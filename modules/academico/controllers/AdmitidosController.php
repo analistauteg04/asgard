@@ -7,6 +7,7 @@ use app\modules\academico\models\Admitido;
 use app\modules\academico\models\EstudioAcademico;
 use yii\helpers\ArrayHelper;
 use app\models\Utilities;
+use app\modules\admision\models\ConvenioEmpresa;
 use app\modules\academico\models\Modalidad;
 use app\modules\academico\models\UnidadAcademica;
 use app\modules\admision\models\Oportunidad;
@@ -23,6 +24,7 @@ admision::registerTranslations();
 financiero::registerTranslations();
 
 class AdmitidosController extends \app\components\CController {
+
     public function actionIndex() {
         $per_id = @Yii::$app->session->get("PB_perid");
         $mod_carrera = new EstudioAcademico();
@@ -168,7 +170,6 @@ class AdmitidosController extends \app\components\CController {
         ]);
     }
 
-
     public function actionUne() {
         $per_id = @Yii::$app->session->get("PB_perid");
         $data = Yii::$app->request->get();
@@ -220,47 +221,46 @@ class AdmitidosController extends \app\components\CController {
         }
         $con = \Yii::$app->db_academico;
         $transaction = $con->beginTransaction();
-        $timeSt = time();        
+        $timeSt = time();
         try {
-            if (isset($data["arc_doc_carta"]) && $data["arc_doc_carta"] != "") {                
-                $arrIm = explode(".", basename($data["arc_doc_carta"]));                
-                $typeFile = strtolower($arrIm[count($arrIm) - 1]);                
-                $carta_archivo = Yii::$app->params["documentFolder"] . "documaceptacion/" . $per_id . "/doc_certune_per_" . $per_id . "." . $typeFile;                
-                $carta_archivo = DocumentoAdjuntar::addLabelTimeDocumentos($per_id, $carta_archivo, $timeSt);                
-                if ($carta_archivo === FALSE)                    
+            if (isset($data["arc_doc_carta"]) && $data["arc_doc_carta"] != "") {
+                $arrIm = explode(".", basename($data["arc_doc_carta"]));
+                $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                $carta_archivo = Yii::$app->params["documentFolder"] . "documaceptacion/" . $per_id . "/doc_certune_per_" . $per_id . "." . $typeFile;
+                $carta_archivo = DocumentoAdjuntar::addLabelTimeDocumentos($per_id, $carta_archivo, $timeSt);
+                if ($carta_archivo === FALSE)
                     throw new Exception('Error doc Carta UNE no renombrado.');
-            }                                       
-            $mod_documento = new DocumentoAceptacion();                        
-            $resexiste= $mod_documento->consultarXperid($per_id);             
-            if ($resexiste["dace_estado_aprobacion"]=='3' or empty($resexiste["dace_estado_aprobacion"]))
-                {                
-                    $datos = array(                        
-                            'per_id'  => $per_id,
-                            'dadj_id'  => 8,
-                            'dace_archivo'  => $carta_archivo,
-                            'dace_observacion'  => $observacion, 
-                            'dace_usuario_ingreso'  => $usr_id,                         
-                        );     
-                    if ($resexiste["dace_estado_aprobacion"]=='3') {                        
-                        $respuesta = $mod_documento->actualizar($con, $usr_id, $per_id);                        
-                        if ($respuesta) {                            
-                            $ok='1';
-                        } else {                            
-                            $ok='0';
-                        }
-                    } else {                        
-                        $ok='1';
+            }
+            $mod_documento = new DocumentoAceptacion();
+            $resexiste = $mod_documento->consultarXperid($per_id);
+            if ($resexiste["dace_estado_aprobacion"] == '3' or empty($resexiste["dace_estado_aprobacion"])) {
+                $datos = array(
+                    'per_id' => $per_id,
+                    'dadj_id' => 8,
+                    'dace_archivo' => $carta_archivo,
+                    'dace_observacion' => $observacion,
+                    'dace_usuario_ingreso' => $usr_id,
+                );
+                if ($resexiste["dace_estado_aprobacion"] == '3') {
+                    $respuesta = $mod_documento->actualizar($con, $usr_id, $per_id);
+                    if ($respuesta) {
+                        $ok = '1';
+                    } else {
+                        $ok = '0';
                     }
-                    if ($ok=='1') {                        
-                        $respuesta = $mod_documento->insertar($con, $datos);
-                        if ($respuesta){
-                            //\app\models\Utilities::putMessageLogFile('despues de insercion');
-                            $exito=1;
-                        }
-                    }                 
-                }  else {
-                    $mensaje="Ya tiene registrado el documento en el sistema.";
+                } else {
+                    $ok = '1';
                 }
+                if ($ok == '1') {
+                    $respuesta = $mod_documento->insertar($con, $datos);
+                    if ($respuesta) {
+                        //\app\models\Utilities::putMessageLogFile('despues de insercion');
+                        $exito = 1;
+                    }
+                }
+            } else {
+                $mensaje = "Ya tiene registrado el documento en el sistema.";
+            }
 
             if ($exito) {
                 $transaction->commit();
@@ -284,17 +284,19 @@ class AdmitidosController extends \app\components\CController {
                 "title" => Yii::t('jslang', 'Error'),
             );
             return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), false, $message);
-        }           
+        }
     }
+
     public function actionValidarcarta() {
         $per_ses__id = @Yii::$app->session->get("PB_perid");
         $per_id = base64_decode($_GET["per_id"]);
-        $mod_doc_ac= new DocumentoAceptacion();
+        $mod_doc_ac = new DocumentoAceptacion();
         $respDocAcep = $mod_doc_ac->consultaDocumentoAceptacionByPerId($per_id);
         return $this->render('validarcarta', [
-                    'docAcept' => $respDocAcep,            
+                    'docAcept' => $respDocAcep,
         ]);
     }
+
     public function actionMatriculado() {
         $per_id = @Yii::$app->session->get("PB_perid");
         $mod_carrera = new EstudioAcademico();
@@ -345,6 +347,7 @@ class AdmitidosController extends \app\components\CController {
                     'arr_carrerra1' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_carrerra1), "id", "name"),
         ]);
     }
+
     public function actionExpexcelmat() {
         ini_set('memory_limit', '256M');
         $content_type = Utilities::mimeContentType("xls");
@@ -428,4 +431,15 @@ class AdmitidosController extends \app\components\CController {
         );
         $report->mpdf->Output('Reporte_' . date("Ymdhis") . ".pdf", ExportFile::OUTPUT_TO_DOWNLOAD);
     }
+
+    public function actionCargarcontrato() {
+        //$usr_id = @Yii::$app->session->get("PB_iduser");
+        //$adm_id = base64_decode($_GET["adm_id"]);    
+        $mod_conempresa = new ConvenioEmpresa();
+        $arr_convempresa = $mod_conempresa->consultarConvenioEmpresa();
+        return $this->render('cargarcontrato', [                  
+                    "arr_convenio_empresa" => ArrayHelper::map(array_merge([["id" => "0", "name" => "Seleccionar"]], $arr_convempresa), "id", "name"),
+        ]);
+    }
+
 }
