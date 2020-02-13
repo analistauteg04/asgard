@@ -141,12 +141,12 @@ class PagoscontratoController extends \app\components\CController {
                 'pcpr_archivo' => $contrato_archivo,
                 'pcpr_usu_ingreso' => $usr_id,
             );
-
-            $respuesta = $mod_documento->insertarcontrato($con, $datos);
-            if ($respuesta) {
-                $exito = 1;
+            if ($contrato_archivo != "") {
+                $respuesta = $mod_documento->insertarcontrato($con, $datos);
+                if ($respuesta) {
+                    $exito = 1;
+                }
             }
-
             if ($exito) {
                 $transaction->commit();
                 $message = array(
