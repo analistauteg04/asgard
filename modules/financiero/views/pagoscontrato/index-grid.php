@@ -2,10 +2,10 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
+use app\models\Utilities;
 use app\widgets\PbGridView\PbGridView;
 use app\modules\academico\Module as academico;
 use app\modules\admision\Module as admision;
-
 admision::registerTranslations();
 academico::registerTranslations();
 ?>
@@ -18,7 +18,7 @@ academico::registerTranslations();
         'fnExportEXCEL' => "exportExcel",
         'fnExportPDF' => "exportPdf",
         'dataProvider' => $model,
-        //'pajax' => false,
+        'pajax' => true,
         'columns' =>
         [
             [
@@ -74,15 +74,22 @@ academico::registerTranslations();
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => Yii::t("formulario", "Actions"),
-                'template' => '{subir}', //
+                'template' => '{subir} {descargar}', //
                 'buttons' => [
                     'subir' => function ($url, $model) {
                         if ($model['documento'] == 0) {
-                            return Html::a('<span class="glyphicon glyphicon-download-alt"></span>', Url::to(['/financiero/pagoscontrato/cargarcontrato', 'sids' => base64_encode($model['sins_id']), 'adm_id' => base64_encode($model['adm_id']), 'per_id' => base64_encode($model['per_id'])]), ["data-toggle" => "tooltip", "title" => "Subir Contrato", "data-pjax" => 0]);
+                            return Html::a('<span class="glyphicon glyphicon-open"></span>', Url::to(['/financiero/pagoscontrato/cargarcontrato', 'sids' => base64_encode($model['sins_id']), 'adm_id' => base64_encode($model['adm_id']), 'per_id' => base64_encode($model['per_id'])]), ["data-toggle" => "tooltip", "title" => "Subir Contrato", "data-pjax" => 0]);
                         } else {
-                            return "<span class = 'glyphicon glyphicon-download-alt' data-toggle = 'tooltip' title ='Contrato Subido'  data-pjax = 0></span>";
+                            return "<span class = 'glyphicon glyphicon-open' data-toggle = 'tooltip' title ='Contrato Subido'  data-pjax = 0></span>";
                         }                         
-                    },                    
+                    },    
+                    'descargar' => function ($url, $model) {
+                        if ($model['documento'] > 0) {
+                            return Html::a('<span class="'.Utilities::getIcon('download').'"></span>', 'javascript:', ["data-toggle" => "tooltip", "title" => Yii::t("accion","Download"), 'data-href' => Url::to(['pagoscontrato/download', 'route' => $model['ruta_contrato'], 'type' => 'down']), 'onclick' => 'downloadPdfs(this)']);
+                        } else {
+                            return "<span class = 'glyphicon glyphicon-download-alt' data-toggle = 'tooltip' title ='Descargar Contrato'  data-pjax = 0></span>";
+                        }                         
+                    },
                 ],
             ],
         ],

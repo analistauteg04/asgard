@@ -12,6 +12,15 @@ use yii\web\JsExpression;
 use app\models\Utilities;
 use app\modules\financiero\Module as financiero;
 use app\modules\admision\Module as admision;
+
+$leyendarc = '<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
+          <div class="form-group">
+          <div class="col-sm-10 col-md-10 col-xs-10 col-lg-10">
+          <div style = "width: 370px;" class="alert alert-info"><span style="font-weight: bold"> Nota: </span> Al subir archivo debe ser 800 KB máximo y tipo pdf.</div>
+          </div>
+          </div>
+          </div>';
+
 session_start();
 $_SESSION['peradmitido'] = $_GET['per_id'];
 ?>
@@ -137,6 +146,7 @@ $_SESSION['peradmitido'] = $_GET['per_id'];
             </div>             
         </div>        
     </div> 
+    <?php echo $leyendarc; ?>
     <div class="row"> 
         <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9"></div>
 

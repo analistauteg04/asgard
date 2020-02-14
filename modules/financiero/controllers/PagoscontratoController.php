@@ -29,6 +29,7 @@ class PagoscontratoController extends \app\components\CController {
         $mod_modalidad = new Modalidad();
         $mod_unidad = new UnidadAcademica();
         $modcanal = new Oportunidad();
+        $mod_contrato = new PagosContratoPrograma();
         $data = Yii::$app->request->get();
         if ($data['PBgetFilter']) {
             $arrSearch["f_ini"] = $data['f_ini'];
@@ -38,12 +39,14 @@ class PagoscontratoController extends \app\components\CController {
             $arrSearch["modalidad"] = $data['modalidad'];
             $arrSearch["carrera"] = $data['carrera'];
             $arrSearch["periodo"] = $data['periodo'];
-            $mod_aspirante = Admitido::getMatriculadoPosgrado($arrSearch);
+            $mod_aspirante = $mod_contrato->consultarMatriculaPosgrado($arrSearch);
+            //$mod_aspirante = Admitido::getMatriculadoPosgrado($arrSearch);
             return $this->renderPartial('index-grid', [
                         "model" => $mod_aspirante,
             ]);
         } else {
-            $mod_aspirante = Admitido::getMatriculadoPosgrado();
+            //$mod_aspirante = Admitido::getMatriculadoPosgrado();
+            $mod_aspirante = $mod_contrato->consultarMatriculaPosgrado($arrSearch);
         }
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
@@ -253,6 +256,37 @@ class PagoscontratoController extends \app\components\CController {
                 ])
         );
         $report->mpdf->Output('Reporte_' . date("Ymdhis") . ".pdf", ExportFile::OUTPUT_TO_DOWNLOAD);
+    }
+
+    public function actionDownload($route, $type) {
+        //$grupo = new Grupo();
+        if (Yii::$app->session->get('PB_isuser')) {
+            $route = str_replace("../", "", $route);
+            if (preg_match("/^" . $this->folder_cv . "\//", $route)) {
+                $url_image = Yii::$app->basePath . $route;
+                $arrIm = explode(".", $url_image);
+                $typeImage = $arrIm[count($arrIm) - 1];
+                if (file_exists($url_image)) {
+                    if (strtolower($typeImage) == "pdf") {
+                        header('Pragma: public');
+                        header('Expires: 0');
+                        header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+                        header('Cache-Control: private', false);
+                        header("Content-type: application/pdf");
+                        if ($type == "view") {
+                            header('Content-Disposition: inline; filename="contrato_' . time() . '.pdf";');
+                        } else {
+                            header('Content-Disposition: attachment; filename="contrato_' . time() . '.pdf";');
+                        }
+                        header('Content-Transfer-Encoding: binary');
+                        header('Content-Length: ' . filesize($url_image));
+                        readfile($url_image);
+                        //return file_get_contents($url_image);
+                    }
+                }
+            }
+        }
+        exit();
     }
 
 }

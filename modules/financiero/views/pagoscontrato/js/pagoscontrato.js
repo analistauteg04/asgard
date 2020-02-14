@@ -106,19 +106,23 @@ function SaveContrato() {
     var arrParams = new Object();
     arrParams.persona_id = $('#txth_per').val();
     arrParams.adm_id = $('#txth_admid').val();
-    arrParams.arc_doc_contrato = $('#txth_doc_contrato').val();    
+    arrParams.arc_doc_contrato = $('#txth_doc_contrato').val();
     arrParams.convenio = $('#cmb_convenio option:selected').val();
     if (arrParams.arc_doc_contrato == null || arrParams.convenio == 0) {
         showAlert('NO_OK', 'error', {"wtmessage": "Los datos de convenio y documento son obligatorio.", "title": 'Error'});
-    }
-    else {
-    if (!validateForm()) {
-        requestHttpAjax(link, arrParams, function (response) {
-            showAlert(response.status, response.label, response.message);
-            setTimeout(function () {
-                window.location.href = $('#txth_base').val() + "/financiero/pagoscontrato/index";
-            }, 5000);
-        }, true);
+    } else {
+        if (!validateForm()) {
+            requestHttpAjax(link, arrParams, function (response) {
+                showAlert(response.status, response.label, response.message);
+                setTimeout(function () {
+                    window.location.href = $('#txth_base').val() + "/financiero/pagoscontrato/index";
+                }, 5000);
+            }, true);
         }
+    }
+
+    function downloadPdfs(ref) {
+        var href = $(ref).attr('data-href');
+        document.location.href = href;
     }
 }
