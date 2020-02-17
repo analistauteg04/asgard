@@ -121,8 +121,8 @@ function SaveContrato() {
         }
     }
 
-    function downloadPdfs(ref) {
-        var href = $(ref).attr('data-href');
-        document.location.href = href;
-    }
+}
+function downloadPdfs(ref) {
+    var href = $(ref).attr('data-href');
+    document.location.href = href;
 }

@@ -24,6 +24,8 @@ financiero::registerTranslations();
 
 class PagoscontratoController extends \app\components\CController {
 
+    public $folder_cv = 'contratos';
+
     public function actionIndex() {
         $mod_carrera = new EstudioAcademico();
         $mod_modalidad = new Modalidad();
@@ -260,13 +262,20 @@ class PagoscontratoController extends \app\components\CController {
 
     public function actionDownload($route, $type) {
         //$grupo = new Grupo();
+        
         if (Yii::$app->session->get('PB_isuser')) {
+           
             $route = str_replace("../", "", $route);
-            if (preg_match("/^" . $this->folder_cv . "\//", $route)) {
+            if (preg_match("/^\/uploads\/" . $this->folder_cv . "\/\d*\/.*\.pdf/", $route)) {
+                 
                 $url_image = Yii::$app->basePath . $route;
                 $arrIm = explode(".", $url_image);
+                \app\models\Utilities::putMessageLogFile('ewwe ' . $url_image);
+                
                 $typeImage = $arrIm[count($arrIm) - 1];
+                exit($url_image);
                 if (file_exists($url_image)) {
+                    exit($route);
                     if (strtolower($typeImage) == "pdf") {
                         header('Pragma: public');
                         header('Expires: 0');

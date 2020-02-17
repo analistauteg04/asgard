@@ -14,9 +14,9 @@ academico::registerTranslations();
     <?=
     PbGridView::widget([
         'id' => 'TbG_PAGOS',
-        'showExport' => true,
-        'fnExportEXCEL' => "exportExcel",
-        'fnExportPDF' => "exportPdf",
+        'showExport' => false,
+        //'fnExportEXCEL' => "exportExcel",
+        //'fnExportPDF' => "exportPdf",
         'dataProvider' => $model,
         'pajax' => true,
         'columns' =>
