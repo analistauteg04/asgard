@@ -11,7 +11,7 @@ USE `db_inventario`;
 -- Estructura de tabla para la tabla `tipo_bien`
 --
 
-/* UTEG */
+/* Empresas: MYD Catering, Cranea */
 
 create table if not exists `tipo_bien` (
  `tbie_id` bigint(20) not null auto_increment primary key,    

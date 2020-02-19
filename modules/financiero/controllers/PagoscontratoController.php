@@ -24,11 +24,14 @@ financiero::registerTranslations();
 
 class PagoscontratoController extends \app\components\CController {
 
+    public $folder_cv = 'contratos';
+
     public function actionIndex() {
         $mod_carrera = new EstudioAcademico();
         $mod_modalidad = new Modalidad();
         $mod_unidad = new UnidadAcademica();
         $modcanal = new Oportunidad();
+        $mod_contrato = new PagosContratoPrograma();
         $data = Yii::$app->request->get();
         if ($data['PBgetFilter']) {
             $arrSearch["f_ini"] = $data['f_ini'];
@@ -38,12 +41,14 @@ class PagoscontratoController extends \app\components\CController {
             $arrSearch["modalidad"] = $data['modalidad'];
             $arrSearch["carrera"] = $data['carrera'];
             $arrSearch["periodo"] = $data['periodo'];
-            $mod_aspirante = Admitido::getMatriculadoPosgrado($arrSearch);
+            $mod_aspirante = $mod_contrato->consultarMatriculaPosgrado($arrSearch);
+            //$mod_aspirante = Admitido::getMatriculadoPosgrado($arrSearch);
             return $this->renderPartial('index-grid', [
                         "model" => $mod_aspirante,
             ]);
         } else {
-            $mod_aspirante = Admitido::getMatriculadoPosgrado();
+            //$mod_aspirante = Admitido::getMatriculadoPosgrado();
+            $mod_aspirante = $mod_contrato->consultarMatriculaPosgrado($arrSearch);
         }
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
@@ -141,12 +146,12 @@ class PagoscontratoController extends \app\components\CController {
                 'pcpr_archivo' => $contrato_archivo,
                 'pcpr_usu_ingreso' => $usr_id,
             );
-
-            $respuesta = $mod_documento->insertarcontrato($con, $datos);
-            if ($respuesta) {
-                $exito = 1;
+            if ($contrato_archivo != "") {
+                $respuesta = $mod_documento->insertarcontrato($con, $datos);
+                if ($respuesta) {
+                    $exito = 1;
+                }
             }
-
             if ($exito) {
                 $transaction->commit();
                 $message = array(
@@ -253,6 +258,44 @@ class PagoscontratoController extends \app\components\CController {
                 ])
         );
         $report->mpdf->Output('Reporte_' . date("Ymdhis") . ".pdf", ExportFile::OUTPUT_TO_DOWNLOAD);
+    }
+
+    public function actionDownload($route, $type) {
+        //$grupo = new Grupo();
+        
+        if (Yii::$app->session->get('PB_isuser')) {
+           
+            $route = str_replace("../", "", $route);
+            if (preg_match("/^\/uploads\/" . $this->folder_cv . "\/\d*\/.*\.pdf/", $route)) {
+                 
+                $url_image = Yii::$app->basePath . $route;
+                $arrIm = explode(".", $url_image);
+                \app\models\Utilities::putMessageLogFile('ewwe ' . $url_image);
+                
+                $typeImage = $arrIm[count($arrIm) - 1];
+                exit($url_image);
+                if (file_exists($url_image)) {
+                    exit($route);
+                    if (strtolower($typeImage) == "pdf") {
+                        header('Pragma: public');
+                        header('Expires: 0');
+                        header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+                        header('Cache-Control: private', false);
+                        header("Content-type: application/pdf");
+                        if ($type == "view") {
+                            header('Content-Disposition: inline; filename="contrato_' . time() . '.pdf";');
+                        } else {
+                            header('Content-Disposition: attachment; filename="contrato_' . time() . '.pdf";');
+                        }
+                        header('Content-Transfer-Encoding: binary');
+                        header('Content-Length: ' . filesize($url_image));
+                        readfile($url_image);
+                        //return file_get_contents($url_image);
+                    }
+                }
+            }
+        }
+        exit();
     }
 
 }

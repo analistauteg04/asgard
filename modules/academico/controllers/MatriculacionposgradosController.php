@@ -598,7 +598,7 @@ class MatriculacionposgradosController extends \app\components\CController {
                     if ($resp_cupoparalelo["pppr_cupo_actual"] > 0) {
                         $fecha = date(Yii::$app->params["dateTimeByDefault"]);
                         // grabar tabla estudiantes
-                        $resp_estudiante = $mod_Estudiante->insertarEstudiante($per_id, $usu_id, null, null, $fecha);
+                        $resp_estudiante = $mod_Estudiante->insertarEstudiante($per_id, $matricula, $usu_id, null, null, $fecha);
                         if ($resp_estudiante) {
                             // grabar en matriculacion_programa_inscrito
                             $resp_matricula_inscrito = $mod_paralelo->insertarMatriculainscrito($promocion, $adm_id, $resp_estudiante, $fecha, $usu_id, $fecha);
@@ -614,7 +614,7 @@ class MatriculacionposgradosController extends \app\components\CController {
                         $mensaje = "¡No hay cupo para este paralelo.!";
                     }
                 } else {
-                    $mensaje = "¡El estudiante ya esta registra en un paralelo.!";
+                    $mensaje = "¡El estudiante ya esta registrado en un paralelo.!";
                 }
                 if ($exito) {
                     $transaction->commit();
@@ -628,7 +628,7 @@ class MatriculacionposgradosController extends \app\components\CController {
                     if (empty($message)) {
                         $message = array
                             (
-                            "wtmessage" => Yii::t("notificaciones", "Error al grabar1. " . $mensaje), "title" =>
+                            "wtmessage" => Yii::t("notificaciones", "Error al grabar. " . $mensaje), "title" =>
                             Yii::t('jslang', 'Success'),
                         );
                     }
@@ -637,7 +637,7 @@ class MatriculacionposgradosController extends \app\components\CController {
             } catch (Exception $ex) {
                 $transaction->rollback();
                 $message = array(
-                    "wtmessage" => Yii::t("notificaciones", "Error al grabar2." . $mensaje),
+                    "wtmessage" => Yii::t("notificaciones", "Error al grabar." . $mensaje),
                     "title" => Yii::t('jslang', 'Success'),
                 );
                 return \app\models\Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
