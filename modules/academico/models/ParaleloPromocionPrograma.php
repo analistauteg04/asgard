@@ -281,7 +281,7 @@ class ParaleloPromocionPrograma extends \yii\db\ActiveRecord {
      * @param   
      * @return  $resultData (Retornar el código de matriculacion inscrito).
      */
-    public function insertarMatriculainscrito($ppro_id, $adm_id, $est_id, $mpin_fecha_registro_ficha, $mpin_usuario_ingresa, $mpin_fecha_creacion) {
+    public function insertarMatriculainscrito($pppr_id, $adm_id, $est_id, $mpin_fecha_registro_ficha, $mpin_usuario_ingresa, $mpin_fecha_creacion) {
 
         $con = \Yii::$app->db_academico;
         $trans = $con->getTransaction(); // se obtiene la transacción actual
@@ -295,9 +295,9 @@ class ParaleloPromocionPrograma extends \yii\db\ActiveRecord {
 
         $param_sql .= ", mpin_estado";
         $bsol_sql .= ", 1";
-        if (isset($ppro_id)) {
-            $param_sql .= ", ppro_id";
-            $bsol_sql .= ", :ppro_id";
+        if (isset($pppr_id)) {
+            $param_sql .= ", pppr_id";
+            $bsol_sql .= ", :pppr_id";
         }
 
         if (isset($adm_id)) {
@@ -329,8 +329,8 @@ class ParaleloPromocionPrograma extends \yii\db\ActiveRecord {
             $sql = "INSERT INTO " . $con->dbname . ".matriculacion_programa_inscrito ($param_sql) VALUES($bsol_sql)";
             $comando = $con->createCommand($sql);
 
-            if (isset($ppro_id)) {
-                $comando->bindParam(':ppro_id', $ppro_id, \PDO::PARAM_INT);
+            if (isset($pppr_id)) {
+                $comando->bindParam(':pppr_id', $pppr_id, \PDO::PARAM_INT);
             }
 
             if (isset($adm_id)) {
@@ -394,7 +394,7 @@ class ParaleloPromocionPrograma extends \yii\db\ActiveRecord {
             $comando->bindParam(":pppr_fecha_modificacion", $fecha_modificacion, \PDO::PARAM_STR);
             $comando->bindParam(":pppr_usuario_modifica", $pppr_usuario_modifica, \PDO::PARAM_INT);
             $comando->bindParam(":pppr_id", $pppr_id, \PDO::PARAM_INT);
-            $comando->bindParam(":ppro_id", $ppro_id, \PDO::PARAM_INT);            
+            $comando->bindParam(":ppro_id", $ppro_id, \PDO::PARAM_INT);
             $response = $comando->execute();
             if ($trans !== null)
                 $trans->commit();
@@ -404,6 +404,39 @@ class ParaleloPromocionPrograma extends \yii\db\ActiveRecord {
                 $trans->rollback();
             return FALSE;
         }
+    }
+
+    /**
+     * Function Consultar datos de paralelo promocion segun id de paralelo y id de promocion.
+     * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;
+     * @property       
+     * @return  
+     */
+    public function consultarMatriculacionxadmid($adm_id) {
+        $con = \Yii::$app->db_academico;
+        $estado = 1;
+
+        $sql = "SELECT 
+                    mpi.pppr_id as paralelo,
+                    ppp.ppro_id as promocion,
+                    ppp.pppr_cupo_actual as disponible,
+                    est.est_matricula as matricula
+                FROM " . $con->dbname . ".matriculacion_programa_inscrito mpi
+                INNER JOIN " . $con->dbname . ".paralelo_promocion_programa ppp ON ppp.pppr_id =  mpi.pppr_id
+                INNER JOIN " . $con->dbname . ".estudiante est ON est.est_id =  mpi.est_id
+                WHERE adm_id = :adm_id AND
+                      mpi.mpin_estado = :estado AND
+                      mpi.mpin_estado_logico =:estado AND
+                      ppp.pppr_estado =:estado AND
+                      ppp.pppr_estado_logico =:estado AND
+                      est.est_estado =:estado AND
+                      est.est_estado_logico =:estado ";
+
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":adm_id", $adm_id, \PDO::PARAM_INT);
+        $resultData = $comando->queryOne();
+        return $resultData;
     }
 
 }

@@ -1037,7 +1037,8 @@ create table if not exists `observaciones_por_documento_aceptacion` (
 -- --------------------------------------------------------
 create table if not exists `matriculacion_programa_inscrito` (
  `mpin_id` bigint(20) not null auto_increment primary key,
- `ppro_id` bigint(20) not null, 
+ -- `ppro_id` bigint(20) not null, 
+ `pppr_id` bigint(20) not null,
  `adm_id` bigint(20) not null, 
  `est_id` bigint(20) not null,   
  `mpin_fecha_matriculacion` timestamp not null,
@@ -1049,7 +1050,8 @@ create table if not exists `matriculacion_programa_inscrito` (
  `mpin_usuario_modifica` bigint(20) null,
  `mpin_fecha_modificacion` timestamp null default null,
  `mpin_estado_logico` varchar(1) not null,
- foreign key (ppro_id) references `promocion_programa`(ppro_id),
+ -- foreign key (ppro_id) references `promocion_programa`(ppro_id),
+ foreign key (pppr_id) references `paralelo_promocion_programa`(pppr_id),
  foreign key (est_id) references `estudiante`(est_id)   
 );
 

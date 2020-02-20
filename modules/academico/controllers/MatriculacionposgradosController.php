@@ -601,7 +601,7 @@ class MatriculacionposgradosController extends \app\components\CController {
                         $resp_estudiante = $mod_Estudiante->insertarEstudiante($per_id, $matricula, $usu_id, null, null, $fecha);
                         if ($resp_estudiante) {
                             // grabar en matriculacion_programa_inscrito
-                            $resp_matricula_inscrito = $mod_paralelo->insertarMatriculainscrito($promocion, $adm_id, $resp_estudiante, $fecha, $usu_id, $fecha);
+                            $resp_matricula_inscrito = $mod_paralelo->insertarMatriculainscrito($paralelo, $adm_id, $resp_estudiante, $fecha, $usu_id, $fecha);
                             if ($resp_matricula_inscrito) {
                                 // actualizar en paralelo_promocion_programa el cupo
                                 $resp_actualiza_cupo = $mod_paralelo->actualizarCupoparalelo($paralelo, $promocion, $usu_id);
@@ -644,6 +644,40 @@ class MatriculacionposgradosController extends \app\components\CController {
             }
             return;
         }
+    }
+
+    public function actionView() {
+        $sins_id = base64_decode($_GET['sids']);
+        $adm_id = base64_decode($_GET['adm']);
+        $mod_solins = new SolicitudInscripcion();
+        $mod_promocion = new PromocionPrograma();
+        $mod_paralelo = new ParaleloPromocionPrograma();
+
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+            //$adm_id = $data["adm_id"];
+            if (isset($data["getparalelos"])) {
+                $resp_Paralelos = $mod_paralelo->consultarParalelosxPrograma($data["promocion_id"]);
+                $message = array("paralelos" => $resp_Paralelos);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+            }
+            if (isset($data["getcupo"])) {
+                $resp_cupo = $mod_paralelo->ObtenerCupodisponible($data["cupo_id"]);
+                $message = array("cupo" => $resp_cupo["cupo"]);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+            }
+        }
+        $arr_matriculacion = $mod_paralelo->consultarMatriculacionxadmid($adm_id);
+        $personaData = $mod_solins->consultarInteresadoPorSol_id($sins_id);
+        $resp_programas = $mod_promocion->consultarPromocionxPrograma($personaData["eaca_id"]);
+        $arr_Paralelos = $mod_paralelo->consultarParalelosxPrograma($arr_matriculacion["promocion"]);
+                
+        return $this->render('view', [
+                    'personalData' => $personaData,
+                    'arr_promocion' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Seleccionar"]], $resp_programas), "id", "name"),
+                    'arr_paralelo' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Seleccionar"]], $arr_Paralelos), "id", "name"),
+                    'arr_matriculacion' => $arr_matriculacion,
+        ]);
     }
 
 }
