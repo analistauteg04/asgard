@@ -12,6 +12,7 @@ use app\modules\academico\models\Modalidad;
 use app\modules\academico\models\UnidadAcademica;
 use app\modules\academico\models\PromocionPrograma;
 use app\modules\academico\models\ParaleloPromocionPrograma;
+use app\modules\academico\models\MatriculacionProgramaInscrito;
 use app\modules\academico\models\Estudiante;
 use app\modules\admision\models\Oportunidad;
 use app\modules\admision\models\SolicitudInscripcion;
@@ -556,7 +557,7 @@ class MatriculacionposgradosController extends \app\components\CController {
                 } else {
                     $transaction->rollback();
                     $message = array(
-                        "wtmessage" => Yii::t("notificaciones", "Error al grabar." . $mensaje),
+                        "wtmessage" => Yii::t("notificaciones", "Error al modificar." . $mensaje),
                         "title" => Yii::t('jslang', 'Success'),
                     );
                     return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
@@ -564,7 +565,7 @@ class MatriculacionposgradosController extends \app\components\CController {
             } catch (Exception $ex) {
                 $transaction->rollback();
                 $message = array(
-                    "wtmessage" => Yii::t("notificaciones", "Error al grabar."),
+                    "wtmessage" => Yii::t("notificaciones", "Error al modificar."),
                     "title" => Yii::t('jslang', 'Success'),
                 );
                 return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
@@ -582,7 +583,7 @@ class MatriculacionposgradosController extends \app\components\CController {
             $matricula = $data["matricula"];
             $promocion = $data["promocion"];
             $paralelo = $data["paralelo"];
-            $cupo = $data["cupo"];
+            //$cupo = $data["cupo"];
 
             $con = \Yii::$app->db_academico;
             $transaction = $con->beginTransaction();
@@ -590,6 +591,7 @@ class MatriculacionposgradosController extends \app\components\CController {
                 // verificar cupo actual del paralelo si es mayor a 0 continuar
                 $mod_Estudiante = new Estudiante();
                 $mod_paralelo = new ParaleloPromocionPrograma();
+                $mod_matricula = new MatriculacionProgramaInscrito();
                 // consultar si el estudiante no ha sido creado antes segun su perid
                 $resp_estudiante = $mod_Estudiante->getEstudiantexids($per_id);
                 if ($resp_estudiante["total"] == 0) {
@@ -601,7 +603,7 @@ class MatriculacionposgradosController extends \app\components\CController {
                         $resp_estudiante = $mod_Estudiante->insertarEstudiante($per_id, $matricula, $usu_id, null, null, $fecha);
                         if ($resp_estudiante) {
                             // grabar en matriculacion_programa_inscrito
-                            $resp_matricula_inscrito = $mod_paralelo->insertarMatriculainscrito($paralelo, $adm_id, $resp_estudiante, $fecha, $usu_id, $fecha);
+                            $resp_matricula_inscrito = $mod_matricula->insertarMatriculainscrito($paralelo, $adm_id, $resp_estudiante, $fecha, $usu_id, $fecha);
                             if ($resp_matricula_inscrito) {
                                 // actualizar en paralelo_promocion_programa el cupo
                                 $resp_actualiza_cupo = $mod_paralelo->actualizarCupoparalelo($paralelo, $promocion, $usu_id);
@@ -671,13 +673,124 @@ class MatriculacionposgradosController extends \app\components\CController {
         $personaData = $mod_solins->consultarInteresadoPorSol_id($sins_id);
         $resp_programas = $mod_promocion->consultarPromocionxPrograma($personaData["eaca_id"]);
         $arr_Paralelos = $mod_paralelo->consultarParalelosxPrograma($arr_matriculacion["promocion"]);
-                
+
         return $this->render('view', [
                     'personalData' => $personaData,
                     'arr_promocion' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Seleccionar"]], $resp_programas), "id", "name"),
                     'arr_paralelo' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Seleccionar"]], $arr_Paralelos), "id", "name"),
                     'arr_matriculacion' => $arr_matriculacion,
         ]);
+    }
+
+    public function actionUpdate() {
+        $sins_id = base64_decode($_GET['sids']);
+        $adm_id = base64_decode($_GET['adm']);
+        $mod_solins = new SolicitudInscripcion();
+        $mod_promocion = new PromocionPrograma();
+        $mod_paralelo = new ParaleloPromocionPrograma();
+
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+            if (isset($data["getparalelos"])) {
+                $resp_Paralelos = $mod_paralelo->consultarParalelosxPrograma($data["promocion_id"]);
+                $message = array("paralelos" => $resp_Paralelos);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+            }
+            if (isset($data["getcupo"])) {
+                $resp_cupo = $mod_paralelo->ObtenerCupodisponible($data["cupo_id"]);
+                $message = array("cupo" => $resp_cupo["cupo"]);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+            }
+        }
+        $arr_matriculacion = $mod_paralelo->consultarMatriculacionxadmid($adm_id);
+        $personaData = $mod_solins->consultarInteresadoPorSol_id($sins_id);
+        $resp_programas = $mod_promocion->consultarPromocionxPrograma($personaData["eaca_id"]);
+        $arr_Paralelos = $mod_paralelo->consultarParalelosxPrograma($arr_matriculacion["promocion"]);
+
+        return $this->render('update', [
+                    'personalData' => $personaData,
+                    'arr_promocion' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Seleccionar"]], $resp_programas), "id", "name"),
+                    'arr_paralelo' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Seleccionar"]], $arr_Paralelos), "id", "name"),
+                    'arr_matriculacion' => $arr_matriculacion,
+        ]);
+    }
+
+    public function actionUpdatematriculacion() {
+        $usu_id = @Yii::$app->session->get("PB_iduser");
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+            //$per_id = base64_decode($data["personaid"]);
+            $adm_id = base64_decode($data["admitidoid"]);
+            //$matricula = $data["matricula"];
+            $promocion = $data["promocion"];
+            $paralelo = $data["paralelo"];
+
+            $con = \Yii::$app->db_academico;
+            $transaction = $con->beginTransaction();
+            try {
+                $mod_paralelo = new ParaleloPromocionPrograma();
+                $mod_matricula = new MatriculacionProgramaInscrito();
+                // consultar el curso anterior que esta el admitido               
+                $arr_matriculacion = $mod_paralelo->consultarMatriculacionxadmid($adm_id);
+                // si es el mismo paralelo que quiere modificar no hacer nada
+                \app\models\Utilities::putMessageLogFile('arreglo paralelo: ' . $arr_matriculacion["paralelo"]);
+                \app\models\Utilities::putMessageLogFile('paralelo: ' . $paralelo);
+                \app\models\Utilities::putMessageLogFile('arreglo promocion: ' . $arr_matriculacion["promocion"]);
+                \app\models\Utilities::putMessageLogFile('promocion: ' . $promocion);
+                if ($arr_matriculacion["paralelo"] != $paralelo || $arr_matriculacion["promocion"] != $promocion) { // cambiar segun la data actual del admitido
+                    $fecha = date(Yii::$app->params["dateTimeByDefault"]);
+                    // si es diferente paralelo, verificar si el paralelo, tiene cupo, sino tiene cupo no dejar modificar
+                    // consultar nuevo paralelo
+                    $resp_cupoparalelo = $mod_paralelo->getParalelosxids($paralelo, $promocion);
+                    if ($resp_cupoparalelo["pppr_cupo_actual"] > 0) {
+                        // modificar matriculacion
+                        $resp_matricula_inscrito = $mod_matricula->modificarMatriculainscrito($paralelo, $adm_id, $usu_id);
+                        if ($resp_matricula_inscrito) {
+                            // actualizar en paralelo_promocion_programa el cupo al nuevo paralelo (restar)
+                            $resp_actualiza_cupo = $mod_paralelo->actualizarCupoparalelo($paralelo, $promocion, $usu_id);
+                            if ($resp_actualiza_cupo) {
+                                // actualizar en paralelo_promocion_programa el cupo al anterior paralelo (sumar)
+                                $resp_modifica_cupo = $mod_paralelo->modificarCupoparalelo($arr_matriculacion["paralelo"], $arr_matriculacion["promocion"], $usu_id);
+                                if ($resp_modifica_cupo) {
+                                    $exito = 1;
+                                }
+                            }
+                        }
+                    } else {
+                        $mensaje = "¡No hay cupo para este paralelo.!";
+                    }
+                } else {
+                    $mensaje = "¡Quiere ingresar al mismo paralelo que ya esta matriculado.!";
+                }
+
+                if ($exito) {
+                    $transaction->commit();
+                    $message = array(
+                        "wtmessage" => Yii::t("notificaciones", "La información ha sido actualizada."),
+                        "title" => Yii::t('jslang', 'Success'),
+                    );
+                    return \app\models\Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                } else {
+                    $transaction->rollback();
+                    if (empty($message)) {
+                        $message = array
+                            (
+                            "wtmessage" => Yii::t("notificaciones", "Error al modificar. " . $mensaje), "title" =>
+                            Yii::t('jslang', 'Success'),
+                        );
+                    }
+                    return \app\models\Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                }
+            } catch (Exception $ex) {
+                $transaction->rollback();
+                $message = array(
+                    "wtmessage" => Yii::t("notificaciones", "Error al modificar." . $mensaje),
+                    "title" => Yii::t('jslang', 'Success'),
+                );
+                return \app\models\Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+            }
+            return;
+        }
     }
 
 }

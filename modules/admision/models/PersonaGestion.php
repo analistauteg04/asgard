@@ -829,7 +829,7 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
 
             $filtro .= " OR pges_pasaporte = :pges_pasaporte";
         }
-        if (empty($opcion)) {                        
+        if (empty($opcion)) {
             $sql = "SELECT                    
                     count(*) as registro ";
         } else {
@@ -1068,12 +1068,16 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
                         and ec.econ_estado = :estado 
                         and ec.econ_estado_logico = :estado 
                         and cc.ccan_estado = :estado 
-                        and cc.ccan_estado_logico = :estado 
+                        and cc.ccan_estado_logico = :estado                    
                 ) a ";
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
             $sql .= "WHERE $str_search 
                            a.pges_codigo = a.pges_codigo";
         }
+        if (isset($arrFiltro) && count($arrFiltro) == 0) { //Aqui se filtran solo los pendientes de gestionar, si debe borrar el if para q salgan todos
+            $sql .= "WHERE a.gestion < 2";
+        }
+        
         $sql .= " ORDER BY a.pges_fecha_creacion desc";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
@@ -2079,17 +2083,18 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
      */
     public static function existePersonaGestion($correo, $numero) {
         //pgest_nombre,pgest_numero,pgest_correo 
-        $con = \Yii::$app->db_crm;            
+        $con = \Yii::$app->db_crm;
         $sql = "SELECT pges_id Ids
                     FROM " . $con->dbname . ".persona_gestion  
                 WHERE pges_estado_logico=1 AND (pges_correo=:pges_correo OR pges_celular=:pges_celular)";
-                
+
         $comando = $con->createCommand($sql);
         $comando->bindParam(":pges_correo", $correo, \PDO::PARAM_STR);
-        $comando->bindParam(":pges_celular", $numero, \PDO::PARAM_STR);      
+        $comando->bindParam(":pges_celular", $numero, \PDO::PARAM_STR);
         $rawData = $comando->queryScalar();
-        if ($rawData === false)        
+        if ($rawData === false)
             return 0;
         return $rawData; //Si Existe en la Tabla
     }
+
 }

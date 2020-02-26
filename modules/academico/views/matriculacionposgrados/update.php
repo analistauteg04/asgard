@@ -90,7 +90,7 @@ $tipodoc = 'Cédula';
                 <div class="form-group">
                     <label for="txt_promocion" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_promocion"><?= academico::t("Academico", "Promotion") ?><span class="text-danger">*</span></label>
                     <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">                    
-                        <?= Html::dropDownList("cmb_promocion", $arr_matriculacion["promocion"], $arr_promocion, ["class" => "form-control", "disabled" => "true", "id" => "cmb_promocion"]) ?>
+                        <?= Html::dropDownList("cmb_promocion", $arr_matriculacion["promocion"], $arr_promocion, ["class" => "form-control", "id" => "cmb_promocion"]) ?>
                     </div>
                 </div>
             </div>
@@ -98,7 +98,7 @@ $tipodoc = 'Cédula';
                 <div class="form-group">
                     <label for="txt_paralelo" class="col-sm-5 control-label" id="lbl_periodo"><?= academico::t("Academico", "Parallel") ?><span class="text-danger">*</span></label>
                     <div class="col-sm-7">
-                        <?= Html::dropDownList("cmb_paralelo", $arr_matriculacion["paralelo"], $arr_paralelo, ["class" => "form-control", "disabled" => "true", "id" => "cmb_paralelo"]) ?>
+                        <?= Html::dropDownList("cmb_paralelo", $arr_matriculacion["paralelo"], $arr_paralelo, ["class" => "form-control", "id" => "cmb_paralelo"]) ?>
                     </div>
                 </div>
             </div>
@@ -120,6 +120,12 @@ $tipodoc = 'Cédula';
                     </div>
                 </div>
             </div> 
+        </div>
+    </div>
+   <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
+        <div class="col-sm-8"></div>
+        <div class="col-sm-2 col-md-2 col-xs-4 col-lg-2">                
+            <a id="modificarMatriculacion" href="javascript:" class="btn btn-primary btn-block"> <?= Yii::t("formulario", "Update") ?></a>
         </div>
     </div>
 </form>
