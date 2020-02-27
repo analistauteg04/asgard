@@ -15,6 +15,9 @@ $(document).ready(function () {
     $('#btn_matricular').click(function () {
         grabarMatriculacion();
     });
+    $('#modificarMatriculacion').click(function () {
+        modificarMatriculacion();
+    });
     /*****************************************************/
     /* Filtro para busqueda en index Promoción Programa */
     /***************************************************/
@@ -324,7 +327,6 @@ function modificarParalelo() {
     } else {
         arrParams.disponible = parseInt($('#txt_cupodisponible').val()) - (parseInt(arrParams.cupoanterior) - (arrParams.cupo));
     }
-    //alert ('este valor nuevo disponible'+ arrParams.disponible);    
     if (!validateForm()) {
         requestHttpAjax(link, arrParams, function (response) {
             showAlert(response.status, response.label, response.message);
@@ -370,5 +372,35 @@ function grabarMatriculacion() {
         }
     }
 
+}
 
+function modificarMatriculacion() {
+    var link = $('#txth_base').val() + "/academico/matriculacionposgrados/updatematriculacion";
+    var arrParams = new Object();
+    arrParams.personaid = $('#txth_per_id').val();
+    arrParams.admitidoid = $('#txth_adm_id').val();
+    arrParams.cupodisponible = $('#txt_cupodisponible').val();
+    arrParams.matricula = $('#txt_matricula').val();
+    arrParams.promocion = $('#cmb_promocion').val();
+    arrParams.paralelo = $('#cmb_paralelo').val();
+    if (arrParams.promocion == 0 || arrParams.paralelo == 0)
+    {
+        showAlert('NO_OK', 'error', {"wtmessage": "Debe seleccionar opciones de las listas.", "title": 'Error'});
+    } else if (arrParams.cupodisponible == 0) {
+        showAlert('NO_OK', 'error', {"wtmessage": "No hay cupo disponible para este paralelo.", "title": 'Error'});
+    } else
+    {
+        if (!validateForm()) {
+            requestHttpAjax(link, arrParams, function (response) {
+                showAlert(response.status, response.label, response.message);
+                if (!response.error) {
+                    setTimeout(function () {
+                        parent.location.href = $('#txth_base').val() + "/academico/admitidos/matriculado";
+                    }, 3000);
+                }
+
+
+            }, true);
+        }
+    }
 }
