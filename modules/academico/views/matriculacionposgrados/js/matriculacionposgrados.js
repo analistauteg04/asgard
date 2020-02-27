@@ -315,6 +315,13 @@ function edit() {
     window.location.href = $('#txth_base').val() + "/academico/matriculacionposgrados/editpromocion?ids=" + codigo;
 }
 
+function update() {
+    var sins = $('#txth_sins_id').val();
+    var adm_id = $('#txth_adm_id').val();
+    var perid = $('#txth_per_id').val();
+     window.location.href = $('#txth_base').val() + "/academico/matriculacionposgrados/update?sids=" + sins + "&adm=" + adm_id + "&perid=" + perid;    
+}
+
 function modificarParalelo() {
     var link = $('#txth_base').val() + "/academico/matriculacionposgrados/updateparalelo";
     var arrParams = new Object();
