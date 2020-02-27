@@ -139,25 +139,27 @@ class ActivoFijo extends \yii\db\ActiveRecord
                 $str_search .= "af.cat_id = :categoria_id AND ";
             }
             if (($arrFiltro['departamento_id'] != "") && ($arrFiltro['departamento_id'] > 0)){
-                $str_search .= "d.dep_id = :departamento_id AND ";
+                $str_search .= "(a.dep_id = :departamento_id or ed.dep_id = :departamento_id) AND ";
             }
             if (($arrFiltro['area_id'] != "") && ($arrFiltro['area_id'] > 0)){
                 $str_search .= "af.are_id = :area_id AND ";
             }
         }
-        $sql = "SELECT 	d.dep_nombre as departamento,
-                        a.are_descripcion as area, 
+        $sql = "SELECT 	case when af.are_id is null then
+                            dep.dep_nombre else d.dep_nombre end as departamento,
+                        ifnull(a.are_descripcion,'N/A') as area, 
                         c.cat_descripcion as categoria,
-                        af.afij_codigo, af.afij_custodio,                                                 
-                        ifnull(af.afij_cantidad,0) as afij_cantidad                         
+                        af.afij_codigo, af.afij_custodio,                                       
+                        ifnull(af.afij_cantidad,0) as afij_cantidad
                 FROM " . $con->dbname . ".activo_fijo af 
                      inner join " . $con->dbname . ".empresa_inventario ei on af.einv_id = ei.einv_id
                      left join " . $con1->dbname . ".area a on a.are_id = af.are_id
                      left join " . $con->dbname . ".espacio_departamento ed on ed.edep_id = af.edep_id
+                     left join " . $con1->dbname . ".departamento d on d.dep_id = a.dep_id 
                      inner join " . $con->dbname . ".categoria c on c.cat_id = af.cat_id
-                     inner join " . $con1->dbname . ".departamento d on (d.dep_id = a.dep_id or d.dep_id = ed.dep_id)
+                     left join " . $con1->dbname . ".departamento dep on dep.dep_id = ed.dep_id
                 WHERE $str_search
-                      afij_estado = :estado and 
+                      afij_estado = :estado and
                       afij_estado_logico = :estado
                 ORDER BY 1";        
                        
@@ -227,14 +229,16 @@ class ActivoFijo extends \yii\db\ActiveRecord
                 $str_search .= "af.cat_id = :categoria_id AND ";
             }
             if (($arrFiltro['departamento_id'] != "") && ($arrFiltro['departamento_id'] > 0)){
-                $str_search .= "d.dep_id = :departamento_id AND ";
+                $str_search .= "(a.dep_id = :departamento_id or ed.dep_id = :departamento_id) AND ";
             }
             if (($arrFiltro['area_id'] != "") && ($arrFiltro['area_id'] > 0)){
                 $str_search .= "af.are_id = :area_id AND ";
             }
         }
-        $sql = "SELECT 	af.afij_codigo, d.dep_nombre as departamento,
-                        a.are_descripcion as area, 
+        $sql = "SELECT 	af.afij_codigo, 
+                        case when af.are_id is null then
+                            dep.dep_nombre else d.dep_nombre end as departamento,
+                        ifnull(a.are_descripcion,'N/A') as area,                         
                         ed.edep_descripcion as espacio,
                         case when (ed.edep_id > 0) then
                                 (select edi_descripcion from " . $con1->dbname . ".edificio e where e.edi_id = ed.edi_id)
@@ -257,8 +261,9 @@ class ActivoFijo extends \yii\db\ActiveRecord
                      left join " . $con1->dbname . ".area a on a.are_id = af.are_id
                      left join " . $con->dbname . ".espacio_departamento ed on ed.edep_id = af.edep_id
                      inner join " . $con->dbname . ".categoria c on c.cat_id = af.cat_id
-                     inner join " . $con1->dbname . ".departamento d on (d.dep_id = a.dep_id or d.dep_id = ed.dep_id)
-                     inner join " . $con->dbname . ".tipo_bien t on t.tbie_id = c.tbie_id
+                     left join " . $con1->dbname . ".departamento d on d.dep_id = a.dep_id 
+                     inner join " . $con->dbname . ".tipo_bien t on t.tbie_id = c.tbie_id                                                                   
+                     left join " . $con1->dbname . ".departamento dep on dep.dep_id = ed.dep_id
                 WHERE $str_search
                       afij_estado = :estado and 
                       afij_estado_logico = :estado

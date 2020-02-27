@@ -38,7 +38,7 @@ PbGridView::widget([
             'buttons' => [
                     'view' => function ($url, $model) {
                         if ($model['categoria'] != '') {
-                            $texto = substr($model['categoria'], 0, 20) . '...';
+                            $texto = substr($model['categoria'], 0, 30) . '...';
                         } else {
                             $texto = '';
                         }
