@@ -61,11 +61,11 @@ use app\modules\admision\Module;
                 'header' => Yii::t("formulario", "Date"),
                 'value' => 'fecha',
             ],
-            [
+            /*[
                 'attribute' => 'Agente',
                 'header' => Yii::t("formulario", "Agent"),
                 'value' => 'padm_codigo',
-            ],
+            ],*/
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => Yii::t("formulario", "Actions"),
@@ -77,9 +77,9 @@ use app\modules\admision\Module;
                     'activities' => function ($url, $model) {
                         return Html::a('<span class="glyphicon glyphicon-th-large"></span>', Url::to(['actividades/listaractividadxoportunidad', 'opor_id' => base64_encode($model["opo_id"]), 'pges_id' => base64_encode($model["pges_id"])]), ["data-toggle" => "tooltip", "title" => "Ver Actividades", "data-pjax" => 0]);
                     },
-                    'reasigna' => function ($url, $model) {
+                    /*'reasigna' => function ($url, $model) {
                         return Html::a('<span class="glyphicon glyphicon-random"></span>', Url::to(['/admision/agentes/reasignagente', 'opor_id' => base64_encode($model['opo_id'])]), ["data-toggle" => "tooltip", "title" => "Re-Asignar Agente", "data-pjax" => 0]);
-                    },
+                    },*/
                 ],
             ],
         ],

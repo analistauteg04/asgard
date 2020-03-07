@@ -39,11 +39,21 @@ PbGridView::widget([
             'header' => Yii::t("formulario", "Attention Next"),
             'value' => 'proxima_atencion',
         ],
-        /*[
-            'attribute' => 'Estado',
-            'header' => Module::t("crm", "Opportunity state"),
-            'value' => 'estado_oportunidad',
-        ],*/
+        [
+            'class' => 'yii\grid\ActionColumn',
+            'header' => Yii::t("formulario", "Comentario"),
+            'template' => '{view}',            
+            'buttons' => [
+                    'view' => function ($url, $model) {
+                        if ($model['bact_descripcion'] != '') {
+                            $texto = substr($model['bact_descripcion'], 0, 100) . '...';
+                        } else {
+                            $texto = '';
+                        }
+                        return Html::a('<span>' . $texto . '</span>', Url::to(['#']), ["data-toggle" => "tooltip", "title" => $model['bact_descripcion']]);
+                    },
+                ],
+        ],     
         [
             'attribute' => 'Usuario',
             'header' => Yii::t("formulario", "User login"),

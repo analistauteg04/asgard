@@ -10,16 +10,16 @@ use app\modules\admision\Module;
  */
 ?>
 <div class="row">
-    <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
+    <!-- <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
         <div class="col-md-12">
-            <div class="form-group">
+           <div class="form-group">
                 <label for="txt_buscarDataAgente" class="col-sm-2 col-md-2 col-xs-2 col-lg-2 control-label"><?= Yii::t("formulario", "Executive") ?></label>
                 <div class="col-sm-9 col-md-9 col-xs-9 col-lg-9">
                     <input type="text" class="form-control" value="" id="txt_buscarDataAgente" placeholder="<?= Yii::t("formulario", "Search by Agent Names") ?>">
                 </div>
             </div>
         </div> 
-    </div>  
+    </div> --> 
     <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
         <div class="col-md-12">
             <div class="form-group">

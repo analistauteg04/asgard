@@ -1372,6 +1372,7 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
                         eopo.eopo_nombre as estado_oportunidad,
                         ba.oact_id as id_observacion,
                         ifnull(oac.oact_nombre, '') as observacion,
+                        ba.bact_descripcion,
                         ifnull((select concat(pers.per_pri_nombre, ' ', ifnull(pers.per_pri_apellido,' ')) 
                                   from " . $con1->dbname . ".usuario usu 
                                   inner join " . $con1->dbname . ".persona pers on pers.per_id = usu.per_id
