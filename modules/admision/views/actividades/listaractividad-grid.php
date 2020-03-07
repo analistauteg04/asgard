@@ -41,7 +41,7 @@ PbGridView::widget([
         ],
         [
             'class' => 'yii\grid\ActionColumn',
-            'header' => Yii::t("formulario", "Comentario"),
+            'header' => Yii::t("formulario", "Comments"),
             'template' => '{view}',            
             'buttons' => [
                     'view' => function ($url, $model) {

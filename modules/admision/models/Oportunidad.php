@@ -439,11 +439,19 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
             }
             if ($arrFiltro['estado'] != "" && $arrFiltro['estado'] > 0) {
                 $str_search .= "  a.eopo_id = :estado_ate AND ";
+            }            
+            if ($arrFiltro['fec_registro_ini'] != "" && $arrFiltro['fec_registro_fin'] != "") {
+                $str_search .= "  a.fecha_registro >= :fec_registro_ini AND ";
+                $str_search .= "  a.fecha_registro <= :fec_registro_fin AND ";
             }
+            if ($arrFiltro['fec_proxima_ini'] != "" && $arrFiltro['fec_proxima_fin'] != "") {
+                $str_search .= "  a.fecha_proxima >= :fec_proxima_ini AND ";
+                $str_search .= "  a.fecha_proxima <= :fec_proxima_fin AND ";
+            }            
         }
         $sql = "
                 SELECT * FROM (
-                    SELECT  o.opo_id,
+                    SELECT o.opo_id,
                             lpad(ifnull(o.opo_codigo,0),7,'0') as opo_codigo, 
                             o.pges_id,
                             (case when pg.tper_id = 1 then 
@@ -469,7 +477,13 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
                             eo.eopo_descripcion as des_estado,        
                             o.mod_id,
                             m.mod_descripcion as des_modalidad,
-                            o.opo_fecha_registro as fecha,
+                            -- o.opo_fecha_registro as fecha,
+                            (select max(bact_fecha_registro) from db_crm.bitacora_actividades b 
+                                    where b.opo_id = o.opo_id and b.bact_estado = 1 and bact_estado_logico = 1) as fecha_registro,
+                            case when o.eopo_id = '3' then
+                                    '' else 
+                                    (select max(bact_fecha_proxima_atencion) from db_crm.bitacora_actividades b 
+                                     where b.opo_id = o.opo_id and b.bact_estado = 1 and bact_estado_logico = 1) end as fecha_proxima,
                             o.padm_id,
                             pa.padm_codigo,
                             concat(p.per_pri_nombre, ' ', ifnull(p.per_seg_nombre,' '), ' ', p.per_pri_apellido, ' ', ifnull(p.per_seg_apellido,' ')) as agente,
@@ -515,7 +529,7 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
             $search_cond = "%" . $arrFiltro["interesado"] . "%";
             $agente = "%" . $arrFiltro["agente"] . "%";
             $estado_ate = $arrFiltro["estado"];
-            $empresa = $arrFiltro["empresa"];
+            $empresa = $arrFiltro["empresa"];            
 
             if ($arrFiltro['interesado'] != "") {
                 $comando->bindParam(":interesado", $search_cond, \PDO::PARAM_STR);
@@ -529,6 +543,19 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
             if ($arrFiltro['estado'] != "" && $arrFiltro['estado'] > 0) {
                 $comando->bindParam(":estado_ate", $estado_ate, \PDO::PARAM_INT);
             }
+            $fec_registro_ini = $arrFiltro["fec_registro_ini"] . " 00:00:00";
+            $fec_registro_fin = $arrFiltro["fec_registro_fin"] . " 23:59:59";            
+            
+            if ($arrFiltro['fec_registro_ini'] != "" && $arrFiltro['fec_registro_fin'] != "") {
+                $comando->bindParam(":fec_registro_ini", $fec_registro_ini, \PDO::PARAM_STR);
+                $comando->bindParam(":fec_registro_fin", $fec_registro_fin, \PDO::PARAM_STR);
+            }
+            $fec_proxima_ini = $arrFiltro["fec_proxima_ini"] . " 00:00:00";
+            $fec_proxima_fin = $arrFiltro["fec_proxima_fin"] . " 23:59:59";    
+            if ($arrFiltro['fec_proxima_ini'] != "" && $arrFiltro['fec_proxima_fin'] != "") {
+                $comando->bindParam(":fec_proxima_ini", $fec_proxima_ini, \PDO::PARAM_STR);
+                $comando->bindParam(":fec_proxima_fin", $fec_proxima_fin, \PDO::PARAM_STR);
+            }   
         }
         $resultData = $comando->queryAll();
         if ($resultado == 1) {
@@ -1998,23 +2025,30 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
             if ($arrFiltro['interesado'] != "") {
                 $str_search = " a.contacto like :interesado AND ";
             }
-            if ($arrFiltro['agente'] != "") {
+            /*if ($arrFiltro['agente'] != "") {
                 $str_search .= " (padm_codigo like :agente)  AND";
-            }
+            }*/
             if ($arrFiltro['empresa'] > "0") {
                 $str_search .= " a.emp_id = :empresa  AND";
             }
             if ($arrFiltro['estado'] != "" && $arrFiltro['estado'] > 0) {
                 $str_search .= "  a.eopo_id = :estado_ate AND ";
             }
+            if ($arrFiltro['fec_registro_ini'] != "" && $arrFiltro['fec_registro_fin'] != "") {
+                $str_search .= "  a.fecha_registro >= :fec_registro_ini AND ";
+                $str_search .= "  a.fecha_registro <= :fec_registro_fin AND ";
+            }
+            if ($arrFiltro['fec_proxima_ini'] != "" && $arrFiltro['fec_proxima_fin'] != "") {
+                $str_search .= "  a.fecha_proxima >= :fec_proxima_ini AND ";
+                $str_search .= "  a.fecha_proxima <= :fec_proxima_fin AND ";
+            }
         }
         $sql = "SELECT * FROM (
-                    SELECT  o.opo_id,                                                       
-                             lpad(ifnull(o.opo_codigo,0),7,'0') as opo_codigo, 
+                    SELECT  
+                            lpad(ifnull(o.opo_codigo,0),7,'0') as opo_codigo, 
                             (case when pg.tper_id = 1 then 
                                     concat(ifnull(pg.pges_pri_nombre,''), ' ', ifnull(pg.pges_seg_nombre,''), ' ', ifnull(pg.pges_pri_apellido,''), ' ', ifnull(pg.pges_seg_apellido,'')) 
-                                    else pg.pges_razon_social end) as contacto,
-                            o.emp_id,             
+                                    else pg.pges_razon_social end) as contacto,                                       
                             e.emp_razon_social as des_empresa,        
                             ua.uaca_descripcion as des_unidad,
                             (case when (o.uaca_id < 3) then
@@ -2023,9 +2057,14 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
                                         end) as des_estudio, 
                              m.mod_descripcion as des_modalidad,            
                             eo.eopo_descripcion as des_estado,  
-                            o.opo_fecha_registro as fecha, 
-                            pa.padm_codigo,
-                            o.eopo_id
+                            -- o.opo_fecha_registro as fecha
+                            (select max(bact_fecha_registro) from db_crm.bitacora_actividades b 
+                                    where b.opo_id = o.opo_id and b.bact_estado = 1 and bact_estado_logico = 1) as fecha_registro,
+                            case when o.eopo_id = '3' then
+                                    '' else 
+                                    (select max(bact_fecha_proxima_atencion) from db_crm.bitacora_actividades b 
+                                     where b.opo_id = o.opo_id and b.bact_estado = 1 and bact_estado_logico = 1) end as fecha_proxima
+                          
                     FROM " . $con->dbname . ".oportunidad o inner join " . $con->dbname . ".persona_gestion pg on pg.pges_id = o.pges_id
                          inner join " . $con1->dbname . ".empresa e on e.emp_id = o.emp_id
                          inner join " . $con2->dbname . ".unidad_academica ua on ua.uaca_id = o.uaca_id
@@ -2062,22 +2101,35 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
 
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
             $search_cond = "%" . $arrFiltro["interesado"] . "%";
-            $agente = "%" . $arrFiltro["agente"] . "%";
+           // $agente = "%" . $arrFiltro["agente"] . "%";
             $estado_ate = $arrFiltro["estado"];
             $empresa = $arrFiltro["empresa"];
 
             if ($arrFiltro['interesado'] != "") {
                 $comando->bindParam(":interesado", $search_cond, \PDO::PARAM_STR);
             }
-            if ($arrFiltro['agente'] != "") {
+            /*if ($arrFiltro['agente'] != "") {
                 $comando->bindParam(":agente", $agente, \PDO::PARAM_STR);
-            }
+            }*/
             if ($arrFiltro['empresa'] > "0") {
                 $comando->bindParam(":empresa", $empresa, \PDO::PARAM_INT);
             }
             if ($arrFiltro['estado'] != "" && $arrFiltro['estado'] > 0) {
                 $comando->bindParam(":estado_ate", $estado_ate, \PDO::PARAM_INT);
             }
+            $fec_registro_ini = $arrFiltro["fec_registro_ini"] . " 00:00:00";
+            $fec_registro_fin = $arrFiltro["fec_registro_fin"] . " 23:59:59";            
+            
+            if ($arrFiltro['fec_registro_ini'] != "" && $arrFiltro['fec_registro_fin'] != "") {
+                $comando->bindParam(":fec_registro_ini", $fec_registro_ini, \PDO::PARAM_STR);
+                $comando->bindParam(":fec_registro_fin", $fec_registro_fin, \PDO::PARAM_STR);
+            }
+            $fec_proxima_ini = $arrFiltro["fec_proxima_ini"] . " 00:00:00";
+            $fec_proxima_fin = $arrFiltro["fec_proxima_fin"] . " 23:59:59";    
+            if ($arrFiltro['fec_proxima_ini'] != "" && $arrFiltro['fec_proxima_fin'] != "") {
+                $comando->bindParam(":fec_proxima_ini", $fec_proxima_ini, \PDO::PARAM_STR);
+                $comando->bindParam(":fec_proxima_fin", $fec_proxima_fin, \PDO::PARAM_STR);
+            }   
         }
         $resultData = $comando->queryall();
         $dataProvider = new ArrayDataProvider([

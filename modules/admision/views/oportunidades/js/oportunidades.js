@@ -212,14 +212,20 @@ $(document).ready(function () {
 });
 
 function actualizarGridGestion() {
-    var agente = $('#txt_buscarDataAgente').val();
+    //var agente = $('#txt_buscarDataAgente').val();
     var interesado = $('#txt_buscarDataPersona').val();
     var empresa = $('#cmb_empresa option:selected').val();
     var estado = $('#cmb_estadop option:selected').val();
+    var fecregistroini = $('#txt_fecha_registro_ini').val();
+    var fecregistrofin = $('#txt_fecha_registro_fin').val();
+    var fecproximaini = $('#txt_fecha_proxima_ini').val();    
+    var fecproximafin = $('#txt_fecha_proxima_fin').val();    
+    
     //Buscar almenos una clase con el nombre para ejecutar
     if (!$(".blockUI").length) {
         showLoadingPopup();
-        $('#Pbgestion').PbGridView('applyFilterData', {'agente': agente, 'interesado': interesado, 'empresa': empresa, 'estado': estado});
+        //$('#Pbgestion').PbGridView('applyFilterData', {'agente': agente, 'interesado': interesado, 'empresa': empresa, 'estado': estado});
+        $('#Pbgestion').PbGridView('applyFilterData', {'interesado': interesado, 'empresa': empresa, 'estado': estado, 'fecregini': fecregistroini, 'fecregfin': fecregistrofin, 'fecproxini': fecproximaini, 'fecproxfin': fecproximafin});
         setTimeout(hideLoadingPopup, 2000);
     }
 }
@@ -294,7 +300,12 @@ function exportExcel() {
     var contacto = $('#txt_buscarDataPersona').val();
     var empresa = $('#cmb_empresa').val();
     var f_estado = $('#cmb_estadop').val();
-    window.location.href = $('#txth_base').val() + "/admision/oportunidades/expexcel?search=" + search + "&contacto=" + contacto + "&empresa=" + empresa + "&f_estado=" + f_estado;
+    var fecregistroini = $('#txt_fecha_registro_ini').val();
+    var fecregistrofin = $('#txt_fecha_registro_fin').val();
+    var fecproximaini = $('#txt_fecha_proxima_ini').val();    
+    var fecproximafin = $('#txt_fecha_proxima_fin').val(); 
+    //window.location.href = $('#txth_base').val() + "/admision/oportunidades/expexcel?search=" + search + "&contacto=" + contacto + "&empresa=" + empresa + "&f_estado=" + f_estado;
+    window.location.href = $('#txth_base').val() + "/admision/oportunidades/expexcel?contacto=" + contacto + "&empresa=" + empresa + "&f_estado=" + f_estado + "&fecregistroini=" + fecregistroini + "&fecregistrofin=" + fecregistrofin + "&fecproximaini=" + fecproximaini + "&fecproximafin=" + fecproximafin;
 }
 
 function exportPdf() {
@@ -302,7 +313,12 @@ function exportPdf() {
     var contacto = $('#txt_buscarDataPersona').val();
     var empresa = $('#cmb_empresa').val();
     var f_estado = $('#cmb_estadop').val();
-    window.location.href = $('#txth_base').val() + "/admision/oportunidades/exppdfoportunidades?pdf=1&search=" + search + "&contacto=" + contacto + "&empresa=" + empresa + "&f_estado=" + f_estado;
+    var fecregistroini = $('#txt_fecha_registro_ini').val();
+    var fecregistrofin = $('#txt_fecha_registro_fin').val();
+    var fecproximaini = $('#txt_fecha_proxima_ini').val();    
+    var fecproximafin = $('#txt_fecha_proxima_fin').val(); 
+    //window.location.href = $('#txth_base').val() + "/admision/oportunidades/exppdfoportunidades?pdf=1&search=" + search + "&contacto=" + contacto + "&empresa=" + empresa + "&f_estado=" + f_estado;
+    window.location.href = $('#txth_base').val() + "/admision/oportunidades/exppdfoportunidades?pdf=1&contacto=" + contacto + "&empresa=" + empresa + "&f_estado=" + f_estado + "&fecregistroini=" + fecregistroini + "&fecregistrofin=" + fecregistrofin + "&fecproximaini=" + fecproximaini + "&fecproximafin=" + fecproximafin;
 }
 
 

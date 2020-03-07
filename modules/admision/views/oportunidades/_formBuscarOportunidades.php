@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Html;
+use kartik\date\DatePicker;
 use app\modules\admision\Module;
 
 /*
@@ -27,6 +28,86 @@ use app\modules\admision\Module;
                 <div class="col-sm-9 col-md-9 col-xs-9 col-lg-9">
                     <input type="text" class="form-control" value="" id="txt_buscarDataPersona" placeholder="<?= Yii::t("formulario", "Search by Contact Names") ?>">
                 </div>
+            </div>
+        </div> 
+    </div>
+    <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12"> 
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+            <div class="form-group">
+                <label for="lbl_inicio" class="col-sm-4 control-label"><?= Yii::t("formulario", "Registration Date Start")?></label>
+                <div class="col-sm-6 col-md-6 col-xs-6 col-lg-6">
+                    <?=
+                    DatePicker::widget([
+                        'name' => 'txt_fecha_registro_ini',
+                        'value' => '',
+                        'type' => DatePicker::TYPE_INPUT,
+                        'options' => ["class" => "form-control", "id" => "txt_fecha_registro_ini", "placeholder" => Yii::t("formulario", "Registration Date Start")],
+                        'pluginOptions' => [
+                            'autoclose' => true,
+                            'format' => Yii::$app->params["dateByDatePicker"],
+                        ]]
+                    );
+                    ?>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+            <div class="form-group">
+            <label for="lbl_fin" class="col-sm-4 control-label"><?= Yii::t("formulario", "Registration Date End") ?></label>
+            <div class="col-sm-6 col-md-6 col-xs-6 col-lg-6">
+                <?=
+                DatePicker::widget([
+                    'name' => 'txt_fecha_registro_fin',
+                    'value' => '',
+                    'type' => DatePicker::TYPE_INPUT,
+                    'options' => ["class" => "form-control", "id" => "txt_fecha_registro_fin", "placeholder" => Yii::t("formulario", "Registration Date End")],
+                    'pluginOptions' => [
+                        'autoclose' => true,
+                        'format' => Yii::$app->params["dateByDatePicker"],
+                    ]]
+                );
+                ?>
+            </div>
+            </div>
+        </div> 
+    </div>
+    <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12"> 
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+            <div class="form-group">
+                <label for="lbl_inicio" class="col-sm-4 control-label"><?= Yii::t("formulario", "Date Next attention Start")?></label>
+                <div class="col-sm-6 col-md-6 col-xs-6 col-lg-6">
+                    <?=
+                    DatePicker::widget([
+                        'name' => 'txt_fecha_proxima_ini',
+                        'value' => '',
+                        'type' => DatePicker::TYPE_INPUT,
+                        'options' => ["class" => "form-control", "id" => "txt_fecha_proxima_ini", "placeholder" => Yii::t("formulario", "Date Next attention Start")],
+                        'pluginOptions' => [
+                            'autoclose' => true,
+                            'format' => Yii::$app->params["dateByDatePicker"],
+                        ]]
+                    );
+                    ?>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+            <div class="form-group">
+            <label for="lbl_fin" class="col-sm-4 control-label"><?= Yii::t("formulario", "Date Next attention End") ?></label>
+            <div class="col-sm-6 col-md-6 col-xs-6 col-lg-6">
+                <?=
+                DatePicker::widget([
+                    'name' => 'txt_fecha_proxima_fin',
+                    'value' => '',
+                    'type' => DatePicker::TYPE_INPUT,
+                    'options' => ["class" => "form-control", "id" => "txt_fecha_proxima_fin", "placeholder" => Yii::t("formulario", "Date Next attention Start")],
+                    'pluginOptions' => [
+                        'autoclose' => true,
+                        'format' => Yii::$app->params["dateByDatePicker"],
+                    ]]
+                );
+                ?>
+            </div>
             </div>
         </div> 
     </div>

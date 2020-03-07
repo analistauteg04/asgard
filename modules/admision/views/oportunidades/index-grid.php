@@ -58,8 +58,13 @@ use app\modules\admision\Module;
             ],
             [
                 'attribute' => 'Fecha',
-                'header' => Yii::t("formulario", "Date"),
-                'value' => 'fecha',
+                'header' => Yii::t("formulario", "Registration Date"),
+                'value' => 'fecha_registro',
+            ],
+            [
+                'attribute' => 'Fecha',
+                'header' => Yii::t("formulario", "Date Next attention"),
+                'value' => 'fecha_proxima',
             ],
             /*[
                 'attribute' => 'Agente',

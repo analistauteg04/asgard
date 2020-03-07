@@ -33,6 +33,10 @@ class OportunidadesController extends \app\components\CController {
             $arrSearch["interesado"] = $data['interesado'];
             $arrSearch["empresa"] = $data['empresa'];
             $arrSearch["estado"] = $data['estado'];
+            $arrSearch["fec_registro_ini"] = $data['fecregini'];
+            $arrSearch["fec_registro_fin"] = $data['fecregfin'];
+            $arrSearch["fec_proxima_ini"] = $data['fecproxini'];
+            $arrSearch["fec_proxima_fin"] = $data['fecproxfin'];
             $mod_gestion = $modoportunidad->consultarOportunidad($arrSearch, 2);
         } else {
             $mod_gestion = $modoportunidad->consultarOportunidad($arrSearch, 2);
@@ -441,25 +445,28 @@ class OportunidadesController extends \app\components\CController {
         header('Cache-Control: max-age=0');
         $colPosition = array("C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N");
 
-        $arrHeader = array(
-            Module::t("crm", "Id Opportunity"),
+        $arrHeader = array(            
             Module::t("crm", "No Opportunity"),
-            Module::t("crm", "Contact"),
-            "",
+            Module::t("crm", "Contact"),           
             Yii::t("formulario", "Company"),
             Yii::t("formulario", "Aca. Uni."),
             Module::t("crm", "Career/Program/Course"),
             Module::t("crm", "Moda"),
             Yii::t("formulario", "Status"),
-            Yii::t("formulario", "Date"),
-            Yii::t("formulario", "Agent"),
+            Yii::t("formulario", "Registration Date"),
+            Yii::t("formulario", "Date Next attention"),
+            //Yii::t("formulario", "Agent"),
             " ",
         );
         $data = Yii::$app->request->get();
         $arrSearch["interesado"] = $data["contacto"];
-        $arrSearch["agente"] = $data["search"];
+        //$arrSearch["agente"] = $data["search"];
         $arrSearch["empresa"] = $data['empresa'];
         $arrSearch["estado"] = $data["f_estado"];
+        $arrSearch["fec_registro_ini"] = $data['fecregistroini'];
+        $arrSearch["fec_registro_fin"] = $data['fecregistrofin'];
+        $arrSearch["fec_proxima_ini"] = $data['fecproximaini'];
+        $arrSearch["fec_proxima_fin"] = $data['fecproximafin'];
 
         $modoportunidad = new Oportunidad();
         $arrData = array();
@@ -485,20 +492,23 @@ class OportunidadesController extends \app\components\CController {
         $arrSearch["agente"] = $data["search"];
         $arrSearch["empresa"] = $data['empresa'];
         $arrSearch["estado"] = $data["f_estado"];
+        $arrSearch["fec_registro_ini"] = $data['fecregistroini'];
+        $arrSearch["fec_registro_fin"] = $data['fecregistrofin'];
+        $arrSearch["fec_proxima_ini"] = $data['fecproximaini'];
+        $arrSearch["fec_proxima_fin"] = $data['fecproximafin'];
 
-        $arr_head = array(
-            Module::t("crm", "Id Opportunity"),
+        $arr_head = array(        
             Module::t("crm", "No Opportunity"),
-            Module::t("crm", "Contact"),
-            "",
+            Module::t("crm", "Contact"),           
             Yii::t("formulario", "Company"),
             Yii::t("formulario", "Aca. Uni."),
             Module::t("crm", "Career/Program/Course"),
             Module::t("crm", "Moda"),
             Yii::t("formulario", "Status"),
             Yii::t("formulario", "Date"),
-            Yii::t("formulario", "Agent"),
-            " ",
+            //Yii::t("formulario", "Agent"),
+            Yii::t("formulario", "Registration Date"),
+            Yii::t("formulario", "Date Next attention"),
         );
 
         if (empty($arrSearch)) {
