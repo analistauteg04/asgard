@@ -74,7 +74,7 @@ return [
     "loadCall" => "Cargar Call Center",
     "loadLeads" => "Cargar Leads",
     "exportStatContact" => "Estado Oportunidad",
-    "exportLostContact" => "Contactos Perdidos",    
+    "exportLostContact" => "Gestión de Actividades",    
     "pendingApplicants" => "Documentos Pendientes Aspirantes",    
     "payApplicants" => "Pagos Pendientes Aspirantes",    
     "To register" => "Registrar",

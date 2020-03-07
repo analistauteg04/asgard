@@ -1021,25 +1021,7 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
                         pg.pges_domicilio_celular2,
                         pg.pges_trabajo_telefono,
                         emp.emp_id,
-                        uaca.uaca_id,
-                        /*
-                        (select 
-                            case  count(ba.bact_id)
-                               when 0 then 1 
-                               when 1 and (ba.eopo_id <> 3) then 1
-                               when 1 and (ba.eopo_id = 3) then 2
-                               when 2 then 2
-                            end as bact_id 
-                            from db_crm.oportunidad o 
-                            inner join db_crm.bitacora_actividades ba on ba.opo_id = o.opo_id
-                            -- inner join db_asgard.usua_grol_eper uge on uge.usu_id = ba.usu_id
-                            where o.pges_id = pg.pges_id                            
-                            and o.opo_estado = :estado
-                            and o.opo_estado_logico = :estado
-                            and ba.bact_estado = :estado
-                            and ba.bact_estado_logico = :estado
-                            group by ba.eopo_id) as gestion 
-                        */
+                        uaca.uaca_id,                        
                         case when (select ifnull(count(ba.bact_id),0)
 				from db_crm.oportunidad o 
 				inner join db_crm.bitacora_actividades ba on ba.opo_id = o.opo_id

@@ -80,18 +80,19 @@ class Reporte extends \yii\db\ActiveRecord {
             }
         }
         $sql = "
-                SELECT LPAD(op.opo_id,9,'0') opo_id,
-                DATE(bact.bact_fecha_registro) F_Atencion,
-                DATE(bact.bact_fecha_proxima_atencion) F_Prox_At,
-                emp.emp_razon_social,                
-                pg.pges_cedula,
-                CONCAT(pg.pges_pri_nombre, ' ', ifnull(pg.pges_seg_nombre,' ')) Nombres,
-                CONCAT(pg.pges_pri_apellido, ' ', ifnull(pg.pges_seg_apellido,' ')) Apellidos,
-                uac.uaca_nombre,
-                ccan.ccan_nombre canal_contacto,
-                eop.eopo_nombre,
-                oact.oact_nombre,
-                CONCAT(per.per_pri_nombre, ' ', ifnull(per.per_pri_apellido,' ')) Agente
+                SELECT  LPAD(op.opo_codigo,9,'0') Codigo,
+                        date_format(bact.bact_fecha_registro, '%Y-%m-%d %H:%i') F_Atencion,
+                        date_format(bact.bact_fecha_proxima_atencion, '%Y-%m-%d %H:%i') F_Prox_At,
+                        emp.emp_razon_social,
+                        pg.pges_cedula,
+                        CONCAT(pg.pges_pri_nombre, ' ', ifnull(pg.pges_seg_nombre,' '), ' ', pg.pges_pri_apellido, ' ', ifnull(pg.pges_seg_apellido,' ')) Nombres_Completos,                        	
+                        ccan.ccan_nombre canal_contacto,
+                        eop.eopo_nombre as Estado,
+                        oact.oact_nombre,
+                        uac.uaca_nombre as Unidad,
+                        mo.mod_nombre as Modalidad,
+                        ea.eaca_nombre as Carrera,
+                        CONCAT(per.per_pri_nombre, ' ', ifnull(per.per_pri_apellido,' ')) Agente
                 FROM " . $con->dbname . ".oportunidad op
                 INNER JOIN " . $con->dbname . ".persona_gestion pg ON pg.pges_id=op.pges_id
                 inner join " . $con->dbname . ".conocimiento_canal ccan on ccan.ccan_id=op.ccan_id
@@ -101,6 +102,8 @@ class Reporte extends \yii\db\ActiveRecord {
                 INNER JOIN " . $con->dbname . ".bitacora_actividades bact ON bact.opo_id=op.opo_id
                 INNER JOIN " . $con1->dbname . ".persona per on per.per_id = bact.bact_usuario
                 INNER JOIN " . $con->dbname . ".observacion_actividades as oact on oact.oact_id=bact.oact_id
+                INNER JOIN " . $con2->dbname . ".estudio_academico ea on ea.eaca_id = op.eaca_id                    
+                INNER JOIN " . $con2->dbname . ".modalidad mo on mo.mod_id = op.mod_id
                 WHERE $str_search 
                     op.opo_estado = :estado and op.opo_estado_logico = :estado and 
                     pg.pges_estado = :estado and pg.pges_estado_logico = :estado and
@@ -110,9 +113,11 @@ class Reporte extends \yii\db\ActiveRecord {
                     eop.eopo_estado = :estado and eop.eopo_estado_logico = :estado and
                     bact.bact_estado = :estado and bact.bact_estado_logico = :estado  and
                     per.per_estado = :estado and per.per_estado_logico = :estado and
-                    oact.oact_estado = :estado and oact.oact_estado_logico = :estado 
+                    oact.oact_estado = :estado and oact.oact_estado_logico = :estado and
+                    ea.eaca_estado = :estado and ea.eaca_estado_logico = :estado and
+                    mo.mod_estado = :estado and mo.mod_estado_logico = :estado
                 ";
-        $sql .= " ORDER BY bact.bact_fecha_proxima_atencion ";
+        $sql .= " ORDER BY op.opo_codigo, bact.bact_fecha_registro";
         $comando = $con->createCommand($sql);
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
             if ($arrFiltro['search_dni'] != "") {
