@@ -505,7 +505,6 @@ class OportunidadesController extends \app\components\CController {
             Module::t("crm", "Career/Program/Course"),
             Module::t("crm", "Moda"),
             Yii::t("formulario", "Status"),
-            Yii::t("formulario", "Date"),
             //Yii::t("formulario", "Agent"),
             Yii::t("formulario", "Registration Date"),
             Yii::t("formulario", "Date Next attention"),
