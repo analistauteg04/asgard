@@ -254,8 +254,8 @@ class OportunidadesController extends \app\components\CController {
     }
 
     public function actionSave() {
-        // $per_id = @Yii::$app->session->get("PB_perid"); //ESTO DESCOMENTAR AL FINAL
-        $per_id = 6;
+        $per_id = @Yii::$app->session->get("PB_perid"); //ESTO DESCOMENTAR AL FINAL
+        //$per_id = 6;
         $mod_gestion = new Oportunidad();
         //$scli_id = 2;
         if (Yii::$app->request->isAjax) {

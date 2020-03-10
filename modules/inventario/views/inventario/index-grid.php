@@ -32,6 +32,11 @@ PbGridView::widget([
             'value' => 'area',
         ],
         [
+            'attribute' => 'Espacio',
+            'header' => inventario::t("inventario", "Space"),
+            'value' => 'espacio',
+        ],
+        [
             'class' => 'yii\grid\ActionColumn',
             'header' => inventario::t("inventario", "Category"),
             'template' => '{view}',            

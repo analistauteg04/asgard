@@ -148,6 +148,7 @@ class ActivoFijo extends \yii\db\ActiveRecord
         $sql = "SELECT 	case when af.are_id is null then
                             dep.dep_nombre else d.dep_nombre end as departamento,
                         ifnull(a.are_descripcion,'N/A') as area, 
+                        ifnull(ed.edep_descripcion,'N/A') as espacio, 
                         c.cat_descripcion as categoria,
                         af.afij_codigo, af.afij_custodio,                                       
                         ifnull(af.afij_cantidad,0) as afij_cantidad
@@ -161,7 +162,7 @@ class ActivoFijo extends \yii\db\ActiveRecord
                 WHERE $str_search
                       afij_estado = :estado and
                       afij_estado_logico = :estado
-                ORDER BY 1";        
+                ORDER BY 1,2,3";        
                        
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
