@@ -261,6 +261,7 @@ create table if not exists `malla_academica_detalle` (
   `nest_id` bigint(20) not null,
   `fmac_id` bigint(20) not null,
   `made_codigo_asignatura` varchar(300) not null,
+  `made_asi_requisito` bigint(20) null,
   `made_hora` integer(04) null,
   `made_credito` integer(2) null,
   `made_usuario_ingreso` bigint(20) not null,
@@ -361,7 +362,9 @@ create table if not exists `periodo_academico` (
 create table if not exists `estudiante` (
   `est_id` bigint(20) not null auto_increment primary key,
   `per_id` bigint(20) not null,    
-  `est_matricula` varchar(20) not null,    
+  `est_matricula` varchar(20) not null, 
+  `est_categoria` varchar(2) not null, 
+  `est_fecha_ingreso` timestamp null default null, 
   `est_usuario_ingreso` bigint(20) not null,
   `est_usuario_modifica` bigint(20)  null,
   `est_estado` varchar(1) not null,
