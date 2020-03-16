@@ -1309,10 +1309,10 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
             //$opo_codigo = Secuencias::nuevaSecuencia($con, 1, 1, 1, 'SOL') ;//
             $opo_codigo = intval($mod_oportunidad->consultarUltimoCodcrm()) + 1;
             $pges_codigo = intval($mod_pergestion->consultarUltimoCodPerGest()) + 1;
-            for ($i = 0; $i < sizeof($Data); $i++) {
+            for ($i = 0; $i < sizeof($Data); $i++) {                 
                 //Verifico si Existe lOS datos en la tabla
                 $pges_id = PersonaGestion::existePersonaGestLeads($Data[$i]['pgest_correo'], $Data[$i]['pgest_numero']);
-                if ($pges_id == 0) {
+                if ($pges_id == 0) {                    
                     //if (!PersonaGestion::existePersonaGestLeads($Data[$i]['correo'], $Data[$i]['telefono'])) {
                     //Si no Existe lo inserta en la Tabla
                     $nombre = $Data[$i]['pgest_nombre'];
@@ -1325,8 +1325,8 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
                     }
 
                     $tper_id = 1; //Por defecto Natural
-                    $econ_id = 1; //=>En Contacto por defecto
-                    $pges_id = PersonaGestion::insertarPersonaGestionLeads($con, $pges_codigo, $tper_id, $nombre, $telefono, $correo, $contacto, $econ_id);
+                    $econ_id = 1; //=>En Contacto por defecto                    
+                    $pges_id = PersonaGestion::insertarPersonaGestionLeads($con, $pges_codigo, $tper_id, $nombre, $telefono, $correo, $contacto, $econ_id);                    
                     $pges_codigo++;
                     if ($pges_id > 0) {
                         //-------------------------------------------
@@ -1372,16 +1372,16 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
                         $padm_id = $agente['agente_id'];
                         //-------------------------------------------
                         //$pgco_id = $mod_oportunidad->insertarPersonaGestionContactoLeads($con, $pges_id,$Data[$i]);                        
-                        $opo_id = $mod_oportunidad->insertarOportunidadLeads($con, $opo_codigo, $emp_id, $pges_id, $padm_id, $Data[$i]);
+                        $opo_id = $mod_oportunidad->insertarOportunidadLeads($con, $opo_codigo, $emp_id, $pges_id, $padm_id, $Data[$i]);                        
                         $opo_codigo++;
-                        if ($opo_id > 0) {
-                            \app\models\Utilities::putMessageLogFile('antes de insertar actividad');
-                            $bact_id = $mod_oportunidad->insertarActividadLeads($con, $opo_id, $padm_id, $Data[$i]['pgest_comentario']);
+                        if ($opo_id > 0) {                            
+                            $bact_id = $mod_oportunidad->insertarActividadLeads($con, $opo_id, $padm_id, $Data[$i]['pgest_comentario']);                            
                         }
                     }
                 } else {
                     //Si existen en gestion Persona 
                     //$rawData[] = $Data[$i]['pgest_nombre'].'-'.$Data[$i]['pgest_correo'].'<br/>';                    
+                    \app\models\Utilities::putMessageLogFile('Contacto existente:'. $Data[$i]['pgest_correo']);   
                     $mensError .= 'Nombre: ' . $Data[$i]['pgest_nombre'] . ' - ' . $Data[$i]['pgest_correo'] . '<br/>';
                     $contError++;
                 }

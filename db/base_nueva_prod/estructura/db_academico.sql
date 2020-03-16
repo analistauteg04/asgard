@@ -1177,3 +1177,79 @@ create table if not exists `distributivo_carga_horaria` (
  foreign key (pro_id) references `profesor`(pro_id),
  foreign key (tdis_id) references `tipo_distributivo`(tdis_id) 
 );
+
+-- --------------------------------------------------------
+-- 
+-- Estructura de tabla para la tabla `control_data` 
+-- --------------------------------------------------------
+create table if not exists `control_catedra` (
+  `cca_id` bigint(20) not null auto_increment primary key,       
+  `hape_id` bigint(20) not null,
+  `cca_fecha_registro` timestamp null,      
+  `cca_titulo_unidad` varchar(500) not null,
+  `cca_tema` varchar(2000) not null,
+  `cca_trabajo_autopractico` varchar(2000) not null,
+  `cca_logro_aprendizaje` varchar(2000) not null,
+  `cca_observacion` varchar(2000) null,
+  `cca_direccion_ip` varchar(20) null,
+  `usu_id` bigint(20) not null,  
+  `cca_estado` varchar(1) not null,
+  `cca_fecha_creacion` timestamp not null default current_timestamp,
+  `cca_fecha_modificacion` timestamp null default null,
+  `cca_estado_logico` varchar(1) not null,  
+  foreign key (hape_id) references `horario_asignatura_periodo`(hape_id)
+);
+
+-- 
+-- Estructura de tabla para la tabla `actividad_evaluacion` 
+-- --------------------------------------------------------
+create table if not exists `actividad_evaluacion` (
+  `aeva_id` bigint(20) not null auto_increment primary key,         
+  `aeva_descripcion` varchar(500) not null,  
+  `aeva_nombre` varchar(500) not null,  
+  `aeva_estado` varchar(1) not null,
+  `aeva_fecha_creacion` timestamp not null default current_timestamp,
+  `aeva_fecha_modificacion` timestamp null default null,
+  `aeva_estado_logico` varchar(1) not null
+);
+
+-- 
+-- Estructura de tabla para la tabla `valor_desarrollo` 
+-- --------------------------------------------------------
+create table if not exists `valor_desarrollo` (
+  `vdes_id` bigint(20) not null auto_increment primary key,         
+  `vdes_descripcion` varchar(500) not null,  
+  `vdes_nombre` varchar(500) not null,  
+  `vdes_estado` varchar(1) not null,
+  `vdes_fecha_creacion` timestamp not null default current_timestamp,
+  `vdes_fecha_modificacion` timestamp null default null,
+  `vdes_estado_logico` varchar(1) not null
+);
+
+-- 
+-- Estructura de tabla para la tabla `detalle_catedra_actividad` 
+-- --------------------------------------------------------
+create table if not exists `detalle_catedra_actividad` (
+  `dcac_id` bigint(20) not null auto_increment primary key,         
+  `ccat_id` bigint(20) not null,  
+  `aeva_id` bigint(20) not null,  
+  `aeva_otro` varchar(1000) null,  
+  `dcac_estado` varchar(1) not null,
+  `dcac_fecha_creacion` timestamp not null default current_timestamp,
+  `dcac_fecha_modificacion` timestamp null default null,
+  `dcac_estado_logico` varchar(1) not null
+);
+
+-- 
+-- Estructura de tabla para la tabla `detalle_valor_desarrollo` 
+-- --------------------------------------------------------
+create table if not exists `detalle_valor_desarrollo` (
+  `dvde_id` bigint(20) not null auto_increment primary key,         
+  `ccat_id` bigint(20) not null,  
+  `vdes_id` bigint(20) not null,  
+  `vdes_otro`  varchar(1000) null,  
+  `dvde_estado` varchar(1) not null,
+  `dvde_fecha_creacion` timestamp not null default current_timestamp,
+  `dvde_fecha_modificacion` timestamp null default null,
+  `dvde_estado_logico` varchar(1) not null
+);
