@@ -353,6 +353,7 @@ create table if not exists `usuario` (
  `usu_session` text,
  `usu_last_login` timestamp null default null,
  `usu_link_activo` text default null,
+ `usu_upreg` varchar(1) not null, -- campo de validacion para cambio de contrasena  0=> oblicacion cambio de clave 1=> no se requiere cambio de clave
  `usu_estado` varchar(1) not null,
  `usu_fecha_creacion` timestamp not null default current_timestamp on update current_timestamp,
  `usu_fecha_modificacion` timestamp null default null,
