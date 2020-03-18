@@ -52,4 +52,4 @@ INSERT INTO `valor_desarrollo` (`vdes_id`, `vdes_descripcion`, `vdes_nombre`, `v
 (6, 'Puntualidad', 'Puntualidad', '1', '1'),
 (7, 'Responsabilidad Social', 'Resp. Social', '1', '1'),
 (8, 'Responsabilidad Ambiental', 'Resp. Ambiental', '1', '1'),
-(9, 'Otros, 'Otros', '1', '1');
+(9, 'Otros', 'Otros', '1', '1');
