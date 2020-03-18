@@ -40,12 +40,15 @@ class ControlcatedraController extends \app\components\CController {
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }
         }
-        $arr_datahorario = $mod_control->consultarHorarioxhapeid($hape_id,true);
+        $arr_actividad = $mod_control->consultarActividadevaluacion();
+        $arr_valor = $mod_control->consultarValordesarrollo();
+        $arr_datahorario = $mod_control->consultarHorarioxhapeid($hape_id, true);
         $arr_unidad = $mod_unidad->consultarUnidadAcademicasEmpresa(1);
         $arr_modalidad = $mod_modalidad->consultarModalidad($arr_datahorario[0]["unidad"], 1);
         $arr_carrera = $modcanal->consultarCarreraModalidad($arr_datahorario[0]["unidad"], $arr_datahorario[0]["modalidad"]);
         return $this->render('new', [
-                    //'hape_id' => $hape_id,
+                    'arr_actividad' => $arr_actividad,
+                    "arr_valor" => $arr_valor,
                     "arr_datahorario" => $arr_datahorario,
                     "arr_unidad" => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arr_unidad), "id", "name"),
                     "arr_modalidad" => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arr_modalidad), "id", "name"),

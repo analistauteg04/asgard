@@ -4,6 +4,7 @@ namespace app\modules\academico\models;
 
 use Yii;
 use yii\data\ArrayDataProvider;
+
 /**
  * This is the model class for table "control_catedra".
  *
@@ -145,6 +146,52 @@ class ControlCatedra extends \yii\db\ActiveRecord {
         } else {
             return $dataProvider;
         }
+    }
+
+    /**
+     * Function obtener Modalidad segun nivel interes estudio
+     * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;
+     * @property       
+     * @return  
+     */
+    public function consultarActividadevaluacion() {
+        $con = \Yii::$app->db_academico;
+        $estado = 1;
+        $sql = "SELECT ace.aeva_id as id,
+                       ace.aeva_nombre as value
+                    FROM " . $con->dbname . ".actividad_evaluacion ace                 
+                    WHERE 
+                    ace.aeva_estado_logico = :estado
+                    and ace.aeva_estado = :estado                    
+                    -- ORDER BY name asc";
+
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);      
+        $resultData = $comando->queryAll();
+        return $resultData;
+    }
+    
+    /**
+     * Function obtener Modalidad segun nivel interes estudio
+     * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;
+     * @property       
+     * @return  
+     */
+    public function consultarValordesarrollo() {
+        $con = \Yii::$app->db_academico;
+        $estado = 1;
+        $sql = "SELECT vde.vdes_id as id,
+                       vde.vdes_nombre as value
+                    FROM " . $con->dbname . ".valor_desarrollo vde                 
+                    WHERE 
+                    vde.vdes_estado_logico = :estado
+                    and vde.vdes_estado = :estado                    
+                    -- ORDER BY name asc";
+
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);      
+        $resultData = $comando->queryAll();
+        return $resultData;
     }
 
 }
