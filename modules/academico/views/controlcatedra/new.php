@@ -103,7 +103,7 @@ use app\modules\academico\Module as academico;
         <div class='col-md-12 col-sm-12 col-xs-12 col-lg-12'>
             <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">            
                 <div class="form-group">
-                    <label for="txt_titulo" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label" id="lbl_titulo"><?= academico::t("Academico", "Unit Title") ?> </label>
+                    <label for="txt_titulo" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label" id="lbl_titulo"><?= academico::t("Academico", "Unit Title") ?><span class="text-danger">*</span></label>
                     <div class="col-sm-8 col-md-8 col-xs-8 col-lg-8">
                         <textarea  class="form-control keyupmce" rows="3" id="txt_titulo"></textarea>                  
                     </div>
@@ -111,7 +111,7 @@ use app\modules\academico\Module as academico;
             </div>     
             <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">            
                 <div class="form-group">
-                    <label for="txt_tema" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label" id="lbl_tema"><?= academico::t("Academico", "Topic") ?> </label>
+                    <label for="txt_tema" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label" id="lbl_tema"><?= academico::t("Academico", "Topic") ?><span class="text-danger">*</span></label>
                     <div class="col-sm-8 col-md-8 col-xs-8 col-lg-8">
                         <textarea  class="form-control keyupmce" rows="3" id="txt_tema"></textarea>                  
                     </div>
@@ -121,7 +121,7 @@ use app\modules\academico\Module as academico;
         <div class='col-md-12 col-sm-12 col-xs-12 col-lg-12'>
             <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">            
                 <div class="form-group">
-                    <label for="txt_trabajo" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label" id="lbl_trabajo"><?= academico::t("Academico", "Freelance practical work") ?> </label>
+                    <label for="txt_trabajo" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label" id="lbl_trabajo"><?= academico::t("Academico", "Freelance practical work") ?><span class="text-danger">*</span></label>
                     <div class="col-sm-8 col-md-8 col-xs-8 col-lg-8">
                         <textarea  class="form-control keyupmce" rows="3" id="txt_trabajo"></textarea>                  
                     </div>
@@ -129,7 +129,7 @@ use app\modules\academico\Module as academico;
             </div>     
             <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">            
                 <div class="form-group">
-                    <label for="txt_logro" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label" id="lbl_logro"><?= academico::t("Academico", "Learning Achievements") ?> </label>
+                    <label for="txt_logro" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label" id="lbl_logro"><?= academico::t("Academico", "Learning Achievements") ?><span class="text-danger">*</span></label>
                     <div class="col-sm-8 col-md-8 col-xs-8 col-lg-8">
                         <textarea  class="form-control keyupmce" rows="3" id="txt_logro"></textarea>                  
                     </div>
