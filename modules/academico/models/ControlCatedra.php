@@ -10,6 +10,7 @@ use yii\data\ArrayDataProvider;
  *
  * @property int $cca_id
  * @property int $hape_id
+ * @property int $eaca_id
  * @property string $cca_fecha_registro
  * @property string $cca_titulo_unidad
  * @property string $cca_tema
@@ -24,6 +25,9 @@ use yii\data\ArrayDataProvider;
  * @property string $cca_estado_logico
  *
  * @property HorarioAsignaturaPeriodo $hape
+ * @property EstudioAcademico $eaca
+ * @property DetalleCatedraActividad[] $detalleCatedraActividads
+ * @property DetalleValorDesarrollo[] $detalleValorDesarrollos
  */
 class ControlCatedra extends \yii\db\ActiveRecord {
 
@@ -47,13 +51,14 @@ class ControlCatedra extends \yii\db\ActiveRecord {
     public function rules() {
         return [
             [['hape_id', 'cca_titulo_unidad', 'cca_tema', 'cca_trabajo_autopractico', 'cca_logro_aprendizaje', 'usu_id', 'cca_estado', 'cca_estado_logico'], 'required'],
-            [['hape_id', 'usu_id'], 'integer'],
+            [['hape_id', 'eaca_id', 'usu_id'], 'integer'],
             [['cca_fecha_registro', 'cca_fecha_creacion', 'cca_fecha_modificacion'], 'safe'],
             [['cca_titulo_unidad'], 'string', 'max' => 500],
             [['cca_tema', 'cca_trabajo_autopractico', 'cca_logro_aprendizaje', 'cca_observacion'], 'string', 'max' => 2000],
             [['cca_direccion_ip'], 'string', 'max' => 20],
             [['cca_estado', 'cca_estado_logico'], 'string', 'max' => 1],
             [['hape_id'], 'exist', 'skipOnError' => true, 'targetClass' => HorarioAsignaturaPeriodo::className(), 'targetAttribute' => ['hape_id' => 'hape_id']],
+            [['eaca_id'], 'exist', 'skipOnError' => true, 'targetClass' => EstudioAcademico::className(), 'targetAttribute' => ['eaca_id' => 'eaca_id']],
         ];
     }
 
@@ -64,6 +69,7 @@ class ControlCatedra extends \yii\db\ActiveRecord {
         return [
             'cca_id' => 'Cca ID',
             'hape_id' => 'Hape ID',
+            'eaca_id' => 'Eaca ID',
             'cca_fecha_registro' => 'Cca Fecha Registro',
             'cca_titulo_unidad' => 'Cca Titulo Unidad',
             'cca_tema' => 'Cca Tema',
@@ -84,6 +90,27 @@ class ControlCatedra extends \yii\db\ActiveRecord {
      */
     public function getHape() {
         return $this->hasOne(HorarioAsignaturaPeriodo::className(), ['hape_id' => 'hape_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getEaca() {
+        return $this->hasOne(EstudioAcademico::className(), ['eaca_id' => 'eaca_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getDetalleCatedraActividads() {
+        return $this->hasMany(DetalleCatedraActividad::className(), ['cca_id' => 'cca_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getDetalleValorDesarrollos() {
+        return $this->hasMany(DetalleValorDesarrollo::className(), ['cca_id' => 'cca_id']);
     }
 
     /**
@@ -166,11 +193,11 @@ class ControlCatedra extends \yii\db\ActiveRecord {
                     -- ORDER BY name asc";
 
         $comando = $con->createCommand($sql);
-        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);      
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $resultData = $comando->queryAll();
         return $resultData;
     }
-    
+
     /**
      * Function obtener Modalidad segun nivel interes estudio
      * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;
@@ -189,7 +216,7 @@ class ControlCatedra extends \yii\db\ActiveRecord {
                     -- ORDER BY name asc";
 
         $comando = $con->createCommand($sql);
-        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);      
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $resultData = $comando->queryAll();
         return $resultData;
     }
