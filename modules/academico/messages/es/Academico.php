@@ -21,6 +21,7 @@ return [
     "Career" => "Carrera",
     "Career/Program" => "Carrera/Programa",
     "Career/Program/Course" => "Carrera/Programa/Curso",
+    "Cathedra control" => "Control Cátedra",
     "Class date" => "Fecha clase",
     "Code" => "Código",
     "Contract" => "Contrato",
