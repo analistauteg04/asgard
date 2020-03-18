@@ -128,7 +128,7 @@ class InteresadosController extends \app\components\CController
                                         }
                                         if ($iemp_id > 0) {
                                             $usuarioNew = Usuario::findIdentity($usuario_id);
-                                            $link = $usuarioNew->generarLinkActivacion();
+                                            $link = $usuarioNew->generarLinkActivacion();                                                                 
                                             $email_info = array(
                                                 "nombres" => $pgest['pges_pri_nombre'] . " " . $pgest['pges_seg_nombre'],
                                                 "apellidos" => $pgest['pges_pri_apellido'] . " " . $pgest['pges_seg_apellido'],
@@ -137,12 +137,12 @@ class InteresadosController extends \app\components\CController
                                                 "identificacion" => isset($pgest['pges_cedula']) ? $pgest['pges_cedula'] : $pgest['pges_pasaporte'],
                                                 "link_asgard" => $link,
                                             );
-                                            /* GVG 27/09/2019 solicitado por Admisiones - Diana Lòpez
+                                            // GVG 27/09/2019 solicitado por Admisiones - Diana Lòpez
                                             $outemail = $mod_interesado->enviarCorreoBienvenida($email_info);
                                             if ($outemail == 0) {
                                                 $error_message .= Yii::t("formulario", "The email hasn't been sent");
                                                 $error++;
-                                            }*/
+                                            }
                                         } else {
                                             $error_message .= Yii::t("formulario", "The enterprise interested hasn't been saved");
                                             $error++;

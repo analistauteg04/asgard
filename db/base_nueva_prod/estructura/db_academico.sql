@@ -362,8 +362,8 @@ create table if not exists `periodo_academico` (
 create table if not exists `estudiante` (
   `est_id` bigint(20) not null auto_increment primary key,
   `per_id` bigint(20) not null,    
-  `est_matricula` varchar(20) not null, 
-  `est_categoria` varchar(2) not null, 
+  `est_matricula` varchar(20) null, 
+  `est_categoria` varchar(2) null, 
   `est_fecha_ingreso` timestamp null default null, 
   `est_usuario_ingreso` bigint(20) not null,
   `est_usuario_modifica` bigint(20)  null,
@@ -1185,6 +1185,7 @@ create table if not exists `distributivo_carga_horaria` (
 create table if not exists `control_catedra` (
   `cca_id` bigint(20) not null auto_increment primary key,       
   `hape_id` bigint(20) not null,
+  `eaca_id` bigint(20) null,
   `cca_fecha_registro` timestamp null,      
   `cca_titulo_unidad` varchar(500) not null,
   `cca_tema` varchar(2000) not null,
@@ -1197,7 +1198,8 @@ create table if not exists `control_catedra` (
   `cca_fecha_creacion` timestamp not null default current_timestamp,
   `cca_fecha_modificacion` timestamp null default null,
   `cca_estado_logico` varchar(1) not null,  
-  foreign key (hape_id) references `horario_asignatura_periodo`(hape_id)
+  foreign key (hape_id) references `horario_asignatura_periodo`(hape_id),
+  foreign key (eaca_id) references `estudio_academico`(eaca_id)
 );
 
 -- 
@@ -1231,13 +1233,14 @@ create table if not exists `valor_desarrollo` (
 -- --------------------------------------------------------
 create table if not exists `detalle_catedra_actividad` (
   `dcac_id` bigint(20) not null auto_increment primary key,         
-  `ccat_id` bigint(20) not null,  
+  `cca_id` bigint(20) not null,  
   `aeva_id` bigint(20) not null,  
   `aeva_otro` varchar(1000) null,  
   `dcac_estado` varchar(1) not null,
   `dcac_fecha_creacion` timestamp not null default current_timestamp,
   `dcac_fecha_modificacion` timestamp null default null,
-  `dcac_estado_logico` varchar(1) not null
+  `dcac_estado_logico` varchar(1) not null,
+  foreign key (cca_id) references `control_catedra`(cca_id)
 );
 
 -- 
@@ -1245,11 +1248,12 @@ create table if not exists `detalle_catedra_actividad` (
 -- --------------------------------------------------------
 create table if not exists `detalle_valor_desarrollo` (
   `dvde_id` bigint(20) not null auto_increment primary key,         
-  `ccat_id` bigint(20) not null,  
+  `cca_id` bigint(20) not null,  
   `vdes_id` bigint(20) not null,  
   `vdes_otro`  varchar(1000) null,  
   `dvde_estado` varchar(1) not null,
   `dvde_fecha_creacion` timestamp not null default current_timestamp,
   `dvde_fecha_modificacion` timestamp null default null,
-  `dvde_estado_logico` varchar(1) not null
+  `dvde_estado_logico` varchar(1) not null,
+  foreign key (cca_id) references `control_catedra`(cca_id)
 );
