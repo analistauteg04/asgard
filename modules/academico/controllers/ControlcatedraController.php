@@ -55,5 +55,44 @@ class ControlcatedraController extends \app\components\CController {
                     "arr_carrera" => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arr_carrera), "id", "name"),
         ]);
     }
+    
+    public function actionIndex() {        
+        $mod_modalidad = new Modalidad();
+        $mod_unidad = new UnidadAcademica();
+        $mod_control = new ControlCatedra();        
+        $mod_periodo = new PeriodoAcademicoMetIngreso();
+        $periodo = $mod_periodo->consultarPeriodoAcademico();
+        $data = Yii::$app->request->get();
+        if ($data['PBgetFilter']) {
+            $arrSearch["profesor"] = $data['profesor'];
+            $arrSearch["materia"] = $data['materia'];
+            $arrSearch["f_ini"] = $data['f_ini'];
+            $arrSearch["f_fin"] = $data['f_fin'];
+            $arrSearch["periodo"] = $data['periodo'];
+            $arrSearch["unidad"] = $data['unidad'];
+            $arrSearch["modalidad"] = $data['modalidad'];
+            $arrSearch["estado"] = $data['estado'];
+            $arr_data = $mod_control->consultarControlCatedra($arrSearch);
+            return $this->render('index-grid', [
+                        'model' => $arr_data,
+            ]);
+        } else {
+            $arrSearch["periodo"] = $periodo[0]["id"];
+            \app\models\Utilities::putMessageLogFile('periodo:' . $arrSearch["periodo"]);
+            $arr_data = $mod_control->consultarControlCatedra($arrSearch);
+        }
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+        }  
+        $unidad = $mod_unidad->consultarUnidadAcademicasEmpresa(1);
+        $modalidad = $mod_modalidad->consultarModalidad(1, 1);
+        return $this->render('index', [                    
+                    'model' => $arr_data,
+                    'arr_periodo' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Todas"]], $periodo), "id", "name"),
+                    'arr_unidad' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Todas"]], $unidad), "id", "name"),
+                    'arr_modalidad' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Todas"]], $modalidad), "id", "name"),
+                    'arr_estado' => array("0" => Yii::t("formulario", "Todas"), "1" => Yii::t("formulario", "Registrado"), "2" => Yii::t("formulario", "Sin Registrar")),
+        ]);
+    }
 
 }

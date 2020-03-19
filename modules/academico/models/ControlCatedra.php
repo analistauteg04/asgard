@@ -194,4 +194,121 @@ class ControlCatedra extends \yii\db\ActiveRecord {
         return $resultData;
     }
 
+    /**
+     * Function consultarControlCatedra
+     * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>    
+     * @property  
+     * @return  
+     */
+    public function consultarControlCatedra($arrFiltro = array(), $onlyData = false) {
+        $con = \Yii::$app->db_academico;
+        $con1 = \Yii::$app->db_asgard;
+        $estado = 1;
+        if (isset($arrFiltro) && count($arrFiltro) > 0) {
+            $str_search .= "(per.per_pri_nombre like :profesor OR ";
+            $str_search .= "per.per_seg_nombre like :profesor OR ";
+            $str_search .= "per.per_pri_apellido like :profesor OR ";
+            $str_search .= "per.per_seg_nombre like :profesor )  AND ";
+            $str_search .= "asig.asi_nombre like :materia  AND ";
+
+            if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
+                $str_search .= "r.rmtm_fecha_transaccion >= :fec_ini AND ";
+                $str_search .= "r.rmtm_fecha_transaccion <= :fec_fin AND ";
+            }
+            if ($arrFiltro['periodo'] != "" && $arrFiltro['periodo'] > 0) {
+                $str_search .= " h.paca_id = :periodo AND ";
+            }
+            if ($arrFiltro['unidad'] != "" && $arrFiltro['unidad'] > 0) {
+                $str_search .= " h.uaca_id = :unidad AND ";
+            }
+            if ($arrFiltro['modalidad'] != "" && $arrFiltro['modalidad'] > 0) {
+                $str_search .= " h.mod_id = :modalidad AND ";
+            }
+            if ($arrFiltro['estado'] != "0") {
+                $str_search .= " ifnull(c.cca_id,'2') = :estadoM AND ";
+            }
+        }
+        if ($onlyData == false) {
+            $periodoacademico = 'h.paca_id as periodo, ';
+            $grupoperi = ',periodo';
+        }
+        $sql = "SELECT 
+			CONCAT(ifnull(per.per_pri_nombre,' '), ' ', ifnull(per.per_pri_apellido,' ')) as nombres,
+			asig.asi_nombre as materia,		
+                        u.uaca_nombre as unidad,
+                        m.mod_nombre as modalidad,
+                        concat(sa.saca_nombre, ' ', ba.baca_nombre, '-', ba.baca_anio) as periodo,
+                        date_format(r.rmtm_fecha_transaccion,'%Y-%m-%d') as fecha,                
+                        case when (ifnull(c.cca_id, '2')) = '2' then 'Sin Registrar'                     
+                             else 'Registrado' end as tipo              
+                FROM " . $con->dbname . ".registro_marcacion_generada r left join " . $con->dbname . ".control_catedra c
+                    on (r.hape_id = c.hape_id and date_format(r.rmtm_fecha_transaccion,'%Y-%m-%d') = date_format(c.cca_fecha_registro,'%Y-%m-%d'))
+                    INNER JOIN " . $con->dbname . ".horario_asignatura_periodo h on h.hape_id = r.hape_id
+                    INNER JOIN " . $con->dbname . ".asignatura asig on asig.asi_id = h.asi_id
+                    INNER JOIN " . $con->dbname . ".profesor profe on profe.pro_id = h.pro_id
+                    INNER JOIN " . $con1->dbname . ".persona per on per.per_id = profe.per_id
+                    INNER JOIN " . $con->dbname . ".periodo_academico peri on peri.paca_id = h.paca_id
+                    INNER JOIN " . $con->dbname . ".unidad_academica u on u.uaca_id = h.uaca_id
+                    INNER JOIN " . $con->dbname . ".modalidad m on m.mod_id = h.mod_id
+                    INNER JOIN " . $con->dbname . ".semestre_academico sa on sa.saca_id = peri.saca_id
+                    INNER JOIN " . $con->dbname . ".bloque_academico ba on ba.baca_id = peri.baca_id
+                WHERE $str_search              
+                      ((date_format(r.rmtm_fecha_transaccion, '%Y-%m-%d') <= date_format(curdate(),'%Y-%m-%d')
+                      and date_format(r.rmtm_fecha_transaccion, '%Y-%m-%d') between peri.paca_fecha_inicio and peri.paca_fecha_fin))
+                      and h.hape_estado = '1' and h.hape_estado_logico = '1'
+                      and asig.asi_estado = '1' and asig.asi_estado_logico = '1'
+                      and u.uaca_estado = '1' and u.uaca_estado_logico = '1'
+                      and m.mod_estado = '1' and m.mod_estado_logico = '1'
+                      and profe.pro_estado = '1' and profe.pro_estado_logico = '1'
+                ORDER BY 6 desc;";
+
+        $comando = $con->createCommand($sql);
+        //$comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        if (isset($arrFiltro) && count($arrFiltro) > 0) {
+            $search_cond = "%" . $arrFiltro["profesor"] . "%";
+            $comando->bindParam(":profesor", $search_cond, \PDO::PARAM_STR);
+            $fecha_ini = $arrFiltro["f_ini"] . " 00:00:00";
+            $fecha_fin = $arrFiltro["f_fin"] . " 23:59:59";
+            $materia = "%" . $arrFiltro["materia"] . "%";
+            $comando->bindParam(":materia", $materia, \PDO::PARAM_STR);
+
+            if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
+                $comando->bindParam(":fec_ini", $fecha_ini, \PDO::PARAM_STR);
+                $comando->bindParam(":fec_fin", $fecha_fin, \PDO::PARAM_STR);
+            }
+            if ($arrFiltro['periodo'] != "" && $arrFiltro['periodo'] > 0) {
+                $periodo = $arrFiltro["periodo"];
+                $comando->bindParam(":periodo", $periodo, \PDO::PARAM_INT);
+            }
+            if ($arrFiltro['unidad'] != "" && $arrFiltro['unidad'] > 0) {
+                $unidad = $arrFiltro["unidad"];
+                $comando->bindParam(":unidad", $unidad, \PDO::PARAM_INT);
+            }
+            if ($arrFiltro['modalidad'] != "" && $arrFiltro['modalidad'] > 0) {
+                $modalidad = $arrFiltro["modalidad"];
+                $comando->bindParam(":modalidad", $modalidad, \PDO::PARAM_INT);
+            }
+            if ($arrFiltro['estado'] != "0") {
+                $estadoM = $arrFiltro["estado"];
+                $comando->bindParam(":estadoM", $estadoM, \PDO::PARAM_STR);
+            }
+        }
+        $resultData = $comando->queryAll();
+        $dataProvider = new ArrayDataProvider([
+            'key' => 'id',
+            'allModels' => $resultData,
+            'pagination' => [
+                'pageSize' => Yii::$app->params["pageSize"],
+            ],
+            'sort' => [
+                'attributes' => [
+                ],
+            ],
+        ]);
+        if ($onlyData) {
+            return $resultData;
+        } else {
+            return $dataProvider;
+        }
+    }
 }
