@@ -462,4 +462,34 @@ class ControlCatedra extends \yii\db\ActiveRecord
             return FALSE;
         }
     }
+    
+    /**
+     * Function consultarControlcatedraxid
+     * @author  Giovanni Vergara <analistadesarrollo01@uteg.edu.ec>
+     * @param   
+     * @return  Consulta datos de control de catedra
+     */
+    public function consultarControlcatedraxid($hape_id, $ccat_fecha_registro, $usu_id) {
+        $con = \Yii::$app->db_academico;
+        $estado = 1;       
+        $sql = "
+                    SELECT count(*) as control
+                    FROM 
+                        " . $con->dbname . ".control_catedra                     
+                    WHERE
+                        hape_id= :hape_id AND                      
+                        date_format(ccat_fecha_creacion, '%Y-%m-%d') = :ccat_fecha_registro AND     
+                        usu_id= :usu_id AND
+                        ccat_estado = :estado AND
+                        ccat_estado_logico = :estado";
+
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":hape_id", $hape_id, \PDO::PARAM_INT);
+        $comando->bindParam(":ccat_fecha_registro", $ccat_fecha_registro, \PDO::PARAM_STR);
+        $comando->bindParam(":usu_id", $usu_id, \PDO::PARAM_STR);
+       
+        $resultData = $comando->queryOne();
+        return $resultData;
+    }
 }

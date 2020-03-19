@@ -97,10 +97,12 @@ class ControlcatedraController extends \app\components\CController {
 
     public function actionSave() {
         $usu_id = @Yii::$app->session->get("PB_iduser");
+        $busqueda = 0;
+         $mod_control = new ControlCatedra();
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
             $hape_id = $data["hape_id"];
-            $carrera = $data["carrera"];            
+            $carrera = $data["carrera"];
             $fecha_registro = $data["fecha_registro"];
             $titulo = ucwords(strtolower($data["titulo"]));
             $tema = ucwords(strtolower($data["tema"]));
@@ -111,29 +113,43 @@ class ControlcatedraController extends \app\components\CController {
             $con = \Yii::$app->db_academico;
             $transaction = $con->beginTransaction();
             try {
-                $fecha = date(Yii::$app->params["dateTimeByDefault"]);
-                $mod_control = new ControlCatedra();
-                $resp_control = $mod_control->insertarControlcatedra($hape_id, $carrera, $fecha_registro, $titulo, $tema, $trabajo, $logro, $observacion, $direccionip, $usu_id, $fecha);
-                if ($resp_control) {
-                    $exito = '1';
+                $cons_control = $mod_control->consultarControlcatedraxid($hape_id, $fecha_registro, $usu_id);
+                if ($cons_control["control"] > 0) {
+                    $busqueda = 1;
                 }
-                if ($exito) {
-                    $transaction->commit();
-                    $message = array(
-                        "wtmessage" => Yii::t("notificaciones", "La información ha sido grabada."),
-                        "title" => Yii::t('jslang', 'Success'),
-                    );
-                    return \app\models\Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
-                } else {
-                    $transaction->rollback();
-                    if (empty($message)) {
-                        $message = array
-                            (
-                            "wtmessage" => Yii::t("notificaciones", "Error al grabar. " . $mensaje), "title" =>
-                            Yii::t('jslang', 'Success'),
-                        );
+                if ($busqueda == 0) {
+                    $fecha = date(Yii::$app->params["dateTimeByDefault"]);                   
+                    $resp_control = $mod_control->insertarControlcatedra($hape_id, $carrera, $fecha_registro, $titulo, $tema, $trabajo, $logro, $observacion, $direccionip, $usu_id, $fecha);
+                    if ($resp_control) {
+                        $exito = '1';
                     }
-                    return \app\models\Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                    if ($exito) {
+                        $transaction->commit();
+                        $message = array(
+                            "wtmessage" => Yii::t("notificaciones", "La información ha sido grabada."),
+                            "title" => Yii::t('jslang', 'Success'),
+                        );
+                        return \app\models\Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                    } else {
+                        $transaction->rollback();
+                        if (empty($message)) {
+                            $message = array
+                                (
+                                "wtmessage" => Yii::t("notificaciones", "Error al grabar. " . $mensaje), "title" =>
+                                Yii::t('jslang', 'Success'),
+                            );
+                        }
+                        return \app\models\Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                    }
+                } else {
+
+                    $mensaje = 'Ya registró el control de la cátreda hoy.';
+                    $transaction->rollback();
+                    $message = array(
+                        "wtmessage" => Yii::t("notificaciones", "No se puede guardar la información. " . $mensaje),
+                        "title" => Yii::t('jslang', 'Error'),
+                    );
+                    return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), true, $message);
                 }
             } catch (Exception $ex) {
                 $transaction->rollback();
