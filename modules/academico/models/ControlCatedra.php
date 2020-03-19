@@ -1,62 +1,65 @@
 <?php
 
 namespace app\modules\academico\models;
-
 use Yii;
 use yii\data\ArrayDataProvider;
+
 
 /**
  * This is the model class for table "control_catedra".
  *
- * @property int $cca_id
+ * @property int $ccat_id
  * @property int $hape_id
  * @property int $eaca_id
- * @property string $cca_fecha_registro
- * @property string $cca_titulo_unidad
- * @property string $cca_tema
- * @property string $cca_trabajo_autopractico
- * @property string $cca_logro_aprendizaje
- * @property string $cca_observacion
- * @property string $cca_direccion_ip
+ * @property string $ccat_fecha_registro
+ * @property string $ccat_titulo_unidad
+ * @property string $ccat_tema
+ * @property string $ccat_trabajo_autopractico
+ * @property string $ccat_logro_aprendizaje
+ * @property string $ccat_observacion
+ * @property string $ccat_direccion_ip
  * @property int $usu_id
- * @property string $cca_estado
- * @property string $cca_fecha_creacion
- * @property string $cca_fecha_modificacion
- * @property string $cca_estado_logico
+ * @property string $ccat_estado
+ * @property string $ccat_fecha_creacion
+ * @property string $ccat_fecha_modificacion
+ * @property string $ccat_estado_logico
  *
  * @property HorarioAsignaturaPeriodo $hape
  * @property EstudioAcademico $eaca
  * @property DetalleCatedraActividad[] $detalleCatedraActividads
  * @property DetalleValorDesarrollo[] $detalleValorDesarrollos
  */
-class ControlCatedra extends \yii\db\ActiveRecord {
-
+class ControlCatedra extends \yii\db\ActiveRecord
+{
     /**
      * {@inheritdoc}
      */
-    public static function tableName() {
+    public static function tableName()
+    {
         return 'control_catedra';
     }
 
     /**
      * @return \yii\db\Connection the database connection used by this AR class.
      */
-    public static function getDb() {
+    public static function getDb()
+    {
         return Yii::$app->get('db_academico');
     }
 
     /**
      * {@inheritdoc}
      */
-    public function rules() {
+    public function rules()
+    {
         return [
-            [['hape_id', 'cca_titulo_unidad', 'cca_tema', 'cca_trabajo_autopractico', 'cca_logro_aprendizaje', 'usu_id', 'cca_estado', 'cca_estado_logico'], 'required'],
+            [['hape_id', 'ccat_titulo_unidad', 'ccat_tema', 'ccat_trabajo_autopractico', 'ccat_logro_aprendizaje', 'usu_id', 'ccat_estado', 'ccat_estado_logico'], 'required'],
             [['hape_id', 'eaca_id', 'usu_id'], 'integer'],
-            [['cca_fecha_registro', 'cca_fecha_creacion', 'cca_fecha_modificacion'], 'safe'],
-            [['cca_titulo_unidad'], 'string', 'max' => 500],
-            [['cca_tema', 'cca_trabajo_autopractico', 'cca_logro_aprendizaje', 'cca_observacion'], 'string', 'max' => 2000],
-            [['cca_direccion_ip'], 'string', 'max' => 20],
-            [['cca_estado', 'cca_estado_logico'], 'string', 'max' => 1],
+            [['ccat_fecha_registro', 'ccat_fecha_creacion', 'ccat_fecha_modificacion'], 'safe'],
+            [['ccat_titulo_unidad'], 'string', 'max' => 500],
+            [['ccat_tema', 'ccat_trabajo_autopractico', 'ccat_logro_aprendizaje', 'ccat_observacion'], 'string', 'max' => 2000],
+            [['ccat_direccion_ip'], 'string', 'max' => 20],
+            [['ccat_estado', 'ccat_estado_logico'], 'string', 'max' => 1],
             [['hape_id'], 'exist', 'skipOnError' => true, 'targetClass' => HorarioAsignaturaPeriodo::className(), 'targetAttribute' => ['hape_id' => 'hape_id']],
             [['eaca_id'], 'exist', 'skipOnError' => true, 'targetClass' => EstudioAcademico::className(), 'targetAttribute' => ['eaca_id' => 'eaca_id']],
         ];
@@ -65,54 +68,59 @@ class ControlCatedra extends \yii\db\ActiveRecord {
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels() {
+    public function attributeLabels()
+    {
         return [
-            'cca_id' => 'Cca ID',
+            'ccat_id' => 'Ccat ID',
             'hape_id' => 'Hape ID',
             'eaca_id' => 'Eaca ID',
-            'cca_fecha_registro' => 'Cca Fecha Registro',
-            'cca_titulo_unidad' => 'Cca Titulo Unidad',
-            'cca_tema' => 'Cca Tema',
-            'cca_trabajo_autopractico' => 'Cca Trabajo Autopractico',
-            'cca_logro_aprendizaje' => 'Cca Logro Aprendizaje',
-            'cca_observacion' => 'Cca Observacion',
-            'cca_direccion_ip' => 'Cca Direccion Ip',
+            'ccat_fecha_registro' => 'Ccat Fecha Registro',
+            'ccat_titulo_unidad' => 'Ccat Titulo Unidad',
+            'ccat_tema' => 'Ccat Tema',
+            'ccat_trabajo_autopractico' => 'Ccat Trabajo Autopractico',
+            'ccat_logro_aprendizaje' => 'Ccat Logro Aprendizaje',
+            'ccat_observacion' => 'Ccat Observacion',
+            'ccat_direccion_ip' => 'Ccat Direccion Ip',
             'usu_id' => 'Usu ID',
-            'cca_estado' => 'Cca Estado',
-            'cca_fecha_creacion' => 'Cca Fecha Creacion',
-            'cca_fecha_modificacion' => 'Cca Fecha Modificacion',
-            'cca_estado_logico' => 'Cca Estado Logico',
+            'ccat_estado' => 'Ccat Estado',
+            'ccat_fecha_creacion' => 'Ccat Fecha Creacion',
+            'ccat_fecha_modificacion' => 'Ccat Fecha Modificacion',
+            'ccat_estado_logico' => 'Ccat Estado Logico',
         ];
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getHape() {
+    public function getHape()
+    {
         return $this->hasOne(HorarioAsignaturaPeriodo::className(), ['hape_id' => 'hape_id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getEaca() {
+    public function getEaca()
+    {
         return $this->hasOne(EstudioAcademico::className(), ['eaca_id' => 'eaca_id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getDetalleCatedraActividads() {
-        return $this->hasMany(DetalleCatedraActividad::className(), ['cca_id' => 'cca_id']);
+    public function getDetalleCatedraActividads()
+    {
+        return $this->hasMany(DetalleCatedraActividad::className(), ['ccat_id' => 'ccat_id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getDetalleValorDesarrollos() {
-        return $this->hasMany(DetalleValorDesarrollo::className(), ['cca_id' => 'cca_id']);
+    public function getDetalleValorDesarrollos()
+    {
+        return $this->hasMany(DetalleValorDesarrollo::className(), ['ccat_id' => 'ccat_id']);
     }
-
+    
     /**
      * Function consultarMateriasMarcabyPro
      * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>    
@@ -252,7 +260,7 @@ class ControlCatedra extends \yii\db\ActiveRecord {
                 $str_search .= " h.mod_id = :modalidad AND ";
             }
             if ($arrFiltro['estado'] != "0") {
-                $str_search .= " ifnull(c.cca_id,'2') = :estadoM AND ";
+                $str_search .= " ifnull(c.ccat_id,'2') = :estadoM AND ";
             }
         }
         if ($onlyData == false) {
@@ -266,10 +274,10 @@ class ControlCatedra extends \yii\db\ActiveRecord {
                         m.mod_nombre as modalidad,
                         concat(sa.saca_nombre, ' ', ba.baca_nombre, '-', ba.baca_anio) as periodo,
                         date_format(r.rmtm_fecha_transaccion,'%Y-%m-%d') as fecha,                
-                        case when (ifnull(c.cca_id, '2')) = '2' then 'Sin Registrar'                     
+                        case when (ifnull(c.ccat_id, '2')) = '2' then 'Sin Registrar'                     
                              else 'Registrado' end as tipo              
                 FROM " . $con->dbname . ".registro_marcacion_generada r left join " . $con->dbname . ".control_catedra c
-                    on (r.hape_id = c.hape_id and date_format(r.rmtm_fecha_transaccion,'%Y-%m-%d') = date_format(c.cca_fecha_registro,'%Y-%m-%d'))
+                    on (r.hape_id = c.hape_id and date_format(r.rmtm_fecha_transaccion,'%Y-%m-%d') = date_format(c.ccat_fecha_registro,'%Y-%m-%d'))
                     INNER JOIN " . $con->dbname . ".horario_asignatura_periodo h on h.hape_id = r.hape_id
                     INNER JOIN " . $con->dbname . ".asignatura asig on asig.asi_id = h.asi_id
                     INNER JOIN " . $con->dbname . ".profesor profe on profe.pro_id = h.pro_id
