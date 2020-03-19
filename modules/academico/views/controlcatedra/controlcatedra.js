@@ -1,5 +1,7 @@
-
 $(document).ready(function () {
+    $('#btn_grabar').click(function () {
+        grabarControl();
+    });
     $('#cmb_unidad').change(function () {
         var link = $('#txth_base').val() + "/academico/controlcatedra/new";
         document.getElementById("cmb_carrera").options.item(0).selected = 'selected';
@@ -37,7 +39,8 @@ $(document).ready(function () {
                 setComboDataselect(data.programa, "cmb_carrera", "Seleccionar");
             }
         }, true);
-    });
+    }
+    );
 });
 
 function setComboDataselect(arr_data, element_id, texto) {

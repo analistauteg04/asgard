@@ -22,6 +22,7 @@ use yii\data\ArrayDataProvider;
  * @property string $usu_session
  * @property string $usu_last_login
  * @property string $usu_link_activo
+ * @property string $usu_upreg
  * @property string $usu_estado
  * @property string $usu_fecha_creacion
  * @property string $usu_fecha_modificacion
@@ -52,7 +53,7 @@ class Usuario extends \yii\db\ActiveRecord implements IdentityInterface {
                 [['usu_sha', 'usu_session', 'usu_link_activo'], 'string'],
                 [['usu_user'], 'string', 'max' => 45],
                 [['usu_password'], 'string', 'max' => 255],
-                [['usu_estado', 'usu_estado_logico'], 'string', 'max' => 1],
+                [['usu_upreg','usu_estado', 'usu_estado_logico'], 'string', 'max' => 1],
                 [['per_id'], 'exist', 'skipOnError' => true, 'targetClass' => Persona::className(), 'targetAttribute' => ['per_id' => 'per_id']],
         ];
     }

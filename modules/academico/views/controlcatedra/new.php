@@ -56,7 +56,7 @@ use app\modules\academico\Module as academico;
             </div>  
             <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
                 <div class="form-group">
-                    <label for="txt_carrera" class="col-sm-4 control-label" id="lbl_programa"><?= academico::t("Academico", "Career/Program") ?><span class="text-danger">*</span></label>
+                    <label for="txt_carrera" class="col-sm-4 control-label" id="lbl_programa"><?= academico::t("Academico", "Career/Program") ?></label>
                     <div class="col-md-8 col-sm-8 col-xs-8 col-lg-8">
                         <?= Html::dropDownList("cmb_carrera", 0, $arr_carrera, ["class" => "form-control", "id" => "cmb_carrera"]) ?>
                     </div>
@@ -103,17 +103,17 @@ use app\modules\academico\Module as academico;
         <div class='col-md-12 col-sm-12 col-xs-12 col-lg-12'>
             <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">            
                 <div class="form-group">
-                    <label for="txt_titulo" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label" id="lbl_titulo"><?= academico::t("Academico", "Unit Title") ?> </label>
+                    <label for="txt_titulo" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label" id="lbl_titulo"><?= academico::t("Academico", "Unit Title") ?><span class="text-danger">*</span></label>
                     <div class="col-sm-8 col-md-8 col-xs-8 col-lg-8">
-                        <textarea  class="form-control keyupmce" rows="3" id="txt_titulo"></textarea>                  
+                        <textarea  class="form-control PBvalidation keyupmce" rows="3" id="txt_titulo"></textarea>                  
                     </div>
                 </div>
             </div>     
             <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">            
                 <div class="form-group">
-                    <label for="txt_tema" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label" id="lbl_tema"><?= academico::t("Academico", "Topic") ?> </label>
+                    <label for="txt_tema" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label" id="lbl_tema"><?= academico::t("Academico", "Topic") ?><span class="text-danger">*</span></label>
                     <div class="col-sm-8 col-md-8 col-xs-8 col-lg-8">
-                        <textarea  class="form-control keyupmce" rows="3" id="txt_tema"></textarea>                  
+                        <textarea  class="form-control PBvalidation keyupmce" rows="3" id="txt_tema"></textarea>                  
                     </div>
                 </div>
             </div>
@@ -121,17 +121,17 @@ use app\modules\academico\Module as academico;
         <div class='col-md-12 col-sm-12 col-xs-12 col-lg-12'>
             <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">            
                 <div class="form-group">
-                    <label for="txt_trabajo" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label" id="lbl_trabajo"><?= academico::t("Academico", "Freelance practical work") ?> </label>
+                    <label for="txt_trabajo" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label" id="lbl_trabajo"><?= academico::t("Academico", "Freelance practical work") ?><span class="text-danger">*</span></label>
                     <div class="col-sm-8 col-md-8 col-xs-8 col-lg-8">
-                        <textarea  class="form-control keyupmce" rows="3" id="txt_trabajo"></textarea>                  
+                        <textarea  class="form-control PBvalidation keyupmce" rows="3" id="txt_trabajo"></textarea>                  
                     </div>
                 </div>
             </div>     
             <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">            
                 <div class="form-group">
-                    <label for="txt_logro" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label" id="lbl_logro"><?= academico::t("Academico", "Learning Achievements") ?> </label>
+                    <label for="txt_logro" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label" id="lbl_logro"><?= academico::t("Academico", "Learning Achievements") ?><span class="text-danger">*</span></label>
                     <div class="col-sm-8 col-md-8 col-xs-8 col-lg-8">
-                        <textarea  class="form-control keyupmce" rows="3" id="txt_logro"></textarea>                  
+                        <textarea  class="form-control PBvalidation keyupmce" rows="3" id="txt_logro"></textarea>                  
                     </div>
                 </div>
             </div>
@@ -146,7 +146,7 @@ use app\modules\academico\Module as academico;
                             ?>
                             <div class="col-sm-8 col-md-8 col-xs-8 col-lg-8">
                                 <div class="form-group">
-                                    <input type="checkbox" id="<?= "chk_" . $arr_actividad[$i]['id'] ?>" data-type="alfa" data-keydown="true" placeholder="<?= $arr_actividad[$i]['value'] ?>"><?php echo "   " . $arr_actividad[$i]['value'] ?>
+                                    <input type="checkbox" id="<?= "chka_" . $arr_actividad[$i]['id'] ?>" data-type="alfa" data-keydown="true" placeholder="<?= $arr_actividad[$i]['value'] ?>"><?php echo "   " . $arr_actividad[$i]['value'] ?>
                                 </div>
                             </div>                
                             <?php
@@ -164,12 +164,30 @@ use app\modules\academico\Module as academico;
                             ?>
                             <div class="col-sm-8 col-md-8 col-xs-8 col-lg-8">
                                 <div class="form-group">
-                                    <input type="checkbox" id="<?= "chk_" . $arr_valor[$j]['id'] ?>" data-type="alfa" data-keydown="true" placeholder="<?= $arr_valor[$j]['value'] ?>"><?php echo "   " . $arr_valor[$j]['value'] ?>
+                                    <input type="checkbox" id="<?= "chkv_" . $arr_valor[$j]['id'] ?>" data-type="alfa" data-keydown="true" placeholder="<?= $arr_valor[$j]['value'] ?>"><?php echo "   " . $arr_valor[$j]['value'] ?>
                                 </div>
                             </div>                
                             <?php
                         }
                         ?>     
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class='col-md-12 col-sm-12 col-xs-12 col-lg-12'>
+            <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">            
+                <div class="form-group">
+                    <label for="txt_otro" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label" id="lbl_otro"><?= academico::t("Academico", "Other") ?></label>
+                    <div class="col-sm-8 col-md-8 col-xs-8 col-lg-8">
+                        <textarea  class="form-control PBvalidation keyupmce" rows="3" id="txt_otro"></textarea>                  
+                    </div>
+                </div>
+            </div>     
+            <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">            
+                <div class="form-group">
+                    <label for="txt_observacion" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label" id="lbl_observacion"><?= Yii::t("formulario", "Observation") ?></label>
+                    <div class="col-sm-8 col-md-8 col-xs-8 col-lg-8">
+                        <textarea  class="form-control PBvalidation keyupmce" rows="3" id="txt_observacion"></textarea>                  
                     </div>
                 </div>
             </div>
