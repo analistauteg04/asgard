@@ -67,6 +67,7 @@ return [
     "Modality" => "Modalidad",
     "Month" => "Mes",
     "Month Process" => "Mes Proceso",
+    "Other" => "Otro",
     "Other activities" => "Otras Actividades",
     "Parallel" => "Paralelo",
     "Parallels" => "Paralelos",
