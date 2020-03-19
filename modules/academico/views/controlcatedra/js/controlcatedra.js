@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    $('#btn_grabar').click(function () {
+    $('#btn_control').click(function () {
         grabarControl();
     });
     $('#cmb_unidad').change(function () {
@@ -53,4 +53,37 @@ function setComboDataselect(arr_data, element_id, texto) {
         option_arr += "<option value='" + id + "'>" + value + "</option>";
     }
     $("#" + element_id).html(option_arr);
+}
+
+function grabarControl() {
+    var link = $('#txth_base').val() + "/academico/controlcatedra/save";
+    var arrParams = new Object();
+    arrParams.hape_id = $('#txth_hape_id').val();
+    arrParams.carrera = $('#cmb_carrera').val();
+    arrParams.fecha_registro = $('#txt_fecha').val();
+    arrParams.titulo = $('#txt_titulo').val();
+    arrParams.tema = $('#txt_tema').val();
+    arrParams.trabajo = $('#txt_trabajo').val();
+    arrParams.logro = $('#txt_logro').val();
+    arrParams.observacion = $('#txt_observacion').val();
+    //arrParams.programa = $("#cmb_programa option:selected").text();
+    /* if (arrParams.mes == 0 || arrParams.modalidad == 0 || arrParams.programa == 0)
+     {
+     showAlert('NO_OK', 'error', {"wtmessage": "Debe seleccionar opciones de las listas.", "title": 'Error'});
+     } else
+     {*/
+    if (!validateForm()) {
+        requestHttpAjax(link, arrParams, function (response) {
+            showAlert(response.status, response.label, response.message);
+            if (!response.error) {
+                setTimeout(function () {
+                    window.location.href = $('#txth_base').val() + "/academico/marcacion/marcacion";
+                }, 5000);
+            }
+
+
+        }, true);
+    }
+    // }
+
 }

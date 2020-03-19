@@ -55,11 +55,11 @@ class ControlcatedraController extends \app\components\CController {
                     "arr_carrera" => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arr_carrera), "id", "name"),
         ]);
     }
-    
-    public function actionIndex() {        
+
+    public function actionIndex() {
         $mod_modalidad = new Modalidad();
         $mod_unidad = new UnidadAcademica();
-        $mod_control = new ControlCatedra();        
+        $mod_control = new ControlCatedra();
         $mod_periodo = new PeriodoAcademicoMetIngreso();
         $periodo = $mod_periodo->consultarPeriodoAcademico();
         $data = Yii::$app->request->get();
@@ -83,16 +83,68 @@ class ControlcatedraController extends \app\components\CController {
         }
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
-        }  
+        }
         $unidad = $mod_unidad->consultarUnidadAcademicasEmpresa(1);
         $modalidad = $mod_modalidad->consultarModalidad(1, 1);
-        return $this->render('index', [                    
+        return $this->render('index', [
                     'model' => $arr_data,
                     'arr_periodo' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Todas"]], $periodo), "id", "name"),
                     'arr_unidad' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Todas"]], $unidad), "id", "name"),
                     'arr_modalidad' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Todas"]], $modalidad), "id", "name"),
                     'arr_estado' => array("0" => Yii::t("formulario", "Todas"), "1" => Yii::t("formulario", "Registrado"), "2" => Yii::t("formulario", "Sin Registrar")),
         ]);
+    }
+
+    public function actionSave() {
+        $usu_id = @Yii::$app->session->get("PB_iduser");
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+            $hape_id = $data["hape_id"];
+            $carrera = $data["carrera"];            
+            $fecha_registro = $data["fecha_registro"];
+            $titulo = ucwords(strtolower($data["titulo"]));
+            $tema = ucwords(strtolower($data["tema"]));
+            $trabajo = ucwords(strtolower($data["trabajo"]));
+            $logro = ucwords(strtolower($data["logro"]));
+            $observacion = ucwords(strtolower($data["observacion"]));
+            $direccionip = \app\models\Utilities::getClientRealIP(); // ip de la maquina
+            $con = \Yii::$app->db_academico;
+            $transaction = $con->beginTransaction();
+            try {
+                $fecha = date(Yii::$app->params["dateTimeByDefault"]);
+                $mod_control = new ControlCatedra();
+                $resp_control = $mod_control->insertarControlcatedra($hape_id, $carrera, $fecha_registro, $titulo, $tema, $trabajo, $logro, $observacion, $direccionip, $usu_id, $fecha);
+                if ($resp_control) {
+                    $exito = '1';
+                }
+                if ($exito) {
+                    $transaction->commit();
+                    $message = array(
+                        "wtmessage" => Yii::t("notificaciones", "La información ha sido grabada."),
+                        "title" => Yii::t('jslang', 'Success'),
+                    );
+                    return \app\models\Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                } else {
+                    $transaction->rollback();
+                    if (empty($message)) {
+                        $message = array
+                            (
+                            "wtmessage" => Yii::t("notificaciones", "Error al grabar. " . $mensaje), "title" =>
+                            Yii::t('jslang', 'Success'),
+                        );
+                    }
+                    return \app\models\Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                }
+            } catch (Exception $ex) {
+                $transaction->rollback();
+                $message = array(
+                    "wtmessage" => Yii::t("notificaciones", "Error al grabar." . $mensaje),
+                    "title" => Yii::t('jslang', 'Success'),
+                );
+                return \app\models\Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+            }
+            return;
+        }
     }
 
 }
