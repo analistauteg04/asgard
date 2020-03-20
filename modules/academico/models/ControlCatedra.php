@@ -352,4 +352,150 @@ class ControlCatedra extends \yii\db\ActiveRecord
             return $dataProvider;
         }
     }
+    
+    /**
+     * Function guardar control de catedra
+     * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>
+     * @param   
+     * @return  $resultData (Retornar el código de promocion).
+     */
+    public function insertarControlcatedra($hape_id, $eaca_id, $ccat_fecha_registro, $ccat_titulo_unidad, $ccat_tema, $ccat_trabajo_autopractico, $ccat_logro_aprendizaje, $ccat_observacion, $ccat_direccion_ip, $usu_id, $ccat_fecha_creacion) {
+
+        $con = \Yii::$app->db_academico;
+        $trans = $con->getTransaction(); // se obtiene la transacción actual
+        if ($trans !== null) {
+            $trans = null; // si existe la transacción entonces no se crea una
+        } else {
+            $trans = $con->beginTransaction(); // si no existe la transacción entonces se crea una
+        }
+        $param_sql = "ccat_estado_logico";
+        $bsol_sql = "1";
+
+        $param_sql .= ", ccat_estado";
+        $bsol_sql .= ", 1";
+        if (isset($hape_id)) {
+            $param_sql .= ", hape_id";
+            $bsol_sql .= ", :hape_id";
+        }
+
+        if ($eaca_id > 0) {
+            $param_sql .= ", eaca_id";
+            $bsol_sql .= ", :eaca_id";
+        }
+
+        if (isset($ccat_fecha_registro)) {
+            $param_sql .= ", ccat_fecha_registro";
+            $bsol_sql .= ", :ccat_fecha_registro";
+        }
+
+        if (isset($ccat_titulo_unidad)) {
+            $param_sql .= ", ccat_titulo_unidad";
+            $bsol_sql .= ", :ccat_titulo_unidad";
+        }
+
+        if (isset($ccat_tema)) {
+            $param_sql .= ", ccat_tema";
+            $bsol_sql .= ", :ccat_tema";
+        }
+        if (isset($ccat_trabajo_autopractico)) {
+            $param_sql .= ", ccat_trabajo_autopractico";
+            $bsol_sql .= ", :ccat_trabajo_autopractico";
+        }
+        if (isset($ccat_logro_aprendizaje)) {
+            $param_sql .= ", ccat_logro_aprendizaje";
+            $bsol_sql .= ", :ccat_logro_aprendizaje";
+        }
+        if (isset($ccat_observacion)) {
+            $param_sql .= ", ccat_observacion";
+            $bsol_sql .= ", :ccat_observacion";
+        }
+        if (isset($ccat_direccion_ip)) {
+            $param_sql .= ", ccat_direccion_ip";
+            $bsol_sql .= ", TO_BASE64(:ccat_direccion_ip)";
+        }
+        if (isset($usu_id)) {
+            $param_sql .= ", usu_id";
+            $bsol_sql .= ", :usu_id";
+        }
+        if (isset($ccat_fecha_creacion)) {
+            $param_sql .= ", ccat_fecha_creacion";
+            $bsol_sql .= ", :ccat_fecha_creacion";
+        }
+        try {
+            $sql = "INSERT INTO " . $con->dbname . ".control_catedra ($param_sql) VALUES($bsol_sql)";
+            $comando = $con->createCommand($sql);
+
+            if (isset($hape_id))
+                $comando->bindParam(':hape_id', $hape_id, \PDO::PARAM_INT);
+
+            if ($eaca_id > 0)
+                $comando->bindParam(':eaca_id', $eaca_id, \PDO::PARAM_INT);
+
+            if (isset($ccat_fecha_registro))
+                $comando->bindParam(':ccat_fecha_registro', $ccat_fecha_registro, \PDO::PARAM_STR);
+
+            if (isset($ccat_titulo_unidad))
+                $comando->bindParam(':ccat_titulo_unidad', $ccat_titulo_unidad, \PDO::PARAM_STR);
+
+            if (isset($ccat_tema))
+                $comando->bindParam(':ccat_tema', $ccat_tema, \PDO::PARAM_STR);
+
+            if (isset($ccat_trabajo_autopractico))
+                $comando->bindParam(':ccat_trabajo_autopractico', $ccat_trabajo_autopractico, \PDO::PARAM_STR);
+
+            if (isset($ccat_logro_aprendizaje))
+                $comando->bindParam(':ccat_logro_aprendizaje', $ccat_logro_aprendizaje, \PDO::PARAM_STR);
+
+            if (isset($ccat_observacion))
+                $comando->bindParam(':ccat_observacion', $ccat_observacion, \PDO::PARAM_STR);
+
+            if (isset($ccat_direccion_ip))
+                $comando->bindParam(':ccat_direccion_ip', $ccat_direccion_ip, \PDO::PARAM_STR);
+
+            if (isset($usu_id))
+                $comando->bindParam(':usu_id', $usu_id, \PDO::PARAM_INT);
+
+            if (isset($ccat_fecha_creacion))
+                $comando->bindParam(':ccat_fecha_creacion', $ccat_fecha_creacion, \PDO::PARAM_STR);
+
+            $result = $comando->execute();
+            if ($trans !== null)
+                $trans->commit();
+            return $con->getLastInsertID($con->dbname . '.control_catedra');
+        } catch (Exception $ex) {
+            if ($trans !== null)
+                $trans->rollback();
+            return FALSE;
+        }
+    }
+    
+    /**
+     * Function consultarControlcatedraxid
+     * @author  Giovanni Vergara <analistadesarrollo01@uteg.edu.ec>
+     * @param   
+     * @return  Consulta datos de control de catedra
+     */
+    public function consultarControlcatedraxid($hape_id, $ccat_fecha_registro, $usu_id) {
+        $con = \Yii::$app->db_academico;
+        $estado = 1;       
+        $sql = "
+                    SELECT count(*) as control
+                    FROM 
+                        " . $con->dbname . ".control_catedra                     
+                    WHERE
+                        hape_id= :hape_id AND                      
+                        date_format(ccat_fecha_creacion, '%Y-%m-%d') = :ccat_fecha_registro AND     
+                        usu_id= :usu_id AND
+                        ccat_estado = :estado AND
+                        ccat_estado_logico = :estado";
+
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":hape_id", $hape_id, \PDO::PARAM_INT);
+        $comando->bindParam(":ccat_fecha_registro", $ccat_fecha_registro, \PDO::PARAM_STR);
+        $comando->bindParam(":usu_id", $usu_id, \PDO::PARAM_STR);
+       
+        $resultData = $comando->queryOne();
+        return $resultData;
+    }
 }

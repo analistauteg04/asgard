@@ -6,7 +6,7 @@ use app\modules\academico\Module as academico;
 
 //print_r($arr_datahorario);
 ?>
-
+<?= Html::hiddenInput('txth_hape_id', $_GET['hape_id'], ['id' => 'txth_hape_id']); ?>
 <form class="form-horizontal" enctype="multipart/form-data" > 
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12 ">
         <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12 ">   
@@ -77,7 +77,7 @@ use app\modules\academico\Module as academico;
                 <div class="form-group">
                     <label for="txt_fecha" class="col-sm-4 control-label" id="lbl_cupo"><?= academico::t("Academico", "Session Date") ?></label>
                     <div class="col-md-8 col-sm-8 col-xs-8 col-lg-8">
-                        <input type="text" class="form-control PBvalidation" value="<?= date('d-m-Y') ?>" id="txt_fecha" data-keydown="true" disabled = "true" placeholder="<?= academico::t("Academico", "Session Date") ?>">
+                        <input type="text" class="form-control PBvalidation" value="<?= date('Y-m-d') ?>" id="txt_fecha" data-keydown="true" disabled = "true" placeholder="<?= academico::t("Academico", "Session Date") ?>">
                     </div>
                 </div>
             </div>  
@@ -179,7 +179,7 @@ use app\modules\academico\Module as academico;
                 <div class="form-group">
                     <label for="txt_otro" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label" id="lbl_otro"><?= academico::t("Academico", "Other") ?></label>
                     <div class="col-sm-8 col-md-8 col-xs-8 col-lg-8">
-                        <textarea  class="form-control PBvalidation keyupmce" rows="3" id="txt_otro"></textarea>                  
+                        <textarea  class="form-control keyupmce" rows="3" id="txt_otro"></textarea>                  
                     </div>
                 </div>
             </div>     
@@ -187,11 +187,16 @@ use app\modules\academico\Module as academico;
                 <div class="form-group">
                     <label for="txt_observacion" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label" id="lbl_observacion"><?= Yii::t("formulario", "Observation") ?></label>
                     <div class="col-sm-8 col-md-8 col-xs-8 col-lg-8">
-                        <textarea  class="form-control PBvalidation keyupmce" rows="3" id="txt_observacion"></textarea>                  
+                        <textarea  class="form-control keyupmce" rows="3" id="txt_observacion"></textarea>                  
                     </div>
                 </div>
             </div>
         </div>
-    </div>   
-</div> 
+        <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
+            <div class="col-sm-8"></div>
+            <div class="col-sm-2 col-md-2 col-xs-4 col-lg-2">                
+                <a id="btn_control" href="javascript:" class="btn btn-primary btn-block"> <?= Yii::t("formulario", "Save") ?></a>
+            </div>
+        </div>
+    </div>  
 </form>
