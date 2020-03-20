@@ -54,13 +54,17 @@ class ExportFile {
     public $footer = TRUE;
     public $typeExport = ""; // OUTPUT_TO_DOWNLOAD, INLINE, DOWNLOAD, FILE, STRING_RETURN
     public $reportName = "";
+    public $uriFileName = ""; // example /test/test.pdf
 
     function __construct() {
         ini_set("pcre.backtrack_limit", "5000000"); //aumento de memoria para generacion de reportes
         if ($this->reportName == "")
             $this->reportName = 'Reporte_' . date("Ymdhis");
-        if ($this->typeExport = "")
+        if ($this->uriFileName != "")
+            $this->typeExport = self::OUTPUT_TO_FILE;
+        else if($this->typeExport == ""){
             $this->typeExport = self::OUTPUT_TO_DOWNLOAD;
+        }
     }
 
     function createReportPdf($content) {
@@ -80,5 +84,7 @@ class ExportFile {
         if ($this->footer)
             $this->mpdf->SetHTMLFooter("<div class='footer' style='font-size: 10px;'><div style='float: left; width: 50%;'>Pag: {PAGENO}</div><div style='float: left;width: 50%;text-align: right;'>Hora: " . date("H:i") . "</div></div>");
         $this->mpdf->WriteHTML($content);
+        if ($this->typeExport == self::OUTPUT_TO_FILE)
+            $this->mpdf->Output($this->uriFileName, self::OUTPUT_TO_FILE);
     }
 }
