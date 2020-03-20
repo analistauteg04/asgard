@@ -85,8 +85,8 @@ class ControlcatedraController extends \app\components\CController {
         }
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
-        }  
-        
+        }
+
         $unidad = $mod_unidad->consultarUnidadAcademicasEmpresa(1);
         $modalidad = $mod_modalidad->consultarModalidad(1, 1);
         return $this->render('index', [
@@ -101,7 +101,7 @@ class ControlcatedraController extends \app\components\CController {
     public function actionSave() {
         $usu_id = @Yii::$app->session->get("PB_iduser");
         $busqueda = 0;
-         $mod_control = new ControlCatedra();
+        $mod_control = new ControlCatedra();
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
             $hape_id = $data["hape_id"];
@@ -121,10 +121,27 @@ class ControlcatedraController extends \app\components\CController {
                     $busqueda = 1;
                 }
                 if ($busqueda == 0) {
-                    $fecha = date(Yii::$app->params["dateTimeByDefault"]);                   
+                    $fecha = date(Yii::$app->params["dateTimeByDefault"]);
                     $resp_control = $mod_control->insertarControlcatedra($hape_id, $carrera, $fecha_registro, $titulo, $tema, $trabajo, $logro, $observacion, $direccionip, $usu_id, $fecha);
                     if ($resp_control) {
-                        $exito = '1';
+                        $arrActividad = $data["actividad"];
+                        for ($a = 0; $a < count($arrActividad); $a++) {
+                            $dataRegActividad = array(
+                                'ccat_id' => $resp_control,
+                                'aeva_id' => $arrActividad[$a]["actividad_id"],
+                                'aeva_otro' => $data["otroactividad"],                              
+                            );
+                            $resp_actividad = $mod_control->insertarActividadcatedra($con, $dataRegActividad);
+                            if ($resp_actividad) {
+                                $exito = 1;
+                            }
+                        }
+                        /*if ($resp_actividad) {
+                            $resp_valor = $mod_control->insertarValorcatedra();
+                            if ($resp_actividad) {
+                                $exito = '1';
+                            }
+                        }*/
                     }
                     if ($exito) {
                         $transaction->commit();

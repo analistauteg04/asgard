@@ -41,11 +41,11 @@ $(document).ready(function () {
         }, true);
     }
     );
-    
+
     $('#btn_buscarRegistro').click(function () {
         actualizarGridCatedra();
     });
-    
+
 });
 
 function setComboDataselect(arr_data, element_id, texto) {
@@ -67,7 +67,7 @@ function actualizarGridCatedra() {
     var materia = $('#txt_buscarDataMateria').val();
     var f_ini = $('#txt_fecha_ini').val();
     var f_fin = $('#txt_fecha_fin').val();
-    var periodo = $('#cmb_periodo option:selected').val();    
+    var periodo = $('#cmb_periodo option:selected').val();
     var estado = $('#cmb_estado option:selected').val();
 
     //Buscar almenos una clase con el nombre para ejecutar
@@ -88,23 +88,64 @@ function grabarControl() {
     arrParams.trabajo = $('#txt_trabajo').val();
     arrParams.logro = $('#txt_logro').val();
     arrParams.observacion = $('#txt_observacion').val();
-    //arrParams.programa = $("#cmb_programa option:selected").text();
-    /* if (arrParams.mes == 0 || arrParams.modalidad == 0 || arrParams.programa == 0)
-     {
-     showAlert('NO_OK', 'error', {"wtmessage": "Debe seleccionar opciones de las listas.", "title": 'Error'});
-     } else
-     {*/
-    if (!validateForm()) {
-        requestHttpAjax(link, arrParams, function (response) {
-            showAlert(response.status, response.label, response.message);
-            if (!response.error) {
-                setTimeout(function () {
-                    window.location.href = $('#txth_base').val() + "/academico/marcacion/marcacion";
-                }, 5000);
-            }
-
-
-        }, true);
+    //Verificación de los checkboxes actividades.
+    var actividad = [];
+    var i = 0;
+    if ($('#chka_1').prop('checked')) {
+        actividad[i] = {"actividad_id": 1};
+        i = actividad.length;
     }
-    // }
+    if ($('#chka_2').prop('checked')) {
+        actividad[i] = {"actividad_id": 2};
+        i = actividad.length;
+    }
+    if ($('#chka_3').prop('checked')) {
+        actividad[i] = {"actividad_id": 3};
+        i = actividad.length;
+    }
+    if ($('#chka_4').prop('checked')) {
+        actividad[i] = {"actividad_id": 4};
+        i = actividad.length;
+    }
+    if ($('#chka_5').prop('checked')) {
+        actividad[i] = {"actividad_id": 5};
+        i = actividad.length;
+    }
+    if ($('#chka_6').prop('checked')) {
+        actividad[i] = {"actividad_id": 6};
+        i = actividad.length;
+    }
+    if ($('#chka_7').prop('checked')) {
+        actividad[i] = {"actividad_id": 7};
+        i = actividad.length;
+    }
+    if ($('#chka_8').prop('checked')) {
+        actividad[i] = {"actividad_id": 8};
+        i = actividad.length;
+    }
+    if ($('#chka_9').prop('checked')) {
+        actividad[i] = {"actividad_id": 9};
+        i = actividad.length;
+    }
+    arrParams.actividad = actividad;
+    arrParams.otroactividad = $('#txt_otro').val();
+    //arrParams.programa = $("#cmb_programa option:selected").text();
+    /*if (arrParams.otro > 0 /*|| arrParams.otrovalor>= 0 )
+    {
+        showAlert('NO_OK', 'error', {"wtmessage": "Debe escribir en la caja de texto Otro, porque tiene seleccionado el chechbox.", "title": 'Error'});
+    } else
+    {*/
+        if (!validateForm()) {
+            requestHttpAjax(link, arrParams, function (response) {
+                showAlert(response.status, response.label, response.message);
+                if (!response.error) {
+                    setTimeout(function () {
+                        window.location.href = $('#txth_base').val() + "/academico/marcacion/marcacion";
+                    }, 5000);
+                }
+
+
+            }, true);
+        }
+   // }
 }

@@ -1,9 +1,9 @@
 <?php
 
 namespace app\modules\academico\models;
+
 use Yii;
 use yii\data\ArrayDataProvider;
-
 
 /**
  * This is the model class for table "control_catedra".
@@ -29,29 +29,26 @@ use yii\data\ArrayDataProvider;
  * @property DetalleCatedraActividad[] $detalleCatedraActividads
  * @property DetalleValorDesarrollo[] $detalleValorDesarrollos
  */
-class ControlCatedra extends \yii\db\ActiveRecord
-{
+class ControlCatedra extends \yii\db\ActiveRecord {
+
     /**
      * {@inheritdoc}
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return 'control_catedra';
     }
 
     /**
      * @return \yii\db\Connection the database connection used by this AR class.
      */
-    public static function getDb()
-    {
+    public static function getDb() {
         return Yii::$app->get('db_academico');
     }
 
     /**
      * {@inheritdoc}
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['hape_id', 'ccat_titulo_unidad', 'ccat_tema', 'ccat_trabajo_autopractico', 'ccat_logro_aprendizaje', 'usu_id', 'ccat_estado', 'ccat_estado_logico'], 'required'],
             [['hape_id', 'eaca_id', 'usu_id'], 'integer'],
@@ -68,8 +65,7 @@ class ControlCatedra extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'ccat_id' => 'Ccat ID',
             'hape_id' => 'Hape ID',
@@ -92,35 +88,31 @@ class ControlCatedra extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getHape()
-    {
+    public function getHape() {
         return $this->hasOne(HorarioAsignaturaPeriodo::className(), ['hape_id' => 'hape_id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getEaca()
-    {
+    public function getEaca() {
         return $this->hasOne(EstudioAcademico::className(), ['eaca_id' => 'eaca_id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getDetalleCatedraActividads()
-    {
+    public function getDetalleCatedraActividads() {
         return $this->hasMany(DetalleCatedraActividad::className(), ['ccat_id' => 'ccat_id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getDetalleValorDesarrollos()
-    {
+    public function getDetalleValorDesarrollos() {
         return $this->hasMany(DetalleValorDesarrollo::className(), ['ccat_id' => 'ccat_id']);
     }
-    
+
     /**
      * Function consultarMateriasMarcabyPro
      * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>    
@@ -248,7 +240,7 @@ class ControlCatedra extends \yii\db\ActiveRecord
             $str_search .= "asig.asi_nombre like :materia  AND ";
 
             if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
-                 \app\models\Utilities::putMessageLogFile('ingresa fechas');
+                \app\models\Utilities::putMessageLogFile('ingresa fechas');
                 $str_search .= "r.rmtm_fecha_transaccion >= :fec_ini AND ";
                 $str_search .= "r.rmtm_fecha_transaccion <= :fec_fin AND ";
             }
@@ -301,7 +293,7 @@ class ControlCatedra extends \yii\db\ActiveRecord
                       and u.uaca_estado = :estadologico and u.uaca_estado_logico = :estadologico
                       and m.mod_estado = :estadologico and m.mod_estado_logico = :estadologico
                       and profe.pro_estado = :estadologico and profe.pro_estado_logico = :estadologico
-                ORDER BY 6,7 asc";        
+                ORDER BY 6,7 asc";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estadologico", $estado_logico, \PDO::PARAM_STR);
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
@@ -352,7 +344,7 @@ class ControlCatedra extends \yii\db\ActiveRecord
             return $dataProvider;
         }
     }
-    
+
     /**
      * Function guardar control de catedra
      * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>
@@ -468,7 +460,7 @@ class ControlCatedra extends \yii\db\ActiveRecord
             return FALSE;
         }
     }
-    
+
     /**
      * Function consultarControlcatedraxid
      * @author  Giovanni Vergara <analistadesarrollo01@uteg.edu.ec>
@@ -477,7 +469,7 @@ class ControlCatedra extends \yii\db\ActiveRecord
      */
     public function consultarControlcatedraxid($hape_id, $ccat_fecha_registro, $usu_id) {
         $con = \Yii::$app->db_academico;
-        $estado = 1;       
+        $estado = 1;
         $sql = "
                     SELECT count(*) as control
                     FROM 
@@ -494,8 +486,34 @@ class ControlCatedra extends \yii\db\ActiveRecord
         $comando->bindParam(":hape_id", $hape_id, \PDO::PARAM_INT);
         $comando->bindParam(":ccat_fecha_registro", $ccat_fecha_registro, \PDO::PARAM_STR);
         $comando->bindParam(":usu_id", $usu_id, \PDO::PARAM_STR);
-       
+
         $resultData = $comando->queryOne();
         return $resultData;
     }
+
+    /**
+     * Function insertarActividadcatedra
+     * @author  Giovanni Vergara <analistadesarrollo01@uteg.edu.ec>
+     * @param   
+     * @return  retorna ultimo id ingresado en detalle actividad
+     */
+    public function insertarActividadcatedra($con, $data) {
+        $estado = 1;
+        $otro = null;
+        $sql = "INSERT INTO " . $con->dbname . ".detalle_catedra_actividad
+            (ccat_id,aeva_id,aeva_otro,dcac_estado,dcac_estado_logico) VALUES
+            (:ccat_id,:aeva_id,:aeva_otro,:dcac_estado,:dcac_estado)";
+        $command = $con->createCommand($sql);
+        $command->bindParam(":ccat_id", $data['ccat_id'], \PDO::PARAM_INT);
+        $command->bindParam(":aeva_id", $data['aeva_id'], \PDO::PARAM_INT);
+        if ($data['aeva_id'] == 9) {
+            $command->bindParam(":aeva_otro", $data['aeva_otro'], \PDO::PARAM_STR);
+        } else {
+            $command->bindParam(":aeva_otro", $otro, \PDO::PARAM_STR);
+        }
+        $command->bindParam(":dcac_estado", $estado, \PDO::PARAM_STR);
+        $command->execute();
+        return $con->getLastInsertID();
+    }
+
 }

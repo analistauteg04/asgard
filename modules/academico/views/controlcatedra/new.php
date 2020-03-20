@@ -182,7 +182,17 @@ use app\modules\academico\Module as academico;
                         <textarea  class="form-control keyupmce" rows="3" id="txt_otro"></textarea>                  
                     </div>
                 </div>
-            </div>     
+            </div>    
+            <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">            
+                <div class="form-group">
+                    <label for="txt_otrovalor" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label" id="lbl_otrovalor"><?= academico::t("Academico", "Other") ?></label>
+                    <div class="col-sm-8 col-md-8 col-xs-8 col-lg-8">
+                        <textarea  class="form-control keyupmce" rows="3" id="txt_otrovalor"></textarea>                  
+                    </div>
+                </div>
+            </div>            
+        </div>
+        <div class='col-md-12 col-sm-12 col-xs-12 col-lg-12'>           
             <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">            
                 <div class="form-group">
                     <label for="txt_observacion" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label" id="lbl_observacion"><?= Yii::t("formulario", "Observation") ?></label>
