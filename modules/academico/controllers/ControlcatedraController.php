@@ -63,6 +63,7 @@ class ControlcatedraController extends \app\components\CController {
         $mod_periodo = new PeriodoAcademicoMetIngreso();
         $periodo = $mod_periodo->consultarPeriodoAcademico();
         $data = Yii::$app->request->get();
+        \app\models\Utilities::putMessageLogFile('paso 1');
         if ($data['PBgetFilter']) {
             $arrSearch["profesor"] = $data['profesor'];
             $arrSearch["materia"] = $data['materia'];
@@ -77,6 +78,7 @@ class ControlcatedraController extends \app\components\CController {
                         'model' => $arr_data,
             ]);
         } else {
+            \app\models\Utilities::putMessageLogFile('paso else filtro');
             $arrSearch["periodo"] = $periodo[0]["id"];
             \app\models\Utilities::putMessageLogFile('periodo:' . $arrSearch["periodo"]);
             $arr_data = $mod_control->consultarControlCatedra($arrSearch);
@@ -84,6 +86,7 @@ class ControlcatedraController extends \app\components\CController {
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
         }  
+        \app\models\Utilities::putMessageLogFile('al principio');
         $unidad = $mod_unidad->consultarUnidadAcademicasEmpresa(1);
         $modalidad = $mod_modalidad->consultarModalidad(1, 1);
         return $this->render('index', [                    

@@ -13,7 +13,7 @@ admision::registerTranslations();
 <div>        
     <?=
     PbGridView::widget([
-        'id' => 'PbMarcacion',
+        'id' => 'PbCatedra',
         'showExport' => true,
         'fnExportEXCEL' => "exportExcel",
         //'fnExportPDF' => "exportPdf",

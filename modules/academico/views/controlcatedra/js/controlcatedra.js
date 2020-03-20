@@ -41,6 +41,11 @@ $(document).ready(function () {
         }, true);
     }
     );
+    
+    $('#btn_buscarRegistro').click(function () {
+        actualizarGridCatedra();
+    });
+    
 });
 
 function setComboDataselect(arr_data, element_id, texto) {
@@ -53,4 +58,22 @@ function setComboDataselect(arr_data, element_id, texto) {
         option_arr += "<option value='" + id + "'>" + value + "</option>";
     }
     $("#" + element_id).html(option_arr);
+}
+
+function actualizarGridCatedra() {
+    var profesor = $('#txt_buscarDataProfesor').val();
+    var unidad = $('#cmb_unidad option:selected').val();
+    var modalidad = $('#cmb_modalidad option:selected').val();
+    var materia = $('#txt_buscarDataMateria').val();
+    var f_ini = $('#txt_fecha_ini').val();
+    var f_fin = $('#txt_fecha_fin').val();
+    var periodo = $('#cmb_periodo option:selected').val();    
+    var estado = $('#cmb_estado option:selected').val();
+
+    //Buscar almenos una clase con el nombre para ejecutar
+    if (!$(".blockUI").length) {
+        showLoadingPopup();
+        $('#PbCatedra').PbGridView('applyFilterData', {'profesor': profesor, 'unidad': unidad, 'modalidad': modalidad, 'materia': materia, 'f_ini': f_ini, 'f_fin': f_fin, 'periodo': periodo, 'estado': estado});
+        setTimeout(hideLoadingPopup, 2000);
+    }
 }

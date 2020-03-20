@@ -238,8 +238,9 @@ class ControlCatedra extends \yii\db\ActiveRecord
     public function consultarControlCatedra($arrFiltro = array(), $onlyData = false) {
         $con = \Yii::$app->db_academico;
         $con1 = \Yii::$app->db_asgard;
-        $estado = 1;
+        $estado_logico = 1;
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
+            \app\models\Utilities::putMessageLogFile('ingresa en filtros');
             $str_search .= "(per.per_pri_nombre like :profesor OR ";
             $str_search .= "per.per_seg_nombre like :profesor OR ";
             $str_search .= "per.per_pri_apellido like :profesor OR ";
@@ -247,19 +248,24 @@ class ControlCatedra extends \yii\db\ActiveRecord
             $str_search .= "asig.asi_nombre like :materia  AND ";
 
             if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
+                 \app\models\Utilities::putMessageLogFile('ingresa fechas');
                 $str_search .= "r.rmtm_fecha_transaccion >= :fec_ini AND ";
                 $str_search .= "r.rmtm_fecha_transaccion <= :fec_fin AND ";
             }
             if ($arrFiltro['periodo'] != "" && $arrFiltro['periodo'] > 0) {
+                \app\models\Utilities::putMessageLogFile('ingresa periodo');
                 $str_search .= " h.paca_id = :periodo AND ";
             }
             if ($arrFiltro['unidad'] != "" && $arrFiltro['unidad'] > 0) {
+                \app\models\Utilities::putMessageLogFile('ingresa unidad');
                 $str_search .= " h.uaca_id = :unidad AND ";
             }
             if ($arrFiltro['modalidad'] != "" && $arrFiltro['modalidad'] > 0) {
+                \app\models\Utilities::putMessageLogFile('ingresa modalidad');
                 $str_search .= " h.mod_id = :modalidad AND ";
             }
             if ($arrFiltro['estado'] != "0") {
+                \app\models\Utilities::putMessageLogFile('ingresa estado');
                 $str_search .= " ifnull(c.ccat_id,'2') = :estadoM AND ";
             }
         }
@@ -267,9 +273,9 @@ class ControlCatedra extends \yii\db\ActiveRecord
             $periodoacademico = 'h.paca_id as periodo, ';
             $grupoperi = ',periodo';
         }
-        $sql = "SELECT 
+        $sql = "SELECT  $periodoacademico
 			CONCAT(ifnull(per.per_pri_nombre,' '), ' ', ifnull(per.per_pri_apellido,' ')) as nombres,
-			asig.asi_nombre as materia,		
+			asig.asi_nombre as materia,
                         u.uaca_nombre as unidad,
                         m.mod_nombre as modalidad,
                         concat(sa.saca_nombre, ' ', ba.baca_nombre, '-', ba.baca_anio) as periodo,
@@ -290,15 +296,14 @@ class ControlCatedra extends \yii\db\ActiveRecord
                 WHERE $str_search              
                       ((date_format(r.rmtm_fecha_transaccion, '%Y-%m-%d') <= date_format(curdate(),'%Y-%m-%d')
                       and date_format(r.rmtm_fecha_transaccion, '%Y-%m-%d') between peri.paca_fecha_inicio and peri.paca_fecha_fin))
-                      and h.hape_estado = '1' and h.hape_estado_logico = '1'
-                      and asig.asi_estado = '1' and asig.asi_estado_logico = '1'
-                      and u.uaca_estado = '1' and u.uaca_estado_logico = '1'
-                      and m.mod_estado = '1' and m.mod_estado_logico = '1'
-                      and profe.pro_estado = '1' and profe.pro_estado_logico = '1'
-                ORDER BY 6 desc;";
-
+                      and h.hape_estado = :estadologico and h.hape_estado_logico = :estadologico
+                      and asig.asi_estado = :estadologico and asig.asi_estado_logico = :estadologico
+                      and u.uaca_estado = :estadologico and u.uaca_estado_logico = :estadologico
+                      and m.mod_estado = :estadologico and m.mod_estado_logico = :estadologico
+                      and profe.pro_estado = :estadologico and profe.pro_estado_logico = :estadologico
+                ORDER BY 6,7 asc";        
         $comando = $con->createCommand($sql);
-        //$comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":estadologico", $estado_logico, \PDO::PARAM_STR);
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
             $search_cond = "%" . $arrFiltro["profesor"] . "%";
             $comando->bindParam(":profesor", $search_cond, \PDO::PARAM_STR);
@@ -328,6 +333,7 @@ class ControlCatedra extends \yii\db\ActiveRecord
                 $comando->bindParam(":estadoM", $estadoM, \PDO::PARAM_STR);
             }
         }
+        \app\models\Utilities::putMessageLogFile('query:' . $sql);
         $resultData = $comando->queryAll();
         $dataProvider = new ArrayDataProvider([
             'key' => 'id',
