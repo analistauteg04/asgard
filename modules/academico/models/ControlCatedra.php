@@ -516,4 +516,29 @@ class ControlCatedra extends \yii\db\ActiveRecord {
         return $con->getLastInsertID();
     }
 
+    /**
+     * Function insertarActividadcatedra
+     * @author  Giovanni Vergara <analistadesarrollo01@uteg.edu.ec>
+     * @param   
+     * @return  retorna ultimo id ingresado en detalle actividad
+     */
+    public function insertarValorcatedra($con, $data) {
+        $estado = 1;
+        $otro = null;
+        $sql = "INSERT INTO " . $con->dbname . ".detalle_valor_desarrollo
+            (ccat_id,vdes_id,vdes_otro,dvde_estado,dvde_estado_logico) VALUES
+            (:ccat_id,:vdes_id,:vdes_otro,:dvde_estado,:dvde_estado)";
+        $command = $con->createCommand($sql);
+        $command->bindParam(":ccat_id", $data['ccat_id'], \PDO::PARAM_INT);
+        $command->bindParam(":vdes_id", $data['vdes_id'], \PDO::PARAM_INT);
+        if ($data['vdes_id'] == 9) {
+            $command->bindParam(":vdes_otro", $data['vdes_otro'], \PDO::PARAM_STR);
+        } else {
+            $command->bindParam(":vdes_otro", $otro, \PDO::PARAM_STR);
+        }
+        $command->bindParam(":dvde_estado", $estado, \PDO::PARAM_STR);
+        $command->execute();
+        return $con->getLastInsertID();
+    }
+
 }

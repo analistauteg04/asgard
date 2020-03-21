@@ -129,19 +129,24 @@ class ControlcatedraController extends \app\components\CController {
                             $dataRegActividad = array(
                                 'ccat_id' => $resp_control,
                                 'aeva_id' => $arrActividad[$a]["actividad_id"],
-                                'aeva_otro' => $data["otroactividad"],                              
+                                'aeva_otro' => $data["otroactividad"],
                             );
                             $resp_actividad = $mod_control->insertarActividadcatedra($con, $dataRegActividad);
-                            if ($resp_actividad) {
-                                $exito = 1;
-                            }
                         }
-                        /*if ($resp_actividad) {
-                            $resp_valor = $mod_control->insertarValorcatedra();
-                            if ($resp_actividad) {
-                                $exito = '1';
+                        if ($resp_actividad) {
+                            $arrValor = $data["valor"];
+                            for ($b = 0; $b < count($arrValor); $b++) {
+                                $dataRegValor = array(
+                                    'ccat_id' => $resp_control,
+                                    'vdes_id' => $arrValor[$b]["valor_id"],
+                                    'vdes_otro' => $data["otrovalor"],
+                                );
+                                $resp_valor = $mod_control->insertarValorcatedra($con, $dataRegValor);
                             }
-                        }*/
+                            if ($resp_valor) {
+                              $exito = 1;  
+                            }                            
+                        }
                     }
                     if ($exito) {
                         $transaction->commit();

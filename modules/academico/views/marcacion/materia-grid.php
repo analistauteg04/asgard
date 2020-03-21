@@ -47,7 +47,7 @@ PbGridView::widget([
         [
             'class' => 'yii\grid\ActionColumn',
             'header' => Yii::t("formulario", "Actions"),
-            'contentOptions' => ['style' => 'max-width:110px;'],
+            'contentOptions' => ['style' => 'max-width:130px;'],
             'template' => '{iniciar} {finalizar} {control}',
             'buttons' => [
                 'iniciar' => function ($url, $model) {                    

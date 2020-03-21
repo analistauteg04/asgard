@@ -129,23 +129,64 @@ function grabarControl() {
     }
     arrParams.actividad = actividad;
     arrParams.otroactividad = $('#txt_otro').val();
+    //Verificación de los checkboxes valores.
+    var valor = [];
+    var j = 0;
+    if ($('#chkv_1').prop('checked')) {
+        valor[j] = {"valor_id": 1};
+        j = valor.length;
+    }
+    if ($('#chkv_2').prop('checked')) {
+        valor[j] = {"valor_id": 2};
+        j = valor.length;
+    }
+    if ($('#chkv_3').prop('checked')) {
+        valor[j] = {"valor_id": 3};
+        j = valor.length;
+    }
+    if ($('#chkv_4').prop('checked')) {
+        valor[j] = {"valor_id": 4};
+        j = valor.length;
+    }
+    if ($('#chkv_5').prop('checked')) {
+        valor[j] = {"valor_id": 5};
+        j = valor.length;
+    }
+    if ($('#chkv_6').prop('checked')) {
+        valor[j] = {"valor_id": 6};
+        j = valor.length;
+    }
+    if ($('#chkv_7').prop('checked')) {
+        valor[j] = {"valor_id": 7};
+        j = valor.length;
+    }
+    if ($('#chkv_8').prop('checked')) {
+        valor[j] = {"valor_id": 8};
+        j = valor.length;
+    }
+    if ($('#chkv_9').prop('checked')) {
+        valor[j] = {"valor_id": 9};
+        j = valor.length;
+    }
+    arrParams.valor = valor;
+    arrParams.otrovalor = $('#txt_otrovalor').val();
     //arrParams.programa = $("#cmb_programa option:selected").text();
     /*if (arrParams.otro > 0 /*|| arrParams.otrovalor>= 0 )
-    {
-        showAlert('NO_OK', 'error', {"wtmessage": "Debe escribir en la caja de texto Otro, porque tiene seleccionado el chechbox.", "title": 'Error'});
-    } else
-    {*/
-        if (!validateForm()) {
-            requestHttpAjax(link, arrParams, function (response) {
-                showAlert(response.status, response.label, response.message);
-                if (!response.error) {
-                    setTimeout(function () {
-                        window.location.href = $('#txth_base').val() + "/academico/marcacion/marcacion";
-                    }, 5000);
-                }
+     {
+     showAlert('NO_OK', 'error', {"wtmessage": "Debe escribir en la caja de texto Otro, porque tiene seleccionado el chechbox.", "title": 'Error'});
+     } else
+     {*/
+    if (!validateForm()) {
+        requestHttpAjax(link, arrParams, function (response) {
+            showAlert(response.status, response.label, response.message);
+            if (!response.error) {
+                setTimeout(function () {
+                    window.location.href = $('#txth_base').val() + "/academico/marcacion/marcacion";
+                }, 5000);
+            }
 
 
-            }, true);
-        }
-   // }
+        }, true);
+    }
+    // }
 }
