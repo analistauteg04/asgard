@@ -81,12 +81,9 @@ PbGridView::widget([
             'attribute' => 'Estado Solicitud',
             'header' => Especies::t("Especies", "Estado Solicitud"),
             //'value' => 'csol_estado_aprobacion',
-            'value' => function ($url, $model) {
-                $estadoApro = "";
-                if ($model['csol_estado_aprobacion'] == '1') {
-                    return $model['csol_estado_aprobacion'];
-                }
-                return $estadoApro;
+            'value' => function ($model) {           
+                $estado=($model['csol_estado_aprobacion']!='')?$model['csol_estado_aprobacion']:1;
+                return \app\modules\academico\models\Especies::getEstadoPago($estado);
             }
         ],
         [

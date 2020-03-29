@@ -5,6 +5,7 @@ namespace app\modules\academico\models;
 use yii\base\Exception;
 use Yii;
 use yii\data\ArrayDataProvider;
+use app\models\Utilities;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -31,6 +32,18 @@ class Especies extends \yii\db\ActiveRecord {
         if ($rawData === false)
             return 0; //en caso de que existe problema o no retorne nada tiene 1 por defecto 
         return $rawData;
+    }
+    
+    public function recuperarResponsable($uaca_id,$mod_id){
+        $con = \Yii::$app->db_academico;
+        $sql = "SELECT * FROM " . $con->dbname . ".responsable_especie
+                    WHERE resp_estado=1 AND resp_estado_logico=1
+                        AND uaca_id=:uaca_id AND mod_id=:mod_id;";
+        
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":uaca_id", $uaca_id, \PDO::PARAM_INT);
+        $comando->bindParam(":mod_id", $mod_id, \PDO::PARAM_INT);
+        return $comando->queryAll();
     }
 
     public function consultaDatosEstudiante($id) {
@@ -73,10 +86,7 @@ class Especies extends \yii\db\ActiveRecord {
                             INNER JOIN " . $con->dbname . ".unidad_academica B ON B.uaca_id=A.uaca_id
                     INNER JOIN " . $con->dbname . ".modalidad C ON C.mod_id=A.mod_id
                     INNER JOIN " . $con2->dbname . ".forma_pago D ON D.fpag_id=A.fpag_id
-                WHERE  A.csol_estado=1 AND A.csol_estado_logico=1 AND A.est_id=:est_id  $str_search;";
-
-       
-
+                WHERE  A.csol_estado=1 AND A.csol_estado_logico=1 AND A.est_id=:est_id  $str_search  ORDER BY A.csol_id DESC;";
 
         $comando = $con->createCommand($sql);
         //$comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
@@ -93,6 +103,7 @@ class Especies extends \yii\db\ActiveRecord {
             }
         }
         $resultData = $comando->queryAll();
+        //Utilities::putMessageLogFile($resultData);
         $dataProvider = new ArrayDataProvider([
             'key' => 'id',
             'allModels' => $resultData,
@@ -293,7 +304,6 @@ class Especies extends \yii\db\ActiveRecord {
             $cabSol=$this->consultarCabSolicitud($csol_id);
             $detSol=$this->consultarDetSolicitud($csol_id);            
             for ($i = 0; $i < sizeof($detSol); $i++) { 
-                //$detSol[$i]['est_id']=1;
                 $esp_id=$detSol[$i]['esp_id'];
                 $detSol[$i]['egen_fecha_solicitud']=$cabSol[0]['csol_fecha_creacion'];
                 $detSol[$i]['egen_ruta_archivo_pago']=$cabSol[0]['csol_ruta_archivo_pago'];
@@ -302,11 +312,10 @@ class Especies extends \yii\db\ActiveRecord {
                 $detSol[$i]['fpag_id']=$cabSol[0]['fpag_id'];
                 $detSol[$i]['egen_estado_aprobacion']=$estado;
                 $detSol[$i]['empid']=$emp_id;
-                $detSol[$i]['resp_id']=1;//Responsable de firma
+                $dataResp=$this->recuperarResponsable($cabSol[0]['uaca_id'],$cabSol[0]['mod_id']);
+                $detSol[$i]['resp_id']=$dataResp[0]['resp_id']; //Responsable de firma
                 $detSol[$i]['egen_usuario_ingreso']=$usu_id;              
                 $detSol[$i]['egen_numero_solicitud']=$this->nuevaSecuencia($con, $esp_id);
-                
-                
                 $dataEsp=$this->consultarDataEspecie($esp_id);
                 $dias=$dataEsp[0]['esp_dia_vigencia'];
                 $detSol[$i]['egen_fecha_caducidad']=date("Y-m-d",strtotime($fecha_actual."+". $dias ." days")); 
@@ -378,19 +387,19 @@ class Especies extends \yii\db\ActiveRecord {
         $command->execute();
     }
     
-    public function nuevaSecuencia($con,$esp_id = NULL){
+    public function nuevaSecuencia($con,$esp_id){
         $numero=0;
         try{
             $sql="SELECT IFNULL(CAST(esp_numero AS UNSIGNED),0) secuencia FROM " . $con->dbname . ".especies 
                     WHERE esp_estado=1 AND esp_estado_logico=1 AND esp_id=:esp_id ";          
             $sql.=" FOR UPDATE ";                        
             $comando = $con->createCommand($sql);
-            $comando->bindParam(":esp_id", $emp_id, \PDO::PARAM_INT);    
+            $comando->bindParam(":esp_id", $esp_id, \PDO::PARAM_INT);    
             $rawData=$comando->queryScalar();   
             if ($rawData !== false){
                 //$numero=str_pad((int)$rawData[0]["secuencia"]+1, 9, "0", STR_PAD_LEFT);
                 $numero=str_pad((int)$rawData + 1, 9, "0", STR_PAD_LEFT);
-                $sql=" UPDATE " . yii::$app->db_facturacion->dbname . ".especies SET esp_numero=:secuencia "
+                $sql=" UPDATE " . " . $con->dbname . " . ".especies SET esp_numero=:secuencia "
                         . " WHERE esp_estado=1 AND esp_estado_logico=1 AND esp_id=:esp_id ";          
                 $comando = $con->createCommand($sql);
                 $comando->bindParam(":secuencia", $numero, \PDO::PARAM_STR);
@@ -401,6 +410,26 @@ class Especies extends \yii\db\ActiveRecord {
             Utilities::putMessageLogFile($e);
         }
         return $numero;
+    }
+    
+ 
+    public static function getEstadoPago($estado) {
+
+        $mensaje = "";
+        switch ($estado) {
+            case '1':
+                $mensaje = Yii::t("formulario", "Pendiente");
+                break;
+            case '2':
+                $mensaje = Yii::t("formulario", "No Aprobado");
+                break;
+            case '3':
+                $mensaje = Yii::t("formulario", "Aprobado");
+                break;
+            default:
+                $mensaje = "";
+        }
+        return $mensaje;
     }
 
 }

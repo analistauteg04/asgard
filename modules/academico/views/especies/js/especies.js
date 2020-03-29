@@ -66,7 +66,7 @@ function findAndRemove(array, property, value) {
 
 $(document).ready(function () {
     InicioFormulario();
-    
+
     $('#cmb_tramite').change(function () {
         obtenerEspecies();
     });
@@ -84,19 +84,19 @@ $(document).ready(function () {
         //dataSolicitudPart1();
         guardarSolicitud('Create');
     });
-    
+
     $('#btn_buscarDataPago').click(function () {
         actualizarGridSolEspecie();
     });
     $('#btn_buscarReviPago').click(function () {
         actualizarGridRevSolEspecie();
     });
-    
-    
+
+
     $('#btn_savepago').click(function () {
         actualizarPago('File');
     });
-    
+
     $('#btn_saveauto').click(function () {
         autorizaPago();
     });
@@ -298,17 +298,17 @@ function retornaFilaProducto(c, Grid, TbGtable, op) {
 
 
     strFila += '<td>';
-     //Cuando hay Actualizacion de Datos
-    if(AccionTipo=="Create"){
+    //Cuando hay Actualizacion de Datos
+    if (AccionTipo == "Create") {
         //var imgFoto=(Grid[c]['accion']=='edit')?Grid[c]['pro_foto']:$('#txth_producto_foto').val();
         //strFila += (Grid[c]['pro_foto'] != "") ? '<a data-title="'+ Grid[c]['pro_nombre'] +'" data-lightbox="image-1" href="' + $('#txth_imgfolder').val() + $('#txt_ftem_cedula').val()+'_'+$('#txth_ftem_id').val() + '/productos/' + imgFoto + '">Ver Foto</a>' : '<span class="label label-danger">No Tiene Foto</span>';
         strFila += '<a onclick="eliminarItemsProducto(\'' + Grid[c]['dsol_id'] + '\',\'' + TbGtable + '\')" ><span class="glyphicon glyphicon-trash"></span></a>';
-        
-    }else{
+
+    } else {
         //strFila += (Grid[c]['pro_foto'] != "") ? '<a data-title="'+ Grid[c]['pro_nombre'] +'" data-lightbox="image-1" href="' + $('#txth_imgfolder').val() + $('#txt_ftem_cedula').val() + '/productos/' + $('#txth_producto_foto').val() + '">Ver Foto</a>' : '<span class="label label-danger">No Tiene Foto</span>';
     }
     strFila += '</td>';
-    
+
     //strFila += '<td>';//¿Está seguro de eliminar este elemento?
     //strFila +='<a class="btn-img" onclick="eliminarItemsProducto('+Grid[c]['DEP_ID']+',\''+TbGtable+'\')" >'+imgCol+'</a>';
     //strFila += '<a onclick="eliminarItemsProducto(\'' + Grid[c]['dsol_id'] + '\',\'' + TbGtable + '\')" ><span class="glyphicon glyphicon-trash"></span></a>';
@@ -334,21 +334,21 @@ function recargarGridProducto() {
     }
 }
 
-function mostrarGridEspecies(Grid){ 
-    var tGrid='TbG_Productos';
+function mostrarGridEspecies(Grid) {
+    var tGrid = 'TbG_Productos';
     var datArray = new Array();
     //alert(Grid);
-    if(Grid.length > 0){        
+    if (Grid.length > 0) {
         $('#' + tGrid + ' > tbody').html("");
-        for(var i=0; i<Grid.length; i++){
-            datArray[i]=objProductoUpdate(i,Grid)
+        for (var i = 0; i < Grid.length; i++) {
+            datArray[i] = objProductoUpdate(i, Grid)
             $('#' + tGrid + ' > tbody:last-child').append(retornaFilaProducto(i, datArray, tGrid, true));
         }
         sessionStorage.dts_Producto = JSON.stringify(datArray);
     }
 }
 
-function objProductoUpdate(i,Grid) {
+function objProductoUpdate(i, Grid) {
     var rowGrid = new Object();
     rowGrid.dsol_id = Grid[i]['dsol_id'];
     rowGrid.csol_id = Grid[i]['csol_id'];
@@ -465,9 +465,9 @@ function guardarSolicitud(accion) {
             var link = $('#txth_base').val() + "/academico/especies/save";
             var arrParams = new Object();
             //arrParams.DATA = dataPersona(pacID, perID);
-            arrParams.DTS_CAB =(accion == "Create") ? cabLista() : new Array,
-            arrParams.DTS_DET =(accion == "Create") ? detLista() : new Array,              
-            arrParams.ACCION = accion;
+            arrParams.DTS_CAB = (accion == "Create") ? cabLista() : new Array,
+                    arrParams.DTS_DET = (accion == "Create") ? detLista() : new Array,
+                    arrParams.ACCION = accion;
             var validation = validateForm();
             if (!validation) {
                 requestHttpAjax(link, arrParams, function (response) {
@@ -497,7 +497,7 @@ function cabLista() {
     rowGrid.empid = 1;
     rowGrid.uaca_id = $('#cmb_ninteres option:selected').val();
     rowGrid.mod_id = $('#cmb_modalidad option:selected').val();
-    rowGrid.fpag_id = $('#cmb_fpago option:selected').val();    
+    rowGrid.fpag_id = $('#cmb_fpago option:selected').val();
     rowGrid.est_id = 1;//$('#cmb_por_id option:selected').val();
     rowGrid.csol_total = parseFloat($('#lbl_total').text());
     rowGrid.csol_usuario_ingreso = 1;
@@ -566,7 +566,7 @@ function actualizarGridSolEspecie() {
     //Buscar almenos una clase con el nombre para ejecutar
     if (!$(".blockUI").length) {
         showLoadingPopup();
-        $('#TbG_Solicitudes').PbGridView('applyFilterData', {'f_ini': f_ini, 'f_fin': f_fin, 'f_pago': f_pago,'f_estado': f_estado, 'search': search});
+        $('#TbG_Solicitudes').PbGridView('applyFilterData', {'f_ini': f_ini, 'f_fin': f_fin, 'f_pago': f_pago, 'f_estado': f_estado, 'search': search});
         setTimeout(hideLoadingPopup, 2000);
     }
 }
@@ -580,7 +580,7 @@ function actualizarGridRevSolEspecie() {
     //Buscar almenos una clase con el nombre para ejecutar
     if (!$(".blockUI").length) {
         showLoadingPopup();
-        $('#TbG_Solicitudes').PbGridView('applyFilterData', {'f_ini': f_ini, 'f_fin': f_fin, 'f_pago': f_pago,'f_estado': f_estado, 'search': search});
+        $('#TbG_Solicitudes').PbGridView('applyFilterData', {'f_ini': f_ini, 'f_fin': f_fin, 'f_pago': f_pago, 'f_estado': f_estado, 'search': search});
         setTimeout(hideLoadingPopup, 2000);
     }
 }
@@ -588,34 +588,44 @@ function actualizarGridRevSolEspecie() {
 function actualizarPago(proceso) {
     var arrParams = new Object();
     var link = $('#txth_base').val() + "/academico/especies/cargarpago";
-    var csol_id=parseInt($('#lbl_num_solicitud').text());
-    arrParams.procesar_file = true;
-    arrParams.tipo_proceso = proceso;
-    arrParams.csol_id = csol_id;
-    arrParams.archivo = $('#txth_doc_adj_pago').val() + "." + $('#txth_doc_adj_leads2').val().split('.').pop();
-    if (!validateForm()) {
-        requestHttpAjax(link, arrParams, function (response) {
-            showAlert(response.status, response.label, response.message);
-            setTimeout(function () {
-                window.location.href = $('#txth_base').val() + "/academico/especies/solicitudalumno";
-            }, 3000);
-        }, true);
+    var csol_id = parseInt($('#lbl_num_solicitud').text());
+    if ($('#txth_doc_adj_pago').val() != "") {
+        arrParams.procesar_file = true;
+        arrParams.tipo_proceso = proceso;
+        arrParams.csol_id = csol_id;
+        arrParams.archivo = $('#txth_doc_adj_pago').val() + "." + $('#txth_doc_adj_leads2').val().split('.').pop();
+        if (!validateForm()) {
+            requestHttpAjax(link, arrParams, function (response) {
+                showAlert(response.status, response.label, response.message);
+                setTimeout(function () {
+                    window.location.href = $('#txth_base').val() + "/academico/especies/solicitudalumno";
+                }, 3000);
+            }, true);
+        }
+    }else{
+         showAlert('NO_OK', 'error', {"wtmessage": 'Debe adjuntar un Documento de Pago', "title": 'Información'});
     }
+
 }
 
 function autorizaPago() {
     var arrParams = new Object();
     var link = $('#txth_base').val() + "/academico/especies/autorizarpago";
-    var csol_id=parseInt($('#lbl_num_solicitud').text());
-    arrParams.csol_id = csol_id;
-    arrParams.estado = $('#cmb_estado').val();
-    arrParams.accion = "AutorizaPago";
-    if (!validateForm()) {
-        requestHttpAjax(link, arrParams, function (response) {
-            showAlert(response.status, response.label, response.message);
-            /*setTimeout(function () {
-                window.location.href = $('#txth_base').val() + "/academico/especies/solicitudalumno";
-            }, 3000);*/
-        }, true);
+    var csol_id = parseInt($('#lbl_num_solicitud').text());
+    if ($('#cmb_estado option:selected').val() != 0) {
+        arrParams.csol_id = csol_id;
+        arrParams.estado = $('#cmb_estado').val();
+        arrParams.accion = "AutorizaPago";
+        if (!validateForm()) {
+            requestHttpAjax(link, arrParams, function (response) {
+                showAlert(response.status, response.label, response.message);
+                setTimeout(function () {
+                    window.location.href = $('#txth_base').val() + "/academico/especies/revisarpago";
+                }, 3000);
+            }, true);
+        }
+    } else {
+        showAlert('NO_OK', 'error', {"wtmessage": 'Debe Selecionar Estado de Solicitud', "title": 'Información'});
     }
+
 }
