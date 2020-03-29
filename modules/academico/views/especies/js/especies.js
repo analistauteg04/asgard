@@ -90,20 +90,32 @@ $(document).ready(function () {
     });
     
     $('#btn_savepago').click(function () {
-        cargarLeads('File');
+        actualizarPago('File');
+    });
+    
+    $('#btn_saveauto').click(function () {
+        autorizaPago();
     });
 
 
 });
 
 function InicioFormulario() {
-    recargarGridProducto();
-    /*if (AccionTipo == "Update") {
-        loadDataUpdate();
+    //recargarGridProducto();
+    if (AccionTipo == "SubirPago") {
+        loadDataPago();
+        //loadDataUpdate();
     } else if (AccionTipo == "Create") {
         loadDataCreate();
-    }*/
+    }
 }
+function loadDataCreate() {
+    recargarGridProducto()
+}
+function loadDataPago() {
+    mostrarGridEspecies(varSolicitud)
+}
+
 
 function obtenerEspecies() {
     var link = $('#txth_base').val() + "/academico/especies/new";
@@ -281,19 +293,22 @@ function retornaFilaProducto(c, Grid, TbGtable, op) {
 
 
 
-    /*strFila += '<td>';
+    strFila += '<td>';
      //Cuando hay Actualizacion de Datos
-     if(AccionTipo=="Update"){
-     var imgFoto=(Grid[c]['accion']=='edit')?Grid[c]['pro_foto']:$('#txth_producto_foto').val();
-     strFila += (Grid[c]['pro_foto'] != "") ? '<a data-title="'+ Grid[c]['pro_nombre'] +'" data-lightbox="image-1" href="' + $('#txth_imgfolder').val() + $('#txt_ftem_cedula').val()+'_'+$('#txth_ftem_id').val() + '/productos/' + imgFoto + '">Ver Foto</a>' : '<span class="label label-danger">No Tiene Foto</span>';
-     }else{
-     strFila += (Grid[c]['pro_foto'] != "") ? '<a data-title="'+ Grid[c]['pro_nombre'] +'" data-lightbox="image-1" href="' + $('#txth_imgfolder').val() + $('#txt_ftem_cedula').val() + '/productos/' + $('#txth_producto_foto').val() + '">Ver Foto</a>' : '<span class="label label-danger">No Tiene Foto</span>';
-     }
-     strFila += '</td>';*/
-    strFila += '<td>';//¿Está seguro de eliminar este elemento?
-    //strFila +='<a class="btn-img" onclick="eliminarItemsProducto('+Grid[c]['DEP_ID']+',\''+TbGtable+'\')" >'+imgCol+'</a>';
-    strFila += '<a onclick="eliminarItemsProducto(\'' + Grid[c]['dsol_id'] + '\',\'' + TbGtable + '\')" ><span class="glyphicon glyphicon-trash"></span></a>';
+    if(AccionTipo=="Create"){
+        //var imgFoto=(Grid[c]['accion']=='edit')?Grid[c]['pro_foto']:$('#txth_producto_foto').val();
+        //strFila += (Grid[c]['pro_foto'] != "") ? '<a data-title="'+ Grid[c]['pro_nombre'] +'" data-lightbox="image-1" href="' + $('#txth_imgfolder').val() + $('#txt_ftem_cedula').val()+'_'+$('#txth_ftem_id').val() + '/productos/' + imgFoto + '">Ver Foto</a>' : '<span class="label label-danger">No Tiene Foto</span>';
+        strFila += '<a onclick="eliminarItemsProducto(\'' + Grid[c]['dsol_id'] + '\',\'' + TbGtable + '\')" ><span class="glyphicon glyphicon-trash"></span></a>';
+        
+    }else{
+        //strFila += (Grid[c]['pro_foto'] != "") ? '<a data-title="'+ Grid[c]['pro_nombre'] +'" data-lightbox="image-1" href="' + $('#txth_imgfolder').val() + $('#txt_ftem_cedula').val() + '/productos/' + $('#txth_producto_foto').val() + '">Ver Foto</a>' : '<span class="label label-danger">No Tiene Foto</span>';
+    }
     strFila += '</td>';
+    
+    //strFila += '<td>';//¿Está seguro de eliminar este elemento?
+    //strFila +='<a class="btn-img" onclick="eliminarItemsProducto('+Grid[c]['DEP_ID']+',\''+TbGtable+'\')" >'+imgCol+'</a>';
+    //strFila += '<a onclick="eliminarItemsProducto(\'' + Grid[c]['dsol_id'] + '\',\'' + TbGtable + '\')" ><span class="glyphicon glyphicon-trash"></span></a>';
+    //strFila += '</td>';
 
     if (op) {
         strFila = '<tr>' + strFila + '</tr>';
@@ -313,6 +328,41 @@ function recargarGridProducto() {
             }
         }
     }
+}
+
+function mostrarGridEspecies(Grid){ 
+    var tGrid='TbG_Productos';
+    var datArray = new Array();
+    //alert(Grid);
+    if(Grid.length > 0){        
+        $('#' + tGrid + ' > tbody').html("");
+        for(var i=0; i<Grid.length; i++){
+            datArray[i]=objProductoUpdate(i,Grid)
+            $('#' + tGrid + ' > tbody:last-child').append(retornaFilaProducto(i, datArray, tGrid, true));
+        }
+        sessionStorage.dts_Producto = JSON.stringify(datArray);
+    }
+}
+
+function objProductoUpdate(i,Grid) {
+    var rowGrid = new Object();
+    rowGrid.dsol_id = Grid[i]['dsol_id'];
+    rowGrid.csol_id = Grid[i]['csol_id'];
+    rowGrid.uaca_id = Grid[i]['uaca_id'];
+    rowGrid.uaca_nombre = $('#cmb_ninteres option:selected').text();//Grid[i]['uaca_nombre'];
+    rowGrid.tra_id = Grid[i]['tra_id'];
+    rowGrid.tra_nombre = Grid[i]['tra_nombre'];
+    rowGrid.esp_id = Grid[i]['esp_id'];
+    rowGrid.esp_nombre = Grid[i]['esp_rubro'];
+    rowGrid.est_id = Grid[i]['est_id'];
+    rowGrid.dsol_cantidad = Grid[i]['dsol_cantidad'];
+    rowGrid.dsol_valor = Grid[i]['dsol_valor'];
+    rowGrid.dsol_total = Grid[i]['dsol_total'];
+    rowGrid.dsol_observacion = ""
+    rowGrid.dsol_usuario_ingreso = Grid[i]['dsol_usuario_ingreso'];
+    rowGrid.dsol_estado = Grid[i]['dsol_estado'];
+    rowGrid.accion = "edit";
+    return rowGrid;
 }
 
 function eliminarItemsProducto(val, TbGtable) {
@@ -517,20 +567,38 @@ function actualizarGridSolEspecie() {
     }
 }
 
-function cargarLeads(proceso) {
+function actualizarPago(proceso) {
     var arrParams = new Object();
     var link = $('#txth_base').val() + "/academico/especies/cargarpago";
+    var csol_id=parseInt($('#lbl_num_solicitud').text());
     arrParams.procesar_file = true;
     arrParams.tipo_proceso = proceso;
-    //arrParams.emp_id = $('#cmb_empresa option:selected').val();
-    arrParams.archivo = $('#txth_doc_adj_leads2').val() + "." + $('#txth_doc_adj_leads').val().split('.').pop();
+    arrParams.csol_id = csol_id;
+    arrParams.archivo = $('#txth_doc_adj_pago').val() + "." + $('#txth_doc_adj_pago').val().split('.').pop();
 
     if (!validateForm()) {
         requestHttpAjax(link, arrParams, function (response) {
             showAlert(response.status, response.label, response.message);
             setTimeout(function () {
-                window.location.href = $('#txth_base').val() + "/admision/contactos/index";
+                window.location.href = $('#txth_base').val() + "/academico/especies/solicitudalumno";
             }, 3000);
+        }, true);
+    }
+}
+
+function autorizaPago() {
+    var arrParams = new Object();
+    var link = $('#txth_base').val() + "/academico/especies/autorizarpago";
+    var csol_id=parseInt($('#lbl_num_solicitud').text());
+    arrParams.csol_id = csol_id;
+    arrParams.estado = $('#cmb_estado').val();
+    arrParams.accion = "Create";
+    if (!validateForm()) {
+        requestHttpAjax(link, arrParams, function (response) {
+            showAlert(response.status, response.label, response.message);
+            /*setTimeout(function () {
+                window.location.href = $('#txth_base').val() + "/academico/especies/solicitudalumno";
+            }, 3000);*/
         }, true);
     }
 }
