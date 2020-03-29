@@ -148,7 +148,7 @@ class Utilities {
     }
     
     public static function createTemporalFile($filename) {
-        $nombre_tmp = tempnam(sys_get_temp_dir() . $filename . "_" . date("Ymdhis"), "PB");
+        $nombre_tmp = tempnam(sys_get_temp_dir() . '/' . $filename . "_" . date("Ymdhis"), "PB");
         return $nombre_tmp;
     }
 
