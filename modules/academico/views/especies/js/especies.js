@@ -574,14 +574,17 @@ function actualizarPago(proceso) {
     arrParams.procesar_file = true;
     arrParams.tipo_proceso = proceso;
     arrParams.csol_id = csol_id;
-    arrParams.archivo = $('#txth_doc_adj_pago').val() + "." + $('#txth_doc_adj_pago').val().split('.').pop();
+    //arrParams.archivo =$('#txth_doc_adj_pago').val();
+    arrParams.archivo = $('#txth_doc_adj_pago').val() + "." + $('#txth_doc_adj_leads2').val().split('.').pop();
+    //arrParams.documento = "facturas/" + $('#txth_per').val() + "/" + $('#txth_doc_titulo').val();
+    //arrParams.archivo = $('#txth_doc_adj_leads2').val() + "." + $('#txth_doc_adj_pago').val().split('.').pop();
 
     if (!validateForm()) {
         requestHttpAjax(link, arrParams, function (response) {
             showAlert(response.status, response.label, response.message);
-            setTimeout(function () {
+            /*setTimeout(function () {
                 window.location.href = $('#txth_base').val() + "/academico/especies/solicitudalumno";
-            }, 3000);
+            }, 3000);*/
         }, true);
     }
 }

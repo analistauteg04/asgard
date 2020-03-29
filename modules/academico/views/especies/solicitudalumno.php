@@ -44,4 +44,8 @@ admision::registerTranslations();
     ?>
 </div>
 
+<script>
+    var AccionTipo = 'Create';
+</script>
+
 

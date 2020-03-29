@@ -7,6 +7,7 @@ use app\components\CFileInputAjax;
 use app\modules\academico\Module as Especies;
 
 Especies::registerTranslations();
+
 ?>
 
 <form class="form-horizontal" enctype="multipart/form-data" id="formsolicitud"> 
@@ -17,8 +18,10 @@ Especies::registerTranslations();
         </div>
     </div>
 
+
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
         <h3><span id="lbl_solicitud"><?= Especies::t("Especies", "Subir Pago de Solicitud") ?></span></h3>
+        <h3>N°<span id="lbl_num_solicitud"><?= app\models\Utilities::add_ceros($cab_solicitud[0]['csol_id'], 9) ?></span></h3>
     </div>
     <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
         <div class="col-md-7 col-sm-7 col-xs-7 col-lg-7">
@@ -62,7 +65,7 @@ Especies::registerTranslations();
                 <div class="form-group">
                     <label for="cmb_ninteres" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label"><?= Especies::t("Academico", "Academic unit") ?></label>
                     <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                        <?= Html::dropDownList("cmb_ninteres", 0, array_merge([Yii::t("formulario", "Select")], $arr_unidad), ["class" => "form-control", "id" => "cmb_ninteres"]) ?>
+                        <?= Html::dropDownList("cmb_ninteres", $cab_solicitud[0]['uaca_id'], array_merge([Yii::t("formulario", "Select")], $arr_unidad), ["class" => "form-control", "id" => "cmb_ninteres","disabled"=>"true"]) ?>
                     </div>
                 </div>  
             </div>
@@ -70,7 +73,7 @@ Especies::registerTranslations();
                 <div class="form-group">
                     <label for="cmb_modalidad" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label"><?= Especies::t("Academico", "Modality") ?></label>
                     <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                        <?= Html::dropDownList("cmb_modalidad", 0, array_merge([Yii::t("formulario", "Select")], $arr_modalidad), ["class" => "form-control", "id" => "cmb_modalidad"]) ?>
+                        <?= Html::dropDownList("cmb_modalidad", $cab_solicitud[0]['mod_id'], array_merge([Yii::t("formulario", "Select")], $arr_modalidad), ["class" => "form-control", "id" => "cmb_modalidad","disabled"=>"true"]) ?>
                     </div>
                 </div>
             </div>
@@ -83,7 +86,7 @@ Especies::registerTranslations();
                 <div class="form-group">
                     <label for="txt_dsol_total" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_dsol_total"><?= Especies::t("Pagos", "Total") ?></label>
                     <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                        <input type="text" class="form-control keyupmce" value="0" id="txt_dsol_total" data-type="alfa" align="rigth" disabled="true" placeholder="<?= Especies::t("Pagos", "Total") ?>">
+                        <input type="text" class="form-control keyupmce" value=<?= $cab_solicitud[0]['csol_total'] ?> id="txt_dsol_total" data-type="alfa" align="rigth" disabled="true" placeholder="<?= Especies::t("Pagos", "Total") ?>">
                     </div>
                 </div>
             </div>
@@ -93,9 +96,9 @@ Especies::registerTranslations();
                     <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
                         <?=
                         Html::dropDownList(
-                                "cmb_fpago", 0, ArrayHelper::map(app\modules\academico\models\Especies::getFormaPago(), 'Ids', 'Nombre'),
+                                "cmb_fpago", $cab_solicitud[0]['fpag_id'], ArrayHelper::map(app\modules\academico\models\Especies::getFormaPago(), 'Ids', 'Nombre'),
                                 //array_merge([Yii::t("formulario", "Select")],ArrayHelper::map(app\modules\academico\models\Especies::getFormaPago(), 'Ids', 'Nombre')), 
-                                ["class" => "form-control", "id" => "cmb_fpago"]
+                                ["class" => "form-control", "id" => "cmb_fpago","disabled"=>"true"]
                         )
                         ?>
                     </div>
@@ -107,7 +110,7 @@ Especies::registerTranslations();
                     <label for="lbl_doc_adj_pago" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Yii::t("formulario", "Attach document") ?></label>
                     <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
                         <?= Html::hiddenInput('txth_doc_adj_pago', '', ['id' => 'txth_doc_adj_pago']); ?>
-                        <?php // Html::hiddenInput('txth_doc_adj_leads2', '', ['id' => 'txth_doc_adj_leads2']); ?>
+                        <?= Html::hiddenInput('txth_doc_adj_leads2', '', ['id' => 'txth_doc_adj_leads2']); ?>
                         <?php
                         echo CFileInputAjax::widget([
                             'id' => 'txt_doc_adj_pago',
@@ -132,7 +135,7 @@ Especies::registerTranslations();
                             'pluginEvents' => [
                                 "filebatchselected" => "function (event) {
                                     $('#txth_doc_adj_pago').val('DOC-" . @Yii::$app->session->get("PB_iduser") . '-' . time() . "');
-                                    $('#txth_doc_adj_leads').val($('#txt_doc_adj_leads').val());
+                                    $('#txth_doc_adj_leads2').val($('#txt_doc_adj_pago').val());
                                     $('#txt_doc_adj_pago').fileinput('upload');
                                 }",
                                 "fileuploaderror" => "function (event, data, msg) {
@@ -165,19 +168,7 @@ Especies::registerTranslations();
 
     </div>
 
-    <div id="div_detalle" class="col-md-12 col-sm-12 col-xs-12 col-lg-12"></div>
-    <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
-        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6"></div>
-        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
-            <div class="form-group">
-                <label for="txt_total" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="txt_total"><?= Especies::t("Pagos", "Total a Pagar") ?></label>
-                <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-<!--                    <input type="text" class="form-control keyupmce" value="0" id="txt_dsol_total" data-type="alfa" align="rigth" disabled="true" placeholder="<?= Especies::t("Pagos", "Total") ?>">-->
-                    <label for="lbl_total" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_total">0.00</label>
-                </div>
-            </div>
-        </div>
-    </div>
+    
     <div class="col-md-12">
         <div class="form-group">
             <div class="box-body table-responsive no-padding">
@@ -211,5 +202,6 @@ Especies::registerTranslations();
 
 </form>
 <script>
-    var AccionTipo = 'Create';
+    var AccionTipo = 'SubirPago';
+    var varSolicitud=<?= $det_solicitud; ?>
 </script>

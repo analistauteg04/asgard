@@ -44,9 +44,9 @@ class EspeciesController extends \app\components\CController {
     }
     
     public function actionSolicitudalumno() {
-        $per_idsession = @Yii::$app->session->get("PB_perid");
-        $est_id = 1;
+        $per_id = @Yii::$app->session->get("PB_perid");        
         $especiesADO = new Especies();
+        $est_id = $especiesADO->recuperarIdsEstudiente($per_id);
         $data = Yii::$app->request->get();
         if ($data['PBgetFilter']) {
             $arrSearch["f_ini"] = $data['f_ini'];
@@ -161,11 +161,12 @@ class EspeciesController extends \app\components\CController {
         }
     }
 
-    public function actionCargarpago() {
-        
+    public function actionCargarpago() {        
+        $per_id = @Yii::$app->session->get("PB_perid");
         $ids = isset($_GET['ids']) ? base64_decode($_GET['ids']) : NULL;
         //Utilities::putMessageLogFile($ids);
         $especiesADO = new Especies();
+        $est_id = $especiesADO->recuperarIdsEstudiente($per_id);
         $mod_unidad = new UnidadAcademica();
         $mod_modalidad = new Modalidad();
         
@@ -179,10 +180,10 @@ class EspeciesController extends \app\components\CController {
                 $files = $_FILES[key($_FILES)];
                 $arrIm = explode(".", basename($files['name']));
                 $typeFile = strtolower($arrIm[count($arrIm) - 1]);
-                Utilities::putMessageLogFile($data["name_file"]);
+                //Utilities::putMessageLogFile($data["name_file"]);
                 //if ($typeFile == 'xlsx' || $typeFile == 'csv' || $typeFile == 'xls') {
                 if ($typeFile == 'jpg' || $typeFile == 'png' || $typeFile == 'pdf') {
-                    $dirFileEnd = Yii::$app->params["documentFolder"] . "dataPago/" . $data["name_file"] . "." . $typeFile;
+                    $dirFileEnd = Yii::$app->params["documentFolder"] . "especies/" . $data["name_file"] . "." . $typeFile;
                     $status = Utilities::moveUploadFile($files['tmp_name'], $dirFileEnd);
                     if ($status) {
                         return true;
@@ -192,7 +193,7 @@ class EspeciesController extends \app\components\CController {
                 }
             }
             if ($data["procesar_file"]) {
-                $carga_archivo = $mod_gestion->CargarArchivo($data["archivo"], $data["emp_id"], $data["tipo_proceso"]);
+                $carga_archivo = $especiesADO->CargarArchivo($data["archivo"], $data["csol_id"]);
                 if ($carga_archivo['status']) {
                     $message = array(
                         "wtmessage" => Yii::t("notificaciones", "Archivo procesado correctamente." . $carga_archivo['data']),
@@ -211,13 +212,15 @@ class EspeciesController extends \app\components\CController {
         } 
         
         
-        $personaData = $especiesADO->consultaDatosEstudiante(1);
+        $personaData = $especiesADO->consultaDatosEstudiante($est_id);
         $arr_unidadac = $mod_unidad->consultarUnidadAcademicas();
         $arr_modalidad = $mod_modalidad->consultarModalidad(1, 1);
         $model = $especiesADO->getSolicitudesAlumnos($est_id, null, false);
         return $this->render('cargarpago', [
                     'model' => $model,
                     'arr_persona' => $personaData,
+                    'cab_solicitud' => $especiesADO->consultarCabSolicitud($ids),
+                    'det_solicitud' => json_encode($especiesADO->consultarDetSolicitud($ids)),
                     'arr_unidad' => ArrayHelper::map($arr_unidadac, "id", "name"),
                     'arr_modalidad' => ArrayHelper::map($arr_modalidad, "id", "name"),
                     'arrEstados' => ArrayHelper::map($this->estadoPagos(), "id", "value"),

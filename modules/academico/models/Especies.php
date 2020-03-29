@@ -20,6 +20,18 @@ use yii\data\ArrayDataProvider;
 class Especies extends \yii\db\ActiveRecord {
 
     //put your code here
+    
+    public function recuperarIdsEstudiente($per_id){
+        $con = \Yii::$app->db_academico; 
+        $sql = "SELECT A.est_id FROM " . $con->dbname . ".estudiante A
+                    WHERE A.est_estado=1 AND A.est_estado_logico=1 AND A.per_id=:per_id;";
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":per_id", $per_id, \PDO::PARAM_INT);
+        $rawData=$comando->queryScalar();
+        if ($rawData === false)
+            return 0; //en caso de que existe problema o no retorne nada tiene 1 por defecto 
+        return $rawData;
+    }
 
     public function consultaDatosEstudiante($id) {
         $rawData = array();
@@ -206,5 +218,68 @@ class Especies extends \yii\db\ActiveRecord {
             $command->execute();
         }
     }
+    
+    public function consultarCabSolicitud($Ids) {
+        $con = \Yii::$app->db_academico;        
+        $sql = "SELECT A.* FROM " . $con->dbname . ".cabecera_solicitud A
+                    WHERE  A.csol_estado=1 AND A.csol_estado_logico=1 AND A.csol_id= :csol_id;";          
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":csol_id", $Ids, \PDO::PARAM_INT);
+        return $comando->queryAll();
+    }
+    
+    public function consultarDetSolicitud($Ids) {
+        $con = \Yii::$app->db_academico;        
+        $sql = "SELECT A.*,C.tra_nombre,B.esp_rubro FROM db_academico.detalle_solicitud A
+			INNER JOIN " . $con->dbname . ".especies B ON A.esp_id=B.esp_id
+			INNER JOIN " . $con->dbname . ".tramite C ON A.tra_id=C.tra_id
+		WHERE A.dsol_estado=1 AND A.dsol_estado_logico=1 AND A.csol_id=:csol_id; ";
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":csol_id", $Ids, \PDO::PARAM_INT);
+        return $comando->queryAll();
+    }
+    
+   
+    public function CargarArchivo($fname, $csol_id) {
+        $arroout = array();
+        $con = \Yii::$app->db_academico;
+        $trans = $con->beginTransaction();
+        try {
+            //$ids = isset($data['ids']) ? base64_decode($data['ids']) :NULL;
+            $path = Yii::$app->basePath . Yii::$app->params['documentFolder'] . "especies/" . $fname;
+            $sql = "UPDATE " . $con->dbname . ".cabecera_solicitud "
+                    . "SET csol_ruta_archivo_pago=:csol_ruta_archivo_pago,csol_fecha_modificacion=CURRENT_TIMESTAMP() WHERE csol_id=:csol_id";
+            
+            $command = $con->createCommand($sql);
+            $command->bindParam(":csol_id", $csol_id, \PDO::PARAM_INT);
+            $command->bindParam(":csol_ruta_archivo_pago", $path, \PDO::PARAM_STR);
+            $command->execute();
+            
+            $trans->commit();
+            $con->close();
+            //RETORNA DATOS 
+            //$arroout["ids"]= $ftem_id;
+            $arroout["status"]= true;
+            //$arroout["secuencial"]= $doc_numero;
+            return $arroout;
+         } catch (\Exception $e) {
+            $trans->rollBack();
+            $con->close();
+            throw $e;
+            $arroout["status"]= false;
+            return $arroout;
+        }
+    }
+    
+    /*INSERT INTO db_academico.especies_generadas
+                    (dsol_id,empid,est_id,resp_id,tra_id,esp_id,uaca_id,mod_id,fpag_id,egen_numero_solicitud,
+                     egen_observacion,egen_fecha_solicitud,egen_fecha_aprobacion,egen_fecha_caducidad,egen_estado_aprobacion,
+                     egen_ruta_archivo_pago,egen_certificado,egen_usuario_ingreso,egen_estado,egen_fecha_creacion,egen_estado_logico)
+                VALUES
+                    ('8','1','1',1,'3','60','1','1','4','000000002',
+                     '','2020-03-27 18:57:40',CURRENT_TIMESTAMP(),'31-12-1969','3',
+                     NULL,NULL,'1',1,CURRENT_TIMESTAMP(),1);*/
+    
+   
 
 }
