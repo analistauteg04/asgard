@@ -182,7 +182,6 @@ class Especies extends \yii\db\ActiveRecord {
     }
 
     private function InsertarCabLista($con, $data) {
-        \app\models\Utilities::putMessageLogFile($data['csol_total']);
         $sql = "INSERT INTO " . $con->dbname . ".cabecera_solicitud
                 (empid,est_id,uaca_id,mod_id,fpag_id,csol_total,csol_usuario_ingreso,csol_estado,csol_fecha_creacion,csol_estado_logico)VALUES
                 (:empid,:est_id,:uaca_id,:mod_id,:fpag_id,:csol_total,1,1,CURRENT_TIMESTAMP(),1);";
@@ -247,6 +246,7 @@ class Especies extends \yii\db\ActiveRecord {
         try {
             //$ids = isset($data['ids']) ? base64_decode($data['ids']) :NULL;
             $path = Yii::$app->basePath . Yii::$app->params['documentFolder'] . "especies/" . $fname;
+            $path =  $fname;
             $sql = "UPDATE " . $con->dbname . ".cabecera_solicitud "
                     . "SET csol_ruta_archivo_pago=:csol_ruta_archivo_pago,csol_fecha_modificacion=CURRENT_TIMESTAMP() WHERE csol_id=:csol_id";
             

@@ -88,6 +88,10 @@ $(document).ready(function () {
     $('#btn_buscarDataPago').click(function () {
         actualizarGridSolEspecie();
     });
+    $('#btn_buscarReviPago').click(function () {
+        actualizarGridRevSolEspecie();
+    });
+    
     
     $('#btn_savepago').click(function () {
         actualizarPago('File');
@@ -567,6 +571,20 @@ function actualizarGridSolEspecie() {
     }
 }
 
+function actualizarGridRevSolEspecie() {
+    var search = $('#txt_buscarDataPago').val();
+    var f_ini = $('#txt_fecha_ini').val();
+    var f_fin = $('#txt_fecha_fin').val();
+    var f_estado = $('#cmb_estado').val();
+    var f_pago = $('#cmb_fpago').val();
+    //Buscar almenos una clase con el nombre para ejecutar
+    if (!$(".blockUI").length) {
+        showLoadingPopup();
+        $('#TbG_Solicitudes').PbGridView('applyFilterData', {'f_ini': f_ini, 'f_fin': f_fin, 'f_pago': f_pago,'f_estado': f_estado, 'search': search});
+        setTimeout(hideLoadingPopup, 2000);
+    }
+}
+
 function actualizarPago(proceso) {
     var arrParams = new Object();
     var link = $('#txth_base').val() + "/academico/especies/cargarpago";
@@ -574,17 +592,13 @@ function actualizarPago(proceso) {
     arrParams.procesar_file = true;
     arrParams.tipo_proceso = proceso;
     arrParams.csol_id = csol_id;
-    //arrParams.archivo =$('#txth_doc_adj_pago').val();
     arrParams.archivo = $('#txth_doc_adj_pago').val() + "." + $('#txth_doc_adj_leads2').val().split('.').pop();
-    //arrParams.documento = "facturas/" + $('#txth_per').val() + "/" + $('#txth_doc_titulo').val();
-    //arrParams.archivo = $('#txth_doc_adj_leads2').val() + "." + $('#txth_doc_adj_pago').val().split('.').pop();
-
     if (!validateForm()) {
         requestHttpAjax(link, arrParams, function (response) {
             showAlert(response.status, response.label, response.message);
-            /*setTimeout(function () {
+            setTimeout(function () {
                 window.location.href = $('#txth_base').val() + "/academico/especies/solicitudalumno";
-            }, 3000);*/
+            }, 3000);
         }, true);
     }
 }

@@ -38,11 +38,40 @@ class EspeciesController extends \app\components\CController {
     private function estadoPagos() {
         return [
             '0' => Yii::t("formulario", "Todos"),
-            '1' => Yii::t("formulario", "Pagada"),
-            '2' => Yii::t("formulario", "Pendiente"),
+            '1' => Yii::t("formulario", "Pendiente"),
+            '2' => Yii::t("formulario", "No Aprobado"),
+            '3' => Yii::t("formulario", "Aprobado"),
         ];
     }
     
+    public function actionRevisarpago() {
+        $per_id = @Yii::$app->session->get("PB_perid");        
+        $especiesADO = new Especies();
+        $est_id = $especiesADO->recuperarIdsEstudiente($per_id);
+        $data = Yii::$app->request->get();
+        if ($data['PBgetFilter']) {
+            $arrSearch["f_ini"] = $data['f_ini'];
+            $arrSearch["f_fin"] = $data['f_fin'];
+            $arrSearch["f_estado"] = $data['f_estado'];
+            $arrSearch["f_pago"] = $data['f_pago'];
+            //$arrSearch["search"] = $data['search'];
+            $resp_pago = $especiesADO->getSolicitudesAlumnos($est_id, $arrSearch, false);
+            return $this->renderPartial('_revisar-grid', [
+                        "model" => $resp_pago,
+            ]);
+        } else {
+            
+        }
+
+        $personaData = $especiesADO->consultaDatosEstudiante($per_id);
+        $model = $especiesADO->getSolicitudesAlumnos($est_id, null, false);
+        
+        return $this->render('revisarpago', [
+                    'model' => $model,
+                    'personalData' => $personaData,
+                    'arrEstados' => $this->estadoPagos(),
+        ]);
+    }
     public function actionSolicitudalumno() {
         $per_id = @Yii::$app->session->get("PB_perid");        
         $especiesADO = new Especies();
@@ -64,11 +93,11 @@ class EspeciesController extends \app\components\CController {
 
         $personaData = $especiesADO->consultaDatosEstudiante($per_id);
         $model = $especiesADO->getSolicitudesAlumnos($est_id, null, false);
-        $arrEstados = ArrayHelper::map([["id" => "T", "value" => "Todos"], ["id" => "S", "value" => "Pagada"], ["id" => "P", "value" => "Pendiente"]], "id", "value");
+       
         return $this->render('solicitudalumno', [
                     'model' => $model,
                     'personalData' => $personaData,
-                    'arrEstados' => $arrEstados
+                    'arrEstados' => $this->estadoPagos(),
         ]);
     }
 
@@ -223,7 +252,41 @@ class EspeciesController extends \app\components\CController {
                     'det_solicitud' => json_encode($especiesADO->consultarDetSolicitud($ids)),
                     'arr_unidad' => ArrayHelper::map($arr_unidadac, "id", "name"),
                     'arr_modalidad' => ArrayHelper::map($arr_modalidad, "id", "name"),
-                    'arrEstados' => ArrayHelper::map($this->estadoPagos(), "id", "value"),
+                    'arrEstados' => $this->estadoPagos(),
+        ]);
+        
+       
+    }
+    
+    public function actionAutorizarpago() {        
+        $per_id = @Yii::$app->session->get("PB_perid");
+        $ids = isset($_GET['ids']) ? base64_decode($_GET['ids']) : NULL;
+        //Utilities::putMessageLogFile($ids);
+        $especiesADO = new Especies();
+        $est_id = $especiesADO->recuperarIdsEstudiente($per_id);
+        $mod_unidad = new UnidadAcademica();
+        $mod_modalidad = new Modalidad();
+        
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+            
+            
+        } 
+        $personaData = $especiesADO->consultaDatosEstudiante($est_id);
+        $arr_unidadac = $mod_unidad->consultarUnidadAcademicas();
+        $arr_modalidad = $mod_modalidad->consultarModalidad(1, 1);
+        $cabSol=$especiesADO->consultarCabSolicitud($ids);
+        $model = $especiesADO->getSolicitudesAlumnos($est_id, null, false);
+        $img_pago = $cabSol[0]["csol_ruta_archivo_pago"];
+        return $this->render('autorizarpago', [
+                    'model' => $model,
+                    'img_pago' => $img_pago,
+                    'arr_persona' => $personaData,
+                    'cab_solicitud' => $cabSol,
+                    'det_solicitud' => json_encode($especiesADO->consultarDetSolicitud($ids)),
+                    'arr_unidad' => ArrayHelper::map($arr_unidadac, "id", "name"),
+                    'arr_modalidad' => ArrayHelper::map($arr_modalidad, "id", "name"),
+                    'arrEstados' => $this->estadoPagos(),
         ]);
         
        
