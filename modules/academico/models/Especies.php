@@ -280,6 +280,127 @@ class Especies extends \yii\db\ActiveRecord {
                      '','2020-03-27 18:57:40',CURRENT_TIMESTAMP(),'31-12-1969','3',
                      NULL,NULL,'1',1,CURRENT_TIMESTAMP(),1);*/
     
-   
+    public function autorizarSolicitud($csol_id, $estado) {
+        $emp_id = @Yii::$app->session->get("PB_idempresa");
+        $usu_id = @Yii::$app->session->get("PB_iduser");
+        $arroout = array();
+        $con = \Yii::$app->db_academico;
+        $trans = $con->beginTransaction();
+        try {
+           // \app\models\Utilities::putMessageLogFile($dts_Cab);
+            
+            $fecha_actual = date("d-m-Y");
+            $cabSol=$this->consultarCabSolicitud($csol_id);
+            $detSol=$this->consultarDetSolicitud($csol_id);            
+            for ($i = 0; $i < sizeof($detSol); $i++) { 
+                //$detSol[$i]['est_id']=1;
+                $esp_id=$detSol[$i]['esp_id'];
+                $detSol[$i]['egen_fecha_solicitud']=$cabSol[0]['csol_fecha_creacion'];
+                $detSol[$i]['egen_ruta_archivo_pago']=$cabSol[0]['csol_ruta_archivo_pago'];
+                $detSol[$i]['uaca_id']=$cabSol[0]['uaca_id'];
+                $detSol[$i]['mod_id']=$cabSol[0]['mod_id'];
+                $detSol[$i]['fpag_id']=$cabSol[0]['fpag_id'];
+                $detSol[$i]['egen_estado_aprobacion']=$estado;
+                $detSol[$i]['empid']=$emp_id;
+                $detSol[$i]['resp_id']=1;//Responsable de firma
+                $detSol[$i]['egen_usuario_ingreso']=$usu_id;              
+                $detSol[$i]['egen_numero_solicitud']=$this->nuevaSecuencia($con, $esp_id);
+                
+                
+                $dataEsp=$this->consultarDataEspecie($esp_id);
+                $dias=$dataEsp[0]['esp_dia_vigencia'];
+                $detSol[$i]['egen_fecha_caducidad']=date("Y-m-d",strtotime($fecha_actual."+". $dias ." days")); 
+                $detSol[$i]['egen_certificado']=$dataEsp[0]['esp_emision_certificado'];
+                $this->generarEspecies($con,$detSol[$i]);
+            }
+            
+            $trans->commit();
+            $con->close();
+            //RETORNA DATOS 
+            //$arroout["ids"]= $ftem_id;
+            $arroout["status"]= true;
+            //$arroout["secuencial"]= $doc_numero;
+            return $arroout;
+         } catch (\Exception $e) {
+            $trans->rollBack();
+            $con->close();
+            throw $e;
+            $arroout["status"]= false;
+            return $arroout;
+        }
+        
+        
+    }
+    
+    public function consultarDataEspecie($Ids) {
+        $con = \Yii::$app->db_academico;
+        $sql = "SELECT esp_id,esp_valor,esp_emision_certificado,esp_dia_vigencia
+                    FROM " . $con->dbname . ".especies
+                WHERE esp_estado=1 AND esp_estado_logico=1 AND esp_id=:esp_id;";
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":esp_id", $Ids, \PDO::PARAM_INT);
+        return $comando->queryAll();
+    }
+
+    
+     private function generarEspecies($con, $data) {
+        $data['fpagegen_observacion_id']="";
+        
+        $sql = "INSERT INTO " . $con->dbname . ".especies_generadas
+                    (dsol_id,empid,est_id,resp_id,tra_id,esp_id,uaca_id,mod_id,fpag_id,egen_numero_solicitud,
+                     egen_observacion,egen_fecha_solicitud,egen_fecha_aprobacion,egen_fecha_caducidad,egen_estado_aprobacion,
+                     egen_ruta_archivo_pago,egen_certificado,egen_usuario_ingreso,egen_estado,egen_fecha_creacion,egen_estado_logico)
+                VALUES
+                    (:dsol_id,:empid,:est_id,:resp_id,:tra_id,:esp_id,:uaca_id,:mod_id,:fpag_id,:egen_numero_solicitud,
+                     :egen_observacion,:egen_fecha_solicitud,CURRENT_TIMESTAMP(),:egen_fecha_caducidad,:egen_estado_aprobacion,
+                     :egen_ruta_archivo_pago,:egen_certificado,:egen_usuario_ingreso,1,CURRENT_TIMESTAMP(),1); ";
+         
+
+        $command = $con->createCommand($sql);
+        $command->bindParam(":dsol_id", $data['dsol_id'], \PDO::PARAM_INT);
+        $command->bindParam(":empid", $data['empid'], \PDO::PARAM_INT);
+        $command->bindParam(":est_id", $data['est_id'], \PDO::PARAM_INT);
+        $command->bindParam(":resp_id", $data['resp_id'], \PDO::PARAM_INT);
+        $command->bindParam(":esp_id", $data['esp_id'], \PDO::PARAM_INT);
+        $command->bindParam(":tra_id", $data['tra_id'], \PDO::PARAM_INT);
+        $command->bindParam(":uaca_id", $data['uaca_id'], \PDO::PARAM_INT);
+        $command->bindParam(":mod_id", $data['mod_id'], \PDO::PARAM_INT);
+        $command->bindParam(":fpag_id", $data['fpag_id'], \PDO::PARAM_INT);        
+        $command->bindParam(":egen_numero_solicitud", $data['egen_numero_solicitud'], \PDO::PARAM_STR);
+        $command->bindParam(":egen_observacion", $data['egen_observacion'], \PDO::PARAM_STR);
+        $command->bindParam(":egen_fecha_solicitud", $data['egen_fecha_solicitud'], \PDO::PARAM_STR);
+        //$command->bindParam(":egen_fecha_aprobacion", $data['egen_fecha_aprobacion'], \PDO::PARAM_STR);
+        $command->bindParam(":egen_fecha_caducidad", $data['egen_fecha_caducidad'], \PDO::PARAM_STR);
+        $command->bindParam(":egen_estado_aprobacion", $data['egen_estado_aprobacion'], \PDO::PARAM_STR);
+        $command->bindParam(":egen_ruta_archivo_pago", $data['egen_ruta_archivo_pago'], \PDO::PARAM_STR);
+        $command->bindParam(":egen_certificado", $data['egen_certificado'], \PDO::PARAM_STR);     
+        $command->bindParam(":egen_usuario_ingreso", $data['egen_usuario_ingreso'], \PDO::PARAM_STR);
+        $command->execute();
+    }
+    
+    public function nuevaSecuencia($con,$esp_id = NULL){
+        $numero=0;
+        try{
+            $sql="SELECT IFNULL(CAST(esp_numero AS UNSIGNED),0) secuencia FROM " . $con->dbname . ".especies 
+                    WHERE esp_estado=1 AND esp_estado_logico=1 AND esp_id=:esp_id ";          
+            $sql.=" FOR UPDATE ";                        
+            $comando = $con->createCommand($sql);
+            $comando->bindParam(":esp_id", $emp_id, \PDO::PARAM_INT);    
+            $rawData=$comando->queryScalar();   
+            if ($rawData !== false){
+                //$numero=str_pad((int)$rawData[0]["secuencia"]+1, 9, "0", STR_PAD_LEFT);
+                $numero=str_pad((int)$rawData + 1, 9, "0", STR_PAD_LEFT);
+                $sql=" UPDATE " . yii::$app->db_facturacion->dbname . ".especies SET esp_numero=:secuencia "
+                        . " WHERE esp_estado=1 AND esp_estado_logico=1 AND esp_id=:esp_id ";          
+                $comando = $con->createCommand($sql);
+                $comando->bindParam(":secuencia", $numero, \PDO::PARAM_STR);
+                $comando->bindParam(":esp_id", $esp_id, \PDO::PARAM_INT);                
+                $rawData=$comando->execute();         
+            }
+        }catch(Exception $e){
+            Utilities::putMessageLogFile($e);
+        }
+        return $numero;
+    }
 
 }

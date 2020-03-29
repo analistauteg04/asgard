@@ -609,7 +609,7 @@ function autorizaPago() {
     var csol_id=parseInt($('#lbl_num_solicitud').text());
     arrParams.csol_id = csol_id;
     arrParams.estado = $('#cmb_estado').val();
-    arrParams.accion = "Create";
+    arrParams.accion = "AutorizaPago";
     if (!validateForm()) {
         requestHttpAjax(link, arrParams, function (response) {
             showAlert(response.status, response.label, response.message);

@@ -178,7 +178,7 @@ class EspeciesController extends \app\components\CController {
                 //$PedId = isset($_POST['PED_ID']) ? $_POST['PED_ID'] : 0;
                 //$arroout = $model->actualizarLista($PedId,$tieId,$total,$dts_Lista);
             }
-            Utilities::putMessageLogFile($resul);
+            //Utilities::putMessageLogFile($resul);
             if ($resul['status']) {
                 $message = ["info" => Yii::t('exception', '<strong>Well done!</strong> your information was successfully saved.')];
                 echo Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message, $resul);
@@ -269,6 +269,33 @@ class EspeciesController extends \app\components\CController {
         
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
+            //$especiesADO = new Especies();
+            $csol_id = isset($data['csol_id']) ? $data['csol_id'] : 0;
+            $estado = isset($data['estado']) ? $data['estado'] : 0;
+            $accion = isset($data['accion']) ? $data['accion'] : "";
+
+            if ($accion == "AutorizaPago") {
+                $resul = $especiesADO->autorizarSolicitud($csol_id, $estado);
+                //VSValidador::putMessageLogFile($arroout);
+                /* if ($arroout["status"]=="OK"){
+                  //Recupera infor de CabTemp  para enviar info al supervisor de tienda
+                  $CabPed=$res->sendMailPedidosTemp($arroout["data"]);
+
+                  } */
+            } else {
+                //Opcion para actualizar
+                //$PedId = isset($_POST['PED_ID']) ? $_POST['PED_ID'] : 0;
+                //$arroout = $model->actualizarLista($PedId,$tieId,$total,$dts_Lista);
+            }
+            //Utilities::putMessageLogFile($resul);
+            if ($resul['status']) {
+                $message = ["info" => Yii::t('exception', '<strong>Well done!</strong> your information was successfully saved.')];
+                echo Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message, $resul);
+            } else {
+                $message = ["info" => Yii::t('exception', 'The above error occurred while the Web server was processing your request.')];
+                echo Utilities::ajaxResponse('NO_OK', 'alert', Yii::t('jslang', 'Error'), 'false', $message);
+            }
+            return;
             
             
         } 

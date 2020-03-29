@@ -13,7 +13,7 @@ Especies::registerTranslations();
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
         <div class="col-sm-10 col-md-10 col-xs-10 col-lg-10"></div>
         <div class="col-sm-2 col-md-2 col-xs-2 col-lg-2">
-            <a id="btn_savepago" href="javascript:" class="btn btn-primary btn-block"> <?= Yii::t("formulario", "Save") ?></a>
+            <a id="btn_saveauto" href="javascript:" class="btn btn-primary btn-block"> <?= Yii::t("formulario", "Save") ?></a>
         </div>
     </div>
 
