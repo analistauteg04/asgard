@@ -12,15 +12,10 @@ use yii\helpers\ArrayHelper;
 
 #use app\modules\academico\models\EstudioAcademico;
 use app\modules\academico\models\Modalidad;
-
-#use app\modules\academico\models\ModuloEstudio;
 use app\modules\academico\models\UnidadAcademica;
-#use app\modules\admision\models\SolicitudinsDocumento;
-#use app\modules\admision\models\DocumentoAdjuntar;
-#use app\modules\admision\Module as admision;
 use app\modules\academico\Module as academico;
-use app\modules\financiero\Module as financiero;
-use app\modules\financiero\models\Secuencias;
+#use app\modules\financiero\Module as financiero;
+#use app\modules\financiero\models\Secuencias;
 use app\modules\academico\models\Especies;
 use app\models\Empresa;
 
@@ -43,6 +38,7 @@ class EspeciesController extends \app\components\CController {
             '3' => Yii::t("formulario", "Aprobado"),
         ];
     }
+    
     
     public function actionRevisarpago() {
         $per_id = @Yii::$app->session->get("PB_perid");        
@@ -167,6 +163,35 @@ class EspeciesController extends \app\components\CController {
 
             if ($accion == "Create") {
                 $resul = $especiesADO->insertarLista($dts_Cab, $dts_Det);
+                
+                        $tituloMensaje = Yii::t("register", "User Register");
+                        $asunto = Yii::t("register", "User Register") . " " . Yii::$app->params["siteName"];
+                        $body = Utilities::getMailMessage("registernew", array(
+                                    "[[primer_nombre]]" => $nombre1,
+                                    "[[primer_apellido]]" => $apellido1,
+                                    "[[dni]]" => $dnis,
+                                    "[[numero_dni]]" => $numidentificacion,
+                                    "[[celular]]" => $celular,
+                                    "[[mail]]" => $correo,
+                                    "[[unidad_academica]]" => $nombre_unidad["nombre_unidad"],
+                                    "[[modalidad]]" => $nombre_modalidad["nombre_modalidad"]), Yii::$app->language);
+                        Utilities::sendEmail(
+                                $tituloMensaje, 
+                                Yii::$app->params["adminEmail"], 
+                                [Yii::$app->params["lidercontact"] => "Lider", 
+                                    Yii::$app->params["contact1"] => "contact1", 
+                                    Yii::$app->params["contact2"] => "contact2", 
+                                    Yii::$app->params["contact3"] => "contact3", 
+                                    Yii::$app->params["contact4"] => "contact4", 
+                                    Yii::$app->params["admisiones1"] => "admisiones1", 
+                                    Yii::$app->params["admisiones2"] => "admisiones2", 
+                                    Yii::$app->params["admisiones3"] => "admisiones3", 
+                                    Yii::$app->params["admisiones4"] => "admisiones4", 
+                                    Yii::$app->params["ventasposgrado1"] => "ventasposgrado1", 
+                                    Yii::$app->params["ventasposgrado2"] => "ventasposgrado2", 
+                                    Yii::$app->params["ventasposgrado3"] => "ventasposgrado3"], 
+                                $asunto, $body);
+                        
                 //VSValidador::putMessageLogFile($arroout);
                 /* if ($arroout["status"]=="OK"){
                   //Recupera infor de CabTemp  para enviar info al supervisor de tienda
@@ -317,6 +342,85 @@ class EspeciesController extends \app\components\CController {
         ]);
         
        
+    }
+    
+    
+    public function actionEspeciesgeneradas() {
+        $per_id = @Yii::$app->session->get("PB_perid");        
+        $especiesADO = new Especies();
+        //$est_id = $especiesADO->recuperarIdsEstudiente($per_id);
+        $data = Yii::$app->request->get();
+        if ($data['PBgetFilter']) {
+            $arrSearch["f_ini"] = $data['f_ini'];
+            $arrSearch["f_fin"] = $data['f_fin'];
+            $arrSearch["f_estado"] = $data['f_estado'];
+            $arrSearch["f_pago"] = $data['f_pago'];
+            //$arrSearch["search"] = $data['search'];
+            $resp_pago = $especiesADO->getSolicitudesGeneradas($est_id, $arrSearch, false);
+            return $this->renderPartial('_especies-grid', [
+                        "model" => $resp_pago,
+            ]);
+        } else {
+            
+        }
+
+        $personaData = $especiesADO->consultaDatosEstudiante($per_id);
+        $model = $especiesADO->getSolicitudesGeneradas($est_id, null, false);
+        
+        return $this->render('especiesgeneradas', [
+                    'model' => $model,
+                    //'personalData' => $personaData,
+                    'arrEstados' => $this->estadoPagos(),
+        ]);
+    }
+    
+    public function actionGenerarespeciespdf($ids) {//ok
+        try {
+            $ids = isset($_GET['ids']) ? base64_decode($_GET['ids']) : NULL;
+            $rep = new ExportFile();
+            //$this->layout = false;
+            $this->layout = '@modules/academico/views/especies/main';
+            //$this->view->title = "Invoices";
+            $modelo = new NubeFactura(); //Ejmpleo code 3
+            $cabFact = $modelo->mostrarCabFactura($ids);
+            $detFact = $modelo->mostrarDetFacturaImp($ids);
+            $impFact = $modelo->mostrarFacturaImp($ids);
+            $pagFact = $modelo->mostrarFormaPago($ids);
+            $adiFact = $modelo->mostrarFacturaDataAdicional($ids);
+            //$venFact= VSDocumentos::buscarDatoVendedor($cabFact['USU_ID']);//DATOS DEL VENDEDOR QUE AUTORIZO
+
+            /*$this->pdf_numeroaut = $cabFact['AutorizacionSri'];
+            $this->pdf_numero = $cabFact['NumDocumento'];
+            $this->pdf_nom_empresa = $cabFact['RazonSocial'];
+            $this->pdf_ruc = $cabFact['Ruc'];
+            $this->pdf_num_contribuyente = $cabFact['ContribuyenteEspecial'];
+            $this->pdf_contabilidad = $cabFact['ObligadoContabilidad'];
+            $this->pdf_dir_matriz = $cabFact['DireccionMatriz'];
+            $this->pdf_dir_sucursal = $cabFact['DireccionEstablecimiento'];
+            $this->pdf_fec_autorizacion = $cabFact['FechaAutorizacion'];
+            $this->pdf_emision = \app\modules\fe_edoc\Module::t("fe", 'NORMAL');//$cabFact['TipoEmision'];
+            $this->pdf_ambiente = ($cabFact['Ambiente']==2)? \app\modules\fe_edoc\Module::t("fe", 'PRODUCTION'): \app\modules\fe_edoc\Module::t("fe", 'TEST');
+            $this->pdf_cla_acceso = $cabFact['ClaveAcceso'];
+            $this->pdf_tipo_documento = \app\modules\fe_edoc\Module::t("fe", 'INVOICE');
+            $this->pdf_cod_barra = "";*/
+
+            $rep->orientation = "P"; // tipo de orientacion L => Horizontal, P => Vertical   
+            
+            $rep->createReportPdf(
+                $this->render('@modules/fe_edoc/views/tpl_fe/factura', [
+                    'cabFact' => $cabFact,
+                    'detFact' => $detFact,
+                    'impFact' => $impFact,
+                    'pagFact' => $pagFact,
+                    'adiFact' => $adiFact,
+                    'venFact' => $venFact,
+                ])
+            );
+            $rep->mpdf->Output('FACTURA_' . $cabFact['NumDocumento'] . ".pdf", ExportFile::OUTPUT_TO_DOWNLOAD); 
+            //exit;
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
     }
 
 }

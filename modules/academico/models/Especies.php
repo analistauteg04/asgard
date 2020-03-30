@@ -34,16 +34,19 @@ class Especies extends \yii\db\ActiveRecord {
         return $rawData;
     }
     
-    public function recuperarResponsable($uaca_id,$mod_id){
+    public function recuperarIdsResponsable($uaca_id,$mod_id){
         $con = \Yii::$app->db_academico;
-        $sql = "SELECT * FROM " . $con->dbname . ".responsable_especie
+        $sql = "SELECT resp_id FROM " . $con->dbname . ".responsable_especie
                     WHERE resp_estado=1 AND resp_estado_logico=1
                         AND uaca_id=:uaca_id AND mod_id=:mod_id;";
         
         $comando = $con->createCommand($sql);
         $comando->bindParam(":uaca_id", $uaca_id, \PDO::PARAM_INT);
         $comando->bindParam(":mod_id", $mod_id, \PDO::PARAM_INT);
-        return $comando->queryAll();
+        $rawData=$comando->queryScalar();
+        if ($rawData === false)
+            return 1; //en caso de que existe problema o no retorne nada tiene 1 por defecto 
+        return $rawData;
     }
 
     public function consultaDatosEstudiante($id) {
@@ -282,14 +285,9 @@ class Especies extends \yii\db\ActiveRecord {
         }
     }
     
-    /*INSERT INTO db_academico.especies_generadas
-                    (dsol_id,empid,est_id,resp_id,tra_id,esp_id,uaca_id,mod_id,fpag_id,egen_numero_solicitud,
-                     egen_observacion,egen_fecha_solicitud,egen_fecha_aprobacion,egen_fecha_caducidad,egen_estado_aprobacion,
-                     egen_ruta_archivo_pago,egen_certificado,egen_usuario_ingreso,egen_estado,egen_fecha_creacion,egen_estado_logico)
-                VALUES
-                    ('8','1','1',1,'3','60','1','1','4','000000002',
-                     '','2020-03-27 18:57:40',CURRENT_TIMESTAMP(),'31-12-1969','3',
-                     NULL,NULL,'1',1,CURRENT_TIMESTAMP(),1);*/
+    
+    
+
     
     public function autorizarSolicitud($csol_id, $estado) {
         $emp_id = @Yii::$app->session->get("PB_idempresa");
@@ -301,8 +299,9 @@ class Especies extends \yii\db\ActiveRecord {
            // \app\models\Utilities::putMessageLogFile($dts_Cab);
             
             $fecha_actual = date("d-m-Y");
+            $this->actualizaCabPago($con,$csol_id, $estado);
             $cabSol=$this->consultarCabSolicitud($csol_id);
-            $detSol=$this->consultarDetSolicitud($csol_id);            
+            $detSol=$this->consultarDetSolicitud($csol_id);
             for ($i = 0; $i < sizeof($detSol); $i++) { 
                 $esp_id=$detSol[$i]['esp_id'];
                 $detSol[$i]['egen_fecha_solicitud']=$cabSol[0]['csol_fecha_creacion'];
@@ -312,8 +311,8 @@ class Especies extends \yii\db\ActiveRecord {
                 $detSol[$i]['fpag_id']=$cabSol[0]['fpag_id'];
                 $detSol[$i]['egen_estado_aprobacion']=$estado;
                 $detSol[$i]['empid']=$emp_id;
-                $dataResp=$this->recuperarResponsable($cabSol[0]['uaca_id'],$cabSol[0]['mod_id']);
-                $detSol[$i]['resp_id']=$dataResp[0]['resp_id']; //Responsable de firma
+                $dataResp=$this->recuperarIdsResponsable($cabSol[0]['uaca_id'],$cabSol[0]['mod_id']);
+                $detSol[$i]['resp_id']=$dataResp;//$dataResp[0]['resp_id']; //Responsable de firma
                 $detSol[$i]['egen_usuario_ingreso']=$usu_id;              
                 $detSol[$i]['egen_numero_solicitud']=$this->nuevaSecuencia($con, $esp_id);
                 $dataEsp=$this->consultarDataEspecie($esp_id);
@@ -350,7 +349,18 @@ class Especies extends \yii\db\ActiveRecord {
         $comando->bindParam(":esp_id", $Ids, \PDO::PARAM_INT);
         return $comando->queryAll();
     }
-
+    private function actualizaCabPago($con, $csol_id,$estado) {
+        $sql = "UPDATE " . $con->dbname . ".cabecera_solicitud "
+                    . "SET csol_fecha_aprobacion=CURRENT_TIMESTAMP(),"
+                        . "csol_estado_aprobacion=:csol_estado_aprobacion WHERE csol_id=:csol_id";
+            
+            $command = $con->createCommand($sql);
+            $command->bindParam(":csol_id", $csol_id, \PDO::PARAM_INT);
+            //$command->bindParam(":csol_fecha_aprobacion", $path, \PDO::PARAM_STR);
+            //$command->bindParam(":csol_fecha_caducidad", $path, \PDO::PARAM_STR);
+            $command->bindParam(":csol_estado_aprobacion", $estado, \PDO::PARAM_STR);
+            $command->execute();
+    }
     
      private function generarEspecies($con, $data) {
         $data['fpagegen_observacion_id']="";
@@ -391,8 +401,8 @@ class Especies extends \yii\db\ActiveRecord {
         $numero=0;
         try{
             $sql="SELECT IFNULL(CAST(esp_numero AS UNSIGNED),0) secuencia FROM " . $con->dbname . ".especies 
-                    WHERE esp_estado=1 AND esp_estado_logico=1 AND esp_id=:esp_id ";          
-            $sql.=" FOR UPDATE ";                        
+                    WHERE esp_estado=1 AND esp_estado_logico=1 AND esp_id=:esp_id FOR UPDATE ";          
+            $sql.="  ";                        
             $comando = $con->createCommand($sql);
             $comando->bindParam(":esp_id", $esp_id, \PDO::PARAM_INT);    
             $rawData=$comando->queryScalar();   
@@ -431,5 +441,82 @@ class Especies extends \yii\db\ActiveRecord {
         }
         return $mensaje;
     }
+    
+    
+/*SELECT A.egen_id,A.dsol_id,A.egen_numero_solicitud,C.esp_rubro,concat(D.per_pri_nombre,' ',D.per_pri_apellido) Nombres,D.per_cedula,
+	F.uaca_nombre,G.mod_nombre,concat(E.resp_titulo,' ',E.resp_nombre) Responsable,date(A.egen_fecha_aprobacion) fecha_aprobacion,
+    A.egen_fecha_caducidad
+	FROM db_academico.especies_generadas A
+		INNER JOIN (db_academico.estudiante B 
+				INNER JOIN db_asgard.persona D ON B.per_id=D.per_id)
+			ON A.est_id=B.est_id
+		INNER JOIN db_academico.especies C ON A.esp_id=C.esp_id
+        INNER JOIN db_academico.unidad_academica F ON F.uaca_id=A.uaca_id
+		INNER JOIN db_academico.modalidad G ON G.mod_id=A.mod_id
+        LEFT JOIN db_academico.responsable_especie E ON E.resp_id=A.resp_id
+    WHERE A.egen_estado=1 AND A.egen_estado_logico=1;*/
+    
+    public static function getSolicitudesGeneradas($est_id, $arrFiltro = array(), $onlyData = false) {
+        $con = \Yii::$app->db_academico;
+        $con1 = \Yii::$app->db_asgard;
+        $con2 = \Yii::$app->db_facturacion;
+        $estado = 1;
+        $str_search = "";
+        if (isset($arrFiltro) && count($arrFiltro) > 0) {
+            //$str_search .= ($arrFiltro['f_pago']!= "")?" AND A.fpag_id= :fpag_id ":"";
+            if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
+                $str_search .= " AND A.egen_fecha_aprobacion BETWEEN :fec_ini AND :fec_fin ";
+                
+            }
+        }
+        
+        $sql = "SELECT A.egen_id,A.dsol_id,A.egen_numero_solicitud,C.esp_rubro,concat(D.per_pri_nombre,' ',D.per_pri_apellido) Nombres,D.per_cedula,
+                    F.uaca_nombre,G.mod_nombre,concat(E.resp_titulo,' ',E.resp_nombre) Responsable,date(A.egen_fecha_aprobacion) fecha_aprobacion,
+                    A.egen_fecha_caducidad
+                    FROM " . $con->dbname . ".especies_generadas A
+                            INNER JOIN (" . $con->dbname . ".estudiante B 
+                                            INNER JOIN " . $con1->dbname . ".persona D ON B.per_id=D.per_id)
+                                    ON A.est_id=B.est_id
+                            INNER JOIN " . $con->dbname . ".especies C ON A.esp_id=C.esp_id
+                            INNER JOIN " . $con->dbname . ".unidad_academica F ON F.uaca_id=A.uaca_id
+                            INNER JOIN " . $con->dbname . ".modalidad G ON G.mod_id=A.mod_id
+                            LEFT JOIN " . $con->dbname . ".responsable_especie E ON E.resp_id=A.resp_id
+                WHERE A.egen_estado=1 AND A.egen_estado_logico=1 $str_search  ORDER BY A.egen_id DESC; ";
 
+
+        $comando = $con->createCommand($sql);
+        //$comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        //$comando->bindParam(":est_id", $est_id, \PDO::PARAM_INT);
+        if (isset($arrFiltro) && count($arrFiltro) > 0) {
+            $fecha_ini = $arrFiltro["f_ini"];
+            $fecha_fin = $arrFiltro["f_fin"];
+            //$forma_pago =$arrFiltro['f_pago'];
+            //if($forma_pago!= ""){ $comando->bindParam(":fpag_id", $forma_pago, \PDO::PARAM_INT); }
+            
+            if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
+                $comando->bindParam(":fec_ini", $fecha_ini, \PDO::PARAM_STR);
+                $comando->bindParam(":fec_fin", $fecha_fin, \PDO::PARAM_STR);
+            }
+        }
+        $resultData = $comando->queryAll();
+        //Utilities::putMessageLogFile($resultData);
+        $dataProvider = new ArrayDataProvider([
+            'key' => 'id',
+            'allModels' => $resultData,
+            'pagination' => [
+                'pageSize' => Yii::$app->params["pageSize"],
+            ],
+            'sort' => [
+                'attributes' => [
+                    'egen_id',
+                    'fecha_aprobacion',
+                ],
+            ],
+        ]);
+        if ($onlyData) {
+            return $resultData;
+        } else {
+            return $dataProvider;
+        }
+    }
 }

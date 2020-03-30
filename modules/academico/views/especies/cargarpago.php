@@ -185,8 +185,8 @@ Especies::registerTranslations();
                             <th><?= Yii::t("formulario", "Cant") ?></th>
                             <th><?= Yii::t("formulario", "Valor") ?></th>
                             <th><?= Yii::t("formulario", "Total") ?></th>
-                            <th><?= Yii::t("formulario", "F.Aut") ?></th>
-                            <th><?= Yii::t("formulario", "F.Cad") ?></th>
+                            <th><?php// Yii::t("formulario", "F.Aut") ?></th>
+                            <th><?php// Yii::t("formulario", "F.Cad") ?></th>
                             <th></th>
                         </tr>
                     </thead>
