@@ -1,11 +1,12 @@
 <?php
 
 use yii\helpers\Html;
-use app\modules\academico\Module as academico;
+use app\modules\academico\Module as Academico;
+Academico::registerTranslations();
+
 ?>
 
-<div>
-    <h3><?= Academico::t("matriculacion", "Online Registration") ?></h3>
+<div>        
     <br></br>
     <div class="row">
         <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12"></div>
@@ -18,7 +19,7 @@ use app\modules\academico\Module as academico;
                 <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                     <span><?= $data_student['pla_periodo_academico'] ?></span>
                 </div>
-            </div>
+            </div><br/>
             <div class="row">
                 <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                     <span><strong><?= Academico::t("matriculacion", "Student") ?>: </strong></span>
@@ -26,7 +27,7 @@ use app\modules\academico\Module as academico;
                 <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                     <span><?= $data_student['pes_nombres'] ?></span>
                 </div>                
-            </div>
+            </div><br/>
             <div class="row">
                 <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                     <span><strong><?= Academico::t("matriculacion", "DNI") ?>: </strong></span>
@@ -34,7 +35,7 @@ use app\modules\academico\Module as academico;
                 <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                     <span><?= $data_student['pes_dni'] ?></span>
                 </div>                
-            </div>
+            </div><br/>
             <div class="row">
                 <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                     <span><strong><?= Academico::t("matriculacion", "Academic Unit") ?>: </strong></span>
@@ -42,7 +43,7 @@ use app\modules\academico\Module as academico;
                 <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                     <span><?= Academico::t("matriculacion", "Modality") ?> <?= $data_student['mod_nombre'] ?></span>
                 </div>
-            </div>
+            </div><br/>
             <div class="row">
                 <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                     <span><strong><?= Academico::t("matriculacion", "Career") ?>: </strong></span>
@@ -50,7 +51,7 @@ use app\modules\academico\Module as academico;
                 <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                     <span><?= $data_student['pes_carrera'] ?></span>
                 </div>                
-            </div>
+            </div><br/>
             <div class="row">
                 <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                     <span><strong><?= Academico::t("matriculacion", "Phone") ?>: </strong></span>
@@ -58,31 +59,13 @@ use app\modules\academico\Module as academico;
                 <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                     <span><?= $data_student['per_celular'] ?></span>
                 </div>                
-            </div>
-            <!-- <div class="row">
-                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                    <span><strong><?= Academico::t("matriculacion", "Register Cost") ?>: </strong></span>
-                </div>
-                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                    <span><?= $cost_total ?></span>
-                </div>
-            </div>  -->
+            </div><br/>          
         </div>
         <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12"></div>
     </div>
 </div>
 <br></br>
-<div class="row">
-    <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12"></div>
-    <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
-    <?=
-        $this->render('index-grid', ['planificacion' => $planificacion,]);
-    ?>
-    </div>
-    <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12"></div>
-</div>
-<input type="hidden" id="frm_pes_id" value="<?= $pes_id ?>">
-<input type="hidden" id="frm_num_min" value="<?= $num_min ?>">
-<input type="hidden" id="frm_num_max" value="<?= $num_max ?>">
-<input type="hidden" id="frm_modalidad" value="<?= $data_student['mod_nombre'] ?>">
-<input type="hidden" id="frm_carrera" value="<?= $data_student['pes_carrera'] ?>">
+<br></br>
+<?=
+    $this->render('exportpdf-grid', ['planificacion' => $planificacion,]);
+?>

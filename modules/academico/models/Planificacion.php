@@ -1,0 +1,158 @@
+<?php
+
+namespace app\modules\academico\models;
+
+use Yii;
+use \yii\data\ActiveDataProvider;
+use \yii\data\ArrayDataProvider;
+use yii\base\Exception;
+use yii\helpers\VarDumper;
+
+/**
+ * This is the model class for table "planificacion".
+ *
+ * @property integer $pla_id
+ * @property integer $mod_id
+ * @property string $pla_fecha_inicio
+ * @property string $pla_fecha_fin
+ * @property string $pla_periodo_academico
+ * @property string $pla_path
+ * @property string $pla_estado
+ * @property string $pla_fecha_creacion
+ * @property string $pla_fecha_modificacion
+ * @property string $pla_estado_logico
+ *
+ */
+class Planificacion extends \yii\db\ActiveRecord {
+
+    /**
+     * @inheritdoc
+     */
+    public static function tableName() {
+        return 'planificacion';
+    }
+
+    /**
+     * @return \yii\db\Connection the database connection used by this AR class.
+     */
+    public static function getDb() {
+        return Yii::$app->get('db_academico');
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function rules() {
+        return [
+            [['pla_estado_logico', 'pla_path'], 'required'],
+            [['pla_fecha_creacion', 'pla_fecha_modificacion','pla_usuario_modifica'], 'safe'],
+            [['pla_fecha_inicio', 'pla_fecha_fin', 'pla_periodo_academico', 'pla_estado'], 'string'],
+            [['pla_estado_logico'], 'string', 'max' => 1],
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function attributeLabels() {
+        return [
+            'pla_id' => 'Planificacion ID',
+            'mod_id' => 'Modalidad ID',
+            'pla_fecha_inicio' => 'Planificacion Fecha Inicio',
+            'pla_fecha_fin' => 'Planificacion Fecha Fin',
+            'pla_periodo_academico' => 'Planificacion Periodo Academico',
+            'pla_estado' => 'Planificacion Estado',
+            'pla_fecha_creacion' => 'Planificacion Fecha Creacion',
+            'pla_usuario_modificacion' => 'Planificacion Usuario Modificacion',
+            'pla_fecha_modificacion' => 'Planificacion Fecha Modificacion',
+            'pla_estado_logico' => 'Planificacion Estado Logico'
+        ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    /* public static function getAllPlanificacionesGrid($search = NULL, $dataProvider = false) {
+        $iduser = Yii::$app->session->get('PB_iduser', FALSE);
+        $search_cond = "%" . $search . "%";
+        $str_search = "";
+        if (isset($search)) {
+            $str_search = "(pl.pla_periodo_academico like :search OR ";
+            $str_search .= "mod.mod_nombre like :search) AND ";
+        }
+        $sql = "SELECT 
+                    pl.pla_id as id,
+                    pl.pla_periodo_academico as Periodo Academico
+                    mod.mod_nombre as Nombre Modalidad
+                FROM 
+                    planificacion as pl
+                    inner join modalidad as mod on mod.mod_id = pl.mod_id
+                WHERE 
+                    $str_search
+                    pl.pla_estado_logico=1 and
+                    mod.mod_estado_logico=1 and
+                    ORDER BY pl.pla_id;";
+         $comando = Yii::$app->db_academico->createCommand($sql);
+         if($dataProvider){
+             $dataProvider = new ArrayDataProvider([
+                 'key' => 'pla_id',
+                 'allModels' => $res,
+                 'pagination' => [
+                     'pageSize' => Yii::$app->params["pageSize"],
+                 ],
+                 'sort' => [
+                     'attributes' => ['Pla_per_aca', 'Modalidad'],
+                 ],
+             ]);
+             return $dataProvider;
+         }
+         return $res;
+     } */
+
+     public static function getAllPlanificacionesGrid($planificacion, $pla_periodo_academico, $mod_id)
+     {
+         $filter = "";
+         $search = "%" . $planificacion . "%";
+         if (!is_null($planificacion) || $planificacion != "") {
+             $filter = 'AND pla.pla_periodo_academico like :search';
+         }
+         $con_academico = \Yii::$app->db_academico;
+         $estado = 1;
+         $sql = "SELECT 
+                    pla.pla_id as id,
+                    pla.pla_periodo_academico as PeriodoAcademico,
+                    moda.mod_id as ModaId,
+                    moda.mod_nombre as Modalidad
+                FROM " . $con_academico->dbname . ".planificacion as pla,
+                " . $con_academico->dbname . ".modalidad as moda
+                 WHERE moda.mod_id = pla.mod_id        
+                AND pla.pla_periodo_academico =:pla_periodo_academico
+                AND pla.mod_id =:mod_id
+                $filter
+                AND pla.pla_estado =:estado
+                AND pla.pla_estado_logico =:estado
+            ";
+ 
+         $comando = $con_academico->createCommand($sql);
+         $comando->bindParam(":pla_periodo_academico", $pla_periodo_academico, \PDO::PARAM_STR);
+         $comando->bindParam(":mod_id", $mod_id, \PDO::PARAM_INT);
+         $comando->bindParam(":search", $search, \PDO::PARAM_STR);
+         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+         $resultData = $comando->queryAll();
+ 
+         return $resultData;
+     }
+
+     public static function getPeriodosAcademico(){
+        $con_academico = \Yii::$app->db_academico;
+        $sql = "SELECT @row_number:=@row_number+1 as pla_id, pla_periodo_academico ". 
+               "FROM " . Yii::$app->db_academico->dbname.".planificacion, (SELECT @row_number:=0) AS t ".
+               "WHERE pla_estado_logico=1 AND pla_estado=1 ".
+               "GROUP BY pla_periodo_academico";
+
+        $comando = $con_academico->createCommand($sql);
+        $resultData = $comando->queryAll();
+
+        return $resultData;
+    }
+}
