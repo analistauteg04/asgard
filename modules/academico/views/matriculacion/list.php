@@ -42,9 +42,9 @@ academico::registerTranslations();
         </div> 
         <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
             <div class="form-group">
-                <label for="cmb_per_academico" class="col-lg-3 col-md-3 col-sm-3 col-xs-3 control-label"><?= academico::t("matriculacion", "Academic Period") ?></label>
+                <label for="cmb_per_acad" class="col-lg-3 col-md-3 col-sm-3 col-xs-3 control-label"><?= academico::t("matriculacion", "Academic Period") ?></label>
                 <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
-                    <?= Html::dropDownList("cmb_per_academico", 0, $arr_pla_per, ["class" => "form-control", "id" => "cmb_per_academico",]) ?>
+                    <?= Html::dropDownList("cmb_per_acad", 0, $arr_pla_per, ["class" => "form-control", "id" => "cmb_per_acad",]) ?>
                 </div>
             </div>
         </div> 
@@ -52,9 +52,9 @@ academico::registerTranslations();
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
             <div class="form-group">
-                <label for="cmb_modalidad" class="col-lg-3 col-md-3 col-sm-3 col-xs-3 control-label"><?= academico::t("matriculacion", "Modality") ?></label>
+                <label for="cmb_mod" class="col-lg-3 col-md-3 col-sm-3 col-xs-3 control-label"><?= academico::t("matriculacion", "Modality") ?></label>
                 <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
-                    <?= Html::dropDownList("cmb_modalidad", 0, $arr_modalidad, ["class" => "form-control", "id" => "cmb_modalidad",]) ?>
+                    <?= Html::dropDownList("cmb_mod", 0, $arr_modalidad, ["class" => "form-control", "id" => "cmb_mod",]) ?>
                 </div>
             </div>
         </div> 

@@ -40,18 +40,24 @@ $(document).ready(function() {
         arrParams2.search = $("#boxgrid").val();
         arrParams2.pla_periodo_academico = $("#cmb_per_academico").val();
         arrParams2.mod_id = $("#cmb_modalidad").val();
+        arrParams2.aprobacion = $("#cmb_estado").val();
         /* console.log(arrParams2); */
         $("#grid_pagos_list").PbGridView("applyFilterData", arrParams2);
     });
 
-    $('#cmb_modalidad').change(function() {
+    $('#cmb_modalidad, #cmb_estado').change(function() {
         var arrParams2 = new Object();
         arrParams2.PBgetFilter = true;
         arrParams2.search = $("#boxgrid").val();
         arrParams2.pla_periodo_academico = $("#cmb_per_academico").val();
         arrParams2.mod_id = $("#cmb_modalidad").val();
+        arrParams2.aprobacion = $("#cmb_estado").val();
         /* console.log(arrParams2); */
         $("#grid_pagos_list").PbGridView("applyFilterData", arrParams2);
+    });
+
+    $('#cmb_carrera, #cmb_per_acad, #cmb_mod, #cmb_status').change(function() {
+        searchModulesList('boxgrid', 'grid_listadoregistrados_list');
     });
 });
 
@@ -84,6 +90,7 @@ function searchModules(idbox, idgrid) {
     arrParams2.search = $("#boxgrid").val();
     arrParams2.pla_periodo_academico = $("#cmb_per_academico").val();
     arrParams2.mod_id = $("#cmb_modalidad").val();
+    arrParams2.aprobacion = $("#cmb_estado").val();
     /* console.log(arrParams2); */
     $("#grid_pagos_list").PbGridView("applyFilterData", arrParams2);
 }
@@ -92,10 +99,10 @@ function searchModulesList(idbox, idgrid) {
     var arrParams2 = new Object();
     arrParams2.PBgetFilter = true;
     arrParams2.search = $("#" + idbox).val();
-    arrParams2.periodo = ($("#cmb_per_academico").val() > 0) ? ($("#cmb_per_academico option:selected").text()) : null;
+    arrParams2.periodo = ($("#cmb_per_acad").val() > 0) ? ($("#cmb_per_acad option:selected").text()) : null;
     arrParams2.carrera = ($("#cmb_carrera").val() > 0) ? ($("#cmb_carrera option:selected").text()) : null;
-    arrParams2.mod_id = ($("#cmb_modalidad").val() > 0) ? ($("#cmb_modalidad").val()) : null;
-    arrParams2.estado = ($("#cmb_status").val() > 0) ? ($("#cmb_status").val()) : null;
+    arrParams2.mod_id = ($("#cmb_mod").val() > 0) ? ($("#cmb_mod").val()) : null;
+    arrParams2.estado = ($("#cmb_status").val() > -1) ? ($("#cmb_status").val()) : null;
     $("#" + idgrid).PbGridView("applyFilterData", arrParams2);
 }
 

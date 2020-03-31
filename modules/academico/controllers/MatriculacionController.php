@@ -500,6 +500,7 @@ class MatriculacionController extends \app\components\CController {
                 $registro_online_model->ron_carrera = $carrera;
                 $registro_online_model->ron_estado_registro = "0"; //Igual esta tampoco ya no se usa
                 $registro_online_model->ron_estado = "1";
+                $registro_online_model->ron_fecha_registro = date(Yii::$app->params['dateByDefault']);
                 $registro_online_model->ron_estado_logico = "1";
                 if ($registro_online_model->save()) {
                     $ron_id = $registro_online_model->getPrimaryKey();
@@ -690,7 +691,8 @@ class MatriculacionController extends \app\components\CController {
                 $search = $data["search"];
                 $pla_periodo_academico = $data["pla_periodo_academico"];
                 $mod_id = $data["mod_id"];
-                $dataPagos = Matriculacion::getEstudiantesPagoMatricula($search, $pla_periodo_academico, $mod_id);
+                $aprobacion = $data["aprobacion"];
+                $dataPagos = Matriculacion::getEstudiantesPagoMatricula($search, $pla_periodo_academico, $mod_id, $aprobacion);
                 $dataProvider = new ArrayDataProvider([
                     'key' => 'PesId',
                     'allModels' => $dataPagos,
@@ -708,6 +710,8 @@ class MatriculacionController extends \app\components\CController {
         }
         
         $arr_pla = Planificacion::getPeriodosAcademico();
+        $arr_status = [-1 => Academico::t("matriculacion", "-- Select Status --"), 0 => Academico::t("matriculacion", "Not reviewed"), 1 => Academico::t("matriculacion", "Approved"), 2 => Academico::t("matriculacion", "Rejected")];
+        /* print_r($arr_pla); */
         if (count($arr_pla) > 0) {
             $arr_modalidad = Modalidad::findAll(["mod_estado" => 1, "mod_estado_logico" => 1]);
             $pla_periodo_academico = $arr_pla[0]["pla_periodo_academico"];
@@ -724,11 +728,12 @@ class MatriculacionController extends \app\components\CController {
                 ],
             ]);
             return $this->render('aprobacion-pago', [
-                        'arr_pla' => (empty(ArrayHelper::map($arr_pla, "pla_periodo_academico", "pla_periodo_academico"))) ? array(Yii::t("planificacion", "-- Select periodo --")) : (ArrayHelper::map($arr_pla, "pla_periodo_academico", "pla_periodo_academico")),
-                        'arr_modalidad' => (empty(ArrayHelper::map($arr_modalidad, "mod_id", "mod_nombre"))) ? array(Yii::t("planificacion", "-- Select periodo --")) : (ArrayHelper::map($arr_modalidad, "mod_id", "mod_nombre")),
+                        'arr_pla' => (empty(ArrayHelper::map($arr_pla, "pla_periodo_academico", "pla_periodo_academico"))) ? array(Yii::t("matriculacion", "-- Select Academic Period --")) : (ArrayHelper::map($arr_pla, "pla_periodo_academico", "pla_periodo_academico")),
+                        'arr_modalidad' => (empty(ArrayHelper::map($arr_modalidad, "mod_id", "mod_nombre"))) ? array(Yii::t("matriculacion", "-- Select Modality --")) : (ArrayHelper::map($arr_modalidad, "mod_id", "mod_nombre")),
                         'pagos' => $dataProvider,
                         'pla_periodo_academico' => $pla_periodo_academico,
                         'mod_id' => $mod_id,
+                        'arr_status' => $arr_status,
             ]);
         } else {
             return $this->render('index-out', [

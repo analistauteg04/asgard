@@ -90,12 +90,14 @@ academico::registerTranslations();
                             'browseClass' => 'btn btn-primary btn-block',
                             'browseIcon' => '<i class="fa fa-folder-open"></i> ',
                             'browseLabel' => "Subir Archivo",
+                            'allowedFileExtensions' => ['pdf'],
                             'uploadUrl' => Url::to(['matriculacion/updatepagoregistro']),
                             // 'maxFileSize' => Yii::$app->params["MaxFileSize"],
                             'uploadExtraData' => 'javascript:function (previewId,index) {
                             return {"upload_file": true, "name_file": "hojaMatricula-' . $est_id . '-' . time() . '"};
                         }',
                         ],
+                        'options' => ['accept' => 'application/pdf'],
                         'pluginEvents' => [
                             "filebatchselected" => "function (event) {
                             $('#txth_up_hoja2').val('hojaMatricula-" . $est_id . '-' . time() . "');

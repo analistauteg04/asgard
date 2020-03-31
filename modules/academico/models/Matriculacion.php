@@ -824,7 +824,7 @@ class Matriculacion extends \yii\db\ActiveRecord {
         return $resultData;
     }
 
-    public static function getEstudiantesPagoMatricula($estudiante, $pla_periodo_academico, $mod_id)
+    public static function getEstudiantesPagoMatricula($estudiante, $pla_periodo_academico, $mod_id, $aprobacion = -1)
     {
         $filter = "";
         $search = "%" . $estudiante . "%";
@@ -833,6 +833,9 @@ class Matriculacion extends \yii\db\ActiveRecord {
                  $filter = 'AND pes.pes_nombres like :search AND pla.mod_id = :mod_id';
             }else{
                 $filter = 'AND pes.pes_nombres like :search';
+            }
+            if($aprobacion > -1){
+                $filter .= ' AND rpm.rpm_estado_aprobacion = :aprobacion';
             }
            
         }       
@@ -865,6 +868,9 @@ class Matriculacion extends \yii\db\ActiveRecord {
         $comando->bindParam(":mod_id", $mod_id, \PDO::PARAM_INT);
         $comando->bindParam(":search", $search, \PDO::PARAM_STR);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        if($aprobacion > -1){
+            $comando->bindParam(":aprobacion", $aprobacion, \PDO::PARAM_INT);
+        }
         $resultData = $comando->queryAll();
 
         return $resultData;
