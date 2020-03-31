@@ -14,7 +14,8 @@ INSERT INTO `objeto_modulo` (`omod_id`, `mod_id`, `omod_padre_id`, `omod_nombre`
 (192, 11, 186, 'Actualizar Perfil', 'A', '0', '', '', '', 'academico/perfil/update', 1, '1', 'matriculacion', '1', '2020-03-31 01:15:13', NULL, '1'),
 (193, 10, 184, 'Cargar Pago', 'A', '0', '', '', '', 'academico/matriculacion/registropago', 1, '1', 'matriculacion', '1', '2020-03-31 01:19:07', NULL, '1'),
 (194, 10, 185, 'Registro Online', 'A', '0', '', '', '', 'academico/matriculacion/registro', 1, '1', 'matriculacion', '1', '2020-03-31 01:22:07', NULL, '1'),
-(195, 4, 190, 'Revisar Matriculación', 'A', '0', '', '', '', 'academico/matriculacion/updatepagoregistro', 1, '1', 'matriculacion', '1', '2020-03-31 01:23:42', NULL, '1');
+(195, 4, 190, 'Revisar Matriculación', 'A', '0', '', '', '', 'academico/matriculacion/updatepagoregistro', 1, '1', 'matriculacion', '1', '2020-03-31 01:23:42', NULL, '1'),
+(196, 4, 187, 'Ver Registro Matrícula', 'S', '0', '', '', '', 'academico/matriculacion/view', 2, '0', 'matriculacion', '1', '2020-03-31 17:43:28', NULL, '1');
 
 INSERT INTO `obmo_acci` (`oacc_id`, `omod_id`, `acc_id`, `oacc_tipo_boton`, `oacc_cont_accion`, `oacc_function`, `oacc_estado`, `oacc_fecha_creacion`, `oacc_fecha_modificacion`, `oacc_estado_logico`) VALUES
 (85, 191, 14, '1', '', 'cargarDocumento', '1', '2020-03-31 01:11:40', NULL, '1'),
@@ -60,7 +61,11 @@ INSERT INTO `grup_obmo` (`gmod_id`, `gru_id`, `omod_id`, `gmod_estado`, `gmod_fe
 (10988, 6, 195, '1', '2020-03-31 01:36:10', NULL, '1'),
 (10989, 7, 187, '1', '2020-03-31 01:37:33', NULL, '1'),
 (10990, 7, 190, '1', '2020-03-31 01:37:33', NULL, '1'),
-(10991, 7, 195, '1', '2020-03-31 01:37:33', NULL, '1');
+(10991, 7, 195, '1', '2020-03-31 01:37:33', NULL, '1'),
+(10992, 1, 196, '1', '2020-03-31 17:44:01', NULL, '1'),
+(10993, 2, 196, '1', '2020-03-31 17:44:25', NULL, '1'),
+(10994, 6, 196, '1', '2020-03-31 17:45:06', NULL, '1'),
+(10995, 7, 196, '1', '2020-03-31 17:46:17', NULL, '1');
 
 INSERT INTO `grup_obmo_grup_rol` (`gogr_id`, `grol_id`, `gmod_id`, `gogr_estado`, `gogr_fecha_creacion`, `gogr_fecha_modificacion`, `gogr_estado_logico`) VALUES
 (12369, 37, 10598, '1', '2020-03-31 01:31:04', NULL, '1'),
@@ -279,4 +284,11 @@ INSERT INTO `grup_obmo_grup_rol` (`gogr_id`, `grol_id`, `gmod_id`, `gogr_estado`
 (12582, 22, 10818, '1', '2020-03-31 01:38:51', NULL, '1'),
 (12583, 22, 10989, '1', '2020-03-31 01:38:51', NULL, '1'),
 (12584, 22, 10990, '1', '2020-03-31 01:38:51', NULL, '1'),
-(12585, 22, 10991, '1', '2020-03-31 01:38:51', NULL, '1');
+(12585, 22, 10991, '1', '2020-03-31 01:38:51', NULL, '1'),
+(12586, 1, 10992, '1', '2020-03-31 17:44:01', NULL, '1'),
+(12587, 2, 10993, '1', '2020-03-31 17:44:25', NULL, '1'),
+(12588, 15, 10994, '1', '2020-03-31 17:45:06', NULL, '1'),
+(12589, 18, 10994, '1', '2020-03-31 17:45:57', NULL, '1'),
+(12590, 19, 10995, '1', '2020-03-31 17:46:17', NULL, '1'),
+(12591, 20, 10995, '1', '2020-03-31 17:46:42', NULL, '1'),
+(12592, 22, 10995, '1', '2020-03-31 17:47:06', NULL, '1');

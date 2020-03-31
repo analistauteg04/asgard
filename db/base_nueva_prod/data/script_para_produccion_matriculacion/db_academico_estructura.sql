@@ -157,3 +157,8 @@ create table if not exists db_academico.`registro_online_cuota` (
  `roc_estado_logico` varchar(1) not null,
  foreign key (ron_id) references `registro_online`(ron_id)
 );
+
+
+alter table db_academico.estudiante add `est_matricula` varchar(20) null after per_id;
+alter table db_academico.estudiante add `est_categoria` varchar(2) null after est_matricula;
+alter table db_academico.estudiante add `est_fecha_ingreso` timestamp null default null after est_categoria;

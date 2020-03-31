@@ -2,6 +2,20 @@
 
 use yii\helpers\Html;
 use app\modules\academico\Module as academico;
+
+$leyenda = '<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
+          <div class="form-group">
+          <div class="col-sm-10 col-md-10 col-xs-10 col-lg-10">
+          <div style = "width: 1000px;" class="alert alert-info"><span style="font-weight: bold"> Nota: </span> 
+                Estimado estudiante, si tiene alguna observación con respecto a su selección de materias, 
+                por favor contactar a la secretaría de facultad antes de seleccionar sus materias, a los siguientes números: </br>
+                </br>
+                Grado Presencial: 0993817458 </br>
+                Grado Semipresencial y a Distancia: 0989589757 </br>
+                Grado Online: 0991534808 </br></div>
+          </div>
+          </div>
+          </div>';
 ?>
 
 <div>
@@ -75,6 +89,8 @@ use app\modules\academico\Module as academico;
 <?=
     $this->render('index-grid', ['planificacion' => $planificacion,]);
 ?>
+<?php echo $leyenda; ?>
+
 <input type="hidden" id="frm_pes_id" value="<?= $pes_id ?>">
 <input type="hidden" id="frm_num_min" value="<?= $num_min ?>">
 <input type="hidden" id="frm_num_max" value="<?= $num_max ?>">

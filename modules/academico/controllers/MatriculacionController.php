@@ -299,13 +299,12 @@ class MatriculacionController extends \app\components\CController {
         }
         /*         * Else */ else {
 
-            $per_id = Yii::$app->session->get("PB_perid");
-
+            $per_id = Yii::$app->session->get("PB_perid");            
             $matriculacion_model = new Matriculacion();
             $today = date("Y-m-d H:i:s");
             $result_process = $matriculacion_model->checkToday($today);
 
-            if (count($result_process) > 0) {
+            if (count($result_process) > 0) {                
                 /*                 * Exist a register process */
                 $pla_id = $result_process[0]['pla_id'];
 
@@ -313,7 +312,7 @@ class MatriculacionController extends \app\components\CController {
                 //$data_planificacion_pago = Matriculacion::getPlanificacionPago($pla_id);
                 /* Se obtiene los datos de planificación del estudiante GVG */
                 $data_planificacion_pago = Matriculacion::getPlanificacionPago($per_id);
-
+                \app\models\Utilities::putMessageLogFile('planif:'.$data_planificacion_pago['pla_id']);                  
                 return $this->render('carga-pago', [
                             "data_planificacion_pago" => $data_planificacion_pago,
                             "pla_id" => $data_planificacion_pago['pla_id'],
