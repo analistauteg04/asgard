@@ -68,5 +68,5 @@ Academico::registerTranslations();
 <input type="hidden" id="frm_ron_id" value="<?= $ron_id ?>">
 <br></br>
 <?=
-    $this->render('registro-grid', ['planificacion' => $planificacion,]);
+    $this->render('registro-grid', ['planificacion' => $planificacion,'materiasxEstudiante' => $materiasxEstudiante,]);
 ?>

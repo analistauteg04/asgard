@@ -460,6 +460,8 @@ class Matriculacion extends \yii\db\ActiveRecord {
         if (!is_null($dict['pes_mat_b1_h1_nombre']) && trim($dict['pes_mat_b1_h1_nombre']) != "") {
             $arrRow11 = array(
                 "Subject" => trim($dict['pes_mat_b1_h1_nombre']),
+                "Block" => "B1",
+                "Hour" => "H1",
             );
             array_push($arrData, $arrRow11);
         }
@@ -467,6 +469,8 @@ class Matriculacion extends \yii\db\ActiveRecord {
         if (!is_null($dict['pes_mat_b1_h2_nombre']) && trim($dict['pes_mat_b1_h2_nombre']) != "") {
             $arrRow12 = array(
                 "Subject" => trim($dict['pes_mat_b1_h2_nombre']),
+                "Block" => "B1",
+                "Hour" => "H2",
             );
             array_push($arrData, $arrRow12);
         }
@@ -474,6 +478,8 @@ class Matriculacion extends \yii\db\ActiveRecord {
         if (!is_null($dict['pes_mat_b1_h3_nombre']) && trim($dict['pes_mat_b1_h3_nombre']) != "") {
             $arrRow13 = array(
                 "Subject" => trim($dict['pes_mat_b1_h3_nombre']),
+                "Block" => "B1",
+                "Hour" => "H3",
             );
             array_push($arrData, $arrRow13);
         }
@@ -481,6 +487,8 @@ class Matriculacion extends \yii\db\ActiveRecord {
         if (!is_null($dict['pes_mat_b1_h4_nombre']) && trim($dict['pes_mat_b1_h4_nombre']) != "") {
             $arrRow14 = array(
                 "Subject" => trim($dict['pes_mat_b1_h4_nombre']),
+                "Block" => "B1",
+                "Hour" => "H4",
             );
             array_push($arrData, $arrRow14);
         }
@@ -488,6 +496,8 @@ class Matriculacion extends \yii\db\ActiveRecord {
         if (!is_null($dict['pes_mat_b1_h5_nombre']) && trim($dict['pes_mat_b1_h5_nombre']) != "") {
             $arrRow15 = array(
                 "Subject" => trim($dict['pes_mat_b1_h5_nombre']),
+                "Block" => "B1",
+                "Hour" => "H5",
             );
             array_push($arrData, $arrRow15);
         }
@@ -495,6 +505,8 @@ class Matriculacion extends \yii\db\ActiveRecord {
         if (!is_null($dict['pes_mat_b2_h1_nombre']) && trim($dict['pes_mat_b2_h1_nombre']) != "") {
             $arrRow21 = array(
                 "Subject" => trim($dict['pes_mat_b2_h1_nombre']),
+                "Block" => "B2",
+                "Hour" => "H1",
             );
             array_push($arrData, $arrRow21);
         }
@@ -502,6 +514,8 @@ class Matriculacion extends \yii\db\ActiveRecord {
         if (!is_null($dict['pes_mat_b2_h2_nombre']) && trim($dict['pes_mat_b2_h2_nombre']) != "") {
             $arrRow22 = array(
                 "Subject" => trim($dict['pes_mat_b2_h2_nombre']),
+                "Block" => "B2",
+                "Hour" => "H2",
             );
             array_push($arrData, $arrRow22);
         }
@@ -509,6 +523,8 @@ class Matriculacion extends \yii\db\ActiveRecord {
         if (!is_null($dict['pes_mat_b2_h3_nombre']) && trim($dict['pes_mat_b2_h3_nombre']) != "") {
             $arrRow23 = array(
                 "Subject" => trim($dict['pes_mat_b2_h3_nombre']),
+                "Block" => "B2",
+                "Hour" => "H3",
             );
             array_push($arrData, $arrRow23);
         }
@@ -516,6 +532,8 @@ class Matriculacion extends \yii\db\ActiveRecord {
         if (!is_null($dict['pes_mat_b2_h4_nombre']) && trim($dict['pes_mat_b2_h4_nombre']) != "") {
             $arrRow24 = array(
                 "Subject" => trim($dict['pes_mat_b2_h4_nombre']),
+                "Block" => "B2",
+                "Hour" => "H4",
             );
             array_push($arrData, $arrRow24);
         }
@@ -523,12 +541,11 @@ class Matriculacion extends \yii\db\ActiveRecord {
         if (!is_null($dict['pes_mat_b2_h5_nombre']) && trim($dict['pes_mat_b2_h5_nombre']) != "") {
             $arrRow25 = array(
                 "Subject" => trim($dict['pes_mat_b2_h5_nombre']),
+                "Block" => "B2",
+                "Hour" => "H5",
             );
             array_push($arrData, $arrRow25);
         }
-
-
-
         return $arrData;
     }
     

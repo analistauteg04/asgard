@@ -84,6 +84,7 @@ return [
     'Unregistered Student' => 'Unregistered Student',
     'Registered List' => 'Registered List',
     'Detail Student Unregistered' => 'Detail Student Unregistered',
+    'Block' => 'Block',
     'Block 1' => 'Block 1',
     'Block 2' => 'Block 2',
     'Hour' => 'Hour',

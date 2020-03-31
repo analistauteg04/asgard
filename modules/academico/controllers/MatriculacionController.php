@@ -499,8 +499,8 @@ class MatriculacionController extends \app\components\CController {
                 $registro_online_model->ron_modalidad = $modalidad;
                 $registro_online_model->ron_carrera = $carrera;
                 $registro_online_model->ron_estado_registro = "0"; //Igual esta tampoco ya no se usa
-                $registro_online_model->ron_estado = "1";
                 $registro_online_model->ron_fecha_registro = date(Yii::$app->params['dateByDefault']);
+                $registro_online_model->ron_estado = "1";
                 $registro_online_model->ron_estado_logico = "1";
                 if ($registro_online_model->save()) {
                     $ron_id = $registro_online_model->getPrimaryKey();
@@ -518,6 +518,7 @@ class MatriculacionController extends \app\components\CController {
                     $report = new ExportFile();
                     $this->view->title = Academico::t("matriculacion", "Registration"); // Titulo del reporte
                     $matriculacion_model = new Matriculacion();
+                    $materiasxEstudiante = PlanificacionEstudiante::findOne($pes_id);
                     $data_student = $matriculacion_model->getDataStudenbyRonId($ron_id);
                     $dataPlanificacion = $matriculacion_model->getPlanificationFromRegistroOnline($ron_id);
                     $dataProvider = new ArrayDataProvider([
@@ -537,6 +538,7 @@ class MatriculacionController extends \app\components\CController {
                             $this->render('exportpdf', [
                                 "planificacion" => $dataProvider,
                                 "data_student" => $data_student,
+                                "materiasxEstudiante" => $materiasxEstudiante,
                             ])
                     );
 
@@ -586,7 +588,7 @@ class MatriculacionController extends \app\components\CController {
                 if ($data_student) {
                     $ron_id = $data_student["ron_id"];
                     $dataPlanificacion = $matriculacion_model->getPlanificationFromRegistroOnline($ron_id);
-
+                    $materiasxEstudiante = PlanificacionEstudiante::findOne($pes_id);
                     $dataProvider = new ArrayDataProvider([
                         'key' => 'Ids',
                         'allModels' => $dataPlanificacion,
@@ -603,6 +605,7 @@ class MatriculacionController extends \app\components\CController {
                                 "data_student" => $data_student,
                                 "title" => Academico::t("matriculacion", "Register saved (Record Time)"),
                                 "ron_id" => $ron_id,
+                                "materiasxEstudiante" => $materiasxEstudiante,
                     ]);
                 } else {
                     return $this->render('index-out', [
@@ -622,6 +625,7 @@ class MatriculacionController extends \app\components\CController {
                 $last_pes_id = $resultData[0]['pes_id'];
                 $data_student = $matriculacion_model->getDataStudenFromRegistroOnline($per_id, $last_pes_id);
                 $dataPlanificacion = $matriculacion_model->getPlanificationFromRegistroOnline($last_ron_id);
+                $materiasxEstudiante = PlanificacionEstudiante::findOne($last_pes_id);
                 $dataProvider = new ArrayDataProvider([
                     'key' => 'Ids',
                     'allModels' => $dataPlanificacion,
@@ -638,6 +642,7 @@ class MatriculacionController extends \app\components\CController {
                             "data_student" => $data_student,
                             "title" => Academico::t("matriculacion", "Last register saved (Non-registration time)"),
                             "ron_id" => $ron_id,
+                            "materiasxEstudiante" => $materiasxEstudiante,
                 ]);
             } else {
                 /*                 * If not exist a minimal one register in registro_online */

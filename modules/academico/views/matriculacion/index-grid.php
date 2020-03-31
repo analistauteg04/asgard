@@ -25,6 +25,11 @@ academico::registerTranslations();
                 'header' => Academico::t("matriculacion", "Subject"),
                 'value' => 'Subject',
             ],
+            [
+                'attribute' => 'Block',
+                'header' => Academico::t("matriculacion", "Block"),
+                'value' => 'Block',
+            ],
             /* [
                 'class' => 'yii\grid\CheckboxColumn',
                 'header' => 'Seleccionar',  

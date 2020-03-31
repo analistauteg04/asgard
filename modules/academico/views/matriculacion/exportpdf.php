@@ -67,5 +67,5 @@ Academico::registerTranslations();
 <br></br>
 <br></br>
 <?=
-    $this->render('exportpdf-grid', ['planificacion' => $planificacion,]);
+    $this->render('exportpdf-grid', ['planificacion' => $planificacion, 'materiasxEstudiante' => $materiasxEstudiante,]);
 ?>

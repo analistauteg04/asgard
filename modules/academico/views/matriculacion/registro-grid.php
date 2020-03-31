@@ -25,6 +25,22 @@ academico::registerTranslations();
                 'header' => Academico::t("matriculacion", "Subject"),
                 'value' => 'Subject',
             ],
+            [
+                'attribute' => 'Subject',
+                'header' => Academico::t("matriculacion", "Block"),
+                'value' => function($data) use ($materiasxEstudiante) {
+                    if(strtoupper($data["Subject"]) == strtoupper($materiasxEstudiante->pes_mat_b1_h1_nombre)) return "B1";
+                    if(strtoupper($data["Subject"]) == strtoupper($materiasxEstudiante->pes_mat_b1_h2_nombre)) return "B1";
+                    if(strtoupper($data["Subject"]) == strtoupper($materiasxEstudiante->pes_mat_b1_h3_nombre)) return "B1";
+                    if(strtoupper($data["Subject"]) == strtoupper($materiasxEstudiante->pes_mat_b1_h4_nombre)) return "B1";
+                    if(strtoupper($data["Subject"]) == strtoupper($materiasxEstudiante->pes_mat_b1_h5_nombre)) return "B1";
+                    if(strtoupper($data["Subject"]) == strtoupper($materiasxEstudiante->pes_mat_b2_h1_nombre)) return "B2";
+                    if(strtoupper($data["Subject"]) == strtoupper($materiasxEstudiante->pes_mat_b2_h2_nombre)) return "B2";
+                    if(strtoupper($data["Subject"]) == strtoupper($materiasxEstudiante->pes_mat_b2_h3_nombre)) return "B2";
+                    if(strtoupper($data["Subject"]) == strtoupper($materiasxEstudiante->pes_mat_b2_h4_nombre)) return "B2";
+                    if(strtoupper($data["Subject"]) == strtoupper($materiasxEstudiante->pes_mat_b2_h5_nombre)) return "B2";
+                },
+            ],
             /* [
                 'class' => 'yii\grid\CheckboxColumn',
                 'header' => 'Seleccionar',  

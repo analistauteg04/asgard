@@ -72,15 +72,9 @@ use app\modules\academico\Module as academico;
     </div>
 </div>
 <br></br>
-<div class="row">
-    <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12"></div>
-    <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
-    <?=
-        $this->render('index-grid', ['planificacion' => $planificacion,]);
-    ?>
-    </div>
-    <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12"></div>
-</div>
+<?=
+    $this->render('index-grid', ['planificacion' => $planificacion,]);
+?>
 <input type="hidden" id="frm_pes_id" value="<?= $pes_id ?>">
 <input type="hidden" id="frm_num_min" value="<?= $num_min ?>">
 <input type="hidden" id="frm_num_max" value="<?= $num_max ?>">
