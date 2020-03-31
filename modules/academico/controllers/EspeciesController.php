@@ -376,17 +376,17 @@ class EspeciesController extends \app\components\CController {
     
     public function actionGenerarespeciespdf($ids) {//ok
         try {
+            
+            
             $ids = isset($_GET['ids']) ? base64_decode($_GET['ids']) : NULL;
+            Utilities::putMessageLogFile($ids);
             $rep = new ExportFile();
             //$this->layout = false;
-            $this->layout = '@modules/academico/views/especies/main';
+            $this->layout = '@modules/academico/views/tpl_especies/main';
             //$this->view->title = "Invoices";
-            $modelo = new NubeFactura(); //Ejmpleo code 3
-            $cabFact = $modelo->mostrarCabFactura($ids);
-            $detFact = $modelo->mostrarDetFacturaImp($ids);
-            $impFact = $modelo->mostrarFacturaImp($ids);
-            $pagFact = $modelo->mostrarFormaPago($ids);
-            $adiFact = $modelo->mostrarFacturaDataAdicional($ids);
+            $especiesADO = new Especies();
+            $cabFact = $especiesADO->consultarEspecieGenerada($ids);
+            
             //$venFact= VSDocumentos::buscarDatoVendedor($cabFact['USU_ID']);//DATOS DEL VENDEDOR QUE AUTORIZO
 
             /*$this->pdf_numeroaut = $cabFact['AutorizacionSri'];
@@ -407,16 +407,12 @@ class EspeciesController extends \app\components\CController {
             $rep->orientation = "P"; // tipo de orientacion L => Horizontal, P => Vertical   
             
             $rep->createReportPdf(
-                $this->render('@modules/fe_edoc/views/tpl_fe/factura', [
+                $this->render('@modules/academico/views/tpl_especies/factura', [
                     'cabFact' => $cabFact,
-                    'detFact' => $detFact,
-                    'impFact' => $impFact,
-                    'pagFact' => $pagFact,
-                    'adiFact' => $adiFact,
-                    'venFact' => $venFact,
+         
                 ])
             );
-            $rep->mpdf->Output('FACTURA_' . $cabFact['NumDocumento'] . ".pdf", ExportFile::OUTPUT_TO_DOWNLOAD); 
+            $rep->mpdf->Output('Especie_' . $cabFact['egen_numero_solicitud'] . ".pdf", ExportFile::OUTPUT_TO_DOWNLOAD); 
             //exit;
         } catch (Exception $e) {
             echo $e->getMessage();

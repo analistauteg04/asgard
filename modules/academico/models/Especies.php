@@ -459,7 +459,6 @@ class Especies extends \yii\db\ActiveRecord {
     public static function getSolicitudesGeneradas($est_id, $arrFiltro = array(), $onlyData = false) {
         $con = \Yii::$app->db_academico;
         $con1 = \Yii::$app->db_asgard;
-        $con2 = \Yii::$app->db_facturacion;
         $estado = 1;
         $str_search = "";
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
@@ -518,5 +517,28 @@ class Especies extends \yii\db\ActiveRecord {
         } else {
             return $dataProvider;
         }
+    }
+    
+     public function consultarEspecieGenerada($Ids) {
+        $rawData = array(); 
+        $con = \Yii::$app->db_academico;
+        $con1 = \Yii::$app->db_asgard;
+        $sql = "SELECT A.egen_id,A.dsol_id,A.egen_numero_solicitud,C.esp_rubro,concat(D.per_pri_nombre,' ',D.per_pri_apellido) Nombres,D.per_cedula,
+                    F.uaca_nombre,G.mod_nombre,concat(E.resp_titulo,' ',E.resp_nombre) Responsable,date(A.egen_fecha_aprobacion) fecha_aprobacion,
+                    A.egen_fecha_caducidad
+                    FROM " . $con->dbname . ".especies_generadas A
+                            INNER JOIN (" . $con->dbname . ".estudiante B 
+                                            INNER JOIN " . $con1->dbname . ".persona D ON B.per_id=D.per_id)
+                                    ON A.est_id=B.est_id
+                            INNER JOIN " . $con->dbname . ".especies C ON A.esp_id=C.esp_id
+                            INNER JOIN " . $con->dbname . ".unidad_academica F ON F.uaca_id=A.uaca_id
+                            INNER JOIN " . $con->dbname . ".modalidad G ON G.mod_id=A.mod_id
+                            LEFT JOIN " . $con->dbname . ".responsable_especie E ON E.resp_id=A.resp_id
+                WHERE A.egen_estado=1 AND A.egen_estado_logico=1 AND A.egen_id=:egen_id ; ";
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":egen_id", $Ids, \PDO::PARAM_INT);
+        //return $comando->queryAll();
+        $rawData = $comando->queryOne();
+        return $rawData;
     }
 }

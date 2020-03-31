@@ -191,75 +191,19 @@
                                 <div> 
                                     <?php echo yii\helpers\Html::img(Yii::$app->basePath . "/themes/" . Yii::$app->view->theme->themeName . "/assets/img/logos/logo_" . Yii::$app->session->get('PB_idempresa') . ".png", array("class" => "logo_cab", "alt" => Yii::$app->params["copyright"])); ?>
                                 </div>
+                                
                             </div>
-                            
-                            <div class="clear"></div>
-                        </div>
-                        <div class="div_modInfo1">
-                            <div class="bordeDiv heightDivDeta">
-                                <div>
-                                    <div>
-                                        <div class="tcoll bold"><?php echo app\modules\fe_edoc\Module::t("fe", "R.U.C") ?>:</div>
-                                        <div class="tcolr"><?php echo Yii::$app->controller->pdf_ruc; ?></div>
-                                    </div>
-                                    <div class="clear"></div>
-                                    <br/>                               
-                                    <div class="tituloLabel">
-                                        <div id="nameLbl" class="bold"><?php echo Yii::$app->controller->pdf_tipo_documento; ?></div>
-                                    </div>
-                                    <div class="clear"></div>
-                                    <br/>
-                                    <div>
-                                        <div class="tcolrc bold"><?php echo app\modules\fe_edoc\Module::t("fe", "No.") ?>:</div>
-                                        <div class="tcolr"><?php echo Yii::$app->controller->pdf_numero; ?></div>
-                                    </div>
-                                    <div class="clear"></div>
-                                    <br/>                                    
-                                    <div>
-                                        <div class="tcolrc bold"><?php echo app\modules\fe_edoc\Module::t("fe", "AUTHORIZATION NUMBER") ?></div>
-                                    </div>
-                                    <div class="clear"></div>
-                                    <br/>
-                                    <div>
-                                        <div class="tcolr_num_aut"><?php echo Yii::$app->controller->pdf_numeroaut; ?></div>
-                                    </div>
-                                    <div class="clear"></div>
-                                    <br/>
-                                    <div>
-                                        <div class="tcolrc bold"><?php echo app\modules\fe_edoc\Module::t("fe", "DATE AND TIME AUTHORIZATION") ?></div>
-                                        <div class="tcolr"><?php echo Yii::$app->controller->pdf_fec_autorizacion; ?></div>
-                                    </div>
-                                    <div class="clear"></div>
-                                    <br/>
-                                    <div>
-                                        <div class="tcolrc bold"><?php echo app\modules\fe_edoc\Module::t("fe", "ENVIRONMENT") ?>:</div>
-                                        <div class="tcolr"><?php echo Yii::$app->controller->pdf_ambiente; ?></div>
-                                    </div>
-                                    <div class="clear"></div>
-                                    <br/>
-                                    <div>
-                                        <div class="tcolrc bold"><?php echo app\modules\fe_edoc\Module::t("fe", "ISSUE") ?>:</div>
-                                        <div class="tcolr"><?php echo Yii::$app->controller->pdf_emision; ?></div>
-                                    </div>
-                                    <div class="clear"></div>
-                                    <br/>
-                                    <div>
-                                        <div class="tcolrc bold"><?php echo app\modules\fe_edoc\Module::t("fe", "PASSWORD") ?></div>                                  
-                                    </div>
-                                    <div class="clear"></div>
-                                    <div>                                    
-                                        <!--<div class="posright" id="codigo_barra"><img src="<?php echo Yii::$app->controller->pdf_cod_barra; ?>" alt="<?php echo Yii::$app->controller->pdf_cla_acceso; ?>" /></div>-->
-                                        <div class="posright" id="codigo_barra">
-                                            <?php echo (Yii::$app->controller->pdf_cla_acceso) ? \penblu\barcode\GeneratedCodebar::widget([
+                            <div class="posright" id="codigo_barra">
+                                            <?php /*echo (Yii::$app->controller->pdf_cla_acceso) ? \penblu\barcode\GeneratedCodebar::widget([
                                                 "message" => Yii::$app->controller->pdf_cla_acceso,
                                                 "base64" => true,
                                                 "font_size" => 35
-                                            ]) : ""; ?>
+                                            ]) : "";*/ ?>
                                         </div>
-                                    </div>
-                                </div>
-                            </div>
+                            
+                            <div class="clear"></div>
                         </div>
+                
                     </div>
                     <div class="clear"></div>
                     <?php echo $content; ?>                  
