@@ -28,9 +28,9 @@ $tipodoc = "CED";
         </div>
         <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
             <div class="form-group">
-                <label for="txt_second_name" class="col-lg-3 col-md-3 col-sm-3 col-xs-3 control-label"><?= Academico::t("perfil", "Second Name") ?><span class="text-danger">*</span></label>
+                <label for="txt_second_name" class="col-lg-3 col-md-3 col-sm-3 col-xs-3 control-label"><?= Academico::t("perfil", "Second Name") ?></label>
                 <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
-                    <input type="text" class="form-control PBvalidation" id="txt_second_name" value="<?= $persona->per_seg_nombre ?>" data-type="alfa" placeholder="<?= Academico::t("perfil", "Second Name") ?>">
+                    <input type="text" class="form-control" id="txt_second_name" value="<?= $persona->per_seg_nombre ?>" data-type="alfa" placeholder="<?= Academico::t("perfil", "Second Name") ?>">
                 </div>
             </div>
         </div>
@@ -46,9 +46,9 @@ $tipodoc = "CED";
         </div>
         <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
             <div class="form-group">
-                <label for="txt_second_lastname" class="col-lg-3 col-md-3 col-sm-3 col-xs-3 control-label"><?= Academico::t("perfil", "Second Surname") ?><span class="text-danger">*</span></label>
+                <label for="txt_second_lastname" class="col-lg-3 col-md-3 col-sm-3 col-xs-3 control-label"><?= Academico::t("perfil", "Second Surname") ?></label>
                 <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
-                    <input type="text" class="form-control PBvalidation" id="txt_second_lastname" value="<?= $persona->per_seg_apellido ?>" data-type="alfa" placeholder="<?= Academico::t("perfil", "Second Lastname") ?>">
+                    <input type="text" class="form-control" id="txt_second_lastname" value="<?= $persona->per_seg_apellido ?>" data-type="alfa" placeholder="<?= Academico::t("perfil", "Second Lastname") ?>">
                 </div>
             </div>
         </div>
