@@ -378,24 +378,55 @@ class EspeciesController extends \app\components\CController {
     
     public function actionGenerarespeciespdf($ids) {//ok
         try {
-            
-            
             $ids = isset($_GET['ids']) ? base64_decode($_GET['ids']) : NULL;
-            //Utilities::putMessageLogFile($ids);
             $rep = new ExportFile();
             //$this->layout = false;
             $this->layout = '@modules/academico/views/tpl_especies/main';
             //$this->view->title = "Invoices";
-            $especiesADO = new Especies();
-            $cabFact = $especiesADO->consultarEspecieGenerada($ids);
-            $this->pdf_cla_acceso = $cabFact['egen_numero_solicitud'];
+            $especiesADO = new Especies();            
+            $cabFact = $especiesADO->consultarEspecieGenerada($ids);            
+            $objEsp=$especiesADO->getDataEspecie($cabFact['esp_id']);
+            $codigo=$objEsp[0]['codigo'].'-'.$cabFact['egen_numero_solicitud'];
+            $cabFact['Carrera']="Sistemas";//consultar Carrera del estudiante
+            //setlocale(LC_TIME,"es_ES");//strftime("%A, %d de %B de %Y", date("d-m-Y"));
+            setlocale(LC_TIME, 'es_CO.UTF-8');
+
+            $cabFact['FechaDia']=strftime("%A %d de %B %G", strtotime(date("d-m-Y")));//date("j F de Y");      
+            $this->pdf_cla_acceso = $codigo;
             $rep->orientation = "P"; // tipo de orientacion L => Horizontal, P => Vertical   
             $rep->createReportPdf(
                 $this->render('@modules/academico/views/tpl_especies/especie', [
                     'cabFact' => $cabFact,
                 ])
             );
-            $rep->mpdf->Output('Especie_' . $cabFact['egen_numero_solicitud'] . ".pdf", ExportFile::OUTPUT_TO_DOWNLOAD); 
+            $rep->mpdf->Output('ESPECIE_' . $codigo . ".pdf", ExportFile::OUTPUT_TO_DOWNLOAD); 
+            //exit;
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
+    }
+    
+    public function actionGenerarcertificado($ids) {//ok
+        try {
+            $ids = isset($_GET['ids']) ? base64_decode($_GET['ids']) : NULL;
+            $rep = new ExportFile();
+            //$this->layout = false;
+            $this->layout = '@modules/academico/views/tpl_especies/main';
+            //$this->view->title = "Invoices";
+            $especiesADO = new Especies();            
+            $cabFact = $especiesADO->consultarEspecieGenerada($ids);            
+            $objEsp=$especiesADO->getDataEspecie($cabFact['esp_id']);
+            $codigo=$objEsp[0]['codigo'].'-'.$cabFact['egen_numero_solicitud'].'-'.$cabFact['per_cedula'];
+            setlocale(LC_TIME, 'es_CO.UTF-8');
+            $cabFact['FechaDia']=strftime("%A %d de %B %G", strtotime(date("d-m-Y")));//date("j F de Y");      
+            $this->pdf_cla_acceso = $codigo;
+            $rep->orientation = "P"; // tipo de orientacion L => Horizontal, P => Vertical   
+            $rep->createReportPdf(
+                $this->render('@modules/academico/views/tpl_especies/solicitud', [
+                    'cabFact' => $cabFact,
+                ])
+            );
+            $rep->mpdf->Output('CERTIFICADO_' . $codigo . ".doc", ExportFile::OUTPUT_TO_DOWNLOAD); 
             //exit;
         } catch (Exception $e) {
             echo $e->getMessage();

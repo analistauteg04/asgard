@@ -158,11 +158,18 @@ class Especies extends \yii\db\ActiveRecord {
         return $comando->queryAll();
     }
 
-    public static function getDataEspecie($Ids) {
+    public function getDataEspecie($Ids) {
         $con = \Yii::$app->db_academico;
-        $sql = "SELECT esp_id,esp_valor,esp_emision_certificado,esp_dia_vigencia
+        $sql = "SELECT A.esp_id,A.esp_valor,A.esp_emision_certificado,A.esp_dia_vigencia,
+		concat(C.uaca_nomenclatura,tra_nomenclatura,lpad(ifnull(A.esp_codigo,0),3,'0')) codigo
+                    FROM " . $con->dbname . ".especies A
+			INNER JOIN (" . $con->dbname . ".tramite B 
+                            INNER JOIN " . $con->dbname . ".unidad_academica C ON B.uaca_id=C.uaca_id)
+			ON A.tra_id=B.tra_id
+                WHERE A.esp_estado=1 AND A.esp_estado_logico=1 AND A.esp_id=:esp_id; ";
+        /*$sql = "SELECT esp_id,esp_valor,esp_emision_certificado,esp_dia_vigencia
                     FROM " . $con->dbname . ".especies
-                WHERE esp_estado=1 AND esp_estado_logico=1 AND esp_id=:esp_id;";
+                WHERE esp_estado=1 AND esp_estado_logico=1 AND esp_id=:esp_id;";*/
         $comando = $con->createCommand($sql);
         $comando->bindParam(":esp_id", $Ids, \PDO::PARAM_INT);
         return $comando->queryAll();
@@ -525,7 +532,7 @@ class Especies extends \yii\db\ActiveRecord {
         $con1 = \Yii::$app->db_asgard;
         $sql = "SELECT A.egen_id,A.dsol_id,A.egen_numero_solicitud,C.esp_rubro,concat(D.per_pri_nombre,' ',D.per_seg_nombre,' ',D.per_pri_apellido,' ',D.per_seg_apellido) Nombres,D.per_cedula,
                     F.uaca_nombre,G.mod_nombre,concat(E.resp_titulo,' ',E.resp_nombre) Responsable,date(A.egen_fecha_aprobacion) fecha_aprobacion,
-                    A.egen_fecha_caducidad,D.per_correo,D.per_celular
+                    A.egen_fecha_caducidad,D.per_correo,D.per_celular,A.esp_id,'' Carrera
                     FROM " . $con->dbname . ".especies_generadas A
                             INNER JOIN (" . $con->dbname . ".estudiante B 
                                             INNER JOIN " . $con1->dbname . ".persona D ON B.per_id=D.per_id)

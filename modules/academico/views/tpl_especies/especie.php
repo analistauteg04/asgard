@@ -90,33 +90,64 @@
     .valorAlign{ 
         text-align: right !important;
     }
-    .divDetaVacio{
-        height: 100px;
-    }
+
     .bold{
         font-weight: bold;
     }
 </style>
 <div>
-    <p>Guayaquil, 30 de Marzo 2020</p>
-<p><?php echo $cabFact['Responsable'] ?><br>
-Decano de la Facultad de la Modalidad <?php echo $cabFact['mod_nombre'] ?>
-</p>
-<p>De mis consideraciones:</p>
-<p>Yo, <?php echo $cabFact['Nombres'] ?> con cédula de cuidadanía No. <?php echo $cabFact['per_cedula'] ?> alumno de la facultad/carrera:
-Solicito a Ud, autorice a quien corresponda, el trámite de mi solicitud:
-<strong><?php echo $cabFact['esp_rubro'] ?></strong>
-</p>
 
-<p>Esperando una favorable acogida, quedo de Ud.</p>
+    <div style="text-align: right">
+        <br><br>
+        <p>Guayaquil, <?php echo $cabFact['FechaDia'] ?></p><br><br><br><br>
+    </div>
+    <div>
+        <p><b><?php echo $cabFact['Responsable'] ?></b><br>
+            Decano de la Facultad de la Modalidad <?php echo $cabFact['mod_nombre'] ?>
+        </p>
+        <br><br>
+    </div>
+    <div>
+        <p>De mis consideraciones:</p><br><br>
+    </div>
+    <div style="text-justify: auto">
+        <p>Yo, <b><?php echo $cabFact['Nombres'] ?></b> con cédula de cuidadanía No. <b><?php echo $cabFact['per_cedula'] ?></b> alumno de la facultad/carrera: <b><?php echo $cabFact['Carrera'] ?></b>
+        </p><br><br>
+    </div>
+    <div style="text-justify: auto">
+        <p>Solicito a Ud, autorice a quien corresponda, el trámite de mi solicitud:
+        <strong><?php echo $cabFact['esp_rubro'] ?></strong></p><br><br>
+    </div>
 
 
 
-<p>Atentamente.</p>
+    <div>
+        <p>Esperando una favorable acogida, quedo de Ud.</p><br><br> 
+    </div>
+    <div>
+        <p>Atentamente.</p><br><br><br>
+    </div>
 
 
 
-<p>Alumno: <?php echo $cabFact['Nombres'] ?> <br>
-C.C. No. <?php echo $cabFact['per_cedula'] ?> <br>
-Teléfono: <?php echo $cabFact['per_celular'] ?></p>
+    <table>
+        <tbody>
+            <tr>
+                <td>Alumno:</td>
+                <td><?php echo $cabFact['Nombres'] ?></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>C.C. No.:</td>
+                <td><?php echo $cabFact['per_cedula'] ?></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Teléfono:</td>
+                <td><?php echo $cabFact['per_celular'] ?></td>
+                <td>E-mail: <?php echo $cabFact['per_correo'] ?></td>
+            </tr>
+        </tbody>
+    </table>
+
 </div>
