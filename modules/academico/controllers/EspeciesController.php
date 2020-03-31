@@ -30,6 +30,8 @@ class EspeciesController extends \app\components\CController {
      * @return
      */
     
+    public $pdf_cla_acceso = "";
+    
     private function estadoPagos() {
         return [
             '0' => Yii::t("formulario", "Todos"),
@@ -379,37 +381,18 @@ class EspeciesController extends \app\components\CController {
             
             
             $ids = isset($_GET['ids']) ? base64_decode($_GET['ids']) : NULL;
-            Utilities::putMessageLogFile($ids);
+            //Utilities::putMessageLogFile($ids);
             $rep = new ExportFile();
             //$this->layout = false;
             $this->layout = '@modules/academico/views/tpl_especies/main';
             //$this->view->title = "Invoices";
             $especiesADO = new Especies();
             $cabFact = $especiesADO->consultarEspecieGenerada($ids);
-            
-            //$venFact= VSDocumentos::buscarDatoVendedor($cabFact['USU_ID']);//DATOS DEL VENDEDOR QUE AUTORIZO
-
-            /*$this->pdf_numeroaut = $cabFact['AutorizacionSri'];
-            $this->pdf_numero = $cabFact['NumDocumento'];
-            $this->pdf_nom_empresa = $cabFact['RazonSocial'];
-            $this->pdf_ruc = $cabFact['Ruc'];
-            $this->pdf_num_contribuyente = $cabFact['ContribuyenteEspecial'];
-            $this->pdf_contabilidad = $cabFact['ObligadoContabilidad'];
-            $this->pdf_dir_matriz = $cabFact['DireccionMatriz'];
-            $this->pdf_dir_sucursal = $cabFact['DireccionEstablecimiento'];
-            $this->pdf_fec_autorizacion = $cabFact['FechaAutorizacion'];
-            $this->pdf_emision = \app\modules\fe_edoc\Module::t("fe", 'NORMAL');//$cabFact['TipoEmision'];
-            $this->pdf_ambiente = ($cabFact['Ambiente']==2)? \app\modules\fe_edoc\Module::t("fe", 'PRODUCTION'): \app\modules\fe_edoc\Module::t("fe", 'TEST');
-            $this->pdf_cla_acceso = $cabFact['ClaveAcceso'];
-            $this->pdf_tipo_documento = \app\modules\fe_edoc\Module::t("fe", 'INVOICE');
-            $this->pdf_cod_barra = "";*/
-
+            $this->pdf_cla_acceso = $cabFact['egen_numero_solicitud'];
             $rep->orientation = "P"; // tipo de orientacion L => Horizontal, P => Vertical   
-            
             $rep->createReportPdf(
-                $this->render('@modules/academico/views/tpl_especies/factura', [
+                $this->render('@modules/academico/views/tpl_especies/especie', [
                     'cabFact' => $cabFact,
-         
                 ])
             );
             $rep->mpdf->Output('Especie_' . $cabFact['egen_numero_solicitud'] . ".pdf", ExportFile::OUTPUT_TO_DOWNLOAD); 

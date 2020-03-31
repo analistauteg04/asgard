@@ -523,9 +523,9 @@ class Especies extends \yii\db\ActiveRecord {
         $rawData = array(); 
         $con = \Yii::$app->db_academico;
         $con1 = \Yii::$app->db_asgard;
-        $sql = "SELECT A.egen_id,A.dsol_id,A.egen_numero_solicitud,C.esp_rubro,concat(D.per_pri_nombre,' ',D.per_pri_apellido) Nombres,D.per_cedula,
+        $sql = "SELECT A.egen_id,A.dsol_id,A.egen_numero_solicitud,C.esp_rubro,concat(D.per_pri_nombre,' ',D.per_seg_nombre,' ',D.per_pri_apellido,' ',D.per_seg_apellido) Nombres,D.per_cedula,
                     F.uaca_nombre,G.mod_nombre,concat(E.resp_titulo,' ',E.resp_nombre) Responsable,date(A.egen_fecha_aprobacion) fecha_aprobacion,
-                    A.egen_fecha_caducidad
+                    A.egen_fecha_caducidad,D.per_correo,D.per_celular
                     FROM " . $con->dbname . ".especies_generadas A
                             INNER JOIN (" . $con->dbname . ".estudiante B 
                                             INNER JOIN " . $con1->dbname . ".persona D ON B.per_id=D.per_id)

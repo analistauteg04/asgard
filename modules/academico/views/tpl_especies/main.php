@@ -194,11 +194,11 @@
                                 
                             </div>
                             <div class="posright" id="codigo_barra">
-                                            <?php /*echo (Yii::$app->controller->pdf_cla_acceso) ? \penblu\barcode\GeneratedCodebar::widget([
+                                            <?php echo (Yii::$app->controller->pdf_cla_acceso) ? \penblu\barcode\GeneratedCodebar::widget([
                                                 "message" => Yii::$app->controller->pdf_cla_acceso,
                                                 "base64" => true,
                                                 "font_size" => 35
-                                            ]) : "";*/ ?>
+                                            ]) : ""; ?>
                                         </div>
                             
                             <div class="clear"></div>

@@ -99,13 +99,13 @@
 </style>
 <div>
     <p>Guayaquil, 30 de Marzo 2020</p>
-<p>Ing. byron VIllacress <br>
-Decano de la Facultad de la Modalidad Presencial
+<p><?php echo $cabFact['Responsable'] ?><br>
+Decano de la Facultad de la Modalidad <?php echo $cabFact['mod_nombre'] ?>
 </p>
 <p>De mis consideraciones:</p>
-<p>Yo, byron con cédula de cuidadanía No. 0951764430 alumno de la facultad/carrera:
+<p>Yo, <?php echo $cabFact['Nombres'] ?> con cédula de cuidadanía No. <?php echo $cabFact['per_cedula'] ?> alumno de la facultad/carrera:
 Solicito a Ud, autorice a quien corresponda, el trámite de mi solicitud:
-<strong>Homologación de materias</strong>
+<strong><?php echo $cabFact['esp_rubro'] ?></strong>
 </p>
 
 <p>Esperando una favorable acogida, quedo de Ud.</p>
@@ -116,7 +116,7 @@ Solicito a Ud, autorice a quien corresponda, el trámite de mi solicitud:
 
 
 
-<p>Alumno: <br>
-C.C. No. <br>
-Teléfono:</p>
+<p>Alumno: <?php echo $cabFact['Nombres'] ?> <br>
+C.C. No. <?php echo $cabFact['per_cedula'] ?> <br>
+Teléfono: <?php echo $cabFact['per_celular'] ?></p>
 </div>
