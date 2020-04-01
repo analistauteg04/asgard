@@ -62,7 +62,8 @@ class PerfilController extends \app\components\CController {
         $country_id = 1;
         $pro_id = Provincia::findOne(["pai_id" => $country_id, "pro_estado" => 1, "pro_estado_logico" => 1]);
         $per_id = Yii::$app->session->get("PB_perid");
-        $user = Usuario::findIdentity($per_id);
+        $usu_id = Yii::$app->session->get("PB_iduser");
+        $user = Usuario::findIdentity($usu_id);
         $persona = Persona::findIdentity($per_id);
         $otra_etnia = $persona->consultarOtraetnia($per_id);
         $arr_pais = Pais::findAll(["pai_estado" => 1, "pai_estado_logico" => 1]);

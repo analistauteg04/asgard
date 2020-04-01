@@ -48,7 +48,7 @@ $tipodoc = "CED";
             <div class="form-group">
                 <label for="txt_second_lastname" class="col-lg-3 col-md-3 col-sm-3 col-xs-3 control-label"><?= Academico::t("perfil", "Second Surname") ?></label>
                 <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
-                    <input type="text" class="form-control" id="txt_second_lastname" value="<?= $persona->per_seg_apellido ?>" data-type="alfa" placeholder="<?= Academico::t("perfil", "Second Lastname") ?>">
+                    <input type="text" class="form-control" id="txt_second_lastname" value="<?= $persona->per_seg_apellido ?>" data-type="alfa" placeholder="<?= Academico::t("perfil", "Second Surname") ?>">
                 </div>
             </div>
         </div>
