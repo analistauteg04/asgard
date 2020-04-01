@@ -226,6 +226,9 @@ function generar() {
         if (response.status == "OK") {
             //parent.searchModulesList("boxgrid", "grid_listadoregistrados_list");
             showAlert(response.status, response.label, response.message);
+            setTimeout(function() {
+                window.location.href = $('#txth_base').val() + "/academico/matriculacion/list";
+            }, 3000);
         }
     }, true);
 }

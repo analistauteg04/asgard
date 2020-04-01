@@ -250,6 +250,7 @@ class MatriculacionController extends \app\components\CController {
                     if (count($result_pago) > 0) {
                         $model_registro_pago_matricula = RegistroPagoMatricula::findOne(["rpm_id" => $result_pago[0]["rpm_id"]]);
                         $model_registro_pago_matricula->rpm_archivo = "pagosmatricula/" . $data["archivo"];
+                        $model_registro_pago_matricula->rpm_estado_aprobacion = "0";
                         if ($model_registro_pago_matricula->save()) {
                             $message = array(
                                 "wtmessage" => Yii::t("notificaciones", "Your information was successfully saved."),
@@ -760,6 +761,25 @@ class MatriculacionController extends \app\components\CController {
                 $registro_pago_matricula_model->rpm_usuario_apruebareprueba = $usu_id;
 
                 if ($registro_pago_matricula_model->save()) {
+                    if($state == 2){ 
+                        $modelPersona = Persona::findOne($registro_pago_matricula_model->per_id);
+                        $matriculacion_model = new Matriculacion();
+                        $modelRegOnl = RegistroOnline::find()->where(["per_id" => $registro_pago_matricula_model->per_id])->orderBy(['ron_id'=>SORT_DESC])->one();
+                        $data_student = $matriculacion_model->getDataStudenbyRonId($modelRegOnl->ron_id);
+                        $from = Yii::$app->params["adminEmail"];
+                        $to = array(
+                            "0" => $modelPersona->per_correo,
+                        );
+                        $asunto = "Registro en línea";
+                        $body = Utilities::getMailMessage("pagonegado", 
+                            array("[[user]]" => $modelPersona->per_pri_nombre . " " . $modelPersona->per_pri_apellido, 
+                                  "[[periodo]]" => $data_student["pla_periodo_academico"], 
+                                  "[[modalidad]]" => $data_student["mod_nombre"]), 
+                            Yii::$app->language, Yii::$app->basePath . "/modules/academico");
+                        $titulo_mensaje = "Registro de Matriculación en línea";
+
+                        Utilities::sendEmail($titulo_mensaje, $from, $to, $asunto, $body);
+                    }
                     $message = array(
                         "wtmessage" => Yii::t("notificaciones", "Your information was successfully saved."),
                         "title" => Yii::t('jslang', 'Success'),
