@@ -4,16 +4,33 @@ use yii\helpers\Html;
 use app\modules\academico\Module as academico;
 
 $leyenda = '<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
-          <div class="form-group">
-          <div class="col-sm-10 col-md-10 col-xs-10 col-lg-10">
-          <div style = "width: 1000px;" class="alert alert-info"><span style="font-weight: bold"> Nota: </span> 
-                Estimado estudiante, si tiene alguna observación con respecto a su selección de materias, 
-                por favor contactar a la secretaría de facultad antes de seleccionar sus materias, a los siguientes números: </br>
-                </br>
-                Grado Presencial: 0993817458 </br>
-                Grado Semipresencial y a Distancia: 0989589757 </br>
-                Grado Online: 0991534808 </br></div>
-          </div>
+          <div class="form-group">          
+          <div style = "width: 1035px;" class="alert alert-info">
+          <table WIDTH="110%" class="tg">
+            <tr>
+              <td colspan="2" class="tg-0pky"><span style="font-weight: bold"> Nota: </span>Estimado Estudiante, si tiene alguna observación con la 
+              planificación del periodo académico por favor contactar a la secretaría de su facultad, a los siguientes números:</br></br></td>
+            </tr>
+            <tr>
+                <td class="tg-0pky"><span style="font-weight: bold">Datos de Contacto</span></br></br></td>
+            </tr>
+            <tr>
+              <td class="tg-0pky"><span style="font-weight: bold">Facultad Grado Presencial</span></br>
+                Correo: secretariapresencial@uteg.edu.ec</br>
+                Celular: 0993817458</br></br></td>
+              <td class="tg-0pky"><span style="font-weight: bold">Facultad Grado a Distancia y Semipresencial</span></br>
+                Correo: secretariasemipresencial@uteg.edu.ec</br>
+                Celular: 09895899757</br></br></td>
+            </tr>
+            <tr>
+              <td class="tg-0pky"> <span style="font-weight: bold">Facultad Grado Online</span></br>
+                Correo: secretariaonline@uteg.edu.ec</br>
+                Celular: 0991534808</br></br></td>
+              <td class="tg-0pky"><span style="font-weight: bold">Mesa de Servicio UTEG</span></br>
+                Correo: mesaservicio01e@uteg.edu.ec y mesaservicio02@uteg.edu.ec</br></br></td>
+            </tr>
+          </table>
+          </div>     
           </div>
           </div>';
 ?>
@@ -87,7 +104,7 @@ $leyenda = '<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
 </div>
 <br></br>
 <?=
-    $this->render('index-grid', ['planificacion' => $planificacion,]);
+$this->render('index-grid', ['planificacion' => $planificacion,]);
 ?>
 <?php echo $leyenda; ?>
 
