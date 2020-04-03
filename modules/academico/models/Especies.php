@@ -50,18 +50,19 @@ class Especies extends \yii\db\ActiveRecord {
     }
 
     public function consultaDatosEstudiante($id) {
-        $rawData = array();
+        //$rawData = array();
         $con = \Yii::$app->db_academico;
         $con1 = \Yii::$app->db_asgard;
+        $estado = 1;
         $sql = "SELECT B.per_id Ids,B.per_pri_nombre,B.per_seg_nombre,B.per_pri_apellido, 
                             B.per_seg_apellido,B.per_cedula
                     FROM " . $con->dbname . ".estudiante A 
                             INNER JOIN " . $con1->dbname . ".persona B ON A.per_id=B.per_id
-                WHERE A.est_estado=1 AND A.est_estado_logico=1 AND A.est_id=:Ids;";
+                WHERE A.est_estado=:estado AND A.est_estado_logico=:estado AND A.per_id=:Ids;";
         //echo $sql;    
 
         $comando = $con->createCommand($sql);
-        //$comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":Ids", $id, \PDO::PARAM_INT);
         //$comando->bindParam(":estadoinactivo", $estadoinactivo, \PDO::PARAM_STR);
         $rawData = $comando->queryOne();
@@ -250,7 +251,7 @@ class Especies extends \yii\db\ActiveRecord {
     
     public function consultarDetSolicitud($Ids) {
         $con = \Yii::$app->db_academico;        
-        $sql = "SELECT A.*,C.tra_nombre,B.esp_rubro FROM db_academico.detalle_solicitud A
+        $sql = "SELECT A.*,C.tra_nombre,B.esp_rubro FROM " . $con->dbname . ".detalle_solicitud A
 			INNER JOIN " . $con->dbname . ".especies B ON A.esp_id=B.esp_id
 			INNER JOIN " . $con->dbname . ".tramite C ON A.tra_id=C.tra_id
 		WHERE A.dsol_estado=1 AND A.dsol_estado_logico=1 AND A.csol_id=:csol_id; ";

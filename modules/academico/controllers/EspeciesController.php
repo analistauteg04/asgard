@@ -101,8 +101,8 @@ class EspeciesController extends \app\components\CController {
 
     public function actionNew() {
         $per_idsession = @Yii::$app->session->get("PB_perid");
-        $est_id = 1;
-        $persona_model = new Persona();
+        //$est_id = 1;
+        //$persona_model = new Persona();
         $especiesADO = new Especies();
         $mod_unidad = new UnidadAcademica();
         $mod_modalidad = new Modalidad();
@@ -128,12 +128,12 @@ class EspeciesController extends \app\components\CController {
         }
 
         //$personaData = $persona_model->consultaPersonaId($per_idsession);
-        $personaData = $especiesADO->consultaDatosEstudiante(1);
+        $personaData = $especiesADO->consultaDatosEstudiante($per_idsession);
         $arr_unidadac = $mod_unidad->consultarUnidadAcademicas();
-        $arr_modalidad = $mod_modalidad->consultarModalidad(1, 1);
+        $arr_modalidad = $mod_modalidad->consultarModalidad($arr_unidadac[0]["id"], 1);
         $arr_tramite = $especiesADO->getTramite();
         $arr_especies = $especiesADO->getTramiteEspecie($arr_tramite[0]["Ids"]);
-        //Utilities::putMessageLogFile($personaData);
+        //Utilities::putMessageLogFile('sadf'.$arr_unidadac[0]["id"]);
         return $this->render('new', [
                     'arr_persona' => $personaData,
                     'arr_tramite' => ArrayHelper::map($arr_tramite, "id", "name"),
