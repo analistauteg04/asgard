@@ -129,7 +129,7 @@ function obtenerEspecies() {
     requestHttpAjax(link, arrParams, function (response) {
         if (response.status == "OK") {
             var data = response.message;
-            setComboData(data.especies, "cmb_especies");
+            setComboDataselect(data.especies, "cmb_especies", "Seleccionar");
         } else {
             $("#cmb_especies").html("<option value='0'>No Existen Datos</option>");
         }
@@ -145,8 +145,8 @@ function obtenerDataEspecies() {
         arrParams.getDataespecie = true;
         requestHttpAjax(link, arrParams, function (response) {
             if (response.status == "OK") {
-                var data = response.message.especies;
-                $('#txt_dsol_valor').val(redondea(data[0]['esp_valor'], Ndecimal));
+                data = response.message;
+                $('#txt_dsol_valor').val(redondea(data.especies[0]['esp_valor'], Ndecimal));
                 calculaSubTotal();
                 //setComboData(data.especies, "cmb_especies");
             } else {
@@ -158,8 +158,6 @@ function obtenerDataEspecies() {
     }
 
 }
-
-
 
 /* INCIO GRID DETALLE*/
 function agregarItemsProducto(opAccion) {
@@ -460,7 +458,7 @@ function guardarSolicitud(accion) {
     //var pacID = (accion == "Update") ? $('#txth_pac_id').val() : 0;
     //var perID = (accion == "Update") ? $('#txth_per_id').val() : 0;
     var total = parseFloat($('#lbl_total').text());
-    if ($('#cmb_especies option:selected').val() != 0 && total > 0) {
+    if (/*$('#cmb_especies option:selected').val() != 0 &&*/ total > 0) {
         if (total > 0) {
             var link = $('#txth_base').val() + "/academico/especies/save";
             var arrParams = new Object();
@@ -628,4 +626,15 @@ function autorizaPago() {
         showAlert('NO_OK', 'error', {"wtmessage": 'Debe Selecionar Estado de Solicitud', "title": 'Información'});
     }
 
+}
+function setComboDataselect(arr_data, element_id, texto) {
+    var option_arr = "";
+    option_arr += "<option value= '0'>" + texto + "</option>";
+    for (var i = 0; i < arr_data.length; i++) {
+        var id = arr_data[i].id;
+        var value = arr_data[i].name;
+
+        option_arr += "<option value='" + id + "'>" + value + "</option>";
+    }
+    $("#" + element_id).html(option_arr);
 }

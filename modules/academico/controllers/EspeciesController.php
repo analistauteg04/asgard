@@ -118,12 +118,9 @@ class EspeciesController extends \app\components\CController {
                 return;
             }
             if (isset($data["getDataespecie"])) {
-                $especies = $especiesADO::getDataEspecie($data['esp_id']);
-                $message = [
-                    "especies" => $especies,
-                ];
-                echo Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
-                return;
+                $especies = $especiesADO->getDataEspecie($data["esp_id"]);
+                $message = array("especies" => $especies);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);               
             }
         }
 
