@@ -92,6 +92,7 @@ create table if not exists `tipo_estudio_academico` (
 create table if not exists `unidad_academica` (
  `uaca_id` bigint(20) not null auto_increment primary key,
  `uaca_nombre` varchar(300) not null,
+ `uaca_nomenclatura` varchar(3) null,
  `uaca_descripcion` varchar(500) not null,
  `uaca_usuario_ingreso` bigint(20) not null,
  `uaca_usuario_modifica` bigint(20)  null,

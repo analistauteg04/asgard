@@ -454,9 +454,10 @@ function calcularTotalGrid() {
 
 
 
-function guardarSolicitud(accion) {
+function guardarSolicitud() {
     //var pacID = (accion == "Update") ? $('#txth_pac_id').val() : 0;
     //var perID = (accion == "Update") ? $('#txth_per_id').val() : 0;
+    accion = "Create";
     var total = parseFloat($('#lbl_total').text());
     if (/*$('#cmb_especies option:selected').val() != 0 &&*/ total > 0) {
         if (total > 0) {
@@ -584,7 +585,8 @@ function actualizarGridRevSolEspecie() {
     }
 }
 
-function actualizarPago(proceso) {
+function actualizarPago() {
+    proceso="File";
     var arrParams = new Object();
     var link = $('#txth_base').val() + "/academico/especies/cargarpago";
     var csol_id = parseInt($('#lbl_num_solicitud').text());

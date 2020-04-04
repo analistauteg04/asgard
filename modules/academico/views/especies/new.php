@@ -8,17 +8,8 @@ use app\modules\academico\Module as Especies;
 Especies::registerTranslations();
 ?>
 <?= Html::hiddenInput('txth_idest', $arr_persona['est_id'], ['id' => 'txth_idest']); ?>
-<form class="form-horizontal" enctype="multipart/form-data" id="formsolicitud"> 
-    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
-        <div class="col-sm-10 col-md-10 col-xs-10 col-lg-10"></div>
-        <div class="col-sm-2 col-md-2 col-xs-2 col-lg-2">
-            <a id="btn_save" href="javascript:" class="btn btn-primary btn-block"> <?= Yii::t("formulario", "Save") ?></a>
-        </div>
-    </div>
+<form class="form-horizontal" enctype="multipart/form-data" id="formsolicitud">   
 
-    <!--<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
-        <h3><span id="lbl_solicitud"><?= Especies::t("Especies", "Crear Solicitud de Especies") ?></span></h3>
-    </div>-->
     <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
         <div class="col-md-7 col-sm-7 col-xs-7 col-lg-7">
             <div class="form-group">
