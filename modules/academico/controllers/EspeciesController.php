@@ -40,7 +40,9 @@ class EspeciesController extends \app\components\CController {
     public function actionRevisarpago() {
         $per_id = @Yii::$app->session->get("PB_perid");
         $especiesADO = new Especies();
+        $mod_fpago = new FormaPago();
         $est_id = $especiesADO->recuperarIdsEstudiente($per_id);
+        $arr_forma_pago = $especiesADO->getFormaPago();
         $data = Yii::$app->request->get();
         if ($data['PBgetFilter']) {
             $arrSearch["f_ini"] = $data['f_ini'];
@@ -63,6 +65,7 @@ class EspeciesController extends \app\components\CController {
                     'model' => $model,
                     'personalData' => $personaData,
                     'arrEstados' => $this->estadoPagos(),
+                    'arr_forma_pago' => ArrayHelper::map(array_merge([["Ids" => "0", "Nombre" => "Todos"]], $arr_forma_pago), "Ids", "Nombre"),
         ]);
     }
 

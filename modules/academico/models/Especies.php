@@ -67,35 +67,37 @@ class Especies extends \yii\db\ActiveRecord {
     }
 
     public static function getSolicitudesAlumnos($est_id, $arrFiltro = array(), $onlyData = false) {
-        $con = \Yii::$app->db_academico;
-        $con1 = \Yii::$app->db_asgard;
-        $con2 = \Yii::$app->db_facturacion;
+        $con = \Yii::$app->db_academico;        
+        $con1 = \Yii::$app->db_facturacion;
         $estado = 1;
         $str_search = "";
-        if (isset($arrFiltro) && count($arrFiltro) > 0) {
-            //$str_search .= ($arrFiltro['f_pago'] > "") ? " AND A.fpag_id= :fpag_id " : "";
+        if (isset($arrFiltro) && count($arrFiltro) > 0) {            
             if ($arrFiltro['f_pago'] != "" && $arrFiltro['f_pago'] != "0") {
-                $str_search .= " AND A.fpag_id= :fpag_id  ";                
+                $str_search .= " AND A.fpag_id= :fpag_id  ";
             }
             if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
-                $str_search .= " AND A.csol_fecha_creacion BETWEEN :fec_ini AND :fec_fin ";                
+                $str_search .= " AND A.csol_fecha_creacion BETWEEN :fec_ini AND :fec_fin ";
             }
-           /* if ($arrFiltro['f_estado'] != "") {
-                $str_search .= " AND A.csol_estado_aprobacion = :estado_aprobacion ";                
-            }*/
+            /* if ($arrFiltro['f_estado'] != "") {
+              $str_search .= " AND A.csol_estado_aprobacion = :estado_aprobacion ";
+              } */
         }
-
+        if ($est_id > "0") {
+            $estudiante = " AND A.est_id=:est_id  ";
+        }
         $sql = "SELECT lpad(ifnull(A.csol_id,0),9,'0') csol_id,A.empid,B.uaca_nombre,C.mod_nombre,D.fpag_nombre,date(A.csol_fecha_creacion) csol_fecha_solicitud,
                     A.csol_estado_aprobacion,A.csol_total
                     FROM " . $con->dbname . ".cabecera_solicitud A
                             INNER JOIN " . $con->dbname . ".unidad_academica B ON B.uaca_id=A.uaca_id
                     INNER JOIN " . $con->dbname . ".modalidad C ON C.mod_id=A.mod_id
-                    INNER JOIN " . $con2->dbname . ".forma_pago D ON D.fpag_id=A.fpag_id
-                WHERE  A.csol_estado=1 AND A.csol_estado_logico=1 AND A.est_id=:est_id  $str_search  ORDER BY A.csol_id DESC;";
+                    INNER JOIN " . $con1->dbname . ".forma_pago D ON D.fpag_id=A.fpag_id
+                WHERE  A.csol_estado=:estado AND A.csol_estado_logico=:estado $estudiante  $str_search  ORDER BY A.csol_id DESC;";
 
         $comando = $con->createCommand($sql);
-        //$comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
-        $comando->bindParam(":est_id", $est_id, \PDO::PARAM_INT);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        if ($est_id > "0") {
+            $comando->bindParam(":est_id", $est_id, \PDO::PARAM_INT);
+        }
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
             $fecha_ini = $arrFiltro["f_ini"];
             $fecha_fin = $arrFiltro["f_fin"];
