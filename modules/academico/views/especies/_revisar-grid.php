@@ -12,7 +12,6 @@ use app\widgets\PbGridView\PbGridView;
 use app\modules\academico\Module as academico;
 use app\modules\financiero\Module as financiero;
 use app\modules\academico\Module as Especies;
-print_r($model);
 academico::registerTranslations();
 financiero::registerTranslations();
 Especies::registerTranslations();
