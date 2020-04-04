@@ -29,9 +29,8 @@ class EspeciesController extends \app\components\CController {
      * @param
      * @return
      */
-    
     public $pdf_cla_acceso = "";
-    
+
     private function estadoPagos() {
         return [
             '0' => Yii::t("formulario", "Todos"),
@@ -40,10 +39,9 @@ class EspeciesController extends \app\components\CController {
             '3' => Yii::t("formulario", "Aprobado"),
         ];
     }
-    
-    
+
     public function actionRevisarpago() {
-        $per_id = @Yii::$app->session->get("PB_perid");        
+        $per_id = @Yii::$app->session->get("PB_perid");
         $especiesADO = new Especies();
         $est_id = $especiesADO->recuperarIdsEstudiente($per_id);
         $data = Yii::$app->request->get();
@@ -63,15 +61,16 @@ class EspeciesController extends \app\components\CController {
 
         $personaData = $especiesADO->consultaDatosEstudiante($per_id);
         $model = $especiesADO->getSolicitudesAlumnos($est_id, null, false);
-        
+
         return $this->render('revisarpago', [
                     'model' => $model,
                     'personalData' => $personaData,
                     'arrEstados' => $this->estadoPagos(),
         ]);
     }
+
     public function actionSolicitudalumno() {
-        $per_id = @Yii::$app->session->get("PB_perid");        
+        $per_id = @Yii::$app->session->get("PB_perid");
         $especiesADO = new Especies();
         $est_id = $especiesADO->recuperarIdsEstudiente($per_id);
         $data = Yii::$app->request->get();
@@ -91,7 +90,7 @@ class EspeciesController extends \app\components\CController {
 
         $personaData = $especiesADO->consultaDatosEstudiante($per_id);
         $model = $especiesADO->getSolicitudesAlumnos($est_id, null, false);
-       
+
         return $this->render('solicitudalumno', [
                     'model' => $model,
                     'personalData' => $personaData,
@@ -120,7 +119,7 @@ class EspeciesController extends \app\components\CController {
             if (isset($data["getDataespecie"])) {
                 $especies = $especiesADO->getDataEspecie($data["esp_id"]);
                 $message = array("especies" => $especies);
-                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);               
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }
         }
         $personaData = $especiesADO->consultaDatosEstudiante($per_idsession);
@@ -160,35 +159,7 @@ class EspeciesController extends \app\components\CController {
 
             if ($accion == "Create") {
                 $resul = $especiesADO->insertarLista($dts_Cab, $dts_Det);
-                
-                        $tituloMensaje = Yii::t("register", "User Register");
-                        $asunto = Yii::t("register", "User Register") . " " . Yii::$app->params["siteName"];
-                        $body = Utilities::getMailMessage("registernew", array(
-                                    "[[primer_nombre]]" => $nombre1,
-                                    "[[primer_apellido]]" => $apellido1,
-                                    "[[dni]]" => $dnis,
-                                    "[[numero_dni]]" => $numidentificacion,
-                                    "[[celular]]" => $celular,
-                                    "[[mail]]" => $correo,
-                                    "[[unidad_academica]]" => $nombre_unidad["nombre_unidad"],
-                                    "[[modalidad]]" => $nombre_modalidad["nombre_modalidad"]), Yii::$app->language);
-                        Utilities::sendEmail(
-                                $tituloMensaje, 
-                                Yii::$app->params["adminEmail"], 
-                                [Yii::$app->params["lidercontact"] => "Lider", 
-                                    Yii::$app->params["contact1"] => "contact1", 
-                                    Yii::$app->params["contact2"] => "contact2", 
-                                    Yii::$app->params["contact3"] => "contact3", 
-                                    Yii::$app->params["contact4"] => "contact4", 
-                                    Yii::$app->params["admisiones1"] => "admisiones1", 
-                                    Yii::$app->params["admisiones2"] => "admisiones2", 
-                                    Yii::$app->params["admisiones3"] => "admisiones3", 
-                                    Yii::$app->params["admisiones4"] => "admisiones4", 
-                                    Yii::$app->params["ventasposgrado1"] => "ventasposgrado1", 
-                                    Yii::$app->params["ventasposgrado2"] => "ventasposgrado2", 
-                                    Yii::$app->params["ventasposgrado3"] => "ventasposgrado3"], 
-                                $asunto, $body);
-                        
+
                 //VSValidador::putMessageLogFile($arroout);
                 /* if ($arroout["status"]=="OK"){
                   //Recupera infor de CabTemp  para enviar info al supervisor de tienda
@@ -212,7 +183,7 @@ class EspeciesController extends \app\components\CController {
         }
     }
 
-    public function actionCargarpago() {        
+    public function actionCargarpago() {
         $per_id = @Yii::$app->session->get("PB_perid");
         $ids = isset($_GET['ids']) ? base64_decode($_GET['ids']) : NULL;
         //Utilities::putMessageLogFile($ids);
@@ -220,7 +191,8 @@ class EspeciesController extends \app\components\CController {
         $est_id = $especiesADO->recuperarIdsEstudiente($per_id);
         $mod_unidad = new UnidadAcademica();
         $mod_modalidad = new Modalidad();
-        
+        $mod_persona = new Persona();
+        $data_persona = $mod_persona->consultaPersonaId($per_id);
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
             if ($data["upload_file"]) {
@@ -245,7 +217,21 @@ class EspeciesController extends \app\components\CController {
             }
             if ($data["procesar_file"]) {
                 $carga_archivo = $especiesADO->CargarArchivo($data["archivo"], $data["csol_id"]);
+                $data_especie = $especiesADO->consultaSolicitudexrubro($data["csol_id"]);
                 if ($carga_archivo['status']) {
+                    // enviar correo estudiante
+                    $correo = $data_persona["per_correo"];                   
+                    $user = $data_persona["per_pri_nombre"] . " ". $data_persona["per_pri_apellido"];
+                    $tituloMensaje = 'Adquisición de Especie Valorada en Línea'; 
+                    $asunto = 'Adquisición de Especie Valorada en Línea'; 
+                    $body = Utilities::getMailMessage("cargapagoalumno", array(
+                                "[[user]]" => $user,
+                                "[[tipo_especie]]" => $data_especie["especies"]), Yii::$app->language, Yii::$app->basePath . "/modules/academico");
+                    Utilities::sendEmail(
+                    $tituloMensaje, Yii::$app->params["adminEmail"], [$correo => $user], $asunto, $body);
+                    // enviar correo colecturia
+                    
+                    
                     $message = array(
                         "wtmessage" => Yii::t("notificaciones", "Archivo procesado correctamente." . $carga_archivo['data']),
                         "title" => Yii::t('jslang', 'Success'),
@@ -260,12 +246,12 @@ class EspeciesController extends \app\components\CController {
                 }
                 return;
             }
-        } 
-        
-        
-        $personaData = $especiesADO->consultaDatosEstudiante($est_id);
+        }
+
+
+        $personaData = $especiesADO->consultaDatosEstudiante($per_id);
         $arr_unidadac = $mod_unidad->consultarUnidadAcademicas();
-        $arr_modalidad = $mod_modalidad->consultarModalidad(1, 1);
+        $arr_modalidad = $mod_modalidad->consultarModalidad($arr_unidadac[0]["id"], 1);
         $model = $especiesADO->getSolicitudesAlumnos($est_id, null, false);
         return $this->render('cargarpago', [
                     'model' => $model,
@@ -276,11 +262,9 @@ class EspeciesController extends \app\components\CController {
                     'arr_modalidad' => ArrayHelper::map($arr_modalidad, "id", "name"),
                     'arrEstados' => $this->estadoPagos(),
         ]);
-        
-       
     }
-    
-    public function actionAutorizarpago() {        
+
+    public function actionAutorizarpago() {
         $per_id = @Yii::$app->session->get("PB_perid");
         $ids = isset($_GET['ids']) ? base64_decode($_GET['ids']) : NULL;
         //Utilities::putMessageLogFile($ids);
@@ -288,7 +272,7 @@ class EspeciesController extends \app\components\CController {
         $est_id = $especiesADO->recuperarIdsEstudiente($per_id);
         $mod_unidad = new UnidadAcademica();
         $mod_modalidad = new Modalidad();
-        
+
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
             //$especiesADO = new Especies();
@@ -318,13 +302,11 @@ class EspeciesController extends \app\components\CController {
                 echo Utilities::ajaxResponse('NO_OK', 'alert', Yii::t('jslang', 'Error'), 'false', $message);
             }
             return;
-            
-            
-        } 
+        }
         $personaData = $especiesADO->consultaDatosEstudiante($est_id);
         $arr_unidadac = $mod_unidad->consultarUnidadAcademicas();
         $arr_modalidad = $mod_modalidad->consultarModalidad(1, 1);
-        $cabSol=$especiesADO->consultarCabSolicitud($ids);
+        $cabSol = $especiesADO->consultarCabSolicitud($ids);
         $model = $especiesADO->getSolicitudesAlumnos($est_id, null, false);
         $img_pago = $cabSol[0]["csol_ruta_archivo_pago"];
         return $this->render('autorizarpago', [
@@ -337,13 +319,10 @@ class EspeciesController extends \app\components\CController {
                     'arr_modalidad' => ArrayHelper::map($arr_modalidad, "id", "name"),
                     'arrEstados' => $this->estadoPagos(),
         ]);
-        
-       
     }
-    
-    
+
     public function actionEspeciesgeneradas() {
-        $per_id = @Yii::$app->session->get("PB_perid");        
+        $per_id = @Yii::$app->session->get("PB_perid");
         $especiesADO = new Especies();
         //$est_id = $especiesADO->recuperarIdsEstudiente($per_id);
         $data = Yii::$app->request->get();
@@ -363,14 +342,14 @@ class EspeciesController extends \app\components\CController {
 
         $personaData = $especiesADO->consultaDatosEstudiante($per_id);
         $model = $especiesADO->getSolicitudesGeneradas($est_id, null, false);
-        
+
         return $this->render('especiesgeneradas', [
                     'model' => $model,
                     //'personalData' => $personaData,
                     'arrEstados' => $this->estadoPagos(),
         ]);
     }
-    
+
     public function actionGenerarespeciespdf($ids) {//ok
         try {
             $ids = isset($_GET['ids']) ? base64_decode($_GET['ids']) : NULL;
@@ -378,29 +357,29 @@ class EspeciesController extends \app\components\CController {
             //$this->layout = false;
             $this->layout = '@modules/academico/views/tpl_especies/main';
             //$this->view->title = "Invoices";
-            $especiesADO = new Especies();            
-            $cabFact = $especiesADO->consultarEspecieGenerada($ids);            
-            $objEsp=$especiesADO->getDataEspecie($cabFact['esp_id']);
-            $codigo=$objEsp[0]['codigo'].'-'.$cabFact['egen_numero_solicitud'];
-            $cabFact['Carrera']="Sistemas";//consultar Carrera del estudiante
+            $especiesADO = new Especies();
+            $cabFact = $especiesADO->consultarEspecieGenerada($ids);
+            $objEsp = $especiesADO->getDataEspecie($cabFact['esp_id']);
+            $codigo = $objEsp[0]['codigo'] . '-' . $cabFact['egen_numero_solicitud'];
+            $cabFact['Carrera'] = "Sistemas"; //consultar Carrera del estudiante
             //setlocale(LC_TIME,"es_ES");//strftime("%A, %d de %B de %Y", date("d-m-Y"));
             setlocale(LC_TIME, 'es_CO.UTF-8');
 
-            $cabFact['FechaDia']=strftime("%A %d de %B %G", strtotime(date("d-m-Y")));//date("j F de Y");      
+            $cabFact['FechaDia'] = strftime("%A %d de %B %G", strtotime(date("d-m-Y"))); //date("j F de Y");      
             $this->pdf_cla_acceso = $codigo;
             $rep->orientation = "P"; // tipo de orientacion L => Horizontal, P => Vertical   
             $rep->createReportPdf(
-                $this->render('@modules/academico/views/tpl_especies/especie', [
-                    'cabFact' => $cabFact,
-                ])
+                    $this->render('@modules/academico/views/tpl_especies/especie', [
+                        'cabFact' => $cabFact,
+                    ])
             );
-            $rep->mpdf->Output('ESPECIE_' . $codigo . ".pdf", ExportFile::OUTPUT_TO_DOWNLOAD); 
+            $rep->mpdf->Output('ESPECIE_' . $codigo . ".pdf", ExportFile::OUTPUT_TO_DOWNLOAD);
             //exit;
         } catch (Exception $e) {
             echo $e->getMessage();
         }
     }
-    
+
     public function actionGenerarcertificado($ids) {//ok
         try {
             $ids = isset($_GET['ids']) ? base64_decode($_GET['ids']) : NULL;
@@ -408,20 +387,20 @@ class EspeciesController extends \app\components\CController {
             //$this->layout = false;
             $this->layout = '@modules/academico/views/tpl_especies/main';
             //$this->view->title = "Invoices";
-            $especiesADO = new Especies();            
-            $cabFact = $especiesADO->consultarEspecieGenerada($ids);            
-            $objEsp=$especiesADO->getDataEspecie($cabFact['esp_id']);
-            $codigo=$objEsp[0]['codigo'].'-'.$cabFact['egen_numero_solicitud'].'-'.$cabFact['per_cedula'];
+            $especiesADO = new Especies();
+            $cabFact = $especiesADO->consultarEspecieGenerada($ids);
+            $objEsp = $especiesADO->getDataEspecie($cabFact['esp_id']);
+            $codigo = $objEsp[0]['codigo'] . '-' . $cabFact['egen_numero_solicitud'] . '-' . $cabFact['per_cedula'];
             setlocale(LC_TIME, 'es_CO.UTF-8');
-            $cabFact['FechaDia']=strftime("%A %d de %B %G", strtotime(date("d-m-Y")));//date("j F de Y");      
+            $cabFact['FechaDia'] = strftime("%A %d de %B %G", strtotime(date("d-m-Y"))); //date("j F de Y");      
             $this->pdf_cla_acceso = $codigo;
             $rep->orientation = "P"; // tipo de orientacion L => Horizontal, P => Vertical   
             $rep->createReportPdf(
-                $this->render('@modules/academico/views/tpl_especies/solicitud', [
-                    'cabFact' => $cabFact,
-                ])
+                    $this->render('@modules/academico/views/tpl_especies/solicitud', [
+                        'cabFact' => $cabFact,
+                    ])
             );
-            $rep->mpdf->Output('CERTIFICADO_' . $codigo . ".doc", ExportFile::OUTPUT_TO_DOWNLOAD); 
+            $rep->mpdf->Output('CERTIFICADO_' . $codigo . ".doc", ExportFile::OUTPUT_TO_DOWNLOAD);
             //exit;
         } catch (Exception $e) {
             echo $e->getMessage();

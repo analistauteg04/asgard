@@ -49,7 +49,7 @@ class Especies extends \yii\db\ActiveRecord {
         return $rawData;
     }
 
-    public function consultaDatosEstudiante($id) {        
+    public function consultaDatosEstudiante($id) {
         $con = \Yii::$app->db_academico;
         $con1 = \Yii::$app->db_asgard;
         $estado = 1;
@@ -173,7 +173,7 @@ class Especies extends \yii\db\ActiveRecord {
         $comando = $con->createCommand($sql);
         $comando->bindParam(":esp_id", $Ids, \PDO::PARAM_INT);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
-        $resultData =  $comando->queryAll();
+        $resultData = $comando->queryAll();
         return $resultData;
     }
 
@@ -540,6 +540,32 @@ class Especies extends \yii\db\ActiveRecord {
         //return $comando->queryAll();
         $rawData = $comando->queryOne();
         return $rawData;
+    }
+
+    /**
+     * Function consultaSolicitudexrubro
+     * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>
+     * @property integer $csol_id       
+     * @return  
+     */
+    public function consultaSolicitudexrubro($csol_id) {
+        $con = \Yii::$app->db_academico;
+        $estado = 1;
+        $sql = "SELECT group_concat(esp.esp_rubro) as especies
+                  FROM db_academico.detalle_solicitud dso
+                       INNER JOIN db_academico.especies esp ON esp.esp_id = dso.esp_id
+                  WHERE csol_id = :csol_id AND
+                    dso.dsol_estado = :estado AND
+                    dso.dsol_estado_logico = :estado AND
+                    esp.esp_estado = :estado AND
+                    esp.esp_estado_logico = :estado";
+
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":csol_id", $csol_id, \PDO::PARAM_INT);
+
+        $resultData = $comando->queryOne();
+        return $resultData;
     }
 
 }

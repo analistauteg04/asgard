@@ -498,7 +498,6 @@ function cabLista() {
     rowGrid.mod_id = $('#cmb_modalidad option:selected').val();
     rowGrid.fpag_id = $('#cmb_fpago option:selected').val();
     rowGrid.est_id = $('#txth_idest').val();
-    alert ('AAA' + rowGrid.est_id );
     rowGrid.csol_total = parseFloat($('#lbl_total').text());
     rowGrid.csol_usuario_ingreso = 1;
     arrayList[0] = rowGrid;
@@ -527,7 +526,6 @@ function detLista() {
                     rowGrid.tra_id = Grid[i]['tra_id'];
                     rowGrid.esp_id = Grid[i]['esp_id'];
                     rowGrid.est_id = $('#txth_idest').val();
-                    alert ('BBB' + rowGrid.est_id );
                     rowGrid.dsol_cantidad = Grid[i]['dsol_cantidad'];
                     rowGrid.dsol_valor = redondea(Grid[i]['dsol_valor'], Ndecimal);
                     rowGrid.dsol_total = redondea(Grid[i]['dsol_total'], Ndecimal);
