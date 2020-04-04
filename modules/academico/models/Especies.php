@@ -73,12 +73,16 @@ class Especies extends \yii\db\ActiveRecord {
         $estado = 1;
         $str_search = "";
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
-            $str_search .= ($arrFiltro['f_pago'] != "") ? " AND A.fpag_id= :fpag_id " : "";
-            if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
-                $str_search .= " AND A.csol_fecha_creacion BETWEEN :fec_ini AND :fec_fin ";
-                //$str_search .= "A.sesp_fecha_solicitud >= :fec_ini AND ";
-                //$str_search .= "A.sesp_fecha_solicitud <= :fec_fin AND ";
+            //$str_search .= ($arrFiltro['f_pago'] > "") ? " AND A.fpag_id= :fpag_id " : "";
+            if ($arrFiltro['f_pago'] != "" && $arrFiltro['f_pago'] != "0") {
+                $str_search .= " AND A.fpag_id= :fpag_id  ";                
             }
+            if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
+                $str_search .= " AND A.csol_fecha_creacion BETWEEN :fec_ini AND :fec_fin ";                
+            }
+           /* if ($arrFiltro['f_estado'] != "") {
+                $str_search .= " AND A.csol_estado_aprobacion = :estado_aprobacion ";                
+            }*/
         }
 
         $sql = "SELECT lpad(ifnull(A.csol_id,0),9,'0') csol_id,A.empid,B.uaca_nombre,C.mod_nombre,D.fpag_nombre,date(A.csol_fecha_creacion) csol_fecha_solicitud,
@@ -96,7 +100,7 @@ class Especies extends \yii\db\ActiveRecord {
             $fecha_ini = $arrFiltro["f_ini"];
             $fecha_fin = $arrFiltro["f_fin"];
             $forma_pago = $arrFiltro['f_pago'];
-            if ($forma_pago != "") {
+            if ($forma_pago != "" && $arrFiltro['f_pago'] != "0") {
                 $comando->bindParam(":fpag_id", $forma_pago, \PDO::PARAM_INT);
             }
 
