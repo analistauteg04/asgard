@@ -65,9 +65,7 @@ admision::registerTranslations();
                     <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
                         <?=
                         Html::dropDownList(
-                                "cmb_fpago", 0, ArrayHelper::map(app\modules\academico\models\Especies::getFormaPago(), 'Ids', 'Nombre'),
-                                //array_merge([Yii::t("formulario", "Select")],ArrayHelper::map(app\modules\academico\models\Especies::getFormaPago(), 'Ids', 'Nombre')), 
-                                ["class" => "form-control", "id" => "cmb_fpago"]
+                                "cmb_fpago", 0, $arr_forma_pago, ["class" => "form-control", "id" => "cmb_fpago"]
                         )
                         ?>
                     </div>

@@ -9,13 +9,10 @@ use app\models\Persona;
 use yii\helpers\Url;
 use yii\base\Exception;
 use yii\helpers\ArrayHelper;
-
-#use app\modules\academico\models\EstudioAcademico;
+use app\modules\financiero\models\FormaPago;
 use app\modules\academico\models\Modalidad;
 use app\modules\academico\models\UnidadAcademica;
 use app\modules\academico\Module as academico;
-#use app\modules\financiero\Module as financiero;
-#use app\modules\financiero\models\Secuencias;
 use app\modules\academico\models\Especies;
 use app\models\Empresa;
 
@@ -72,7 +69,9 @@ class EspeciesController extends \app\components\CController {
     public function actionSolicitudalumno() {
         $per_id = @Yii::$app->session->get("PB_perid");
         $especiesADO = new Especies();
+        $mod_fpago = new FormaPago();
         $est_id = $especiesADO->recuperarIdsEstudiente($per_id);
+        $arr_forma_pago = $especiesADO->getFormaPago();
         $data = Yii::$app->request->get();
         if ($data['PBgetFilter']) {
             $arrSearch["f_ini"] = $data['f_ini'];
@@ -95,6 +94,8 @@ class EspeciesController extends \app\components\CController {
                     'model' => $model,
                     'personalData' => $personaData,
                     'arrEstados' => $this->estadoPagos(),
+                    //'arr_forma_pago' => ArrayHelper::map($arr_forma_pago, "id", "value"),
+                    'arr_forma_pago' => ArrayHelper::map(array_merge([["Ids" => "0", "Nombre" => "Todos"]], $arr_forma_pago), "Ids", "Nombre"),                    
         ]);
     }
 

@@ -30,7 +30,8 @@ admision::registerTranslations();
     <form class="form-horizontal">
         <?=
         $this->render('_solicitud-search', [           
-            'arrEstados' => $arrEstados
+            'arrEstados' => $arrEstados,
+            'arr_forma_pago' => $arr_forma_pago
             ]);
         ?>
     </form>
