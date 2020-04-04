@@ -93,7 +93,7 @@ PbGridView::widget([
             'buttons' => [
                 'view' => function ($url, $model) {
                     //return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', Url::to(['/academico/especies/new', 'Ids' => $model['orden']]), ["data-toggle" => "tooltip", "title" => "Ver Pagos", "data-pjax" => 0]);
-                    return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', Url::to(['/academico/especies/cargarpago', 'ids' => base64_encode($model['csol_id'])]), ["data-toggle" => "tooltip", "title" => "Ver Solicitud", "data-pjax" => "0"]);
+                    return Html::a('<span class="glyphicon glyphicon-upload"></span>', Url::to(['/academico/especies/cargarpago', 'ids' => base64_encode($model['csol_id'])]), ["data-toggle" => "tooltip", "title" => "Subir Pago", "data-pjax" => "0"]);
                     //return ($model['Observacion'] != '')?Html::a('<span class="glyphicon glyphicon-eye-open"></span>', Url::to(['/academico/especies/cargarpago', 'ids' => base64_encode($model['csol_id'])]), ["data-toggle" => "tooltip", "title" => "Ver Solicitud", "data-pjax" => "0"]):'';
                     /*if ($model['estado'] != 'P') {
                         return Html::a('<span class="glyphicon glyphicon-thumbs-up"></span>', Url::to(['pagos/validarpagocarga', 'ido' => $model['orden']]), ["data-toggle" => "tooltip", "title" => "Ver Pagos", "data-pjax" => 0]);
