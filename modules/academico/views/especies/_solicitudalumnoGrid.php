@@ -89,15 +89,16 @@ PbGridView::widget([
         [
             'class' => 'yii\grid\ActionColumn',
             'header' => Yii::t("formulario", "Actions"),
-            'template' => '{payments} {upload} {view} {downloadFact}', //
+            'template' => '{view}',
             'buttons' => [
                 'view' => function ($url, $model) {
+/*
                     //return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', Url::to(['/academico/especies/new', 'Ids' => $model['orden']]), ["data-toggle" => "tooltip", "title" => "Ver Pagos", "data-pjax" => 0]);
                     return Html::a('<span class="glyphicon glyphicon-upload"></span>', Url::to(['/academico/especies/cargarpago', 'ids' => base64_encode($model['csol_id'])]), ["data-toggle" => "tooltip", "title" => "Subir Pago", "data-pjax" => "0"]);
                     //return ($model['Observacion'] != '')?Html::a('<span class="glyphicon glyphicon-eye-open"></span>', Url::to(['/academico/especies/cargarpago', 'ids' => base64_encode($model['csol_id'])]), ["data-toggle" => "tooltip", "title" => "Ver Solicitud", "data-pjax" => "0"]):'';
                     /*if ($model['estado'] != 'P') {
                         return Html::a('<span class="glyphicon glyphicon-thumbs-up"></span>', Url::to(['pagos/validarpagocarga', 'ido' => $model['orden']]), ["data-toggle" => "tooltip", "title" => "Ver Pagos", "data-pjax" => 0]);
-                    }*/
+                    }
                 },
                 'payments' => function ($url, $model) {
                     return Html::a('<span class="glyphicon glyphicon-usd"></span>', Url::to(['/financiero/pagos/listarpagosolicitud', 'id_sol' => base64_encode($model['sins_id']), 'per_id' => $_GET['perid']]), ["data-toggle" => "tooltip", "title" => "Pago de Solicitud", "data-pjax" => 0]);
@@ -118,7 +119,10 @@ PbGridView::widget([
                     //if ($ruta !== 0) {
                         return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', Url::to(['/financiero/pagos/descargafactura', 'ids' => base64_encode($model['sins_id'])]), ["data-toggle" => "tooltip", "title" => "Descargar Factura", "data-pjax" => 0]);
                     //}
-                },
+                },*/
+                    return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', Url::to(['/academico/especies/cargarpago', 'ids' => base64_encode($model['csol_id'])]), ["data-toggle" => "tooltip", "title" => "Subir Pago", "data-pjax" => "0"]);
+                },                              
+
             ],
         ],
     ],
