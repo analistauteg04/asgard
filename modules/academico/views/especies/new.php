@@ -7,7 +7,7 @@ use app\modules\academico\Module as Especies;
 
 Especies::registerTranslations();
 ?>
-
+<?= Html::hiddenInput('txth_idest', $arr_persona['est_id'], ['id' => 'txth_idest']); ?>
 <form class="form-horizontal" enctype="multipart/form-data" id="formsolicitud"> 
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
         <div class="col-sm-10 col-md-10 col-xs-10 col-lg-10"></div>
@@ -46,8 +46,6 @@ Especies::registerTranslations();
         </div>
 
     </div>
-
-
 
     <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
         <div class="col-md-7 col-sm-7 col-xs-7 col-lg-7">

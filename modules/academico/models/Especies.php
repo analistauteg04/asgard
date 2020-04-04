@@ -49,22 +49,19 @@ class Especies extends \yii\db\ActiveRecord {
         return $rawData;
     }
 
-    public function consultaDatosEstudiante($id) {
-        //$rawData = array();
+    public function consultaDatosEstudiante($id) {        
         $con = \Yii::$app->db_academico;
         $con1 = \Yii::$app->db_asgard;
         $estado = 1;
-        $sql = "SELECT B.per_id Ids,B.per_pri_nombre,B.per_seg_nombre,B.per_pri_apellido, 
+        $sql = "SELECT A.est_id, B.per_id Ids,B.per_pri_nombre,B.per_seg_nombre,B.per_pri_apellido, 
                             B.per_seg_apellido,B.per_cedula
                     FROM " . $con->dbname . ".estudiante A 
                             INNER JOIN " . $con1->dbname . ".persona B ON A.per_id=B.per_id
                 WHERE A.est_estado=:estado AND A.est_estado_logico=:estado AND A.per_id=:Ids;";
-        //echo $sql;    
 
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":Ids", $id, \PDO::PARAM_INT);
-        //$comando->bindParam(":estadoinactivo", $estadoinactivo, \PDO::PARAM_STR);
         $rawData = $comando->queryOne();
         return $rawData;
     }

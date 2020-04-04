@@ -123,8 +123,6 @@ class EspeciesController extends \app\components\CController {
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);               
             }
         }
-
-        //$personaData = $persona_model->consultaPersonaId($per_idsession);
         $personaData = $especiesADO->consultaDatosEstudiante($per_idsession);
         $arr_unidadac = $mod_unidad->consultarUnidadAcademicas();
         $arr_modalidad = $mod_modalidad->consultarModalidad($arr_unidadac[0]["id"], 1);
@@ -204,10 +202,10 @@ class EspeciesController extends \app\components\CController {
             }
             //Utilities::putMessageLogFile($resul);
             if ($resul['status']) {
-                $message = ["info" => Yii::t('exception', '<strong>Well done!</strong> your information was successfully saved.')];
+                $message = ["info" => Yii::t('exception', 'La infomación ha sido grabada. ')];
                 echo Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message, $resul);
             } else {
-                $message = ["info" => Yii::t('exception', 'The above error occurred while the Web server was processing your request.')];
+                $message = ["info" => Yii::t('exception', 'Error al grabar.')];
                 echo Utilities::ajaxResponse('NO_OK', 'alert', Yii::t('jslang', 'Error'), 'false', $message);
             }
             return;
