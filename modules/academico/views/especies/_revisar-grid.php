@@ -12,7 +12,7 @@ use app\widgets\PbGridView\PbGridView;
 use app\modules\academico\Module as academico;
 use app\modules\financiero\Module as financiero;
 use app\modules\academico\Module as Especies;
-
+print_r($model);
 academico::registerTranslations();
 financiero::registerTranslations();
 Especies::registerTranslations();
@@ -27,18 +27,10 @@ PbGridView::widget([
     'dataProvider' => $model,
     'columns' =>
     [
-        /* [
-          'class' => 'yii\grid\CheckboxColumn',
-          // you may configure additional properties here
-         * var keys = $('#TbG_PERSONAS').yiiGridView('getSelectedRows'); Usar JS
-          ], */
+      
         [
             'attribute' => 'Solicitud',
             'header' => Especies::t("Especies", "Solicitud"),
-            //'visible' => FALSE,
-            //'htmlOptions' => array('style' => 'display:none; border:none;'),
-            //'contentOptions' => ['class' => 'bg-red','style' => 'display:none; border:none;'],     // HTML attributes to customize value tag
-            //'captionOptions' => ['tooltip' => 'Tooltip'], 
             'value' => 'csol_id',
         ],
         [
@@ -62,16 +54,6 @@ PbGridView::widget([
             'header' => Especies::t("Especies", "F.Pago"),
             'value' => 'fpag_nombre',
         ],
-        /* [
-          'class' => 'yii\grid\ActionColumn',
-          'header' => academico::t("Academico", "Especies"),
-          'template' => '{view}',
-          'buttons' => [
-          'view' => function ($url, $model) {
-          return Html::a('<span>' . substr($model['esp_rubro'], 0, 20) . '... </span>', Url::to(['#']), ["data-toggle" => "tooltip", "title" => $model['esp_rubro']]);
-          },
-          ],
-          ], */
         [
             'attribute' => 'Total',
             'header' => Especies::t("Especies", "Total"),
@@ -92,7 +74,7 @@ PbGridView::widget([
             'template' => '{view}', //
             'buttons' => [
                 'view' => function ($url, $model) {
-                    return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', Url::to(['/academico/especies/autorizarpago', 'ids' => base64_encode($model['csol_id'])]), ["data-toggle" => "tooltip", "title" => "Ver Solicitud", "data-pjax" => "0"]);
+                    return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', Url::to(['/academico/especies/autorizarpago', 'est_id' => base64_encode($model['est_id']), 'ids' => base64_encode($model['csol_id'])]), ["data-toggle" => "tooltip", "title" => "Ver Solicitud", "data-pjax" => "0"]);
                 },
                 
             ],

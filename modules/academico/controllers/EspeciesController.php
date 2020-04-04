@@ -276,11 +276,12 @@ class EspeciesController extends \app\components\CController {
     }
 
     public function actionAutorizarpago() {
-        $per_id = @Yii::$app->session->get("PB_perid");
+        //$per_id = @Yii::$app->session->get("PB_perid");
         $ids = isset($_GET['ids']) ? base64_decode($_GET['ids']) : NULL;
         //Utilities::putMessageLogFile($ids);
+        $est_id = base64_decode($_GET['est_id']);
         $especiesADO = new Especies();
-        $est_id = $especiesADO->recuperarIdsEstudiente($per_id);
+        //$est_id = $especiesADO->recuperarIdsEstudiente($per_id);
         $mod_unidad = new UnidadAcademica();
         $mod_modalidad = new Modalidad();
 
@@ -292,13 +293,7 @@ class EspeciesController extends \app\components\CController {
             $accion = isset($data['accion']) ? $data['accion'] : "";
 
             if ($accion == "AutorizaPago") {
-                $resul = $especiesADO->autorizarSolicitud($csol_id, $estado);
-                //VSValidador::putMessageLogFile($arroout);
-                /* if ($arroout["status"]=="OK"){
-                  //Recupera infor de CabTemp  para enviar info al supervisor de tienda
-                  $CabPed=$res->sendMailPedidosTemp($arroout["data"]);
-
-                  } */
+                $resul = $especiesADO->autorizarSolicitud($csol_id, $estado);                
             } else {
                 //Opcion para actualizar
                 //$PedId = isset($_POST['PED_ID']) ? $_POST['PED_ID'] : 0;
@@ -314,9 +309,10 @@ class EspeciesController extends \app\components\CController {
             }
             return;
         }
-        $personaData = $especiesADO->consultaDatosEstudiante($est_id);
+        $per_id = $especiesADO->consultaPeridxestid($est_id);  
+        $personaData = $especiesADO->consultaDatosEstudiante($per_id["per_id"]); //aqui enviar per_id
         $arr_unidadac = $mod_unidad->consultarUnidadAcademicas();
-        $arr_modalidad = $mod_modalidad->consultarModalidad(1, 1);
+        $arr_modalidad = $mod_modalidad->consultarModalidad($arr_unidadac[0]["id"], 1);
         $cabSol = $especiesADO->consultarCabSolicitud($ids);
         $model = $especiesADO->getSolicitudesAlumnos($est_id, null, false);
         $img_pago = $cabSol[0]["csol_ruta_archivo_pago"];

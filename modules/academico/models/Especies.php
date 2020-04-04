@@ -85,7 +85,7 @@ class Especies extends \yii\db\ActiveRecord {
         if ($est_id > "0") {
             $estudiante = " AND A.est_id=:est_id  ";
         }
-        $sql = "SELECT lpad(ifnull(A.csol_id,0),9,'0') csol_id,A.empid,B.uaca_nombre,C.mod_nombre,D.fpag_nombre,date(A.csol_fecha_creacion) csol_fecha_solicitud,
+        $sql = "SELECT A.est_id, lpad(ifnull(A.csol_id,0),9,'0') csol_id,A.empid,B.uaca_nombre,C.mod_nombre,D.fpag_nombre,date(A.csol_fecha_creacion) csol_fecha_solicitud,
                     A.csol_estado_aprobacion,A.csol_total
                     FROM " . $con->dbname . ".cabecera_solicitud A
                             INNER JOIN " . $con->dbname . ".unidad_academica B ON B.uaca_id=A.uaca_id
@@ -450,19 +450,6 @@ class Especies extends \yii\db\ActiveRecord {
         return $mensaje;
     }
 
-    /* SELECT A.egen_id,A.dsol_id,A.egen_numero_solicitud,C.esp_rubro,concat(D.per_pri_nombre,' ',D.per_pri_apellido) Nombres,D.per_cedula,
-      F.uaca_nombre,G.mod_nombre,concat(E.resp_titulo,' ',E.resp_nombre) Responsable,date(A.egen_fecha_aprobacion) fecha_aprobacion,
-      A.egen_fecha_caducidad
-      FROM db_academico.especies_generadas A
-      INNER JOIN (db_academico.estudiante B
-      INNER JOIN db_asgard.persona D ON B.per_id=D.per_id)
-      ON A.est_id=B.est_id
-      INNER JOIN db_academico.especies C ON A.esp_id=C.esp_id
-      INNER JOIN db_academico.unidad_academica F ON F.uaca_id=A.uaca_id
-      INNER JOIN db_academico.modalidad G ON G.mod_id=A.mod_id
-      LEFT JOIN db_academico.responsable_especie E ON E.resp_id=A.resp_id
-      WHERE A.egen_estado=1 AND A.egen_estado_logico=1; */
-
     public static function getSolicitudesGeneradas($est_id, $arrFiltro = array(), $onlyData = false) {
         $con = \Yii::$app->db_academico;
         $con1 = \Yii::$app->db_asgard;
@@ -558,8 +545,8 @@ class Especies extends \yii\db\ActiveRecord {
         $con = \Yii::$app->db_academico;
         $estado = 1;
         $sql = "SELECT group_concat(esp.esp_rubro) as especies
-                  FROM db_academico.detalle_solicitud dso
-                       INNER JOIN db_academico.especies esp ON esp.esp_id = dso.esp_id
+                  FROM " . $con->dbname . ".detalle_solicitud dso
+                       INNER JOIN " . $con->dbname . ".especies esp ON esp.esp_id = dso.esp_id
                   WHERE csol_id = :csol_id AND
                     dso.dsol_estado = :estado AND
                     dso.dsol_estado_logico = :estado AND
@@ -569,6 +556,29 @@ class Especies extends \yii\db\ActiveRecord {
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":csol_id", $csol_id, \PDO::PARAM_INT);
+
+        $resultData = $comando->queryOne();
+        return $resultData;
+    }
+    
+     /**
+     * Function consultaPeridxestid
+     * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>
+     * @property integer $est_id       
+     * @return  
+     */
+    public function consultaPeridxestid($est_id) {
+        $con = \Yii::$app->db_academico;
+        $estado = 1;
+        $sql = "SELECT per_id
+                  FROM " . $con->dbname . ".estudiante                       
+                  WHERE est_id = :est_id AND
+                    est_estado = :estado AND
+                    est_estado_logico = :estado";
+
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":est_id", $est_id, \PDO::PARAM_INT);
 
         $resultData = $comando->queryOne();
         return $resultData;
