@@ -230,7 +230,14 @@ class EspeciesController extends \app\components\CController {
                     Utilities::sendEmail(
                     $tituloMensaje, Yii::$app->params["adminEmail"], [$correo => $user], $asunto, $body);
                     // enviar correo colecturia
-                    
+                    //$user = $data_persona["per_pri_nombre"] . " ". $data_persona["per_pri_apellido"];
+                    //$tituloMensaje = 'Adquisición de Especie Valorada en Línea'; 
+                    //$asunto = 'Adquisición de Especie Valorada en Línea'; 
+                    $bodies = Utilities::getMailMessage("cargapagocolecturia", array(
+                                "[[user]]" => $user,
+                                "[[tipo_especie]]" => $data_especie["especies"]), Yii::$app->language, Yii::$app->basePath . "/modules/academico");
+                    Utilities::sendEmail(
+                    $tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["colecturia"] => "Colecturia"], $asunto, $bodies);
                     
                     $message = array(
                         "wtmessage" => Yii::t("notificaciones", "Archivo procesado correctamente." . $carga_archivo['data']),
