@@ -8,6 +8,13 @@ use app\modules\academico\Module as Especies;
 
 Especies::registerTranslations();
 
+$leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
+          <div class="form-group">
+          <div class="col-sm-10 col-md-10 col-xs-10 col-lg-10">
+          <div style = "width: 450px;" class="alert alert-info"><span style="font-weight: bold"> Nota: </span> Al subir archivo debe ser 800 KB máximo y tipo jpg, png o pdf.</div>
+          </div>
+          </div>
+          </div>';
 ?>
 
 <form class="form-horizontal" enctype="multipart/form-data" id="formsolicitud"> 
@@ -48,11 +55,7 @@ Especies::registerTranslations();
             </div>
 
         </div>
-
     </div>
-
-
-
     <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
         <div class="col-md-7 col-sm-7 col-xs-7 col-lg-7">
             <div class="form-group">
@@ -65,7 +68,7 @@ Especies::registerTranslations();
                 <div class="form-group">
                     <label for="cmb_ninteres" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label"><?= Especies::t("Academico", "Academic unit") ?></label>
                     <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                        <?= Html::dropDownList("cmb_ninteres", $cab_solicitud[0]['uaca_id'], array_merge([Yii::t("formulario", "Select")], $arr_unidad), ["class" => "form-control", "id" => "cmb_ninteres","disabled"=>"true"]) ?>
+                        <?= Html::dropDownList("cmb_ninteres", $cab_solicitud[0]['uaca_id'], array_merge([Yii::t("formulario", "Select")], $arr_unidad), ["class" => "form-control", "id" => "cmb_ninteres", "disabled" => "true"]) ?>
                     </div>
                 </div>  
             </div>
@@ -73,15 +76,10 @@ Especies::registerTranslations();
                 <div class="form-group">
                     <label for="cmb_modalidad" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label"><?= Especies::t("Academico", "Modality") ?></label>
                     <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                        <?= Html::dropDownList("cmb_modalidad", $cab_solicitud[0]['mod_id'], array_merge([Yii::t("formulario", "Select")], $arr_modalidad), ["class" => "form-control", "id" => "cmb_modalidad","disabled"=>"true"]) ?>
+                        <?= Html::dropDownList("cmb_modalidad", $cab_solicitud[0]['mod_id'], array_merge([Yii::t("formulario", "Select")], $arr_modalidad), ["class" => "form-control", "id" => "cmb_modalidad", "disabled" => "true"]) ?>
                     </div>
                 </div>
             </div>
-
-
-
-
-
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                 <div class="form-group">
                     <label for="txt_dsol_total" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_dsol_total"><?= Especies::t("Pagos", "Total") ?></label>
@@ -98,13 +96,12 @@ Especies::registerTranslations();
                         Html::dropDownList(
                                 "cmb_fpago", $cab_solicitud[0]['fpag_id'], ArrayHelper::map(app\modules\academico\models\Especies::getFormaPago(), 'Ids', 'Nombre'),
                                 //array_merge([Yii::t("formulario", "Select")],ArrayHelper::map(app\modules\academico\models\Especies::getFormaPago(), 'Ids', 'Nombre')), 
-                                ["class" => "form-control", "id" => "cmb_fpago","disabled"=>"true"]
+                                ["class" => "form-control", "id" => "cmb_fpago", "disabled" => "true"]
                         )
                         ?>
                     </div>
                 </div>
             </div>
-
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                 <div class="form-group">
                     <label for="lbl_doc_adj_pago" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Yii::t("formulario", "Attach document") ?></label>
@@ -156,19 +153,18 @@ Especies::registerTranslations();
                                     var acciones = [{id: 'reloadpage', class: 'btn btn-primary', value: objLang.Accept, callback: 'reloadPage'}];                           
                                 }",
                             ],
-                        ]); 
+                        ]);
                         ?>
                     </div>     
-                </div>  
-
-            </div>
-
-
+                </div>                  
+            </div>            
         </div>
-
+        <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
+            <div class="form-group">
+                <?php echo $leyenda; ?>
+            </div>
+        </div>
     </div>
-
-    
     <div class="col-md-12">
         <div class="form-group">
             <div class="box-body table-responsive no-padding">
@@ -185,8 +181,8 @@ Especies::registerTranslations();
                             <th><?= Yii::t("formulario", "Cant") ?></th>
                             <th><?= Yii::t("formulario", "Valor") ?></th>
                             <th><?= Yii::t("formulario", "Total") ?></th>
-                            <th><?php// Yii::t("formulario", "F.Aut") ?></th>
-                            <th><?php// Yii::t("formulario", "F.Cad") ?></th>
+                            <th><?php // Yii::t("formulario", "F.Aut")     ?></th>
+                            <th><?php // Yii::t("formulario", "F.Cad")     ?></th>
                             <th></th>
                         </tr>
                     </thead>
@@ -203,5 +199,5 @@ Especies::registerTranslations();
 </form>
 <script>
     var AccionTipo = 'SubirPago';
-    var varSolicitud=<?= $det_solicitud; ?>
+    var varSolicitud =<?= $det_solicitud; ?>
 </script>
