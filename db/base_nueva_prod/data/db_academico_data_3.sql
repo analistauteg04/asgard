@@ -58,7 +58,9 @@ INSERT INTO `valor_desarrollo` (`vdes_id`, `vdes_descripcion`, `vdes_nombre`, `v
 -- Especies Valoradas 
 INSERT INTO `responsable_especie` (`resp_id`, `resp_nombre`, `resp_titulo`, `resp_cargo`, `uaca_id`, `mod_id`, `resp_usuario_ingreso`, `resp_estado`, `resp_estado_logico`) VALUES 
 (1,'Diego Aguirre','Msc','',1,1,1,'1','1'),
-(2,'Xavier Mosquera','Phd','',1,2,1,'1','1');
+(2,'Xavier Mosquera','Phd','',1,2,1,'1','1'),
+(3,'Francisco Cedeño','Msc','',1,2,1,'1','1'),
+(4,'Francisco Cedeño','Msc','',1,2,1,'1','1');
 
 
 INSERT INTO `tramite` (`tra_id`, `uaca_id`, `tra_nombre`, `tra_nomenclatura`, `tra_descripcion`, `tra_usuario_ingreso`, `tra_estado`, `tra_estado_logico`) VALUES 

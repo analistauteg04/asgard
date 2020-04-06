@@ -19,9 +19,6 @@ admision::registerTranslations();
         </div>
 </div>-->
 <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
-    <h3><span id="lbl_Personeria"><?= admision::t("Solicitudes", "Solicitud de Especies") ?></span></h3>
-</div>
-<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
     <h4><span id="lbl_general"><?= admision::t("Solicitudes", "General Information") ?></span></h4> 
 </div>
 

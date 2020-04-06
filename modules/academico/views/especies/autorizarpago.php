@@ -10,17 +10,8 @@ Especies::registerTranslations();
 ?>
 
 <form class="form-horizontal" enctype="multipart/form-data" id="formsolicitud"> 
-    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
-        <div class="col-sm-10 col-md-10 col-xs-10 col-lg-10"></div>
-        <div class="col-sm-2 col-md-2 col-xs-2 col-lg-2">
-            <a id="btn_saveauto" href="javascript:" class="btn btn-primary btn-block"> <?= Yii::t("formulario", "Save") ?></a>
-        </div>
-    </div>
-
-
-    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
-        <h3><span id="lbl_solicitud"><?= Especies::t("Especies", "Autorizar Pago de Solicitud") ?></span></h3>
-        <h3>N°<span id="lbl_num_solicitud"><?= app\models\Utilities::add_ceros($cab_solicitud[0]['csol_id'], 9) ?></span></h3>
+    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">        
+        <h3>Solicitud N°<span id="lbl_num_solicitud"><?= app\models\Utilities::add_ceros($cab_solicitud[0]['csol_id'], 9) ?></span></h3>
     </div>
     <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
         <div class="col-md-7 col-sm-7 col-xs-7 col-lg-7">
@@ -78,9 +69,6 @@ Especies::registerTranslations();
             </div>
 
 
-
-
-
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                 <div class="form-group">
                     <label for="txt_dsol_total" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_dsol_total"><?= Especies::t("Pagos", "Total") ?></label>
@@ -126,7 +114,7 @@ Especies::registerTranslations();
             </div>
             <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
                 <div class="form-group">
-                    <label for="txth_doc_pago" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Especies::t("Pagos", "Payment") ?></label>
+                    <label for="txth_doc_pago" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Especies::t("Especies", "Payment") ?></label>
                     <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7 ">                
                         <?php
                         //echo "<a href='" . Url::to(['/site/getimage', 'route' => "/uploads/especies/" . $per_id . "/" . $img_pago]) . "' download='" . $img_pago . "' ><span class='glyphicon glyphicon-download-alt'></span>Descargar Pago</a>"

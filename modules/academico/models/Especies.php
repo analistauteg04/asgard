@@ -329,6 +329,7 @@ class Especies extends \yii\db\ActiveRecord {
                 $dias = $dataEsp[0]['esp_dia_vigencia'];
                 $detSol[$i]['egen_fecha_caducidad'] = date("Y-m-d", strtotime($fecha_actual . "+" . $dias . " days"));
                 $detSol[$i]['egen_certificado'] = $dataEsp[0]['esp_emision_certificado'];
+                $detSol[$i]['est_id'] = $cabSol[0]['est_id'];
                 $this->generarEspecies($con, $detSol[$i]);
             }
 

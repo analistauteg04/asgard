@@ -10,7 +10,8 @@ namespace app\modules\academico\messages;
 return [
     "# Solicitude" => "# Solicitud",
     "Academic unit" => "Unidad Académica",
-    "Year" => "Año",
     "Create Application for Registration" => "datos datos",
+    "Year" => "Año",
+    "Payment" => "Pagos"
 ];
 
