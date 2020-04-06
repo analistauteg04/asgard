@@ -92,7 +92,7 @@ Especies::registerTranslations();
                 <div class="form-group">
                     <label for="txt_dsol_cantidad" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_dsol_cantidad"><?= Especies::t("Pagos", "Cantidad") ?></label>
                     <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                        <input type="text" class="form-control keyupmce" value="1" id="txt_dsol_cantidad" data-type="alfa" align="rigth"  
+                        <input type="text" class="form-control keyupmce" value="1" id="txt_dsol_cantidad" disabled="true" data-type="alfa" align="rigth"  
                                onblur="pedidoEnterGrid(true, this)"
                                onkeydown="pedidoEnterGrid(true, this)"
                                placeholder="<?= Especies::t("Pagos", "Cantidad") ?>">

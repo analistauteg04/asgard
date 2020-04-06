@@ -101,6 +101,34 @@ $(document).ready(function () {
         autorizaPago();
     });
 
+    $('#cmb_ninteres').change(function () {
+        var link = $('#txth_base').val() + "/academico/especies/new";
+        var arrParams = new Object();
+        arrParams.unidad = $('#cmb_ninteres').val();
+        //arrParams.moda_id = $(this).val();
+        arrParams.getmodalidad = true;
+        requestHttpAjax(link, arrParams, function (response) {
+            if (response.status == "OK") {
+                data = response.message;
+                setComboDataselect(data.modalidad, "cmb_modalidad", "Seleccionar");
+                ///
+                var arrParams = new Object();
+                if (data.modalidad.length > 0) {
+                    arrParams.unidad = $('#cmb_ninteres').val();
+                    arrParams.moda_id = $('#cmb_modalidad').val();
+                    arrParams.gettramite = true;
+                    requestHttpAjax(link, arrParams, function(response) {
+                        if (response.status == "OK") {
+                            data = response.message;
+                            setComboDataselect(data.tramite, "cmb_tramite", "Seleccionar");
+                        }
+                    }, true);
+                }
+                
+                ///
+            }
+        }, true);
+    });
 
 });
 
@@ -476,8 +504,8 @@ function guardarSolicitud() {
                         //limpiarDatos();
                         sessionStorage.removeItem('dts_Producto');
                         setTimeout(function () {
-                        parent.window.location.href = $('#txth_base').val() + "/academico/especies/solicitudalumno";
-                    }, 2000);
+                            parent.window.location.href = $('#txth_base').val() + "/academico/especies/solicitudalumno";
+                        }, 2000);
                     } else {
                         showAlert(response.status, response.type, {"wtmessage": message.info, "title": response.label});
                     }
@@ -586,7 +614,7 @@ function actualizarGridRevSolEspecie() {
 }
 
 function actualizarPago() {
-    proceso="File";
+    proceso = "File";
     var arrParams = new Object();
     var link = $('#txth_base').val() + "/academico/especies/cargarpago";
     var csol_id = parseInt($('#lbl_num_solicitud').text());
@@ -603,8 +631,8 @@ function actualizarPago() {
                 }, 3000);
             }, true);
         }
-    }else{
-         showAlert('NO_OK', 'error', {"wtmessage": 'Debe adjuntar un Documento de Pago', "title": 'Información'});
+    } else {
+        showAlert('NO_OK', 'error', {"wtmessage": 'Debe adjuntar un Documento de Pago', "title": 'Información'});
     }
 
 }

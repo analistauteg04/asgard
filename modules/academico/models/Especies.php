@@ -133,13 +133,15 @@ class Especies extends \yii\db\ActiveRecord {
         }
     }
 
-    public static function getTramite() {
+    public static function getTramite($uaca_id) {
+        $estado = 1;
         $con = \Yii::$app->db_academico;
         $sql = "SELECT tra_id id,tra_nombre name 
                     FROM " . $con->dbname . ".tramite
-                WHERE tra_estado=1 AND tra_estado_logico=1; ";
+                WHERE uaca_id =:uaca_id AND tra_estado=:estado AND tra_estado_logico=:estado; ";
         $comando = $con->createCommand($sql);
-        //$comando->bindParam(":esp_id", $Ids, \PDO::PARAM_INT);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":uaca_id", $uaca_id, \PDO::PARAM_INT);
         return $comando->queryAll();
     }
 

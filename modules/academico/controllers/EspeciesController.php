@@ -10,6 +10,7 @@ use yii\helpers\Url;
 use yii\base\Exception;
 use yii\helpers\ArrayHelper;
 use app\modules\financiero\models\FormaPago;
+use app\modules\academico\models\ModuloEstudio;
 use app\modules\academico\models\Modalidad;
 use app\modules\academico\models\UnidadAcademica;
 use app\modules\academico\Module as academico;
@@ -104,14 +105,29 @@ class EspeciesController extends \app\components\CController {
 
     public function actionNew() {
         $per_idsession = @Yii::$app->session->get("PB_perid");
-        //$est_id = 1;
-        //$persona_model = new Persona();
         $especiesADO = new Especies();
         $mod_unidad = new UnidadAcademica();
         $mod_modalidad = new Modalidad();
-
+        $modestudio = new ModuloEstudio();
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
+            if (isset($data["getmodalidad"])) {            
+                if (($data["unidad"]==1) or ($data["unidad"]==2)){
+                    $modalidad = $mod_modalidad->consultarModalidad($data["unidad"], 1);                    
+                } else {
+                    $modalidad = $modestudio->consultarModalidadModestudio();                    
+                }
+                $message = array("modalidad" => $modalidad);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+            }
+            if (isset($data["gettramite"])) {
+                $tramite = $especiesADO->getTramite($data["unidad"]);
+                $message = [
+                    "tramite" => $tramite,
+                ];
+                echo Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+                return;
+            }
             if (isset($data["getespecie"])) {
                 $especies = $especiesADO::getTramiteEspecie($data['tra_id']);
                 $message = [
@@ -129,7 +145,7 @@ class EspeciesController extends \app\components\CController {
         $personaData = $especiesADO->consultaDatosEstudiante($per_idsession);
         $arr_unidadac = $mod_unidad->consultarUnidadAcademicas();
         $arr_modalidad = $mod_modalidad->consultarModalidad($arr_unidadac[0]["id"], 1);
-        $arr_tramite = $especiesADO->getTramite();
+        $arr_tramite = $especiesADO->getTramite(0);
         $arr_especies = $especiesADO->getTramiteEspecie($arr_tramite[0]["Ids"]);
         //Utilities::putMessageLogFile('sadf'.$arr_unidadac[0]["id"]);
         return $this->render('new', [
