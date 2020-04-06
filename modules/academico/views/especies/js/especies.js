@@ -617,6 +617,7 @@ function autorizaPago() {
         arrParams.csol_id = csol_id;
         arrParams.estado = $('#cmb_estado').val();
         arrParams.accion = "AutorizaPago";
+        arrParams.est_id = $('#txth_est_id').val();
         if (!validateForm()) {
             requestHttpAjax(link, arrParams, function (response) {
                 showAlert(response.status, response.label, response.message);

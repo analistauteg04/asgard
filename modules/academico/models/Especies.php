@@ -54,7 +54,7 @@ class Especies extends \yii\db\ActiveRecord {
         $con1 = \Yii::$app->db_asgard;
         $estado = 1;
         $sql = "SELECT A.est_id, B.per_id Ids,B.per_pri_nombre,B.per_seg_nombre,B.per_pri_apellido, 
-                            B.per_seg_apellido,B.per_cedula
+                            B.per_seg_apellido,B.per_cedula, B.per_correo
                     FROM " . $con->dbname . ".estudiante A 
                             INNER JOIN " . $con1->dbname . ".persona B ON A.per_id=B.per_id
                 WHERE A.est_estado=:estado AND A.est_estado_logico=:estado AND A.per_id=:Ids;";

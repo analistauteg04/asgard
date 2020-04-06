@@ -98,7 +98,7 @@ class EspeciesController extends \app\components\CController {
                     'personalData' => $personaData,
                     'arrEstados' => $this->estadoPagos(),
                     //'arr_forma_pago' => ArrayHelper::map($arr_forma_pago, "id", "value"),
-                    'arr_forma_pago' => ArrayHelper::map(array_merge([["Ids" => "0", "Nombre" => "Todos"]], $arr_forma_pago), "Ids", "Nombre"),                    
+                    'arr_forma_pago' => ArrayHelper::map(array_merge([["Ids" => "0", "Nombre" => "Todos"]], $arr_forma_pago), "Ids", "Nombre"),
         ]);
     }
 
@@ -224,15 +224,15 @@ class EspeciesController extends \app\components\CController {
                 $data_especie = $especiesADO->consultaSolicitudexrubro($data["csol_id"]);
                 if ($carga_archivo['status']) {
                     // enviar correo estudiante
-                    $correo = $data_persona["per_correo"];                   
-                    $user = $data_persona["per_pri_nombre"] . " ". $data_persona["per_pri_apellido"];
-                    $tituloMensaje = 'Adquisición de Especie Valorada en Línea'; 
-                    $asunto = 'Adquisición de Especie Valorada en Línea'; 
+                    $correo = $data_persona["per_correo"];
+                    $user = $data_persona["per_pri_nombre"] . " " . $data_persona["per_pri_apellido"];
+                    $tituloMensaje = 'Adquisición de Especie Valorada en Línea';
+                    $asunto = 'Adquisición de Especie Valorada en Línea';
                     $body = Utilities::getMailMessage("cargapagoalumno", array(
                                 "[[user]]" => $user,
                                 "[[tipo_especie]]" => $data_especie["especies"]), Yii::$app->language, Yii::$app->basePath . "/modules/academico");
                     Utilities::sendEmail(
-                    $tituloMensaje, Yii::$app->params["adminEmail"], [$correo => $user], $asunto, $body);
+                            $tituloMensaje, Yii::$app->params["adminEmail"], [$correo => $user], $asunto, $body);
                     // enviar correo colecturia
                     //$user = $data_persona["per_pri_nombre"] . " ". $data_persona["per_pri_apellido"];
                     //$tituloMensaje = 'Adquisición de Especie Valorada en Línea'; 
@@ -241,8 +241,8 @@ class EspeciesController extends \app\components\CController {
                                 "[[user]]" => $user,
                                 "[[tipo_especie]]" => $data_especie["especies"]), Yii::$app->language, Yii::$app->basePath . "/modules/academico");
                     Utilities::sendEmail(
-                    $tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["colecturia"] => "Colecturia"], $asunto, $bodies);
-                    
+                            $tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["colecturia"] => "Colecturia"], $asunto, $bodies);
+
                     $message = array(
                         "wtmessage" => Yii::t("notificaciones", "Archivo procesado correctamente." . $carga_archivo['data']),
                         "title" => Yii::t('jslang', 'Success'),
@@ -276,7 +276,6 @@ class EspeciesController extends \app\components\CController {
     }
 
     public function actionAutorizarpago() {
-        //$per_id = @Yii::$app->session->get("PB_perid");
         $ids = isset($_GET['ids']) ? base64_decode($_GET['ids']) : NULL;
         //Utilities::putMessageLogFile($ids);
         $est_id = base64_decode($_GET['est_id']);
@@ -291,25 +290,49 @@ class EspeciesController extends \app\components\CController {
             $csol_id = isset($data['csol_id']) ? $data['csol_id'] : 0;
             $estado = isset($data['estado']) ? $data['estado'] : 0;
             $accion = isset($data['accion']) ? $data['accion'] : "";
-
+            $estud_id = $data['est_id'];
             if ($accion == "AutorizaPago") {
-                $resul = $especiesADO->autorizarSolicitud($csol_id, $estado);                
+                $resul = $especiesADO->autorizarSolicitud($csol_id, $estado);
             } else {
                 //Opcion para actualizar
                 //$PedId = isset($_POST['PED_ID']) ? $_POST['PED_ID'] : 0;
                 //$arroout = $model->actualizarLista($PedId,$tieId,$total,$dts_Lista);
             }
-            //Utilities::putMessageLogFile($resul);
+            Utilities::putMessageLogFile($resul);
             if ($resul['status']) {
-                $message = ["info" => Yii::t('exception', '<strong>Well done!</strong> your information was successfully saved.')];
-                echo Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message, $resul);
+                //si aprueba un correo.
+                //Utilities::putMessageLogFile('vvvv'.$estud_id);
+                $especiesADO = new Especies();
+                $persona = $especiesADO->consultaPeridxestid($estud_id);
+                Utilities::putMessageLogFile('sasas'.$estud_id);
+                Utilities::putMessageLogFile('asas'.$persona["per_id"]);
+                $data_persona = $especiesADO->consultaDatosEstudiante($persona["per_id"]); //aqui enviar per_id
+                $correo = $data_persona["per_correo"];
+                $user = $data_persona["per_pri_nombre"] . " " . $data_persona["per_pri_apellido"];
+                $tituloMensaje = 'Adquisición de Especie Valorada en Línea';
+                $asunto = 'Adquisición de Especie Valorada en Línea';
+                $body = Utilities::getMailMessage("aprobarpagoalumno", array(
+                            "[[user]]" => $user,
+                            "[[link]]" => "https://asgard.uteg.edu.ec/asgard/"), Yii::$app->language, Yii::$app->basePath . "/modules/academico");
+                Utilities::sendEmail(
+                $tituloMensaje, Yii::$app->params["adminEmail"], [$correo => $user], $asunto, $body);
+                //si reprueba otro correo
+                $message = array(
+                    "wtmessage" => Yii::t("notificaciones", "La infomación ha sido grabada."),
+                    "title" => Yii::t('jslang', 'Success'),
+                );
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
             } else {
-                $message = ["info" => Yii::t('exception', 'The above error occurred while the Web server was processing your request.')];
-                echo Utilities::ajaxResponse('NO_OK', 'alert', Yii::t('jslang', 'Error'), 'false', $message);
+                $message = array(
+                    "wtmessage" => Yii::t("notificaciones", "Error al grabar. " . $carga_archivo['message']),
+                    "title" => Yii::t('jslang', 'Error'),
+                );
+
+                return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), true, $message);
             }
             return;
         }
-        $per_id = $especiesADO->consultaPeridxestid($est_id);  
+        $per_id = $especiesADO->consultaPeridxestid($est_id);
         $personaData = $especiesADO->consultaDatosEstudiante($per_id["per_id"]); //aqui enviar per_id
         $arr_unidadac = $mod_unidad->consultarUnidadAcademicas();
         $arr_modalidad = $mod_modalidad->consultarModalidad($arr_unidadac[0]["id"], 1);
