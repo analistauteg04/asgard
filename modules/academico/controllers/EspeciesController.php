@@ -300,22 +300,29 @@ class EspeciesController extends \app\components\CController {
             }
             Utilities::putMessageLogFile($resul);
             if ($resul['status']) {
-                //si aprueba un correo.
-                //Utilities::putMessageLogFile('vvvv'.$estud_id);
                 $especiesADO = new Especies();
                 $persona = $especiesADO->consultaPeridxestid($estud_id);
-                Utilities::putMessageLogFile('sasas'.$estud_id);
-                Utilities::putMessageLogFile('asas'.$persona["per_id"]);
                 $data_persona = $especiesADO->consultaDatosEstudiante($persona["per_id"]); //aqui enviar per_id
                 $correo = $data_persona["per_correo"];
                 $user = $data_persona["per_pri_nombre"] . " " . $data_persona["per_pri_apellido"];
                 $tituloMensaje = 'Adquisición de Especie Valorada en Línea';
                 $asunto = 'Adquisición de Especie Valorada en Línea';
-                $body = Utilities::getMailMessage("aprobarpagoalumno", array(
-                            "[[user]]" => $user,
-                            "[[link]]" => "https://asgard.uteg.edu.ec/asgard/"), Yii::$app->language, Yii::$app->basePath . "/modules/academico");
-                Utilities::sendEmail(
-                $tituloMensaje, Yii::$app->params["adminEmail"], [$correo => $user], $asunto, $body);
+                if ($data['estado'] == '3') { //si aprueba un correo.
+                    $body = Utilities::getMailMessage("aprobarpagoalumno", array(
+                                "[[user]]" => $user,
+                                "[[link]]" => "https://asgard.uteg.edu.ec/asgard/"), Yii::$app->language, Yii::$app->basePath . "/modules/academico");
+                    Utilities::sendEmail(
+                            $tituloMensaje, Yii::$app->params["adminEmail"], [$correo => $user], $asunto, $body);
+                } else if ($data['estado'] == '2') {
+                    $bodies = Utilities::getMailMessage("reprobarpagoalumno", array(
+                                "[[user]]" => $user,
+                                "[[link]]" => "https://asgard.uteg.edu.ec/asgard/",
+                                "[[motivo]]" => $motivo), Yii::$app->language, Yii::$app->basePath . "/modules/academico");
+                    Utilities::sendEmail(
+                            $tituloMensaje, Yii::$app->params["adminEmail"], [$correo => $user], $asunto, $bodies);
+                }
+
+
                 //si reprueba otro correo
                 $message = array(
                     "wtmessage" => Yii::t("notificaciones", "La infomación ha sido grabada."),

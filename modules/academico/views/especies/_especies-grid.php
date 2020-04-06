@@ -110,11 +110,11 @@ PbGridView::widget([
             'template' => '{view} {downloadCert}', //
             'buttons' => [
                 'view' => function ($url, $model) {
-                    return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', Url::to(['/academico/especies/generarespeciespdf', 'ids' => base64_encode($model['egen_id'])]), ["data-toggle" => "tooltip", "title" => "Descargar Especies", "data-pjax" => "0"]);
+                    return Html::a('<span class="glyphicon glyphicon-download"></span>', Url::to(['/academico/especies/generarespeciespdf', 'ids' => base64_encode($model['egen_id'])]), ["data-toggle" => "tooltip", "title" => "Descargar Especie", "data-pjax" => "0"]);
                 },
-                'downloadCert' => function ($url, $model) {
+                /*'downloadCert' => function ($url, $model) {
                     return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', Url::to(['/academico/especies/generarcertificado', 'ids' => base64_encode($model['egen_id'])]), ["data-toggle" => "tooltip", "title" => "Descargar Certificado", "data-pjax" => "0"]);
-                },
+                },*/
             ],
         ],
     ],
