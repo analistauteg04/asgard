@@ -67,20 +67,20 @@ class Especies extends \yii\db\ActiveRecord {
     }
 
     public static function getSolicitudesAlumnos($est_id, $arrFiltro = array(), $onlyData = false) {
-        $con = \Yii::$app->db_academico;        
+        $con = \Yii::$app->db_academico;
         $con1 = \Yii::$app->db_facturacion;
         $estado = 1;
         $str_search = "";
-        if (isset($arrFiltro) && count($arrFiltro) > 0) {            
+        if (isset($arrFiltro) && count($arrFiltro) > 0) {
             if ($arrFiltro['f_pago'] != "" && $arrFiltro['f_pago'] != "0") {
                 $str_search .= " AND A.fpag_id= :fpag_id  ";
             }
             if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
                 $str_search .= " AND A.csol_fecha_creacion >= :fec_ini AND A.csol_fecha_creacion <= :fec_fin ";
             }
-            /* if ($arrFiltro['f_estado'] != "") {
-              $str_search .= " AND A.csol_estado_aprobacion = :estado_aprobacion ";
-              } */
+            if ($arrFiltro['f_estado'] != "" && $arrFiltro['f_estado'] != "0") {
+                $str_search .= " AND A.csol_estado_aprobacion = :estado_aprobacion ";
+            }
         }
         if ($est_id > "0") {
             $estudiante = " AND A.est_id=:est_id  ";
@@ -99,13 +99,16 @@ class Especies extends \yii\db\ActiveRecord {
             $comando->bindParam(":est_id", $est_id, \PDO::PARAM_INT);
         }
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
-            $fecha_ini = $arrFiltro["f_ini"]. " 00:00:00";
-            $fecha_fin = $arrFiltro["f_fin"]. " 23:59:59";
+            $fecha_ini = $arrFiltro["f_ini"] . " 00:00:00";
+            $fecha_fin = $arrFiltro["f_fin"] . " 23:59:59";
             $forma_pago = $arrFiltro['f_pago'];
+            $forma_estado = $arrFiltro['f_estado'];
             if ($forma_pago != "" && $arrFiltro['f_pago'] != "0") {
                 $comando->bindParam(":fpag_id", $forma_pago, \PDO::PARAM_INT);
             }
-
+            if ($forma_estado != "" && $arrFiltro['f_estado'] != "0") {
+                $comando->bindParam(":estado_aprobacion", $forma_estado, \PDO::PARAM_INT);
+            }
             if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
                 $comando->bindParam(":fec_ini", $fecha_ini, \PDO::PARAM_STR);
                 $comando->bindParam(":fec_fin", $fecha_fin, \PDO::PARAM_STR);
@@ -213,9 +216,10 @@ class Especies extends \yii\db\ActiveRecord {
     }
 
     private function InsertarCabLista($con, $data) {
+        $usu_id = @Yii::$app->session->get("PB_iduser");
         $sql = "INSERT INTO " . $con->dbname . ".cabecera_solicitud
-                (empid,est_id,uaca_id,mod_id,fpag_id,csol_total,csol_usuario_ingreso,csol_estado,csol_fecha_creacion,csol_estado_logico)VALUES
-                (:empid,:est_id,:uaca_id,:mod_id,:fpag_id,:csol_total,1,1,CURRENT_TIMESTAMP(),1);";
+                (empid,est_id,uaca_id,mod_id,fpag_id,csol_total,csol_estado_aprobacion,csol_usuario_ingreso,csol_estado,csol_fecha_creacion,csol_estado_logico)VALUES
+                (:empid,:est_id,:uaca_id,:mod_id,:fpag_id,:csol_total,1,:csol_usuario_ingreso,1,CURRENT_TIMESTAMP(),1);";
         $command = $con->createCommand($sql);
         $command->bindParam(":empid", $data['empid'], \PDO::PARAM_INT);
         $command->bindParam(":est_id", $data['est_id'], \PDO::PARAM_INT);
@@ -223,12 +227,13 @@ class Especies extends \yii\db\ActiveRecord {
         $command->bindParam(":mod_id", $data['mod_id'], \PDO::PARAM_INT);
         $command->bindParam(":fpag_id", $data['fpag_id'], \PDO::PARAM_INT);
         $command->bindParam(":csol_total", $data['csol_total'], \PDO::PARAM_STR);
+        $command->bindParam(":csol_usuario_ingreso", $usu_id, \PDO::PARAM_INT);
         $command->execute();
     }
 
     private function InsertarDetLista($con, $dts_Det, $idCab) {
         for ($i = 0; $i < sizeof($dts_Det); $i++) {
-            $dts_Det[$i]['dsol_usuario_ingreso'] = 1;
+            $dts_Det[$i]['dsol_usuario_ingreso'] = @Yii::$app->session->get("PB_iduser");
             //$dts_Det[$i]['est_id'] = 1;
             $sql = "INSERT INTO " . $con->dbname . ".detalle_solicitud
                         (csol_id,tra_id,esp_id,est_id,dsol_cantidad,dsol_valor,dsol_total,
@@ -274,7 +279,6 @@ class Especies extends \yii\db\ActiveRecord {
         $con = \Yii::$app->db_academico;
         $trans = $con->beginTransaction();
         try {
-            //$ids = isset($data['ids']) ? base64_decode($data['ids']) :NULL;
             $path = Yii::$app->basePath . Yii::$app->params['documentFolder'] . "especies/" . $fname;
             $path = $fname;
             $sql = "UPDATE " . $con->dbname . ".cabecera_solicitud "
@@ -288,9 +292,7 @@ class Especies extends \yii\db\ActiveRecord {
             $trans->commit();
             $con->close();
             //RETORNA DATOS 
-            //$arroout["ids"]= $ftem_id;
             $arroout["status"] = true;
-            //$arroout["secuencial"]= $doc_numero;
             return $arroout;
         } catch (\Exception $e) {
             $trans->rollBack();
@@ -369,7 +371,7 @@ class Especies extends \yii\db\ActiveRecord {
                 . "WHERE csol_id=:csol_id";
 
         $command = $con->createCommand($sql);
-        $command->bindParam(":csol_id", $csol_id, \PDO::PARAM_INT);        
+        $command->bindParam(":csol_id", $csol_id, \PDO::PARAM_INT);
         $command->bindParam(":csol_estado_aprobacion", $estado, \PDO::PARAM_STR);
         $command->bindParam(":csol_observacion", $observacion, \PDO::PARAM_STR);
         $command->execute();
@@ -428,7 +430,7 @@ class Especies extends \yii\db\ActiveRecord {
                 $comando = $con->createCommand($sql);
                 $comando->bindParam(":secuencia", $numero, \PDO::PARAM_STR);
                 $comando->bindParam(":esp_id", $esp_id, \PDO::PARAM_INT);
-         
+
                 $rawData = $comando->execute();
             }
         } catch (Exception $e) {
@@ -467,10 +469,10 @@ class Especies extends \yii\db\ActiveRecord {
                 $str_search .= " AND A.egen_fecha_aprobacion BETWEEN :fec_ini AND :fec_fin AND ";
             }
             if ($arrFiltro['search'] != "") {
-                $str_search .= "(D.per_pri_nombre like :estudiante OR ";            
+                $str_search .= "(D.per_pri_nombre like :estudiante OR ";
                 $str_search .= "D.per_pri_apellido like :estudiante OR ";
                 $str_search .= "D.per_cedula like :estudiante )  AND ";
-            }            
+            }
         }
 
         $sql = "SELECT A.egen_id,A.dsol_id,A.egen_numero_solicitud,C.esp_rubro,concat(D.per_pri_nombre,' ',D.per_pri_apellido) Nombres,D.per_cedula,
@@ -493,7 +495,7 @@ class Especies extends \yii\db\ActiveRecord {
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
             $fecha_ini = $arrFiltro["f_ini"] . " 00:00:00";
             $fecha_fin = $arrFiltro["f_fin"] . " 23:59:59";
-            $search_cond = "%" . $arrFiltro["search"] . "%";            
+            $search_cond = "%" . $arrFiltro["search"] . "%";
             //$forma_pago =$arrFiltro['f_pago'];
             //if($forma_pago!= ""){ $comando->bindParam(":fpag_id", $forma_pago, \PDO::PARAM_INT); }
             if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
@@ -502,7 +504,7 @@ class Especies extends \yii\db\ActiveRecord {
             }
             if ($arrFiltro['search'] != "") {
                 $comando->bindParam(":estudiante", $search_cond, \PDO::PARAM_STR);
-            }            
+            }
         }
         $resultData = $comando->queryAll();
         //Utilities::putMessageLogFile($resultData);
@@ -577,8 +579,8 @@ class Especies extends \yii\db\ActiveRecord {
         $resultData = $comando->queryOne();
         return $resultData;
     }
-    
-     /**
+
+    /**
      * Function consultaPeridxestid
      * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>
      * @property integer $est_id       
