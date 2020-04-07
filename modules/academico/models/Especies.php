@@ -415,17 +415,19 @@ class Especies extends \yii\db\ActiveRecord {
             $sql = "SELECT IFNULL(CAST(esp_numero AS UNSIGNED),0) secuencia FROM " . $con->dbname . ".especies 
                     WHERE esp_estado=1 AND esp_estado_logico=1 AND esp_id=:esp_id FOR UPDATE ";
             $sql .= "  ";
+            \app\models\Utilities::putMessageLogFile('sql:' . $sql);
             $comando = $con->createCommand($sql);
             $comando->bindParam(":esp_id", $esp_id, \PDO::PARAM_INT);
             $rawData = $comando->queryScalar();
             if ($rawData !== false) {
                 //$numero=str_pad((int)$rawData[0]["secuencia"]+1, 9, "0", STR_PAD_LEFT);
                 $numero = str_pad((int) $rawData + 1, 9, "0", STR_PAD_LEFT);
-                $sql = " UPDATE " . " . $con->dbname . " . ".especies SET esp_numero=:secuencia "
+                $sql = " UPDATE " . $con->dbname . ".especies SET esp_numero=:secuencia "
                         . " WHERE esp_estado=1 AND esp_estado_logico=1 AND esp_id=:esp_id ";
                 $comando = $con->createCommand($sql);
                 $comando->bindParam(":secuencia", $numero, \PDO::PARAM_STR);
                 $comando->bindParam(":esp_id", $esp_id, \PDO::PARAM_INT);
+         
                 $rawData = $comando->execute();
             }
         } catch (Exception $e) {
