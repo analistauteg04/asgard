@@ -10,6 +10,7 @@ use yii\helpers\Url;
 use yii\base\Exception;
 use yii\helpers\ArrayHelper;
 use app\modules\financiero\models\FormaPago;
+use app\modules\academico\models\ModuloEstudio;
 use app\modules\academico\models\Modalidad;
 use app\modules\academico\models\UnidadAcademica;
 use app\modules\academico\Module as academico;
@@ -33,7 +34,8 @@ class EspeciesController extends \app\components\CController {
             '0' => Yii::t("formulario", "Todos"),
             '1' => Yii::t("formulario", "Pendiente"),
             '2' => Yii::t("formulario", "No Aprobado"),
-            '3' => Yii::t("formulario", "Aprobado"),
+            '3' => Yii::t("formulario", "Generado"),
+            '4' => Yii::t("formulario", "Atendido"),
         ];
     }
 
@@ -97,21 +99,35 @@ class EspeciesController extends \app\components\CController {
                     'model' => $model,
                     'personalData' => $personaData,
                     'arrEstados' => $this->estadoPagos(),
-                    //'arr_forma_pago' => ArrayHelper::map($arr_forma_pago, "id", "value"),
                     'arr_forma_pago' => ArrayHelper::map(array_merge([["Ids" => "0", "Nombre" => "Todos"]], $arr_forma_pago), "Ids", "Nombre"),
         ]);
     }
 
     public function actionNew() {
         $per_idsession = @Yii::$app->session->get("PB_perid");
-        //$est_id = 1;
-        //$persona_model = new Persona();
         $especiesADO = new Especies();
         $mod_unidad = new UnidadAcademica();
         $mod_modalidad = new Modalidad();
-
+        $modestudio = new ModuloEstudio();
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
+            if (isset($data["getmodalidad"])) {            
+                if (($data["unidad"]==1) or ($data["unidad"]==2)){
+                    $modalidad = $mod_modalidad->consultarModalidad($data["unidad"], 1);                    
+                } else {
+                    $modalidad = $modestudio->consultarModalidadModestudio();                    
+                }
+                $message = array("modalidad" => $modalidad);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+            }
+            if (isset($data["gettramite"])) {
+                $tramite = $especiesADO->getTramite($data["unidad"]);
+                $message = [
+                    "tramite" => $tramite,
+                ];
+                echo Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+                return;
+            }
             if (isset($data["getespecie"])) {
                 $especies = $especiesADO::getTramiteEspecie($data['tra_id']);
                 $message = [
@@ -129,25 +145,14 @@ class EspeciesController extends \app\components\CController {
         $personaData = $especiesADO->consultaDatosEstudiante($per_idsession);
         $arr_unidadac = $mod_unidad->consultarUnidadAcademicas();
         $arr_modalidad = $mod_modalidad->consultarModalidad($arr_unidadac[0]["id"], 1);
-        $arr_tramite = $especiesADO->getTramite();
+        $arr_tramite = $especiesADO->getTramite(0);
         $arr_especies = $especiesADO->getTramiteEspecie($arr_tramite[0]["Ids"]);
-        //Utilities::putMessageLogFile('sadf'.$arr_unidadac[0]["id"]);
         return $this->render('new', [
                     'arr_persona' => $personaData,
                     'arr_tramite' => ArrayHelper::map($arr_tramite, "id", "name"),
                     'arr_especies' => ArrayHelper::map($arr_especies, "id", "name"),
                     'arr_unidad' => ArrayHelper::map($arr_unidadac, "id", "name"),
-                    'arr_modalidad' => ArrayHelper::map($arr_modalidad, "id", "name"),
-                        /* "arr_metodos" => ArrayHelper::map($arr_metodos, "id", "name"),
-                          "arr_persona" => $dataPersona,
-                          "arr_carrera" => ArrayHelper::map($arr_carrera, "id", "name"),
-
-                          "arr_descuento" => ArrayHelper::map($arr_descuento, "id", "name"),
-                          "arr_item" => ArrayHelper::map(array_merge(["id" => "0", "name" => "Seleccionar"], $resp_item), "id", "name"), //ArrayHelper::map($resp_item, "id", "name"),
-                          "int_id" => $inte_id,
-                          "per_id" => $per_id,
-                          "arr_empresa" => ArrayHelper::map($empresa, "id", "value"),
-                          "arr_convenio_empresa" => ArrayHelper::map($arr_convempresa, "id", "name"), */
+                    'arr_modalidad' => ArrayHelper::map($arr_modalidad, "id", "name"),                   
         ]);
     }
 
@@ -163,13 +168,6 @@ class EspeciesController extends \app\components\CController {
 
             if ($accion == "Create") {
                 $resul = $especiesADO->insertarLista($dts_Cab, $dts_Det);
-
-                //VSValidador::putMessageLogFile($arroout);
-                /* if ($arroout["status"]=="OK"){
-                  //Recupera infor de CabTemp  para enviar info al supervisor de tienda
-                  $CabPed=$res->sendMailPedidosTemp($arroout["data"]);
-
-                  } */
             } else {
                 //Opcion para actualizar
                 //$PedId = isset($_POST['PED_ID']) ? $_POST['PED_ID'] : 0;

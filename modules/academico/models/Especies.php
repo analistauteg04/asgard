@@ -76,7 +76,7 @@ class Especies extends \yii\db\ActiveRecord {
                 $str_search .= " AND A.fpag_id= :fpag_id  ";
             }
             if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
-                $str_search .= " AND A.csol_fecha_creacion BETWEEN :fec_ini AND :fec_fin ";
+                $str_search .= " AND A.csol_fecha_creacion >= :fec_ini AND A.csol_fecha_creacion <= :fec_fin ";
             }
             /* if ($arrFiltro['f_estado'] != "") {
               $str_search .= " AND A.csol_estado_aprobacion = :estado_aprobacion ";
@@ -99,8 +99,8 @@ class Especies extends \yii\db\ActiveRecord {
             $comando->bindParam(":est_id", $est_id, \PDO::PARAM_INT);
         }
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
-            $fecha_ini = $arrFiltro["f_ini"];
-            $fecha_fin = $arrFiltro["f_fin"];
+            $fecha_ini = $arrFiltro["f_ini"]. " 00:00:00";
+            $fecha_fin = $arrFiltro["f_fin"]. " 23:59:59";
             $forma_pago = $arrFiltro['f_pago'];
             if ($forma_pago != "" && $arrFiltro['f_pago'] != "0") {
                 $comando->bindParam(":fpag_id", $forma_pago, \PDO::PARAM_INT);
@@ -133,13 +133,15 @@ class Especies extends \yii\db\ActiveRecord {
         }
     }
 
-    public static function getTramite() {
+    public static function getTramite($uaca_id) {
+        $estado = 1;
         $con = \Yii::$app->db_academico;
         $sql = "SELECT tra_id id,tra_nombre name 
                     FROM " . $con->dbname . ".tramite
-                WHERE tra_estado=1 AND tra_estado_logico=1; ";
+                WHERE uaca_id =:uaca_id AND tra_estado=:estado AND tra_estado_logico=:estado; ";
         $comando = $con->createCommand($sql);
-        //$comando->bindParam(":esp_id", $Ids, \PDO::PARAM_INT);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":uaca_id", $uaca_id, \PDO::PARAM_INT);
         return $comando->queryAll();
     }
 

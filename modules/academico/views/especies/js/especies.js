@@ -101,6 +101,34 @@ $(document).ready(function () {
         autorizaPago();
     });
 
+    $('#cmb_ninteres').change(function () {
+        var link = $('#txth_base').val() + "/academico/especies/new";
+        var arrParams = new Object();
+        arrParams.unidad = $('#cmb_ninteres').val();
+        //arrParams.moda_id = $(this).val();
+        arrParams.getmodalidad = true;
+        requestHttpAjax(link, arrParams, function (response) {
+            if (response.status == "OK") {
+                data = response.message;
+                setComboDataselect(data.modalidad, "cmb_modalidad", "Seleccionar");
+                ///
+                var arrParams = new Object();
+                if (data.modalidad.length > 0) {
+                    arrParams.unidad = $('#cmb_ninteres').val();
+                    arrParams.moda_id = $('#cmb_modalidad').val();
+                    arrParams.gettramite = true;
+                    requestHttpAjax(link, arrParams, function(response) {
+                        if (response.status == "OK") {
+                            data = response.message;
+                            setComboDataselect(data.tramite, "cmb_tramite", "Seleccionar");
+                        }
+                    }, true);
+                }
+                
+                ///
+            }
+        }, true);
+    });
 
 });
 
@@ -224,9 +252,6 @@ function limpiarDetalle() {
 
 function objProducto(indice) {
     var rowGrid = new Object();
-    //dsol_id,csol_id,tra_id,esp_id,est_id,dsol_cantidad,dsol_valor,dsol_total,dsol_observacion,dsol_usuario_ingreso,
-    //dsol_usuario_modifica,dsol_estado,dsol_fecha_creacion,dsol_fecha_modificacion,dsol_estado_logico, 
-
     rowGrid.dsol_id = indice;
     rowGrid.csol_id = 0;
     rowGrid.uaca_id = $('#cmb_ninteres option:selected').val();
@@ -242,7 +267,7 @@ function objProducto(indice) {
     rowGrid.dsol_observacion = ""
     rowGrid.dsol_usuario_ingreso = "0";
     rowGrid.dsol_estado = 1;
-    //rowGrid.pro_otros = ($("#chk_otros").prop("checked")) ? 1 : 0;
+    rowGrid.fpag_nombre = $('#cmb_fpago option:selected').text();
     rowGrid.accion = "new";
     return rowGrid;
 }
@@ -255,43 +280,25 @@ function addPrimerItemProducto(TbGtable, lista, i) {
 }
 
 function addVariosItemProducto(TbGtable, lista, i) {
-    //i=(i==-1)?($('#'+TbGtable+' tr').length)-1:i;
     i = ($('#' + TbGtable + ' tr').length) - 1;
-    //$('#'+TbGtable+' >table >tbody').append(retornaFilaProducto(i,lista,TbGtable,true));
     $('#' + TbGtable + ' tr:last').after(retornaFilaProducto(i, lista, TbGtable, true));
 }
 
 function retornaFilaProducto(c, Grid, TbGtable, op) {
-    //var RutaImagenAccion='ruta IMG'//$('#txth_rutaImg').val();
     var strFila = "";
-    //var imgCol='<img class="btn-img" src="'+RutaImagenAccion+'/acciones/eliminar.png" >';
-
-    /*<th style="display:none; border:none;"><?= Yii::t("formulario", "Ids") ?></th>
-     <th style="display:none; border:none;"><?= Yii::t("formulario", "uaca_id") ?></th>
-     <th><?= Yii::t("formulario", "Unidad") ?></th>
-     <th style="display:none; border:none;"><?= Yii::t("formulario", "tra_id") ?></th>
-     <th><?= Yii::t("formulario", "Tramite") ?></th>
-     <th style="display:none; border:none;"><?= Yii::t("formulario", "esp_id") ?></th>
-     <th><?= Yii::t("formulario", "Especie") ?></th>
-     <th><?= Yii::t("formulario", "Cant") ?></th>
-     <th><?= Yii::t("formulario", "Valor") ?></th>
-     <th><?= Yii::t("formulario", "Total") ?></th>
-     <th><?= Yii::t("formulario", "F.Emi") ?></th>
-     <th><?= Yii::t("formulario", "F.Cad") ?></th>*/
-
-
     strFila += '<td style="display:none; border:none;">' + Grid[c]['dsol_id'] + '</td>';
     strFila += '<td style="display:none; border:none;">' + Grid[c]['uaca_id'] + '</td>';
     strFila += '<td>' + Grid[c]['uaca_nombre'] + '</td>';
     strFila += '<td style="display:none; border:none;">' + Grid[c]['tra_id'] + '</td>';
     strFila += '<td>' + Grid[c]['tra_nombre'] + '</td>';
-    strFila += '<td style="display:none; border:none;">' + Grid[c]['esp_id'] + '</td>';
+    strFila += '<td style="display:none; border:none;">' + Grid[c]['esp_id'] + '</td>';    
     strFila += '<td>' + Grid[c]['esp_nombre'] + '</td>';
+    strFila += '<td>' + Grid[c]['fpag_nombre'] + '</td>';
     strFila += '<td>' + Grid[c]['dsol_cantidad'] + '</td>';
     strFila += '<td>' + Grid[c]['dsol_valor'] + '</td>';
     strFila += '<td>' + Grid[c]['dsol_total'] + '</td>';
-    strFila += '<td></td>';
-    strFila += '<td></td>';
+    //strFila += '<td></td>';
+    //strFila += '<td></td>';
 
 
 
@@ -475,9 +482,10 @@ function guardarSolicitud() {
                         showAlert(response.status, response.type, {"wtmessage": message.info, "title": response.label});
                         //limpiarDatos();
                         sessionStorage.removeItem('dts_Producto');
+                        sessionStorage.clear();
                         setTimeout(function () {
-                        parent.window.location.href = $('#txth_base').val() + "/academico/especies/solicitudalumno";
-                    }, 2000);
+                            parent.window.location.href = $('#txth_base').val() + "/academico/especies/solicitudalumno";
+                        }, 2000);
                     } else {
                         showAlert(response.status, response.type, {"wtmessage": message.info, "title": response.label});
                     }
@@ -586,7 +594,7 @@ function actualizarGridRevSolEspecie() {
 }
 
 function actualizarPago() {
-    proceso="File";
+    proceso = "File";
     var arrParams = new Object();
     var link = $('#txth_base').val() + "/academico/especies/cargarpago";
     var csol_id = parseInt($('#lbl_num_solicitud').text());
@@ -603,8 +611,8 @@ function actualizarPago() {
                 }, 3000);
             }, true);
         }
-    }else{
-         showAlert('NO_OK', 'error', {"wtmessage": 'Debe adjuntar un Documento de Pago', "title": 'Información'});
+    } else {
+        showAlert('NO_OK', 'error', {"wtmessage": 'Debe adjuntar un Documento de Pago', "title": 'Información'});
     }
 
 }
