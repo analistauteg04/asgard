@@ -169,6 +169,7 @@ class EspeciesController extends \app\components\CController {
         $per_id = @Yii::$app->session->get("PB_perid");
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
+            //Utilities::putMessageLogFile($data['DTS_DET']);
             $especiesADO = new Especies();
             $dts_Cab = isset($data['DTS_CAB']) ? $data['DTS_CAB'] : array();
             $dts_Det = isset($data['DTS_DET']) ? $data['DTS_DET'] : array();
@@ -299,8 +300,7 @@ class EspeciesController extends \app\components\CController {
             $observacion = isset($data['observacion']) ? $data['observacion'] : "";
             $estud_id = $data['est_id'];
             if ($accion == "AutorizaPago") {
-                \app\models\Utilities::putMessageLogFile('observacion:' . $observacion);
-                \app\models\Utilities::putMessageLogFile('estado:' . $estado);
+               // \app\models\Utilities::putMessageLogFile('observacion:' . $observacion);                
                 $resul = $especiesADO->autorizarSolicitud($csol_id, $estado, $observacion);
             } else {
                 //Opcion para actualizar
@@ -310,6 +310,7 @@ class EspeciesController extends \app\components\CController {
             Utilities::putMessageLogFile($resul);
             if ($resul['status']) {
                 $especiesADO = new Especies();
+                $datasolicitud = $especiesADO->consultarCabSolicitud($csol_id);
                 $persona = $especiesADO->consultaPeridxestid($estud_id);
                 $data_persona = $especiesADO->consultaDatosEstudiante($persona["per_id"]); //aqui enviar per_id
                 $correo = $data_persona["per_correo"];
@@ -326,11 +327,10 @@ class EspeciesController extends \app\components\CController {
                     $bodies = Utilities::getMailMessage("reprobarpagoalumno", array(
                                 "[[user]]" => $user,
                                 "[[link]]" => "https://asgard.uteg.edu.ec/asgard/",
-                                "[[motivo]]" => $observacion), Yii::$app->language, Yii::$app->basePath . "/modules/academico");
+                                "[[motivo]]" => $datasolicitud["csol_observacion"]), Yii::$app->language, Yii::$app->basePath . "/modules/academico");
                     Utilities::sendEmail(
                             $tituloMensaje, Yii::$app->params["adminEmail"], [$correo => $user], $asunto, $bodies);
                 }
-
 
                 //si reprueba otro correo
                 $message = array(

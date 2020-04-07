@@ -229,7 +229,7 @@ class Especies extends \yii\db\ActiveRecord {
     private function InsertarDetLista($con, $dts_Det, $idCab) {
         for ($i = 0; $i < sizeof($dts_Det); $i++) {
             $dts_Det[$i]['dsol_usuario_ingreso'] = 1;
-            $dts_Det[$i]['est_id'] = 1;
+            //$dts_Det[$i]['est_id'] = 1;
             $sql = "INSERT INTO " . $con->dbname . ".detalle_solicitud
                         (csol_id,tra_id,esp_id,est_id,dsol_cantidad,dsol_valor,dsol_total,
                         dsol_usuario_ingreso,dsol_estado,dsol_fecha_creacion,dsol_estado_logico)
