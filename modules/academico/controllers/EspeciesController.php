@@ -161,6 +161,7 @@ class EspeciesController extends \app\components\CController {
         $per_id = @Yii::$app->session->get("PB_perid");
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
+            //Utilities::putMessageLogFile($data['DTS_DET']);
             $especiesADO = new Especies();
             $dts_Cab = isset($data['DTS_CAB']) ? $data['DTS_CAB'] : array();
             $dts_Det = isset($data['DTS_DET']) ? $data['DTS_DET'] : array();

@@ -481,7 +481,7 @@ function guardarSolicitud() {
                     if (response.status == "OK") {
                         showAlert(response.status, response.type, {"wtmessage": message.info, "title": response.label});
                         //limpiarDatos();
-                        sessionStorage.removeItem('dts_Producto');
+                        //sessionStorage.removeItem('dts_Producto');
                         sessionStorage.clear();
                         setTimeout(function () {
                             parent.window.location.href = $('#txth_base').val() + "/academico/especies/solicitudalumno";
