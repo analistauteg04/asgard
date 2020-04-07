@@ -301,7 +301,7 @@ class Especies extends \yii\db\ActiveRecord {
         }
     }
 
-    public function autorizarSolicitud($csol_id, $estado) {
+    public function autorizarSolicitud($csol_id, $estado, $observacion) {
         $emp_id = @Yii::$app->session->get("PB_idempresa");
         $usu_id = @Yii::$app->session->get("PB_iduser");
         $arroout = array();
@@ -311,7 +311,7 @@ class Especies extends \yii\db\ActiveRecord {
             // \app\models\Utilities::putMessageLogFile($dts_Cab);
 
             $fecha_actual = date("d-m-Y");
-            $this->actualizaCabPago($con, $csol_id, $estado);
+            $this->actualizaCabPago($con, $csol_id, $estado, $observacion);
             $cabSol = $this->consultarCabSolicitud($csol_id);
             $detSol = $this->consultarDetSolicitud($csol_id);
             for ($i = 0; $i < sizeof($detSol); $i++) {
@@ -361,16 +361,17 @@ class Especies extends \yii\db\ActiveRecord {
         return $comando->queryAll();
     }
 
-    private function actualizaCabPago($con, $csol_id, $estado) {
+    private function actualizaCabPago($con, $csol_id, $estado, $observacion) {
         $sql = "UPDATE " . $con->dbname . ".cabecera_solicitud "
                 . "SET csol_fecha_aprobacion=CURRENT_TIMESTAMP(),"
-                . "csol_estado_aprobacion=:csol_estado_aprobacion WHERE csol_id=:csol_id";
+                . "csol_estado_aprobacion=:csol_estado_aprobacion, "
+                . "csol_observacion=:csol_observacion "
+                . "WHERE csol_id=:csol_id";
 
         $command = $con->createCommand($sql);
-        $command->bindParam(":csol_id", $csol_id, \PDO::PARAM_INT);
-        //$command->bindParam(":csol_fecha_aprobacion", $path, \PDO::PARAM_STR);
-        //$command->bindParam(":csol_fecha_caducidad", $path, \PDO::PARAM_STR);
+        $command->bindParam(":csol_id", $csol_id, \PDO::PARAM_INT);        
         $command->bindParam(":csol_estado_aprobacion", $estado, \PDO::PARAM_STR);
+        $command->bindParam(":csol_observacion", $observacion, \PDO::PARAM_STR);
         $command->execute();
     }
 

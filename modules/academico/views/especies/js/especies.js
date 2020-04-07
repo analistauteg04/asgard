@@ -129,6 +129,16 @@ $(document).ready(function () {
             }
         }, true);
     });
+    
+    $('#cmb_estado').change(function () {
+        if ($('#cmb_estado').val() == 2)
+        {           
+            $('#Divobservacion').show();
+        } else
+        {            
+            $('#Divobservacion').hide();
+        }
+    });    
 
 });
 
@@ -624,6 +634,7 @@ function autorizaPago() {
     if ($('#cmb_estado option:selected').val() != 0) {
         arrParams.csol_id = csol_id;
         arrParams.estado = $('#cmb_estado').val();
+        arrParams.observacion = $('#cmb_observacion').val();
         arrParams.accion = "AutorizaPago";
         arrParams.est_id = $('#txth_est_id').val();
         if (!validateForm()) {

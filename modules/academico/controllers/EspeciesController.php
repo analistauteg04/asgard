@@ -39,6 +39,14 @@ class EspeciesController extends \app\components\CController {
         ];
     }
 
+    private function estadoPagosColecturia() {
+        return [
+            '0' => Yii::t("formulario", "Todos"),            
+            '2' => Yii::t("formulario", "No Aprobar"),
+            '3' => Yii::t("formulario", "Generar"),           
+        ];
+    }
+    
     public function actionRevisarpago() {
         $per_id = @Yii::$app->session->get("PB_perid");
         $especiesADO = new Especies();
@@ -288,9 +296,12 @@ class EspeciesController extends \app\components\CController {
             $csol_id = isset($data['csol_id']) ? $data['csol_id'] : 0;
             $estado = isset($data['estado']) ? $data['estado'] : 0;
             $accion = isset($data['accion']) ? $data['accion'] : "";
+            $observacion = isset($data['observacion']) ? $data['observacion'] : "";
             $estud_id = $data['est_id'];
             if ($accion == "AutorizaPago") {
-                $resul = $especiesADO->autorizarSolicitud($csol_id, $estado);
+                \app\models\Utilities::putMessageLogFile('observacion:' . $observacion);
+                \app\models\Utilities::putMessageLogFile('estado:' . $estado);
+                $resul = $especiesADO->autorizarSolicitud($csol_id, $estado, $observacion);
             } else {
                 //Opcion para actualizar
                 //$PedId = isset($_POST['PED_ID']) ? $_POST['PED_ID'] : 0;
@@ -315,7 +326,7 @@ class EspeciesController extends \app\components\CController {
                     $bodies = Utilities::getMailMessage("reprobarpagoalumno", array(
                                 "[[user]]" => $user,
                                 "[[link]]" => "https://asgard.uteg.edu.ec/asgard/",
-                                "[[motivo]]" => $motivo), Yii::$app->language, Yii::$app->basePath . "/modules/academico");
+                                "[[motivo]]" => $observacion), Yii::$app->language, Yii::$app->basePath . "/modules/academico");
                     Utilities::sendEmail(
                             $tituloMensaje, Yii::$app->params["adminEmail"], [$correo => $user], $asunto, $bodies);
                 }
@@ -352,7 +363,8 @@ class EspeciesController extends \app\components\CController {
                     'det_solicitud' => json_encode($especiesADO->consultarDetSolicitud($ids)),
                     'arr_unidad' => ArrayHelper::map($arr_unidadac, "id", "name"),
                     'arr_modalidad' => ArrayHelper::map($arr_modalidad, "id", "name"),
-                    'arrEstados' => $this->estadoPagos(),
+                    'arrEstados' => $this->estadoPagosColecturia(),
+                    'arrObservacion' => array("" => "Seleccione una opción", "Pago Ilegible" => "Pago Ilegible", "Pago Duplicado" => "Pago Duplicado", "Tipo de archivo incorrecto" => "Tipo de archivo incorrecto"),
         ]);
     }
 
