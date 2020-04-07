@@ -154,4 +154,22 @@ CREATE TABLE db_academico.`especies_generadas` (
   CONSTRAINT `especies_generadas_ibfk_5` FOREIGN KEY (`dsol_id`) REFERENCES `detalle_solicitud` (`dsol_id`),
   CONSTRAINT `especies_generadas_ibfk_6` FOREIGN KEY (`resp_id`) REFERENCES `responsable_especie` (`resp_id`),
   CONSTRAINT `especies_generadas_ibfk_7` FOREIGN KEY (`est_id`) REFERENCES `estudiante` (`est_id`)
-)
+);
+
+
+create table if not exists db_academico.`estudiante_carrera_programa` (
+  `ecpr_id` bigint(20) not null auto_increment primary key,
+  `est_id` bigint(20) not null,    
+  `meun_id` bigint(20) not null,  
+  `ecpr_fecha_registro` timestamp null default null,    
+  `ecpr_usuario_ingreso` bigint(20) not null,
+  `ecpr_usuario_modifica` bigint(20)  null,
+  `ecpr_estado` varchar(1) not null,
+  `ecpr_fecha_creacion` timestamp not null default current_timestamp,
+  `ecpr_fecha_modificacion` timestamp null default null,
+  `ecpr_estado_logico` varchar(1) not null,
+  foreign key (est_id) references `estudiante`(est_id),
+  foreign key (meun_id) references `modalidad_estudio_unidad`(meun_id)
+);
+
+

@@ -1,4 +1,4 @@
-use 'db_asgard';
+use db_asgard;
 
 INSERT INTO `modulo` (`mod_id`, `apl_id`, `mod_nombre`, `mod_tipo`, `mod_dir_imagen`, `mod_url`, `mod_orden`, `mod_lang_file`, `mod_estado_visible`, `mod_estado`, `mod_fecha_creacion`, `mod_fecha_actualizacion`, `mod_estado_logico`) VALUES
 (12, 1, 'Especies Valoradas', 'Especies Valoradas', 'glyphicon glyphicon-certificate', 'academico/especies/solicitudalumno', 12, 'academico', '1', '1', '2020-04-04 15:53:21', NULL, '1');
@@ -9,12 +9,18 @@ INSERT INTO `objeto_modulo` (`omod_id`, `mod_id`, `omod_padre_id`, `omod_nombre`
 (199, 12, 197, 'Crear Solicitud Especie', 'A', '0', '', '', '', 'academico/especies/new', 1, '1', 'academico', '1', '2020-04-04 17:45:43', NULL, '1'),
 (200, 12, 198, 'Grabar Solicitud Especie', 'A', '0', '', '', '', 'academico/especies/save', 1, '1', 'academico', '1', '2020-04-04 17:51:29', NULL, '1'),
 (201, 12, 197, 'Subir Pago Especie', 'S', '0', '', '', '', 'academico/especies/cargarpago', 2, '0', 'academico', '1', '2020-04-04 20:43:52', NULL, '1'),
-(202, 12, 201, 'Guardar Subir Pago', 'A', '0', '', '', '', 'academico/especies/cargarpago', 1, '1', 'academico', '1', '2020-04-04 20:50:26', NULL, '1');
+(202, 12, 201, 'Guardar Subir Pago', 'A', '0', '', '', '', 'academico/especies/cargarpago', 1, '1', 'academico', '1', '2020-04-04 20:50:26', NULL, '1'),
+(203, 3, 203, 'Pagos Especies Valoradas', 'P', '0', '', '', '', 'academico/especies/revisarpago', 13, '1', 'academico', '1', '2020-04-04 23:00:13', NULL, '1'),
+(204, 12, 203, 'Autorizar Pagos Especies Valoradas', 'S', '0', '', '', '', 'academico/especies/autorizarpago', 1, '0', 'academico', '1', '2020-04-05 00:18:50', NULL, '1'),
+(205, 12, 204, 'Grabar Autorización Pago Especies', 'A', '0', '', '', '', 'academico/especies/autorizarpago', 1, '1', 'academico', '1', '2020-04-05 00:24:42', NULL, '1'),
+(206, 12, 206, 'Especies Valoradas Generadas', 'P', '0', '', '', '', 'academico/especies/especiesgeneradas', 2, '1', 'academico', '1', '2020-04-06 15:52:21', NULL, '1');
 
 INSERT INTO `obmo_acci` (`oacc_id`, `omod_id`, `acc_id`, `oacc_tipo_boton`, `oacc_cont_accion`, `oacc_function`, `oacc_estado`, `oacc_fecha_creacion`, `oacc_fecha_modificacion`, `oacc_estado_logico`) VALUES
 (90, 199, 1, '0', 'academico/especies/new', '', '1', '2020-04-04 17:45:44', NULL, '1'),
 (91, 200, 4, '1', '', 'guardarSolicitud', '1', '2020-04-04 17:51:29', NULL, '1'),
-(92, 202, 4, '1', '', 'actualizarPago', '1', '2020-04-04 20:50:26', NULL, '1');
+(92, 202, 4, '1', '', 'actualizarPago', '1', '2020-04-04 20:50:26', NULL, '1'),
+(93, 205, 4, '1', '', 'autorizaPago', '1', '2020-04-05 00:24:42', NULL, '1');
+
 
 INSERT INTO `grup_obmo` (`gmod_id`, `gru_id`, `omod_id`, `gmod_estado`, `gmod_fecha_creacion`, `gmod_fecha_modificacion`, `gmod_estado_logico`) VALUES
 (11014, 1, 197, '1', '2020-04-04 16:07:30', NULL, '1'),
@@ -34,7 +40,21 @@ INSERT INTO `grup_obmo` (`gmod_id`, `gru_id`, `omod_id`, `gmod_estado`, `gmod_fe
 (11028, 2, 201, '1', '2020-04-04 20:51:42', NULL, '1'),
 (11029, 2, 202, '1', '2020-04-04 20:51:42', NULL, '1'),
 (11030, 12, 201, '1', '2020-04-04 20:52:16', NULL, '1'),
-(11031, 12, 202, '1', '2020-04-04 20:52:16', NULL, '1');
+(11031, 12, 202, '1', '2020-04-04 20:52:16', NULL, '1'),
+
+(11032, 1, 203, '1', '2020-04-04 23:00:53', NULL, '1'),
+(11033, 2, 203, '1', '2020-04-04 23:01:30', NULL, '1'),
+(11034, 5, 203, '1', '2020-04-04 23:04:46', NULL, '1'),
+(11035, 5, 204, '1', '2020-04-05 00:19:24', NULL, '1'),
+(11036, 5, 205, '1', '2020-04-05 00:26:12', NULL, '1'),
+(11037, 1, 204, '1', '2020-04-05 00:38:51', NULL, '1'),
+(11038, 1, 205, '1', '2020-04-05 00:38:51', NULL, '1'),
+(11039, 2, 204, '1', '2020-04-05 00:39:21', NULL, '1'),
+(11040, 2, 205, '1', '2020-04-05 00:39:21', NULL, '1'),
+(11041, 1, 206, '1', '2020-04-06 15:52:57', NULL, '1'),
+(11042, 2, 206, '1', '2020-04-06 15:53:31', NULL, '1'),
+(11043, 5, 206, '1', '2020-04-06 15:54:35', NULL, '1');
+
 
 INSERT INTO `grup_obmo_grup_rol` (`gogr_id`, `grol_id`, `gmod_id`, `gogr_estado`, `gogr_fecha_creacion`, `gogr_fecha_modificacion`, `gogr_estado_logico`) VALUES
 (12611, 1, 11014, '1', '2020-04-04 16:07:30', NULL, '1'),
@@ -54,5 +74,33 @@ INSERT INTO `grup_obmo_grup_rol` (`gogr_id`, `grol_id`, `gmod_id`, `gogr_estado`
 (12625, 2, 11028, '1', '2020-04-04 20:51:42', NULL, '1'),
 (12626, 2, 11029, '1', '2020-04-04 20:51:42', NULL, '1'),
 (12627, 37, 11030, '1', '2020-04-04 20:52:16', NULL, '1'),
-(12628, 37, 11031, '1', '2020-04-04 20:52:16', NULL, '1');
+(12628, 37, 11031, '1', '2020-04-04 20:52:16', NULL, '1'),
+
+(12629, 1, 11032, '1', '2020-04-04 23:00:53', NULL, '1'),
+(12630, 2, 11033, '1', '2020-04-04 23:01:30', NULL, '1'),
+(12631, 8, 10952, '1', '2020-04-04 23:02:02', NULL, '1'),
+(12632, 8, 10953, '1', '2020-04-04 23:02:02', NULL, '1'),
+(12633, 8, 11034, '1', '2020-04-04 23:02:02', NULL, '1'),
+(12634, 7, 10952, '1', '2020-04-04 23:02:26', NULL, '1'),
+(12635, 7, 10953, '1', '2020-04-04 23:02:26', NULL, '1'),
+
+(12636, 6, 10952, '1', '2020-04-04 23:02:45', NULL, '1'),
+(12637, 6, 10953, '1', '2020-04-04 23:02:45', NULL, '1'),
+(12638, 6, 11034, '1', '2020-04-04 23:02:45', NULL, '1'),
+(12639, 9, 10952, '1', '2020-04-04 23:04:05', NULL, '1'),
+(12640, 9, 10953, '1', '2020-04-04 23:04:05', NULL, '1'),
+(12641, 11, 11034, '1', '2020-04-04 23:04:46', NULL, '1'),
+(12642, 12, 11034, '1', '2020-04-04 23:05:12', NULL, '1'),
+(12643, 12, 11035, '1', '2020-04-05 00:19:24', NULL, '1'),
+(12644, 12, 11036, '1', '2020-04-05 00:26:12', NULL, '1'),
+(12645, 1, 11037, '1', '2020-04-05 00:38:51', NULL, '1'),
+(12646, 1, 11038, '1', '2020-04-05 00:38:51', NULL, '1'),
+(12647, 2, 11039, '1', '2020-04-05 00:39:21', NULL, '1'),
+(12648, 2, 11040, '1', '2020-04-05 00:39:21', NULL, '1'),
+(12649, 11, 11037, '1', '2020-04-05 00:40:13', NULL, '1'),
+(12650, 11, 11038, '1', '2020-04-05 00:40:13', NULL, '1'),
+(12651, 1, 11041, '1', '2020-04-06 15:52:57', NULL, '1'),
+(12652, 2, 11042, '1', '2020-04-06 15:53:31', NULL, '1'),
+(12653, 11, 11043, '1', '2020-04-06 15:54:35', NULL, '1'),
+(12654, 12, 11043, '1', '2020-04-06 15:55:07', NULL, '1');
 

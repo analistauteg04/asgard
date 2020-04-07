@@ -21,9 +21,9 @@ Especies::registerTranslations();
 
 PbGridView::widget([
     'id' => 'TbG_Solicitudes',
-    //'showExport' => true,
-    //'fnExportEXCEL' => "exportExcel",
-    //'fnExportPDF' => "exportPdf",
+    'showExport' => true,
+    'fnExportEXCEL' => "exportExcel",
+    'fnExportPDF' => "exportPdf",
     'dataProvider' => $model,
     'columns' =>
     [
@@ -98,7 +98,7 @@ PbGridView::widget([
             'value' => 'fecha_aprobacion',
         ],
         [
-            'attribute' => 'Fecha Aprobación',
+            'attribute' => 'Fecha Validez',
             'header' => Especies::t("Especies", "Fecha Validez"),
             'format' => ['date', 'php:d-m-Y'],
             'value' => 'egen_fecha_caducidad',

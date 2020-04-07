@@ -366,9 +366,9 @@ class EspeciesController extends \app\components\CController {
         if ($data['PBgetFilter']) {
             $arrSearch["f_ini"] = $data['f_ini'];
             $arrSearch["f_fin"] = $data['f_fin'];
-            $arrSearch["f_estado"] = $data['f_estado'];
+           // $arrSearch["f_estado"] = $data['f_estado'];
             $arrSearch["f_pago"] = $data['f_pago'];
-            //$arrSearch["search"] = $data['search'];
+            $arrSearch["search"] = $data['search'];
             $resp_pago = $especiesADO->getSolicitudesGeneradas($est_id, $arrSearch, false);
             return $this->renderPartial('_especies-grid', [
                         "model" => $resp_pago,
@@ -376,7 +376,6 @@ class EspeciesController extends \app\components\CController {
         } else {
             
         }
-
         $personaData = $especiesADO->consultaDatosEstudiante($per_id);
         $model = $especiesADO->getSolicitudesGeneradas($est_id, null, false);
 
@@ -397,8 +396,7 @@ class EspeciesController extends \app\components\CController {
             $especiesADO = new Especies();
             $cabFact = $especiesADO->consultarEspecieGenerada($ids);
             $objEsp = $especiesADO->getDataEspecie($cabFact['esp_id']);
-            $codigo = $objEsp[0]['codigo'] . '-' . $cabFact['egen_numero_solicitud'];
-            $cabFact['Carrera'] = "Sistemas"; //consultar Carrera del estudiante
+            $codigo = $objEsp[0]['codigo'] . '-' . $cabFact['egen_numero_solicitud'];            
             //setlocale(LC_TIME,"es_ES");//strftime("%A, %d de %B de %Y", date("d-m-Y"));
             setlocale(LC_TIME, 'es_CO.UTF-8');
 

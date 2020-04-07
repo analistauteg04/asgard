@@ -459,8 +459,13 @@ class Especies extends \yii\db\ActiveRecord {
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
             //$str_search .= ($arrFiltro['f_pago']!= "")?" AND A.fpag_id= :fpag_id ":"";
             if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
-                $str_search .= " AND A.egen_fecha_aprobacion BETWEEN :fec_ini AND :fec_fin ";
+                $str_search .= " AND A.egen_fecha_aprobacion BETWEEN :fec_ini AND :fec_fin AND ";
             }
+            if ($arrFiltro['search'] != "") {
+                $str_search .= "(D.per_pri_nombre like :estudiante OR ";            
+                $str_search .= "D.per_pri_apellido like :estudiante OR ";
+                $str_search .= "D.per_cedula like :estudiante )  AND ";
+            }            
         }
 
         $sql = "SELECT A.egen_id,A.dsol_id,A.egen_numero_solicitud,C.esp_rubro,concat(D.per_pri_nombre,' ',D.per_pri_apellido) Nombres,D.per_cedula,
@@ -474,22 +479,25 @@ class Especies extends \yii\db\ActiveRecord {
                             INNER JOIN " . $con->dbname . ".unidad_academica F ON F.uaca_id=A.uaca_id
                             INNER JOIN " . $con->dbname . ".modalidad G ON G.mod_id=A.mod_id
                             LEFT JOIN " . $con->dbname . ".responsable_especie E ON E.resp_id=A.resp_id
-                WHERE A.egen_estado=1 AND A.egen_estado_logico=1 $str_search  ORDER BY A.egen_id DESC; ";
+                WHERE $str_search A.egen_estado=1 AND A.egen_estado_logico=1  ORDER BY A.egen_id DESC; ";
 
 
         $comando = $con->createCommand($sql);
         //$comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         //$comando->bindParam(":est_id", $est_id, \PDO::PARAM_INT);
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
-            $fecha_ini = $arrFiltro["f_ini"];
-            $fecha_fin = $arrFiltro["f_fin"];
+            $fecha_ini = $arrFiltro["f_ini"] . " 00:00:00";
+            $fecha_fin = $arrFiltro["f_fin"] . " 23:59:59";
+            $search_cond = "%" . $arrFiltro["search"] . "%";            
             //$forma_pago =$arrFiltro['f_pago'];
             //if($forma_pago!= ""){ $comando->bindParam(":fpag_id", $forma_pago, \PDO::PARAM_INT); }
-
             if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
                 $comando->bindParam(":fec_ini", $fecha_ini, \PDO::PARAM_STR);
                 $comando->bindParam(":fec_fin", $fecha_fin, \PDO::PARAM_STR);
             }
+            if ($arrFiltro['search'] != "") {
+                $comando->bindParam(":estudiante", $search_cond, \PDO::PARAM_STR);
+            }            
         }
         $resultData = $comando->queryAll();
         //Utilities::putMessageLogFile($resultData);
@@ -519,15 +527,18 @@ class Especies extends \yii\db\ActiveRecord {
         $con1 = \Yii::$app->db_asgard;
         $sql = "SELECT A.egen_id,A.dsol_id,A.egen_numero_solicitud,C.esp_rubro,concat(D.per_pri_nombre,' ',D.per_seg_nombre,' ',D.per_pri_apellido,' ',D.per_seg_apellido) Nombres,D.per_cedula,
                     F.uaca_nombre,G.mod_nombre,concat(E.resp_titulo,' ',E.resp_nombre) Responsable,date(A.egen_fecha_aprobacion) fecha_aprobacion,
-                    A.egen_fecha_caducidad,D.per_correo,D.per_celular,A.esp_id,'' Carrera
+                    A.egen_fecha_caducidad,D.per_correo,D.per_celular,A.esp_id, ea.eaca_nombre Carrera
                     FROM " . $con->dbname . ".especies_generadas A
                             INNER JOIN (" . $con->dbname . ".estudiante B 
                                             INNER JOIN " . $con1->dbname . ".persona D ON B.per_id=D.per_id)
                                     ON A.est_id=B.est_id
-                            INNER JOIN " . $con->dbname . ".especies C ON A.esp_id=C.esp_id
-                            INNER JOIN " . $con->dbname . ".unidad_academica F ON F.uaca_id=A.uaca_id
-                            INNER JOIN " . $con->dbname . ".modalidad G ON G.mod_id=A.mod_id
-                            LEFT JOIN " . $con->dbname . ".responsable_especie E ON E.resp_id=A.resp_id
+                            INNER JOIN " . $con->dbname . ".especies C ON A.esp_id=C.esp_id                                                        
+                            INNER JOIN " . $con->dbname . ".estudiante_carrera_programa ecp ON ecp.est_id = A.est_id
+                            INNER JOIN " . $con->dbname . ".modalidad_estudio_unidad meu ON meu.meun_id = ecp.meun_id
+                            INNER JOIN " . $con->dbname . ".unidad_academica F ON F.uaca_id=meu.uaca_id
+                            INNER JOIN " . $con->dbname . ".modalidad G ON G.mod_id=meu.mod_id
+                            INNER JOIN " . $con->dbname . ".estudio_academico ea ON ea.eaca_id=meu.eaca_id
+                            INNER JOIN " . $con->dbname . ".responsable_especie E ON (E.uaca_id=meu.uaca_id and E.mod_id=meu.mod_id)
                 WHERE A.egen_estado=1 AND A.egen_estado_logico=1 AND A.egen_id=:egen_id ; ";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":egen_id", $Ids, \PDO::PARAM_INT);

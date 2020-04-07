@@ -1,22 +1,33 @@
-use 'db_academico';
+use db_academico;
+
+update db_academico.unidad_academica
+set uaca_nomenclatura = 'GRA'
+where uaca_id = 1;
+
+update db_academico.unidad_academica
+set uaca_nomenclatura = 'POS'
+where uaca_id = 2;
 
 INSERT INTO `responsable_especie` (`resp_id`, `resp_nombre`, `resp_titulo`, `resp_cargo`, `uaca_id`, `mod_id`, `resp_usuario_ingreso`, `resp_estado`, `resp_estado_logico`) VALUES 
 (1,'Diego Aguirre','Msc','',1,1,1,'1','1'),
 (2,'Xavier Mosquera','Phd','',1,2,1,'1','1'),
-(3,'Francisco Cedeño','Msc','',1,2,1,'1','1'),
-(4,'Francisco Cedeño','Msc','',1,2,1,'1','1');
+(3,'Francisco Cedeño','Msc','',1,3,1,'1','1'),
+(4,'Francisco Cedeño','Msc','',1,4,1,'1','1'),
+(5,'Olmedo Farfán','Phd','',2,1,1,'1','1'),
+(6,'Olmedo Farfán','Phd','',2,2,1,'1','1'),
+(7,'Olmedo Farfán','Phd','',2,3,1,'1','1');
 
 
 INSERT INTO `tramite` (`tra_id`, `uaca_id`, `tra_nombre`, `tra_nomenclatura`, `tra_descripcion`, `tra_usuario_ingreso`, `tra_estado`, `tra_estado_logico`) VALUES 
-(1,1,'Académicos','AC',null,1,'1','1'),
-(2,1,'Graduación','GR',null,1,'1','1'),
-(3,1,'Secretaría General','SE',null,1,'1','1'),
-(4,1,'Financiero','FI',null,1,'1','1'),
-(5,2,'Decanato','DE',null,1,'1','1'),
-(6,2,'Graduación','FR',null,1,'1','1'),
-(7,2,'Examen Complexivo','EX',null,1,'1','1'),
-(8,2,'Secretaría General','SE',null,1,'1','1'),
-(9,2,'Financiero','FI',null,1,'1','1');
+(1,1,'Académicos','ACA',null,1,'1','1'),
+(2,1,'Graduación','GRA',null,1,'1','1'),
+(3,1,'Secretaría General','SEC',null,1,'1','1'),
+(4,1,'Financiero','FIN',null,1,'1','1'),
+(5,2,'Académicos','ACA',null,1,'1','1'),
+(6,2,'Graduación','GRA',null,1,'1','1'),
+(7,2,'Examen Complexivo','EXA',null,1,'1','1'),
+(8,2,'Secretaría General','SEC',null,1,'1','1'),
+(9,2,'Financiero','FIN',null,1,'1','1');
 
 
 INSERT INTO `especies` (`esp_id`,`tra_id`,`esp_codigo`,`esp_rubro`,`esp_valor`,`esp_emision_certificado`,`esp_departamento`,`esp_dia_vigencia`,`esp_numero`,`esp_usuario_ingreso`,`esp_usuario_modifica`,`esp_estado`,`esp_fecha_creacion`,`esp_fecha_modificacion`,`esp_estado_logico`) VALUES 
@@ -147,3 +158,4 @@ INSERT INTO `especies` (`esp_id`,`tra_id`,`esp_codigo`,`esp_rubro`,`esp_valor`,`
 (125,9,4,'Devolución de valores',20.00,'NO','INTERNO',30,'000000001',NULL,NULL,'1','2020-03-25 02:24:15',NULL,'1'),
 (126,9,5,'Prórroga de pagos',20.00,'NO','INTERNO',30,'000000001',NULL,NULL,'1','2020-03-25 02:24:15',NULL,'1'),
 (127,9,6,'Cambio de Compromiso de Pago',10.00,'NO','INTERNO',30,'000000001',NULL,NULL,'1','2020-03-25 02:24:15',NULL,'1');
+

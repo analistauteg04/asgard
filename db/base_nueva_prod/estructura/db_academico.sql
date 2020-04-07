@@ -1260,9 +1260,9 @@ create table if not exists `detalle_valor_desarrollo` (
 );
 
 -- --------------------------------------------------------
--- Estructura de tabla para la tabla `estudiante_carrera_programa`
+-- Estructura de tabla para la tabla `estudiante_carrera_programa
 -- 
-create table if not exists `estudiante_carrera_programa` (
+create table if not exists db_academico.`estudiante_carrera_programa` (
   `ecpr_id` bigint(20) not null auto_increment primary key,
   `est_id` bigint(20) not null,    
   `meun_id` bigint(20) not null,  
@@ -1276,6 +1276,7 @@ create table if not exists `estudiante_carrera_programa` (
   foreign key (est_id) references `estudiante`(est_id),
   foreign key (meun_id) references `modalidad_estudio_unidad`(meun_id)
 );
+
 
 -- -------------------------------- TABLAS DE PROCESO DE REGISTRO EN LINEA -------------------------------------
 

@@ -65,11 +65,7 @@ Financiero::registerTranslations();
                     </div>
                 </div>
             </div>
-<<<<<<< HEAD
 
-
-=======
->>>>>>> ee6527a2a0893e76d254214db75f86b8cb757e94
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                 <div class="form-group">
                     <label for="txt_dsol_total" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_dsol_total"><?= Especies::t("Pagos", "Total") ?></label>
@@ -107,11 +103,7 @@ Financiero::registerTranslations();
             </div>
             <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
                 <div class="form-group">
-<<<<<<< HEAD
                     <label for="txth_doc_pago" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Especies::t("Especies", "Payment") ?></label>
-=======
-                    <label for="txth_doc_pago" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Financiero::t("Pagos", "Payment") ?></label>
->>>>>>> ee6527a2a0893e76d254214db75f86b8cb757e94
                     <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7 ">                
                         <?php
                         echo "<a href='" . Url::to(['/site/getimage', 'route' => "/uploads/especies/" . $img_pago]) . "' download='" . $img_pago . "' ><span class='glyphicon glyphicon-download-alt'></span>Descargar Pago</a>"
