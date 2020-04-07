@@ -300,6 +300,7 @@ class EspeciesController extends \app\components\CController {
             Utilities::putMessageLogFile($resul);
             if ($resul['status']) {
                 $especiesADO = new Especies();
+                $datasolicitud = $especiesADO->consultarCabSolicitud($csol_id);
                 $persona = $especiesADO->consultaPeridxestid($estud_id);
                 $data_persona = $especiesADO->consultaDatosEstudiante($persona["per_id"]); //aqui enviar per_id
                 $correo = $data_persona["per_correo"];
@@ -316,7 +317,7 @@ class EspeciesController extends \app\components\CController {
                     $bodies = Utilities::getMailMessage("reprobarpagoalumno", array(
                                 "[[user]]" => $user,
                                 "[[link]]" => "https://asgard.uteg.edu.ec/asgard/",
-                                "[[motivo]]" => $motivo), Yii::$app->language, Yii::$app->basePath . "/modules/academico");
+                                "[[motivo]]" => $datasolicitud["csol_observacion"]), Yii::$app->language, Yii::$app->basePath . "/modules/academico");
                     Utilities::sendEmail(
                             $tituloMensaje, Yii::$app->params["adminEmail"], [$correo => $user], $asunto, $bodies);
                 }
