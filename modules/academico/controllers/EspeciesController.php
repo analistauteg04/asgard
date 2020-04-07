@@ -327,7 +327,7 @@ class EspeciesController extends \app\components\CController {
                     $bodies = Utilities::getMailMessage("reprobarpagoalumno", array(
                                 "[[user]]" => $user,
                                 "[[link]]" => "https://asgard.uteg.edu.ec/asgard/",
-                                "[[motivo]]" => $datasolicitud["csol_observacion"]), Yii::$app->language, Yii::$app->basePath . "/modules/academico");
+                                "[[motivo]]" => $datasolicitud[0]["csol_observacion"]), Yii::$app->language, Yii::$app->basePath . "/modules/academico");
                     Utilities::sendEmail(
                             $tituloMensaje, Yii::$app->params["adminEmail"], [$correo => $user], $asunto, $bodies);
                 }
