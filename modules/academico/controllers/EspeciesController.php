@@ -371,13 +371,29 @@ class EspeciesController extends \app\components\CController {
     public function actionEspeciesgeneradas() {
         $per_id = @Yii::$app->session->get("PB_perid");
         $especiesADO = new Especies();
+        $mod_unidad = new UnidadAcademica();
+        $mod_modalidad = new Modalidad();
+        $modestudio = new ModuloEstudio();
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+            if (isset($data["getmodalidad"])) {            
+                if (($data["unidad"]==1) or ($data["unidad"]==2)){
+                    $modalidad = $mod_modalidad->consultarModalidad($data["unidad"], 1);                    
+                } else {
+                    $modalidad = $modestudio->consultarModalidadModestudio();                    
+                }
+                $message = array("modalidad" => $modalidad);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+            }
+        }   
         //$est_id = $especiesADO->recuperarIdsEstudiente($per_id);
         $data = Yii::$app->request->get();
         if ($data['PBgetFilter']) {
             $arrSearch["f_ini"] = $data['f_ini'];
             $arrSearch["f_fin"] = $data['f_fin'];
            // $arrSearch["f_estado"] = $data['f_estado'];
-            $arrSearch["f_pago"] = $data['f_pago'];
+            $arrSearch["unidad"] = $data['unidad'];
+            $arrSearch["modalidad"] = $data['modalidad'];
             $arrSearch["search"] = $data['search'];
             $resp_pago = $especiesADO->getSolicitudesGeneradas($est_id, $arrSearch, false);
             return $this->renderPartial('_especies-grid', [
@@ -388,11 +404,14 @@ class EspeciesController extends \app\components\CController {
         }
         $personaData = $especiesADO->consultaDatosEstudiante($per_id);
         $model = $especiesADO->getSolicitudesGeneradas($est_id, null, false);
-
+        $arr_unidadac = $mod_unidad->consultarUnidadAcademicas();
+        $arr_modalidad = $mod_modalidad->consultarModalidad($arr_unidadac[0]["id"], 1);
         return $this->render('especiesgeneradas', [
                     'model' => $model,
                     //'personalData' => $personaData,
                     'arrEstados' => $this->estadoPagos(),
+                    'arr_unidad' => ArrayHelper::map($arr_unidadac, "id", "name"),
+                    'arr_modalidad' => ArrayHelper::map($arr_modalidad, "id", "name"),  
         ]);
     }
 

@@ -463,8 +463,7 @@ class Especies extends \yii\db\ActiveRecord {
         $con1 = \Yii::$app->db_asgard;
         $estado = 1;
         $str_search = "";
-        if (isset($arrFiltro) && count($arrFiltro) > 0) {
-            //$str_search .= ($arrFiltro['f_pago']!= "")?" AND A.fpag_id= :fpag_id ":"";
+        if (isset($arrFiltro) && count($arrFiltro) > 0) {          
             if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
                 $str_search .= " AND A.egen_fecha_aprobacion BETWEEN :fec_ini AND :fec_fin AND ";
             }
@@ -473,12 +472,18 @@ class Especies extends \yii\db\ActiveRecord {
                 $str_search .= "D.per_pri_apellido like :estudiante OR ";
                 $str_search .= "D.per_cedula like :estudiante )  AND ";
             }
+            if ($arrFiltro['unidad'] > 0) {
+                $str_search .= "A.uaca_id = :unidad AND ";
+            }
+            if ($arrFiltro['modalidad'] > 0) {
+                $str_search .= "A.mod_id = :modalidad AND ";
+            }
         }
 
         $sql = "SELECT A.egen_id,A.dsol_id,A.egen_numero_solicitud,C.esp_rubro,concat(D.per_pri_nombre,' ',D.per_pri_apellido) Nombres,D.per_cedula,
                     F.uaca_nombre,G.mod_nombre,concat(E.resp_titulo,' ',E.resp_nombre) Responsable,date(A.egen_fecha_aprobacion) fecha_aprobacion,
                     A.egen_fecha_caducidad
-                    FROM " . $con->dbname . ".especies_generadas A
+                FROM " . $con->dbname . ".especies_generadas A
                             INNER JOIN (" . $con->dbname . ".estudiante B 
                                             INNER JOIN " . $con1->dbname . ".persona D ON B.per_id=D.per_id)
                                     ON A.est_id=B.est_id
@@ -488,7 +493,6 @@ class Especies extends \yii\db\ActiveRecord {
                             LEFT JOIN " . $con->dbname . ".responsable_especie E ON E.resp_id=A.resp_id
                 WHERE $str_search A.egen_estado=1 AND A.egen_estado_logico=1  ORDER BY A.egen_id DESC; ";
 
-
         $comando = $con->createCommand($sql);
         //$comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         //$comando->bindParam(":est_id", $est_id, \PDO::PARAM_INT);
@@ -496,14 +500,20 @@ class Especies extends \yii\db\ActiveRecord {
             $fecha_ini = $arrFiltro["f_ini"] . " 00:00:00";
             $fecha_fin = $arrFiltro["f_fin"] . " 23:59:59";
             $search_cond = "%" . $arrFiltro["search"] . "%";
-            //$forma_pago =$arrFiltro['f_pago'];
-            //if($forma_pago!= ""){ $comando->bindParam(":fpag_id", $forma_pago, \PDO::PARAM_INT); }
+            $unidad =$arrFiltro['unidad'];
+            $modalidad =$arrFiltro['modalidad'];            
             if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
                 $comando->bindParam(":fec_ini", $fecha_ini, \PDO::PARAM_STR);
                 $comando->bindParam(":fec_fin", $fecha_fin, \PDO::PARAM_STR);
             }
             if ($arrFiltro['search'] != "") {
                 $comando->bindParam(":estudiante", $search_cond, \PDO::PARAM_STR);
+            }
+            if ($arrFiltro['unidad'] > 0) { 
+                $comando->bindParam(":unidad", $unidad, \PDO::PARAM_INT); 
+            }
+            if ($arrFiltro['modalidad'] > 0) { 
+                $comando->bindParam(":modalidad", $modalidad, \PDO::PARAM_INT); 
             }
         }
         $resultData = $comando->queryAll();

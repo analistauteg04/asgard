@@ -138,7 +138,21 @@ $(document).ready(function () {
         {            
             $('#Divobservacion').hide();
         }
-    });    
+    });  
+    
+    $('#cmb_unidad').change(function () {
+        var link = $('#txth_base').val() + "/academico/especies/especiesgeneradas";
+        var arrParams = new Object();
+        arrParams.unidad = $('#cmb_unidad').val();
+        //arrParams.moda_id = $(this).val();
+        arrParams.getmodalidad = true;
+        requestHttpAjax(link, arrParams, function (response) {
+            if (response.status == "OK") {
+                data = response.message;
+                setComboDataselect(data.modalidad, "cmb_modalidad_esp", "Seleccionar");                
+            }
+        }, true);
+    });
 
 });
 
@@ -593,12 +607,12 @@ function actualizarGridRevSolEspecie() {
     var search = $('#txt_buscarDataPago').val();
     var f_ini = $('#txt_fecha_ini').val();
     var f_fin = $('#txt_fecha_fin').val();
-    //var f_estado = $('#cmb_estado').val();
-    var f_pago = $('#cmb_fpago').val();
+    var unidad = $('#cmb_unidad').val();
+    var modalidad = $('#cmb_modalidad_esp').val();
     //Buscar almenos una clase con el nombre para ejecutar
     if (!$(".blockUI").length) {
         showLoadingPopup();
-        $('#TbG_Solicitudes').PbGridView('applyFilterData', {'f_ini': f_ini, 'f_fin': f_fin, 'f_pago': f_pago, 'search': search});
+        $('#TbG_Solicitudes').PbGridView('applyFilterData', {'f_ini': f_ini, 'f_fin': f_fin, 'unidad': unidad, 'modalidad': modalidad, 'search': search});
         setTimeout(hideLoadingPopup, 2000);
     }
 }

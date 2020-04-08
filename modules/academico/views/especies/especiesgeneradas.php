@@ -27,7 +27,9 @@ admision::registerTranslations();
     <form class="form-horizontal">
         <?=
         $this->render('_especies-search', [           
-            'arrEstados' => $arrEstados
+            'arrEstados' => $arrEstados,
+            'arr_unidad' => $arr_unidad,
+            'arr_modalidad' => $arr_modalidad,
             ]);
         ?>
     </form>
