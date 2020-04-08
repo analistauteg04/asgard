@@ -12,7 +12,6 @@ use app\widgets\PbGridView\PbGridView;
 use app\modules\academico\Module as academico;
 use app\modules\financiero\Module as financiero;
 use app\modules\academico\Module as Especies;
-
 academico::registerTranslations();
 financiero::registerTranslations();
 Especies::registerTranslations();
@@ -27,11 +26,6 @@ PbGridView::widget([
     'dataProvider' => $model,
     'columns' =>
     [
-        /* [
-          'class' => 'yii\grid\CheckboxColumn',
-          // you may configure additional properties here
-         * var keys = $('#TbG_PERSONAS').yiiGridView('getSelectedRows'); Usar JS
-          ], */
         [
             'attribute' => 'Solicitud',
             'header' => Especies::t("Especies", "Solicitud"),
@@ -62,16 +56,6 @@ PbGridView::widget([
             'header' => Especies::t("Especies", "F.Pago"),
             'value' => 'fpag_nombre',
         ],
-        /* [
-          'class' => 'yii\grid\ActionColumn',
-          'header' => academico::t("Academico", "Especies"),
-          'template' => '{view}',
-          'buttons' => [
-          'view' => function ($url, $model) {
-          return Html::a('<span>' . substr($model['esp_rubro'], 0, 20) . '... </span>', Url::to(['#']), ["data-toggle" => "tooltip", "title" => $model['esp_rubro']]);
-          },
-          ],
-          ], */
         [
             'attribute' => 'Total',
             'header' => Especies::t("Especies", "Total"),
@@ -80,21 +64,26 @@ PbGridView::widget([
         [
             'attribute' => 'Estado Solicitud',
             'header' => Especies::t("Especies", "Estado Solicitud"),
-            //'value' => 'csol_estado_aprobacion',
-            'value' => function ($model) {           
-                $estado=($model['csol_estado_aprobacion']!='')?$model['csol_estado_aprobacion']:1;
+            'value' => function ($model) {
+                $estado = ($model['csol_estado_aprobacion'] != '') ? $model['csol_estado_aprobacion'] : 1;
                 return \app\modules\academico\models\Especies::getEstadoPago($estado);
             }
         ],
         [
             'class' => 'yii\grid\ActionColumn',
             'header' => Yii::t("formulario", "Actions"),
-            'template' => '{view}',
+            'template' => '{view} {download}',
             'buttons' => [
                 'view' => function ($url, $model) {
-                    return Html::a('<span class="glyphicon glyphicon-upload"></span>', Url::to(['/academico/especies/cargarpago', 'ids' => base64_encode($model['csol_id'])]), ["data-toggle" => "tooltip", "title" => "Subir Pago", "data-pjax" => "0"]);
-                },                              
-
+                    if ($model["csol_estado_aprobacion"] == "3") {
+                        return Html::a('<span class="glyphicon glyphicon-upload"></span>', Url::to(['/academico/especies/verpago', 'ids' => base64_encode($model['csol_id'])]), ["data-toggle" => "tooltip", "title" => "Ver Pago", "data-pjax" => "0"]);
+                    } else {
+                        return Html::a('<span class="glyphicon glyphicon-upload"></span>', Url::to(['/academico/especies/cargarpago', 'ids' => base64_encode($model['csol_id'])]), ["data-toggle" => "tooltip", "title" => "Subir Pago", "data-pjax" => "0"]);
+                    }
+                },
+            /* 'download' => function ($url, $model) use ($generadas) {
+              return Html::a('<span class="glyphicon glyphicon-download"></span>', Url::to(['/academico/especies/generarespeciespdf', 'ids' => base64_encode($generadas)]), ["data-toggle" => "tooltip", "title" => "Descargar Especie", "data-pjax" => "0"]);
+              }, */
             ],
         ],
     ],

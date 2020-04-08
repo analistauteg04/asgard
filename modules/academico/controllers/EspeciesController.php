@@ -43,12 +43,12 @@ class EspeciesController extends \app\components\CController {
 
     private function estadoPagosColecturia() {
         return [
-            '0' => Yii::t("formulario", "Todos"),            
+            '0' => Yii::t("formulario", "Todos"),
             '2' => Yii::t("formulario", "No Aprobar"),
-            '3' => Yii::t("formulario", "Generar"),           
+            '3' => Yii::t("formulario", "Generar"),
         ];
     }
-    
+
     public function actionRevisarpago() {
         $per_id = @Yii::$app->session->get("PB_perid");
         $especiesADO = new Especies();
@@ -121,11 +121,11 @@ class EspeciesController extends \app\components\CController {
         $modestudio = new ModuloEstudio();
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
-            if (isset($data["getmodalidad"])) {            
-                if (($data["unidad"]==1) or ($data["unidad"]==2)){
-                    $modalidad = $mod_modalidad->consultarModalidad($data["unidad"], 1);                    
+            if (isset($data["getmodalidad"])) {
+                if (($data["unidad"] == 1) or ( $data["unidad"] == 2)) {
+                    $modalidad = $mod_modalidad->consultarModalidad($data["unidad"], 1);
                 } else {
-                    $modalidad = $modestudio->consultarModalidadModestudio();                    
+                    $modalidad = $modestudio->consultarModalidadModestudio();
                 }
                 $message = array("modalidad" => $modalidad);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
@@ -162,7 +162,7 @@ class EspeciesController extends \app\components\CController {
                     'arr_tramite' => ArrayHelper::map($arr_tramite, "id", "name"),
                     'arr_especies' => ArrayHelper::map($arr_especies, "id", "name"),
                     'arr_unidad' => ArrayHelper::map($arr_unidadac, "id", "name"),
-                    'arr_modalidad' => ArrayHelper::map($arr_modalidad, "id", "name"),                   
+                    'arr_modalidad' => ArrayHelper::map($arr_modalidad, "id", "name"),
         ]);
     }
 
@@ -302,7 +302,7 @@ class EspeciesController extends \app\components\CController {
             $observacion = isset($data['observacion']) ? $data['observacion'] : "";
             $estud_id = $data['est_id'];
             if ($accion == "AutorizaPago") {
-               // \app\models\Utilities::putMessageLogFile('observacion:' . $observacion);                
+                // \app\models\Utilities::putMessageLogFile('observacion:' . $observacion);                
                 $resul = $especiesADO->autorizarSolicitud($csol_id, $estado, $observacion);
             } else {
                 //Opcion para actualizar
@@ -378,21 +378,21 @@ class EspeciesController extends \app\components\CController {
         $modestudio = new ModuloEstudio();
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
-            if (isset($data["getmodalidad"])) {            
-                if (($data["unidad"]==1) or ($data["unidad"]==2)){
-                    $modalidad = $mod_modalidad->consultarModalidad($data["unidad"], 1);                    
+            if (isset($data["getmodalidad"])) {
+                if (($data["unidad"] == 1) or ( $data["unidad"] == 2)) {
+                    $modalidad = $mod_modalidad->consultarModalidad($data["unidad"], 1);
                 } else {
-                    $modalidad = $modestudio->consultarModalidadModestudio();                    
+                    $modalidad = $modestudio->consultarModalidadModestudio();
                 }
                 $message = array("modalidad" => $modalidad);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }
-        }   
+        }
         //$est_id = $especiesADO->recuperarIdsEstudiente($per_id);
         $data = Yii::$app->request->get();
         if ($data['PBgetFilter']) {
             $arrSearch["f_ini"] = $data['f_ini'];
-            $arrSearch["f_fin"] = $data['f_fin'];           
+            $arrSearch["f_fin"] = $data['f_fin'];
             $arrSearch["unidad"] = $data['unidad'];
             $arrSearch["modalidad"] = $data['modalidad'];
             $arrSearch["search"] = $data['search'];
@@ -412,7 +412,7 @@ class EspeciesController extends \app\components\CController {
                     //'personalData' => $personaData,
                     'arrEstados' => $this->estadoPagos(),
                     'arr_unidad' => ArrayHelper::map($arr_unidadac, "id", "name"),
-                    'arr_modalidad' => ArrayHelper::map($arr_modalidad, "id", "name"),  
+                    'arr_modalidad' => ArrayHelper::map($arr_modalidad, "id", "name"),
         ]);
     }
 
@@ -426,7 +426,7 @@ class EspeciesController extends \app\components\CController {
             $especiesADO = new Especies();
             $cabFact = $especiesADO->consultarEspecieGenerada($ids);
             $objEsp = $especiesADO->getDataEspecie($cabFact['esp_id']);
-            $codigo = $objEsp[0]['codigo'] . '-' . $cabFact['egen_numero_solicitud'];            
+            $codigo = $objEsp[0]['codigo'] . '-' . $cabFact['egen_numero_solicitud'];
             //setlocale(LC_TIME,"es_ES");//strftime("%A, %d de %B de %Y", date("d-m-Y"));
             setlocale(LC_TIME, 'es_CO.UTF-8');
 
@@ -495,19 +495,50 @@ class EspeciesController extends \app\components\CController {
         $especiesADO = new Especies();
         $data = Yii::$app->request->get();
         $arrSearch["f_ini"] = $data['f_ini'];
-        $arrSearch["f_fin"] = $data['f_fin'];           
+        $arrSearch["f_fin"] = $data['f_fin'];
         $arrSearch["unidad"] = $data['unidad'];
         $arrSearch["modalidad"] = $data['modalidad'];
         $arrSearch["search"] = $data['search'];
-        
+
         $arrData = array();
         if (empty($arrSearch)) {
             $arrData = $especiesADO->getSolicitudesGeneradas(null, array(), true);
         } else {
             $arrData = $especiesADO->getSolicitudesGeneradas(null, $arrSearch, true);
-        }        
+        }
         $nameReport = Especie::t("Especies", "List of generated species");
         Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
         exit;
     }
+
+    public function actionVerpago() {
+        $per_id = @Yii::$app->session->get("PB_perid");
+        $ids = isset($_GET['ids']) ? base64_decode($_GET['ids']) : NULL;
+        $especiesADO = new Especies();
+        $est_id = $especiesADO->recuperarIdsEstudiente($per_id);
+        $mod_unidad = new UnidadAcademica();
+        $mod_modalidad = new Modalidad();
+        $mod_persona = new Persona();
+        $data_persona = $mod_persona->consultaPersonaId($per_id);
+        /* if (Yii::$app->request->isAjax) {
+          $data = Yii::$app->request->post();
+          } */
+        $cabSol = $especiesADO->consultarCabSolicitud($ids);
+        $img_pago = $cabSol[0]["csol_ruta_archivo_pago"];
+        $personaData = $especiesADO->consultaDatosEstudiante($per_id);
+        $arr_unidadac = $mod_unidad->consultarUnidadAcademicas();
+        $arr_modalidad = $mod_modalidad->consultarModalidad($arr_unidadac[0]["id"], 1);
+        $model = $especiesADO->getSolicitudesAlumnos($est_id, null, false);
+        return $this->render('verpago', [
+                    'model' => $model,
+                    'arr_persona' => $personaData,
+                    'cab_solicitud' => $especiesADO->consultarCabSolicitud($ids),
+                    'det_solicitud' => json_encode($especiesADO->consultarDetSolicitud($ids)),
+                    'arr_unidad' => ArrayHelper::map($arr_unidadac, "id", "name"),
+                    'arr_modalidad' => ArrayHelper::map($arr_modalidad, "id", "name"),
+                    'arrEstados' => $this->estadoPagos(),
+                    'img_pago' => $img_pago,
+        ]);
+    }
+
 }

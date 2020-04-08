@@ -27,24 +27,6 @@ PbGridView::widget([
     'dataProvider' => $model,
     'columns' =>
     [
-        /* [
-          'class' => 'yii\grid\CheckboxColumn',
-          // you may configure additional properties here
-         * var keys = $('#TbG_PERSONAS').yiiGridView('getSelectedRows'); Usar JS
-          ], */
-
-        /* A.egen_id,A.dsol_id,A.egen_numero_solicitud,C.esp_rubro,concat(D.per_pri_nombre,' ',D.per_pri_apellido) Nombres,D.per_cedula,
-          F.uaca_nombre,G.mod_nombre,concat(E.resp_titulo,' ',E.resp_nombre) Responsable,date(A.egen_fecha_aprobacion) fecha_aprobacion,
-          A.egen_fecha_caducidad 
-        [
-            'attribute' => 'Ids',
-            'header' => Especies::t("Especies", "Ids"),
-            //'visible' => FALSE,
-            //'htmlOptions' => array('style' => 'display:none; border:none;'),
-            //'contentOptions' => ['class' => 'bg-red','style' => 'display:none; border:none;'],     // HTML attributes to customize value tag
-            //'captionOptions' => ['tooltip' => 'Tooltip'], 
-            'value' => 'egen_id',
-        ],*/
         [
             'attribute' => 'Número',
             'header' => Especies::t("Especies", "Número"),
@@ -100,14 +82,11 @@ PbGridView::widget([
         [
             'class' => 'yii\grid\ActionColumn',
             'header' => Yii::t("formulario", "Actions"),
-            'template' => '{view} {downloadCert}', //
+            'template' => '{view}', //
             'buttons' => [
                 'view' => function ($url, $model) {
                     return Html::a('<span class="glyphicon glyphicon-download"></span>', Url::to(['/academico/especies/generarespeciespdf', 'ids' => base64_encode($model['egen_id'])]), ["data-toggle" => "tooltip", "title" => "Descargar Especie", "data-pjax" => "0"]);
-                },
-                /*'downloadCert' => function ($url, $model) {
-                    return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', Url::to(['/academico/especies/generarcertificado', 'ids' => base64_encode($model['egen_id'])]), ["data-toggle" => "tooltip", "title" => "Descargar Certificado", "data-pjax" => "0"]);
-                },*/
+                },               
             ],
         ],
     ],
