@@ -479,8 +479,13 @@ class Especies extends \yii\db\ActiveRecord {
                 $str_search .= "A.mod_id = :modalidad AND ";
             }
         }
-
-        $sql = "SELECT A.egen_id, A.egen_numero_solicitud,C.esp_rubro,concat(D.per_pri_nombre,' ',D.per_pri_apellido) Nombres,D.per_cedula,
+        if ($onlyData == false) {
+            $secuencial = 'A.egen_id, ';            
+        } else {
+            $secuencial = null;  
+        }
+        
+        $sql = "SELECT $secuencial A.egen_numero_solicitud,C.esp_rubro,concat(D.per_pri_nombre,' ',D.per_pri_apellido) Nombres,D.per_cedula,
                     F.uaca_nombre,G.mod_nombre,concat(E.resp_titulo,' ',E.resp_nombre) Responsable,date(A.egen_fecha_aprobacion) fecha_aprobacion,
                     A.egen_fecha_caducidad
                 FROM " . $con->dbname . ".especies_generadas A

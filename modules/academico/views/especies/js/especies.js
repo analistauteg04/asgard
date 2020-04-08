@@ -685,3 +685,13 @@ function exportExcel() {
 
     window.location.href = $('#txth_base').val() + "/academico/especies/expexcelespecies?search=" + search + "&f_ini="+ f_ini + "&f_fin="+ f_fin + '&unidad='+ unidad + "&modalidad=" + modalidad;
 }
+
+function exportPdf() {
+    var search = $('#txt_buscarDataPago').val();
+    var f_ini = $('#txt_fecha_ini').val();
+    var f_fin = $('#txt_fecha_fin').val();
+    var unidad = $('#cmb_unidad').val();
+    var modalidad = $('#cmb_modalidad_esp').val();
+
+    window.location.href = $('#txth_base').val() + "/academico/especies/exppdfespecies?pdf=1&search=" + search + "&f_ini="+ f_ini + "&f_fin="+ f_fin + '&unidad='+ unidad + "&modalidad=" + modalidad;
+}

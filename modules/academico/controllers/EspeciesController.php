@@ -481,8 +481,7 @@ class EspeciesController extends \app\components\CController {
         header("Content-Disposition: attachment;filename=" . $nombarch);
         header('Cache-Control: max-age=0');
         $colPosition = array("C", "D", "E", "F", "G", "H", "I", "J", "K", "L");
-        $arrHeader = array(
-            Yii::t("formulario", "Id"),
+        $arrHeader = array(            
             Yii::t("formulario", "Number"),
             Especie::t("Especies", "Tipo Especies"),
             Especie::t("Especies", "Student"),
@@ -569,6 +568,45 @@ class EspeciesController extends \app\components\CController {
                     'arrEstados' => $this->estadoPagosColecturia(),
                     'arrObservacion' => array("" => "Seleccione una opción", "Pago Ilegible" => "Pago Ilegible", "Pago Duplicado" => "Pago Duplicado", "Tipo de archivo incorrecto" => "Tipo de archivo incorrecto"),
         ]);
+    }
+    
+    public function actionExppdfespecies() {
+        $report = new ExportFile();
+        $arrHeader = array(            
+            Yii::t("formulario", "Number"),
+            Especie::t("Especies", "Tipo Especies"),
+            Especie::t("Especies", "Student"),
+            Yii::t("formulario", "DNI Document"),
+            Especie::t("Especies", "Unidad Academica"),
+            Especie::t("Academico", "Modalidad"),
+            Especie::t("Especies", "Responsable"),
+            Especie::t("Especies", "Approval date"),
+            Especie::t("Especies", "Date validity"),
+        );
+        $especiesADO = new Especies();
+        $data = Yii::$app->request->get();
+        $arrSearch["f_ini"] = $data['f_ini'];
+        $arrSearch["f_fin"] = $data['f_fin'];
+        $arrSearch["unidad"] = $data['unidad'];
+        $arrSearch["modalidad"] = $data['modalidad'];
+        $arrSearch["search"] = $data['search'];
+        $arrData = array();
+        if (empty($arrSearch)) {
+            $arrData = $especiesADO->getSolicitudesGeneradas(null, array(), true);
+        } else {
+            $arrData = $especiesADO->getSolicitudesGeneradas(null, $arrSearch, true);
+        }
+        
+        $this->view->title = Especie::t("Especies", "List of generated species"); // Titulo del reporte                
+        $report->orientation = "L"; // tipo de orientacion L => Horizontal, P => Vertical
+        $report->createReportPdf(
+                $this->render('exportpdf', [
+                    'arr_head' => $arrHeader,
+                    'arr_body' => $arrData
+                ])
+        );
+        $report->mpdf->Output('Reporte_' . date("Ymdhis") . ".pdf", ExportFile::OUTPUT_TO_DOWNLOAD);
+        return;
     }
 
 }
