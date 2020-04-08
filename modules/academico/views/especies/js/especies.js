@@ -153,6 +153,10 @@ $(document).ready(function () {
             }
         }, true);
     });
+    
+     $('#btn_buscarEspecies').click(function () {        
+        actualizarGridEspeciesGeneradas();
+    });
 
 });
 
@@ -674,6 +678,20 @@ function setComboDataselect(arr_data, element_id, texto) {
         option_arr += "<option value='" + id + "'>" + value + "</option>";
     }
     $("#" + element_id).html(option_arr);
+}
+
+function actualizarGridEspeciesGeneradas() {
+    var search = $('#txt_buscarDataPago').val();
+    var f_ini = $('#txt_fecha_ini').val();
+    var f_fin = $('#txt_fecha_fin').val();
+    var unidad = $('#cmb_unidad').val();
+    var modalidad = $('#cmb_modalidad_esp').val();
+    //Buscar almenos una clase con el nombre para ejecutar
+    if (!$(".blockUI").length) {
+        showLoadingPopup();
+        $('#TbG_Solicitudes').PbGridView('applyFilterData', {'f_ini': f_ini, 'f_fin': f_fin, 'unidad': unidad, 'modalidad': modalidad, 'search': search});
+        setTimeout(hideLoadingPopup, 2000);
+    }
 }
 
 function exportExcel() {
