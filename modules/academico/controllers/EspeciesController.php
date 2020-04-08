@@ -481,6 +481,7 @@ class EspeciesController extends \app\components\CController {
         header('Cache-Control: max-age=0');
         $colPosition = array("C", "D", "E", "F", "G", "H", "I", "J", "K", "L");
         $arrHeader = array(
+            Yii::t("formulario", "Id"),
             Yii::t("formulario", "Number"),
             Especie::t("Especies", "Tipo Especies"),
             Especie::t("Especies", "Student"),
