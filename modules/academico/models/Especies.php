@@ -477,7 +477,7 @@ class Especies extends \yii\db\ActiveRecord {
         $str_search = "";
         if (isset($arrFiltro) && count($arrFiltro) > 0) {          
             if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
-                $str_search .= " AND A.egen_fecha_aprobacion BETWEEN :fec_ini AND :fec_fin AND ";
+                $str_search .= " A.egen_fecha_aprobacion BETWEEN :fec_ini AND :fec_fin AND ";
             }
             if ($arrFiltro['search'] != "") {
                 $str_search .= "(D.per_pri_nombre like :estudiante OR ";
