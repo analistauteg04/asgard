@@ -35,7 +35,7 @@ PbGridView::widget([
 
         /* A.egen_id,A.dsol_id,A.egen_numero_solicitud,C.esp_rubro,concat(D.per_pri_nombre,' ',D.per_pri_apellido) Nombres,D.per_cedula,
           F.uaca_nombre,G.mod_nombre,concat(E.resp_titulo,' ',E.resp_nombre) Responsable,date(A.egen_fecha_aprobacion) fecha_aprobacion,
-          A.egen_fecha_caducidad */
+          A.egen_fecha_caducidad 
         [
             'attribute' => 'Ids',
             'header' => Especies::t("Especies", "Ids"),
@@ -44,13 +44,12 @@ PbGridView::widget([
             //'contentOptions' => ['class' => 'bg-red','style' => 'display:none; border:none;'],     // HTML attributes to customize value tag
             //'captionOptions' => ['tooltip' => 'Tooltip'], 
             'value' => 'egen_id',
-        ],
+        ],*/
         [
             'attribute' => 'Número',
             'header' => Especies::t("Especies", "Número"),
             'value' => 'egen_numero_solicitud',
-        ],
-        
+        ],        
         [
             'class' => 'yii\grid\ActionColumn',
             'header' => Especies::t("Especies", "Tipo Especies"),
@@ -85,12 +84,7 @@ PbGridView::widget([
             'attribute' => 'Responsable',
             'header' => Especies::t("Especies", "Responsable"),
             'value' => 'Responsable',
-        ],
-        /* [
-          'attribute' => 'F.Pago',
-          'header' => Especies::t("Especies", "F.Pago"),
-          'value' => 'fpag_nombre',
-          ], */
+        ],      
         [
             'attribute' => 'Fecha Aprobación',
             'header' => Especies::t("Especies", "Fecha Aprobación"),
@@ -102,8 +96,7 @@ PbGridView::widget([
             'header' => Especies::t("Especies", "Fecha Validez"),
             'format' => ['date', 'php:d-m-Y'],
             'value' => 'egen_fecha_caducidad',
-        ],
-        
+        ],        
         [
             'class' => 'yii\grid\ActionColumn',
             'header' => Yii::t("formulario", "Actions"),

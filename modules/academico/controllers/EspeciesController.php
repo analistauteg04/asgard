@@ -16,8 +16,10 @@ use app\modules\academico\models\UnidadAcademica;
 use app\modules\academico\Module as academico;
 use app\modules\academico\models\Especies;
 use app\models\Empresa;
+use app\modules\academico\Module as Especie;
 
 Academico::registerTranslations();
+Especie::registerTranslations();
 
 class EspeciesController extends \app\components\CController {
 
@@ -390,8 +392,7 @@ class EspeciesController extends \app\components\CController {
         $data = Yii::$app->request->get();
         if ($data['PBgetFilter']) {
             $arrSearch["f_ini"] = $data['f_ini'];
-            $arrSearch["f_fin"] = $data['f_fin'];
-           // $arrSearch["f_estado"] = $data['f_estado'];
+            $arrSearch["f_fin"] = $data['f_fin'];           
             $arrSearch["unidad"] = $data['unidad'];
             $arrSearch["modalidad"] = $data['modalidad'];
             $arrSearch["search"] = $data['search'];
@@ -471,4 +472,41 @@ class EspeciesController extends \app\components\CController {
         }
     }
 
+    public function actionExpexcelespecies() {
+        ini_set('memory_limit', '256M');
+        $content_type = Utilities::mimeContentType("xls");
+        $nombarch = "Report-" . date("YmdHis") . ".xls";
+        header("Content-Type: $content_type");
+        header("Content-Disposition: attachment;filename=" . $nombarch);
+        header('Cache-Control: max-age=0');
+        $colPosition = array("C", "D", "E", "F", "G", "H", "I", "J", "K", "L");
+        $arrHeader = array(
+            Yii::t("formulario", "Number"),
+            Especie::t("Especies", "Tipo Especies"),
+            Especie::t("Especies", "Student"),
+            Yii::t("formulario", "DNI Document"),
+            Especie::t("Especies", "Unidad Academica"),
+            Especie::t("Academico", "Modalidad"),
+            Especie::t("Especies", "Responsable"),
+            Especie::t("Especies", "Approval date"),
+            Especie::t("Especies", "Date validity"),
+        );
+        $especiesADO = new Especies();
+        $data = Yii::$app->request->get();
+        $arrSearch["f_ini"] = $data['f_ini'];
+        $arrSearch["f_fin"] = $data['f_fin'];           
+        $arrSearch["unidad"] = $data['unidad'];
+        $arrSearch["modalidad"] = $data['modalidad'];
+        $arrSearch["search"] = $data['search'];
+        
+        $arrData = array();
+        if (empty($arrSearch)) {
+            $arrData = $especiesADO->getSolicitudesGeneradas(null, array(), true);
+        } else {
+            $arrData = $especiesADO->getSolicitudesGeneradas(null, $arrSearch, true);
+        }        
+        $nameReport = Especie::t("Especies", "List of generated species");
+        Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
+        exit;
+    }
 }

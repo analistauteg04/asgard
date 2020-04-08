@@ -9,6 +9,7 @@ use yii\helpers\ArrayHelper;
 use app\modules\admision\Module as admision;
 use app\modules\academico\Module as Especies;
 
+
 admision::registerTranslations();
 Especies::registerTranslations();
 
@@ -63,7 +64,7 @@ Especies::registerTranslations();
     </div>
     <div class="col-md-12 col-xs-12 col-lg-12 col-sm-12">   
         <div class="form-group">
-            <label for="lbl_unidad" class="col-sm-2 col-md-2 col-xs-2 col-lg-2 control-label" id="lbl_unidad"><?= Especies::t("Academico", "Academic unit") ?></label>
+            <label for="lbl_unidad" class="col-sm-2 col-md-2 col-xs-2 col-lg-2 control-label" id="lbl_unidad"><?= Especies::t("Especies", "Academic unit") ?></label>
                 <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">                                      
                     <?= Html::dropDownList("cmb_unidad", 0, array_merge([Yii::t("formulario", "Select")], $arr_unidad), ["class" => "form-control", "id" => "cmb_unidad"]) ?>                                       
                 </div>
