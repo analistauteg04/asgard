@@ -61,7 +61,7 @@ class EspeciesController extends \app\components\CController {
             $arrSearch["f_fin"] = $data['f_fin'];
             $arrSearch["f_estado"] = $data['f_estado'];
             $arrSearch["f_pago"] = $data['f_pago'];
-            //$arrSearch["search"] = $data['search'];
+            $arrSearch["search"] = $data['search'];
             $resp_pago = $especiesADO->getSolicitudesAlumnos($est_id, $arrSearch, false);
             return $this->renderPartial('_revisar-grid', [
                         "model" => $resp_pago,

@@ -69,9 +69,15 @@ class Especies extends \yii\db\ActiveRecord {
     public static function getSolicitudesAlumnos($est_id, $arrFiltro = array(), $onlyData = false) {
         $con = \Yii::$app->db_academico;
         $con1 = \Yii::$app->db_facturacion;
+        $con2 = \Yii::$app->db_asgard;
         $estado = 1;
         $str_search = "";
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
+            if ($arrFiltro['search'] != "") {
+                $str_search = "AND (P.per_pri_nombre like :search OR ";
+                $str_search .= "P.per_seg_nombre like :search OR ";
+                $str_search .= "P.per_pri_apellido like :search ) ";
+            }
             if ($arrFiltro['f_pago'] != "" && $arrFiltro['f_pago'] != "0") {
                 $str_search .= " AND A.fpag_id= :fpag_id  ";
             }
@@ -86,11 +92,13 @@ class Especies extends \yii\db\ActiveRecord {
             $estudiante = " AND A.est_id=:est_id  ";
         }
         $sql = "SELECT A.est_id, lpad(ifnull(A.csol_id,0),9,'0') csol_id,A.empid,B.uaca_nombre,C.mod_nombre,D.fpag_nombre,date(A.csol_fecha_creacion) csol_fecha_solicitud,
-                    A.csol_estado_aprobacion,A.csol_total, A.csol_estado_aprobacion, A.csol_observacion
+                    A.csol_estado_aprobacion,A.csol_total, A.csol_estado_aprobacion, A.csol_observacion, concat(P.per_pri_nombre, ' ', P.per_pri_apellido) as nombre
                     FROM " . $con->dbname . ".cabecera_solicitud A
-                            INNER JOIN " . $con->dbname . ".unidad_academica B ON B.uaca_id=A.uaca_id
+                    INNER JOIN " . $con->dbname . ".unidad_academica B ON B.uaca_id=A.uaca_id
                     INNER JOIN " . $con->dbname . ".modalidad C ON C.mod_id=A.mod_id
                     INNER JOIN " . $con1->dbname . ".forma_pago D ON D.fpag_id=A.fpag_id
+                    INNER JOIN " . $con->dbname . ".estudiante E ON E.est_id=A.est_id    
+                    INNER JOIN " . $con2->dbname . ".persona P ON P.per_id=E.per_id
                 WHERE  A.csol_estado=:estado AND A.csol_estado_logico=:estado $estudiante  $str_search  ORDER BY A.csol_id DESC;";
 
         $comando = $con->createCommand($sql);
@@ -99,6 +107,10 @@ class Especies extends \yii\db\ActiveRecord {
             $comando->bindParam(":est_id", $est_id, \PDO::PARAM_INT);
         }
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
+            if ($arrFiltro['search'] != "") {
+                $search_cond = "%" . $arrFiltro["search"] . "%";
+                $comando->bindParam(":search", $search_cond, \PDO::PARAM_STR);
+            }
             $fecha_ini = $arrFiltro["f_ini"] . " 00:00:00";
             $fecha_fin = $arrFiltro["f_fin"] . " 23:59:59";
             $forma_pago = $arrFiltro['f_pago'];

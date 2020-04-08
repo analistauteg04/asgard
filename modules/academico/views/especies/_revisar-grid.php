@@ -39,6 +39,11 @@ PbGridView::widget([
             'value' => 'csol_fecha_solicitud',
         ],
         [
+            'attribute' => 'Nombre ',
+            'header' => Yii::t("formulario", "Names"),          
+            'value' => 'nombre',
+        ],
+        [
             'attribute' => 'Unidad Academica',
             'header' => Especies::t("Especies", "Unidad Academica"),
             'value' => 'uaca_nombre',
