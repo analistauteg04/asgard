@@ -136,7 +136,7 @@ Financiero::registerTranslations();
                             <th style="display:none; border:none;"><?= Yii::t("formulario", "tra_id") ?></th>
                             <th><?= Yii::t("formulario", "Tramite") ?></th>
                             <th style="display:none; border:none;"><?= Yii::t("formulario", "esp_id") ?></th>
-                            <th><?= Yii::t("formulario", "Especie") ?></th>
+                            <th><?= Yii::t("formulario", "Especie") ?></th>                            
                             <th><?= Yii::t("formulario", "Cant") ?></th>
                             <th><?= Yii::t("formulario", "Valor") ?></th>
                             <th><?= Yii::t("formulario", "Total") ?></th>

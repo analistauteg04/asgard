@@ -166,10 +166,10 @@ function InicioFormulario() {
     }
 }
 function loadDataCreate() {
-    recargarGridProducto()
+    recargarGridProducto();
 }
 function loadDataPago() {
-    mostrarGridEspecies(varSolicitud)
+    mostrarGridEspecies(varSolicitud);
 }
 
 
@@ -317,7 +317,7 @@ function retornaFilaProducto(c, Grid, TbGtable, op) {
     strFila += '<td>' + Grid[c]['tra_nombre'] + '</td>';
     strFila += '<td style="display:none; border:none;">' + Grid[c]['esp_id'] + '</td>';    
     strFila += '<td>' + Grid[c]['esp_nombre'] + '</td>';
-    strFila += '<td>' + Grid[c]['fpag_nombre'] + '</td>';
+    //strFila += '<td>' + Grid[c]['fpag_nombre'] + '</td>';
     strFila += '<td>' + Grid[c]['dsol_cantidad'] + '</td>';
     strFila += '<td>' + Grid[c]['dsol_valor'] + '</td>';
     strFila += '<td>' + Grid[c]['dsol_total'] + '</td>';
@@ -370,7 +370,7 @@ function mostrarGridEspecies(Grid) {
     if (Grid.length > 0) {
         $('#' + tGrid + ' > tbody').html("");
         for (var i = 0; i < Grid.length; i++) {
-            datArray[i] = objProductoUpdate(i, Grid)
+            datArray[i] = objProductoUpdate(i, Grid);
             $('#' + tGrid + ' > tbody:last-child').append(retornaFilaProducto(i, datArray, tGrid, true));
         }
         sessionStorage.dts_Producto = JSON.stringify(datArray);
@@ -391,7 +391,7 @@ function objProductoUpdate(i, Grid) {
     rowGrid.dsol_cantidad = Grid[i]['dsol_cantidad'];
     rowGrid.dsol_valor = Grid[i]['dsol_valor'];
     rowGrid.dsol_total = Grid[i]['dsol_total'];
-    rowGrid.dsol_observacion = ""
+    rowGrid.dsol_observacion = "";
     rowGrid.dsol_usuario_ingreso = Grid[i]['dsol_usuario_ingreso'];
     rowGrid.dsol_estado = Grid[i]['dsol_estado'];
     rowGrid.accion = "edit";
