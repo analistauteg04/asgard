@@ -118,12 +118,12 @@ $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
                                 'uploadUrl' => Url::to(['/academico/especies/cargarpago']),
                                 'maxFileSize' => Yii::$app->params["MaxFileSize"],
                                 'uploadExtraData' => 'javascript:function (previewId,index) {
-                                        return {"upload_file": true, "name_file": "DOC-' . @Yii::$app->session->get("PB_iduser") . '-' . time() . '"};
+                                        return {"upload_file": true, "name_file": "DOC-' . @Yii::$app->session->get("PB_perid") . '-' . time() . '"};
                                     }',
                             ],
                             'pluginEvents' => [
                                 "filebatchselected" => "function (event) {
-                                    $('#txth_doc_adj_pago').val('DOC-" . @Yii::$app->session->get("PB_iduser") . '-' . time() . "');
+                                    $('#txth_doc_adj_pago').val('DOC-" . @Yii::$app->session->get("PB_perid") . '-' . time() . "');
                                     $('#txth_doc_adj_leads2').val($('#txt_doc_adj_pago').val());
                                     $('#txt_doc_adj_pago').fileinput('upload');
                                 }",
