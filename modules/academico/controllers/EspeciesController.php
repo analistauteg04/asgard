@@ -430,7 +430,8 @@ class EspeciesController extends \app\components\CController {
             //setlocale(LC_TIME,"es_ES");//strftime("%A, %d de %B de %Y", date("d-m-Y"));
             setlocale(LC_TIME, 'es_CO.UTF-8');
 
-            $cabFact['FechaDia'] = strftime("%A %d de %B %G", strtotime(date("d-m-Y"))); //date("j F de Y");      
+            //$cabFact['FechaDia'] = strftime("%A %d de %B %G", strtotime(date("d-m-Y"))); 
+            $cabFact['FechaDia'] = strftime("%A %d de %B %G", strtotime($cabFact['fecha_aprobacion']));             
             $this->pdf_cla_acceso = $codigo;
             $rep->orientation = "P"; // tipo de orientacion L => Horizontal, P => Vertical   
             $rep->createReportPdf(
