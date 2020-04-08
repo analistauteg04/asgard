@@ -541,4 +541,33 @@ class EspeciesController extends \app\components\CController {
         ]);
     }
 
+    public function actionVerautorizarpago() {
+        $ids = isset($_GET['ids']) ? base64_decode($_GET['ids']) : NULL;
+        //Utilities::putMessageLogFile($ids);
+        $est_id = base64_decode($_GET['est_id']);
+        $especiesADO = new Especies();
+        //$est_id = $especiesADO->recuperarIdsEstudiente($per_id);
+        $mod_unidad = new UnidadAcademica();
+        $mod_modalidad = new Modalidad();
+
+        $per_id = $especiesADO->consultaPeridxestid($est_id);
+        $personaData = $especiesADO->consultaDatosEstudiante($per_id["per_id"]); //aqui enviar per_id
+        $arr_unidadac = $mod_unidad->consultarUnidadAcademicas();
+        $arr_modalidad = $mod_modalidad->consultarModalidad($arr_unidadac[0]["id"], 1);
+        $cabSol = $especiesADO->consultarCabSolicitud($ids);
+        $model = $especiesADO->getSolicitudesAlumnos($est_id, null, false);
+        $img_pago = $cabSol[0]["csol_ruta_archivo_pago"];
+        return $this->render('ver_autorizarpago', [
+                    'model' => $model,
+                    'img_pago' => $img_pago,
+                    'arr_persona' => $personaData,
+                    'cab_solicitud' => $cabSol,
+                    'det_solicitud' => json_encode($especiesADO->consultarDetSolicitud($ids)),
+                    'arr_unidad' => ArrayHelper::map($arr_unidadac, "id", "name"),
+                    'arr_modalidad' => ArrayHelper::map($arr_modalidad, "id", "name"),
+                    'arrEstados' => $this->estadoPagosColecturia(),
+                    'arrObservacion' => array("" => "Seleccione una opción", "Pago Ilegible" => "Pago Ilegible", "Pago Duplicado" => "Pago Duplicado", "Tipo de archivo incorrecto" => "Tipo de archivo incorrecto"),
+        ]);
+    }
+
 }

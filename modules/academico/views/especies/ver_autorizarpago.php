@@ -97,7 +97,7 @@ Financiero::registerTranslations();
                 <div class="form-group">
                     <label for="cmb_revision" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Yii::t("formulario", "Result") ?></label>
                     <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                        <?= Html::dropDownList("cmb_estado", 0, $arrEstados, ["class" => "form-control", "id" => "cmb_estado"]) ?>
+                        <?= Html::dropDownList("cmb_estado", $cab_solicitud[0]['csol_estado_aprobacion'], $arrEstados, ["class" => "form-control", "id" => "cmb_estado", "disabled" => "true"]) ?>
                     </div>
                 </div>
             </div>
@@ -136,7 +136,7 @@ Financiero::registerTranslations();
                             <th style="display:none; border:none;"><?= Yii::t("formulario", "tra_id") ?></th>
                             <th><?= Yii::t("formulario", "Tramite") ?></th>
                             <th style="display:none; border:none;"><?= Yii::t("formulario", "esp_id") ?></th>
-                            <th><?= Yii::t("formulario", "Especie") ?></th>                            
+                            <th><?= Yii::t("formulario", "Especie") ?></th>
                             <th><?= Yii::t("formulario", "Cant") ?></th>
                             <th><?= Yii::t("formulario", "Valor") ?></th>
                             <th><?= Yii::t("formulario", "Total") ?></th>

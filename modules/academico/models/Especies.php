@@ -86,7 +86,7 @@ class Especies extends \yii\db\ActiveRecord {
             $estudiante = " AND A.est_id=:est_id  ";
         }
         $sql = "SELECT A.est_id, lpad(ifnull(A.csol_id,0),9,'0') csol_id,A.empid,B.uaca_nombre,C.mod_nombre,D.fpag_nombre,date(A.csol_fecha_creacion) csol_fecha_solicitud,
-                    A.csol_estado_aprobacion,A.csol_total
+                    A.csol_estado_aprobacion,A.csol_total, A.csol_estado_aprobacion, A.csol_observacion
                     FROM " . $con->dbname . ".cabecera_solicitud A
                             INNER JOIN " . $con->dbname . ".unidad_academica B ON B.uaca_id=A.uaca_id
                     INNER JOIN " . $con->dbname . ".modalidad C ON C.mod_id=A.mod_id
