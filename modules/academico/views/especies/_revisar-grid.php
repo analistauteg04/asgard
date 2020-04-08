@@ -73,7 +73,11 @@ PbGridView::widget([
             'template' => '{view}', //
             'buttons' => [
                 'view' => function ($url, $model) {
-                    return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', Url::to(['/academico/especies/autorizarpago', 'est_id' => base64_encode($model['est_id']), 'ids' => base64_encode($model['csol_id'])]), ["data-toggle" => "tooltip", "title" => "Ver Solicitud", "data-pjax" => "0"]);
+                    if ($model['csol_estado_aprobacion'] == 3) {
+                        return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', Url::to(['/academico/especies/verautorizarpago', 'est_id' => base64_encode($model['est_id']), 'ids' => base64_encode($model['csol_id'])]), ["data-toggle" => "tooltip", "title" => "Ver Solicitud Generada", "data-pjax" => "0"]);
+                    } else {
+                        return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', Url::to(['/academico/especies/autorizarpago', 'est_id' => base64_encode($model['est_id']), 'ids' => base64_encode($model['csol_id'])]), ["data-toggle" => "tooltip", "title" => "Ver Solicitud", "data-pjax" => "0"]);
+                    }
                 },
                 
             ],
