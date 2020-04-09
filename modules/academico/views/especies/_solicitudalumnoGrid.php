@@ -12,6 +12,7 @@ use app\widgets\PbGridView\PbGridView;
 use app\modules\academico\Module as academico;
 use app\modules\financiero\Module as financiero;
 use app\modules\academico\Module as Especies;
+
 academico::registerTranslations();
 financiero::registerTranslations();
 Especies::registerTranslations();
@@ -84,7 +85,9 @@ PbGridView::widget([
                 'especies' => function ($url, $model) {
                     if ($model["csol_estado_aprobacion"] == "3") {
                         return Html::a('<span class="glyphicon glyphicon-file"></span>', Url::to(['/academico/especies/especiesgeneradasxest', 'ids' => base64_encode($model['csol_id'])]), ["data-toggle" => "tooltip", "title" => "Ver Especies Valoradas", "data-pjax" => "0"]);
-                    } 
+                    } else {
+                        return "<span class = 'glyphicon glyphicon-file' data-toggle = 'tooltip' title ='Ver Especies Valoradas'  data-pjax = 0></span>";
+                    }
                 },
             /* 'download' => function ($url, $model) use ($generadas) {
               return Html::a('<span class="glyphicon glyphicon-download"></span>', Url::to(['/academico/especies/generarespeciespdf', 'ids' => base64_encode($generadas)]), ["data-toggle" => "tooltip", "title" => "Descargar Especie", "data-pjax" => "0"]);

@@ -7,7 +7,6 @@ use app\components\CFileInputAjax;
 use app\modules\academico\Module as Especies;
 
 Especies::registerTranslations();
-
 $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
           <div class="form-group">
           <div class="col-sm-10 col-md-10 col-xs-10 col-lg-10">
@@ -149,6 +148,24 @@ $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
                         ?>
                     </div>     
                 </div>                  
+            </div>
+            <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
+                <div class="form-group">
+                    <label for="txth_doc_pago" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Especies::t("Especies", "Payment") ?></label>
+                    <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7 ">                
+                        <?php
+                        if ($cab_solicitud[0]['csol_estado_aprobacion'] < '2' && $cab_solicitud[0]['csol_ruta_archivo_pago'] != "") {
+                            echo '<div style = "width: 310px;" class="alert alert-info"><span style="font-weight: bold"> Nota: </span>' .'Gracias por subir el pago. Esta en revisión' . '</div';
+                        }
+                        if ($cab_solicitud[0]['csol_estado_aprobacion'] == '2') {
+                            echo '<div style = "width: 310px;" class="alert alert-info"><span style="font-weight: bold"> Nota: </span>' . $cab_solicitud[0]['csol_observacion'] . ' ' . '. Por favor volver a subirlo' . '</div>';
+                        }
+                        if ($cab_solicitud[0]['csol_estado_aprobacion'] < '2' && $cab_solicitud[0]['csol_ruta_archivo_pago'] == "") {
+                            echo '<div style = "width: 310px;" class="alert alert-info"><span style="font-weight: bold"> Nota: </span>' . 'Por favor subir el pago'. '</div>';
+                        }
+                        ?>
+                    </div>
+                </div>
             </div>            
         </div>
         <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
@@ -173,8 +190,8 @@ $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
                             <th><?= Yii::t("formulario", "Cant") ?></th>
                             <th><?= Yii::t("formulario", "Valor") ?></th>
                             <th><?= Yii::t("formulario", "Total") ?></th>
-                            <th><?php // Yii::t("formulario", "F.Aut")     ?></th>
-                            <th><?php // Yii::t("formulario", "F.Cad")     ?></th>
+                            <th><?php // Yii::t("formulario", "F.Aut")        ?></th>
+                            <th><?php // Yii::t("formulario", "F.Cad")        ?></th>
                             <th></th>
                         </tr>
                     </thead>
