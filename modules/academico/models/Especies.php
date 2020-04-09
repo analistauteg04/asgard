@@ -629,5 +629,54 @@ class Especies extends \yii\db\ActiveRecord {
         $resultData = $comando->queryOne();
         return $resultData;
     }
+    
+    public static function getSolicitudesGeneradasxest($csol_id, $onlyData = false) {
+        $con = \Yii::$app->db_academico;
+        $con1 = \Yii::$app->db_asgard;
+        $estado = 1;    
+                      
+        $sql = "SELECT A.egen_id, A.egen_numero_solicitud,C.esp_rubro,concat(D.per_pri_nombre,' ',D.per_pri_apellido) Nombres,D.per_cedula,
+                    F.uaca_nombre,G.mod_nombre,concat(E.resp_titulo,' ',E.resp_nombre) Responsable,date(A.egen_fecha_aprobacion) fecha_aprobacion,
+                    A.egen_fecha_caducidad
+                FROM " . $con->dbname . ".especies_generadas A
+                            INNER JOIN (" . $con->dbname . ".estudiante B 
+                                            INNER JOIN " . $con1->dbname . ".persona D ON B.per_id=D.per_id)
+                                    ON A.est_id=B.est_id
+                            INNER JOIN " . $con->dbname . ".detalle_solicitud ds on ds.dsol_id = A.dsol_id
+                            INNER JOIN " . $con->dbname . ".cabecera_solicitud cs on cs.csol_id = ds.csol_id
+                            INNER JOIN " . $con->dbname . ".especies C ON A.esp_id=C.esp_id
+                            INNER JOIN " . $con->dbname . ".unidad_academica F ON F.uaca_id=A.uaca_id
+                            INNER JOIN " . $con->dbname . ".modalidad G ON G.mod_id=A.mod_id
+                            LEFT JOIN " . $con->dbname . ".responsable_especie E ON E.resp_id=A.resp_id
+                WHERE cs.csol_id = :csol_id AND 
+                      A.egen_estado=:estado AND 
+                      A.egen_estado_logico=:estado  
+                ORDER BY A.egen_id DESC; ";
+
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":csol_id", $csol_id, \PDO::PARAM_INT);
+        
+        $resultData = $comando->queryAll();
+        //Utilities::putMessageLogFile($resultData);
+        $dataProvider = new ArrayDataProvider([
+            'key' => 'id',
+            'allModels' => $resultData,
+            'pagination' => [
+                'pageSize' => Yii::$app->params["pageSize"],
+            ],
+            'sort' => [
+                'attributes' => [
+                    'egen_id',
+                    'fecha_aprobacion',
+                ],
+            ],
+        ]);
+        if ($onlyData) {
+            return $resultData;
+        } else {
+            return $dataProvider;
+        }
+    }
 
 }

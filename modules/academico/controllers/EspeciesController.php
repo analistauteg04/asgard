@@ -608,5 +608,26 @@ class EspeciesController extends \app\components\CController {
         $report->mpdf->Output('Reporte_' . date("Ymdhis") . ".pdf", ExportFile::OUTPUT_TO_DOWNLOAD);
         return;
     }
+    
+    public function actionEspeciesgeneradasxest() {
+        $per_id = @Yii::$app->session->get("PB_perid");
+        $cab_ids = isset($_GET['ids']) ? base64_decode($_GET['ids']) : NULL;
+        $especiesADO = new Especies();
+        $mod_unidad = new UnidadAcademica();
+        $mod_modalidad = new Modalidad();
+        
+        $personaData = $especiesADO->consultaDatosEstudiante($per_id);
+        $cabSol = $especiesADO->consultarCabSolicitud($cab_ids);                  
+        $model = $especiesADO->getSolicitudesGeneradasxest($cab_ids, false);
+        $arr_unidad = $mod_unidad->consultarUnidadAcademicas();
+        $arr_modalidad = $mod_modalidad->consultarModalidad($arr_unidad[0]["id"], 1);
+        return $this->render('especiesgeneradas_est', [
+                    'model' => $model,                    
+                    'arr_persona' => $personaData,
+                    'cabsolicitud' => $cabSol,                    
+                    'arr_unidad' => ArrayHelper::map($arr_unidad, "id", "name"),
+                    'arr_modalidad' => ArrayHelper::map($arr_modalidad, "id", "name"),
+        ]);
+    }
 
 }

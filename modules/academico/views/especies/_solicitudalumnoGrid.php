@@ -72,7 +72,7 @@ PbGridView::widget([
         [
             'class' => 'yii\grid\ActionColumn',
             'header' => Yii::t("formulario", "Actions"),
-            'template' => '{view} {download}',
+            'template' => '{view} {especies}',
             'buttons' => [
                 'view' => function ($url, $model) {
                     if ($model["csol_estado_aprobacion"] == "3") {
@@ -80,6 +80,11 @@ PbGridView::widget([
                     } else {
                         return Html::a('<span class="glyphicon glyphicon-upload"></span>', Url::to(['/academico/especies/cargarpago', 'ids' => base64_encode($model['csol_id'])]), ["data-toggle" => "tooltip", "title" => "Subir Pago", "data-pjax" => "0"]);
                     }
+                },
+                'especies' => function ($url, $model) {
+                    if ($model["csol_estado_aprobacion"] == "3") {
+                        return Html::a('<span class="glyphicon glyphicon-file"></span>', Url::to(['/academico/especies/especiesgeneradasxest', 'ids' => base64_encode($model['csol_id'])]), ["data-toggle" => "tooltip", "title" => "Ver Especies Valoradas", "data-pjax" => "0"]);
+                    } 
                 },
             /* 'download' => function ($url, $model) use ($generadas) {
               return Html::a('<span class="glyphicon glyphicon-download"></span>', Url::to(['/academico/especies/generarespeciespdf', 'ids' => base64_encode($generadas)]), ["data-toggle" => "tooltip", "title" => "Descargar Especie", "data-pjax" => "0"]);

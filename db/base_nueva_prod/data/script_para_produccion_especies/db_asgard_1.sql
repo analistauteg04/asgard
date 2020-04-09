@@ -13,7 +13,7 @@ INSERT INTO `objeto_modulo` (`omod_id`, `mod_id`, `omod_padre_id`, `omod_nombre`
 (203, 3, 203, 'Pagos Especies Valoradas', 'P', '0', '', '', '', 'academico/especies/revisarpago', 13, '1', 'academico', '1', '2020-04-04 23:00:13', NULL, '1'),
 (204, 12, 203, 'Autorizar Pagos Especies Valoradas', 'S', '0', '', '', '', 'academico/especies/autorizarpago', 1, '0', 'academico', '1', '2020-04-05 00:18:50', NULL, '1'),
 (205, 12, 204, 'Grabar Autorización Pago Especies', 'A', '0', '', '', '', 'academico/especies/autorizarpago', 1, '1', 'academico', '1', '2020-04-05 00:24:42', NULL, '1'),
-(206, 12, 206, 'Especies Valoradas Generadas', 'P', '0', '', '', '', 'academico/especies/especiesgeneradas', 2, '1', 'academico', '1', '2020-04-06 15:52:21', NULL, '1'),
+(206, 12, 206, 'Listar Especies Generadas', 'P', '0', '', '', '', 'academico/especies/especiesgeneradas', 2, '1', 'academico', '1', '2020-04-06 15:52:21', NULL, '1'),
 (207, 12, 203, 'Ver Autorización de Pago', 'S', '0', '', '', '', 'academico/especies/verautorizarpago', 2, '0', 'academico', '1', '2020-04-08 20:28:08', NULL, '1'),
 (208, 12, 197, 'Ver Pago Especie Valorada', 'S', '0', '', '', '', 'academico/especies/verpago', 2, '0', 'academico', '1', '2020-04-08 20:34:15', NULL, '1');
 
