@@ -7,6 +7,7 @@ use app\components\CFileInputAjax;
 use app\modules\academico\Module as Especies;
 
 Especies::registerTranslations();
+print_r($cab_solicitud[0]['mod_id']);
 ?>
 
 <form class="form-horizontal" enctype="multipart/form-data" id="formsolicitud">     

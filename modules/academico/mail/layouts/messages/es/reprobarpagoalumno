@@ -1,6 +1,6 @@
 <strong>Hola [[user]],</strong>
 <br /><br />
-Su pago no ha sido aprobado, por el siguiente motivo:  [[motivo]]<br />
+Su pago no ha sido aprobado, por el siguiente motivo:  [[motivo]].<br />
 Ingrese al sistema Asgard <a href='[[link]]' target='_blank'>[[link]]</a> y suba un pago válido. <br />
 Gracias por la atención prestada.<br />
 <br /><br /><br />

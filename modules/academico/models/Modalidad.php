@@ -102,7 +102,7 @@ class Modalidad extends \app\modules\academico\components\CActiveRecord {
                     and meu.meun_estado = :estado
                     and moda.mod_estado_logico = :estado
                     and moda.mod_estado = :estado
-                    ORDER BY name asc";        
+                    ORDER BY 1 asc";        
         
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);

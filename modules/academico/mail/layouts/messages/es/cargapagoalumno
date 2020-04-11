@@ -1,7 +1,7 @@
 <strong>Hola [[user]],</strong>
 <br /><br />
 Hemos recibido su pago correspondientes a la(s) especies:
-<strong>[[tipo_especie]]</strong><br />
+<strong>[[tipo_especie]].</strong><br />
 Se procederá a validar el pago; en un lapso de 24 horas recibirá la confirmación de su trámite.
 Gracias por la atención prestada.
 <br /><br /><br />

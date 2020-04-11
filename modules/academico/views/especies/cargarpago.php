@@ -155,7 +155,7 @@ $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
                     <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7 ">                
                         <?php
                         if ($cab_solicitud[0]['csol_estado_aprobacion'] < '2' && $cab_solicitud[0]['csol_ruta_archivo_pago'] != "") {
-                            echo '<div style = "width: 310px;" class="alert alert-info"><span style="font-weight: bold"> Nota: </span>' .'Gracias por subir el pago. Esta en revisión' . '</div';
+                            echo '<div style = "width: 310px;" class="alert alert-info"><span style="font-weight: bold"> Nota: </span>' .'Gracias por subir el pago. Está en revisión' . '</div';
                         }
                         if ($cab_solicitud[0]['csol_estado_aprobacion'] == '2') {
                             echo '<div style = "width: 310px;" class="alert alert-info"><span style="font-weight: bold"> Nota: </span>' . $cab_solicitud[0]['csol_observacion'] . ' ' . '. Por favor volver a subirlo' . '</div>';
