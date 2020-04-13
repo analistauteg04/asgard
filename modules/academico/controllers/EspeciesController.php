@@ -230,6 +230,10 @@ class EspeciesController extends \app\components\CController {
             if ($data["procesar_file"]) {
                 $carga_archivo = $especiesADO->CargarArchivo($data["archivo"], $data["csol_id"]);
                 $data_especie = $especiesADO->consultaSolicitudexrubro($data["csol_id"]);
+                $especie_tramite = explode(",", $data_especie["especies"]);
+                for ($a = 0; $a < count($especie_tramite); $a++) {
+                    $datos_especie .=  $especie_tramite[$a] . ', ';
+                }
                 if ($carga_archivo['status']) {
                     // enviar correo estudiante
                     $correo = $data_persona["per_correo"];
@@ -238,7 +242,7 @@ class EspeciesController extends \app\components\CController {
                     $asunto = 'Adquisición de Especie Valorada en Línea';
                     $body = Utilities::getMailMessage("cargapagoalumno", array(
                                 "[[user]]" => $user,
-                                "[[tipo_especie]]" => $data_especie["especies"]), Yii::$app->language, Yii::$app->basePath . "/modules/academico");
+                                "[[tipo_especie]]" => substr($datos_especie, 0, -2)), Yii::$app->language, Yii::$app->basePath . "/modules/academico");
                     Utilities::sendEmail(
                             $tituloMensaje, Yii::$app->params["adminEmail"], [$correo => $user], $asunto, $body);
                     // enviar correo colecturia
@@ -247,7 +251,7 @@ class EspeciesController extends \app\components\CController {
                     //$asunto = 'Adquisición de Especie Valorada en Línea'; 
                     $bodies = Utilities::getMailMessage("cargapagocolecturia", array(
                                 "[[user]]" => $user,
-                                "[[tipo_especie]]" => $data_especie["especies"]), Yii::$app->language, Yii::$app->basePath . "/modules/academico");
+                                "[[tipo_especie]]" => substr($datos_especie, 0, -2)), Yii::$app->language, Yii::$app->basePath . "/modules/academico");
                     Utilities::sendEmail(
                             $tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["colecturia"] => "Colecturia"], $asunto, $bodies);
 
