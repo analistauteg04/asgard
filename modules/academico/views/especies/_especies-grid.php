@@ -44,7 +44,7 @@ PbGridView::widget([
         ],      
         [
             'class' => 'yii\grid\ActionColumn',
-            'header' => Especies::t("Especies", "Tipo Especies"),
+            'header' => Especies::t("Especies", "Tipo Especie"),
             'template' => '{view}',
             'buttons' => [
                 'view' => function ($url, $model) {
