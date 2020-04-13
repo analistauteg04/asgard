@@ -19,7 +19,7 @@ $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
 <form class="form-horizontal" enctype="multipart/form-data" id="formsolicitud">     
 
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">       
-        <h3>Solicitud N°<span id="lbl_num_solicitud"><?= app\models\Utilities::add_ceros($cab_solicitud[0]['csol_id'], 9) ?></span></h3>
+        <h3>Solicitud: <span id="lbl_num_solicitud"><?= app\models\Utilities::add_ceros($cab_solicitud[0]['csol_id'], 9) ?></span></h3>
     </div>
     <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
         <div class="col-md-7 col-sm-7 col-xs-7 col-lg-7">
@@ -151,17 +151,17 @@ $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
             </div>
             <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
                 <div class="form-group">
-                    <label for="txth_doc_pago" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Especies::t("Especies", "Payment") ?></label>
-                    <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7 ">                
+                    <label for="txth_doc_pago" class="col-sm-3 col-md-3 col-xs-3 col-lg-3 control-label keyupmce"></label>
+                    <div class="col-sm-9 col-md-9 col-xs-9 col-lg-9 ">                
                         <?php
                         if ($cab_solicitud[0]['csol_estado_aprobacion'] < '2' && $cab_solicitud[0]['csol_ruta_archivo_pago'] != "") {
-                            echo '<div style = "width: 310px;" class="alert alert-info"><span style="font-weight: bold"> Nota: </span>' .'Gracias por subir el pago. Está en revisión' . '</div';
+                            echo '<div style = "width: 350px;" class="alert alert-info"><span style="font-weight: bold"> Nota: </span>' .'Gracias por subir el pago; su comprobante se encuentra en proceso de revisión por el Departamento de Colecturía.' . '</div';
                         }
                         if ($cab_solicitud[0]['csol_estado_aprobacion'] == '2') {
-                            echo '<div style = "width: 310px;" class="alert alert-info"><span style="font-weight: bold"> Nota: </span>' . $cab_solicitud[0]['csol_observacion'] . ' ' . '. Por favor volver a subirlo' . '</div>';
+                            echo '<div style = "width: 350px;" class="alert alert-info"><span style="font-weight: bold"> Nota: </span>' . $cab_solicitud[0]['csol_observacion'] . ' ' . '. Por favor volver a subir el comprobante de pago' . '</div>';
                         }
                         if ($cab_solicitud[0]['csol_estado_aprobacion'] < '2' && $cab_solicitud[0]['csol_ruta_archivo_pago'] == "") {
-                            echo '<div style = "width: 310px;" class="alert alert-info"><span style="font-weight: bold"> Nota: </span>' . 'Por favor subir el pago'. '</div>';
+                            echo '<div style = "width: 350px;" class="alert alert-info"><span style="font-weight: bold"> Nota: </span>' . 'Por favor subir su comprobante de pago.'. '</div>';
                         }
                         ?>
                     </div>
@@ -184,10 +184,10 @@ $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
                             <th style="display:none; border:none;"><?= Yii::t("formulario", "uaca_id") ?></th>
                             <th><?= Yii::t("formulario", "Unidad") ?></th>
                             <th style="display:none; border:none;"><?= Yii::t("formulario", "tra_id") ?></th>
-                            <th><?= Yii::t("formulario", "Tramite") ?></th>
+                            <th><?= Yii::t("formulario", "Trámite") ?></th>
                             <th style="display:none; border:none;"><?= Yii::t("formulario", "esp_id") ?></th>
                             <th><?= Yii::t("formulario", "Especie") ?></th>
-                            <th><?= Yii::t("formulario", "Cant") ?></th>
+                            <th><?= Yii::t("formulario", "Cantidad") ?></th>
                             <th><?= Yii::t("formulario", "Valor") ?></th>
                             <th><?= Yii::t("formulario", "Total") ?></th>
                             <th><?php // Yii::t("formulario", "F.Aut")        ?></th>

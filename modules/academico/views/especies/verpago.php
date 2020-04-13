@@ -7,13 +7,12 @@ use app\components\CFileInputAjax;
 use app\modules\academico\Module as Especies;
 
 Especies::registerTranslations();
-print_r($cab_solicitud[0]['mod_id']);
 ?>
 
 <form class="form-horizontal" enctype="multipart/form-data" id="formsolicitud">     
 
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">       
-        <h3>Solicitud N°<span id="lbl_num_solicitud"><?= app\models\Utilities::add_ceros($cab_solicitud[0]['csol_id'], 9) ?></span></h3>
+        <h3>Solicitud: <span id="lbl_num_solicitud"><?= app\models\Utilities::add_ceros($cab_solicitud[0]['csol_id'], 9) ?></span></h3>
     </div>
     <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
         <div class="col-md-7 col-sm-7 col-xs-7 col-lg-7">
@@ -169,10 +168,10 @@ print_r($cab_solicitud[0]['mod_id']);
                             <th style="display:none; border:none;"><?= Yii::t("formulario", "uaca_id") ?></th>
                             <th><?= Yii::t("formulario", "Unidad") ?></th>
                             <th style="display:none; border:none;"><?= Yii::t("formulario", "tra_id") ?></th>
-                            <th><?= Yii::t("formulario", "Tramite") ?></th>
+                            <th><?= Yii::t("formulario", "Trámite") ?></th>
                             <th style="display:none; border:none;"><?= Yii::t("formulario", "esp_id") ?></th>
                             <th><?= Yii::t("formulario", "Especie") ?></th>
-                            <th><?= Yii::t("formulario", "Cant") ?></th>
+                            <th><?= Yii::t("formulario", "Cantidad") ?></th>
                             <th><?= Yii::t("formulario", "Valor") ?></th>
                             <th><?= Yii::t("formulario", "Total") ?></th>
                             <th><?php // Yii::t("formulario", "F.Aut")       ?></th>

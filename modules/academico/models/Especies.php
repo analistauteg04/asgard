@@ -459,7 +459,7 @@ class Especies extends \yii\db\ActiveRecord {
                 $mensaje = Yii::t("formulario", "Pendiente");
                 break;
             case '2':
-                $mensaje = Yii::t("formulario", "No Aprobado");
+                $mensaje = Yii::t("formulario", "Pago Solicitud - Rechazado");
                 break;
             case '3':
                 $mensaje = Yii::t("formulario", "Generado");

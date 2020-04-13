@@ -35,16 +35,15 @@ class EspeciesController extends \app\components\CController {
         return [
             '0' => Yii::t("formulario", "Todos"),
             '1' => Yii::t("formulario", "Pendiente"),
-            '2' => Yii::t("formulario", "No Aprobado"),
-            '3' => Yii::t("formulario", "Generado"),
-            '4' => Yii::t("formulario", "Atendido"),
+            '2' => Yii::t("formulario", "Pago Solicitud - Rechazado"),
+            '3' => Yii::t("formulario", "Generado"),            
         ];
     }
 
     private function estadoPagosColecturia() {
         return [
             '0' => Yii::t("formulario", "Todos"),
-            '2' => Yii::t("formulario", "No Aprobar"),
+            '2' => Yii::t("formulario", "Pago Solicitud - Rechazado"),
             '3' => Yii::t("formulario", "Generar"),
         ];
     }

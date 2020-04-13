@@ -70,7 +70,7 @@ admision::registerTranslations();
                         ?>
                     </div>
          
-            <label for="cmb_estado" class="col-sm-2 col-md-2 col-xs-2 col-lg-2 control-label"><?= Yii::t("formulario", "Status") ?></label>
+            <label for="cmb_estado" class="col-sm-2 col-md-2 col-xs-2 col-lg-2 control-label"><?= admision::t("Solicitudes", "State Request") ?></label>
             <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
                 <?= Html::dropDownList("cmb_estado", 0, $arrEstados, ["class" => "form-control", "id" => "cmb_estado"]) ?>
             </div>

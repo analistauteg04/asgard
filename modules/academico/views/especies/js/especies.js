@@ -264,7 +264,7 @@ function agregarItemsProducto(opAccion) {
         }
         calcularTotalGrid();
     } else {
-        showAlert('NO_OK', 'error', {"wtmessage": 'Debe ingresar Datos Validos', "title": 'Información'});
+        showAlert('NO_OK', 'error', {"wtmessage": 'Debe ingresar Datos Válidos', "title": 'Información'});
     }
 }
 function limpiarDetalle() {

@@ -4,7 +4,7 @@ INSERT INTO `modulo` (`mod_id`, `apl_id`, `mod_nombre`, `mod_tipo`, `mod_dir_ima
 (12, 1, 'Especies Valoradas', 'Especies Valoradas', 'glyphicon glyphicon-certificate', 'academico/especies/solicitudalumno', 12, 'academico', '1', '1', '2020-04-04 15:53:21', NULL, '1');
 
 INSERT INTO `objeto_modulo` (`omod_id`, `mod_id`, `omod_padre_id`, `omod_nombre`, `omod_tipo`, `omod_tipo_boton`, `omod_accion`, `omod_function`, `omod_dir_imagen`, `omod_entidad`, `omod_orden`, `omod_estado_visible`, `omod_lang_file`, `omod_estado`, `omod_fecha_creacion`, `omod_fecha_actualizacion`, `omod_estado_logico`) VALUES
-(197, 12, 197, 'Solicitud', 'P', '0', '', '', '', 'academico/especies/solicitudalumno', 1, '1', 'academico', '1', '2020-04-04 16:02:16', NULL, '1'),
+(197, 12, 197, 'Solicitud Especies Valoradas', 'P', '0', '', '', '', 'academico/especies/solicitudalumno', 1, '1', 'academico', '1', '2020-04-04 16:02:16', NULL, '1'),
 (198, 12, 197, 'Crear Solicitud Especie', 'S', '0', '', '', '', 'academico/especies/new', 1, '0', 'academico', '1', '2020-04-04 17:12:47', NULL, '1'),
 (199, 12, 197, 'Crear Solicitud Especie', 'A', '0', '', '', '', 'academico/especies/new', 1, '1', 'academico', '1', '2020-04-04 17:45:43', NULL, '1'),
 (200, 12, 198, 'Grabar Solicitud Especie', 'A', '0', '', '', '', 'academico/especies/save', 1, '1', 'academico', '1', '2020-04-04 17:51:29', NULL, '1'),

@@ -17,6 +17,7 @@ return [
     "Payment" => "Pagos",
     "Responsable" => "Responsable",
     "Student" => "Estudiante",
+    "Way to pay" => "Forma Pago",
     "Year" => "Año",    
 ];
 

@@ -45,7 +45,7 @@ PbGridView::widget([
         ],
         [
             'attribute' => 'Unidad Academica',
-            'header' => Especies::t("Especies", "Unidad Academica"),
+            'header' => Especies::t("Especies", "Academic unit"),
             'value' => 'uaca_nombre',
         ],
         [
@@ -55,7 +55,7 @@ PbGridView::widget([
         ],
         [
             'attribute' => 'F.Pago',
-            'header' => Especies::t("Especies", "F.Pago"),
+            'header' => Especies::t("Especies", "Way to pay"),
             'value' => 'fpag_nombre',
         ],
         [
