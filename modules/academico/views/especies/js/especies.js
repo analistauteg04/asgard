@@ -91,7 +91,9 @@ $(document).ready(function () {
     $('#btn_buscarReviPago').click(function () {
         actualizarGridRevSolEspecie();
     });
-
+    $('#btn_buscarEspecies').click(function () {
+        actualizarGridEspeciesGeneradas();
+    });
 
     $('#btn_savepago').click(function () {
         actualizarPago('File');
@@ -138,9 +140,8 @@ $(document).ready(function () {
         {            
             $('#Divobservacion').hide();
         }
-    });  
-    
-    $('#cmb_unidad').change(function () {
+    });      
+   $('#cmb_unidad').change(function () {
         var link = $('#txth_base').val() + "/academico/especies/especiesgeneradas";
         var arrParams = new Object();
         arrParams.unidad = $('#cmb_unidad').val();
@@ -149,13 +150,24 @@ $(document).ready(function () {
         requestHttpAjax(link, arrParams, function (response) {
             if (response.status == "OK") {
                 data = response.message;
-                setComboDataselect(data.modalidad, "cmb_modalidad_esp", "Seleccionar");                
+                setComboDataselect(data.modalidad, "cmb_modalidad_esp", "Seleccionar");
+                ///
+                var arrParams = new Object();
+                if (data.modalidad.length > 0) {
+                    arrParams.unidad = $('#cmb_unidad').val();
+                    arrParams.moda_id = $('#cmb_modalidad_esp').val();
+                    arrParams.gettramite = true;
+                    requestHttpAjax(link, arrParams, function(response) {
+                        if (response.status == "OK") {
+                            data = response.message;
+                            setComboDataselect(data.tramite, "cmb_tramite_esp", "Seleccionar");
+                        }
+                    }, true);
+                }
+                
+                ///
             }
         }, true);
-    });
-    
-     $('#btn_buscarEspecies').click(function () {        
-        actualizarGridEspeciesGeneradas();
     });
 
 });
@@ -686,10 +698,11 @@ function actualizarGridEspeciesGeneradas() {
     var f_fin = $('#txt_fecha_fin').val();
     var unidad = $('#cmb_unidad').val();
     var modalidad = $('#cmb_modalidad_esp').val();
+    var tramite = $('#cmb_tramite_esp').val();
     //Buscar almenos una clase con el nombre para ejecutar
     if (!$(".blockUI").length) {
         showLoadingPopup();
-        $('#TbG_Solicitudes').PbGridView('applyFilterData', {'f_ini': f_ini, 'f_fin': f_fin, 'unidad': unidad, 'modalidad': modalidad, 'search': search});
+        $('#TbG_Solicitudes').PbGridView('applyFilterData', {'f_ini': f_ini, 'f_fin': f_fin, 'unidad': unidad, 'modalidad': modalidad, 'search': search, 'tramite': tramite});
         setTimeout(hideLoadingPopup, 2000);
     }
 }

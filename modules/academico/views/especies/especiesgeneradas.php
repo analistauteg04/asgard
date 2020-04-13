@@ -30,6 +30,7 @@ admision::registerTranslations();
             'arrEstados' => $arrEstados,
             'arr_unidad' => $arr_unidad,
             'arr_modalidad' => $arr_modalidad,
+            'arr_tramite' => $arr_tramite,
             ]);
         ?>
     </form>

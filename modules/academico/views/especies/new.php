@@ -33,11 +33,8 @@ Especies::registerTranslations();
                     </div>
                 </div>
             </div>
-
         </div>
-
     </div>
-
     <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
         <div class="col-md-7 col-sm-7 col-xs-7 col-lg-7">
             <div class="form-group">
@@ -45,7 +42,6 @@ Especies::registerTranslations();
             </div>
         </div>
         <div class='col-md-12 col-sm-12 col-xs-12 col-lg-12'>
-
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                 <div class="form-group">
                     <label for="cmb_ninteres" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label"><?= Especies::t("Academico", "Academic unit") ?></label>
@@ -62,7 +58,6 @@ Especies::registerTranslations();
                     </div>
                 </div>
             </div>
-
             <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
                 <div class="form-group">
                     <label for="lbl_tramite" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_tramite"><?= Yii::t("formulario", "Tramite") ?></label>

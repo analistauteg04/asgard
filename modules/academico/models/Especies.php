@@ -490,6 +490,9 @@ class Especies extends \yii\db\ActiveRecord {
             if ($arrFiltro['modalidad'] > 0) {
                 $str_search .= "A.mod_id = :modalidad AND ";
             }
+            if ($arrFiltro['tramite'] > 0) {
+                $str_search .= "A.tra_id = :tramite AND ";
+            }
         }
         if ($onlyData == false) {
             $secuencial = 'A.egen_id, ';            
@@ -509,10 +512,10 @@ class Especies extends \yii\db\ActiveRecord {
                             INNER JOIN " . $con->dbname . ".unidad_academica F ON F.uaca_id=A.uaca_id
                             INNER JOIN " . $con->dbname . ".modalidad G ON G.mod_id=A.mod_id
                             INNER JOIN " . $con->dbname . ".tramite T ON T.tra_id = A.tra_id                           
-                WHERE $str_search A.egen_estado=1 AND A.egen_estado_logico=1  ORDER BY A.egen_id DESC; ";
+                WHERE $str_search A.egen_estado=:estado AND A.egen_estado_logico=:estado  ORDER BY A.egen_id DESC; ";
 
         $comando = $con->createCommand($sql);
-        //$comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         //$comando->bindParam(":est_id", $est_id, \PDO::PARAM_INT);
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
             $fecha_ini = $arrFiltro["f_ini"] . " 00:00:00";
@@ -520,6 +523,7 @@ class Especies extends \yii\db\ActiveRecord {
             $search_cond = "%" . $arrFiltro["search"] . "%";
             $unidad =$arrFiltro['unidad'];
             $modalidad =$arrFiltro['modalidad'];            
+            $tramite =$arrFiltro['tramite'];
             if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
                 $comando->bindParam(":fec_ini", $fecha_ini, \PDO::PARAM_STR);
                 $comando->bindParam(":fec_fin", $fecha_fin, \PDO::PARAM_STR);
@@ -532,6 +536,9 @@ class Especies extends \yii\db\ActiveRecord {
             }
             if ($arrFiltro['modalidad'] > 0) { 
                 $comando->bindParam(":modalidad", $modalidad, \PDO::PARAM_INT); 
+            }
+            if ($arrFiltro['tramite'] > 0) { 
+                $comando->bindParam(":tramite", $tramite, \PDO::PARAM_INT); 
             }
         }
         $resultData = $comando->queryAll();
