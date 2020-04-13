@@ -29,7 +29,12 @@ PbGridView::widget([
             'attribute' => 'Número',
             'header' => Especies::t("Especies", "Número"),
             'value' => 'egen_numero_solicitud',
-        ],        
+        ],  
+          [
+            'attribute' => 'Tramite',
+            'header' => Especies::t("Especies", "Procedure"),
+            'value' => 'tramite',
+        ],      
         [
             'class' => 'yii\grid\ActionColumn',
             'header' => Especies::t("Especies", "Tipo Especies"),
@@ -39,12 +44,7 @@ PbGridView::widget([
                     return Html::a('<span>' . substr($model['esp_rubro'], 0, 30) . '... </span>', Url::to(['#']), ["data-toggle" => "tooltip", "title" => $model['esp_rubro']]);
                 },
             ],
-        ],       
-        [
-            'attribute' => 'Responsable',
-            'header' => Especies::t("Especies", "Responsable"),
-            'value' => 'Responsable',
-        ],      
+        ],             
         [
             'attribute' => 'Fecha Aprobación',
             'header' => Especies::t("Especies", "Fecha Aprobación"),

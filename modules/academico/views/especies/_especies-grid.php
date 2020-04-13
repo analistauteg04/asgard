@@ -28,10 +28,20 @@ PbGridView::widget([
     'columns' =>
     [
         [
-            'attribute' => 'Número',
+            'class' => 'yii\grid\ActionColumn',     
             'header' => Especies::t("Especies", "Número"),
-            'value' => 'egen_numero_solicitud',
-        ],        
+            'template' => '{view}',
+            'buttons' => [
+                'view' => function ($url, $model) {
+                    return Html::a('<span>' . substr($model['egen_numero_solicitud'], 0, 10) . '... </span>', Url::to(['#']), ["data-toggle" => "tooltip", "title" => $model['egen_numero_solicitud']]);
+                },
+            ],          
+        ],  
+        [
+            'attribute' => 'Tramite',
+            'header' => Especies::t("Especies", "Trámite"),
+            'value' => 'tramite',
+        ],      
         [
             'class' => 'yii\grid\ActionColumn',
             'header' => Especies::t("Especies", "Tipo Especies"),
@@ -54,19 +64,14 @@ PbGridView::widget([
         ],
         [
             'attribute' => 'Unidad Academica',
-            'header' => Especies::t("Especies", "Unidad Academica"),
+            'header' => Especies::t("Especies", "Academic unit"),
             'value' => 'uaca_nombre',
         ],
         [
             'attribute' => 'Modalidad',
             'header' => Especies::t("Especies", "Modalidad"),
             'value' => 'mod_nombre',
-        ],
-        [
-            'attribute' => 'Responsable',
-            'header' => Especies::t("Especies", "Responsable"),
-            'value' => 'Responsable',
-        ],      
+        ],       
         [
             'attribute' => 'Fecha Aprobación',
             'header' => Especies::t("Especies", "Fecha Aprobación"),

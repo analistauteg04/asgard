@@ -482,12 +482,12 @@ class EspeciesController extends \app\components\CController {
         $colPosition = array("C", "D", "E", "F", "G", "H", "I", "J", "K", "L");
         $arrHeader = array(            
             Yii::t("formulario", "Number"),
+            Especie::t("Especies", "Procedure"),
             Especie::t("Especies", "Tipo Especies"),
             Especie::t("Especies", "Student"),
             Yii::t("formulario", "DNI Document"),
             Especie::t("Especies", "Unidad Academica"),
-            Especie::t("Academico", "Modalidad"),
-            Especie::t("Especies", "Responsable"),
+            Especie::t("Academico", "Modalidad"),            
             Especie::t("Especies", "Approval date"),
             Especie::t("Especies", "Date validity"),
         );
@@ -573,12 +573,12 @@ class EspeciesController extends \app\components\CController {
         $report = new ExportFile();
         $arrHeader = array(            
             Yii::t("formulario", "Number"),
+            Especie::t("Especies", "Procedure"),
             Especie::t("Especies", "Tipo Especies"),
             Especie::t("Especies", "Student"),
             Yii::t("formulario", "DNI Document"),
             Especie::t("Especies", "Unidad Academica"),
-            Especie::t("Academico", "Modalidad"),
-            Especie::t("Especies", "Responsable"),
+            Especie::t("Academico", "Modalidad"),           
             Especie::t("Especies", "Approval date"),
             Especie::t("Especies", "Date validity"),
         );

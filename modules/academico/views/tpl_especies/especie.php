@@ -101,7 +101,18 @@
         <br><br>
         <p>Guayaquil, <?php echo $cabFact['FechaDia'] ?></p><br><br><br><br>
     </div>
+    <div style="text-align: right">
+        <br>
+        <p>Trámite: <strong><?php echo $cabFact['esp_rubro'] ?>.</strong></p><br><br>
+    </div>
+    
+    <div style="text-align: right">
+        <br>
+        <p>Validez máxima: <?php echo $cabFact['esp_dia_vigencia'] ?> días. </p><br><br>
+    </div>
+    
     <div>
+        <br><br>
         <p><b><?php echo $cabFact['Responsable'] ?></b><br>
             Decano de la Facultad de la Modalidad <?php echo $cabFact['mod_nombre'] ?>
         </p>
@@ -115,7 +126,7 @@
         </p><br><br>
     </div>
     <div style="text-justify: auto">
-        <p>Solicito a Ud, autorice a quien corresponda, el trámite de mi solicitud:
+        <p>Solicito a Ud, autorice a quien corresponda, el trámite de mi solicitud:<br>
         <strong><?php echo $cabFact['esp_rubro'] ?>.</strong></p><br><br>
     </div>
 
@@ -127,8 +138,6 @@
     <div>
         <p>Atentamente.</p><br><br><br>
     </div>
-
-
 
     <table>
         <tbody>
@@ -144,8 +153,7 @@
             </tr>
             <tr>
                 <td>Teléfono:</td>
-                <td><?php echo $cabFact['per_celular'] ?></td>
-                <td>E-mail: <?php echo $cabFact['per_correo'] ?></td>
+                <td><?php echo $cabFact['per_celular'] ?></td>                
             </tr>
         </tbody>
     </table>

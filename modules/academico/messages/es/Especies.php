@@ -15,6 +15,7 @@ return [
     "Date validity" => "Fecha Validez",
     "List of generated species" => "Listado de Especies Generadas",
     "Payment" => "Pagos",
+    "Procedure" => "Trámite",
     "Responsable" => "Responsable",
     "Student" => "Estudiante",
     "Way to pay" => "Forma Pago",
