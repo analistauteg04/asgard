@@ -60,7 +60,7 @@ Especies::registerTranslations();
             </div>
             <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
                 <div class="form-group">
-                    <label for="lbl_tramite" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_tramite"><?= Yii::t("formulario", "Tramite") ?></label>
+                    <label for="lbl_tramite" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_tramite"><?= especies::t("Especies", "Procedure") ?></label>
                     <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
                         <?=
                         Html::dropDownList(
