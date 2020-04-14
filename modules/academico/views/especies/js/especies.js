@@ -713,8 +713,9 @@ function exportExcel() {
     var f_fin = $('#txt_fecha_fin').val();
     var unidad = $('#cmb_unidad').val();
     var modalidad = $('#cmb_modalidad_esp').val();
+    var tramite = $('#cmb_tramite_esp').val();
 
-    window.location.href = $('#txth_base').val() + "/academico/especies/expexcelespecies?search=" + search + "&f_ini="+ f_ini + "&f_fin="+ f_fin + '&unidad='+ unidad + "&modalidad=" + modalidad;
+    window.location.href = $('#txth_base').val() + "/academico/especies/expexcelespecies?search=" + search + "&f_ini="+ f_ini + "&f_fin="+ f_fin + '&unidad='+ unidad + "&modalidad=" + modalidad + "&tramite=" + tramite;
 }
 
 function exportPdf() {
@@ -723,6 +724,7 @@ function exportPdf() {
     var f_fin = $('#txt_fecha_fin').val();
     var unidad = $('#cmb_unidad').val();
     var modalidad = $('#cmb_modalidad_esp').val();
+    var tramite = $('#cmb_tramite_esp').val();
 
-    window.location.href = $('#txth_base').val() + "/academico/especies/exppdfespecies?pdf=1&search=" + search + "&f_ini="+ f_ini + "&f_fin="+ f_fin + '&unidad='+ unidad + "&modalidad=" + modalidad;
+    window.location.href = $('#txth_base').val() + "/academico/especies/exppdfespecies?pdf=1&search=" + search + "&f_ini="+ f_ini + "&f_fin="+ f_fin + '&unidad='+ unidad + "&modalidad=" + modalidad + "&tramite=" + tramite;
 }

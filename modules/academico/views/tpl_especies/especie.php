@@ -127,7 +127,7 @@
     </div>
     <div style="text-justify: auto">
         <p>Solicito a Ud, autorice a quien corresponda, el trámite de mi solicitud:<br>
-        <<strong><?php echo $cabFact['esp_rubro'] ?>.</strong></p><br><br>
+        <strong><?php echo $cabFact['esp_rubro'] ?>.</strong></p><br><br>
     </div>
 
 

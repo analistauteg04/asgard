@@ -509,6 +509,7 @@ class EspeciesController extends \app\components\CController {
         $arrSearch["unidad"] = $data['unidad'];
         $arrSearch["modalidad"] = $data['modalidad'];
         $arrSearch["search"] = $data['search'];
+        $arrSearch["tramite"] = $data['tramite'];
 
         $arrData = array();
         if (empty($arrSearch)) {
@@ -600,6 +601,7 @@ class EspeciesController extends \app\components\CController {
         $arrSearch["unidad"] = $data['unidad'];
         $arrSearch["modalidad"] = $data['modalidad'];
         $arrSearch["search"] = $data['search'];
+        $arrSearch["tramite"] = $data['tramite'];
         $arrData = array();
         if (empty($arrSearch)) {
             $arrData = $especiesADO->getSolicitudesGeneradas(null, array(), true);
