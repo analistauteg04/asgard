@@ -439,6 +439,14 @@ class EspeciesController extends \app\components\CController {
             //$this->view->title = "Invoices";
             $especiesADO = new Especies();
             $cabFact = $especiesADO->consultarEspecieGenerada($ids);
+            if ($cabFact['uaca_id'] == '1'){
+                $carrera = 'facultad/carrera';
+                $facultaded = 'Facultad de Grado';
+            }
+             if ($cabFact['uaca_id'] == '2'){
+                $carrera = 'maestría';
+                $facultaded = 'Facultad de Posgrado';
+            }
             $objEsp = $especiesADO->getDataEspecie($cabFact['esp_id']);
             $codigo = $objEsp[0]['codigo'] . '-' . $cabFact['egen_numero_solicitud'];
             //setlocale(LC_TIME,"es_ES");//strftime("%A, %d de %B de %Y", date("d-m-Y"));
@@ -451,6 +459,8 @@ class EspeciesController extends \app\components\CController {
             $rep->createReportPdf(
                     $this->render('@modules/academico/views/tpl_especies/especie', [
                         'cabFact' => $cabFact,
+                        'carrera'=>$carrera,
+                        'facultaded'=>$facultaded,
                     ])
             );
             $rep->mpdf->Output('ESPECIE_' . $codigo . ".pdf", ExportFile::OUTPUT_TO_DOWNLOAD);

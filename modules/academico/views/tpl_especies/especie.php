@@ -114,7 +114,7 @@
     <div>
         <br><br>
         <p><b><?php echo $cabFact['Responsable'] ?></b><br>
-            Decano de la Facultad de la Modalidad <?php echo $cabFact['mod_nombre'] ?>
+            Decano de la <?php echo $facultaded ?> de la Modalidad <?php echo $cabFact['mod_nombre'] ?>
         </p>
         <br><br>
     </div>
@@ -122,12 +122,12 @@
         <p>De mis consideraciones:</p><br><br>
     </div>
     <div style="text-justify: auto">
-        <p>Yo, <b><?php echo $cabFact['Nombres'] ?></b> con cédula de cuidadanía No. <b><?php echo $cabFact['per_cedula'] ?></b> alumno de la facultad/carrera: <b><?php echo $cabFact['Carrera'] ?>.</b>
+        <p>Yo, <b><?php echo $cabFact['Nombres'] ?></b> con cédula de cuidadanía No. <b><?php echo $cabFact['per_cedula'] ?></b> alumno de la <?php echo $carrera ?>: <b><?php echo $cabFact['Carrera'] ?>.</b>
         </p><br><br>
     </div>
     <div style="text-justify: auto">
         <p>Solicito a Ud, autorice a quien corresponda, el trámite de mi solicitud:<br>
-        <<strong><?php echo $cabFact['esp_rubro'] ?>.</strong></p><br><br>
+        <strong><?php echo $cabFact['esp_rubro'] ?>.</strong></p><br><br>
     </div>
 
 
