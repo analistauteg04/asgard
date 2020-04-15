@@ -127,7 +127,7 @@ $leyenda = '<div ALIGN="justify" style = "width: 400px;" class="alert alert-info
             </div>
             <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
                 <div class="form-group">
-                    <label for="lbl_observacion" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_observacion"><?= Yii::t("formulario", "Observation") ?></label>
+                    <label for="lbl_observacion" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_observacion"><?= Yii::t("formulario", "Detalle Trámite") ?></label>
                     <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
                         <textarea  class="form-control keyupmce" id="txt_observacion" rows="5"></textarea>   
                     </div>
