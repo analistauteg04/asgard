@@ -248,10 +248,10 @@ class Especies extends \yii\db\ActiveRecord {
             $dts_Det[$i]['dsol_usuario_ingreso'] = @Yii::$app->session->get("PB_iduser");
             //$dts_Det[$i]['est_id'] = 1;
             $sql = "INSERT INTO " . $con->dbname . ".detalle_solicitud
-                        (csol_id,tra_id,esp_id,est_id,dsol_cantidad,dsol_valor,dsol_total,
+                        (csol_id,tra_id,esp_id,est_id,dsol_cantidad,dsol_valor,dsol_total,dsol_observacion,
                         dsol_usuario_ingreso,dsol_estado,dsol_fecha_creacion,dsol_estado_logico)
                     VALUES
-                        (:csol_id,:tra_id,:esp_id,:est_id,:dsol_cantidad,:dsol_valor,:dsol_total,
+                        (:csol_id,:tra_id,:esp_id,:est_id,:dsol_cantidad,:dsol_valor,:dsol_total,:dsol_observacion,
                         :dsol_usuario_ingreso,1,CURRENT_TIMESTAMP(),1);";
             $command = $con->createCommand($sql);
             $command->bindParam(":csol_id", $idCab, \PDO::PARAM_INT);
@@ -261,6 +261,7 @@ class Especies extends \yii\db\ActiveRecord {
             $command->bindParam(":dsol_cantidad", $dts_Det[$i]['dsol_cantidad'], \PDO::PARAM_INT);
             $command->bindParam(":dsol_valor", $dts_Det[$i]['dsol_valor'], \PDO::PARAM_STR);
             $command->bindParam(":dsol_total", $dts_Det[$i]['dsol_total'], \PDO::PARAM_STR);
+            $command->bindParam(":dsol_observacion", ucfirst(mb_strtolower($dts_Det[$i]['dsol_observacion'],'UTF-8')), \PDO::PARAM_STR);
             $command->bindParam(":dsol_usuario_ingreso", $dts_Det[$i]['dsol_usuario_ingreso'], \PDO::PARAM_INT);
             $command->execute();
         }
@@ -570,7 +571,7 @@ class Especies extends \yii\db\ActiveRecord {
         $estado = 1;
         $sql = "SELECT A.egen_id,A.dsol_id,A.egen_numero_solicitud,C.esp_rubro,concat(D.per_pri_nombre,' ',D.per_seg_nombre,' ',D.per_pri_apellido,' ',D.per_seg_apellido) Nombres,D.per_cedula,
                     A.uaca_id,F.uaca_nombre,G.mod_nombre,concat(E.resp_titulo,' ',E.resp_nombre) Responsable,date(A.egen_fecha_aprobacion) fecha_aprobacion,
-                    A.egen_fecha_caducidad,D.per_correo,D.per_celular,A.esp_id, ea.eaca_nombre Carrera, esp_dia_vigencia
+                    A.egen_fecha_caducidad,D.per_correo,D.per_celular,A.esp_id, ea.eaca_nombre Carrera, esp_dia_vigencia, det.dsol_observacion as detalle
                     FROM " . $con->dbname . ".especies_generadas A
                             INNER JOIN (" . $con->dbname . ".estudiante B 
                                             INNER JOIN " . $con1->dbname . ".persona D ON B.per_id=D.per_id)
@@ -582,6 +583,7 @@ class Especies extends \yii\db\ActiveRecord {
                             INNER JOIN " . $con->dbname . ".modalidad G ON G.mod_id=A.mod_id
                             INNER JOIN " . $con->dbname . ".estudio_academico ea ON ea.eaca_id=meu.eaca_id
                             INNER JOIN " . $con->dbname . ".responsable_especie E ON (E.uaca_id=A.uaca_id and E.mod_id=A.mod_id)
+                            INNER JOIN " . $con->dbname . ".detalle_solicitud det ON det.dsol_id = A.dsol_id 
                 WHERE A.egen_estado=:estado AND A.egen_estado_logico=:estado AND A.egen_id=:egen_id ; ";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":egen_id", $Ids, \PDO::PARAM_INT);

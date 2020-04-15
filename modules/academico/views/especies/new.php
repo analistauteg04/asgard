@@ -6,6 +6,8 @@ use yii\helpers\ArrayHelper;
 use app\modules\academico\Module as Especies;
 
 Especies::registerTranslations();
+$leyenda = '<div ALIGN="justify" style = "width: 400px;" class="alert alert-info"><span style="font-weight: bold"> Nota: </span> El detalle del trámite es la constancia de 
+          la solicitud. Tenga cuidado al ingresar especialmente en el detalle del trámite puesto que este texto también es parte de la especie valorada, luego de generar la solicitud, no puede realizar modificaciones.</div>';
 ?>
 <?= Html::hiddenInput('txth_idest', $arr_persona['est_id'], ['id' => 'txth_idest']); ?>
 <form class="form-horizontal" enctype="multipart/form-data" id="formsolicitud">   
@@ -82,7 +84,6 @@ Especies::registerTranslations();
                     </div>
                 </div>
             </div>
-
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                 <div class="form-group">
                     <label for="txt_dsol_cantidad" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_dsol_cantidad"><?= Especies::t("Pagos", "Cantidad") ?></label>
@@ -124,20 +125,32 @@ Especies::registerTranslations();
                     </div>
                 </div>
             </div>
-
-            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
-                <div class="col-sm-5 col-md-5 col-xs-5 col-lg-5"></div>
-                <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                    <a id="btn_addData" href="javascript:" class="btn btn-primary btn-block"> <?= Yii::t("formulario", "Add") ?></a>
+            <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
+                <div class="form-group">
+                    <label for="lbl_observacion" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_observacion"><?= Yii::t("formulario", "Observation") ?></label>
+                    <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
+                        <textarea  class="form-control keyupmce" id="txt_observacion" rows="5"></textarea>   
+                    </div>
                 </div>
-
-            </div>
-
-
+            </div> 
+            <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
+                <div class="form-group">
+                    <label for="lbl_leyenda" class="col-sm-3 col-md-3 col-xs-3 col-lg-3 control-label" id="lbl_leyenda"></label>
+                    <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
+                        <?php echo $leyenda?>  
+                    </div>
+                </div>
+            </div> 
         </div>
-
     </div>
-
+    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+        <div class="form-group">
+            <div class="col-sm-5 col-md-5 col-xs-5 col-lg-5"> </div>
+            <div class="col-sm-6 col-md-6 col-xs-6 col-lg-6">
+                <a id="btn_addData" href="javascript:" class="btn btn-primary btn-block"> <?= Yii::t("formulario", "Add") ?></a>
+            </div>
+        </div>
+    </div>
     <div id="div_detalle" class="col-md-12 col-sm-12 col-xs-12 col-lg-12"></div>
     <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6"></div>
@@ -174,15 +187,11 @@ Especies::registerTranslations();
                         </tr>
                     </thead>
                     <tbody>
-
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
-
-
-
 </form>
 <script>
     var AccionTipo = 'Create';

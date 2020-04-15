@@ -130,7 +130,9 @@
         <strong><?php echo $cabFact['esp_rubro'] ?>.</strong></p><br><br>
     </div>
 
-
+    <div>
+        <p><?php echo $cabFact['detalle'] ?>.</p><br><br> 
+    </div>
 
     <div>
         <p>Esperando una favorable acogida, quedo de Ud.</p><br><br> 

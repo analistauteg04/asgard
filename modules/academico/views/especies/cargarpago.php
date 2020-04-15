@@ -10,7 +10,7 @@ Especies::registerTranslations();
 $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
           <div class="form-group">
           <div class="col-sm-10 col-md-10 col-xs-10 col-lg-10">
-          <div style = "width: 450px;" class="alert alert-info"><span style="font-weight: bold"> Nota: </span> Al subir archivo debe ser 800 KB máximo y tipo jpg, png o pdf.</div>
+          <div ALIGN="justify" style = "width: 450px;" class="alert alert-info"><span style="font-weight: bold"> Nota: </span> Al subir archivo debe ser 800 KB máximo y tipo jpg, png o pdf.</div>
           </div>
           </div>
           </div>';
@@ -155,13 +155,13 @@ $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
                     <div class="col-sm-9 col-md-9 col-xs-9 col-lg-9 ">                
                         <?php
                         if ($cab_solicitud[0]['csol_estado_aprobacion'] < '2' && $cab_solicitud[0]['csol_ruta_archivo_pago'] != "") {
-                            echo '<div style = "width: 350px;" class="alert alert-info"><span style="font-weight: bold"> Nota: </span>' .'Gracias por subir el pago; su comprobante se encuentra en proceso de revisión por el Departamento de Colecturía.' . '</div';
+                            echo '<div ALIGN="justify" style = "width: 390px;" class="alert alert-info"><span style="font-weight: bold"> Nota: </span>' .'Gracias por subir el pago; su comprobante se encuentra en proceso de revisión por el Departamento de Colecturía.' . '</div';
                         }
                         if ($cab_solicitud[0]['csol_estado_aprobacion'] == '2') {
-                            echo '<div style = "width: 350px;" class="alert alert-info"><span style="font-weight: bold"> Nota: </span>' . $cab_solicitud[0]['csol_observacion'] . ' ' . '. Por favor volver a subir el comprobante de pago' . '</div>';
+                            echo '<div ALIGN="justify" style = "width: 390px;" class="alert alert-info"><span style="font-weight: bold"> Nota: </span>' . $cab_solicitud[0]['csol_observacion'] . ' ' . '. Por favor volver a subir el comprobante de pago' . '</div>';
                         }
                         if ($cab_solicitud[0]['csol_estado_aprobacion'] < '2' && $cab_solicitud[0]['csol_ruta_archivo_pago'] == "") {
-                            echo '<div style = "width: 350px;" class="alert alert-info"><span style="font-weight: bold"> Nota: </span>' . 'Por favor subir su comprobante de pago.'. '</div>';
+                            echo '<div ALIGN="justify" style = "width: 390px;" class="alert alert-info"><span style="font-weight: bold"> Nota: </span>' . 'Por favor subir su comprobante de pago.'. '</div>';
                         }
                         ?>
                     </div>
