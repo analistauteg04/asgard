@@ -131,7 +131,7 @@
     </div>
 
     <div>
-        <p><?php echo $cabFact['detalle'] ?>.</p><br><br> 
+        <p><?php echo $cabFact['detalle'] ?></p><br><br> 
     </div>
 
     <div>
