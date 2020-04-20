@@ -54,9 +54,11 @@ class Especies extends \yii\db\ActiveRecord {
         $con1 = \Yii::$app->db_asgard;
         $estado = 1;
         $sql = "SELECT A.est_id, B.per_id Ids,B.per_pri_nombre,B.per_seg_nombre,B.per_pri_apellido, 
-                            B.per_seg_apellido,B.per_cedula, B.per_correo
+                            B.per_seg_apellido,B.per_cedula, B.per_correo, D.uaca_id, D.mod_id, D.eaca_id
                     FROM " . $con->dbname . ".estudiante A 
                             INNER JOIN " . $con1->dbname . ".persona B ON A.per_id=B.per_id
+                            INNER JOIN " . $con->dbname . ".estudiante_carrera_programa C ON C.est_id = A.est_id
+                            INNER JOIN " . $con->dbname . ".modalidad_estudio_unidad D ON D.meun_id = C.meun_id
                 WHERE A.est_estado=:estado AND A.est_estado_logico=:estado AND A.per_id=:Ids;";
 
         $comando = $con->createCommand($sql);

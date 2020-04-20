@@ -48,7 +48,7 @@ $leyenda = '<div ALIGN="justify" style = "width: 400px;" class="alert alert-info
                 <div class="form-group">
                     <label for="cmb_ninteres" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label"><?= Especies::t("Academico", "Academic unit") ?></label>
                     <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                        <?= Html::dropDownList("cmb_ninteres", 0, array_merge([Yii::t("formulario", "Select")], $arr_unidad), ["class" => "form-control", "id" => "cmb_ninteres"]) ?>
+                        <?= Html::dropDownList("cmb_ninteres", $arr_persona['uaca_id'], array_merge([Yii::t("formulario", "Select")], $arr_unidad), ["class" => "form-control", "id" => "cmb_ninteres", "disabled" => "true"]) ?>
                     </div>
                 </div>  
             </div>
@@ -56,7 +56,7 @@ $leyenda = '<div ALIGN="justify" style = "width: 400px;" class="alert alert-info
                 <div class="form-group">
                     <label for="cmb_modalidad" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label"><?= Especies::t("Academico", "Modality") ?></label>
                     <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                        <?= Html::dropDownList("cmb_modalidad", 0, array_merge([Yii::t("formulario", "Select")], $arr_modalidad), ["class" => "form-control", "id" => "cmb_modalidad"]) ?>
+                        <?= Html::dropDownList("cmb_modalidad", $arr_persona['mod_id'], array_merge([Yii::t("formulario", "Select")], $arr_modalidad), ["class" => "form-control", "id" => "cmb_modalidad", "disabled" => "true"]) ?>
                     </div>
                 </div>
             </div>
@@ -118,8 +118,7 @@ $leyenda = '<div ALIGN="justify" style = "width: 400px;" class="alert alert-info
                         <?=
                         Html::dropDownList(
                                 "cmb_fpago", 0, ArrayHelper::map(app\modules\academico\models\Especies::getFormaPago(), 'Ids', 'Nombre'),
-                                //array_merge([Yii::t("formulario", "Select")],ArrayHelper::map(app\modules\academico\models\Especies::getFormaPago(), 'Ids', 'Nombre')), 
-                                ["class" => "form-control", "id" => "cmb_fpago"]
+                               ["class" => "form-control", "id" => "cmb_fpago"]
                         )
                         ?>
                     </div>

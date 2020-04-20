@@ -154,7 +154,7 @@ class EspeciesController extends \app\components\CController {
         $personaData = $especiesADO->consultaDatosEstudiante($per_idsession);
         $arr_unidadac = $mod_unidad->consultarUnidadAcademicas();
         $arr_modalidad = $mod_modalidad->consultarModalidad($arr_unidadac[0]["id"], 1);
-        $arr_tramite = $especiesADO->getTramite(0);
+        $arr_tramite = $especiesADO->getTramite($personaData["uaca_id"]);
         $arr_especies = $especiesADO->getTramiteEspecie($arr_tramite[0]["Ids"]);
         return $this->render('new', [
                     'arr_persona' => $personaData,
