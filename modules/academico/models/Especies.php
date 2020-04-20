@@ -176,7 +176,7 @@ class Especies extends \yii\db\ActiveRecord {
         $con = \Yii::$app->db_academico;
         $sql = "SELECT esp_id id,esp_rubro name
                     FROM " . $con->dbname . ".especies
-                WHERE esp_estado=1 AND esp_estado_logico=1 AND tra_id=:tra_id;";
+                WHERE esp_estado=1 AND esp_estado_logico=1 AND tra_id=:tra_id order by name asc;";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":tra_id", $Ids, \PDO::PARAM_INT);
         return $comando->queryAll();
