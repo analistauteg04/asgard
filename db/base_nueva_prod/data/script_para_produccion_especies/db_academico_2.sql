@@ -8,6 +8,11 @@ update db_academico.unidad_academica
 set uaca_nomenclatura = 'POS'
 where uaca_id = 2;
 
+-- Agregar campo de imagen extra en detalle solictud
+ALTER TABLE `db_academico`.`detalle_solicitud` 
+ADD COLUMN `dsol_archivo_extra` VARCHAR(500) NULL AFTER `dsol_observacion`;
+
+
 INSERT INTO `responsable_especie` (`resp_id`, `resp_nombre`, `resp_titulo`, `resp_cargo`, `uaca_id`, `mod_id`, `resp_usuario_ingreso`, `resp_estado`, `resp_estado_logico`) VALUES 
 (1,'Diego Aguirre','Msc','',1,1,1,'1','1'),
 (2,'Xavier Mosquera','Phd','',1,2,1,'1','1'),

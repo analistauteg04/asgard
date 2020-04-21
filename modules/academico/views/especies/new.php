@@ -3,10 +3,11 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
+use app\components\CFileInputAjax;
 use app\modules\academico\Module as Especies;
 
 Especies::registerTranslations();
-$leyenda = '<div ALIGN="justify" style = "width: 400px;" class="alert alert-info"><span style="font-weight: bold"> Nota: </span> El detalle del trámite es la constancia de 
+$leyenda = '<div ALIGN="justify" style = "width: 380px;" class="alert alert-info"><span style="font-weight: bold"> Nota: </span> El detalle del trámite es la constancia de 
           la solicitud. Tenga cuidado al ingresar especialmente en el detalle del trámite puesto que este texto también es parte de la especie valorada, luego de generar la solicitud, no puede realizar modificaciones.</div>';
 ?>
 <?= Html::hiddenInput('txth_idest', $arr_persona['est_id'], ['id' => 'txth_idest']); ?>
@@ -132,14 +133,68 @@ $leyenda = '<div ALIGN="justify" style = "width: 400px;" class="alert alert-info
                     </div>
                 </div>
             </div> 
-            <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
-                <div class="form-group">
+            <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">               
                     <label for="lbl_leyenda" class="col-sm-3 col-md-3 col-xs-3 col-lg-3 control-label" id="lbl_leyenda"></label>
                     <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
                         <?php echo $leyenda?>  
-                    </div>
-                </div>
-            </div> 
+                    </div>             
+            </div>             
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                <div class="form-group">
+                    <label for="lbl_doc_adj_pago" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Yii::t("formulario", "Attach document") ?></label>
+                    <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
+                        <?= Html::hiddenInput('txth_doc_adj_pago', '', ['id' => 'txth_doc_adj_pago']); ?>
+                        <?= Html::hiddenInput('txth_doc_adj_leads2', '', ['id' => 'txth_doc_adj_leads2']); ?>
+                        <?php
+                        echo CFileInputAjax::widget([
+                            'id' => 'txt_doc_adj_pago',
+                            'name' => 'txt_doc_adj_pago',
+                            'pluginLoading' => false,
+                            'showMessage' => false,
+                            'pluginOptions' => [
+                                'showPreview' => false,
+                                'showCaption' => true,
+                                'showRemove' => true,
+                                'showUpload' => false,
+                                'showCancel' => false,
+                                'browseClass' => 'btn btn-primary btn-block',
+                                'browseIcon' => '<i class="fa fa-folder-open"></i> ',
+                                'browseLabel' => "Subir Archivo",
+                                'uploadUrl' => Url::to(['/academico/especies/cargarpago']),
+                                'maxFileSize' => Yii::$app->params["MaxFileSize"],
+                                'uploadExtraData' => 'javascript:function (previewId,index) {
+                                        return {"upload_file": true, "name_file": "DOC-' . @Yii::$app->session->get("PB_perid") . '-' . time() . '"};
+                                    }',
+                            ],
+                            'pluginEvents' => [
+                                "filebatchselected" => "function (event) {
+                                    $('#txth_doc_adj_pago').val('DOC-" . @Yii::$app->session->get("PB_perid") . '-' . time() . "');
+                                    $('#txth_doc_adj_leads2').val($('#txt_doc_adj_pago').val());
+                                    $('#txt_doc_adj_pago').fileinput('upload');
+                                }",
+                                "fileuploaderror" => "function (event, data, msg) {
+                                    $(this).parent().parent().children().first().addClass('hide');
+                                    $('#txth_doc_adj_pago').val('');        
+                                }",
+                                "filebatchuploadcomplete" => "function (event, files, extra) { 
+                                    $(this).parent().parent().children().first().addClass('hide');
+                                }",
+                                "filebatchuploadsuccess" => "function (event, data, previewId, index) {
+                                    var form = data.form, files = data.files, extra = data.extra,
+                                    response = data.response, reader = data.reader;
+                                    $(this).parent().parent().children().first().addClass('hide');
+                                    var acciones = [{id: 'reloadpage', class: 'btn btn-primary', value: objLang.Accept, callback: 'reloadPage'}];       
+                                }",
+                                "fileuploaded" => "function (event, data, previewId, index) {
+                                    $(this).parent().parent().children().first().addClass('hide');
+                                    var acciones = [{id: 'reloadpage', class: 'btn btn-primary', value: objLang.Accept, callback: 'reloadPage'}];                           
+                                }",
+                            ],
+                        ]);
+                        ?>
+                    </div>     
+                </div>                  
+            </div>            
         </div>
     </div>
     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">

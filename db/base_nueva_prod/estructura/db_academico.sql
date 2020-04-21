@@ -1541,6 +1541,7 @@ CREATE TABLE `detalle_solicitud` (
   `dsol_valor` decimal(12,2) DEFAULT NULL,
   `dsol_total` decimal(12,2) DEFAULT NULL,
   `dsol_observacion` text,
+  `dsol_archivo_extra` varchar(500) DEFAULT NULL,
   `dsol_usuario_ingreso` bigint(20) NOT NULL,
   `dsol_usuario_modifica` bigint(20) DEFAULT NULL,
   `dsol_estado` varchar(1) DEFAULT NULL,
