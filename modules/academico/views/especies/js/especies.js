@@ -286,6 +286,7 @@ function limpiarDetalle() {
     $("#cmb_tramite option[value=0]").attr("selected", true);
     $("#cmb_especies option[value=0]").attr("selected", true);
     $('#txt_observacion').val(" ");
+    $('#txt_doc_adj_img').val(" ");    
     //$('#chk_envase').prop('checked', false);
 
 
@@ -309,6 +310,7 @@ function objProducto(indice) {
     rowGrid.dsol_estado = 1;
     rowGrid.fpag_nombre = $('#cmb_fpago option:selected').text();
     rowGrid.dsol_observacion = $('#txt_observacion').val();
+    rowGrid.dsol_archivo_extra = $('#txt_doc_adj_img').val();
     rowGrid.accion = "new";
     return rowGrid;
 }
@@ -409,6 +411,7 @@ function objProductoUpdate(i, Grid) {
     rowGrid.dsol_valor = Grid[i]['dsol_valor'];
     rowGrid.dsol_total = Grid[i]['dsol_total'];
     rowGrid.dsol_observacion = Grid[i]['dsol_observacion'];
+    rowGrid.dsol_archivo_extra = Grid[i]['dsol_archivo_extra'];
     rowGrid.dsol_usuario_ingreso = Grid[i]['dsol_usuario_ingreso'];
     rowGrid.dsol_estado = Grid[i]['dsol_estado'];
     rowGrid.accion = "edit";
@@ -575,6 +578,7 @@ function detLista() {
                     rowGrid.uaca_id = Grid[i]['uaca_id'];
                     rowGrid.tra_id = Grid[i]['tra_id'];
                     rowGrid.dsol_observacion = Grid[i]['dsol_observacion'];
+                    rowGrid.dsol_archivo_extra = Grid[i]['dsol_archivo_extra'];                    
                     rowGrid.esp_id = Grid[i]['esp_id'];
                     rowGrid.est_id = $('#txth_idest').val();
                     rowGrid.dsol_cantidad = Grid[i]['dsol_cantidad'];

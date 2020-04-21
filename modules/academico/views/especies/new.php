@@ -141,14 +141,14 @@ $leyenda = '<div ALIGN="justify" style = "width: 380px;" class="alert alert-info
             </div>             
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                 <div class="form-group">
-                    <label for="lbl_doc_adj_pago" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Yii::t("formulario", "Attach document") ?></label>
+                    <label for="lbl_doc_adj_img" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Yii::t("formulario", "Attach document") ?></label>
                     <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                        <?= Html::hiddenInput('txth_doc_adj_pago', '', ['id' => 'txth_doc_adj_pago']); ?>
+                        <?= Html::hiddenInput('txth_doc_adj_img', '', ['id' => 'txth_doc_adj_img']); ?>  
                         <?= Html::hiddenInput('txth_doc_adj_leads2', '', ['id' => 'txth_doc_adj_leads2']); ?>
                         <?php
                         echo CFileInputAjax::widget([
-                            'id' => 'txt_doc_adj_pago',
-                            'name' => 'txt_doc_adj_pago',
+                            'id' => 'txt_doc_adj_img',
+                            'name' => 'txt_doc_adj_img',
                             'pluginLoading' => false,
                             'showMessage' => false,
                             'pluginOptions' => [
@@ -160,21 +160,21 @@ $leyenda = '<div ALIGN="justify" style = "width: 380px;" class="alert alert-info
                                 'browseClass' => 'btn btn-primary btn-block',
                                 'browseIcon' => '<i class="fa fa-folder-open"></i> ',
                                 'browseLabel' => "Subir Archivo",
-                                'uploadUrl' => Url::to(['/academico/especies/cargarpago']),
+                                'uploadUrl' => Url::to(['/academico/especies/cargarimagen']),
                                 'maxFileSize' => Yii::$app->params["MaxFileSize"],
                                 'uploadExtraData' => 'javascript:function (previewId,index) {
-                                        return {"upload_file": true, "name_file": "DOC-' . @Yii::$app->session->get("PB_perid") . '-' . time() . '"};
+                                        return {"upload_file": true, "name_file": "IMG-' . @Yii::$app->session->get("PB_perid") . '-' . time() . microtime(true) . '"};
                                     }',
                             ],
                             'pluginEvents' => [
                                 "filebatchselected" => "function (event) {
-                                    $('#txth_doc_adj_pago').val('DOC-" . @Yii::$app->session->get("PB_perid") . '-' . time() . "');
-                                    $('#txth_doc_adj_leads2').val($('#txt_doc_adj_pago').val());
-                                    $('#txt_doc_adj_pago').fileinput('upload');
+                                    $('#txth_doc_adj_img').val('IMG-" . @Yii::$app->session->get("PB_perid") . '-' . time() . microtime(true) . "');
+                                    $('#txth_doc_adj_leads2').val($('#txt_doc_adj_img').val());
+                                    $('#txt_doc_adj_img').fileinput('upload');
                                 }",
                                 "fileuploaderror" => "function (event, data, msg) {
                                     $(this).parent().parent().children().first().addClass('hide');
-                                    $('#txth_doc_adj_pago').val('');        
+                                    $('#txth_doc_adj_img').val('');        
                                 }",
                                 "filebatchuploadcomplete" => "function (event, files, extra) { 
                                     $(this).parent().parent().children().first().addClass('hide');
