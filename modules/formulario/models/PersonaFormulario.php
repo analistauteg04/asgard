@@ -107,9 +107,8 @@ class PersonaFormulario extends \yii\db\ActiveRecord
         $con = \Yii::$app->db_academico;
         $estado = 1;
         $sql = "
-                SELECT 
-                        eac.eaca_id as id,
-                        eac.eaca_nombre as name
+                SELECT distinct eac.eaca_nombre as name,
+                        eac.eaca_id as id                        
                     FROM
                         " . $con->dbname . ".modalidad_estudio_unidad as mcn
                         INNER JOIN " . $con->dbname . ".estudio_academico as eac on eac.eaca_id = mcn.eaca_id

@@ -147,16 +147,16 @@ academico::registerTranslations();
             <label for="rb_estudios_ant" class="col-sm-5 control-label"><?= formulario::t("ficha", "Have you done previous studies?") ?><span class="text-danger">*</span></label>
             <div class="col-sm-7">
                 <label>
-                    <input type="radio" name="signup-si" value="1" >Si<br>
+                    <input type="radio" name="signup-si" id="signup-si" value="1" >Si<br>
                 </label>
                 <label>
-                    <input type="radio" name="signup-no" value="0">No<br>
+                    <input type="radio" name="signup-no" id="signup-no" value="0" checked>No<br>
                 </label>            
             </div>
         </div>
     </div>
     
-    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="otro_estudio"  style="display: none;">
         <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
             <div class="form-group">
                 <label for="lbl_institucion_acad" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_institucion_acad"><?= formulario::t("ficha", "Academic institution") ?></label>

@@ -105,4 +105,22 @@ $(document).ready(function() {
         }
     });
 
+    //Control del div de discapacidad
+    $('#signup-si').change(function () {
+        if ($('#signup-si').val() == 1) {
+            $('#otro_estudio').css('display', 'block');
+            $("#signup-no").prop("checked", "");
+        } else {
+            $('#otro_estudio').css('display', 'none');
+        }
+    });
+
+    $('#signup-no').change(function () {
+        if ($('#signup-no').val() == 0) {
+            $('#otro_estudio').css('display', 'none');
+            $("#signup-si").prop("checked", "");
+        } else {
+            $('#otro_estudio').css('display', 'block');
+        }
+    });
 });
