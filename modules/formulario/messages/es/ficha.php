@@ -45,9 +45,11 @@
 
 return [        
     "Academic institution" => 'Institución Académica',
+    "Academic Offer" => 'Oferta Académica',
     "Datasheet" => 'Ficha de Datos',
-    "Have you done previous studies?" => "¿Ha realizado estudios anteriores?",    
-    "Other Data" => 'Otros Datos',
+    "Have you done previous studies?" => "¿Ha realizado estudios anteriores?",        
+    "If your answer is (YES), indicate the name of the institution where you completed your studies and the degree you completed." => 'Si su respuesta es (SI), señalar el nombre de la institución donde realizó sus estudios y la carrera que cursó.',
     "Registry Date" => 'Fecha Registro',
+    
         
 ];

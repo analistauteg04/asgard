@@ -107,14 +107,7 @@ academico::registerTranslations();
                     <input type="text" class="form-control" value="" id="txt_telefono" data-type="telefono_sin" data-keydown="true" placeholder="<?= Yii::t("formulario", "Phone") ?>">
                 </div>
             </div>
-        </div>            
-    </div>          
-    
-    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-        <h3><span id="lbl_Personeria"><?= formulario::t("ficha", "Other Data") ?></span></h3>
-    </div>
-    
-    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        </div> 
         <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
             <div class="form-group">
                 <label for="txt_institucion" class="col-sm-5 control-label"><?= Yii::t("formulario", "Institution") ?><span class="text-danger">*</span></label>
@@ -122,8 +115,13 @@ academico::registerTranslations();
                     <input type="text" class="form-control PBvalidation keyupmce" value="" id="txt_institucion"  data-type="alfa" data-keydown="true" placeholder="<?= Yii::t("formulario", "Institution") ?>">
                 </div>
             </div>
-        </div>        
+        </div> 
+    </div>          
+    
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <h3><span id="lbl_Personeria"><?= formulario::t("ficha", "Academic Offer") ?></span></h3>
     </div>
+    
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
             <div class="form-group">
@@ -156,22 +154,27 @@ academico::registerTranslations();
         </div>
     </div>
     
-    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="otro_estudio"  style="display: none;">
-        <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
-            <div class="form-group">
-                <label for="lbl_institucion_acad" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_institucion_acad"><?= formulario::t("ficha", "Academic institution") ?></label>
-                <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">                                      
-                    <?= Html::dropDownList("cmb_institucion", 0, array_merge([Yii::t("formulario", "Select")], $arr_institucion), ["class" => "form-control", "id" => "cmb_institucion"]) ?>                                       
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
-            <div class="form-group">
-                <label for="txt_carrera" class="col-sm-5 control-label"><?= academico::t("Academico", "Career") ?><span class="text-danger"></span></label>
-                <div class="col-sm-7">
-                    <input type="text" class="form-control PBvalidation keyupmce" value="" id="txt_carrera"  data-type="alfa" data-keydown="true" placeholder="<?= academico::t("Academico", "Career")?>">
-                </div>
-            </div>
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="otro_estudio"  style="display: none;">        
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <h5><b><span id="lbl_Personeria"><?= formulario::t("ficha", "If your answer is (YES), indicate the name of the institution where you completed your studies and the degree you completed.") ?></span></b></h5>
         </div>        
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">        
+            <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
+                <div class="form-group">
+                    <label for="lbl_institucion_acad" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_institucion_acad"><?= formulario::t("ficha", "Academic institution") ?></label>
+                    <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">                                      
+                        <?= Html::dropDownList("cmb_institucion", 0, array_merge([Yii::t("formulario", "Select")], $arr_institucion), ["class" => "form-control", "id" => "cmb_institucion"]) ?>                                       
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
+                <div class="form-group">
+                    <label for="txt_carrera" class="col-sm-5 control-label"><?= academico::t("Academico", "Career") ?><span class="text-danger"></span></label>
+                    <div class="col-sm-7">
+                        <input type="text" class="form-control" value="" id="txt_carrera"  data-type="alfa" data-keydown="true" placeholder="<?= academico::t("Academico", "Career")?>">
+                    </div>
+                </div>
+            </div>   
+        </div>    
     </div>
 </form>

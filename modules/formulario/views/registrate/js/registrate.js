@@ -43,48 +43,29 @@ $(document).ready(function() {
         arrParams.apellidos = $('#txt_apellido').val();
         arrParams.correo = $('#txt_correo').val();
         arrParams.celular = $('#txt_celular').val();
-        arrParams.telefono = $('#txt_telefono').val();
-        arrParams.genero = $('#cmb_genero').val();
-        arrParams.fechanac = $('#txt_fecha_nacimiento').val();
-        arrParams.niv_interes = $('#cmb_nivel_estudio').val();
+        arrParams.telefono = $('#txt_telefono').val();        
         arrParams.pro_id = $('#cmb_provincia').val();
         arrParams.can_id = $('#cmb_ciudad').val();
-        arrParams.ocu_id = $('#cmb_ocupacion').val();
-        arrParams.eve_id = $('#cmb_evento').val();
-        //Verificación de los checkboxes.
-        var intereses = [];
-        var i = 0;
-        if ($('#chk_1').prop('checked')) {
-            intereses[i] = { "interes_id": 1 };
-            i = intereses.length;
-        }
-        if ($('#chk_2').prop('checked')) {
-            intereses[i] = { "interes_id": 2 };
-            i = intereses.length;
-        }
-        if ($('#chk_3').prop('checked')) {
-            intereses[i] = { "interes_id": 3 };
-            i = intereses.length;
-        }
-        if ($('#chk_4').prop('checked')) {
-            intereses[i] = { "interes_id": 4 };
-            i = intereses.length;
-        }
-        if ($('#chk_5').prop('checked')) {
-            intereses[i] = { "interes_id": 5 };
-            i = intereses.length;
-        }
-        if ($('#chk_6').prop('checked')) {
-            intereses[i] = { "interes_id": 6 };
-            i = intereses.length;
-        }
-        arrParams.intereses = intereses;
+        arrParams.institucion = $('#txt_institucion').val();
+        arrParams.unidad = $('#cmb_unidad').val();
+        arrParams.carrera_programa = $('#cmb_carrera_programa').val();
+       
+        if ($('input[name=signup-si]:checked').val() == 1) {
+            arrParams.estudio_anterior = 1;
+            arrParams.institucion_acad = $('#cmb_institucion').val();
+            arrParams.carrera_ant = $('#txt_carrera').val();
+        } else {
+            arrParams.estudio_anterior = 0;
+            arrParams.institucion_acad = 0;
+            arrParams.carrera_ant = "";
+        }         
+        
         if (!validateForm()) {
             requestHttpAjax(link, arrParams, function(response) {
                 showAlert(response.status, response.label, response.message);
                 if (!response.error) {
                     setTimeout(function() {
-                        window.location.href = $('#txth_base').val() + "/piensaecuador/registrate/index";
+                        window.location.href = $('#txth_base').val() + "/formulario/registrate/index";
                     }, 5000);
                 }
             }, true);

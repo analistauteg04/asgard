@@ -97,7 +97,7 @@ class PersonaFormulario extends \yii\db\ActiveRecord
     }
     
 
-/**
+    /**
      * Function obtener carreras segun unidad academica 
      * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>;
      * @property       
@@ -126,5 +126,79 @@ class PersonaFormulario extends \yii\db\ActiveRecord
         $comando->bindParam(":modalidad", $modalidad, \PDO::PARAM_INT);
         $resultData = $comando->queryAll();
         return $resultData;
-    }    
+    }   
+    
+    /**
+     * Function consultar por Identificación
+     * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>;
+     * @property       
+     * @return  
+     */
+    public function consultarXIdentificacion($identificacion)
+    {
+        $con = \Yii::$app->db_externo;
+        $estado = 1;        
+        $sql = "    SELECT 'S' existe
+                    FROM 
+                         " . $con->dbname . ".persona_formulario
+                    WHERE pfor_identificacion = :identificacion AND
+                        pfor_estado=:estado AND
+                        pfor_estado_logico=:estado";
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);       
+        $comando->bindParam(":identificacion", $identificacion, \PDO::PARAM_STR); 
+        $resultData = $comando->queryOne();
+        return $resultData;        
+    }
+    
+    /**
+     * Function insertar personas insertPersonaFormulario
+     * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>;
+     * @property       
+     * @return  
+     */
+    public function insertPersonaFormulario($con, $data) {  
+        $estado = 1;
+        $fecha_actual = date(Yii::$app->params["dateTimeByDefault"]);        
+        if ($data['pfor_est_ant']==1) {
+            $sql = "INSERT INTO " . $con->dbname . ".persona_formulario
+            (pfor_tipo_dni,pfor_identificacion,pfor_nombres,pfor_apellidos,pfor_correo,pfor_celular,pfor_telefono,
+             pro_id,can_id, pfor_institucion, uaca_id, eaca_id, pfor_estudio_anterior, ins_id, pfor_carrera_anterior, 
+             pfor_fecha_registro, pfor_estado, pfor_estado_logico) VALUES
+            (:pfor_tipo_dni,:pfor_identificacion,:pfor_nombres,:pfor_apellidos,:pfor_correo,:pfor_celular,:pfor_telefono,
+             :pro_id,:can_id, :pfor_institucion, :uaca_id, :eaca_id, :pfor_est_ant, :ins_id, :pfor_carrera_ant, 
+             :pfor_fecha_registro, :pfor_estado, :pfor_estado)";
+        } else {
+            $sql = "INSERT INTO " . $con->dbname . ".persona_formulario
+            (pfor_tipo_dni,pfor_identificacion,pfor_nombres,pfor_apellidos,pfor_correo,pfor_celular,pfor_telefono,
+             pro_id,can_id, pfor_institucion, uaca_id, eaca_id, pfor_estudio_anterior, 
+             pfor_fecha_registro, pfor_estado, pfor_estado_logico) VALUES
+            (:pfor_tipo_dni,:pfor_identificacion,:pfor_nombres,:pfor_apellidos,:pfor_correo,:pfor_celular,:pfor_telefono,
+             :pro_id,:can_id, :pfor_institucion, :uaca_id, :eaca_id, :pfor_est_ant, 
+             :pfor_fecha_registro, :pfor_estado, :pfor_estado)";
+        }        
+                
+        $command = $con->createCommand($sql);        
+        $command->bindParam(":pfor_tipo_dni",  $data['pfor_tipoidentifica'], \PDO::PARAM_STR);
+        $command->bindParam(":pfor_identificacion",  $data['pfor_identificacion'], \PDO::PARAM_STR);
+        $command->bindParam(":pfor_nombres",  $data['pfor_nombres'], \PDO::PARAM_STR);
+        $command->bindParam(":pfor_apellidos", $data['pfor_apellidos'], \PDO::PARAM_STR);
+        $command->bindParam(":pfor_correo", $data['pfor_correo'], \PDO::PARAM_STR);
+        $command->bindParam(":pfor_celular", $data['pfofr_celular'], \PDO::PARAM_STR);
+        $command->bindParam(":pfor_telefono", $data['pfor_telefono'], \PDO::PARAM_STR);       
+        $command->bindParam(":pro_id", $data['pro_id'], \PDO::PARAM_INT);
+        $command->bindParam(":can_id", $data['can_id'], \PDO::PARAM_INT);    
+        $command->bindParam(":pfor_institucion", $data['pfor_institucion'], \PDO::PARAM_STR);    
+        $command->bindParam(":uaca_id", $data['uaca_id'], \PDO::PARAM_INT);    
+        $command->bindParam(":eaca_id", $data['eaca_id'], \PDO::PARAM_INT);    
+        $command->bindParam(":pfor_est_ant", $data['pfor_est_ant'], \PDO::PARAM_STR);  
+        if ($data['pfor_est_ant']==1) {
+            $command->bindParam(":ins_id", $data['ins_id'], \PDO::PARAM_INT);    
+            $command->bindParam(":pfor_carrera_ant", $data['pfor_carrera_ant'], \PDO::PARAM_STR);                 
+        }                                                              
+        $command->bindParam(":pfor_fecha_registro", $fecha_actual, \PDO::PARAM_STR);         
+        $command->bindParam(":pfor_estado", $estado, \PDO::PARAM_STR);      
+        $command->execute();
+        return $con->getLastInsertID();
+    }
 }

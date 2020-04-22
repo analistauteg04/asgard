@@ -118,7 +118,7 @@ create table if not exists persona_formulario (
  `eaca_id` bigint(20) not null,  
  `pfor_estudio_anterior` varchar(1) not null,
  `ins_id` bigint(20) null,
- `pfor_carrera_anterior` varchar(1) null,
+ `pfor_carrera_anterior` varchar(500) null,
  `pfor_estado` varchar(1) not null,
  `pfor_fecha_registro` timestamp not null, 
  `pfor_fecha_creacion` timestamp not null default current_timestamp,

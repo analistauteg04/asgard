@@ -58,62 +58,41 @@ class RegistrateController extends \yii\web\Controller {
         ]);
     }     
     
-    /*public function actionSave() {
-        $mod_perext = new PersonaExterna();
-        $con = \Yii::$app->db_externo;
-        $ip = \app\models\Utilities::getClientRealIP(); // obtiene la ip de la máquina.   
+    public function actionSave() {
+        $mod_perform = new PersonaFormulario();
+        $con = \Yii::$app->db_externo;        
         if (Yii::$app->request->isAjax) {            
             $data = Yii::$app->request->post();                                  
             $transaction = $con->beginTransaction();
             try {  
-                $respPerexiste = $mod_perext->consultarXIdentificacion($data["identificacion"]);
+                $respPerexiste = $mod_perform->consultarXIdentificacion($data["identificacion"]);
                 \app\models\Utilities::putMessageLogFile('existe:'.$respPerexiste["existe"]);   
                 \app\models\Utilities::putMessageLogFile('tipo ident:'.$data["tipoidentifica"]);   
                 if (empty($respPerexiste["existe"])) {                    
                     $dataRegistro = array(                        
-                        'pext_tipoidentifica'  => $data["tipoidentifica"],
-                        'pext_identificacion'  => $data["identificacion"],
-                        'pext_nombres'  => ucwords(strtolower($data["nombres"])),
-                        'pext_apellidos'  => ucwords(strtolower($data["apellidos"])), 
-                        'pext_correo'  => strtolower($data["correo"]), 
-                        'pext_celular'  => $data["celular"], 
-                        'pext_telefono'  => $data["telefono"], 
-                        'pext_genero'  => $data["genero"], 
-                        'pext_fechanac'  => $data["fechanac"], 
-                        'nins_id'  => $data["niv_interes"], 
+                        'pfor_tipoidentifica'  => $data["tipoidentifica"],
+                        'pfor_identificacion'  => $data["identificacion"],
+                        'pfor_nombres'  => ucwords(strtolower($data["nombres"])),
+                        'pfor_apellidos'  => ucwords(strtolower($data["apellidos"])), 
+                        'pfor_correo'  => strtolower($data["correo"]), 
+                        'pfor_celular'  => $data["celular"], 
+                        'pfor_telefono'  => $data["telefono"],                                                 
                         'pro_id'  => $data["pro_id"], 
                         'can_id'  => $data["can_id"], 
-                        'eve_id'  => $data["eve_id"], 
-                        'ocu_id'  => $data["ocu_id"], 
-                        'pext_ip_registro'  => $ip, 
+                        'pfor_institucion' => ucwords(strtolower($data["institucion"])), 
+                        'uaca_id' => $data["unidad"], 
+                        'eaca_id' => $data["carrera_programa"], 
+                        'pfor_est_ant' => $data["estudio_anterior"],                         
+                        'ins_id' => $data["institucion_acad"], 
+                        'pfor_carrera_ant' => ucwords(strtolower($data["carrera_ant"])), 
                     );                                   
-                    $respPersext = $mod_perext->insertPersonaExterna($con, $dataRegistro);
-                    if ($respPersext) {
-                        //Verifica que existan intereses marcados.
-                        $arrIntereses = $data["intereses"]; 
-                        if (empty($arrIntereses)){
-                            $mensaje = "Seleccione unos de los intereses.";
-                            $exito = 0;
-                        } else {
-                            for ($a=0;$a<count($arrIntereses);$a++){   
-                                $intereses = 'S';
-                                $dataRegIntereses = array(
-                                    'int_id'  => $arrIntereses[$a]["interes_id"],
-                                    'pext_id'  => $respPersext,                             
-                                );                   
-                                $resIntereses = $mod_perext->insertPersonaExternaInteres($con, $dataRegIntereses);
-                                if (!($resIntereses)) {
-                                    $exito = 0;
-                                } 
-                            }
-                            //Si hubieron marcadas de intereses.
-                            if (($intereses=='S') and ($exito!='0')) {
-                                $exito = 1;
-                            } else {                                
-                                $exito = 0;
-                            }
-                        }
+                    $respPersform = $mod_perform->insertPersonaFormulario($con, $dataRegistro);
+                    if ($respPersform) {                        
+                        $exito = 1;
+                    } else {                                
+                        $exito = 0;
                     }
+                    
                 } else {                   
                     $mensaje = "Ya se encuentra registrado.";                    
                     $exito = 0;                    
@@ -129,20 +108,20 @@ class RegistrateController extends \yii\web\Controller {
                 } else {                    
                     $transaction->rollBack();   
                     $message = array(
-                            "wtmessage" => Yii::t("notificaciones", "Error al grabar ".$mensaje),
+                            "wtmessage" => Yii::t("notificaciones", "Error al grabar. ".$mensaje),
                             "title" => Yii::t('jslang', 'Error'),
                         );                    
-                    return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), false, $message);                                                                              
+                    return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error. "), false, $message);                                                                              
                 }
             } catch (Exception $ex) {
                 $transaction->rollBack();
                 $message = array(
-                    "wtmessage" => $ex->getMessage(), Yii::t("notificaciones", "Error al grabar."),
+                    "wtmessage" => $ex->getMessage(), Yii::t("notificaciones", "Error al grabar. "),
                     "title" => Yii::t('jslang', 'Error'),
                 );                                
                 return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), true, $message);
             }            
         }
-    }*/
+    }
 }
 
