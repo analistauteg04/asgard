@@ -185,7 +185,7 @@ $leyenda = '<div ALIGN="justify" style = "width: 380px;" class="alert alert-info
                         }",
                                             "fileuploaderror" => "function (event, data, msg) {
                             $(this).parent().parent().children().first().addClass('hide');
-                            $('#txth_doc_titulo').val('');
+                            $('#txth_doc_adj_img').val('');
                             //showAlert('NO_OK', 'error', {'wtmessage': objLang.Error_to_process_File__Try_again_, 'title': objLang.Error});   
                         }",
                                             "filebatchuploadcomplete" => "function (event, files, extra) { 
