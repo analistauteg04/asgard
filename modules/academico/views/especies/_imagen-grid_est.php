@@ -91,14 +91,15 @@ PbGridView::widget([
             'buttons' => [
                 'view' => function ($url, $model) {
                     return Html::a('<span class="glyphicon glyphicon-download"></span>', Url::to(['/academico/especies/generarespeciespdf', 'ids' => base64_encode($model['egen_id'])]), ["data-toggle" => "tooltip", "title" => "Descargar Especie", "data-pjax" => "0"]);
-                },
-                'descarga' => function ($url, $model) {
-                    return Html::a('<span class="glyphicon glyphicon-download-alt"></span>', Url::to(['/academico/especies/descargarimagen', 'espgen_id' => base64_encode($model['egen_id'])]), ["data-toggle" => "tooltip", "title" => "Descargar Imagen", "data-pjax" => "0"]);
-                },    
-                /*'descarga' => function ($url, $model) use ($imagen){                   
+                },            
+                'descarga' => function ($url, $model) use ($imagen){       
+                    if (!empty($imagen)) {
                         return Html::a('<span class="glyphicon glyphicon-download-alt"></span>', Url::to(['/site/getimage', 'route' => '/uploads/imagenespecie/' . $imagen]), ["download" => $imagen, "data-toggle" => "tooltip", "title" => "Descargar Imagen", "data-pjax" => 0]);
+                     } else {
+                        return "<span class = 'glyphicon glyphicon-download-alt' data-toggle = 'tooltip' title ='Descargar Imagen'  data-pjax = 0></span>";
+                    }    
                   
-                }, */         
+                },          
             ],
         ],
     ],

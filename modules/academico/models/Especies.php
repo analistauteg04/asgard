@@ -574,7 +574,7 @@ class Especies extends \yii\db\ActiveRecord {
         $estado = 1;
         $sql = "SELECT A.egen_id,A.dsol_id,A.egen_numero_solicitud,C.esp_rubro,concat(D.per_pri_nombre,' ',D.per_seg_nombre,' ',D.per_pri_apellido,' ',D.per_seg_apellido) Nombres,D.per_cedula,
                     A.uaca_id,F.uaca_nombre,G.mod_nombre,concat(E.resp_titulo,' ',E.resp_nombre) Responsable,date(A.egen_fecha_aprobacion) fecha_aprobacion,
-                    A.egen_fecha_caducidad,D.per_correo,D.per_celular,A.esp_id, ea.eaca_nombre Carrera, esp_dia_vigencia, det.dsol_observacion as detalle
+                    A.egen_fecha_caducidad,D.per_correo,D.per_celular,A.esp_id, ea.eaca_nombre Carrera, esp_dia_vigencia, det.dsol_observacion as detalle, det.dsol_archivo_extra as imagen, D.per_id
                     FROM " . $con->dbname . ".especies_generadas A
                             INNER JOIN (" . $con->dbname . ".estudiante B 
                                             INNER JOIN " . $con1->dbname . ".persona D ON B.per_id=D.per_id)
@@ -672,6 +672,80 @@ class Especies extends \yii\db\ActiveRecord {
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":csol_id", $csol_id, \PDO::PARAM_INT);
+        
+        $resultData = $comando->queryAll();
+        //Utilities::putMessageLogFile($resultData);
+        $dataProvider = new ArrayDataProvider([
+            'key' => 'id',
+            'allModels' => $resultData,
+            'pagination' => [
+                'pageSize' => Yii::$app->params["pageSize"],
+            ],
+            'sort' => [
+                'attributes' => [
+                    'egen_id',
+                    'fecha_aprobacion',
+                ],
+            ],
+        ]);
+        if ($onlyData) {
+            return $resultData;
+        } else {
+            return $dataProvider;
+        }
+    }
+
+    /**
+     * Function consultarcabeceraxdetalle
+     * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>
+     * @property integer $csol_id       
+     * @return  
+     */
+    public function consultarcabeceraxdetalle($dsol_id) {
+        $con = \Yii::$app->db_academico;
+        $estado = 1;
+        $sql = "SELECT csol_id
+                  FROM " . $con->dbname . ".detalle_solicitud                       
+                  WHERE dsol_id = :dsol_id AND
+                    dsol_estado = :estado AND
+                    dsol_estado_logico = :estado";
+
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":dsol_id", $dsol_id, \PDO::PARAM_INT);
+
+        $resultData = $comando->queryOne();
+        return $resultData;
+    }
+
+    public static function getSolicitudesGeneradasxdet($csol_id, $sol_id, $onlyData = false) {
+        $con = \Yii::$app->db_academico;
+        $con1 = \Yii::$app->db_asgard;
+        $estado = 1;    
+                      
+        $sql = "SELECT A.egen_id, concat(F.uaca_nomenclatura,T.tra_nomenclatura,lpad(ifnull(C.esp_codigo,0),3,'0'),'-',A.egen_numero_solicitud) as egen_numero_solicitud,
+                    T.tra_nombre as tramite, C.esp_rubro,concat(D.per_pri_nombre,' ',D.per_pri_apellido) Nombres,D.per_cedula,
+                    F.uaca_nombre,G.mod_nombre,date(A.egen_fecha_aprobacion) fecha_aprobacion,
+                    A.egen_fecha_caducidad
+                FROM " . $con->dbname . ".especies_generadas A
+                            INNER JOIN (" . $con->dbname . ".estudiante B 
+                                            INNER JOIN " . $con1->dbname . ".persona D ON B.per_id=D.per_id)
+                                    ON A.est_id=B.est_id
+                            INNER JOIN " . $con->dbname . ".detalle_solicitud ds on ds.dsol_id = A.dsol_id
+                            INNER JOIN " . $con->dbname . ".cabecera_solicitud cs on cs.csol_id = ds.csol_id
+                            INNER JOIN " . $con->dbname . ".especies C ON A.esp_id=C.esp_id
+                            INNER JOIN " . $con->dbname . ".unidad_academica F ON F.uaca_id=A.uaca_id
+                            INNER JOIN " . $con->dbname . ".modalidad G ON G.mod_id=A.mod_id
+                            INNER JOIN " . $con->dbname . ".tramite T ON T.tra_id = A.tra_id  
+                WHERE cs.csol_id = :csol_id AND ds.dsol_id = :dsol_id AND
+                      A.egen_estado=:estado AND 
+                      A.egen_estado_logico=:estado  
+                ORDER BY A.egen_id DESC; ";
+
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":csol_id", $csol_id, \PDO::PARAM_INT);
+        $comando->bindParam(":dsol_id", $sol_id, \PDO::PARAM_INT);
         
         $resultData = $comando->queryAll();
         //Utilities::putMessageLogFile($resultData);

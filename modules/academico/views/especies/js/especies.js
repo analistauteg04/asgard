@@ -310,7 +310,7 @@ function objProducto(indice) {
     rowGrid.dsol_estado = 1;
     rowGrid.fpag_nombre = $('#cmb_fpago option:selected').text();
     rowGrid.dsol_observacion = $('#txt_observacion').val();
-    rowGrid.dsol_archivo_extra = $('#txth_doc_adj_img').val();
+    rowGrid.dsol_archivo_extra = $('#txth_doc_adj_img').val()+ "." + $('#txth_doc_adj_leads2').val().split('.').pop();
     rowGrid.accion = "new";
     return rowGrid;
 }

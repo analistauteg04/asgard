@@ -331,6 +331,7 @@ class EspeciesController extends \app\components\CController {
 
     public function actionEspeciesgeneradas() {
         $per_id = @Yii::$app->session->get("PB_perid");
+        $ids = isset($_GET['ids']) ? base64_decode($_GET['ids']) : NULL;
         $especiesADO = new Especies();
         $mod_unidad = new UnidadAcademica();
         $mod_modalidad = new Modalidad();
@@ -370,15 +371,17 @@ class EspeciesController extends \app\components\CController {
             ]);
         } else {
             
-        }
+        }        
         $personaData = $especiesADO->consultaDatosEstudiante($per_id);
         $model = $especiesADO->getSolicitudesGeneradas($est_id, null, false);
         $arr_unidadac = $mod_unidad->consultarUnidadAcademicas();
         $arr_modalidad = $mod_modalidad->consultarModalidad($arr_unidadac[0]["id"], 1);
         $arr_tramite = $especiesADO->getTramite(1);
+        $cabFact = $especiesADO->consultarEspecieGenerada(7);
+        //Utilities::putMessageLogFile('xxccv'. $cabFact["imagen"]);
         return $this->render('especiesgeneradas', [
                     'model' => $model,
-                    //'personalData' => $personaData,
+                    'imagen' => $cabFact["imagen"],
                     'arrEstados' => $this->estadoPagos(),
                     'arr_unidad' => ArrayHelper::map($arr_unidadac, "id", "name"),
                     'arr_modalidad' => ArrayHelper::map($arr_modalidad, "id", "name"),
@@ -656,6 +659,29 @@ class EspeciesController extends \app\components\CController {
                     'arr_modalidad' => ArrayHelper::map($arr_modalidad, "id", "name"),
                     'arrEstados' => $this->estadoPagos(),
         ]);*/
+    }
+    public function actionDescargarimagen() {
+        //$per_id = @Yii::$app->session->get("PB_perid");
+        $gen_id = isset($_GET['espgen_id']) ? base64_decode($_GET['espgen_id']) : NULL;
+       
+        $especiesADO = new Especies();
+        $mod_unidad = new UnidadAcademica();
+        $mod_modalidad = new Modalidad();
+        $det_ids = $especiesADO->consultarEspecieGenerada($gen_id);
+        $cab_ids = $especiesADO->consultarcabeceraxdetalle($det_ids["dsol_id"]);
+        $personaData = $especiesADO->consultaDatosEstudiante($det_ids["per_id"]);
+        $cabSol = $especiesADO->consultarCabSolicitud($cab_ids["csol_id"]);
+        $model = $especiesADO->getSolicitudesGeneradasxdet($cab_ids["csol_id"], $det_ids["dsol_id"], false);
+        $arr_unidad = $mod_unidad->consultarUnidadAcademicas();
+        $arr_modalidad = $mod_modalidad->consultarModalidad($arr_unidad[0]["id"], 1);
+        return $this->render('descargarimagen', [
+                    'model' => $model,
+                    'arr_persona' => $personaData,
+                    'cabsolicitud' => $cabSol,
+                    'arr_unidad' => ArrayHelper::map($arr_unidad, "id", "name"),
+                    'arr_modalidad' => ArrayHelper::map($arr_modalidad, "id", "name"),
+                    'imagen' => $det_ids["imagen"],
+        ]);
     }
 
 }
