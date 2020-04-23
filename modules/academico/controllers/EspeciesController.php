@@ -227,7 +227,51 @@ class EspeciesController extends \app\components\CController {
                     }
                 }
             }
+            if ($data["procesar_file"]) {
+                $carga_archivo = $especiesADO->CargarArchivo($data["archivo"], $data["csol_id"]);
+                $data_especie = $especiesADO->consultaSolicitudexrubro($data["csol_id"]);
+                $especie_tramite = explode(",", $data_especie["especies"]);
+                for ($a = 0; $a < count($especie_tramite); $a++) {
+                    $datos_especie .=  $especie_tramite[$a] . ', ';
+                }
+                if ($carga_archivo['status']) {
+                    // enviar correo estudiante
+                    $correo = $data_persona["per_correo"];
+                    $user = $data_persona["per_pri_nombre"] . " " . $data_persona["per_pri_apellido"];
+                    $tituloMensaje = 'Adquisición de Especie Valorada en Línea';
+                    $asunto = 'Adquisición de Especie Valorada en Línea';
+                    $body = Utilities::getMailMessage("cargapagoalumno", array(
+                                "[[user]]" => $user,
+                                "[[tipo_especie]]" => substr($datos_especie, 0, -2)), Yii::$app->language, Yii::$app->basePath . "/modules/academico");
+                    Utilities::sendEmail(
+                            $tituloMensaje, Yii::$app->params["adminEmail"], [$correo => $user], $asunto, $body);
+                    // enviar correo colecturia
+                    //$user = $data_persona["per_pri_nombre"] . " ". $data_persona["per_pri_apellido"];
+                    //$tituloMensaje = 'Adquisición de Especie Valorada en Línea';
+                    //$asunto = 'Adquisición de Especie Valorada en Línea';
+                    $bodies = Utilities::getMailMessage("cargapagocolecturia", array(
+                                "[[user]]" => $user,
+                                "[[tipo_especie]]" => substr($datos_especie, 0, -2)), Yii::$app->language, Yii::$app->basePath . "/modules/academico");
+                    Utilities::sendEmail(
+                            $tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["colecturia"] => "Colecturia"], $asunto, $bodies);
+
+                    $message = array(
+                        "wtmessage" => Yii::t("notificaciones", "Archivo procesado correctamente." . $carga_archivo['data']),
+                        "title" => Yii::t('jslang', 'Success'),
+                    );
+                    return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Success"), false, $message);
+                } else {
+                    $message = array(
+                        "wtmessage" => Yii::t("notificaciones", "Error al procesar el archivo. " . $carga_archivo['message']),
+                        "title" => Yii::t('jslang', 'Error'),
+                    );
+                    return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), true, $message);
+                }
+                return;
+            }
         }
+
+
         $personaData = $especiesADO->consultaDatosEstudiante($per_id);
         $arr_unidadac = $mod_unidad->consultarUnidadAcademicas();
         $arr_modalidad = $mod_modalidad->consultarModalidad($arr_unidadac[0]["id"], 1);
@@ -242,6 +286,7 @@ class EspeciesController extends \app\components\CController {
                     'arrEstados' => $this->estadoPagos(),
         ]);
     }
+
 
     public function actionAutorizarpago() {
         $ids = isset($_GET['ids']) ? base64_decode($_GET['ids']) : NULL;
