@@ -119,29 +119,29 @@ $(document).ready(function () {
                     arrParams.unidad = $('#cmb_ninteres').val();
                     arrParams.moda_id = $('#cmb_modalidad').val();
                     arrParams.gettramite = true;
-                    requestHttpAjax(link, arrParams, function(response) {
+                    requestHttpAjax(link, arrParams, function (response) {
                         if (response.status == "OK") {
                             data = response.message;
                             setComboDataselect(data.tramite, "cmb_tramite", "Seleccionar");
                         }
                     }, true);
                 }
-                
+
                 ///
             }
         }, true);
     });
-    
+
     $('#cmb_estado').change(function () {
         if ($('#cmb_estado').val() == 2)
-        {           
+        {
             $('#Divobservacion').show();
         } else
-        {            
+        {
             $('#Divobservacion').hide();
         }
-    });      
-   $('#cmb_unidad').change(function () {
+    });
+    $('#cmb_unidad').change(function () {
         var link = $('#txth_base').val() + "/academico/especies/especiesgeneradas";
         var arrParams = new Object();
         arrParams.unidad = $('#cmb_unidad').val();
@@ -157,14 +157,14 @@ $(document).ready(function () {
                     arrParams.unidad = $('#cmb_unidad').val();
                     arrParams.moda_id = $('#cmb_modalidad_esp').val();
                     arrParams.gettramite = true;
-                    requestHttpAjax(link, arrParams, function(response) {
+                    requestHttpAjax(link, arrParams, function (response) {
                         if (response.status == "OK") {
                             data = response.message;
                             setComboDataselect(data.tramite, "cmb_tramite_esp", "Seleccionar");
                         }
                     }, true);
                 }
-                
+
                 ///
             }
         }, true);
@@ -246,14 +246,14 @@ function agregarItemsProducto(opAccion) {
                 var size = arr_Grid.length;
                 if (size > 0) {
                     //Varios Items
-                    //if (codigoExiste(nombre_especie, 'esp_nombre', sessionStorage.dts_Producto)) {//Verifico si el Codigo Existe  para no Dejar ingresar Repetidos
+                    if (codigoExiste(nombre_especie, 'esp_nombre', sessionStorage.dts_Producto)) {//Verifico si el Codigo Existe  para no Dejar ingresar Repetidos
                         arr_Grid[size] = objProducto(size);
                         sessionStorage.dts_Producto = JSON.stringify(arr_Grid);
                         addVariosItemProducto(tGrid, arr_Grid, -1);
                         limpiarDetalle();
-                    /*} else {
+                    } else {
                         showAlert('OK', 'error', {"wtmessage": 'Item ya existe en su lista", "Información', "title": 'Información'});
-                    }*/
+                    }
                 } else {
                     /*Agrego a la Sesion*/
                     //Primer Items
@@ -286,7 +286,6 @@ function limpiarDetalle() {
     $("#cmb_tramite option[value=0]").attr("selected", true);
     $("#cmb_especies option[value=0]").attr("selected", true);
     $('#txt_observacion').val(" ");
-    $('#txt_doc_adj_img').val(" ");    
     //$('#chk_envase').prop('checked', false);
 
 
@@ -310,7 +309,6 @@ function objProducto(indice) {
     rowGrid.dsol_estado = 1;
     rowGrid.fpag_nombre = $('#cmb_fpago option:selected').text();
     rowGrid.dsol_observacion = $('#txt_observacion').val();
-    rowGrid.dsol_archivo_extra = $('#txt_doc_adj_img').val();
     rowGrid.accion = "new";
     return rowGrid;
 }
@@ -334,7 +332,7 @@ function retornaFilaProducto(c, Grid, TbGtable, op) {
     strFila += '<td>' + Grid[c]['uaca_nombre'] + '</td>';
     strFila += '<td style="display:none; border:none;">' + Grid[c]['tra_id'] + '</td>';
     strFila += '<td>' + Grid[c]['tra_nombre'] + '</td>';
-    strFila += '<td style="display:none; border:none;">' + Grid[c]['esp_id'] + '</td>';    
+    strFila += '<td style="display:none; border:none;">' + Grid[c]['esp_id'] + '</td>';
     strFila += '<td>' + Grid[c]['esp_nombre'] + '</td>';
     //strFila += '<td>' + Grid[c]['fpag_nombre'] + '</td>';
     strFila += '<td>' + Grid[c]['dsol_cantidad'] + '</td>';
@@ -411,7 +409,6 @@ function objProductoUpdate(i, Grid) {
     rowGrid.dsol_valor = Grid[i]['dsol_valor'];
     rowGrid.dsol_total = Grid[i]['dsol_total'];
     rowGrid.dsol_observacion = Grid[i]['dsol_observacion'];
-    rowGrid.dsol_archivo_extra = Grid[i]['dsol_archivo_extra'];
     rowGrid.dsol_usuario_ingreso = Grid[i]['dsol_usuario_ingreso'];
     rowGrid.dsol_estado = Grid[i]['dsol_estado'];
     rowGrid.accion = "edit";
@@ -578,7 +575,6 @@ function detLista() {
                     rowGrid.uaca_id = Grid[i]['uaca_id'];
                     rowGrid.tra_id = Grid[i]['tra_id'];
                     rowGrid.dsol_observacion = Grid[i]['dsol_observacion'];
-                    rowGrid.dsol_archivo_extra = Grid[i]['dsol_archivo_extra'];                    
                     rowGrid.esp_id = Grid[i]['esp_id'];
                     rowGrid.est_id = $('#txth_idest').val();
                     rowGrid.dsol_cantidad = Grid[i]['dsol_cantidad'];
@@ -721,7 +717,7 @@ function exportExcel() {
     var modalidad = $('#cmb_modalidad_esp').val();
     var tramite = $('#cmb_tramite_esp').val();
 
-    window.location.href = $('#txth_base').val() + "/academico/especies/expexcelespecies?search=" + search + "&f_ini="+ f_ini + "&f_fin="+ f_fin + '&unidad='+ unidad + "&modalidad=" + modalidad + "&tramite=" + tramite;
+    window.location.href = $('#txth_base').val() + "/academico/especies/expexcelespecies?search=" + search + "&f_ini=" + f_ini + "&f_fin=" + f_fin + '&unidad=' + unidad + "&modalidad=" + modalidad + "&tramite=" + tramite;
 }
 
 function exportPdf() {
@@ -732,5 +728,6 @@ function exportPdf() {
     var modalidad = $('#cmb_modalidad_esp').val();
     var tramite = $('#cmb_tramite_esp').val();
 
-    window.location.href = $('#txth_base').val() + "/academico/especies/exppdfespecies?pdf=1&search=" + search + "&f_ini="+ f_ini + "&f_fin="+ f_fin + '&unidad='+ unidad + "&modalidad=" + modalidad + "&tramite=" + tramite;
+    window.location.href = $('#txth_base').val() + "/academico/especies/exppdfespecies?pdf=1&search=" + search + "&f_ini=" + f_ini + "&f_fin=" + f_fin + '&unidad=' + unidad + "&modalidad=" + modalidad + "&tramite=" + tramite;
 }
+

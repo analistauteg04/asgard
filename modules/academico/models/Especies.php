@@ -251,10 +251,10 @@ class Especies extends \yii\db\ActiveRecord {
             //$dts_Det[$i]['est_id'] = 1;
             $sql = "INSERT INTO " . $con->dbname . ".detalle_solicitud
                         (csol_id,tra_id,esp_id,est_id,dsol_cantidad,dsol_valor,dsol_total,dsol_observacion,
-                        dsol_usuario_ingreso,dsol_estado,dsol_fecha_creacion,dsol_estado_logico)
+                        dsol_archivo_extra, dsol_usuario_ingreso,dsol_estado,dsol_fecha_creacion,dsol_estado_logico)
                     VALUES
                         (:csol_id,:tra_id,:esp_id,:est_id,:dsol_cantidad,:dsol_valor,:dsol_total,:dsol_observacion,
-                        :dsol_usuario_ingreso,1,CURRENT_TIMESTAMP(),1);";
+                        :dsol_archivo_extra,:dsol_usuario_ingreso,1,CURRENT_TIMESTAMP(),1);";
             $command = $con->createCommand($sql);
             $command->bindParam(":csol_id", $idCab, \PDO::PARAM_INT);
             $command->bindParam(":tra_id", $dts_Det[$i]['tra_id'], \PDO::PARAM_INT);
@@ -264,6 +264,7 @@ class Especies extends \yii\db\ActiveRecord {
             $command->bindParam(":dsol_valor", $dts_Det[$i]['dsol_valor'], \PDO::PARAM_STR);
             $command->bindParam(":dsol_total", $dts_Det[$i]['dsol_total'], \PDO::PARAM_STR);
             $command->bindParam(":dsol_observacion", ucfirst(mb_strtolower($dts_Det[$i]['dsol_observacion'],'UTF-8')), \PDO::PARAM_STR);
+            $command->bindParam(":dsol_archivo_extra",$dts_Det[$i]['dsol_archivo_extra'], \PDO::PARAM_STR);
             $command->bindParam(":dsol_usuario_ingreso", $dts_Det[$i]['dsol_usuario_ingreso'], \PDO::PARAM_INT);
             $command->execute();
         }
