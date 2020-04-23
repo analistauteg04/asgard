@@ -726,5 +726,4 @@ class EspeciesController extends \app\components\CController {
                     'imagen' => $det_ids["imagen"],
         ]);
     }
-
 }

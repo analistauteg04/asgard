@@ -733,4 +733,3 @@ function exportPdf() {
 
     window.location.href = $('#txth_base').val() + "/academico/especies/exppdfespecies?pdf=1&search=" + search + "&f_ini=" + f_ini + "&f_fin=" + f_fin + '&unidad=' + unidad + "&modalidad=" + modalidad + "&tramite=" + tramite;
 }
-
