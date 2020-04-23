@@ -412,6 +412,7 @@ function objProductoUpdate(i, Grid) {
     rowGrid.dsol_valor = Grid[i]['dsol_valor'];
     rowGrid.dsol_total = Grid[i]['dsol_total'];
     rowGrid.dsol_observacion = Grid[i]['dsol_observacion'];
+    rowGrid.dsol_archivo_extra = Grid[i]['dsol_archivo_extra'];
     rowGrid.dsol_usuario_ingreso = Grid[i]['dsol_usuario_ingreso'];
     rowGrid.dsol_estado = Grid[i]['dsol_estado'];
     rowGrid.accion = "edit";
@@ -578,6 +579,7 @@ function detLista() {
                     rowGrid.uaca_id = Grid[i]['uaca_id'];
                     rowGrid.tra_id = Grid[i]['tra_id'];
                     rowGrid.dsol_observacion = Grid[i]['dsol_observacion'];
+                    rowGrid.dsol_archivo_extra = Grid[i]['dsol_archivo_extra'];
                     rowGrid.esp_id = Grid[i]['esp_id'];
                     rowGrid.est_id = $('#txth_idest').val();
                     rowGrid.dsol_cantidad = Grid[i]['dsol_cantidad'];

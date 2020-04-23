@@ -689,19 +689,6 @@ class EspeciesController extends \app\components\CController {
                 }
             }
         }
-       /* $personaData = $especiesADO->consultaDatosEstudiante($per_id);
-        $arr_unidadac = $mod_unidad->consultarUnidadAcademicas();
-        $arr_modalidad = $mod_modalidad->consultarModalidad($arr_unidadac[0]["id"], 1);
-        $model = $especiesADO->getSolicitudesAlumnos($est_id, null, false);
-        return $this->render('cargarpago', [
-                    'model' => $model,
-                    'arr_persona' => $personaData,
-                    'cab_solicitud' => $especiesADO->consultarCabSolicitud($ids),
-                    'det_solicitud' => json_encode($especiesADO->consultarDetSolicitud($ids)),
-                    'arr_unidad' => ArrayHelper::map($arr_unidadac, "id", "name"),
-                    'arr_modalidad' => ArrayHelper::map($arr_modalidad, "id", "name"),
-                    'arrEstados' => $this->estadoPagos(),
-        ]);*/
     }
     public function actionDescargarimagen() {
         //$per_id = @Yii::$app->session->get("PB_perid");
