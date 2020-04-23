@@ -19,27 +19,21 @@ admision::registerTranslations();
         </div>
 </div>-->
 <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
-    <h4><span id="lbl_general"><?= admision::t("Solicitudes", "General Information") ?></span></h4> 
-</div>
-
-
-<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
     <form class="form-horizontal">
         <?=
-        $this->render('_especies-search', [           
-            'arrEstados' => $arrEstados,
+        $this->render('_imagen-search_est', [           
+            'arr_persona' => $arr_persona,
+            'cab_solicitud' => $cabsolicitud,   
             'arr_unidad' => $arr_unidad,
             'arr_modalidad' => $arr_modalidad,
-            'arr_tramite' => $arr_tramite,
             ]);
         ?>
     </form>
 </div>
 <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
     <?=
-    $this->render('_especies-grid', [
+    $this->render('_imagen-grid_est', [
         'model' => $model,
-        //'url' => $url, 
         'imagen' => $imagen,     
         ]);
     ?>

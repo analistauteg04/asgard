@@ -375,6 +375,7 @@ class EspeciesController extends \app\components\CController {
 
     public function actionEspeciesgeneradas() {
         $per_id = @Yii::$app->session->get("PB_perid");
+        $ids = isset($_GET['ids']) ? base64_decode($_GET['ids']) : NULL;
         $especiesADO = new Especies();
         $mod_unidad = new UnidadAcademica();
         $mod_modalidad = new Modalidad();
@@ -414,15 +415,17 @@ class EspeciesController extends \app\components\CController {
             ]);
         } else {
             
-        }
+        }        
         $personaData = $especiesADO->consultaDatosEstudiante($per_id);
         $model = $especiesADO->getSolicitudesGeneradas($est_id, null, false);
         $arr_unidadac = $mod_unidad->consultarUnidadAcademicas();
         $arr_modalidad = $mod_modalidad->consultarModalidad($arr_unidadac[0]["id"], 1);
         $arr_tramite = $especiesADO->getTramite(1);
+        $cabFact = $especiesADO->consultarEspecieGenerada(7);
+        //Utilities::putMessageLogFile('xxccv'. $cabFact["imagen"]);
         return $this->render('especiesgeneradas', [
                     'model' => $model,
-                    //'personalData' => $personaData,
+                    'imagen' => $cabFact["imagen"],
                     'arrEstados' => $this->estadoPagos(),
                     'arr_unidad' => ArrayHelper::map($arr_unidadac, "id", "name"),
                     'arr_modalidad' => ArrayHelper::map($arr_modalidad, "id", "name"),
@@ -653,6 +656,74 @@ class EspeciesController extends \app\components\CController {
                     'cabsolicitud' => $cabSol,
                     'arr_unidad' => ArrayHelper::map($arr_unidad, "id", "name"),
                     'arr_modalidad' => ArrayHelper::map($arr_modalidad, "id", "name"),
+        ]);
+    }
+    public function actionCargarimagen() {
+        $per_id = @Yii::$app->session->get("PB_perid");
+        $ids = isset($_GET['ids']) ? base64_decode($_GET['ids']) : NULL;
+        //Utilities::putMessageLogFile($ids);
+        $especiesADO = new Especies();
+        $est_id = $especiesADO->recuperarIdsEstudiente($per_id);
+        $mod_unidad = new UnidadAcademica();
+        $mod_modalidad = new Modalidad();
+        $mod_persona = new Persona();
+        $data_persona = $mod_persona->consultaPersonaId($per_id);
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+            if ($data["upload_file"]) {
+                if (empty($_FILES)) {
+                    return json_encode(['error' => Yii::t("notificaciones", "Error to process File {file}. Try again.", ['{file}' => basename($files['name'])])]);
+                }
+                //Recibe Parámetros
+                $files = $_FILES[key($_FILES)];
+                $arrIm = explode(".", basename($files['name']));
+                $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                if ($typeFile == 'jpg' || $typeFile == 'png' || $typeFile == 'pdf') {
+                    $dirFileEnd = Yii::$app->params["documentFolder"] . "imagenespecie/" . $data["name_file"] . "." . $typeFile;
+                    $status = Utilities::moveUploadFile($files['tmp_name'], $dirFileEnd);
+                    if ($status) {
+                        return true;
+                    } else {
+                        return json_encode(['error' => Yii::t("notificaciones", "Error to process File {file}. Try again.", ['{file}' => basename($files['name'])])]);
+                    }
+                }
+            }
+        }
+       /* $personaData = $especiesADO->consultaDatosEstudiante($per_id);
+        $arr_unidadac = $mod_unidad->consultarUnidadAcademicas();
+        $arr_modalidad = $mod_modalidad->consultarModalidad($arr_unidadac[0]["id"], 1);
+        $model = $especiesADO->getSolicitudesAlumnos($est_id, null, false);
+        return $this->render('cargarpago', [
+                    'model' => $model,
+                    'arr_persona' => $personaData,
+                    'cab_solicitud' => $especiesADO->consultarCabSolicitud($ids),
+                    'det_solicitud' => json_encode($especiesADO->consultarDetSolicitud($ids)),
+                    'arr_unidad' => ArrayHelper::map($arr_unidadac, "id", "name"),
+                    'arr_modalidad' => ArrayHelper::map($arr_modalidad, "id", "name"),
+                    'arrEstados' => $this->estadoPagos(),
+        ]);*/
+    }
+    public function actionDescargarimagen() {
+        //$per_id = @Yii::$app->session->get("PB_perid");
+        $gen_id = isset($_GET['espgen_id']) ? base64_decode($_GET['espgen_id']) : NULL;
+       
+        $especiesADO = new Especies();
+        $mod_unidad = new UnidadAcademica();
+        $mod_modalidad = new Modalidad();
+        $det_ids = $especiesADO->consultarEspecieGenerada($gen_id);
+        $cab_ids = $especiesADO->consultarcabeceraxdetalle($det_ids["dsol_id"]);
+        $personaData = $especiesADO->consultaDatosEstudiante($det_ids["per_id"]);
+        $cabSol = $especiesADO->consultarCabSolicitud($cab_ids["csol_id"]);
+        $model = $especiesADO->getSolicitudesGeneradasxdet($cab_ids["csol_id"], $det_ids["dsol_id"], false);
+        $arr_unidad = $mod_unidad->consultarUnidadAcademicas();
+        $arr_modalidad = $mod_modalidad->consultarModalidad($arr_unidad[0]["id"], 1);
+        return $this->render('descargarimagen', [
+                    'model' => $model,
+                    'arr_persona' => $personaData,
+                    'cabsolicitud' => $cabSol,
+                    'arr_unidad' => ArrayHelper::map($arr_unidad, "id", "name"),
+                    'arr_modalidad' => ArrayHelper::map($arr_modalidad, "id", "name"),
+                    'imagen' => $det_ids["imagen"],
         ]);
     }
 

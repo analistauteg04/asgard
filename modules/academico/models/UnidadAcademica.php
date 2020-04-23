@@ -161,5 +161,33 @@ class UnidadAcademica extends \app\modules\academico\components\CActiveRecord {
         $resultData = $comando->queryOne();
         return $resultData;
     }
+    
+    
+     /**
+     * Function consulta el nombre de unidad academica 
+     * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>;
+     * @property       
+     * @return  
+     */
+    public function consultarUnidadAcademicasxUteg() {
+        $con = \Yii::$app->db_academico;
+        $estado = 1;
+        $sql = "
+                    SELECT 
+                        unia.uaca_nombre as name,
+                        unia.uaca_id as id
+                    FROM 
+                        " . $con->dbname . ".unidad_academica as unia            
+                    WHERE   
+                        unia.uaca_estado_logico=:estado AND 
+                        unia.uaca_estado=:estado AND
+                        unia.uaca_id in (1,2)
+                    ORDER BY 2 asc
+               ";
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $resultData = $comando->queryAll();
+        return $resultData;
+    }
 
 }

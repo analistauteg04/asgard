@@ -286,6 +286,8 @@ function limpiarDetalle() {
     $("#cmb_tramite option[value=0]").attr("selected", true);
     $("#cmb_especies option[value=0]").attr("selected", true);
     $('#txt_observacion').val(" ");
+
+    //$('#txth_doc_adj_img').val(" ");    
     //$('#chk_envase').prop('checked', false);
 
 
@@ -301,7 +303,7 @@ function objProducto(indice) {
     rowGrid.tra_nombre = $('#cmb_tramite option:selected').text();
     rowGrid.esp_id = $('#cmb_especies option:selected').val();
     rowGrid.esp_nombre = $('#cmb_especies option:selected').text();
-    rowGrid.est_id = 0;//$('#cmb_por_id option:selected').val();
+    rowGrid.est_id = $('#txth_idest').val();
     rowGrid.dsol_cantidad = $('#txt_dsol_cantidad').val();
     rowGrid.dsol_valor = $('#txt_dsol_valor').val();
     rowGrid.dsol_total = $('#txt_dsol_total').val();
@@ -309,6 +311,7 @@ function objProducto(indice) {
     rowGrid.dsol_estado = 1;
     rowGrid.fpag_nombre = $('#cmb_fpago option:selected').text();
     rowGrid.dsol_observacion = $('#txt_observacion').val();
+    rowGrid.dsol_archivo_extra = $('#txth_doc_adj_img').val()+ "." + $('#txth_doc_adj_leads2').val().split('.').pop();
     rowGrid.accion = "new";
     return rowGrid;
 }
@@ -559,7 +562,7 @@ function cabLista() {
 function detLista() {
     var TbGtable = 'TbG_Productos';
     var arrayList = new Array;
-    var c = 0;
+    var c = 0;        
     //Usa los datos del Session Stores
     if (sessionStorage.dts_Producto) {
         var Grid = JSON.parse(sessionStorage.dts_Producto);

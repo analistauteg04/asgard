@@ -98,3 +98,30 @@ create table if not exists persona_externa (
  foreign key (int_id) references `interes`(int_id)
  );
 
+-- --------------------------------------------------------
+-- 
+-- Estructura de tabla para la tabla `persona_formulario`
+-- --------------------------------------------------------
+create table if not exists persona_formulario (
+ `pfor_id` bigint(20) not null auto_increment primary key, 
+ `pfor_nombres` varchar(60) not null, 
+ `pfor_apellidos` varchar(60) not null, 
+ `pfor_identificacion` varchar(15) not null,
+ `pfor_tipo_dni` varchar(5) not null,
+ `pfor_correo` varchar(50) not null, 
+ `pfor_celular` varchar(20) null,
+ `pfor_telefono` varchar(20) null,
+ `pro_id` bigint(20) not null,  
+ `can_id` bigint(20) not null,
+ `pfor_institucion` varchar(500) not null,
+ `uaca_id` bigint(20) not null,  
+ `eaca_id` bigint(20) not null,  
+ `pfor_estudio_anterior` varchar(1) not null,
+ `ins_id` bigint(20) null,
+ `pfor_carrera_anterior` varchar(500) null,
+ `pfor_estado` varchar(1) not null,
+ `pfor_fecha_registro` timestamp not null, 
+ `pfor_fecha_creacion` timestamp not null default current_timestamp,
+ `pfor_fecha_modificacion` timestamp null default null,
+ `pfor_estado_logico` varchar(1) not null
+ );
