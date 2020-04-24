@@ -21,7 +21,7 @@ Especies::registerTranslations();
 
 PbGridView::widget([
     'id' => 'TbG_Solicitudes',
-    'showExport' => true,
+    //'showExport' => true,
     'fnExportEXCEL' => "exportExcel",
     'fnExportPDF' => "exportPdf",
     'dataProvider' => $model,
@@ -94,9 +94,9 @@ PbGridView::widget([
                 },            
                 'descarga' => function ($url, $model) use ($imagen){       
                     if (!empty($imagen)) {
-                        return Html::a('<span class="glyphicon glyphicon-download-alt"></span>', Url::to(['/site/getimage', 'route' => '/uploads/imagenespecie/' . $imagen]), ["download" => $imagen, "data-toggle" => "tooltip", "title" => "Descargar Imagen", "data-pjax" => 0]);
+                        return Html::a('<span class="glyphicon glyphicon-download-alt"></span>', Url::to(['/site/getimage', 'route' => '/uploads/imagenespecie/' . $imagen]), ["download" => $imagen, "data-toggle" => "tooltip", "title" => "Descargar Justificación", "data-pjax" => 0]);
                      } else {
-                        return "<span class = 'glyphicon glyphicon-download-alt' data-toggle = 'tooltip' title ='Descargar Imagen'  data-pjax = 0></span>";
+                        return "<span class = 'glyphicon glyphicon-download-alt' data-toggle = 'tooltip' title ='Descargar Justificación'  data-pjax = 0></span>";
                     }    
                   
                 },          
