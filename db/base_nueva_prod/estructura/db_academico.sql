@@ -743,7 +743,7 @@ create table if not exists `planifica_academic_malla_det` (
 --  
 -- Estructura de tabla para la tabla `paralelo_planificacion`
 -- 
-create table if not exists `paralelo_planificacion` (
+/*create table if not exists `paralelo_planificacion` (
   `ppla_id` bigint(20) not null auto_increment primary key,   
   `pamd_id` bigint(20) not null,
   `pppr_id` bigint(20) null, 
@@ -757,7 +757,7 @@ create table if not exists `paralelo_planificacion` (
   `ppla_estado_logico` varchar(1) not null,  
   foreign key (pamd_id) references `planifica_academic_malla_det`(pamd_id),
   foreign key (pppr_id) references `paralelo_promocion_programa`(pppr_id)
-);
+);*/
 
 -- --------------------------------------------------------
 -- 
@@ -765,19 +765,25 @@ create table if not exists `paralelo_planificacion` (
 -- 
 create table if not exists `distributivo_academico` (
   `daca_id` bigint(20) not null auto_increment primary key, 
-  `pamd_id` bigint(20) not null,
+  `paca_id` bigint(20) null,
+  `ppro_id` bigint(20) null,
+  `asi_id` bigint(20) not null,
   `pro_id` bigint(20) not null,  
-  `ppla_id` bigint(20) not null,  
+  `uaca_id` bigint(20) not null,  
+  `mod_id` bigint(20) not null,  
   `daca_fecha_registro` timestamp null default null,
   `daca_usuario_ingreso` bigint(20) not null,
   `daca_usuario_modifica` bigint(20)  null,
   `daca_estado` varchar(1) not null,
   `daca_fecha_creacion` timestamp not null default current_timestamp,
   `daca_fecha_modificacion` timestamp null default null,
-  `daca_estado_logico` varchar(1) not null,  
-  foreign key (pamd_id) references `planifica_academic_malla_det`(pamd_id),
-  foreign key (pro_id) references `profesor`(pro_id),
-  foreign key (ppla_id) references `paralelo_planificacion`(ppla_id)
+  `daca_estado_logico` varchar(1) not null,    
+  foreign key (pro_id) references `profesor`(pro_id),  
+  foreign key (paca_id) references `periodo_academico`(paca_id),  
+  foreign key (asi_id) references `asignatura`(asi_id),  
+  foreign key (uaca_id) references `unidad_academica`(uaca_id), 
+  foreign key (mod_id) references `modalidad`(mod_id),
+  foreign key (ppro_id) references `promocion_programa`(ppro_id)
 );
 
 -- --------------------------------------------------------
@@ -1074,7 +1080,7 @@ create table if not exists registro_marcacion_generada (
 
 -- --------------------------------------------------------
 --
--- Estructura de tabla para la tabla `distributivo`
+-- Estructura de tabla para la tabla `distributivo`  
 --
 create table if not exists `distributivo` (
  `dis_id` bigint(20) not null auto_increment primary key,
@@ -1599,4 +1605,40 @@ CREATE TABLE `especies_generadas` (
   CONSTRAINT `especies_generadas_ibfk_5` FOREIGN KEY (`dsol_id`) REFERENCES `detalle_solicitud` (`dsol_id`),
   CONSTRAINT `especies_generadas_ibfk_6` FOREIGN KEY (`resp_id`) REFERENCES `responsable_especie` (`resp_id`),
   CONSTRAINT `especies_generadas_ibfk_7` FOREIGN KEY (`est_id`) REFERENCES `estudiante` (`est_id`)
-)
+);
+
+
+-- --------------------------------------------------------
+-- 
+-- Estructura de tabla para la tabla `distributivo_academico_estudiante` 
+-- --------------------------------------------------------
+create table if not exists `distributivo_academico_estudiante` (
+  `daes_id` bigint(20) not null auto_increment primary key,   
+  `daca_id` bigint(20) not null,
+  `est_id` bigint(20) not null,    
+  `daes_fecha_registro` timestamp null default null,
+  `daes_estado` varchar(1) not null,
+  `daes_fecha_creacion` timestamp not null default current_timestamp,
+  `daes_fecha_modificacion` timestamp null default null,
+  `daes_estado_logico` varchar(1) not null,  
+  foreign key (daca_id) REFERENCES `distributivo_academico`(daca_id),
+  foreign key (est_id) REFERENCES `estudiante`(est_id)
+);
+
+-- --------------------------------------------------------
+-- 
+-- Estructura de tabla para la tabla `estudiante_periodo_pago` 
+-- --------------------------------------------------------
+create table if not exists `estudiante_periodo_pago` (
+  `eppa_id` bigint(20) not null auto_increment primary key,   
+  `paca_id` bigint(20) not null,
+  `est_id` bigint(20) not null,    
+  `eppa_estado_pago` varchar(1) not null,
+  `eppa_fecha_registro` timestamp null default null,
+  `eppa_estado` varchar(1) not null,
+  `eppa_fecha_creacion` timestamp not null default current_timestamp,
+  `eppa_fecha_modificacion` timestamp null default null,
+  `eppa_estado_logico` varchar(1) not null,  
+  foreign key (paca_id) REFERENCES `periodo_academico`(paca_id),
+  foreign key (est_id) REFERENCES `estudiante`(est_id)
+);
