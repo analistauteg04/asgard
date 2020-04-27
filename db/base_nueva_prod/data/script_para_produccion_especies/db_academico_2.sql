@@ -12,6 +12,12 @@ where uaca_id = 2;
 ALTER TABLE `db_academico`.`detalle_solicitud` 
 ADD COLUMN `dsol_archivo_extra` VARCHAR(500) NULL AFTER `dsol_observacion`;
 
+-- Agregar campo de codigo en estudio academico para matriculacion posgrado
+
+ALTER TABLE `db_academico`.`estudio_academico` 
+CHANGE COLUMN `eaca_estado_logico` `eaca_estado_logico` VARCHAR(10) NOT NULL ,
+ADD COLUMN `eaca_codigo` VARCHAR(20) NULL AFTER `teac_id`;
+
 
 INSERT INTO `responsable_especie` (`resp_id`, `resp_nombre`, `resp_titulo`, `resp_cargo`, `uaca_id`, `mod_id`, `resp_usuario_ingreso`, `resp_estado`, `resp_estado_logico`) VALUES 
 (1,'Diego Aguirre','Msc','',1,1,1,'1','1'),

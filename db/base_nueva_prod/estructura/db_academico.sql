@@ -127,6 +127,7 @@ create table if not exists `modalidad` (
 create table if not exists `estudio_academico` (
   `eaca_id` bigint(20) not null auto_increment primary key,
   `teac_id` bigint(20) not null,
+  `eaca_codigo` varchar(20) null,
   `eaca_nombre` varchar(300) not null,
   `eaca_descripcion` varchar(500) not null, 
   `eaca_alias` varchar(300) not null,

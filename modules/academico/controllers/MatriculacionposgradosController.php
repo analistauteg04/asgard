@@ -228,7 +228,7 @@ class MatriculacionposgradosController extends \app\components\CController {
             if ($mes > 0 && $mes < 10) {
                 $meses = '0' . $mes;
             }
-            $codigo = strtoupper(substr($data["nombreprograma"], 0, 3)) . $anio . $meses;
+            //$codigo = strtoupper(substr($data["nombreprograma"], 0, 3)) . $anio . $meses;
             $con = \Yii::$app->db_academico;
             $transaction = $con->beginTransaction();
             try {
@@ -236,6 +236,9 @@ class MatriculacionposgradosController extends \app\components\CController {
                 //Verificar que no tenga una matrícula.
                 $mod_Matriculacion = new PromocionPrograma();
                 $resp_consPromocion = $mod_Matriculacion->consultarPromocion($anio, $mes, $unidad, $modalidad, $programa);
+                $resp_consCodprograma = $mod_Matriculacion->consultarCodigoestudioaca($programa);
+                $codigo = $resp_consCodprograma["eaca_codigo"] . $anio . $meses;
+                \app\models\Utilities::putMessageLogFile('sddfbb: ' . $resp_consCodprograma["eaca_codigo"]);
                 if (!$resp_consPromocion) {
                     $fecha = date(Yii::$app->params["dateTimeByDefault"]);
                     //Buscar el código de planificación académica según el periodo, unidad, modalidad y carrera.
@@ -376,12 +379,13 @@ class MatriculacionposgradosController extends \app\components\CController {
             if ($mes > 0 && $mes < 10) {
                 $meses = '0' . $mes;
             }
-            $codigo = strtoupper(substr($data["nombreprograma"], 0, 3)) . $anio . $meses;
+            //$codigo = strtoupper(substr($data["nombreprograma"], 0, 3)) . $anio . $meses;
             $con = \Yii::$app->db_academico;
             $transaction = $con->beginTransaction();
             try {
                 $mod_programa = new PromocionPrograma();
-
+                $resp_consCodprograma = $mod_programa->consultarCodigoestudioaca($programa);
+                $codigo = $resp_consCodprograma["eaca_codigo"] . $anio . $meses;
                 $keys_act = [
                     'ppro_anio', 'ppro_mes', 'ppro_codigo', 'uaca_id', 'mod_id'
                     , 'eaca_id', 'ppro_usuario_modifica', 'ppro_fecha_modificacion'

@@ -80,7 +80,16 @@ $tipodoc = 'Cédula';
                 </div>
             </div> 
         </div>        
-
+        <div class='col-md-12 col-sm-12 col-xs-12 col-lg-12'>
+            <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
+                <div class="form-group">
+                    <label for="txt_programa" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_programa"><?= academico::t("Academico", "Career/Program") ?>:</label>
+                    <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
+                        <input type="text" class="form-control keyupmce" value="<?php echo $personalData["carrera"] ?>" id="txt_programa" data-type="alfa" disabled="true">
+                    </div>
+                </div>
+            </div>             
+        </div>
         <div class="col-md-7 col-sm-7 col-xs-7 col-lg-7">
             <div class="form-group">
                 <br/><h4><span id="lbl_general1"><?= Yii::t("formulario", "Asignación Paralelo") ?></span></h4> 

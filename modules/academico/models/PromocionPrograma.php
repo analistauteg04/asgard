@@ -257,7 +257,7 @@ class PromocionPrograma extends \yii\db\ActiveRecord {
      * Function consultar si existe ya el programa con los mismo datos antes de guardar
      * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>
      * @param   
-     * @return  $resultData (Retornar el código de promocion).
+     * @return  $resultData (Retornar el id de promocion).
      */
     public function consultarPromocion($ppro_anio, $ppro_mes, $uaca_id, $mod_id, $eaca_id) {
         $con = \Yii::$app->db_academico;
@@ -607,6 +607,28 @@ class PromocionPrograma extends \yii\db\ActiveRecord {
                 $trans->rollback();
             return FALSE;
         }
+    }
+        /**
+     * Function consultar el codigo de estudio academico
+     * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>
+     * @param   
+     * @return  $resultData (Retornar el código de estudio academico).
+     */
+    public function consultarCodigoestudioaca($eaca_id) {
+        $con = \Yii::$app->db_academico;
+        $estado = 1;
+
+        $sql = "SELECT eaca_codigo 
+                   FROM " . $con->dbname . ".estudio_academico 
+                   WHERE eaca_id = :eaca_id 
+                        AND eaca_estado = :estado
+                        AND eaca_estado_logico = :estado";
+
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":eaca_id", $eaca_id, \PDO::PARAM_INT);
+        $resultData = $comando->queryOne();
+        return $resultData;
     }
 
 }
