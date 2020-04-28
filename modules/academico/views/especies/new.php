@@ -9,6 +9,14 @@ use app\modules\academico\Module as Especies;
 Especies::registerTranslations();
 $leyenda = '<div ALIGN="justify" style = "width: 380px;" class="alert alert-info"><span style="font-weight: bold"> Nota: </span> El detalle del trámite es la constancia de 
           la solicitud. Tenga cuidado al ingresar especialmente en el detalle del trámite puesto que este texto también es parte de la especie valorada, luego de generar la solicitud, no puede realizar modificaciones.</div>';
+
+$formatoimagen = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
+          <div class="form-group">
+          <div class="col-sm-10 col-md-10 col-xs-10 col-lg-10">
+          <div ALIGN="justify" style = "width: 450px;" class="alert alert-info"><span style="font-weight: bold"> Nota: </span> Al subir archivo debe ser 800 KB máximo y tipo jpg, png o pdf.</div>
+          </div>
+          </div>
+          </div>';
 ?>
 <?= Html::hiddenInput('txth_idest', $arr_persona['est_id'], ['id' => 'txth_idest']); ?>
 <?= Html::hiddenInput('txth_per', @Yii::$app->session->get("PB_perid"), ['id' => 'txth_per']); ?>
@@ -119,8 +127,7 @@ $leyenda = '<div ALIGN="justify" style = "width: 380px;" class="alert alert-info
                     <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
                         <?=
                         Html::dropDownList(
-                                "cmb_fpago", 0, ArrayHelper::map(app\modules\academico\models\Especies::getFormaPago(), 'Ids', 'Nombre'),
-                               ["class" => "form-control", "id" => "cmb_fpago"]
+                                "cmb_fpago", 0, ArrayHelper::map(app\modules\academico\models\Especies::getFormaPago(), 'Ids', 'Nombre'), ["class" => "form-control", "id" => "cmb_fpago"]
                         )
                         ?>
                     </div>
@@ -135,11 +142,11 @@ $leyenda = '<div ALIGN="justify" style = "width: 380px;" class="alert alert-info
                 </div>
             </div> 
             <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">               
-                    <label for="lbl_leyenda" class="col-sm-3 col-md-3 col-xs-3 col-lg-3 control-label" id="lbl_leyenda"></label>
-                    <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                        <?php echo $leyenda?>  
-                    </div>             
-            </div>             
+                <label for="lbl_leyenda" class="col-sm-3 col-md-3 col-xs-3 col-lg-3 control-label" id="lbl_leyenda"></label>
+                <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
+                    <?php echo $leyenda ?>  
+                </div>             
+            </div>            
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                 <div class="form-group">
                     <label for="lbl_doc_adj_img" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Yii::t("formulario", "Attach document") ?></label>
@@ -167,9 +174,9 @@ $leyenda = '<div ALIGN="justify" style = "width: 380px;" class="alert alert-info
                                             var name_archivo= $("#txth_doc_adj_img").val();
                                 return {"upload_file": true, "name_file": name_archivo};
                             }',
-                                        ],
-                                        'pluginEvents' => [
-                                            "filebatchselected" => "function (event) {                        
+                            ],
+                            'pluginEvents' => [
+                                "filebatchselected" => "function (event) {                        
                                             function d2(n) {
                                             if(n<9) return '0'+n;
                                             return n;
@@ -183,32 +190,37 @@ $leyenda = '<div ALIGN="justify" style = "width: 380px;" class="alert alert-info
                             var ext = fileSent.split('.');
                             $('#txth_doc_adj_img').val(name_archivo + '.' + ext[ext.length - 1]);
                         }",
-                                            "fileuploaderror" => "function (event, data, msg) {
+                                "fileuploaderror" => "function (event, data, msg) {
                             $(this).parent().parent().children().first().addClass('hide');
                             $('#txth_doc_adj_img').val('');
                             //showAlert('NO_OK', 'error', {'wtmessage': objLang.Error_to_process_File__Try_again_, 'title': objLang.Error});   
                         }",
-                                            "filebatchuploadcomplete" => "function (event, files, extra) { 
+                                "filebatchuploadcomplete" => "function (event, files, extra) { 
                             $(this).parent().parent().children().first().addClass('hide');
                         }",
-                                            "filebatchuploadsuccess" => "function (event, data, previewId, index) {
+                                "filebatchuploadsuccess" => "function (event, data, previewId, index) {
                             var form = data.form, files = data.files, extra = data.extra,
                             response = data.response, reader = data.reader;
                             $(this).parent().parent().children().first().addClass('hide');
                             var acciones = [{id: 'reloadpage', class: 'btn btn-primary', value: objLang.Accept, callback: 'reloadPage'}];
                             //showAlert('OK', 'Success', {'wtmessage': objLang.File_uploaded_successfully__Do_you_refresh_the_web_page_, 'title': objLang.Success, 'acciones': acciones});  
                         }",
-                                            "fileuploaded" => "function (event, data, previewId, index) {
+                                "fileuploaded" => "function (event, data, previewId, index) {
                             $(this).parent().parent().children().first().addClass('hide');        
                             var acciones = [{id: 'reloadpage', class: 'btn btn-primary', value: objLang.Accept, callback: 'reloadPage'}];
                             //showAlert('OK', 'Success', {'wtmessage': objLang.File_uploaded_successfully__Do_you_refresh_the_web_page_, 'title': objLang.Success, 'acciones': acciones});                              
                         }",
-                                        ],
+                            ],
                         ]);
                         ?>
                     </div>     
                 </div>                  
             </div>            
+        </div>
+        <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
+            <div class="form-group">
+                <?php echo $formatoimagen; ?>
+            </div>
         </div>
     </div>
     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">

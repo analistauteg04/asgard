@@ -8,6 +8,8 @@ use app\modules\academico\models\Distributivo;
 use app\modules\academico\models\SemestreAcademico;
 use app\modules\academico\models\UnidadAcademica;
 use app\modules\academico\models\TipoDistributivo;
+use app\modules\academico\models\Modalidad;
+use app\modules\academico\models\PeriodoAcademicoMetIngreso;
 use yii\helpers\ArrayHelper;
 use app\models\Utilities;
 use app\modules\academico\Module as academico;
@@ -171,6 +173,36 @@ class DistributivoController extends \app\components\CController {
         $nameReport = academico::t("Academico", "Workload");
         Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
         exit;
+    }
+    
+    public function actionListarestudiantes() {
+        $per_id = @Yii::$app->session->get("PB_perid");
+        $distributivo_model = new Distributivo();
+        $mod_modalidad = new Modalidad();
+        $mod_unidad = new UnidadAcademica();
+        $mod_periodo = new PeriodoAcademicoMetIngreso();
+        $data = Yii::$app->request->get();
+        if ($data['PBgetFilter']) {
+            $arrSearch["search"] = $data['search'];                        
+            $arrSearch["unidad"] = $data['unidad'];      
+            $arrSearch["modalidad"] = $data['modalidad'];
+            $arrSearch["periodo"] = $data['periodo'];
+            $model = $distributivo_model->consultarDistributivoxProfesor($arrSearch,$per_id);
+            return $this->render('index-grid', [
+                        "model" => $model,
+            ]);
+        } else {
+            $model = $distributivo_model->consultarDistributivoxProfesor(null,$per_id);
+        }        
+        $arr_unidad = $mod_unidad->consultarUnidadAcademicasEmpresa(1);
+        $arr_modalidad = $mod_modalidad->consultarModalidad($arr_unidad[0]["id"], 1);
+        $arr_periodo = $mod_periodo->consultarPeriodoAcademico();
+        return $this->render('listar_distributivo_profesor', [
+                   'mod_unidad' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_unidad), "id", "name"),
+                   'mod_modalidad' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_modalidad), "id", "name"),
+                   'mod_periodo' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_periodo), "id", "name"),
+                   'model' => $model,
+        ]);
     }
 }
 
