@@ -27,6 +27,8 @@ return [
     "Data Promotion Program" => "Datos Promoción Programa",
     "Day" => "Día",
     "Dial type" => "Tipo marcación",
+    "Distributive List" => "Listar Distributivo",
+    "Distributive Type" => "Tipo Distributivo",
     "End IP" => "IP Salida",
     "Entry" => "Entrada",
     "Enrolled Income Method" => "Matriculado Método Ingreso", 
@@ -69,6 +71,7 @@ return [
     "Teacher Dialing" => "Marcación Profesor",    
     "Teacher list unchecked" => "Listado profesores sin marcar",
     "Update period income method" => "Actualizar Período Método Ingreso",
+    "Workload" => "Carga Horaria",
     "Year" => "Año",
 ];
 

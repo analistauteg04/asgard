@@ -432,4 +432,83 @@ class Distributivo extends \yii\db\ActiveRecord
         $resultData = $comando->queryAll();
         return $resultData;
     } 
+    
+    /**
+     * Function Obtiene información de distributivo.
+     * @author Grace Viteri <analistadesarrollo01@uteg.edu.ec>;
+     * @param
+     * @return
+     */
+    public function consultarDistributivoxProfesor($arrFiltro = array(), $id_profesor) {
+        $con = \Yii::$app->db_academico;
+        $con1 = \Yii::$app->db_asgard;
+        $estado = 1;
+        
+        if (isset($arrFiltro) && count($arrFiltro) > 0) {
+            $str_search .= "(per.per_pri_nombre like :search OR ";
+            $str_search .= "per.per_seg_nombre like :search OR ";
+            $str_search .= "per.per_pri_apellido like :search OR ";
+            $str_search .= "per.per_seg_apellido like :search OR ";
+            $str_search .= "per.per_cedula like :search) AND ";
+                        
+            if ($arrFiltro['unidad'] != "" && $arrFiltro['unidad'] > 0) {
+                $str_search .= " ua.uaca_id = :unidad AND ";
+            }
+            if ($arrFiltro['semestre'] != "" && $arrFiltro['semestre'] > 0) {
+                $str_search .= "d.saca_id = :semestre AND ";
+            }        
+        }        
+        $sql = "SELECT  d.uaca_nombre as unidad, e.mod_nombre as modalidad,
+                        p.per_cedula as identificacion, 
+                        concat(p.per_pri_nombre, ' ', p.per_pri_apellido, ' ', ifnull(p.per_seg_apellido,'')) as estudiante,
+                        concat(saca_nombre, '-', baca_nombre,'-',baca_anio) as periodo,
+                        z.asi_nombre as asignatura
+                FROM ". $con->dbname . ".distributivo_academico a inner join ". $con->dbname . ".profesor b
+                    on b.pro_id = a.pro_id 
+                    inner join ". $con1->dbname . ".persona c on c.per_id = b.per_id
+                    inner join ". $con->dbname . ".unidad_academica d on d.uaca_id = a.uaca_id
+                    inner join ". $con->dbname . ".modalidad e on e.mod_id = a.mod_id
+                    inner join ". $con->dbname . ".periodo_academico f on f.paca_id = a.paca_id
+                    inner join ". $con->dbname . ".distributivo_academico_estudiante g on g.daca_id = a.daca_id
+                    inner join ". $con->dbname . ".estudiante h on h.est_id = g.est_id
+                    inner join ". $con1->dbname . ".persona p on p.per_id = h.per_id
+                    inner join ". $con->dbname . ".semestre_academico s on s.saca_id = f.saca_id
+                    inner join ". $con->dbname . ".bloque_academico t on t.baca_id = f.baca_id
+                    inner join db_academico.asignatura z on a.asi_id = z.asi_id
+                WHERE  c.per_id = :profesor
+                    and f.paca_activo = 'A'
+                    and a.daca_estado = :estado
+                    and a.daca_estado_logico = :estado
+                    and g.daes_estado = :estado
+                    and g.daes_estado_logico = :estado"; 
+        
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":profesor", $id_profesor, \PDO::PARAM_INT);
+        if (isset($arrFiltro) && count($arrFiltro) > 0) {
+            $search_cond = "%" . $arrFiltro["search"] . "%";
+            $comando->bindParam(":search", $search_cond, \PDO::PARAM_STR);
+            
+            if ($arrFiltro['unidad'] != "" && $arrFiltro['unidad'] > 0) {
+                $search_uni = $arrFiltro["unidad"];
+                $comando->bindParam(":unidad", $search_uni, \PDO::PARAM_INT);
+            }
+            if ($arrFiltro['semestre'] != "" && $arrFiltro['semestre'] > 0) {
+                $search_semestre = $arrFiltro["semestre"];
+                $comando->bindParam(":semestre", $search_semestre, \PDO::PARAM_INT);
+            }
+        }
+        $resultData = $comando->queryAll();
+        $dataProvider = new ArrayDataProvider([
+            'key' => 'id',
+            'allModels' => $resultData,
+            'pagination' => [
+                'pageSize' => Yii::$app->params["pageSize"],
+            ],
+            'sort' => [
+                'attributes' => [],
+            ],
+        ]);        
+        return $dataProvider;        
+    }    
 }
