@@ -25,12 +25,12 @@ academico::registerTranslations();
                 'attribute' => 'Periodo',
                 'header' => Yii::t("formulario", "Period"),
                 'value' => 'periodo',
-            ],                                        
+            ],
             [
                 'attribute' => 'unidad_academico',
                 'header' => Yii::t("formulario", "Academic unit"),
                 'value' => 'unidad',
-            ],    
+            ],
             [
                 'attribute' => 'modalidad',
                 'header' => Yii::t("formulario", "Mode"),
@@ -40,18 +40,32 @@ academico::registerTranslations();
                 'attribute' => 'asignatura',
                 'header' => Yii::t("formulario", "Subject"),
                 'value' => 'asignatura',
-            ],             
+            ],
             [
                 'attribute' => 'DNI',
                 'header' => Yii::t("formulario", "DNI"),
                 'value' => 'identificacion',
-            ],            
+            ],
             [
                 'attribute' => 'Estudiante',
                 'header' => Yii::t("formulario", "Complete Names"),
                 'value' => 'estudiante',
-            ],   
-                                               
+            ],
+            /* [   
+              'class' => 'app\widgets\PbGridView\PbCheckboxColumn',
+              ], */
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'header' => Academico::t("matriculacion", "Select"),
+                'contentOptions' => ['style' => 'text-align: center;'],
+                'headerOptions' => ['width' => '60'],
+                'template' => '{select}',
+                'buttons' => [
+                    'select' => function ($url, $model) {
+                        return Html::checkbox("", false, ["value" => $model['est_id']]);                       
+                    },
+                ],
+            ],
         ],
     ])
     ?>

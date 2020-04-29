@@ -61,6 +61,9 @@ $(document).ready(function () {
             }
         }, true);
     });
+    $('#btnGuardarpago').click(function () {
+        guardarPagosEstudiante();
+    });
 });
 
 function actualizarGrid() {
@@ -159,4 +162,34 @@ function actualizarGridDistPago() {
         $('#Tbg_Distributivo_listadopago').PbGridView('applyFilterData', {'search': search, 'unidad': unidad, 'modalidad': modalidad, 'periodo': periodo, 'asignatura': asignatura});
         setTimeout(hideLoadingPopup, 2000);
     }
+}
+function guardarPagosEstudiante() {
+     //var keys = String($('#Tbg_Distributivo_listadopago').PbGridView('getSelectedRows'));     
+    //var link = $('#txth_base').val() + "/evaluacion/evaluar";
+        var arrParams = new Object();
+        var selected = '';
+        //var vacio = '';
+        //arrParams.carrera = $('#TbG_CARRERAS input[name=rb_carrera]:checked').val();
+        $('#Tbg_Distributivo_listadopago input[type=checkbox]').each(function () {
+            if (this.checked) {
+                selected += $(this).val() + ',';
+            }
+        });
+        if (selected != '')
+        {   alert('xzcvbn' + selected.slice(0,-1));
+            arrParams.pagado = selected.slice(0,-1);
+        } else
+
+        {
+            alert('Carrera: Campo no puede ser vacio');
+        }
+
+       /* if (!validateForm()) {
+            requestHttpAjax(link, arrParams, function (response) {
+                showAlert(response.status, response.label, response.message);
+                setTimeout(function () {
+                    window.location.href = $('#txth_base').val() + "/evaluacion/evaluar";
+                }, 3000);
+            }, true);
+        }*/
 }

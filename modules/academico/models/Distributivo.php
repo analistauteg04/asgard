@@ -549,7 +549,7 @@ class Distributivo extends \yii\db\ActiveRecord {
                 $str_search .= "a.asi_id = :asignatura AND ";
             }
         }
-        $sql = "SELECT  d.uaca_nombre as unidad, e.mod_nombre as modalidad,
+        $sql = "SELECT  h.est_id, d.uaca_nombre as unidad, e.mod_nombre as modalidad,
                         p.per_cedula as identificacion, 
                         concat(p.per_pri_nombre, ' ', p.per_pri_apellido, ' ', ifnull(p.per_seg_apellido,'')) as estudiante,
                         concat(saca_nombre, '-', baca_nombre,'-',baca_anio) as periodo,

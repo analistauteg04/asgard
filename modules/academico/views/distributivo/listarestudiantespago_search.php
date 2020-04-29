@@ -49,5 +49,8 @@ use app\modules\academico\Module as academico;
             <a id="btn_buscarData_distpago" href="javascript:" class="btn btn-primary btn-block"> <?= Yii::t("formulario", "Search") ?></a>
         </div>
     </div>
+    <div class="col-md-2 col-xs-4 col-lg-2 col-sm-2">
+        <a id="btnGuardarpago" href="javascript:" class="btn btn-primary btn-block"> <?= Yii::t("formulario", "Save") ?> </a>
+    </div>
 </div>
 
