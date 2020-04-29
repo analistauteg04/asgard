@@ -287,5 +287,43 @@ class DistributivoController extends \app\components\CController {
         );
         $report->mpdf->Output('Reporte_' . date("Ymdhis") . ".pdf", ExportFile::OUTPUT_TO_DOWNLOAD);
     }   
+    public function actionListarestudiantespago() {
+        $per_id = @Yii::$app->session->get("PB_perid");
+        $distributivo_model = new Distributivo();
+        $mod_modalidad = new Modalidad();
+        $mod_unidad = new UnidadAcademica();
+        $mod_periodo = new PeriodoAcademicoMetIngreso();
+        $data = Yii::$app->request->get();
+         
+        if ($data['PBgetFilter']) {
+            $arrSearch["search"] = $data['search'];                        
+            $arrSearch["unidad"] = $data['unidad'];      
+            $arrSearch["modalidad"] = $data['modalidad'];
+            $arrSearch["periodo"] = $data['periodo'];
+            $model = $distributivo_model->consultarDistributivoxEstudiante($arrSearch,1);
+            return $this->render('_listarestudiantespagogrid', [
+                        "model" => $model,
+            ]);
+        } else {
+            $model = $distributivo_model->consultarDistributivoxEstudiante(null,1);
+        }        
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+            if (isset($data["getmodalidad"])) {
+                $modalidad = $mod_modalidad->consultarModalidad($data["uaca_id"], 1);
+                $message = array("modalidad" => $modalidad);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+            }
+        }
+        $arr_unidad = $mod_unidad->consultarUnidadAcademicasEmpresa(1);
+        $arr_modalidad = $mod_modalidad->consultarModalidad($arr_unidad[0]["id"], 1);
+        $arr_periodo = $mod_periodo->consultarPeriodoAcademico();
+        return $this->render('listarestudiantepago', [
+                   'mod_unidad' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_unidad), "id", "name"),
+                   'mod_modalidad' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_modalidad), "id", "name"),
+                   'mod_periodo' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_periodo), "id", "name"),
+                   'model' => $model,
+        ]);
+    }
 }
 

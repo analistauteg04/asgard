@@ -9,14 +9,26 @@ $(document).ready(function () {
         actualizarGridDistProf();
     });
     $('#cmb_unidad_dis').change(function () {
-        var link = $('#txth_base').val() + "/academico/distributivo/listarestudiantes";        
-        var arrParams = new Object();        
-        arrParams.uaca_id = $(this).val();        
+        var link = $('#txth_base').val() + "/academico/distributivo/listarestudiantes";
+        var arrParams = new Object();
+        arrParams.uaca_id = $(this).val();
         arrParams.getmodalidad = true;
         requestHttpAjax(link, arrParams, function (response) {
             if (response.status == "OK") {
                 data = response.message;
-                setComboDataselect(data.modalidad, "cmb_modalidad", "Todos");              
+                setComboDataselect(data.modalidad, "cmb_modalidad", "Todos");
+            }
+        }, true);
+    });
+    $('#cmb_unidad_dises').change(function () {
+        var link = $('#txth_base').val() + "/academico/distributivo/listarestudiantespagos";
+        var arrParams = new Object();
+        arrParams.uaca_id = $(this).val();
+        arrParams.getmodalidad = true;
+        requestHttpAjax(link, arrParams, function (response) {
+            if (response.status == "OK") {
+                data = response.message;
+                setComboDataselect(data.modalidad, "cmb_modalidades", "Todos");
             }
         }, true);
     });
@@ -103,5 +115,5 @@ function exportPdfDisprof() {
     var unidad = $('#cmb_unidad_dis option:selected').val();
     var modalidad = $('#cmb_modalidad option:selected').val();
     var periodo = $('#cmb_periodo option:selected').val();
-    window.location.href = $('#txth_base').val() + "/academico/distributivo/exppdfdis?pdf=1&search=" + search + "&unidad=" + unidad + "&modalidad=" + modalidad+ "&periodo=" + periodo;
+    window.location.href = $('#txth_base').val() + "/academico/distributivo/exppdfdis?pdf=1&search=" + search + "&unidad=" + unidad + "&modalidad=" + modalidad + "&periodo=" + periodo;
 }
