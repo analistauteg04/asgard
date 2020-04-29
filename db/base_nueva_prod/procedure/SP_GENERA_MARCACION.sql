@@ -1,7 +1,7 @@
--- drop procedure SP_GENERA_MARCACION;
--- CALL SP_GENERA_MARCACION (7)
+-- drop procedure db_academico.SP_GENERA_MARCACION;
+-- CALL db_academico.SP_GENERA_MARCACION (8)
 DELIMITER $$
-CREATE PROCEDURE SP_GENERA_MARCACION 
+CREATE PROCEDURE db_academico.SP_GENERA_MARCACION 
 	(IN pi_periodo BIGINT)
 BEGIN	
 	-- Variable para controlar el fin del bucle
@@ -19,7 +19,9 @@ BEGIN
     DECLARE C_Horario CURSOR FOR
 		SELECT h.hape_id, h.uaca_id, h.mod_id, dia_id, h.hape_fecha_clase
         FROM db_academico.horario_asignatura_periodo h
-        WHERE h.paca_id = pi_periodo;
+        WHERE h.paca_id = pi_periodo
+              and h.hape_estado = '1' 
+              and h.hape_estado_logico = '1';
              
     DECLARE CONTINUE HANDLER FOR NOT FOUND SET fin = 1;
     select paca_fecha_inicio, paca_fecha_fin
