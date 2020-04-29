@@ -434,7 +434,7 @@ class Distributivo extends \yii\db\ActiveRecord
     } 
     
     /**
-     * Function Obtiene información de distributivo.
+     * Function Obtiene información de distributivo por profesor.
      * @author Grace Viteri <analistadesarrollo01@uteg.edu.ec>;
      * @param
      * @return
@@ -445,24 +445,28 @@ class Distributivo extends \yii\db\ActiveRecord
         $estado = 1;
         
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
-            $str_search .= "(per.per_pri_nombre like :search OR ";
-            $str_search .= "per.per_seg_nombre like :search OR ";
-            $str_search .= "per.per_pri_apellido like :search OR ";
-            $str_search .= "per.per_seg_apellido like :search OR ";
-            $str_search .= "per.per_cedula like :search) AND ";
+            $str_search .= "(p.per_pri_nombre like :search OR ";
+            $str_search .= "p.per_seg_nombre like :search OR ";
+            $str_search .= "p.per_pri_apellido like :search OR ";
+            $str_search .= "p.per_seg_apellido like :search OR ";
+            $str_search .= "p.per_cedula like :search) AND ";
                         
             if ($arrFiltro['unidad'] != "" && $arrFiltro['unidad'] > 0) {
-                $str_search .= " ua.uaca_id = :unidad AND ";
+                $str_search .= "a.uaca_id = :unidad AND ";
             }
-            if ($arrFiltro['semestre'] != "" && $arrFiltro['semestre'] > 0) {
-                $str_search .= "d.saca_id = :semestre AND ";
-            }        
+            if ($arrFiltro['modalidad'] != "" && $arrFiltro['modalidad'] > 0) {
+                $str_search .= "a.mod_id = :modalidad AND ";
+            }
+            if ($arrFiltro['periodo'] != "" && $arrFiltro['periodo'] > 0) {
+                $str_search .= "a.paca_id = :periodo AND ";
+            } 
         }        
         $sql = "SELECT  d.uaca_nombre as unidad, e.mod_nombre as modalidad,
                         p.per_cedula as identificacion, 
                         concat(p.per_pri_nombre, ' ', p.per_pri_apellido, ' ', ifnull(p.per_seg_apellido,'')) as estudiante,
                         concat(saca_nombre, '-', baca_nombre,'-',baca_anio) as periodo,
-                        z.asi_nombre as asignatura
+                        z.asi_nombre as asignatura,
+                        case when m.eppa_estado_pago = 'N' then 'Pagado' else 'Pendiente' end as pago
                 FROM ". $con->dbname . ".distributivo_academico a inner join ". $con->dbname . ".profesor b
                     on b.pro_id = a.pro_id 
                     inner join ". $con1->dbname . ".persona c on c.per_id = b.per_id
@@ -474,8 +478,9 @@ class Distributivo extends \yii\db\ActiveRecord
                     inner join ". $con1->dbname . ".persona p on p.per_id = h.per_id
                     inner join ". $con->dbname . ".semestre_academico s on s.saca_id = f.saca_id
                     inner join ". $con->dbname . ".bloque_academico t on t.baca_id = f.baca_id
-                    inner join db_academico.asignatura z on a.asi_id = z.asi_id
-                WHERE  c.per_id = :profesor
+                    inner join ". $con->dbname . ".asignatura z on a.asi_id = z.asi_id
+                    left join ". $con->dbname . ".estudiante_periodo_pago m on (m.est_id = g.est_id and m.paca_id = f.paca_id)
+                WHERE $str_search c.per_id = :profesor
                     and f.paca_activo = 'A'
                     and a.daca_estado = :estado
                     and a.daca_estado_logico = :estado
@@ -493,9 +498,13 @@ class Distributivo extends \yii\db\ActiveRecord
                 $search_uni = $arrFiltro["unidad"];
                 $comando->bindParam(":unidad", $search_uni, \PDO::PARAM_INT);
             }
-            if ($arrFiltro['semestre'] != "" && $arrFiltro['semestre'] > 0) {
-                $search_semestre = $arrFiltro["semestre"];
-                $comando->bindParam(":semestre", $search_semestre, \PDO::PARAM_INT);
+            if ($arrFiltro['modalidad'] != "" && $arrFiltro['modalidad'] > 0) {
+                $search_mod = $arrFiltro["modalidad"];
+                $comando->bindParam(":modalidad", $search_mod, \PDO::PARAM_INT);
+            }
+            if ($arrFiltro['periodo'] != "" && $arrFiltro['periodo'] > 0) {
+                $search_per = $arrFiltro["periodo"];
+                $comando->bindParam(":periodo", $search_per, \PDO::PARAM_INT);
             }
         }
         $resultData = $comando->queryAll();

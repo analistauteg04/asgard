@@ -182,18 +182,27 @@ class DistributivoController extends \app\components\CController {
         $mod_unidad = new UnidadAcademica();
         $mod_periodo = new PeriodoAcademicoMetIngreso();
         $data = Yii::$app->request->get();
+         
         if ($data['PBgetFilter']) {
             $arrSearch["search"] = $data['search'];                        
             $arrSearch["unidad"] = $data['unidad'];      
             $arrSearch["modalidad"] = $data['modalidad'];
             $arrSearch["periodo"] = $data['periodo'];
             $model = $distributivo_model->consultarDistributivoxProfesor($arrSearch,$per_id);
-            return $this->render('index-grid', [
+            return $this->render('listar_distributivo-grid', [
                         "model" => $model,
             ]);
         } else {
             $model = $distributivo_model->consultarDistributivoxProfesor(null,$per_id);
         }        
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+            if (isset($data["getmodalidad"])) {
+                $modalidad = $mod_modalidad->consultarModalidad($data["uaca_id"], 1);
+                $message = array("modalidad" => $modalidad);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+            }
+        }
         $arr_unidad = $mod_unidad->consultarUnidadAcademicasEmpresa(1);
         $arr_modalidad = $mod_modalidad->consultarModalidad($arr_unidad[0]["id"], 1);
         $arr_periodo = $mod_periodo->consultarPeriodoAcademico();

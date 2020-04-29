@@ -54,7 +54,7 @@ academico::registerTranslations();
             [
                 'attribute' => 'Estado pago',
                 'header' => Yii::t("formulario", "Payment Status"),
-                'value' => 'estado_pago',
+                'value' => 'pago',
             ],                                        
         ],
     ])
