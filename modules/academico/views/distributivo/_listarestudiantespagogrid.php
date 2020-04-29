@@ -13,10 +13,10 @@ academico::registerTranslations();
 <div>
     <?=
     PbGridView::widget([
-        'id' => 'Tbg_Distributivo_listado',
-        'showExport' => true,
-        'fnExportEXCEL' => "exportExcelDistprof",
-        'fnExportPDF' => "exportPdfDisprof",
+        'id' => 'Tbg_Distributivo_listadopago',
+        //'showExport' => true,
+        'fnExportEXCEL' => "exportExcelDistpago",
+        'fnExportPDF' => "exportPdfDispago",
         'dataProvider' => $model,
         //'pajax' => false,
         'columns' =>
@@ -50,12 +50,8 @@ academico::registerTranslations();
                 'attribute' => 'Estudiante',
                 'header' => Yii::t("formulario", "Complete Names"),
                 'value' => 'estudiante',
-            ],     
-            [
-                'attribute' => 'Estado pago',
-                'header' => Yii::t("formulario", "Payment Status"),
-                'value' => 'pago',
-            ],                                        
+            ],   
+                                               
         ],
     ])
     ?>

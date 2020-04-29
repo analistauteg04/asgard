@@ -300,6 +300,7 @@ class DistributivoController extends \app\components\CController {
             $arrSearch["unidad"] = $data['unidad'];      
             $arrSearch["modalidad"] = $data['modalidad'];
             $arrSearch["periodo"] = $data['periodo'];
+            $arrSearch["asignatura"] = $data['asignatura'];
             $model = $distributivo_model->consultarDistributivoxEstudiante($arrSearch,1);
             return $this->render('_listarestudiantespagogrid', [
                         "model" => $model,
@@ -314,14 +315,21 @@ class DistributivoController extends \app\components\CController {
                 $message = array("modalidad" => $modalidad);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }
+             if (isset($data["getasignatura"])) {
+                $asignatura = $distributivo_model->consultarAsiganturaxuniymoda($data["uaca_id"], $data["moda_id"]);
+                $message = array("asignatura" => $asignatura);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+            }
         }
         $arr_unidad = $mod_unidad->consultarUnidadAcademicasEmpresa(1);
         $arr_modalidad = $mod_modalidad->consultarModalidad($arr_unidad[0]["id"], 1);
         $arr_periodo = $mod_periodo->consultarPeriodoAcademico();
+        $arr_asignatura = $distributivo_model->consultarAsiganturaxuniymoda(0, 0);
         return $this->render('listarestudiantepago', [
                    'mod_unidad' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_unidad), "id", "name"),
                    'mod_modalidad' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_modalidad), "id", "name"),
                    'mod_periodo' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_periodo), "id", "name"),
+                   'mod_asignatura' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_asignatura), "id", "name"),
                    'model' => $model,
         ]);
     }

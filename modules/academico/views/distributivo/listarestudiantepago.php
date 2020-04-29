@@ -11,6 +11,7 @@ use app\modules\academico\Module as academico;
             'arr_unidad' => $mod_unidad,
             'arr_modalidad' => $mod_modalidad,
             'arr_periodo' => $mod_periodo,
+            'arr_asignatura' => $mod_asignatura,
             ]);
         ?>
     </form>

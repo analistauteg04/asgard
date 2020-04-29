@@ -8,6 +8,9 @@ $(document).ready(function () {
     $('#btn_buscarData_distprof').click(function () {
         actualizarGridDistProf();
     });
+    $('#btn_buscarData_distpago').click(function () {
+        actualizarGridDistPago();
+    });
     $('#cmb_unidad_dis').change(function () {
         var link = $('#txth_base').val() + "/academico/distributivo/listarestudiantes";
         var arrParams = new Object();
@@ -21,7 +24,7 @@ $(document).ready(function () {
         }, true);
     });
     $('#cmb_unidad_dises').change(function () {
-        var link = $('#txth_base').val() + "/academico/distributivo/listarestudiantespagos";
+        var link = $('#txth_base').val() + "/academico/distributivo/listarestudiantespago";
         var arrParams = new Object();
         arrParams.uaca_id = $(this).val();
         arrParams.getmodalidad = true;
@@ -29,6 +32,32 @@ $(document).ready(function () {
             if (response.status == "OK") {
                 data = response.message;
                 setComboDataselect(data.modalidad, "cmb_modalidades", "Todos");
+                var arrParams = new Object();
+                if (data.modalidad.length > 0) {
+                    arrParams.uaca_id = $('#cmb_unidad_dises').val();
+                    arrParams.moda_id = data.modalidad[0].id;
+                    arrParams.getasignatura = true;
+                    requestHttpAjax(link, arrParams, function (response) {
+                        if (response.status == "OK") {
+                            data = response.message;
+                            setComboDataselect(data.asignatura, "cmb_asignaturaes", "Todos");
+                        }
+                    }, true);
+                }
+            }
+        }, true);
+    });
+    
+    $('#cmb_modalidades').change(function () {
+        var link = $('#txth_base').val() + "/academico/distributivo/listarestudiantespago";
+        var arrParams = new Object();
+        arrParams.uaca_id = $('#cmb_unidad_dises').val();
+        arrParams.moda_id = $(this).val();
+        arrParams.getasignatura = true;
+        requestHttpAjax(link, arrParams, function (response) {
+            if (response.status == "OK") {
+                data = response.message;
+                setComboDataselect(data.asignatura, "cmb_asignaturaes", "Todos");
             }
         }, true);
     });
@@ -116,4 +145,18 @@ function exportPdfDisprof() {
     var modalidad = $('#cmb_modalidad option:selected').val();
     var periodo = $('#cmb_periodo option:selected').val();
     window.location.href = $('#txth_base').val() + "/academico/distributivo/exppdfdis?pdf=1&search=" + search + "&unidad=" + unidad + "&modalidad=" + modalidad + "&periodo=" + periodo;
+}
+
+function actualizarGridDistPago() {
+    var search = $('#txt_buscarDatapago').val();
+    var unidad = $('#cmb_unidad_dises option:selected').val();
+    var modalidad = $('#cmb_modalidades option:selected').val();
+    var periodo = $('#cmb_periodoes option:selected').val();
+    var asignatura = $('#cmb_asignaturaes option:selected').val();
+    //Buscar almenos una clase con el nombre para ejecutar
+    if (!$(".blockUI").length) {
+        showLoadingPopup();
+        $('#Tbg_Distributivo_listadopago').PbGridView('applyFilterData', {'search': search, 'unidad': unidad, 'modalidad': modalidad, 'periodo': periodo, 'asignatura': asignatura});
+        setTimeout(hideLoadingPopup, 2000);
+    }
 }
