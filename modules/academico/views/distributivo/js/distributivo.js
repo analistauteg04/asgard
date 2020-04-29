@@ -89,3 +89,19 @@ function actualizarGridDistProf() {
         setTimeout(hideLoadingPopup, 2000);
     }
 }
+
+function exportExcelDistprof() {
+    var search = $('#txt_buscarData').val();
+    var unidad = $('#cmb_unidad_dis option:selected').val();
+    var modalidad = $('#cmb_modalidad option:selected').val();
+    var periodo = $('#cmb_periodo option:selected').val();
+    window.location.href = $('#txth_base').val() + "/academico/distributivo/expexceldist?search=" + search + "&unidad=" + unidad + "&modalidad=" + modalidad + "&periodo=" + periodo;
+}
+
+function exportPdfDisprof() {
+    var search = $('#txt_buscarData').val();
+    var unidad = $('#cmb_unidad_dis option:selected').val();
+    var modalidad = $('#cmb_modalidad option:selected').val();
+    var periodo = $('#cmb_periodo option:selected').val();
+    window.location.href = $('#txth_base').val() + "/academico/distributivo/exppdfdis?pdf=1&search=" + search + "&unidad=" + unidad + "&modalidad=" + modalidad+ "&periodo=" + periodo;
+}

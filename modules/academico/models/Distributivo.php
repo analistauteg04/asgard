@@ -439,7 +439,7 @@ class Distributivo extends \yii\db\ActiveRecord
      * @param
      * @return
      */
-    public function consultarDistributivoxProfesor($arrFiltro = array(), $id_profesor) {
+    public function consultarDistributivoxProfesor($arrFiltro = array(), $id_profesor, $reporte) {
         $con = \Yii::$app->db_academico;
         $con1 = \Yii::$app->db_asgard;
         $estado = 1;
@@ -518,6 +518,10 @@ class Distributivo extends \yii\db\ActiveRecord
                 'attributes' => [],
             ],
         ]);        
-        return $dataProvider;        
+        if ($reporte ==1) {
+            return $dataProvider;        
+        } else {
+            return $resultData;
+        }
     }    
 }
