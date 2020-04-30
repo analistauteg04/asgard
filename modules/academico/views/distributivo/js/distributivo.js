@@ -165,31 +165,39 @@ function actualizarGridDistPago() {
 }
 function guardarPagosEstudiante() {
      //var keys = String($('#Tbg_Distributivo_listadopago').PbGridView('getSelectedRows'));     
-    //var link = $('#txth_base').val() + "/evaluacion/evaluar";
+        var link = $('#txth_base').val() + "/academico/distributivo/savepagoaldia";
         var arrParams = new Object();
+        arrParams.periodo = $('#cmb_periodoes').val();
         var selected = '';
+        var unselected = '';
         //var vacio = '';
         //arrParams.carrera = $('#TbG_CARRERAS input[name=rb_carrera]:checked').val();
         $('#Tbg_Distributivo_listadopago input[type=checkbox]').each(function () {
             if (this.checked) {
                 selected += $(this).val() + ',';
+            }else{
+                unselected += $(this).val() + ',';
             }
+                
         });
-        if (selected != '')
-        {   alert('xzcvbn' + selected.slice(0,-1));
+        //if (selected != '')
+        //{   
+            //alert('marcados... ' + selected.slice(0,-1));
+            //alert('desmarcados... ' + unselected.slice(0,-1));
             arrParams.pagado = selected.slice(0,-1);
-        } else
+            arrParams.nopagado = unselected.slice(0,-1);
+        //} else
 
-        {
-            alert('Carrera: Campo no puede ser vacio');
-        }
+        //{
+            //alert('Carrera: Campo no puede ser vacio');
+        //}
 
-       /* if (!validateForm()) {
+        if (!validateForm()) {
             requestHttpAjax(link, arrParams, function (response) {
                 showAlert(response.status, response.label, response.message);
                 setTimeout(function () {
-                    window.location.href = $('#txth_base').val() + "/evaluacion/evaluar";
+                    window.location.href = $('#txth_base').val() + "/academico/distributivo/listarestudiantespago";
                 }, 3000);
             }, true);
-        }*/
+        }
 }

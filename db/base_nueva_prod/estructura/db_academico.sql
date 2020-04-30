@@ -1636,6 +1636,8 @@ create table if not exists `estudiante_periodo_pago` (
   `est_id` bigint(20) not null,    
   `eppa_estado_pago` varchar(1) not null,
   `eppa_fecha_registro` timestamp null default null,
+  `eppa_usuario_ingreso` bigint(20) DEFAULT NULL,
+  `eppa_usuario_modifica` bigint(20) DEFAULT NULL,
   `eppa_estado` varchar(1) not null,
   `eppa_fecha_creacion` timestamp not null default current_timestamp,
   `eppa_fecha_modificacion` timestamp null default null,

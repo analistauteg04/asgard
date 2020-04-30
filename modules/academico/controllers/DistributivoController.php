@@ -328,10 +328,65 @@ class DistributivoController extends \app\components\CController {
         return $this->render('listarestudiantepago', [
                    'mod_unidad' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_unidad), "id", "name"),
                    'mod_modalidad' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_modalidad), "id", "name"),
-                   'mod_periodo' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_periodo), "id", "name"),
+                   //'mod_periodo' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_periodo), "id", "name"),
+                   "mod_periodo" => ArrayHelper::map($arr_periodo, "id", "name"),
                    'mod_asignatura' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_asignatura), "id", "name"),
                    'model' => $model,
         ]);
     }
+   /* public function actionSavepagoaldia() {
+        $usu_id = @Yii::$app->session->get("PB_iduser");
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+            $periodo = $data["periodo"];
+            $pagado = $data["pagado"];
+            $nopagado = $data["nopagado"];
+            
+            $con = \Yii::$app->db_academico;
+            $transaction = $con->beginTransaction();
+            try {
+                // abre foreach
+                //Verificar que no haya guardado el estudiante en el periodo y est_id para insert, si guardo es update PAGADOS.
+                // en un ciclo primero los pagados, luego los no pagado
+                $distributivo_model = new Distributivo();
+                $resp_consPeriodopago = $distributivo_model->consultarPeriodopago($periodo, $pagado);
+                                
+                if (!$resp_consPeriodopago) {
+                    $fecha = date(Yii::$app->params["dateTimeByDefault"]);
+                    // insert update pagados
+                    
+                } else {
+                    // es un insert pagados
+                }
+                if ($exito) {
+                    $transaction->commit();
+                    $message = array(
+                        "wtmessage" => Yii::t("notificaciones", "La información ha sido grabada."),
+                        "title" => Yii::t('jslang', 'Success'),
+                    );
+                    return \app\models\Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                } else {
+                    $transaction->rollback();
+                    if (empty($message)) {
+                        $message = array
+                            (
+                            "wtmessage" => Yii::t("notificaciones", "Error al grabar. " . $mensaje), "title" =>
+                            Yii::t('jslang', 'Success'),
+                        );
+                    }
+                    return \app\models\Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                }
+              // cierra foreach  
+            } catch (Exception $ex) {
+                $transaction->rollback();
+                $message = array(
+                    "wtmessage" => Yii::t("notificaciones", "Error al grabar." . $mensaje),
+                    "title" => Yii::t('jslang', 'Success'),
+                );
+                return \app\models\Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+            }
+            return;
+        }
+    }*/
 }
 
