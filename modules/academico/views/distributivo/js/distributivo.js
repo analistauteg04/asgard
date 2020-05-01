@@ -165,7 +165,7 @@ function actualizarGridDistPago() {
 }
 function guardarPagosEstudiante() {
      //var keys = String($('#Tbg_Distributivo_listadopago').PbGridView('getSelectedRows'));     
-        var link = $('#txth_base').val() + "/academico/distributivo/savepagoaldia";
+        var link = $('#txth_base').val() + "/academico/distributivo/savestudiantespago";
         var arrParams = new Object();
         arrParams.periodo = $('#cmb_periodoes').val();
         var selected = '';
@@ -180,18 +180,10 @@ function guardarPagosEstudiante() {
             }
                 
         });
-        //if (selected != '')
-        //{   
-            //alert('marcados... ' + selected.slice(0,-1));
-            //alert('desmarcados... ' + unselected.slice(0,-1));
+            //alert ('pagado .. ' + selected.slice(0,-1));
+            //alert ('no pagado .. ' + unselected.slice(0,-1));
             arrParams.pagado = selected.slice(0,-1);
             arrParams.nopagado = unselected.slice(0,-1);
-        //} else
-
-        //{
-            //alert('Carrera: Campo no puede ser vacio');
-        //}
-
         if (!validateForm()) {
             requestHttpAjax(link, arrParams, function (response) {
                 showAlert(response.status, response.label, response.message);

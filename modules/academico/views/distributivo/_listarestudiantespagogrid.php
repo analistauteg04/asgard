@@ -28,7 +28,7 @@ academico::registerTranslations();
             ],
             [
                 'attribute' => 'unidad_academico',
-                'header' => Yii::t("formulario", "Academic unit"),
+                'header' => academico::t("Academico", "Aca. Uni."),
                 'value' => 'unidad',
             ],
             [
@@ -36,10 +36,23 @@ academico::registerTranslations();
                 'header' => Yii::t("formulario", "Mode"),
                 'value' => 'modalidad',
             ],
+            /* [
+              'attribute' => 'asignatura',
+              'header' => Yii::t("formulario", "Subject"),
+              'value' => 'asignatura',
+              ], */
             [
-                'attribute' => 'asignatura',
+                'class' => 'yii\grid\ActionColumn',
                 'header' => Yii::t("formulario", "Subject"),
-                'value' => 'asignatura',
+                'template' => '{view}',
+                'buttons' => [
+                    'view' => function ($url, $model) {
+                        if (strlen($model['asignatura']) > 30) {
+                            $texto = '...';
+                        }
+                        return Html::a('<span>' . substr($model['asignatura'], 0, 20) . $texto . '</span>', "javascript:", ["data-toggle" => "tooltip", "title" => $model['asignatura']]);
+                    },
+                ],
             ],
             [
                 'attribute' => 'DNI',
@@ -50,6 +63,16 @@ academico::registerTranslations();
                 'attribute' => 'Estudiante',
                 'header' => Yii::t("formulario", "Complete Names"),
                 'value' => 'estudiante',
+            ],
+            [
+                'attribute' => 'Estado',
+                'header' => Yii::t("formulario", "Status"),
+                'value' => 'pago',
+            ],
+            [
+                'attribute' => 'Fecha',
+                'header' => Yii::t("formulario", "Date"),
+                'value' => 'fecha_pago',
             ],
             /* [   
               'class' => 'app\widgets\PbGridView\PbCheckboxColumn',
@@ -62,7 +85,7 @@ academico::registerTranslations();
                 'template' => '{select}',
                 'buttons' => [
                     'select' => function ($url, $model) {
-                        return Html::checkbox("", false, ["value" => $model['est_id']]);                       
+                        return Html::checkbox("", false, ["value" => $model['est_id']]);
                     },
                 ],
             ],

@@ -549,12 +549,19 @@ class Distributivo extends \yii\db\ActiveRecord {
                 $str_search .= "a.asi_id = :asignatura AND ";
             }
         }
-        $sql = "SELECT  h.est_id, d.uaca_nombre as unidad, e.mod_nombre as modalidad,
+        $sql = "SELECT  h.est_id, 
+                        d.uaca_nombre as unidad, 
+                        e.mod_nombre as modalidad,
                         p.per_cedula as identificacion, 
                         concat(p.per_pri_nombre, ' ', p.per_pri_apellido, ' ', ifnull(p.per_seg_apellido,'')) as estudiante,
                         concat(saca_nombre, '-', baca_nombre,'-',baca_anio) as periodo,
                         z.asi_nombre as asignatura,
-                        case when m.eppa_estado_pago = 'N' then 'Pagado' else 'Pendiente' end as pago
+                        case 
+                             when m.eppa_estado_pago = '0' then 'Deuda' 
+                             when m.eppa_estado_pago = '1' then 'Pagado'
+                             else 'Pendiente'
+                             end as 'pago',                           
+                        ifnull(DATE_FORMAT(m.eppa_fecha_registro, '%Y-%m-%d'), ' ') as fecha_pago 
                 FROM " . $con->dbname . ".distributivo_academico a inner join " . $con->dbname . ".profesor b
                     on b.pro_id = a.pro_id 
                     inner join " . $con1->dbname . ".persona c on c.per_id = b.per_id
@@ -642,6 +649,161 @@ class Distributivo extends \yii\db\ActiveRecord {
         $comando->bindParam(":mod_id", $mod_id, \PDO::PARAM_INT);
         $resultData = $comando->queryAll();
         return $resultData;
+    }
+
+    /**
+     * Function Consulta si ya tiene data en la tabla period pago, segun periodo academico y est_id.
+     * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>
+     * @param   
+     * @return  estudiante_periodo_pago_id eppa_id
+     */
+    public function consultarPeriodopago($paca_id, $est_id) {
+        $con = \Yii::$app->db_academico;
+        $estado = 1;
+        $sql = "
+                    SELECT eppa_id as eppa_id
+                    FROM 
+                        " . $con->dbname . ".estudiante_periodo_pago                   
+                    WHERE
+                        paca_id= :paca_id AND
+                        est_id= :est_id AND                                               
+                        eppa_estado = :estado AND
+                        eppa_estado_logico = :estado";
+
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":paca_id", $paca_id, \PDO::PARAM_INT);
+        $comando->bindParam(":est_id", $est_id, \PDO::PARAM_INT);
+        $resultData = $comando->queryOne();
+        return $resultData;
+    }
+
+    /**
+     * Function insertarPagoestudiante crea pagos estudiante.
+     * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;
+     * @param
+     * @return
+     */
+    public function insertarPagoestudiante($paca_id, $est_id, $eppa_estado_pago, $usu_id) {
+        $con = \Yii::$app->db_academico;
+        $fecha = date(Yii::$app->params["dateTimeByDefault"]);
+        $trans = $con->getTransaction(); // se obtiene la transacción actual
+        if ($trans !== null) {
+            $trans = null; // si existe la transacción entonces no se crea una
+        } else {
+            $trans = $con->beginTransaction(); // si no existe la transacción entonces se crea una
+        }
+
+        $param_sql = "eppa_estado";
+        $bdet_sql = "1";
+
+        $param_sql .= ", eppa_estado_logico";
+        $bdet_sql .= ", 1";
+
+        /*$param_sql .= ", eppa_estado_pago";
+        $bdet_sql .= ", 1";*/
+
+        if (isset($paca_id)) {
+            $param_sql .= ", paca_id";
+            $bdet_sql .= ", :paca_id";
+        }
+        if (isset($est_id)) {
+            $param_sql .= ", est_id";
+            $bdet_sql .= ", :est_id";
+        }
+        if (isset($eppa_estado_pago)) {
+            $param_sql .= ", eppa_estado_pago";
+            $bdet_sql .= ", :eppa_estado_pago";
+        }
+        if (isset($fecha)) {
+            $param_sql .= ", eppa_fecha_registro";
+            $bdet_sql .= ", :eppa_fecha_registro";
+        }
+        if (isset($usu_id)) {
+            $param_sql .= ", eppa_usuario_ingreso";
+            $bdet_sql .= ", :eppa_usuario_ingreso";
+        }
+        if (isset($fecha)) {
+            $param_sql .= ", eppa_fecha_creacion";
+            $bdet_sql .= ", :eppa_fecha_creacion";
+        }
+        try {
+            $sql = "INSERT INTO " . $con->dbname . ".estudiante_periodo_pago ($param_sql) VALUES($bdet_sql)";
+            $comando = $con->createCommand($sql);
+
+            if (isset($paca_id)) {
+                $comando->bindParam(':paca_id', $paca_id, \PDO::PARAM_INT);
+            }
+            if (isset($est_id)) {
+                $comando->bindParam(':est_id', $est_id, \PDO::PARAM_INT);
+            }
+            if (isset($fecha)) {
+                $comando->bindParam(':eppa_fecha_registro', $fecha, \PDO::PARAM_STR);
+            }
+            if (isset($eppa_estado_pago)) {
+                $comando->bindParam(':eppa_estado_pago', $eppa_estado_pago, \PDO::PARAM_STR);
+            }
+            if (!empty((isset($usu_id)))) {
+                $comando->bindParam(':eppa_usuario_ingreso', $usu_id, \PDO::PARAM_INT);
+            }
+            if (!empty((isset($fecha)))) {
+                $comando->bindParam(':eppa_fecha_creacion', $fecha, \PDO::PARAM_STR);
+            }
+            $result = $comando->execute();
+            if ($trans !== null)
+                $trans->commit();
+            return $con->getLastInsertID($con->dbname . '.estudiante_periodo_pago');
+        } catch (Exception $ex) {
+            if ($trans !== null)
+                $trans->rollback();
+            return FALSE;
+        }
+    }
+
+    /**
+     * Function modificarPagoestudiante.
+     * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;
+     * @param
+     * @return
+     */
+    public function modificarPagoestudiante($paca_id, $est_id, $eppa_estado_pago, $usu_id) {
+        $con = \Yii::$app->db_academico;
+        $estado = 1;
+        $fecha = date(Yii::$app->params["dateTimeByDefault"]);
+        $trans = $con->getTransaction(); // se obtiene la transacción actual
+        if ($trans !== null) {
+            $trans = null; // si existe la transacción entonces no se crea una
+        } else {
+            $trans = $con->beginTransaction(); // si no existe la transacción entonces se crea una
+        }
+
+        try {
+            $comando = $con->createCommand
+                    ("UPDATE " . $con->dbname . ".estudiante_periodo_pago		       
+                      SET eppa_estado_pago = :eppa_estado_pago,
+                          eppa_usuario_modifica = :eppa_usuario_modifica,
+                          eppa_fecha_registro = :fecha,
+                          eppa_fecha_modificacion = :fecha
+                      WHERE                     
+                        paca_id = :paca_id AND
+                        est_id =  :est_id AND
+                        eppa_estado = :estado AND
+                        eppa_estado_logico = :estado");
+            $comando->bindParam(':paca_id', $paca_id, \PDO::PARAM_INT);
+            $comando->bindParam(':est_id', $est_id, \PDO::PARAM_INT);
+            $comando->bindParam(':eppa_estado_pago', $eppa_estado_pago, \PDO::PARAM_STR);
+            $comando->bindParam(':eppa_usuario_modifica', $usu_id, \PDO::PARAM_INT);
+            $comando->bindParam(":fecha", $fecha, \PDO::PARAM_STR);
+            $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+            $result = $comando->execute();
+            if ($trans !== null)
+                $trans->commit();
+            return $con->getLastInsertID($con->dbname . '.estudiante_periodo_pago');
+        } catch (Exception $ex) {
+            if ($trans !== null)
+                $trans->rollback();
+            return FALSE;
+        }
     }
 
 }

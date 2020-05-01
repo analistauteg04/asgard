@@ -27,8 +27,8 @@ class DistributivoController extends \app\components\CController {
         $mod_unidad = new UnidadAcademica();
         $data = Yii::$app->request->get();
         if ($data['PBgetFilter']) {
-            $arrSearch["search"] = $data['search'];                        
-            $arrSearch["unidad"] = $data['unidad'];      
+            $arrSearch["search"] = $data['search'];
+            $arrSearch["unidad"] = $data['unidad'];
             $arrSearch["semestre"] = $data['semestre'];
             $model = $distributivo_model->consultarDistributivo($arrSearch);
             return $this->render('index-grid', [
@@ -36,16 +36,16 @@ class DistributivoController extends \app\components\CController {
             ]);
         } else {
             $model = $distributivo_model->consultarDistributivo();
-        }        
+        }
         $arr_unidad = $mod_unidad->consultarUnidadAcademicasEmpresa(1);
         $arr_semestre = $mod_semestre->consultarSemestres();
         return $this->render('index', [
-                   'mod_unidad' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_unidad), "id", "name"),
-                   'mod_semestre' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_semestre), "id", "name"),
-                   'model' => $distributivo_model->consultarDistributivo(),
+                    'mod_unidad' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_unidad), "id", "name"),
+                    'mod_semestre' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_semestre), "id", "name"),
+                    'model' => $distributivo_model->consultarDistributivo(),
         ]);
     }
-    
+
     public function actionExpexcel() {
         ini_set('memory_limit', '256M');
         $content_type = Utilities::mimeContentType("xls");
@@ -61,20 +61,20 @@ class DistributivoController extends \app\components\CController {
             Yii::t("formulario", "Academic unit"),
             Yii::t("formulario", "Subject"),
             Yii::t("formulario", "Description"),
-            Yii::t("formulario", "Semester"),            
+            Yii::t("formulario", "Semester"),
         );
-        $distributivo_model = new Distributivo();        
+        $distributivo_model = new Distributivo();
         $data = Yii::$app->request->get();
-        $arrSearch["search"] = $data['search'];                
+        $arrSearch["search"] = $data['search'];
         $arrSearch["unidad"] = $data['unidad'];
         $arrSearch["semestre"] = $data['semestre'];
         $arrData = array();
-        if ($arrSearch["unidad"] ==0 and $arrSearch["semestre"] ==0 and (empty($arrSearch["search"]))) {
+        if ($arrSearch["unidad"] == 0 and $arrSearch["semestre"] == 0 and ( empty($arrSearch["search"]))) {
             \app\models\Utilities::putMessageLogFile('arrSearch vacío');
             $arrData = $distributivo_model->consultarDistributivoReporte(array());
-        } else {            
+        } else {
             $arrData = $distributivo_model->consultarDistributivoReporte($arrSearch);
-        }        
+        }
         $nameReport = academico::t("Academico", "Distributive List");
         Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
         exit;
@@ -92,13 +92,13 @@ class DistributivoController extends \app\components\CController {
             Yii::t("formulario", "Description"),
             Yii::t("formulario", "Semester"),
         );
-        $distributivo_model = new Distributivo();        
-        $data = Yii::$app->request->get();        
-        $arrSearch["search"] = $data['search'];                
+        $distributivo_model = new Distributivo();
+        $data = Yii::$app->request->get();
+        $arrSearch["search"] = $data['search'];
         $arrSearch["unidad"] = $data['unidad'];
         $arrSearch["semestre"] = $data['semestre'];
         $arrData = array();
-        if ($arrSearch["unidad"] ==0 and $arrSearch["semestre"] ==0 and (empty($arrSearch["search"]))) {
+        if ($arrSearch["unidad"] == 0 and $arrSearch["semestre"] == 0 and ( empty($arrSearch["search"]))) {
             $arrData = $distributivo_model->consultarDistributivoReporte(array());
         } else {
             $arrData = $distributivo_model->consultarDistributivoReporte($arrSearch);
@@ -111,16 +111,16 @@ class DistributivoController extends \app\components\CController {
                 ])
         );
         $report->mpdf->Output('Reporte_' . date("Ymdhis") . ".pdf", ExportFile::OUTPUT_TO_DOWNLOAD);
-    }   
-    
+    }
+
     public function actionCarga_horaria() {
         $distributivo_model = new Distributivo();
         $mod_semestre = new SemestreAcademico();
         $mod_tipo = new TipoDistributivo();
         $data = Yii::$app->request->get();
         if ($data['PBgetFilter']) {
-            $arrSearch["search"] = $data['search'];                        
-            $arrSearch["tipo"] = $data['tipo'];      
+            $arrSearch["search"] = $data['search'];
+            $arrSearch["tipo"] = $data['tipo'];
             $arrSearch["semestre"] = $data['semestre'];
             $model = $distributivo_model->consultarCargaHoraria($arrSearch);
             return $this->render('carga_horaria-grid', [
@@ -128,17 +128,17 @@ class DistributivoController extends \app\components\CController {
             ]);
         } else {
             $model = $distributivo_model->consultarCargaHoraria();
-        }        
+        }
         $arr_tipo = $mod_tipo->consultarTipoDistributivo();
         $arr_semestre = $mod_semestre->consultarSemestres();
         return $this->render('carga_horaria', [
-                   'mod_tipo' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_tipo), "id", "name"),
-                   'mod_semestre' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_semestre), "id", "name"),
-                   'model' => $distributivo_model->consultarCargaHoraria(),
+                    'mod_tipo' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_tipo), "id", "name"),
+                    'mod_semestre' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_semestre), "id", "name"),
+                    'model' => $distributivo_model->consultarCargaHoraria(),
         ]);
     }
-    
-     public function actionExpexcelhoras() {
+
+    public function actionExpexcelhoras() {
         ini_set('memory_limit', '256M');
         $content_type = Utilities::mimeContentType("xls");
         $nombarch = "Report-" . date("YmdHis") . ".xls";
@@ -158,23 +158,23 @@ class DistributivoController extends \app\components\CController {
             academico::t("Academico", "Other activities"),
             academico::t("Academico", "Total Hours")
         );
-        $distributivo_model = new Distributivo();        
+        $distributivo_model = new Distributivo();
         $data = Yii::$app->request->get();
-        $arrSearch["search"] = $data['search'];                
+        $arrSearch["search"] = $data['search'];
         $arrSearch["tipo"] = $data['tipo'];
         $arrSearch["semestre"] = $data['semestre'];
         $arrData = array();
-        if ($arrSearch["tipo"] ==0 and $arrSearch["semestre"] ==0 and (empty($arrSearch["search"]))) {
+        if ($arrSearch["tipo"] == 0 and $arrSearch["semestre"] == 0 and ( empty($arrSearch["search"]))) {
             \app\models\Utilities::putMessageLogFile('arrSearch vacío');
             $arrData = $distributivo_model->consultarCargaHorariaReporte(array());
-        } else {            
+        } else {
             $arrData = $distributivo_model->consultarCargaHorariaReporte($arrSearch);
-        }        
+        }
         $nameReport = academico::t("Academico", "Workload");
         Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
         exit;
     }
-    
+
     public function actionListarestudiantes() {
         $per_id = @Yii::$app->session->get("PB_perid");
         $distributivo_model = new Distributivo();
@@ -182,19 +182,19 @@ class DistributivoController extends \app\components\CController {
         $mod_unidad = new UnidadAcademica();
         $mod_periodo = new PeriodoAcademicoMetIngreso();
         $data = Yii::$app->request->get();
-         
+
         if ($data['PBgetFilter']) {
-            $arrSearch["search"] = $data['search'];                        
-            $arrSearch["unidad"] = $data['unidad'];      
+            $arrSearch["search"] = $data['search'];
+            $arrSearch["unidad"] = $data['unidad'];
             $arrSearch["modalidad"] = $data['modalidad'];
             $arrSearch["periodo"] = $data['periodo'];
-            $model = $distributivo_model->consultarDistributivoxProfesor($arrSearch,$per_id,1);
+            $model = $distributivo_model->consultarDistributivoxProfesor($arrSearch, $per_id, 1);
             return $this->render('listar_distributivo-grid', [
                         "model" => $model,
             ]);
         } else {
-            $model = $distributivo_model->consultarDistributivoxProfesor(null,$per_id,1);
-        }        
+            $model = $distributivo_model->consultarDistributivoxProfesor(null, $per_id, 1);
+        }
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
             if (isset($data["getmodalidad"])) {
@@ -207,16 +207,16 @@ class DistributivoController extends \app\components\CController {
         $arr_modalidad = $mod_modalidad->consultarModalidad($arr_unidad[0]["id"], 1);
         $arr_periodo = $mod_periodo->consultarPeriodoAcademico();
         return $this->render('listar_distributivo_profesor', [
-                   'mod_unidad' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_unidad), "id", "name"),
-                   'mod_modalidad' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_modalidad), "id", "name"),
-                   'mod_periodo' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_periodo), "id", "name"),
-                   'model' => $model,
+                    'mod_unidad' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_unidad), "id", "name"),
+                    'mod_modalidad' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_modalidad), "id", "name"),
+                    'mod_periodo' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_periodo), "id", "name"),
+                    'model' => $model,
         ]);
     }
-    
-    public function actionExpexceldist() {                          
-        $per_id = @Yii::$app->session->get("PB_perid");        
-                
+
+    public function actionExpexceldist() {
+        $per_id = @Yii::$app->session->get("PB_perid");
+
         ini_set('memory_limit', '256M');
         $content_type = Utilities::mimeContentType("xls");
         $nombarch = "Report-" . date("YmdHis") . ".xls";
@@ -226,58 +226,58 @@ class DistributivoController extends \app\components\CController {
         $colPosition = array("C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N");
         $arrHeader = array(
             Yii::t("formulario", "Academic unit"),
-            Yii::t("formulario", "Mode"),            
+            Yii::t("formulario", "Mode"),
             Yii::t("formulario", "DNI"),
             Yii::t("formulario", "Complete Names"),
             Yii::t("formulario", "Period"),
-            Yii::t("formulario", "Subject"),                        
-            Yii::t("formulario", "Payment Status"),         
+            Yii::t("formulario", "Subject"),
+            Yii::t("formulario", "Payment Status"),
         );
-        \app\models\Utilities::putMessageLogFile('perid:'.$per_id);
-        $distributivo_model = new Distributivo();        
+        \app\models\Utilities::putMessageLogFile('perid:' . $per_id);
+        $distributivo_model = new Distributivo();
         $data = Yii::$app->request->get();
-        $arrSearch["search"] = $data['search'];                        
-        $arrSearch["unidad"] = $data['unidad'];      
+        $arrSearch["search"] = $data['search'];
+        $arrSearch["unidad"] = $data['unidad'];
         $arrSearch["modalidad"] = $data['modalidad'];
         $arrSearch["periodo"] = $data['periodo'];
-                 
+
         $arrData = array();
-        if ($arrSearch["unidad"] ==0 and $arrSearch["modalidad"] ==0 and $arrSearch["periodo"] ==0 and (empty($arrSearch["search"]))) {            
-            $arrData = $distributivo_model->consultarDistributivoxProfesor(array(),$per_id,0);
-        } else {                     
-            $arrData = $distributivo_model->consultarDistributivoxProfesor($arrSearch, $per_id,0);
-        }        
+        if ($arrSearch["unidad"] == 0 and $arrSearch["modalidad"] == 0 and $arrSearch["periodo"] == 0 and ( empty($arrSearch["search"]))) {
+            $arrData = $distributivo_model->consultarDistributivoxProfesor(array(), $per_id, 0);
+        } else {
+            $arrData = $distributivo_model->consultarDistributivoxProfesor($arrSearch, $per_id, 0);
+        }
         $nameReport = academico::t("Academico", "Listado de estudiantes");
         Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
         exit;
     }
-    
+
     public function actionExppdfdis() {
-        $per_id = @Yii::$app->session->get("PB_perid");        
+        $per_id = @Yii::$app->session->get("PB_perid");
         $report = new ExportFile();
         $this->view->title = academico::t("Academico", "Listado de estudiantes"); // Titulo del reporte
         $arrHeader = array(
             Yii::t("formulario", "Academic unit"),
-            Yii::t("formulario", "Mode"),            
+            Yii::t("formulario", "Mode"),
             Yii::t("formulario", "DNI"),
             Yii::t("formulario", "Complete Names"),
             Yii::t("formulario", "Period"),
-            Yii::t("formulario", "Subject"),                        
-            Yii::t("formulario", "Payment Status"),  
+            Yii::t("formulario", "Subject"),
+            Yii::t("formulario", "Payment Status"),
         );
-        $distributivo_model = new Distributivo();        
-        $data = Yii::$app->request->get();        
-        $arrSearch["search"] = $data['search'];                        
-        $arrSearch["unidad"] = $data['unidad'];      
+        $distributivo_model = new Distributivo();
+        $data = Yii::$app->request->get();
+        $arrSearch["search"] = $data['search'];
+        $arrSearch["unidad"] = $data['unidad'];
         $arrSearch["modalidad"] = $data['modalidad'];
         $arrSearch["periodo"] = $data['periodo'];
-        
+
         $arrData = array();
-        if ($arrSearch["unidad"] ==0 and $arrSearch["modalidad"] ==0 and $arrSearch["periodo"] ==0 and (empty($arrSearch["search"]))) {            
-            $arrData = $distributivo_model->consultarDistributivoxProfesor(array(),$per_id,0);
-        } else {                     
-            $arrData = $distributivo_model->consultarDistributivoxProfesor($arrSearch, $per_id,0);
-        }        
+        if ($arrSearch["unidad"] == 0 and $arrSearch["modalidad"] == 0 and $arrSearch["periodo"] == 0 and ( empty($arrSearch["search"]))) {
+            $arrData = $distributivo_model->consultarDistributivoxProfesor(array(), $per_id, 0);
+        } else {
+            $arrData = $distributivo_model->consultarDistributivoxProfesor($arrSearch, $per_id, 0);
+        }
         $report->orientation = "L"; // tipo de orientacion L => Horizontal, P => Vertical                                
         $report->createReportPdf(
                 $this->render('exportpdf', [
@@ -286,7 +286,8 @@ class DistributivoController extends \app\components\CController {
                 ])
         );
         $report->mpdf->Output('Reporte_' . date("Ymdhis") . ".pdf", ExportFile::OUTPUT_TO_DOWNLOAD);
-    }   
+    }
+
     public function actionListarestudiantespago() {
         $per_id = @Yii::$app->session->get("PB_perid");
         $distributivo_model = new Distributivo();
@@ -294,20 +295,20 @@ class DistributivoController extends \app\components\CController {
         $mod_unidad = new UnidadAcademica();
         $mod_periodo = new PeriodoAcademicoMetIngreso();
         $data = Yii::$app->request->get();
-         
+
         if ($data['PBgetFilter']) {
-            $arrSearch["search"] = $data['search'];                        
-            $arrSearch["unidad"] = $data['unidad'];      
+            $arrSearch["search"] = $data['search'];
+            $arrSearch["unidad"] = $data['unidad'];
             $arrSearch["modalidad"] = $data['modalidad'];
             $arrSearch["periodo"] = $data['periodo'];
             $arrSearch["asignatura"] = $data['asignatura'];
-            $model = $distributivo_model->consultarDistributivoxEstudiante($arrSearch,1);
+            $model = $distributivo_model->consultarDistributivoxEstudiante($arrSearch, 1);
             return $this->render('_listarestudiantespagogrid', [
                         "model" => $model,
             ]);
         } else {
-            $model = $distributivo_model->consultarDistributivoxEstudiante(null,1);
-        }        
+            $model = $distributivo_model->consultarDistributivoxEstudiante(null, 1);
+        }
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
             if (isset($data["getmodalidad"])) {
@@ -315,7 +316,7 @@ class DistributivoController extends \app\components\CController {
                 $message = array("modalidad" => $modalidad);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }
-             if (isset($data["getasignatura"])) {
+            if (isset($data["getasignatura"])) {
                 $asignatura = $distributivo_model->consultarAsiganturaxuniymoda($data["uaca_id"], $data["moda_id"]);
                 $message = array("asignatura" => $asignatura);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
@@ -326,37 +327,60 @@ class DistributivoController extends \app\components\CController {
         $arr_periodo = $mod_periodo->consultarPeriodoAcademico();
         $arr_asignatura = $distributivo_model->consultarAsiganturaxuniymoda(0, 0);
         return $this->render('listarestudiantepago', [
-                   'mod_unidad' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_unidad), "id", "name"),
-                   'mod_modalidad' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_modalidad), "id", "name"),
-                   //'mod_periodo' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_periodo), "id", "name"),
-                   "mod_periodo" => ArrayHelper::map($arr_periodo, "id", "name"),
-                   'mod_asignatura' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_asignatura), "id", "name"),
-                   'model' => $model,
+                    'mod_unidad' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_unidad), "id", "name"),
+                    'mod_modalidad' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_modalidad), "id", "name"),
+                    //'mod_periodo' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_periodo), "id", "name"),
+                    "mod_periodo" => ArrayHelper::map($arr_periodo, "id", "name"),
+                    'mod_asignatura' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_asignatura), "id", "name"),
+                    'model' => $model,
         ]);
     }
-   /* public function actionSavepagoaldia() {
+
+    public function actionSavestudiantespago() {
         $usu_id = @Yii::$app->session->get("PB_iduser");
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
             $periodo = $data["periodo"];
             $pagado = $data["pagado"];
             $nopagado = $data["nopagado"];
-            
+
             $con = \Yii::$app->db_academico;
             $transaction = $con->beginTransaction();
             try {
-                // abre foreach
-                //Verificar que no haya guardado el estudiante en el periodo y est_id para insert, si guardo es update PAGADOS.
-                // en un ciclo primero los pagados, luego los no pagado
-                $distributivo_model = new Distributivo();
-                $resp_consPeriodopago = $distributivo_model->consultarPeriodopago($periodo, $pagado);
-                                
-                if (!$resp_consPeriodopago) {
-                    $fecha = date(Yii::$app->params["dateTimeByDefault"]);
-                    // insert update pagados
-                    
-                } else {
-                    // es un insert pagados
+                if (!empty($pagado)) {
+                    $pagados = explode(",", $pagado); //PAGADOS
+                    foreach ($pagados as $est_id) {  // empieza foreach para guardar los pagados
+                        //Verificar que no haya guardado el estudiante en el periodo y est_id para insert, si guardo es update PAGADOS.
+                        // en un ciclo primero los pagados, luego los no pagado
+                        $distributivo_model = new Distributivo();
+                        $resp_consPeriodopago = $distributivo_model->consultarPeriodopago($periodo, $est_id);
+                        if (!empty($resp_consPeriodopago["eppa_id"])) {
+                            // update update pagados   
+                            $resp_guardapago = $distributivo_model->modificarPagoestudiante($periodo, $est_id, 1, $usu_id);
+                            $exito = 1;
+                        } else {
+                            // es un insert pagados
+                            $resp_modificarpago = $distributivo_model->insertarPagoestudiante($periodo, $est_id, 1, $usu_id);
+                            $exito = 1;
+                        }
+                    } // cierra foreach 
+                }
+                if (!empty($nopagado)) {
+                    $nopagados = explode(",", $nopagado); //NO PAGADOS
+                    foreach ($nopagados as $est_id) {  // empieza foreach para guardar los no pagados
+                        //Verificar que no haya guardado el estudiante en el periodo y est_id para insert, si guardo es update NO PAGADOS.                    
+                        $distributivo_model = new Distributivo();
+                        $resp_consPeriodonopago = $distributivo_model->consultarPeriodopago($periodo, $est_id);
+                        if (!empty($resp_consPeriodonopago["eppa_id"])) {
+                            // update update pagados   s
+                            $resp_guardanopago = $distributivo_model->modificarPagoestudiante($periodo, $est_id, 0, $usu_id);
+                            $exito = 1;
+                        } else {
+                            // es un insert pagados
+                            $resp_modificarnopago = $distributivo_model->insertarPagoestudiante($periodo, $est_id, 0, $usu_id);
+                            $exito = 1;
+                        }
+                    } // cierra foreach 
                 }
                 if ($exito) {
                     $transaction->commit();
@@ -376,7 +400,6 @@ class DistributivoController extends \app\components\CController {
                     }
                     return \app\models\Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
                 }
-              // cierra foreach  
             } catch (Exception $ex) {
                 $transaction->rollback();
                 $message = array(
@@ -387,6 +410,6 @@ class DistributivoController extends \app\components\CController {
             }
             return;
         }
-    }*/
-}
+    }
 
+}
