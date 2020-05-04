@@ -32,6 +32,7 @@ $(document).ready(function () {
         arrParams.pri_apellido = $('#txt_primer_apellido').val();
         arrParams.tipo_dni = $('#cmb_tipo_dni').val();
         arrParams.cedula = $('#txt_cedula').val();
+        arrParams.empresa = $('#txt_empresa').val();
         arrParams.correo = $('#txt_correo').val();
         arrParams.pais = $('#cmb_pais_dom').val();
         arrParams.celular = $('#txt_celular').val();
