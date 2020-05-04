@@ -99,10 +99,10 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
         $twin_mensaje2 = 0;
 
         $sql = "INSERT INTO " . $con->dbname . ".temporal_wizard_inscripcion
-            (twin_nombre,twin_apellido,twin_dni,twin_numero,twin_correo,twin_pais,twin_celular,uaca_id, 
+            (twin_nombre,twin_apellido,twin_dni,twin_numero,twin_correo,twin_empresa,twin_pais,twin_celular,uaca_id, 
              mod_id,car_id,twin_metodo_ingreso,conuteg_id,ruta_doc_titulo, ruta_doc_dni, ruta_doc_certvota,
              ruta_doc_foto,ruta_doc_certificado, twin_mensaje1,twin_mensaje2,twin_estado,twin_fecha_creacion,twin_estado_logico)VALUES
-            (:twin_nombre,:twin_apellido,:twin_dni,:twin_numero,:twin_correo,:twin_pais,:twin_celular,:uaca_id, 
+            (:twin_nombre,:twin_apellido,:twin_dni,:twin_numero,:twin_correo,:twin_empresa,:twin_pais,:twin_celular,:uaca_id, 
              :mod_id,:car_id,:twin_metodo_ingreso,:conuteg_id,:ruta_doc_titulo,:ruta_doc_dni,:ruta_doc_certvota,
              :ruta_doc_foto,:ruta_doc_certificado,:twin_mensaje1,:twin_mensaje2,1,CURRENT_TIMESTAMP(),1)";
 
@@ -118,6 +118,7 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
         $command->bindParam(":twin_apellido", $data[0]['pges_pri_apellido'], \PDO::PARAM_STR);
         $command->bindParam(":twin_dni", $data[0]['tipo_dni'], \PDO::PARAM_STR);
         $command->bindParam(":twin_numero", $data[0]['pges_cedula'], \PDO::PARAM_STR);
+        $command->bindParam(":twin_empresa", ucfirst(mb_strtolower($data[0]['pges_empresa'],'UTF-8')), \PDO::PARAM_STR);
         $command->bindParam(":twin_correo", $data[0]['pges_correo'], \PDO::PARAM_STR);
         $command->bindParam(":twin_pais", $data[0]['pais'], \PDO::PARAM_STR);
         $command->bindParam(":twin_celular", $data[0]['pges_celular'], \PDO::PARAM_STR);
@@ -140,7 +141,7 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
     private function updateDataInscripcion($con, $data) {
         $sql = "UPDATE " . $con->dbname . ".temporal_wizard_inscripcion 
                 SET twin_nombre=:twin_nombre,twin_apellido=:twin_apellido,twin_dni=:twin_dni,twin_numero=:twin_numero,
-                    twin_correo=:twin_correo,twin_pais=:twin_pais,twin_celular=:twin_celular,uaca_id=:uaca_id, 
+                    twin_correo=:twin_correo,twin_empresa=:twin_empresa,twin_pais=:twin_pais,twin_celular=:twin_celular,uaca_id=:uaca_id, 
                     mod_id=:mod_id,car_id=:car_id,twin_metodo_ingreso=:twin_metodo_ingreso,conuteg_id=:conuteg_id,ruta_doc_titulo=:ruta_doc_titulo, 
                     ruta_doc_dni=:ruta_doc_dni, ruta_doc_certvota=:ruta_doc_certvota,ruta_doc_foto=:ruta_doc_foto,
                     ruta_doc_hojavida=:ruta_doc_hojavida,ruta_doc_certificado=:ruta_doc_certificado, 
@@ -159,6 +160,7 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
         $command->bindParam(":twin_apellido", $data[0]['pges_pri_apellido'], \PDO::PARAM_STR);
         $command->bindParam(":twin_dni", $data[0]['tipo_dni'], \PDO::PARAM_STR);
         $command->bindParam(":twin_numero", $data[0]['pges_cedula'], \PDO::PARAM_STR);
+        $command->bindParam(":twin_empresa", ucfirst(mb_strtolower($data[0]['pges_empresa'],'UTF-8')), \PDO::PARAM_STR);
         $command->bindParam(":twin_correo", $data[0]['pges_correo'], \PDO::PARAM_STR);
         $command->bindParam(":twin_pais", $data[0]['pais'], \PDO::PARAM_STR);
         $command->bindParam(":twin_celular", $data[0]['pges_celular'], \PDO::PARAM_STR);
@@ -247,6 +249,7 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                         twin_nombre,
                         twin_apellido,
                         twin_numero,
+                        twin_empresa,
                         twin_correo,
                         twin_pais,
                         twin_celular,
@@ -327,7 +330,7 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                         'pro_id_nacimiento', 'can_id_nacimiento', 'per_fecha_nacimiento',
                         'per_celular', 'per_correo', 'tsan_id', 'per_domicilio_sector',
                         'per_domicilio_cpri', 'per_domicilio_csec', 'per_domicilio_num',
-                        'per_domicilio_ref', 'per_domicilio_telefono', 'pai_id_domicilio',
+                        'per_domicilio_ref', 'per_domicilio_telefono', 'per_trabajo_nombre', 'pai_id_domicilio',
                         'pro_id_domicilio', 'can_id_domicilio', 'per_nac_ecuatoriano',
                         'per_nacionalidad', 'per_foto', 'per_usuario_ingresa', 'per_estado', 'per_estado_logico'
                     ];
@@ -337,7 +340,7 @@ class InscripcionAdmision extends \yii\db\ActiveRecord {
                         $resp_datos['twin_numero'], null, null, null, null, null,
                         null, null, $resp_datos['twin_celular'], $resp_datos['twin_correo'],
                         null, null, null, null,
-                        null, null, null,
+                        null, null, null,$resp_datos['twin_empresa'],
                         null, null, null,
                         null, null, null, $usuario_ingreso, 1, 1
                     ];
