@@ -14,7 +14,7 @@ academico::registerTranslations();
     <?=
     PbGridView::widget([
         'id' => 'Tbg_Distributivo_listadopago',
-        //'showExport' => true,
+        'showExport' => true,
         'fnExportEXCEL' => "exportExcelDistpago",
         'fnExportPDF' => "exportPdfDispago",
         'dataProvider' => $model,
