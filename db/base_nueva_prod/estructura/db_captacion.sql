@@ -471,6 +471,7 @@ create table if not exists `temporal_wizard_inscripcion` (
  `twin_dni` varchar(1000) not  null,
  `twin_numero` varchar(1000) not  null,
  `twin_correo` varchar(1000) not  null,
+ `twin_empresa` varchar(200) null,
  `twin_pais` bigint(20) not null,
  `twin_celular` bigint(20) not null,
  `uaca_id` bigint(20) not null, 
