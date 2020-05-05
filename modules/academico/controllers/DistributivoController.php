@@ -298,6 +298,7 @@ class DistributivoController extends \app\components\CController {
 
         if ($data['PBgetFilter']) {
             $arrSearch["search"] = $data['search'];
+            $arrSearch["profesor"] = $data['profesor'];
             $arrSearch["unidad"] = $data['unidad'];
             $arrSearch["modalidad"] = $data['modalidad'];
             $arrSearch["periodo"] = $data['periodo'];
@@ -410,6 +411,87 @@ class DistributivoController extends \app\components\CController {
             }
             return;
         }
+    }
+       public function actionExpexcelestpago() {
+        $per_id = @Yii::$app->session->get("PB_perid");
+
+        ini_set('memory_limit', '256M');
+        $content_type = Utilities::mimeContentType("xls");
+        $nombarch = "Report-" . date("YmdHis") . ".xls";
+        header("Content-Type: $content_type");
+        header("Content-Disposition: attachment;filename=" . $nombarch);
+        header('Cache-Control: max-age=0');
+        $colPosition = array("C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N");
+        $arrHeader = array(
+            
+            Yii::t("formulario", " "),
+            Yii::t("formulario", "Academic unit"),
+            Yii::t("formulario", "Mode"),
+            Yii::t("formulario", "DNI"),             
+            Yii::t("formulario", "Complete Names"),         
+            Yii::t("formulario", "Period"),
+            Yii::t("formulario", "Subject"),
+            Yii::t("formulario", "Payment Status"),
+            Yii::t("formulario", "Date"),
+            
+        );
+        \app\models\Utilities::putMessageLogFile('perid:' . $per_id);
+        $distributivo_model = new Distributivo();
+        $data = Yii::$app->request->get();
+        $arrSearch["search"] = $data['search'];
+        $arrSearch["profesor"] = $data['profesor'];
+        $arrSearch["unidad"] = $data['unidad'];
+        $arrSearch["modalidad"] = $data['modalidad'];
+        $arrSearch["periodo"] = $data['periodo'];
+        $arrSearch["asignatura"] = $data['asignatura'];
+        
+        $arrData = array();
+        if (empty($arrSearch)) {
+            $arrData = $distributivo_model->consultarDistributivoxEstudiante(array(), 0);
+        } else {
+            $arrData = $distributivo_model->consultarDistributivoxEstudiante($arrSearch, 0);
+        }
+        $nameReport = academico::t("Academico", "Listado de estudiantes pago");
+        Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
+        exit;
+    }
+    public function actionExppdfestpago() {
+        //$per_id = @Yii::$app->session->get("PB_perid");
+        $report = new ExportFile();
+        $this->view->title = academico::t("Academico", "Listado de estudiantes pago"); // Titulo del reporte
+        $arrHeader = array(
+             Yii::t("formulario", " "),
+            Yii::t("formulario", "Academic unit"),
+            Yii::t("formulario", "Mode"),
+            Yii::t("formulario", "DNI"),
+            Yii::t("formulario", "Complete Names"),
+            Yii::t("formulario", "Period"),
+            Yii::t("formulario", "Subject"),
+            Yii::t("formulario", "Payment Status"),
+            Yii::t("formulario", "Date"),
+        );
+        $distributivo_model = new Distributivo();
+        $data = Yii::$app->request->get();
+        $arrSearch["search"] = $data['search'];
+        $arrSearch["profesor"] = $data['profesor'];
+        $arrSearch["unidad"] = $data['unidad'];
+        $arrSearch["modalidad"] = $data['modalidad'];
+        $arrSearch["periodo"] = $data['periodo'];
+        $arrSearch["asignatura"] = $data['asignatura'];
+        $arrData = array();
+        if (empty($arrSearch)) {
+            $arrData = $distributivo_model->consultarDistributivoxEstudiante(array(), 0);
+        } else {
+            $arrData = $distributivo_model->consultarDistributivoxEstudiante($arrSearch, 0);
+        }
+        $report->orientation = "L"; // tipo de orientacion L => Horizontal, P => Vertical                                
+        $report->createReportPdf(
+                $this->render('exportpdf', [
+                    'arr_head' => $arrHeader,
+                    'arr_body' => $arrData,
+                ])
+        );
+        $report->mpdf->Output('Reporte_' . date("Ymdhis") . ".pdf", ExportFile::OUTPUT_TO_DOWNLOAD);
     }
 
 }

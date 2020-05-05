@@ -152,6 +152,7 @@ function exportPdfDisprof() {
 
 function actualizarGridDistPago() {
     var search = $('#txt_buscarDatapago').val();
+    var profesor = $('#txt_buscarprofesor').val();
     var unidad = $('#cmb_unidad_dises option:selected').val();
     var modalidad = $('#cmb_modalidades option:selected').val();
     var periodo = $('#cmb_periodoes option:selected').val();
@@ -159,7 +160,7 @@ function actualizarGridDistPago() {
     //Buscar almenos una clase con el nombre para ejecutar
     if (!$(".blockUI").length) {
         showLoadingPopup();
-        $('#Tbg_Distributivo_listadopago').PbGridView('applyFilterData', {'search': search, 'unidad': unidad, 'modalidad': modalidad, 'periodo': periodo, 'asignatura': asignatura});
+        $('#Tbg_Distributivo_listadopago').PbGridView('applyFilterData', {'search': search, 'profesor': profesor, 'unidad': unidad, 'modalidad': modalidad, 'periodo': periodo, 'asignatura': asignatura});
         setTimeout(hideLoadingPopup, 2000);
     }
 }
@@ -170,7 +171,6 @@ function guardarPagosEstudiante() {
         arrParams.periodo = $('#cmb_periodoes').val();
         var selected = '';
         var unselected = '';
-        //var vacio = '';
         //arrParams.carrera = $('#TbG_CARRERAS input[name=rb_carrera]:checked').val();
         $('#Tbg_Distributivo_listadopago input[type=checkbox]').each(function () {
             if (this.checked) {
@@ -180,8 +180,6 @@ function guardarPagosEstudiante() {
             }
                 
         });
-            //alert ('pagado .. ' + selected.slice(0,-1));
-            //alert ('no pagado .. ' + unselected.slice(0,-1));
             arrParams.pagado = selected.slice(0,-1);
             arrParams.nopagado = unselected.slice(0,-1);
         if (!validateForm()) {
@@ -192,4 +190,22 @@ function guardarPagosEstudiante() {
                 }, 3000);
             }, true);
         }
+}
+
+function exportExcelDistpago() {
+    var search = $('#txt_buscarDatapago').val();
+    var unidad = $('#cmb_unidad_dises option:selected').val();
+    var modalidad = $('#cmb_modalidades option:selected').val();
+    var periodo = $('#cmb_periodoes option:selected').val();
+    var asignatura = $('#cmb_asignaturaes option:selected').val();
+    window.location.href = $('#txth_base').val() + "/academico/distributivo/expexcelestpago?search=" + search + "&unidad=" + unidad + "&modalidad=" + modalidad + "&periodo=" + periodo + "&asignatura=" + asignatura;
+}
+
+function exportPdfDispago() {
+    var search = $('#txt_buscarDatapago').val();
+    var unidad = $('#cmb_unidad_dises option:selected').val();
+    var modalidad = $('#cmb_modalidades option:selected').val();
+    var periodo = $('#cmb_periodoes option:selected').val();
+    var asignatura = $('#cmb_asignaturaes option:selected').val();
+    window.location.href = $('#txth_base').val() + "/academico/distributivo/exppdfestpago?pdf=1&search=" + search + "&unidad=" + unidad + "&modalidad=" + modalidad + "&periodo=" + periodo + "&asignatura=" + asignatura;
 }

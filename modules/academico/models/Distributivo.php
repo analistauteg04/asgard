@@ -535,7 +535,13 @@ class Distributivo extends \yii\db\ActiveRecord {
             $str_search .= "p.per_pri_apellido like :search OR ";
             $str_search .= "p.per_seg_apellido like :search OR ";
             $str_search .= "p.per_cedula like :search) AND ";
-
+            
+            if (!empty($arrFiltro['profesor'])) {
+                $str_search .= "(pe.per_pri_nombre like :profesor OR ";
+                $str_search .= "pe.per_seg_nombre like :profesor OR ";
+                $str_search .= "pe.per_pri_apellido like :profesor OR ";
+                $str_search .= "pe.per_seg_apellido like :profesor) AND ";
+            }            
             if ($arrFiltro['unidad'] != "" && $arrFiltro['unidad'] > 0) {
                 $str_search .= "a.uaca_id = :unidad AND ";
             }
@@ -565,6 +571,7 @@ class Distributivo extends \yii\db\ActiveRecord {
                 FROM " . $con->dbname . ".distributivo_academico a inner join " . $con->dbname . ".profesor b
                     on b.pro_id = a.pro_id 
                     inner join " . $con1->dbname . ".persona c on c.per_id = b.per_id
+                    inner join " . $con1->dbname . ".persona pe on pe.per_id = b.per_id
                     inner join " . $con->dbname . ".unidad_academica d on d.uaca_id = a.uaca_id
                     inner join " . $con->dbname . ".modalidad e on e.mod_id = a.mod_id
                     inner join " . $con->dbname . ".periodo_academico f on f.paca_id = a.paca_id
@@ -586,7 +593,11 @@ class Distributivo extends \yii\db\ActiveRecord {
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
             $search_cond = "%" . $arrFiltro["search"] . "%";
             $comando->bindParam(":search", $search_cond, \PDO::PARAM_STR);
-
+                        
+            if (!empty($arrFiltro['profesor'])) {
+                $search_profe = "%" . $arrFiltro["profesor"] . "%";
+                $comando->bindParam(":profesor", $search_profe, \PDO::PARAM_STR);
+            }            
             if ($arrFiltro['unidad'] != "" && $arrFiltro['unidad'] > 0) {
                 $search_uni = $arrFiltro["unidad"];
                 $comando->bindParam(":unidad", $search_uni, \PDO::PARAM_INT);
