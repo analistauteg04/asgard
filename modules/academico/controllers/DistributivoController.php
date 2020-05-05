@@ -298,6 +298,7 @@ class DistributivoController extends \app\components\CController {
 
         if ($data['PBgetFilter']) {
             $arrSearch["search"] = $data['search'];
+            $arrSearch["profesor"] = $data['profesor'];
             $arrSearch["unidad"] = $data['unidad'];
             $arrSearch["modalidad"] = $data['modalidad'];
             $arrSearch["periodo"] = $data['periodo'];
@@ -438,6 +439,7 @@ class DistributivoController extends \app\components\CController {
         $distributivo_model = new Distributivo();
         $data = Yii::$app->request->get();
         $arrSearch["search"] = $data['search'];
+        $arrSearch["profesor"] = $data['profesor'];
         $arrSearch["unidad"] = $data['unidad'];
         $arrSearch["modalidad"] = $data['modalidad'];
         $arrSearch["periodo"] = $data['periodo'];
@@ -471,6 +473,7 @@ class DistributivoController extends \app\components\CController {
         $distributivo_model = new Distributivo();
         $data = Yii::$app->request->get();
         $arrSearch["search"] = $data['search'];
+        $arrSearch["profesor"] = $data['profesor'];
         $arrSearch["unidad"] = $data['unidad'];
         $arrSearch["modalidad"] = $data['modalidad'];
         $arrSearch["periodo"] = $data['periodo'];

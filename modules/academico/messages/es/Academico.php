@@ -64,6 +64,7 @@ return [
     "Registration by Homologation" => "Matriculación por Homologación",
     "Search DNI" => "Buscar DNI",
     "Search by Matter" => "Buscar por Materia",
+    "Search by Teacher Name" => "Buscar por Npmbres Profesor",
     "Schedule" => "Horario",
     "Start IP" => "IP Inicio",
     "Total Quota" => "Total Cupo",

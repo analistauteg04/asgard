@@ -18,7 +18,15 @@ use app\modules\academico\Module as academico;
                 <input type="text" class="form-control" value="" id="txt_buscarDatapago" placeholder="<?= Yii::t("solicitud_ins", "Search by Dni or Names") ?> <?= academico::t("Especies", "Student") ?>">
             </div>
         </div>
-    </div>    
+    </div>
+    <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
+        <div class="form-group">
+            <label for="txt_buscarprofesor" class="col-sm-2 col-md-2 col-xs-2 col-lg-2 control-label"><?= academico::t("Academico", "Teacher") ?></label>
+            <div class="col-sm-8 col-md-8 col-xs-8 col-lg-8 ">
+                <input type="text" class="form-control" value="" id="txt_buscarprofesor" placeholder="<?= academico::t("Academico", "Search by Teacher Name") ?>">
+            </div>
+        </div>
+    </div>
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="form-group">            
             <label for="cmb_unidad_dises" class="col-sm-2 col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= Yii::t("formulario", "Academic unit") ?></label>

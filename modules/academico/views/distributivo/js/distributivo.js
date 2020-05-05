@@ -152,6 +152,7 @@ function exportPdfDisprof() {
 
 function actualizarGridDistPago() {
     var search = $('#txt_buscarDatapago').val();
+    var profesor = $('#txt_buscarprofesor').val();
     var unidad = $('#cmb_unidad_dises option:selected').val();
     var modalidad = $('#cmb_modalidades option:selected').val();
     var periodo = $('#cmb_periodoes option:selected').val();
@@ -159,7 +160,7 @@ function actualizarGridDistPago() {
     //Buscar almenos una clase con el nombre para ejecutar
     if (!$(".blockUI").length) {
         showLoadingPopup();
-        $('#Tbg_Distributivo_listadopago').PbGridView('applyFilterData', {'search': search, 'unidad': unidad, 'modalidad': modalidad, 'periodo': periodo, 'asignatura': asignatura});
+        $('#Tbg_Distributivo_listadopago').PbGridView('applyFilterData', {'search': search, 'profesor': profesor, 'unidad': unidad, 'modalidad': modalidad, 'periodo': periodo, 'asignatura': asignatura});
         setTimeout(hideLoadingPopup, 2000);
     }
 }
