@@ -642,7 +642,7 @@ class Distributivo extends \yii\db\ActiveRecord {
     public function consultarAsiganturaxuniymoda($uaca_id, $mod_id) {
         $con = \Yii::$app->db_academico;
         $estado = 1;
-        $sql = "SELECT asig.asi_id as id,
+        $sql = "SELECT distinct asig.asi_id as id,
                            asig.asi_nombre as name
                     FROM " . $con->dbname . ".distributivo_academico diac "
                 . "inner join " . $con->dbname . ".asignatura asig ON asig.asi_id = diac.asi_id
