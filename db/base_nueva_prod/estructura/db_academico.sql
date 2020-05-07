@@ -772,6 +772,8 @@ create table if not exists `distributivo_academico` (
   `pro_id` bigint(20) not null,  
   `uaca_id` bigint(20) not null,  
   `mod_id` bigint(20) not null,  
+  `daca_jornada` varchar(1) not null,  
+  `daca_horario` varchar(10) not null,  
   `daca_fecha_registro` timestamp null default null,
   `daca_usuario_ingreso` bigint(20) not null,
   `daca_usuario_modifica` bigint(20)  null,

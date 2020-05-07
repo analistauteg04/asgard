@@ -157,10 +157,11 @@ function actualizarGridDistPago() {
     var modalidad = $('#cmb_modalidades option:selected').val();
     var periodo = $('#cmb_periodoes option:selected').val();
     var asignatura = $('#cmb_asignaturaes option:selected').val();
+    var estado = $('#cmb_estadoes option:selected').val();
     //Buscar almenos una clase con el nombre para ejecutar
     if (!$(".blockUI").length) {
         showLoadingPopup();
-        $('#Tbg_Distributivo_listadopago').PbGridView('applyFilterData', {'search': search, 'profesor': profesor, 'unidad': unidad, 'modalidad': modalidad, 'periodo': periodo, 'asignatura': asignatura});
+        $('#Tbg_Distributivo_listadopago').PbGridView('applyFilterData', {'search': search, 'profesor': profesor, 'unidad': unidad, 'modalidad': modalidad, 'periodo': periodo, 'asignatura': asignatura, 'estado': estado});
         setTimeout(hideLoadingPopup, 2000);
     }
 }
@@ -198,7 +199,8 @@ function exportExcelDistpago() {
     var modalidad = $('#cmb_modalidades option:selected').val();
     var periodo = $('#cmb_periodoes option:selected').val();
     var asignatura = $('#cmb_asignaturaes option:selected').val();
-    window.location.href = $('#txth_base').val() + "/academico/distributivo/expexcelestpago?search=" + search + "&unidad=" + unidad + "&modalidad=" + modalidad + "&periodo=" + periodo + "&asignatura=" + asignatura;
+    var estado = $('#cmb_estadoes option:selected').val();
+    window.location.href = $('#txth_base').val() + "/academico/distributivo/expexcelestpago?search=" + search + "&unidad=" + unidad + "&modalidad=" + modalidad + "&periodo=" + periodo + "&asignatura=" + asignatura + "&estado=" + estado;
 }
 
 function exportPdfDispago() {
@@ -207,5 +209,6 @@ function exportPdfDispago() {
     var modalidad = $('#cmb_modalidades option:selected').val();
     var periodo = $('#cmb_periodoes option:selected').val();
     var asignatura = $('#cmb_asignaturaes option:selected').val();
-    window.location.href = $('#txth_base').val() + "/academico/distributivo/exppdfestpago?pdf=1&search=" + search + "&unidad=" + unidad + "&modalidad=" + modalidad + "&periodo=" + periodo + "&asignatura=" + asignatura;
+    var estado = $('#cmb_estadoes option:selected').val();
+    window.location.href = $('#txth_base').val() + "/academico/distributivo/exppdfestpago?pdf=1&search=" + search + "&unidad=" + unidad + "&modalidad=" + modalidad + "&periodo=" + periodo + "&asignatura=" + asignatura + "&estado=" + estado;
 }

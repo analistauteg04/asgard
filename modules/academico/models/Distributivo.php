@@ -554,6 +554,12 @@ class Distributivo extends \yii\db\ActiveRecord {
             if ($arrFiltro['asignatura'] != "" && $arrFiltro['asignatura'] > 0) {
                 $str_search .= "a.asi_id = :asignatura AND ";
             }
+            if ($arrFiltro['estado_pago'] != '-1' && $arrFiltro['estado_pago'] != 'null') {
+                 $str_search .= " m.eppa_estado_pago = :estado_pago AND ";
+            } 
+            if ($arrFiltro['estado_pago'] == 'null') {
+                 $str_search .= " (m.eppa_estado_pago IS NULL) AND ";
+            }
         }
         $sql = "SELECT  h.est_id, 
                         d.uaca_nombre as unidad, 
@@ -614,6 +620,10 @@ class Distributivo extends \yii\db\ActiveRecord {
                 $search_asi = $arrFiltro["asignatura"];
                 $comando->bindParam(":asignatura", $search_asi, \PDO::PARAM_INT);
             }
+           if ($arrFiltro['estado_pago'] != '-1') {
+              $comando->bindParam(":estado_pago", $arrFiltro['estado_pago'], \PDO::PARAM_STR); 
+           }
+            
         }
         $resultData = $comando->queryAll();
         $dataProvider = new ArrayDataProvider([
@@ -642,7 +652,7 @@ class Distributivo extends \yii\db\ActiveRecord {
     public function consultarAsiganturaxuniymoda($uaca_id, $mod_id) {
         $con = \Yii::$app->db_academico;
         $estado = 1;
-        $sql = "SELECT asig.asi_id as id,
+        $sql = "SELECT distinct asig.asi_id as id,
                            asig.asi_nombre as name
                     FROM " . $con->dbname . ".distributivo_academico diac "
                 . "inner join " . $con->dbname . ".asignatura asig ON asig.asi_id = diac.asi_id
