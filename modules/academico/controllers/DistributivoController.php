@@ -303,6 +303,7 @@ class DistributivoController extends \app\components\CController {
             $arrSearch["modalidad"] = $data['modalidad'];
             $arrSearch["periodo"] = $data['periodo'];
             $arrSearch["asignatura"] = $data['asignatura'];
+            $arrSearch["estado_pago"] = $data['estado'];
             $model = $distributivo_model->consultarDistributivoxEstudiante($arrSearch, 1);
             return $this->render('_listarestudiantespagogrid', [
                         "model" => $model,
@@ -334,6 +335,7 @@ class DistributivoController extends \app\components\CController {
                     "mod_periodo" => ArrayHelper::map($arr_periodo, "id", "name"),
                     'mod_asignatura' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_asignatura), "id", "name"),
                     'model' => $model,
+                    'mod_estado' => array("-1" => "Todos", "null" => "Pendiente", "0" => "Deuda", "1" => "Pagado"),
         ]);
     }
 
@@ -444,6 +446,7 @@ class DistributivoController extends \app\components\CController {
         $arrSearch["modalidad"] = $data['modalidad'];
         $arrSearch["periodo"] = $data['periodo'];
         $arrSearch["asignatura"] = $data['asignatura'];
+        $arrSearch["estado_pago"] = $data['estado'];
         
         $arrData = array();
         if (empty($arrSearch)) {
@@ -478,6 +481,8 @@ class DistributivoController extends \app\components\CController {
         $arrSearch["modalidad"] = $data['modalidad'];
         $arrSearch["periodo"] = $data['periodo'];
         $arrSearch["asignatura"] = $data['asignatura'];
+        $arrSearch["estado_pago"] = $data['estado'];
+        
         $arrData = array();
         if (empty($arrSearch)) {
             $arrData = $distributivo_model->consultarDistributivoxEstudiante(array(), 0);
