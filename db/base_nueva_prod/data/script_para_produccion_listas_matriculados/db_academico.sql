@@ -1,4 +1,8 @@
-drop table db_academico.`distributivo_academico`;
+/*Alter table db_academico.distributivo_academico drop foreign key distributivo_academico_ibfk_1;
+Alter table db_academico.distributivo_academico drop foreign key distributivo_academico_ibfk_2;
+Alter table db_academico.distributivo_academico drop foreign key distributivo_academico_ibfk_3;
+show create table db_academico.distributivo_academico;
+*/
 
 -- --------------------------------------------------------
 -- 
@@ -12,6 +16,8 @@ create table if not exists db_academico.`distributivo_academico` (
   `pro_id` bigint(20) not null,  
   `uaca_id` bigint(20) not null,  
   `mod_id` bigint(20) not null,  
+  `daca_jornada` varchar(1) not null,  
+  `daca_horario` varchar(10) not null,  
   `daca_fecha_registro` timestamp null default null,
   `daca_usuario_ingreso` bigint(20) not null,
   `daca_usuario_modifica` bigint(20)  null,

@@ -40,12 +40,3 @@ INSERT INTO db_asgard.`usua_grol_eper` (`ugep_id`, `eper_id`, `usu_id`, `grol_id
 (229, 229, 229, 33, '1', '1'),
 (230, 230, 230, 33, '1', '1');
 (231, 231, 231, 33, '1', '1');
-
-
-INSERT INTO db_academico.`profesor` (`pro_id`, `per_id`, `pro_usuario_ingreso`, `pro_estado`,`pro_estado_logico`) VALUES
-(180,226,1,1,1),
-(181,227,1,1,1),
-(182,228,1,1,1),
-(183,229,1,1,1),
-(184,230,1,1,1),
-(185,231,1,1,1);

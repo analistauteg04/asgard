@@ -7,9 +7,15 @@ INSERT INTO db_academico.`asignatura` (`asi_id`, `scon_id`, `uaca_id`, `asi_nomb
 (366,1,1,'Geografía Turística','Geografía Turística',1,1,1),
 (367,1,1,'Marketing Estratégico','Marketing Estratégico',1,1,1),
 (368,1,1,'Legislación Turística','Legislación Turística',1,1,1),
-(369,1,1,'Pre-Intermediate I','Pre-Intermediate I',1,1,1),
-(370,1,1,'Desarrollo Organizacional','Desarrollo Organizacional',1,1,1),
-(371,1,1,'Intermediate II','Intermediate II',1,1,1),
-(372,1,1,'Francés I','Francés I',1,1,1),
-(373,1,1,'Francés III','Francés III',1,1,1);
+(369,1,1,'Desarrollo Organizacional','Desarrollo Organizacional',1,1,1),
+(370,1,3,'Francés I','Francés I',1,1,1),
+(371,1,3,'Francés III','Francés III',1,1,1);
 
+
+INSERT INTO db_academico.`profesor` (`pro_id`, `per_id`, `pro_usuario_ingreso`, `pro_estado`,`pro_estado_logico`) VALUES
+(180,226,1,1,1),
+(181,227,1,1,1),
+(182,228,1,1,1),
+(183,229,1,1,1),
+(184,230,1,1,1),
+(185,231,1,1,1);
