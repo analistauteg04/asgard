@@ -126,10 +126,11 @@ function actualizarGridDistProf() {
     var unidad = $('#cmb_unidad_dis option:selected').val();
     var modalidad = $('#cmb_modalidad option:selected').val();
     var periodo = $('#cmb_periodo option:selected').val();
+    var estado = $('#cmb_estado option:selected').val();
     //Buscar almenos una clase con el nombre para ejecutar
     if (!$(".blockUI").length) {
         showLoadingPopup();
-        $('#Tbg_Distributivo_listado').PbGridView('applyFilterData', {'search': search, 'unidad': unidad, 'modalidad': modalidad, 'periodo': periodo});
+        $('#Tbg_Distributivo_listado').PbGridView('applyFilterData', {'search': search, 'unidad': unidad, 'modalidad': modalidad, 'periodo': periodo, 'estado': estado});
         setTimeout(hideLoadingPopup, 2000);
     }
 }
