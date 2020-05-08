@@ -12,6 +12,7 @@ use app\modules\academico\Module as academico;
             'arr_modalidad' => $mod_modalidad,
             'arr_periodo' => $mod_periodo,
             'arr_asignatura' => $mod_asignatura,
+            'arr_estado' => $mod_estado,
             ]);
         ?>
     </form>
