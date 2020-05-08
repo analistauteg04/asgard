@@ -453,13 +453,16 @@ class Distributivo extends \yii\db\ActiveRecord {
             if ($arrFiltro['periodo'] != "" && $arrFiltro['periodo'] > 0) {
                 $str_search .= "a.paca_id = :periodo AND ";
             }
+            if ($arrFiltro['estado'] != "" && $arrFiltro['estado'] > 0) {
+                $str_search .= "ifnull(m.eppa_estado_pago,'0') = :estpago AND ";
+            }
         }
         $sql = "SELECT  d.uaca_nombre as unidad, e.mod_nombre as modalidad,
                         p.per_cedula as identificacion, 
                         concat(p.per_pri_nombre, ' ', p.per_pri_apellido, ' ', ifnull(p.per_seg_apellido,'')) as estudiante,
                         concat(saca_nombre, '-', baca_nombre,'-',baca_anio) as periodo,
                         z.asi_nombre as asignatura,
-                        case when m.eppa_estado_pago = 'N' then 'Pagado' else 'Pendiente' end as pago
+                        case when m.eppa_estado_pago = '1' then 'Pagado' else 'Pendiente' end as pago
                 FROM " . $con->dbname . ".distributivo_academico a inner join " . $con->dbname . ".profesor b
                     on b.pro_id = a.pro_id 
                     inner join " . $con1->dbname . ".persona c on c.per_id = b.per_id
@@ -498,6 +501,10 @@ class Distributivo extends \yii\db\ActiveRecord {
             if ($arrFiltro['periodo'] != "" && $arrFiltro['periodo'] > 0) {
                 $search_per = $arrFiltro["periodo"];
                 $comando->bindParam(":periodo", $search_per, \PDO::PARAM_INT);
+            }
+            if ($arrFiltro['estado'] != "" && $arrFiltro['estado'] < 2) {
+                $search_estado = $arrFiltro["estado"];
+                $comando->bindParam(":estpago", $search_estado, \PDO::PARAM_STR);
             }
         }
         $resultData = $comando->queryAll();
