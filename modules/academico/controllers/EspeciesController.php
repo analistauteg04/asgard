@@ -1,7 +1,7 @@
 <?php
 
-
 namespace app\modules\academico\controllers;
+
 use Yii;
 use app\models\Utilities;
 use app\models\ExportFile;
@@ -170,25 +170,33 @@ class EspeciesController extends \app\components\CController {
         $per_id = @Yii::$app->session->get("PB_perid");
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
-            //Utilities::putMessageLogFile($data['DTS_DET']);
-            $especiesADO = new Especies();
-            $dts_Cab = isset($data['DTS_CAB']) ? $data['DTS_CAB'] : array();
-            $dts_Det = isset($data['DTS_DET']) ? $data['DTS_DET'] : array();
-            $accion = isset($data['ACCION']) ? $data['ACCION'] : "";
-
-            if ($accion == "Create") {
-                $resul = $especiesADO->insertarLista($dts_Cab, $dts_Det);
-            } else {
-                //Opcion para actualizar
-                //$PedId = isset($_POST['PED_ID']) ? $_POST['PED_ID'] : 0;
-                //$arroout = $model->actualizarLista($PedId,$tieId,$total,$dts_Lista);
-            }
-            //Utilities::putMessageLogFile($resul);
-            if ($resul['status']) {
-                $message = ["info" => Yii::t('exception', 'La infomación ha sido grabada. ')];
-                echo Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message, $resul);
-            } else {
-                $message = ["info" => Yii::t('exception', 'Error al grabar.')];
+            //Utilities::putMessageLogFile($data['DTS_CAB']['est_id']);
+            $especiesADO = new Especies();            
+            $periodo_academico = $especiesADO->consultarPeriodoactivo();
+            $pagodia = $especiesADO->consultarPagodia($periodo_academico['paca_id'], $data['DTS_CAB']['est_id']);            
+            if ($pagodia['eppa_estado_pago'] == "1") {
+                $dts_Cab = isset($data['DTS_CAB']) ? $data['DTS_CAB'] : array();
+                $dts_Det = isset($data['DTS_DET']) ? $data['DTS_DET'] : array();
+                $accion = isset($data['ACCION']) ? $data['ACCION'] : "";
+                if ($accion == "Create") {
+                    $resul = $especiesADO->insertarLista($dts_Cab, $dts_Det);
+                } else {
+                    //Opcion para actualizar
+                    //$PedId = isset($_POST['PED_ID']) ? $_POST['PED_ID'] : 0;
+                    //$arroout = $model->actualizarLista($PedId,$tieId,$total,$dts_Lista);
+                }
+                //Utilities::putMessageLogFile($resul);
+                if ($resul['status']) {
+                    $message = ["info" => Yii::t('exception', 'La infomación ha sido grabada. ')];
+                    echo Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message, $resul);
+                } else {
+                    $message = ["info" => Yii::t('exception', 'Error al grabar.')];
+                    echo Utilities::ajaxResponse('NO_OK', 'alert', Yii::t('jslang', 'Error'), 'false', $message);
+                }
+                return;
+            }            
+            else {
+                $message = ["info" => Yii::t('exception', 'No puede crear solicitud porque no esta al dia en los pagos.')];
                 echo Utilities::ajaxResponse('NO_OK', 'alert', Yii::t('jslang', 'Error'), 'false', $message);
             }
             return;
@@ -232,7 +240,7 @@ class EspeciesController extends \app\components\CController {
                 $data_especie = $especiesADO->consultaSolicitudexrubro($data["csol_id"]);
                 $especie_tramite = explode(",", $data_especie["especies"]);
                 for ($a = 0; $a < count($especie_tramite); $a++) {
-                    $datos_especie .=  $especie_tramite[$a] . ', ';
+                    $datos_especie .= $especie_tramite[$a] . ', ';
                 }
                 if ($carga_archivo['status']) {
                     // enviar correo estudiante
@@ -287,7 +295,6 @@ class EspeciesController extends \app\components\CController {
                     'arrEstados' => $this->estadoPagos(),
         ]);
     }
-
 
     public function actionAutorizarpago() {
         $ids = isset($_GET['ids']) ? base64_decode($_GET['ids']) : NULL;
@@ -417,7 +424,7 @@ class EspeciesController extends \app\components\CController {
             ]);
         } else {
             
-        }        
+        }
         $personaData = $especiesADO->consultaDatosEstudiante($per_id);
         $model = $especiesADO->getSolicitudesGeneradas($est_id, null, false);
         $arr_unidadac = $mod_unidad->consultarUnidadAcademicas();
@@ -444,11 +451,11 @@ class EspeciesController extends \app\components\CController {
             //$this->view->title = "Invoices";
             $especiesADO = new Especies();
             $cabFact = $especiesADO->consultarEspecieGenerada($ids);
-            if ($cabFact['uaca_id'] == '1'){
+            if ($cabFact['uaca_id'] == '1') {
                 $carrera = 'facultad/carrera';
                 $facultaded = 'Facultad de Grado';
             }
-             if ($cabFact['uaca_id'] == '2'){
+            if ($cabFact['uaca_id'] == '2') {
                 $carrera = 'maestría';
                 $facultaded = 'Facultad de Posgrado';
             }
@@ -464,8 +471,8 @@ class EspeciesController extends \app\components\CController {
             $rep->createReportPdf(
                     $this->render('@modules/academico/views/tpl_especies/especie', [
                         'cabFact' => $cabFact,
-                        'carrera'=>$carrera,
-                        'facultaded'=>$facultaded,
+                        'carrera' => $carrera,
+                        'facultaded' => $facultaded,
                     ])
             );
             $rep->mpdf->Output('ESPECIE_' . $codigo . ".pdf", ExportFile::OUTPUT_TO_DOWNLOAD);
@@ -660,6 +667,7 @@ class EspeciesController extends \app\components\CController {
                     'arr_modalidad' => ArrayHelper::map($arr_modalidad, "id", "name"),
         ]);
     }
+
     public function actionCargarimagen() {
         $per_id = @Yii::$app->session->get("PB_perid");
         $ids = isset($_GET['ids']) ? base64_decode($_GET['ids']) : NULL;
@@ -692,10 +700,11 @@ class EspeciesController extends \app\components\CController {
             }
         }
     }
+
     public function actionDescargarimagen() {
         //$per_id = @Yii::$app->session->get("PB_perid");
         $gen_id = isset($_GET['espgen_id']) ? base64_decode($_GET['espgen_id']) : NULL;
-       
+
         $especiesADO = new Especies();
         $mod_unidad = new UnidadAcademica();
         $mod_modalidad = new Modalidad();
@@ -715,4 +724,5 @@ class EspeciesController extends \app\components\CController {
                     'imagen' => $det_ids["imagen"],
         ]);
     }
+
 }
