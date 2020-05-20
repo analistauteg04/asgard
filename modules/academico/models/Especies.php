@@ -768,5 +768,51 @@ class Especies extends \yii\db\ActiveRecord {
             return $dataProvider;
         }
     }
+    
+     /**
+     * Function consultarPeriodoactivo
+     * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>
+     * @property integer $paca_id       
+     * @return  
+     */
+    public function consultarPeriodoactivo() {
+        $con = \Yii::$app->db_academico;
+        $estado = 1;
+        $sql = "SELECT paca_id
+                  FROM " . $con->dbname . ".periodo_academico                       
+                  WHERE paca_activo = 'A' AND
+                    paca_estado = :estado AND
+                    paca_estado_logico = :estado";
+
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        
+        $resultData = $comando->queryOne();
+        return $resultData;
+    }
+    
+     /**
+     * Function consultarPagodia
+     * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>
+     * @property integer eppa_estado_pago       
+     * @return  
+     */
+    public function consultarPagodia($paca_id,$est_id) {
+        $con = \Yii::$app->db_academico;
+        $estado = 1;
+        $sql = "SELECT eppa_estado_pago
+                  FROM " . $con->dbname . ".estudiante_periodo_pago                       
+                  WHERE paca_id = :paca_id AND
+                    est_id = :est_id AND
+                    eppa_estado = :estado AND
+                    eppa_estado_logico = :estado";
+
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":paca_id", $paca_id, \PDO::PARAM_INT);
+        $comando->bindParam(":est_id", $est_id, \PDO::PARAM_INT);
+        $resultData = $comando->queryOne();
+        return $resultData;
+    }
 
 }
