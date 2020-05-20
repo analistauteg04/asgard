@@ -72,6 +72,7 @@ return [
     "Teacher Dialing" => "Marcación Profesor",    
     "Teacher list unchecked" => "Listado profesores sin marcar",
     "Update period income method" => "Actualizar Período Método Ingreso",
+    "Working day" => "Jornada",
     "Workload" => "Carga Horaria",
     "Year" => "Año",
 ];
