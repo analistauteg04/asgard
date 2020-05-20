@@ -173,13 +173,15 @@ class EspeciesController extends \app\components\CController {
             //Utilities::putMessageLogFile($data['DTS_CAB']['est_id']);
             $especiesADO = new Especies();            
             $periodo_academico = $especiesADO->consultarPeriodoactivo();
-            $pagodia = $especiesADO->consultarPagodia($periodo_academico['paca_id'], $data['DTS_CAB']['est_id']);            
-            if ($pagodia['eppa_estado_pago'] == "1") {
+            Utilities::putMessageLogFile('dasd'.$periodo_academico['paca_id']);
+            $pagodia = $especiesADO->consultarPagodia($periodo_academico['paca_id'], $data['DTS_CAB']['est_id']);      
+            Utilities::putMessageLogFile('csdfsd'.$pagodia['eppa_estado_pago']);
+            if ($pagodia['eppa_estado_pago'] > "0") {
                 $dts_Cab = isset($data['DTS_CAB']) ? $data['DTS_CAB'] : array();
                 $dts_Det = isset($data['DTS_DET']) ? $data['DTS_DET'] : array();
                 $accion = isset($data['ACCION']) ? $data['ACCION'] : "";
                 if ($accion == "Create") {
-                    $resul = $especiesADO->insertarLista($dts_Cab, $dts_Det);
+                   $resul = $especiesADO->insertarLista($dts_Cab, $dts_Det);
                 } else {
                     //Opcion para actualizar
                     //$PedId = isset($_POST['PED_ID']) ? $_POST['PED_ID'] : 0;

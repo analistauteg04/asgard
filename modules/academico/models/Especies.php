@@ -263,7 +263,7 @@ class Especies extends \yii\db\ActiveRecord {
             $command->bindParam(":dsol_cantidad", $dts_Det[$i]['dsol_cantidad'], \PDO::PARAM_INT);
             $command->bindParam(":dsol_valor", $dts_Det[$i]['dsol_valor'], \PDO::PARAM_STR);
             $command->bindParam(":dsol_total", $dts_Det[$i]['dsol_total'], \PDO::PARAM_STR);
-            $command->bindParam(":dsol_observacion", ucfirst(mb_strtolower($dts_Det[$i]['dsol_observacion'],'UTF-8')), \PDO::PARAM_STR);
+            $command->bindParam(":dsol_observacion", ucfirst(mb_strtolower($dts_Det[$i]['dsol_observacion'], 'UTF-8')), \PDO::PARAM_STR);
             $command->bindParam(":dsol_archivo_extra", $dts_Det[$i]['dsol_archivo_extra'], \PDO::PARAM_STR);
             $command->bindParam(":dsol_usuario_ingreso", $dts_Det[$i]['dsol_usuario_ingreso'], \PDO::PARAM_INT);
             $command->execute();
@@ -479,7 +479,7 @@ class Especies extends \yii\db\ActiveRecord {
         $con1 = \Yii::$app->db_asgard;
         $estado = 1;
         $str_search = "";
-        if (isset($arrFiltro) && count($arrFiltro) > 0) {          
+        if (isset($arrFiltro) && count($arrFiltro) > 0) {
             if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
                 $str_search .= " A.egen_fecha_aprobacion BETWEEN :fec_ini AND :fec_fin AND ";
             }
@@ -499,11 +499,11 @@ class Especies extends \yii\db\ActiveRecord {
             }
         }
         if ($onlyData == false) {
-            $secuencial = 'A.egen_id, ';            
+            $secuencial = 'A.egen_id, ';
         } else {
-            $secuencial = null;  
+            $secuencial = null;
         }
-        
+
         $sql = "SELECT $secuencial concat(F.uaca_nomenclatura,T.tra_nomenclatura,lpad(ifnull(C.esp_codigo,0),3,'0'),'-',A.egen_numero_solicitud) as egen_numero_solicitud,
                     T.tra_nombre as tramite, C.esp_rubro,concat(D.per_pri_nombre,' ',D.per_pri_apellido) Nombres,
                     D.per_cedula, F.uaca_nombre,G.mod_nombre,date(A.egen_fecha_aprobacion) fecha_aprobacion,
@@ -525,9 +525,9 @@ class Especies extends \yii\db\ActiveRecord {
             $fecha_ini = $arrFiltro["f_ini"] . " 00:00:00";
             $fecha_fin = $arrFiltro["f_fin"] . " 23:59:59";
             $search_cond = "%" . $arrFiltro["search"] . "%";
-            $unidad =$arrFiltro['unidad'];
-            $modalidad =$arrFiltro['modalidad'];            
-            $tramite =$arrFiltro['tramite'];
+            $unidad = $arrFiltro['unidad'];
+            $modalidad = $arrFiltro['modalidad'];
+            $tramite = $arrFiltro['tramite'];
             if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
                 $comando->bindParam(":fec_ini", $fecha_ini, \PDO::PARAM_STR);
                 $comando->bindParam(":fec_fin", $fecha_fin, \PDO::PARAM_STR);
@@ -535,14 +535,14 @@ class Especies extends \yii\db\ActiveRecord {
             if ($arrFiltro['search'] != "") {
                 $comando->bindParam(":estudiante", $search_cond, \PDO::PARAM_STR);
             }
-            if ($arrFiltro['unidad'] > 0) { 
-                $comando->bindParam(":unidad", $unidad, \PDO::PARAM_INT); 
+            if ($arrFiltro['unidad'] > 0) {
+                $comando->bindParam(":unidad", $unidad, \PDO::PARAM_INT);
             }
-            if ($arrFiltro['modalidad'] > 0) { 
-                $comando->bindParam(":modalidad", $modalidad, \PDO::PARAM_INT); 
+            if ($arrFiltro['modalidad'] > 0) {
+                $comando->bindParam(":modalidad", $modalidad, \PDO::PARAM_INT);
             }
-            if ($arrFiltro['tramite'] > 0) { 
-                $comando->bindParam(":tramite", $tramite, \PDO::PARAM_INT); 
+            if ($arrFiltro['tramite'] > 0) {
+                $comando->bindParam(":tramite", $tramite, \PDO::PARAM_INT);
             }
         }
         $resultData = $comando->queryAll();
@@ -644,12 +644,12 @@ class Especies extends \yii\db\ActiveRecord {
         $resultData = $comando->queryOne();
         return $resultData;
     }
-    
+
     public static function getSolicitudesGeneradasxest($csol_id, $onlyData = false) {
         $con = \Yii::$app->db_academico;
         $con1 = \Yii::$app->db_asgard;
-        $estado = 1;    
-                      
+        $estado = 1;
+
         $sql = "SELECT A.egen_id, concat(F.uaca_nomenclatura,T.tra_nomenclatura,lpad(ifnull(C.esp_codigo,0),3,'0'),'-',A.egen_numero_solicitud) as egen_numero_solicitud,
                     T.tra_nombre as tramite, C.esp_rubro,concat(D.per_pri_nombre,' ',D.per_pri_apellido) Nombres,D.per_cedula,
                     F.uaca_nombre,G.mod_nombre,date(A.egen_fecha_aprobacion) fecha_aprobacion,
@@ -672,7 +672,7 @@ class Especies extends \yii\db\ActiveRecord {
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":csol_id", $csol_id, \PDO::PARAM_INT);
-        
+
         $resultData = $comando->queryAll();
         //Utilities::putMessageLogFile($resultData);
         $dataProvider = new ArrayDataProvider([
@@ -721,8 +721,8 @@ class Especies extends \yii\db\ActiveRecord {
     public static function getSolicitudesGeneradasxdet($csol_id, $sol_id, $onlyData = false) {
         $con = \Yii::$app->db_academico;
         $con1 = \Yii::$app->db_asgard;
-        $estado = 1;    
-                      
+        $estado = 1;
+
         $sql = "SELECT A.egen_id, concat(F.uaca_nomenclatura,T.tra_nomenclatura,lpad(ifnull(C.esp_codigo,0),3,'0'),'-',A.egen_numero_solicitud) as egen_numero_solicitud,
                     T.tra_nombre as tramite, C.esp_rubro,concat(D.per_pri_nombre,' ',D.per_pri_apellido) Nombres,D.per_cedula,
                     F.uaca_nombre,G.mod_nombre,date(A.egen_fecha_aprobacion) fecha_aprobacion,
@@ -746,7 +746,7 @@ class Especies extends \yii\db\ActiveRecord {
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":csol_id", $csol_id, \PDO::PARAM_INT);
         $comando->bindParam(":dsol_id", $sol_id, \PDO::PARAM_INT);
-        
+
         $resultData = $comando->queryAll();
         //Utilities::putMessageLogFile($resultData);
         $dataProvider = new ArrayDataProvider([
@@ -768,8 +768,8 @@ class Especies extends \yii\db\ActiveRecord {
             return $dataProvider;
         }
     }
-    
-     /**
+
+    /**
      * Function consultarPeriodoactivo
      * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>
      * @property integer $paca_id       
@@ -778,7 +778,7 @@ class Especies extends \yii\db\ActiveRecord {
     public function consultarPeriodoactivo() {
         $con = \Yii::$app->db_academico;
         $estado = 1;
-        $sql = "SELECT paca_id
+        $sql = "SELECT group_concat(paca_id) as paca_id
                   FROM " . $con->dbname . ".periodo_academico                       
                   WHERE paca_activo = 'A' AND
                     paca_estado = :estado AND
@@ -786,30 +786,33 @@ class Especies extends \yii\db\ActiveRecord {
 
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
-        
+
         $resultData = $comando->queryOne();
         return $resultData;
     }
-    
-     /**
+
+    /**
      * Function consultarPagodia
      * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>
      * @property integer eppa_estado_pago       
      * @return  
      */
-    public function consultarPagodia($paca_id,$est_id) {
+    public function consultarPagodia($paca_id, $est_id) {
         $con = \Yii::$app->db_academico;
         $estado = 1;
-        $sql = "SELECT eppa_estado_pago
+        if (!empty($paca_id)) {
+            $periodo = 'paca_id in ('. $paca_id .') AND';
+        }
+        $sql = "SELECT count(*) as eppa_estado_pago
                   FROM " . $con->dbname . ".estudiante_periodo_pago                       
-                  WHERE paca_id = :paca_id AND
+                  WHERE $periodo
+                    eppa_estado_pago = :estado AND
                     est_id = :est_id AND
                     eppa_estado = :estado AND
                     eppa_estado_logico = :estado";
 
         $comando = $con->createCommand($sql);
-        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
-        $comando->bindParam(":paca_id", $paca_id, \PDO::PARAM_INT);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);        
         $comando->bindParam(":est_id", $est_id, \PDO::PARAM_INT);
         $resultData = $comando->queryOne();
         return $resultData;
