@@ -542,13 +542,13 @@ class Distributivo extends \yii\db\ActiveRecord {
             $str_search .= "p.per_pri_apellido like :search OR ";
             $str_search .= "p.per_seg_apellido like :search OR ";
             $str_search .= "p.per_cedula like :search) AND ";
-            
+
             if (!empty($arrFiltro['profesor'])) {
                 $str_search .= "(pe.per_pri_nombre like :profesor OR ";
                 $str_search .= "pe.per_seg_nombre like :profesor OR ";
                 $str_search .= "pe.per_pri_apellido like :profesor OR ";
                 $str_search .= "pe.per_seg_apellido like :profesor) AND ";
-            }            
+            }
             if ($arrFiltro['unidad'] != "" && $arrFiltro['unidad'] > 0) {
                 $str_search .= "a.uaca_id = :unidad AND ";
             }
@@ -562,10 +562,13 @@ class Distributivo extends \yii\db\ActiveRecord {
                 $str_search .= "a.asi_id = :asignatura AND ";
             }
             if ($arrFiltro['estado_pago'] != '-1' && $arrFiltro['estado_pago'] != 'null') {
-                 $str_search .= " m.eppa_estado_pago = :estado_pago AND ";
-            } 
+                $str_search .= " m.eppa_estado_pago = :estado_pago AND ";
+            }
             if ($arrFiltro['estado_pago'] == 'null') {
-                 $str_search .= " (m.eppa_estado_pago IS NULL) AND ";
+                $str_search .= " (m.eppa_estado_pago IS NULL) AND ";
+            }
+            if ($arrFiltro['jornada'] != "" && $arrFiltro['jornada'] > 0) {
+                $str_search .= "a.daca_jornada = :jornada AND ";
             }
         }
         $sql = "SELECT  h.est_id, 
@@ -606,11 +609,11 @@ class Distributivo extends \yii\db\ActiveRecord {
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
             $search_cond = "%" . $arrFiltro["search"] . "%";
             $comando->bindParam(":search", $search_cond, \PDO::PARAM_STR);
-                        
+
             if (!empty($arrFiltro['profesor'])) {
                 $search_profe = "%" . $arrFiltro["profesor"] . "%";
                 $comando->bindParam(":profesor", $search_profe, \PDO::PARAM_STR);
-            }            
+            }
             if ($arrFiltro['unidad'] != "" && $arrFiltro['unidad'] > 0) {
                 $search_uni = $arrFiltro["unidad"];
                 $comando->bindParam(":unidad", $search_uni, \PDO::PARAM_INT);
@@ -627,10 +630,13 @@ class Distributivo extends \yii\db\ActiveRecord {
                 $search_asi = $arrFiltro["asignatura"];
                 $comando->bindParam(":asignatura", $search_asi, \PDO::PARAM_INT);
             }
-           if ($arrFiltro['estado_pago'] != '-1') {
-              $comando->bindParam(":estado_pago", $arrFiltro['estado_pago'], \PDO::PARAM_STR); 
-           }
-            
+            if ($arrFiltro['estado_pago'] != '-1') {
+                $comando->bindParam(":estado_pago", $arrFiltro['estado_pago'], \PDO::PARAM_STR);
+            }
+            if ($arrFiltro['jornada'] != "" && $arrFiltro['jornada'] > 0) {
+                $search_jor = $arrFiltro["jornada"];
+                $comando->bindParam(":jornada", $search_jor, \PDO::PARAM_INT);
+            }
         }
         $resultData = $comando->queryAll();
         $dataProvider = new ArrayDataProvider([
@@ -728,8 +734,8 @@ class Distributivo extends \yii\db\ActiveRecord {
         $param_sql .= ", eppa_estado_logico";
         $bdet_sql .= ", 1";
 
-        /*$param_sql .= ", eppa_estado_pago";
-        $bdet_sql .= ", 1";*/
+        /* $param_sql .= ", eppa_estado_pago";
+          $bdet_sql .= ", 1"; */
 
         if (isset($paca_id)) {
             $param_sql .= ", paca_id";

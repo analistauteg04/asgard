@@ -12,7 +12,7 @@ use app\widgets\PbGridView\PbGridView;
 use app\modules\academico\Module as academico;
 use app\modules\financiero\Module as financiero;
 use app\modules\academico\Module as Especies;
-
+//print_r($model);
 academico::registerTranslations();
 financiero::registerTranslations();
 Especies::registerTranslations();
@@ -28,20 +28,20 @@ PbGridView::widget([
     'columns' =>
     [
         [
-            'class' => 'yii\grid\ActionColumn',     
+            'class' => 'yii\grid\ActionColumn',
             'header' => Especies::t("Especies", "Número"),
             'template' => '{view}',
             'buttons' => [
                 'view' => function ($url, $model) {
                     return Html::a('<span>' . substr($model['egen_numero_solicitud'], 0, 10) . '... </span>', Url::to(['#']), ["data-toggle" => "tooltip", "title" => $model['egen_numero_solicitud']]);
                 },
-            ],          
-        ],  
+            ],
+        ],
         [
             'attribute' => 'Tramite',
             'header' => Especies::t("Especies", "Trámite"),
             'value' => 'tramite',
-        ],      
+        ],
         [
             'class' => 'yii\grid\ActionColumn',
             'header' => Especies::t("Especies", "Tipo Especie"),
@@ -71,7 +71,7 @@ PbGridView::widget([
             'attribute' => 'Modalidad',
             'header' => Especies::t("Especies", "Modalidad"),
             'value' => 'mod_nombre',
-        ],       
+        ],
         [
             'attribute' => 'Fecha Aprobación',
             'header' => Especies::t("Especies", "Fecha Aprobación"),
@@ -83,22 +83,25 @@ PbGridView::widget([
             'header' => Especies::t("Especies", "Fecha Validez"),
             'format' => ['date', 'php:d-m-Y'],
             'value' => 'egen_fecha_caducidad',
-        ],        
+        ],
         [
             'class' => 'yii\grid\ActionColumn',
             'header' => Yii::t("formulario", "Actions"),
-            'template' => '{view} {descarga}', //
+            'template' => '{view} {descarga} {certificado}', //
             'buttons' => [
                 'view' => function ($url, $model) {
                     return Html::a('<span class="glyphicon glyphicon-download"></span>', Url::to(['/academico/especies/generarespeciespdf', 'ids' => base64_encode($model['egen_id'])]), ["data-toggle" => "tooltip", "title" => "Descargar Especie", "data-pjax" => "0"]);
                 },
                 'descarga' => function ($url, $model) {
                     return Html::a('<span class="glyphicon glyphicon-download-alt"></span>', Url::to(['/academico/especies/descargarimagen', 'espgen_id' => base64_encode($model['egen_id'])]), ["data-toggle" => "tooltip", "title" => "Descargar Especie/Justificación", "data-pjax" => "0"]);
-                },                  
-                /*'descarga' => function ($url, $model) use ($imagen){                   
-                        return Html::a('<span class="glyphicon glyphicon-download-alt"></span>', Url::to(['/site/getimage', 'route' => '/uploads/imagenespecie/' . $imagen]), ["download" => $imagen, "data-toggle" => "tooltip", "title" => "Descargar Imagen", "data-pjax" => 0]);
-                  
-                }, */         
+                },
+                'certificado' => function ($url, $model) {
+                        if ($model["egen_certificado"] == "SI" && $model["codigo_generado"] == "NO") { // tambien preguntar si ya no se ha generado el codigo ne la tabla certificados_generados
+                            return Html::a('<span class="glyphicon glyphicon-barcode"></span>', "#", ["onclick" => "generarCodigocer(" . $model['egen_id'] . ",'" . $model["egen_numero_solicitud"] . "','" . $model['per_cedula'] . "');", "data-toggle" => "tooltip", "title" => "Generar Codigo Certificado", "data-pjax" => 0]);
+                        } else {
+                            return "<span class = 'glyphicon glyphicon-barcode' data-toggle = 'tooltip' title ='Especie no genera codigo o ya fue generado'  data-pjax = 0></span>";
+                        }
+                },
             ],
         ],
     ],

@@ -17,9 +17,18 @@ $formatoimagen = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
           </div>
           </div>
           </div>';
+$pagodia = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
+          <div class="form-group">
+          <div class="col-sm-10 col-md-10 col-xs-10 col-lg-10">
+          <div ALIGN="justify" style = "width: 600px;" class="alert alert-info"><span style="font-weight: bold"> Nota: </span> Si no se encuentra al día en los pagos no podra crear solicitud de especies valoradas.</div>
+          </div>
+          </div>
+          </div>';
 ?>
+
 <?= Html::hiddenInput('txth_idest', $arr_persona['est_id'], ['id' => 'txth_idest']); ?>
 <?= Html::hiddenInput('txth_per', @Yii::$app->session->get("PB_perid"), ['id' => 'txth_per']); ?>
+<?php echo $pagodia ?>  
 <form class="form-horizontal" enctype="multipart/form-data" id="formsolicitud">   
 
     <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">

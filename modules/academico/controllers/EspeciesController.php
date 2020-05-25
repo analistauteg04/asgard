@@ -1,7 +1,7 @@
 <?php
 
-
 namespace app\modules\academico\controllers;
+
 use Yii;
 use app\models\Utilities;
 use app\models\ExportFile;
@@ -17,6 +17,7 @@ use app\modules\academico\Module as academico;
 use app\modules\academico\models\Especies;
 use app\models\Empresa;
 use app\modules\academico\Module as Especie;
+use app\modules\academico\models\CertificadosGeneradas;
 
 Academico::registerTranslations();
 Especie::registerTranslations();
@@ -170,25 +171,34 @@ class EspeciesController extends \app\components\CController {
         $per_id = @Yii::$app->session->get("PB_perid");
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
-            //Utilities::putMessageLogFile($data['DTS_DET']);
+            //Utilities::putMessageLogFile($data['DTS_CAB']['est_id']);
             $especiesADO = new Especies();
-            $dts_Cab = isset($data['DTS_CAB']) ? $data['DTS_CAB'] : array();
-            $dts_Det = isset($data['DTS_DET']) ? $data['DTS_DET'] : array();
-            $accion = isset($data['ACCION']) ? $data['ACCION'] : "";
-
-            if ($accion == "Create") {
-                $resul = $especiesADO->insertarLista($dts_Cab, $dts_Det);
+            $periodo_academico = $especiesADO->consultarPeriodoactivo();
+            Utilities::putMessageLogFile('dasd' . $periodo_academico['paca_id']);
+            $pagodia = $especiesADO->consultarPagodia($periodo_academico['paca_id'], $data['DTS_CAB']['est_id']);
+            Utilities::putMessageLogFile('csdfsd' . $pagodia['eppa_estado_pago']);
+            if ($pagodia['eppa_estado_pago'] > "0") {
+                $dts_Cab = isset($data['DTS_CAB']) ? $data['DTS_CAB'] : array();
+                $dts_Det = isset($data['DTS_DET']) ? $data['DTS_DET'] : array();
+                $accion = isset($data['ACCION']) ? $data['ACCION'] : "";
+                if ($accion == "Create") {
+                    $resul = $especiesADO->insertarLista($dts_Cab, $dts_Det);
+                } else {
+                    //Opcion para actualizar
+                    //$PedId = isset($_POST['PED_ID']) ? $_POST['PED_ID'] : 0;
+                    //$arroout = $model->actualizarLista($PedId,$tieId,$total,$dts_Lista);
+                }
+                //Utilities::putMessageLogFile($resul);
+                if ($resul['status']) {
+                    $message = ["info" => Yii::t('exception', 'La infomación ha sido grabada. ')];
+                    echo Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message, $resul);
+                } else {
+                    $message = ["info" => Yii::t('exception', 'Error al grabar.')];
+                    echo Utilities::ajaxResponse('NO_OK', 'alert', Yii::t('jslang', 'Error'), 'false', $message);
+                }
+                return;
             } else {
-                //Opcion para actualizar
-                //$PedId = isset($_POST['PED_ID']) ? $_POST['PED_ID'] : 0;
-                //$arroout = $model->actualizarLista($PedId,$tieId,$total,$dts_Lista);
-            }
-            //Utilities::putMessageLogFile($resul);
-            if ($resul['status']) {
-                $message = ["info" => Yii::t('exception', 'La infomación ha sido grabada. ')];
-                echo Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message, $resul);
-            } else {
-                $message = ["info" => Yii::t('exception', 'Error al grabar.')];
+                $message = ["info" => Yii::t('exception', 'No puede crear solicitud porque no esta al dia en los pagos.')];
                 echo Utilities::ajaxResponse('NO_OK', 'alert', Yii::t('jslang', 'Error'), 'false', $message);
             }
             return;
@@ -232,7 +242,7 @@ class EspeciesController extends \app\components\CController {
                 $data_especie = $especiesADO->consultaSolicitudexrubro($data["csol_id"]);
                 $especie_tramite = explode(",", $data_especie["especies"]);
                 for ($a = 0; $a < count($especie_tramite); $a++) {
-                    $datos_especie .=  $especie_tramite[$a] . ', ';
+                    $datos_especie .= $especie_tramite[$a] . ', ';
                 }
                 if ($carga_archivo['status']) {
                     // enviar correo estudiante
@@ -287,7 +297,6 @@ class EspeciesController extends \app\components\CController {
                     'arrEstados' => $this->estadoPagos(),
         ]);
     }
-
 
     public function actionAutorizarpago() {
         $ids = isset($_GET['ids']) ? base64_decode($_GET['ids']) : NULL;
@@ -417,7 +426,7 @@ class EspeciesController extends \app\components\CController {
             ]);
         } else {
             
-        }        
+        }
         $personaData = $especiesADO->consultaDatosEstudiante($per_id);
         $model = $especiesADO->getSolicitudesGeneradas($est_id, null, false);
         $arr_unidadac = $mod_unidad->consultarUnidadAcademicas();
@@ -444,11 +453,11 @@ class EspeciesController extends \app\components\CController {
             //$this->view->title = "Invoices";
             $especiesADO = new Especies();
             $cabFact = $especiesADO->consultarEspecieGenerada($ids);
-            if ($cabFact['uaca_id'] == '1'){
+            if ($cabFact['uaca_id'] == '1') {
                 $carrera = 'facultad/carrera';
                 $facultaded = 'Facultad de Grado';
             }
-             if ($cabFact['uaca_id'] == '2'){
+            if ($cabFact['uaca_id'] == '2') {
                 $carrera = 'maestría';
                 $facultaded = 'Facultad de Posgrado';
             }
@@ -464,8 +473,8 @@ class EspeciesController extends \app\components\CController {
             $rep->createReportPdf(
                     $this->render('@modules/academico/views/tpl_especies/especie', [
                         'cabFact' => $cabFact,
-                        'carrera'=>$carrera,
-                        'facultaded'=>$facultaded,
+                        'carrera' => $carrera,
+                        'facultaded' => $facultaded,
                     ])
             );
             $rep->mpdf->Output('ESPECIE_' . $codigo . ".pdf", ExportFile::OUTPUT_TO_DOWNLOAD);
@@ -660,6 +669,7 @@ class EspeciesController extends \app\components\CController {
                     'arr_modalidad' => ArrayHelper::map($arr_modalidad, "id", "name"),
         ]);
     }
+
     public function actionCargarimagen() {
         $per_id = @Yii::$app->session->get("PB_perid");
         $ids = isset($_GET['ids']) ? base64_decode($_GET['ids']) : NULL;
@@ -692,10 +702,11 @@ class EspeciesController extends \app\components\CController {
             }
         }
     }
+
     public function actionDescargarimagen() {
         //$per_id = @Yii::$app->session->get("PB_perid");
         $gen_id = isset($_GET['espgen_id']) ? base64_decode($_GET['espgen_id']) : NULL;
-       
+
         $especiesADO = new Especies();
         $mod_unidad = new UnidadAcademica();
         $mod_modalidad = new Modalidad();
@@ -715,4 +726,48 @@ class EspeciesController extends \app\components\CController {
                     'imagen' => $det_ids["imagen"],
         ]);
     }
+
+    public function actionGeneracetificodigo() {
+        $mod_certificado = new CertificadosGeneradas();
+        $usuario = @Yii::$app->user->identity->usu_id;
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+            $egen_id = $data['egen_id'];
+            $egen_numero_solicitud = $data['egen_numero_solicitud'];
+            $per_cedula = $data['per_cedula'];
+            $cgen_codigo = $egen_numero_solicitud . "-" . $per_cedula;
+            $fecha = date(Yii::$app->params["dateTimeByDefault"]);
+            $con = \Yii::$app->db_academico;
+            $transaction = $con->beginTransaction();
+            try {
+                $resul = $mod_certificado->insertarCodigocertificado($egen_id, $cgen_codigo, $fecha, 1, $usuario);
+                if ($resul) {
+                    $exito = 1;
+                }
+                if ($exito) {
+                    $transaction->commit();
+                    $message = array(
+                        "wtmessage" => Yii::t("notificaciones", "Código de certificado ha sido generado. "),
+                        "title" => Yii::t('jslang', 'Success'),
+                    );
+                    echo Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                } else {
+                    $transaction->rollback();
+                    $message = array(
+                        "wtmessage" => Yii::t("notificaciones", "Error al generar código de certificado." . $mensaje),
+                        "title" => Yii::t('jslang', 'Error'),
+                    );
+                    echo Utilities::ajaxResponse('NO_OK', 'Error', Yii::t("jslang", "Error"), false, $message);
+                }
+            } catch (Exception $ex) {
+                $transaction->rollback();
+                $message = array(
+                    "wtmessage" => $ex->getMessage(), Yii::t("notificaciones", "Error al generar código de certificado."),
+                    "title" => Yii::t('jslang', 'Error'),
+                );
+                return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), true, $message);
+            }
+        }
+    }
+
 }
