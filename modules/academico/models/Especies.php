@@ -507,7 +507,9 @@ class Especies extends \yii\db\ActiveRecord {
         $sql = "SELECT $secuencial concat(F.uaca_nomenclatura,T.tra_nomenclatura,lpad(ifnull(C.esp_codigo,0),3,'0'),'-',A.egen_numero_solicitud) as egen_numero_solicitud,
                     T.tra_nombre as tramite, C.esp_rubro,concat(D.per_pri_nombre,' ',D.per_pri_apellido) Nombres,
                     D.per_cedula, F.uaca_nombre,G.mod_nombre,date(A.egen_fecha_aprobacion) fecha_aprobacion,
-                    A.egen_fecha_caducidad
+                    A.egen_fecha_caducidad, A.egen_certificado,
+                    IFNULL((SELECT IFNULL(ceg.cgen_codigo,'NO')  FROM " . $con->dbname . ".certificados_generadas ceg 
+                        WHERE ceg.cgen_estado=:estado AND ceg.cgen_estado_logico=:estado AND ceg.egen_id=A.egen_id),'NO') codigo_generado
                 FROM " . $con->dbname . ".especies_generadas A
                             INNER JOIN (" . $con->dbname . ".estudiante B 
                                             INNER JOIN " . $con1->dbname . ".persona D ON B.per_id=D.per_id)
