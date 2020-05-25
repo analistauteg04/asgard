@@ -1647,3 +1647,29 @@ create table if not exists `estudiante_periodo_pago` (
   foreign key (paca_id) REFERENCES `periodo_academico`(paca_id),
   foreign key (est_id) REFERENCES `estudiante`(est_id)
 );
+
+-- --------------------------------------------------------
+-- 
+-- Estructura de tabla para la tabla `certificados_generadas` 
+-- --------------------------------------------------------
+
+CREATE TABLE `certificados_generadas` (
+  `cgen_id` bigint(20) not null auto_increment primary key,
+  `egen_id` bigint(20) not null,
+  `cgen_codigo` varchar(100) not null,
+  `cgen_observacion` text,
+  `cgen_fecha_codigo_generado` timestamp DEFAULT NULL,
+  `cgen_fecha_certificado_subido` timestamp DEFAULT NULL,
+  `cgen_fecha_caducidad` date DEFAULT NULL,
+  `cgen_ruta_archivo_pdf` varchar(500) DEFAULT NULL,
+  `cgen_estado_certificado` varchar(1) NOT NULL, -- null pendiente, 1 codigo generado, 2 certificado generado 
+  `cgen_usuario_ingreso` bigint(20) DEFAULT NULL,
+  `cgen_usuario_modifica` bigint(20) DEFAULT NULL,
+  `cgen_estado` varchar(1) NOT NULL,
+  `cgen_fecha_creacion` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `cgen_fecha_modificacion` timestamp NULL DEFAULT NULL,
+  `cgen_estado_logico` varchar(1) NOT NULL,
+  foreign key (egen_id) references `especies_generadas`(egen_id),
+  unique cgen_codigo(cgen_codigo) 
+
+);
