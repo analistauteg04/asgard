@@ -242,9 +242,10 @@ class DistributivoController extends \app\components\CController {
         $arrSearch["unidad"] = $data['unidad'];
         $arrSearch["modalidad"] = $data['modalidad'];
         $arrSearch["periodo"] = $data['periodo'];
+        $arrSearch["estado"] = $data['estado'];
 
         $arrData = array();
-        if ($arrSearch["unidad"] == 0 and $arrSearch["modalidad"] == 0 and $arrSearch["periodo"] == 0 and ( empty($arrSearch["search"]))) {
+        if ($arrSearch["unidad"] == 0 and $arrSearch["modalidad"] == 0 and $arrSearch["periodo"] == 0 and $arrSearch["estado"] == 2 and ( empty($arrSearch["search"]))) {
             $arrData = $distributivo_model->consultarDistributivoxProfesor(array(), $per_id, 0);
         } else {
             $arrData = $distributivo_model->consultarDistributivoxProfesor($arrSearch, $per_id, 0);
@@ -273,9 +274,10 @@ class DistributivoController extends \app\components\CController {
         $arrSearch["unidad"] = $data['unidad'];
         $arrSearch["modalidad"] = $data['modalidad'];
         $arrSearch["periodo"] = $data['periodo'];
+        $arrSearch["estado"] = $data['estado'];
 
         $arrData = array();
-        if ($arrSearch["unidad"] == 0 and $arrSearch["modalidad"] == 0 and $arrSearch["periodo"] == 0 and ( empty($arrSearch["search"]))) {
+        if ($arrSearch["unidad"] == 0 and $arrSearch["modalidad"] == 0 and $arrSearch["periodo"] == 0 and $arrSearch["estado"] == 2 and ( empty($arrSearch["search"]))) {
             $arrData = $distributivo_model->consultarDistributivoxProfesor(array(), $per_id, 0);
         } else {
             $arrData = $distributivo_model->consultarDistributivoxProfesor($arrSearch, $per_id, 0);

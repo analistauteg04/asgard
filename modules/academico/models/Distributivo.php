@@ -453,9 +453,9 @@ class Distributivo extends \yii\db\ActiveRecord {
             if ($arrFiltro['periodo'] != "" && $arrFiltro['periodo'] > 0) {
                 $str_search .= "a.paca_id = :periodo AND ";
             }
-            if ($arrFiltro['estado'] != "" && $arrFiltro['estado'] > 0) {
+            if ($arrFiltro['estado'] == "0" or $arrFiltro['estado'] == "1") {
                 $str_search .= "ifnull(m.eppa_estado_pago,'0') = :estpago AND ";
-            }
+            }          
         }
         $sql = "SELECT  d.uaca_nombre as unidad, e.mod_nombre as modalidad,
                         p.per_cedula as identificacion, 
@@ -502,7 +502,7 @@ class Distributivo extends \yii\db\ActiveRecord {
                 $search_per = $arrFiltro["periodo"];
                 $comando->bindParam(":periodo", $search_per, \PDO::PARAM_INT);
             }
-            if ($arrFiltro['estado'] != "" && $arrFiltro['estado'] < 2) {
+            if ($arrFiltro['estado'] == "0" or $arrFiltro['estado'] == "1") {
                 $search_estado = $arrFiltro["estado"];
                 $comando->bindParam(":estpago", $search_estado, \PDO::PARAM_STR);
             }

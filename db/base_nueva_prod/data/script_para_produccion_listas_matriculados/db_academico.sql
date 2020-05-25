@@ -2,6 +2,7 @@
 Alter table db_academico.distributivo_academico drop foreign key distributivo_academico_ibfk_2;
 Alter table db_academico.distributivo_academico drop foreign key distributivo_academico_ibfk_3;
 show create table db_academico.distributivo_academico;
+drop table db_academico.`distributivo_academico`;
 */
 
 -- --------------------------------------------------------

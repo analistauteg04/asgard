@@ -140,7 +140,8 @@ function exportExcelDistprof() {
     var unidad = $('#cmb_unidad_dis option:selected').val();
     var modalidad = $('#cmb_modalidad option:selected').val();
     var periodo = $('#cmb_periodo option:selected').val();
-    window.location.href = $('#txth_base').val() + "/academico/distributivo/expexceldist?search=" + search + "&unidad=" + unidad + "&modalidad=" + modalidad + "&periodo=" + periodo;
+    var estado = $('#cmb_estado option:selected').val();
+    window.location.href = $('#txth_base').val() + "/academico/distributivo/expexceldist?search=" + search + "&unidad=" + unidad + "&modalidad=" + modalidad + "&periodo=" + periodo + "&estado=" + estado;
 }
 
 function exportPdfDisprof() {
@@ -148,7 +149,8 @@ function exportPdfDisprof() {
     var unidad = $('#cmb_unidad_dis option:selected').val();
     var modalidad = $('#cmb_modalidad option:selected').val();
     var periodo = $('#cmb_periodo option:selected').val();
-    window.location.href = $('#txth_base').val() + "/academico/distributivo/exppdfdis?pdf=1&search=" + search + "&unidad=" + unidad + "&modalidad=" + modalidad + "&periodo=" + periodo;
+    var estado = $('#cmb_estado option:selected').val();
+    window.location.href = $('#txth_base').val() + "/academico/distributivo/exppdfdis?pdf=1&search=" + search + "&unidad=" + unidad + "&modalidad=" + modalidad + "&periodo=" + periodo + "&estado=" + estado;
 }
 
 function actualizarGridDistPago() {
