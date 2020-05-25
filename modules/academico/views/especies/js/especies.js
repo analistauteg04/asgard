@@ -735,3 +735,18 @@ function exportPdf() {
 
     window.location.href = $('#txth_base').val() + "/academico/especies/exppdfespecies?pdf=1&search=" + search + "&f_ini=" + f_ini + "&f_fin=" + f_fin + '&unidad=' + unidad + "&modalidad=" + modalidad + "&tramite=" + tramite;
 }
+function generarCodigocer(egen_id, egen_numero_solicitud, per_cedula) {
+    var link = $('#txth_base').val() + "/academico/especies/generacetificodigo";
+    var arrParams = new Object();
+    arrParams.egen_id = egen_id;
+    arrParams.egen_numero_solicitud = egen_numero_solicitud;
+    arrParams.per_cedula = per_cedula;
+    if (!validateForm()) {
+            requestHttpAjax(link, arrParams, function (response) {
+                showAlert(response.status, response.label, response.message);
+                setTimeout(function () {
+                    window.location.href = $('#txth_base').val() + "/academico/especies/especiesgeneradas";
+                }, 3000);
+            }, true);
+        }
+}

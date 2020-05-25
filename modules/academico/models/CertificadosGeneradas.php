@@ -1,4 +1,5 @@
 <?php
+
 namespace app\modules\academico\models;
 
 use yii\base\Exception;
@@ -26,29 +27,26 @@ use app\models\Utilities;
  *
  * @property EspeciesGeneradas $egen
  */
-class CertificadosGeneradas extends \yii\db\ActiveRecord
-{
+class CertificadosGeneradas extends \yii\db\ActiveRecord {
+
     /**
      * {@inheritdoc}
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return 'certificados_generadas';
     }
 
     /**
      * @return \yii\db\Connection the database connection used by this AR class.
      */
-    public static function getDb()
-    {
+    public static function getDb() {
         return Yii::$app->get('db_academico');
     }
 
     /**
      * {@inheritdoc}
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['egen_id', 'cgen_codigo', 'cgen_estado_logico'], 'required'],
             [['egen_id', 'cgen_usuario_ingreso', 'cgen_usuario_modifica'], 'integer'],
@@ -65,8 +63,7 @@ class CertificadosGeneradas extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'cgen_id' => 'Cgen ID',
             'egen_id' => 'Egen ID',
@@ -88,8 +85,79 @@ class CertificadosGeneradas extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getEgen()
-    {
+    public function getEgen() {
         return $this->hasOne(EspeciesGeneradas::className(), ['egen_id' => 'egen_id']);
     }
+
+    /**
+     * Function insertarCodigocertificado
+     * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;
+     * @param
+     * @return cgen_id
+     */
+    public function insertarCodigocertificado($egen_id, $cgen_codigo, $cgen_fecha_codigo_generado, $cgen_estado_certificado, $cgen_usuario_ingreso) {
+        $con = \Yii::$app->db_academico;
+        $trans = $con->getTransaction(); // se obtiene la transacción actual
+        if ($trans !== null) {
+            $trans = null; // si existe la transacción entonces no se crea una
+        } else {
+            $trans = $con->beginTransaction(); // si no existe la transacción entonces se crea una
+        }
+
+        $param_sql = "cgen_estado";
+        $bdet_sql = "1";
+
+        $param_sql .= ", cgen_estado_logico";
+        $bdet_sql .= ", 1";
+
+        if (isset($egen_id)) {
+            $param_sql .= ", egen_id";
+            $bdet_sql .= ", :egen_id";
+        }
+        if (isset($cgen_codigo)) {
+            $param_sql .= ", cgen_codigo";
+            $bdet_sql .= ", :cgen_codigo";
+        }
+        if (isset($cgen_fecha_codigo_generado)) {
+            $param_sql .= ", cgen_fecha_codigo_generado";
+            $bdet_sql .= ", :cgen_fecha_codigo_generado";
+        }
+        if (isset($cgen_estado_certificado)) {
+            $param_sql .= ", cgen_estado_certificado";
+            $bdet_sql .= ", :cgen_estado_certificado";
+        }
+        if (isset($cgen_usuario_ingreso)) {
+            $param_sql .= ", cgen_usuario_ingreso";
+            $bdet_sql .= ", :cgen_usuario_ingreso";
+        }
+        try {
+            $sql = "INSERT INTO " . $con->dbname . ".certificados_generadas ($param_sql) VALUES($bdet_sql)";
+            $comando = $con->createCommand($sql);
+
+            if (isset($egen_id)) {
+                $comando->bindParam(':egen_id', $egen_id, \PDO::PARAM_INT);
+            }
+            if (isset($cgen_codigo)) {
+                $comando->bindParam(':cgen_codigo', $cgen_codigo, \PDO::PARAM_STR);
+            }
+            if (!empty((isset($cgen_fecha_codigo_generado)))) {
+                $comando->bindParam(':cgen_fecha_codigo_generado', $cgen_fecha_codigo_generado, \PDO::PARAM_STR);                
+            }
+            if (!empty((isset($cgen_estado_certificado)))) {
+                $comando->bindParam(':cgen_estado_certificado', $cgen_estado_certificado, \PDO::PARAM_STR);
+            }
+            if (!empty((isset($cgen_usuario_ingreso)))) {
+                $comando->bindParam(':cgen_usuario_ingreso', $cgen_usuario_ingreso, \PDO::PARAM_INT);
+            }           
+            $result = $comando->execute();
+            if ($trans !== null)
+                $trans->commit();
+            return $con->getLastInsertID($con->dbname . '.certificados_generadas');
+        } catch (Exception $ex) {
+            if ($trans !== null)
+                $trans->rollback();
+            return FALSE;
+        }
+    }
+
 }

@@ -17,6 +17,7 @@ use app\modules\academico\Module as academico;
 use app\modules\academico\models\Especies;
 use app\models\Empresa;
 use app\modules\academico\Module as Especie;
+use app\modules\academico\models\CertificadosGeneradas;
 
 Academico::registerTranslations();
 Especie::registerTranslations();
@@ -171,17 +172,17 @@ class EspeciesController extends \app\components\CController {
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
             //Utilities::putMessageLogFile($data['DTS_CAB']['est_id']);
-            $especiesADO = new Especies();            
+            $especiesADO = new Especies();
             $periodo_academico = $especiesADO->consultarPeriodoactivo();
-            Utilities::putMessageLogFile('dasd'.$periodo_academico['paca_id']);
-            $pagodia = $especiesADO->consultarPagodia($periodo_academico['paca_id'], $data['DTS_CAB']['est_id']);      
-            Utilities::putMessageLogFile('csdfsd'.$pagodia['eppa_estado_pago']);
+            Utilities::putMessageLogFile('dasd' . $periodo_academico['paca_id']);
+            $pagodia = $especiesADO->consultarPagodia($periodo_academico['paca_id'], $data['DTS_CAB']['est_id']);
+            Utilities::putMessageLogFile('csdfsd' . $pagodia['eppa_estado_pago']);
             if ($pagodia['eppa_estado_pago'] > "0") {
                 $dts_Cab = isset($data['DTS_CAB']) ? $data['DTS_CAB'] : array();
                 $dts_Det = isset($data['DTS_DET']) ? $data['DTS_DET'] : array();
                 $accion = isset($data['ACCION']) ? $data['ACCION'] : "";
                 if ($accion == "Create") {
-                   $resul = $especiesADO->insertarLista($dts_Cab, $dts_Det);
+                    $resul = $especiesADO->insertarLista($dts_Cab, $dts_Det);
                 } else {
                     //Opcion para actualizar
                     //$PedId = isset($_POST['PED_ID']) ? $_POST['PED_ID'] : 0;
@@ -196,8 +197,7 @@ class EspeciesController extends \app\components\CController {
                     echo Utilities::ajaxResponse('NO_OK', 'alert', Yii::t('jslang', 'Error'), 'false', $message);
                 }
                 return;
-            }            
-            else {
+            } else {
                 $message = ["info" => Yii::t('exception', 'No puede crear solicitud porque no esta al dia en los pagos.')];
                 echo Utilities::ajaxResponse('NO_OK', 'alert', Yii::t('jslang', 'Error'), 'false', $message);
             }
@@ -725,6 +725,49 @@ class EspeciesController extends \app\components\CController {
                     'arr_modalidad' => ArrayHelper::map($arr_modalidad, "id", "name"),
                     'imagen' => $det_ids["imagen"],
         ]);
+    }
+
+    public function actionGeneracetificodigo() {
+        $mod_certificado = new CertificadosGeneradas();
+        $usuario = @Yii::$app->user->identity->usu_id;
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+            $egen_id = $data['egen_id'];
+            $egen_numero_solicitud = $data['egen_numero_solicitud'];
+            $per_cedula = $data['per_cedula'];
+            $cgen_codigo = $egen_numero_solicitud . "-" . $per_cedula;
+            $fecha = date(Yii::$app->params["dateTimeByDefault"]);
+            $con = \Yii::$app->db_academico;
+            $transaction = $con->beginTransaction();
+            try {
+                $resul = $mod_certificado->insertarCodigocertificado($egen_id, $cgen_codigo, $fecha, 1, $usuario);
+                if ($resul) {
+                    $exito = 1;
+                }
+                if ($exito) {
+                    $transaction->commit();
+                    $message = array(
+                        "wtmessage" => Yii::t("notificaciones", "Código de certificado ha sido generado. "),
+                        "title" => Yii::t('jslang', 'Success'),
+                    );
+                    echo Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                } else {
+                    $transaction->rollback();
+                    $message = array(
+                        "wtmessage" => Yii::t("notificaciones", "Error al generar código de certificado." . $mensaje),
+                        "title" => Yii::t('jslang', 'Error'),
+                    );
+                    echo Utilities::ajaxResponse('NO_OK', 'Error', Yii::t("jslang", "Error"), false, $message);
+                }
+            } catch (Exception $ex) {
+                $transaction->rollback();
+                $message = array(
+                    "wtmessage" => $ex->getMessage(), Yii::t("notificaciones", "Error al generar código de certificado."),
+                    "title" => Yii::t('jslang', 'Error'),
+                );
+                return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), true, $message);
+            }
+        }
     }
 
 }
