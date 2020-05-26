@@ -76,7 +76,7 @@ return [
     "Afro-American" => "Afroamericano",
     "Age" => "Edad",
     "Agent" => "Agente",
-    "All" => "TODOS",
+    "All" => "Todos",
     "Allocation Data" => "Datos Asignación",
     "Another language" => "Otro lenguaje",
     "Another Master" => "Otra maestría",

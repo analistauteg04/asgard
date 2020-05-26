@@ -21,8 +21,8 @@ Especies::registerTranslations();
 <?=
 
 PbGridView::widget([
-    'id' => 'TbG_Certiifcados',
-    //'showExport' => true,
+    'id' => 'TbG_Certificados',
+    'showExport' => true,
     'fnExportEXCEL' => "exportExcel",
     'fnExportPDF' => "exportPdf",
     'dataProvider' => $model,
@@ -35,7 +35,7 @@ PbGridView::widget([
         ],
         [
             'attribute' => 'Nombres',
-            'header' => Especies::t("Especies", "Alumno"),
+            'header' => Especies::t("Especies", "Student"),
             'value' => 'Nombres',
         ],
         [
@@ -67,7 +67,7 @@ PbGridView::widget([
         ],
         [
             'attribute' => 'Modalidad',
-            'header' => Especies::t("Especies", "Modalidad"),
+            'header' => academico::t("Academico", "Modality"),
             'value' => 'mod_nombre',
         ],
         [
@@ -76,6 +76,11 @@ PbGridView::widget([
             'format' => ['date', 'php:d-m-Y'],
             'value' => 'cgen_fecha_codigo_generado',
         ],
+        [
+            'attribute' => 'Estado',
+            'header' => especies::t("Especies", "Certified Status"),           
+            'value' => 'cgen_estado_certificado',
+        ],                    
         /*[
             'class' => 'yii\grid\ActionColumn',
             'header' => Yii::t("formulario", "Actions"),

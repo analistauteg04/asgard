@@ -173,7 +173,7 @@ class CertificadosGeneradas extends \yii\db\ActiveRecord {
         $str_search = "";
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
             if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
-                $str_search .= " A.egen_fecha_aprobacion BETWEEN :fec_ini AND :fec_fin AND ";
+                $str_search .= " ceg.cgen_fecha_codigo_generado BETWEEN :fec_ini AND :fec_fin AND ";
             }
             if ($arrFiltro['search'] != "") {
                 $str_search .= "(D.per_pri_nombre like :estudiante OR ";
@@ -181,17 +181,15 @@ class CertificadosGeneradas extends \yii\db\ActiveRecord {
                 $str_search .= "D.per_cedula like :estudiante )  AND ";
             }
             if ($arrFiltro['unidad'] > 0) {
-                $str_search .= "A.uaca_id = :unidad AND ";
+                $str_search .= "esg.uaca_id = :unidad AND ";
             }
             if ($arrFiltro['modalidad'] > 0) {
-                $str_search .= "A.mod_id = :modalidad AND ";
+                $str_search .= "esg.mod_id = :modalidad AND ";
             }
-            if ($arrFiltro['estdocerti'] == 0) {
-                $str_search .= "CG.cgen_estado_certificado IS NULL AND A.egen_certificado = 'SI' AND"; // son los pendientes no estan en la tabla
+            if ($arrFiltro['estdocerti'] > 0) {
+                $str_search .= "ceg.cgen_estado_certificado = :estdocerti AND"; // son los pendientes no estan en la tabla
             }
-            if ($arrFiltro['estdocerti'] == 1) {
-                $str_search .= "CG.cgen_estado_certificado = :estdocerti AND "; // los de estado 1 en la tabla
-            }
+            
         }
 
         $sql = "SELECT cgen_id,
@@ -213,7 +211,7 @@ class CertificadosGeneradas extends \yii\db\ActiveRecord {
                 INNER JOIN " . $con->dbname . ".tramite T ON T.tra_id = esg.tra_id
                 INNER JOIN (" . $con->dbname . ".estudiante B 
                 INNER JOIN " . $con1->dbname . ".persona D ON B.per_id=D.per_id) ON esg.est_id=B.est_id
-                WHERE
+                WHERE $str_search
                     ceg.cgen_estado = :estado AND 
                     ceg.cgen_estado_logico = :estado AND
                     esg.egen_estado = :estado AND 
@@ -242,7 +240,7 @@ class CertificadosGeneradas extends \yii\db\ActiveRecord {
             if ($arrFiltro['modalidad'] > 0) {
                 $comando->bindParam(":modalidad", $modalidad, \PDO::PARAM_INT);
             }
-            if ($arrFiltro['estdocerti'] > -1) {
+            if ($arrFiltro['estdocerti'] > 0) {
                 $comando->bindParam(":estdocerti", $estadocerti, \PDO::PARAM_INT);
             }
         }
