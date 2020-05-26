@@ -82,7 +82,14 @@ Especies::registerTranslations();
                 Html::dropDownList(
                         "cmb_tramite_esp", 0, array_merge([Yii::t("formulario", "Select")], $arr_tramite), ["class" => "form-control", "id" => "cmb_tramite_esp"]
                 )
-                ?></div>               
+                ?></div>  
+            <label for="lbl_estadocertificado" class="col-sm-2 col-md-2 col-xs-2 col-lg-2 control-label" id="lbl_tramite"><?= especies::t("Especies", "Certified Status") ?></label>
+            <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">   
+                <?=
+                Html::dropDownList(
+                        "cmb_estadocertificado", -1, $arr_estadocertificado, ["class" => "form-control", "id" => "cmb_estadocertificado"]
+                )
+                ?></div> 
         </div>
     </div>    
     <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
