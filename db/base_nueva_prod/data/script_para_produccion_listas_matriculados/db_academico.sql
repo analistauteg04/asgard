@@ -70,3 +70,31 @@ create table if not exists db_academico.`estudiante_periodo_pago` (
   foreign key (paca_id) REFERENCES `periodo_academico`(paca_id),
   foreign key (est_id) REFERENCES `estudiante`(est_id)
 );
+
+-- --------------------------------------------------------
+-- 
+-- Estructura de tabla para la tabla `distributivo_academico_horario` 
+-- --------------------------------------------------------
+create table if not exists db_academico.`distributivo_academico_horario` (
+  `daho_id` bigint(20) not null auto_increment primary key,   
+  `uaca_id` bigint(20) not null,
+  `mod_id` bigint(20) not null,
+  `daho_jornada` varchar(1) not null,
+  `daho_horario` varchar(10) not null,
+  `daho_hora_inicio` varchar(10) null,
+  `daho_hora_fin` varchar(10) null,
+  `daho_lunes` varchar(1) null,
+  `daho_martes` varchar(1) null,
+  `daho_miercoles` varchar(1) null,
+  `daho_jueves` varchar(1) null,
+  `daho_viernes` varchar(1) null,
+  `daho_sabado` varchar(1) null,
+  `daho_domingo` varchar(1) null,
+  `daho_estado` varchar(1) not null,
+  `daho_fecha_creacion` timestamp not null default current_timestamp,
+  `daho_fecha_modificacion` timestamp null default null,
+  `daho_estado_logico` varchar(1) not null,  
+  foreign key (uaca_id) references `unidad_academica`(uaca_id), 
+  foreign key (mod_id) references `modalidad`(mod_id)
+);
+
