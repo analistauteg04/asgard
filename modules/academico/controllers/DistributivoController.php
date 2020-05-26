@@ -189,6 +189,7 @@ class DistributivoController extends \app\components\CController {
             $arrSearch["modalidad"] = $data['modalidad'];
             $arrSearch["periodo"] = $data['periodo'];
             $arrSearch["estado"] = $data['estado'];
+            $arrSearch["jornada"] = $data['jornada'];
             $model = $distributivo_model->consultarDistributivoxProfesor($arrSearch, $per_id, 1);
             return $this->render('listar_distributivo-grid', [
                         "model" => $model,
@@ -213,6 +214,7 @@ class DistributivoController extends \app\components\CController {
                     'mod_periodo' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_periodo), "id", "name"),
                     'mod_estado' => ArrayHelper::map(array_merge([["id" => "2", "name" => Yii::t("formulario", "Grid")]], [["id" => "0", "name" => Yii::t("formulario", "Pendiente")]], [["id" => "1", "name" => Yii::t("formulario", "Pagado")]]), "id", "name"),
                     'model' => $model,
+                    'mod_jornada' => array("0" => "Todos", "1" => "(M) Matutino", "2" => "(N) Nocturno", "3" => "(S) Semipresencial" , "4" => "(D) Distancia"),    
         ]);
     }
 

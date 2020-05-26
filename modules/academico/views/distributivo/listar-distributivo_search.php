@@ -41,9 +41,16 @@ use app\modules\academico\Module as academico;
             <div class="col-sm-3 col-xs-3 col-md-3 col-lg-3">
                 <?= Html::dropDownList("cmb_estado", 2,  $arr_estado, ["class" => "form-control", "id" => "cmb_estado"]) ?>
             </div> 
-        </div>                                    
-        
+        </div>                                            
     </div>    
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="form-group">                        
+            <label for="cmb_jornadaes" class="col-sm-2 col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= academico::t("Academico", "Working day") ?></label>
+            <div class="col-sm-3 col-xs-3 col-md-3 col-lg-3">
+                <?= Html::dropDownList("cmb_jornada", " ", $arr_jornada, ["class" => "form-control", "id" => "cmb_jornada"]) ?>
+            </div>   
+        </div>
+    </div> 
     <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
         <div class="col-sm-8"></div>
         <div class="col-sm-2 col-md-2 col-xs-4 col-lg-2">                

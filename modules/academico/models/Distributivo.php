@@ -455,7 +455,10 @@ class Distributivo extends \yii\db\ActiveRecord {
             }
             if ($arrFiltro['estado'] == "0" or $arrFiltro['estado'] == "1") {
                 $str_search .= "ifnull(m.eppa_estado_pago,'0') = :estpago AND ";
-            }          
+            }    
+            if ($arrFiltro['jornada'] != "" && $arrFiltro['jornada'] > 0) {
+                $str_search .= "a.daca_jornada = :jornada AND ";
+            }
         }
         $sql = "SELECT  d.uaca_nombre as unidad, e.mod_nombre as modalidad,
                         p.per_cedula as identificacion, 
@@ -505,6 +508,10 @@ class Distributivo extends \yii\db\ActiveRecord {
             if ($arrFiltro['estado'] == "0" or $arrFiltro['estado'] == "1") {
                 $search_estado = $arrFiltro["estado"];
                 $comando->bindParam(":estpago", $search_estado, \PDO::PARAM_STR);
+            }
+            if ($arrFiltro['jornada'] != "" && $arrFiltro['jornada'] > 0) {
+                $search_jor = $arrFiltro["jornada"];
+                $comando->bindParam(":jornada", $search_jor, \PDO::PARAM_INT);
             }
         }
         $resultData = $comando->queryAll();
