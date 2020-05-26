@@ -264,5 +264,42 @@ class CertificadosGeneradas extends \yii\db\ActiveRecord {
             return $dataProvider;
         }
     }
+    
+    public function consultarCertificadosGeneradas($cgen_id) {
+        $con = \Yii::$app->db_academico;
+        $con1 = \Yii::$app->db_asgard;
+        $estado = 1;
+        $sql = "SELECT cgen_id,
+                    D.per_id,
+                    concat(F.uaca_nomenclatura,T.tra_nomenclatura,lpad(ifnull(C.esp_codigo,0),3,'0'),'-',esg.egen_numero_solicitud) as egen_numero_solicitud,
+                    concat(D.per_pri_nombre,' ',D.per_pri_apellido) Nombres,
+                    F.uaca_nombre,
+                    G.mod_nombre,
+                    ceg.cgen_codigo,
+                    ceg.cgen_fecha_codigo_generado,
+                    case ceg.cgen_estado_certificado  
+                      when 1 then 'Código Generado'  
+                      when 2 then 'Certificado Generaado'    
+                    end as cgen_estado_certificado
+                FROM db_academico.certificados_generadas ceg
+                INNER JOIN " . $con->dbname . ".especies_generadas esg on esg.egen_id = ceg.egen_id
+                INNER JOIN " . $con->dbname . ".especies C ON esg.esp_id=C.esp_id
+                INNER JOIN " . $con->dbname . ".unidad_academica F ON F.uaca_id=esg.uaca_id
+                INNER JOIN " . $con->dbname . ".modalidad G ON G.mod_id=esg.mod_id
+                INNER JOIN " . $con->dbname . ".tramite T ON T.tra_id = esg.tra_id
+                INNER JOIN (" . $con->dbname . ".estudiante B 
+                INNER JOIN " . $con1->dbname . ".persona D ON B.per_id=D.per_id) ON esg.est_id=B.est_id
+                WHERE 
+                    cgen_id = :cgen_id AND
+                    ceg.cgen_estado = :estado AND 
+                    ceg.cgen_estado_logico = :estado AND
+                    esg.egen_estado = :estado AND 
+                    esg.egen_estado_logico = :estado  
+                ORDER BY ceg.cgen_fecha_codigo_generado DESC;";
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":cgen_id", $cgen_id, \PDO::PARAM_INT);
+        return $comando->queryAll();
+    }
 
 }

@@ -8,6 +8,7 @@ namespace app\modules\academico\messages;
  * and open the template in the editor.
  */
 return [
-    "List of generated certificate" => "Listado de Certicados Generados",    
+    "List of generated certificate" => "Listado de Certicados Generados",   
+    "Upload certificate" => "Subir Certificado",
 ];
 
