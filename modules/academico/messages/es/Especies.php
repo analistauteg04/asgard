@@ -10,9 +10,12 @@ namespace app\modules\academico\messages;
 return [
     "# Solicitude" => "# Solicitud",
     "Academic unit" => "Unidad Académica",
-    "Approval date" => "Fecha Aprobación",    
+    "Approval date" => "Fecha Aprobación",  
+    "Certified Code" => "Código Certificado",
+    "Certified Status" => "Estado Certificado",
     "Create Application for Registration" => "datos datos",
     "Date validity" => "Fecha Validez",
+    "Generate Code" => "Genera Código",
     "List of generated species" => "Listado de Especies Generadas",
     "Payment" => "Pagos",
     "Procedure" => "Trámite",

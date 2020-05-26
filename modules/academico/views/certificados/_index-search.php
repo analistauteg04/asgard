@@ -21,9 +21,9 @@ Especies::registerTranslations();
 <div class="row">
     <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
         <div class="form-group">
-            <label for="txt_buscarDataPago" class="col-sm-2 col-md-2 col-xs-2 col-lg-2 control-label"><?= Yii::t("formulario", "Search") ?></label>
+            <label for="txt_buscarDataCertificado" class="col-sm-2 col-md-2 col-xs-2 col-lg-2 control-label"><?= Yii::t("formulario", "Search") ?></label>
             <div class="col-sm-8 col-md-8 col-xs-8 col-lg-8">
-                <input type="text" class="form-control" value="" id="txt_buscarDataPago" placeholder="<?= Yii::t("formulario", "Search by Names") ?>">
+                <input type="text" class="form-control" value="" id="txt_buscarDataCertificado" placeholder="<?= Yii::t("formulario", "Search by Names") ?>">
             </div>
         </div>
     </div>
@@ -65,29 +65,22 @@ Especies::registerTranslations();
         <div class="form-group">
             <label for="lbl_unidad" class="col-sm-2 col-md-2 col-xs-2 col-lg-2 control-label" id="lbl_unidad"><?= Especies::t("Especies", "Academic unit") ?></label>
             <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">                                      
-                <?= Html::dropDownList("cmb_unidad", 0, array_merge([Yii::t("formulario", "Select")], $arr_unidad), ["class" => "form-control", "id" => "cmb_unidad"]) ?>                                       
+                <?= Html::dropDownList("cmb_unidad_cer", 0, array_merge([Yii::t("formulario", "All")], $arr_unidad), ["class" => "form-control", "id" => "cmb_unidad_cer"]) ?>                                       
             </div>
 
-            <label for="lbl_modalidad_esp" class="col-sm-2 col-md-2 col-xs-2 col-lg-2 control-label"><?= Especies::t("Academico", "Modality") ?></label>
+            <label for="lbl_modalidad_cer" class="col-sm-2 col-md-2 col-xs-2 col-lg-2 control-label"><?= Especies::t("Academico", "Modality") ?></label>
             <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">                                
-                <?= Html::dropDownList("cmb_modalidad_esp", 0, array_merge([Yii::t("formulario", "Select")], $arr_modalidad), ["class" => "form-control", "id" => "cmb_modalidad_esp"]) ?>
+                <?= Html::dropDownList("cmb_modalidad_cer", 0, array_merge([Yii::t("formulario", "All")], $arr_modalidad), ["class" => "form-control", "id" => "cmb_modalidad_cer"]) ?>
             </div>            
         </div>
     </div>    
     <div class="col-md-12 col-xs-12 col-lg-12 col-sm-12">   
         <div class="form-group">
-            <label for="lbl_tramite" class="col-sm-2 col-md-2 col-xs-2 col-lg-2 control-label" id="lbl_tramite"><?= especies::t("Especies", "Procedure") ?></label>
-            <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">   
-                <?=
-                Html::dropDownList(
-                        "cmb_tramite_esp", 0, array_merge([Yii::t("formulario", "Select")], $arr_tramite), ["class" => "form-control", "id" => "cmb_tramite_esp"]
-                )
-                ?></div>  
             <label for="lbl_estadocertificado" class="col-sm-2 col-md-2 col-xs-2 col-lg-2 control-label" id="lbl_tramite"><?= especies::t("Especies", "Certified Status") ?></label>
             <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">   
                 <?=
                 Html::dropDownList(
-                        "cmb_estadocertificado", -1, $arr_estadocertificado, ["class" => "form-control", "id" => "cmb_estadocertificado"]
+                        "cmb_estadocertificado_cer", -1, $arr_estadocertificado, ["class" => "form-control", "id" => "cmb_estadocertificado_cer"]
                 )
                 ?></div> 
         </div>
@@ -95,7 +88,7 @@ Especies::registerTranslations();
     <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
         <div class="col-sm-8 col-md-8 col-xs-8 col-lg-8"></div>
         <div class="col-sm-2 col-md-2 col-xs-4 col-lg-2">                
-            <a id="btn_buscarEspecies" href="javascript:" class="btn btn-primary btn-block"> <?= Yii::t("formulario", "Search") ?></a>
+            <a id="btn_buscarCertificado" href="javascript:" class="btn btn-primary btn-block"> <?= Yii::t("formulario", "Search") ?></a>
         </div>
     </div>
 </div></br>

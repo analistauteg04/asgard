@@ -22,6 +22,7 @@
         "fxp/composer-asset-plugin": "~1.4.4",
         "mpdf/mpdf": "*",
         "phpoffice/phpspreadsheet": "*",
+        "phpoffice/phpword": "*",
         "bower-asset/font-awesome": "*",
         "branchonline/yii2-lightbox": "*",
         "cebe/yii2-gravatar": "1.*",
