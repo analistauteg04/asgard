@@ -141,14 +141,14 @@ class CertificadosGeneradas extends \yii\db\ActiveRecord {
                 $comando->bindParam(':cgen_codigo', $cgen_codigo, \PDO::PARAM_STR);
             }
             if (!empty((isset($cgen_fecha_codigo_generado)))) {
-                $comando->bindParam(':cgen_fecha_codigo_generado', $cgen_fecha_codigo_generado, \PDO::PARAM_STR);                
+                $comando->bindParam(':cgen_fecha_codigo_generado', $cgen_fecha_codigo_generado, \PDO::PARAM_STR);
             }
             if (!empty((isset($cgen_estado_certificado)))) {
                 $comando->bindParam(':cgen_estado_certificado', $cgen_estado_certificado, \PDO::PARAM_STR);
             }
             if (!empty((isset($cgen_usuario_ingreso)))) {
                 $comando->bindParam(':cgen_usuario_ingreso', $cgen_usuario_ingreso, \PDO::PARAM_INT);
-            }           
+            }
             $result = $comando->execute();
             if ($trans !== null)
                 $trans->commit();
@@ -157,6 +157,111 @@ class CertificadosGeneradas extends \yii\db\ActiveRecord {
             if ($trans !== null)
                 $trans->rollback();
             return FALSE;
+        }
+    }
+
+    /**
+     * Function getCertificadosGeneradas
+     * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;
+     * @param
+     * @return cgen_id
+     */
+    public static function getCertificadosGeneradas($arrFiltro = array(), $onlyData = false) {
+        $con = \Yii::$app->db_academico;
+        $con1 = \Yii::$app->db_asgard;
+        $estado = 1;
+        $str_search = "";
+        if (isset($arrFiltro) && count($arrFiltro) > 0) {
+            if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
+                $str_search .= " ceg.cgen_fecha_codigo_generado BETWEEN :fec_ini AND :fec_fin AND ";
+            }
+            if ($arrFiltro['search'] != "") {
+                $str_search .= "(D.per_pri_nombre like :estudiante OR ";
+                $str_search .= "D.per_pri_apellido like :estudiante OR ";
+                $str_search .= "D.per_cedula like :estudiante )  AND ";
+            }
+            if ($arrFiltro['unidad'] > 0) {
+                $str_search .= "esg.uaca_id = :unidad AND ";
+            }
+            if ($arrFiltro['modalidad'] > 0) {
+                $str_search .= "esg.mod_id = :modalidad AND ";
+            }
+            if ($arrFiltro['estdocerti'] > 0) {
+                $str_search .= "ceg.cgen_estado_certificado = :estdocerti AND"; // son los pendientes no estan en la tabla
+            }
+            
+        }
+
+        $sql = "SELECT cgen_id,
+                    concat(F.uaca_nomenclatura,T.tra_nomenclatura,lpad(ifnull(C.esp_codigo,0),3,'0'),'-',esg.egen_numero_solicitud) as egen_numero_solicitud,
+                    concat(D.per_pri_nombre,' ',D.per_pri_apellido) Nombres,
+                    F.uaca_nombre,
+                    G.mod_nombre,
+                    ceg.cgen_codigo,
+                    ceg.cgen_fecha_codigo_generado,
+                    case ceg.cgen_estado_certificado  
+                      when 1 then 'Código Generado'  
+                      when 2 then 'Certificado Generaado'    
+                    end as cgen_estado_certificado
+                FROM db_academico.certificados_generadas ceg
+                INNER JOIN " . $con->dbname . ".especies_generadas esg on esg.egen_id = ceg.egen_id
+                INNER JOIN " . $con->dbname . ".especies C ON esg.esp_id=C.esp_id
+                INNER JOIN " . $con->dbname . ".unidad_academica F ON F.uaca_id=esg.uaca_id
+                INNER JOIN " . $con->dbname . ".modalidad G ON G.mod_id=esg.mod_id
+                INNER JOIN " . $con->dbname . ".tramite T ON T.tra_id = esg.tra_id
+                INNER JOIN (" . $con->dbname . ".estudiante B 
+                INNER JOIN " . $con1->dbname . ".persona D ON B.per_id=D.per_id) ON esg.est_id=B.est_id
+                WHERE $str_search
+                    ceg.cgen_estado = :estado AND 
+                    ceg.cgen_estado_logico = :estado AND
+                    esg.egen_estado = :estado AND 
+                    esg.egen_estado_logico = :estado  
+                ORDER BY ceg.cgen_fecha_codigo_generado DESC; ";
+
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        if (isset($arrFiltro) && count($arrFiltro) > 0) {
+            $fecha_ini = $arrFiltro["f_ini"] . " 00:00:00";
+            $fecha_fin = $arrFiltro["f_fin"] . " 23:59:59";
+            $search_cond = "%" . $arrFiltro["search"] . "%";
+            $unidad = $arrFiltro['unidad'];
+            $modalidad = $arrFiltro['modalidad'];
+            $estadocerti = $arrFiltro['estdocerti'];
+            if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
+                $comando->bindParam(":fec_ini", $fecha_ini, \PDO::PARAM_STR);
+                $comando->bindParam(":fec_fin", $fecha_fin, \PDO::PARAM_STR);
+            }
+            if ($arrFiltro['search'] != "") {
+                $comando->bindParam(":estudiante", $search_cond, \PDO::PARAM_STR);
+            }
+            if ($arrFiltro['unidad'] > 0) {
+                $comando->bindParam(":unidad", $unidad, \PDO::PARAM_INT);
+            }
+            if ($arrFiltro['modalidad'] > 0) {
+                $comando->bindParam(":modalidad", $modalidad, \PDO::PARAM_INT);
+            }
+            if ($arrFiltro['estdocerti'] > 0) {
+                $comando->bindParam(":estdocerti", $estadocerti, \PDO::PARAM_INT);
+            }
+        }
+        $resultData = $comando->queryAll();
+        $dataProvider = new ArrayDataProvider([
+            'key' => 'id',
+            'allModels' => $resultData,
+            'pagination' => [
+                'pageSize' => Yii::$app->params["pageSize"],
+            ],
+            'sort' => [
+                'attributes' => [
+                    'egen_id',
+                    'fecha_creacion',
+                ],
+            ],
+        ]);
+        if ($onlyData) {
+            return $resultData;
+        } else {
+            return $dataProvider;
         }
     }
 

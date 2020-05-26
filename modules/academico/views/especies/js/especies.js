@@ -706,10 +706,11 @@ function actualizarGridEspeciesGeneradas() {
     var unidad = $('#cmb_unidad').val();
     var modalidad = $('#cmb_modalidad_esp').val();
     var tramite = $('#cmb_tramite_esp').val();
+    var estdocerti = $('#cmb_estadocertificado').val();
     //Buscar almenos una clase con el nombre para ejecutar
     if (!$(".blockUI").length) {
         showLoadingPopup();
-        $('#TbG_Solicitudes').PbGridView('applyFilterData', {'f_ini': f_ini, 'f_fin': f_fin, 'unidad': unidad, 'modalidad': modalidad, 'search': search, 'tramite': tramite});
+        $('#TbG_Solicitudes').PbGridView('applyFilterData', {'f_ini': f_ini, 'f_fin': f_fin, 'unidad': unidad, 'modalidad': modalidad, 'search': search, 'tramite': tramite, 'estdocerti': estdocerti});
         setTimeout(hideLoadingPopup, 2000);
     }
 }
@@ -721,8 +722,9 @@ function exportExcel() {
     var unidad = $('#cmb_unidad').val();
     var modalidad = $('#cmb_modalidad_esp').val();
     var tramite = $('#cmb_tramite_esp').val();
+    var estdocerti = $('#cmb_estadocertificado').val();
 
-    window.location.href = $('#txth_base').val() + "/academico/especies/expexcelespecies?search=" + search + "&f_ini=" + f_ini + "&f_fin=" + f_fin + '&unidad=' + unidad + "&modalidad=" + modalidad + "&tramite=" + tramite;
+    window.location.href = $('#txth_base').val() + "/academico/especies/expexcelespecies?search=" + search + "&f_ini=" + f_ini + "&f_fin=" + f_fin + '&unidad=' + unidad + "&modalidad=" + modalidad + "&tramite=" + tramite + "&estdocerti=" + estdocerti;
 }
 
 function exportPdf() {
@@ -732,8 +734,9 @@ function exportPdf() {
     var unidad = $('#cmb_unidad').val();
     var modalidad = $('#cmb_modalidad_esp').val();
     var tramite = $('#cmb_tramite_esp').val();
+    var estdocerti = $('#cmb_estadocertificado').val();
 
-    window.location.href = $('#txth_base').val() + "/academico/especies/exppdfespecies?pdf=1&search=" + search + "&f_ini=" + f_ini + "&f_fin=" + f_fin + '&unidad=' + unidad + "&modalidad=" + modalidad + "&tramite=" + tramite;
+    window.location.href = $('#txth_base').val() + "/academico/especies/exppdfespecies?pdf=1&search=" + search + "&f_ini=" + f_ini + "&f_fin=" + f_fin + '&unidad=' + unidad + "&modalidad=" + modalidad + "&tramite=" + tramite + "&estdocerti=" + estdocerti;
 }
 function generarCodigocer(egen_id, egen_numero_solicitud, per_cedula) {
     var link = $('#txth_base').val() + "/academico/especies/generacetificodigo";

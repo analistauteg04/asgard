@@ -497,6 +497,12 @@ class Especies extends \yii\db\ActiveRecord {
             if ($arrFiltro['tramite'] > 0) {
                 $str_search .= "A.tra_id = :tramite AND ";
             }
+            if ($arrFiltro['estdocerti'] == 0) {
+                $str_search .= "CG.cgen_estado_certificado IS NULL AND A.egen_certificado = 'SI' AND"; // son los pendientes no estan en la tabla
+            }
+            if ($arrFiltro['estdocerti'] == 1) {
+                $str_search .= "CG.cgen_estado_certificado = :estdocerti AND "; // los de estado 1 en la tabla
+            }
         }
         if ($onlyData == false) {
             $secuencial = 'A.egen_id, ';
@@ -508,8 +514,8 @@ class Especies extends \yii\db\ActiveRecord {
                     T.tra_nombre as tramite, C.esp_rubro,concat(D.per_pri_nombre,' ',D.per_pri_apellido) Nombres,
                     D.per_cedula, F.uaca_nombre,G.mod_nombre,date(A.egen_fecha_aprobacion) fecha_aprobacion,
                     A.egen_fecha_caducidad, A.egen_certificado,
-                    IFNULL((SELECT IFNULL(ceg.cgen_codigo,'NO')  FROM " . $con->dbname . ".certificados_generadas ceg 
-                        WHERE ceg.cgen_estado=:estado AND ceg.cgen_estado_logico=:estado AND ceg.egen_id=A.egen_id),'NO') codigo_generado
+                    IFNULL((SELECT IFNULL(ceg.cgen_codigo,' ')  FROM " . $con->dbname . ".certificados_generadas ceg 
+                        WHERE ceg.cgen_estado=:estado AND ceg.cgen_estado_logico=:estado AND ceg.egen_id=A.egen_id),' ') codigo_generado
                 FROM " . $con->dbname . ".especies_generadas A
                             INNER JOIN (" . $con->dbname . ".estudiante B 
                                             INNER JOIN " . $con1->dbname . ".persona D ON B.per_id=D.per_id)
@@ -517,7 +523,8 @@ class Especies extends \yii\db\ActiveRecord {
                             INNER JOIN " . $con->dbname . ".especies C ON A.esp_id=C.esp_id
                             INNER JOIN " . $con->dbname . ".unidad_academica F ON F.uaca_id=A.uaca_id
                             INNER JOIN " . $con->dbname . ".modalidad G ON G.mod_id=A.mod_id
-                            INNER JOIN " . $con->dbname . ".tramite T ON T.tra_id = A.tra_id                           
+                            INNER JOIN " . $con->dbname . ".tramite T ON T.tra_id = A.tra_id
+                            LEFT JOIN db_academico.certificados_generadas CG ON CG.egen_id = A.egen_id
                 WHERE $str_search A.egen_estado=:estado AND A.egen_estado_logico=:estado  ORDER BY A.egen_id DESC; ";
 
         $comando = $con->createCommand($sql);
@@ -530,6 +537,7 @@ class Especies extends \yii\db\ActiveRecord {
             $unidad = $arrFiltro['unidad'];
             $modalidad = $arrFiltro['modalidad'];
             $tramite = $arrFiltro['tramite'];
+            $estadocerti = $arrFiltro['estdocerti'];
             if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
                 $comando->bindParam(":fec_ini", $fecha_ini, \PDO::PARAM_STR);
                 $comando->bindParam(":fec_fin", $fecha_fin, \PDO::PARAM_STR);
@@ -545,6 +553,9 @@ class Especies extends \yii\db\ActiveRecord {
             }
             if ($arrFiltro['tramite'] > 0) {
                 $comando->bindParam(":tramite", $tramite, \PDO::PARAM_INT);
+            }
+            if ($arrFiltro['estdocerti'] > -1) {
+                $comando->bindParam(":estdocerti", $estadocerti, \PDO::PARAM_INT);
             }
         }
         $resultData = $comando->queryAll();

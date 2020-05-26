@@ -31,6 +31,7 @@ admision::registerTranslations();
             'arr_unidad' => $arr_unidad,
             'arr_modalidad' => $arr_modalidad,
             'arr_tramite' => $arr_tramite,
+            'arr_estadocertificado' => $arr_estadocertificado,
             ]);
         ?>
     </form>

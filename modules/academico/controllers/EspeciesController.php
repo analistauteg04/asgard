@@ -420,6 +420,7 @@ class EspeciesController extends \app\components\CController {
             $arrSearch["modalidad"] = $data['modalidad'];
             $arrSearch["search"] = $data['search'];
             $arrSearch["tramite"] = $data['tramite'];
+            $arrSearch["estdocerti"] = $data['estdocerti'];
             $resp_pago = $especiesADO->getSolicitudesGeneradas($est_id, $arrSearch, false);
             return $this->renderPartial('_especies-grid', [
                         "model" => $resp_pago,
@@ -441,6 +442,7 @@ class EspeciesController extends \app\components\CController {
                     'arr_unidad' => ArrayHelper::map($arr_unidadac, "id", "name"),
                     'arr_modalidad' => ArrayHelper::map($arr_modalidad, "id", "name"),
                     'arr_tramite' => ArrayHelper::map($arr_tramite, "id", "name"),
+                    'arr_estadocertificado' => array("-1" => "Seleccionar", "0" => "Pendiente", "1" => "Generado"),
         ]);
     }
 
@@ -518,7 +520,7 @@ class EspeciesController extends \app\components\CController {
         header("Content-Type: $content_type");
         header("Content-Disposition: attachment;filename=" . $nombarch);
         header('Cache-Control: max-age=0');
-        $colPosition = array("C", "D", "E", "F", "G", "H", "I", "J", "K", "L");
+        $colPosition = array("C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N");
         $arrHeader = array(
             Yii::t("formulario", "Number"),
             Especie::t("Especies", "Procedure"),
@@ -529,6 +531,9 @@ class EspeciesController extends \app\components\CController {
             Especie::t("Academico", "Modalidad"),
             Especie::t("Especies", "Approval date"),
             Especie::t("Especies", "Date validity"),
+            Especie::t("Especies", "Generate Code"),
+            Especie::t("Especies", "Certified Code"),
+            //" ",
         );
         $especiesADO = new Especies();
         $data = Yii::$app->request->get();
@@ -538,6 +543,7 @@ class EspeciesController extends \app\components\CController {
         $arrSearch["modalidad"] = $data['modalidad'];
         $arrSearch["search"] = $data['search'];
         $arrSearch["tramite"] = $data['tramite'];
+        $arrSearch["estdocerti"] = $data['estdocerti'];
 
         $arrData = array();
         if (empty($arrSearch)) {
@@ -621,6 +627,9 @@ class EspeciesController extends \app\components\CController {
             Especie::t("Academico", "Modalidad"),
             Especie::t("Especies", "Approval date"),
             Especie::t("Especies", "Date validity"),
+            Especie::t("Especies", "Generate Code"),
+            Especie::t("Especies", "Certified Code"),
+            
         );
         $especiesADO = new Especies();
         $data = Yii::$app->request->get();
@@ -630,6 +639,7 @@ class EspeciesController extends \app\components\CController {
         $arrSearch["modalidad"] = $data['modalidad'];
         $arrSearch["search"] = $data['search'];
         $arrSearch["tramite"] = $data['tramite'];
+        $arrSearch["estdocerti"] = $data['estdocerti'];
         $arrData = array();
         if (empty($arrSearch)) {
             $arrData = $especiesADO->getSolicitudesGeneradas(null, array(), true);
