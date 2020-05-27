@@ -301,5 +301,40 @@ class CertificadosGeneradas extends \yii\db\ActiveRecord {
         $comando->bindParam(":cgen_id", $cgen_id, \PDO::PARAM_INT);
         return $comando->queryAll();
     }
+    /**
+     * Function subirCertificadopdf (Actualiza el certiifcado generado una vez subido el archivo pdf)
+     * @author  Giovanni Vergara <analistadesarrollo01@uteg.edu.ec>
+     * @param   
+     * @return  
+     */
+    public function subirCertificadopdf($cgen_id, $cgen_observacion, $cgen_ruta_archivo_pdf, $cgen_usuario_modifica) {
+        $con = \Yii::$app->db_academico;
+        $estado = 1;
+        $fecha_modificacion = date(Yii::$app->params["dateTimeByDefault"]);
+
+        $comando = $con->createCommand
+                ("UPDATE " . $con->dbname . ".certificados_generadas
+                SET cgen_observacion = :cgen_observacion,
+                    cgen_fecha_certificado_subido = :cgen_fecha_certificado_subido,
+                    cgen_fecha_caducidad = date(date_add(:cgen_fecha_certificado_subido, interval 1 month)),
+                    cgen_ruta_archivo_pdf = :cgen_ruta_archivo_pdf,
+                    cgen_estado_certificado = 2,
+                    cgen_usuario_modifica = :cgen_usuario_modifica,
+                    cgen_fecha_modificacion = :cgen_fecha_modificacion
+                WHERE cgen_id = :cgen_id AND 
+                      cgen_estado =:estado AND
+                      cgen_estado_logico = :estado");
+
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":cgen_id", $cgen_id, \PDO::PARAM_INT);
+        $comando->bindParam(":cgen_observacion", ucfirst(mb_strtolower($cgen_observacion, 'UTF-8')), \PDO::PARAM_STR);
+        $comando->bindParam(":cgen_fecha_certificado_subido", $fecha_modificacion, \PDO::PARAM_STR);
+        $comando->bindParam(":cgen_ruta_archivo_pdf", $cgen_ruta_archivo_pdf, \PDO::PARAM_STR);
+        $comando->bindParam(":cgen_usuario_modifica", $cgen_usuario_modifica, \PDO::PARAM_INT);
+        $comando->bindParam(":cgen_fecha_modificacion", $fecha_modificacion, \PDO::PARAM_STR);        
+        $response = $comando->execute();
+
+        return $response;
+    }
 
 }
