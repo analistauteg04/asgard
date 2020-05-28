@@ -1,30 +1,28 @@
 <?php
 
-namespace app\modules\piensaecuador\controllers;
+namespace app\modules\formulario\controllers;
 
 use Yii;
-use app\modules\piensaecuador\models\PersonaExterna;
+use app\modules\formulario\models\PersonaFormulario;
 use app\models\ExportFile;
 use app\models\Utilities;
-use app\modules\piensaecuador\Module as piensaecuador;
-piensaecuador::registerTranslations();
+//use app\modules\piensaecuador\Module as piensaecuador;
+//piensaecuador::registerTranslations();
 
 class RegistroController extends \app\components\CController {
 
     public function actionIndex() {
-        $model = new PersonaExterna();
+        $mod_PersForm = new PersonaFormulario();
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->get();
             if (isset($data["search"])) {
                 return $this->renderPartial('index-grid', [
-                    "model" => $model->getAllPersonaExtGrid($data["search"], true),
-                    'dataInteres' => $model->getAllInteresByPersona(NULL)
+                    "model" => $mod_PersForm->getAllPersonaFormGrid($data["search"], true),                   
                 ]);
             }
         }
         return $this->render('index', [
-            'model' => $model->getAllPersonaExtGrid(NULL, true),
-            'dataInteres' => $model->getAllInteresByPersona(NULL)
+            'model' => $mod_PersForm->getAllPersonaFormGrid(NULL, true),            
         ]);
     }
 

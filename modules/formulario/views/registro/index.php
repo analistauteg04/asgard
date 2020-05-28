@@ -21,12 +21,13 @@ use app\widgets\PbSearchBox\PbSearchBox;
                 'placeHolder' => Yii::t("accion","Search").": ".Yii::t("formulario", "Names").", ".Yii::t("formulario", 'Last Names').", ".Yii::t("formulario", "Dni").", ".Yii::t("perfil", 'Email'),
                 'controller' => '',
                 'callbackListSource' => 'searchModules',
-                'callbackListSourceParams' => ["'boxgrid'","'grid_personaext_list'"],
+                'callbackListSourceParams' => ["'boxgrid'","'grid_personaform_list'"],
             ]);
         ?>
     </div>
 </div>
 <br />
 <?=
-    $this->render('index-grid', ['model' => $model, 'dataInteres' => $dataInteres]);
+    $this->render('index-grid', 
+            ['model' => $model, ]);
 ?>

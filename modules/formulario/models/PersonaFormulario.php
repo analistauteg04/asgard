@@ -1,6 +1,7 @@
 <?php
 
 namespace app\modules\formulario\models;
+use \yii\data\ArrayDataProvider;
 
 use Yii;
 
@@ -200,5 +201,64 @@ class PersonaFormulario extends \yii\db\ActiveRecord
         $command->bindParam(":pfor_estado", $estado, \PDO::PARAM_STR);      
         $command->execute();
         return $con->getLastInsertID();
+    }
+    
+     /**
+     * Function getAllPersonaFormGrid
+     * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>;
+     * @property       
+     * @return  
+     */
+    public function getAllPersonaFormGrid($search = NULL, $dataProvider = false){        
+        $con = \Yii::$app->db_externo;
+        $con3 = \Yii::$app->db_academico;
+        $con2 = \Yii::$app->db;
+        $search_cond = "%".$search."%";
+        $str_search = "";
+        if(isset($search)){
+            $str_search  = "(a.pfor_nombres like :search OR ";
+            $str_search .= "a.pfor_apellidos like :search OR ";
+            $str_search .= "a.pfor_identificacion like :search OR ";
+            $str_search .= "a.pfor_correo like :search) AND ";
+        }
+        $sql = "SELECT  a.pfor_nombres as nombres,
+                        a.pfor_apellidos as apellidos,
+                        a.pfor_identificacion as dni,
+                        a.pfor_correo as correo,
+                        ifnull(a.pfor_celular, a.pfor_telefono) as celular_telefono,		
+                        a.pfor_institucion as institucion,
+                        p.pro_nombre as provincia,
+                        c.can_nombre as canton,
+                        u.uaca_nombre as unidad,
+                        e.eaca_nombre as carrera
+                FROM    " . $con->dbname . ".persona_formulario AS a 
+                        INNER JOIN " . $con2->dbname . ".provincia AS p ON p.pro_id = a.pro_id
+                        INNER JOIN " . $con2->dbname . ".canton AS c ON c.can_id = a.can_id
+                        INNER JOIN " . $con3->dbname . ".unidad_academica AS u ON u.uaca_id = a.uaca_id
+                        INNER JOIN " . $con3->dbname . ".estudio_academico AS e ON e.eaca_id = a.eaca_id
+                WHERE   $str_search       
+                        a.pfor_estado=1 AND
+                        a.pfor_estado_logico=1 
+		ORDER BY a.pfor_id desc;";
+        
+        $comando = Yii::$app->db->createCommand($sql);
+        if(isset($search)){
+            $comando->bindParam(":search",$search_cond, \PDO::PARAM_STR);
+        }
+        $res = $comando->queryAll();
+        if($dataProvider){
+            $dataProvider = new ArrayDataProvider([
+                'key' => 'pext_id',
+                'allModels' => $res,
+                'pagination' => [
+                    'pageSize' => Yii::$app->params["pageSize"],
+                ],
+                'sort' => [
+                    'attributes' => ['Nombres', 'Apellidos', 'Dni', 'Correo', 'FechaRegistro'],
+                ],
+            ]);
+            return $dataProvider;
+        }
+        return $res;
     }
 }
