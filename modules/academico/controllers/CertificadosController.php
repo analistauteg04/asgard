@@ -230,5 +230,117 @@ class CertificadosController extends \app\components\CController {
             return;
         }
     }
+    
+    public function actionListadogenerados() {
+        $mod_certificado = new CertificadosGeneradas();
+        $mod_unidad = new UnidadAcademica();
+        $mod_modalidad = new Modalidad();
+        $modestudio = new ModuloEstudio();
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+            if (isset($data["getmodalidad"])) {
+                if (($data["unidad"] == 1) or ( $data["unidad"] == 2)) {
+                    $modalidad = $mod_modalidad->consultarModalidad($data["unidad"], 1);
+                } else {
+                    $modalidad = $modestudio->consultarModalidadModestudio();
+                }
+                $message = array("modalidad" => $modalidad);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+            }
+        }
+        $data = Yii::$app->request->get();
+        if ($data['PBgetFilter']) {
+            $arrSearch["f_ini"] = $data['f_ini'];
+            $arrSearch["f_fin"] = $data['f_fin'];
+            $arrSearch["unidad"] = $data['unidad'];
+            $arrSearch["modalidad"] = $data['modalidad'];
+            $arrSearch["search"] = $data['search'];            
+            $resp_cert = $mod_certificado->listarCertificadosGenerados($arrSearch, false,1);
+            return $this->renderPartial('_index-grid_certgen', [
+                        "model" => $resp_cert,
+            ]);
+        }
+        $model = $mod_certificado->listarCertificadosGenerados(null, false,1);
+        $arr_unidadac = $mod_unidad->consultarUnidadAcademicas();
+        $arr_modalidad = $mod_modalidad->consultarModalidad($arr_unidadac[0]["id"], 1);
+        return $this->render('index_certgen', [
+                    'model' => $model,                    
+                    'arr_unidad' => ArrayHelper::map($arr_unidadac, "id", "name"),
+                    'arr_modalidad' => ArrayHelper::map($arr_modalidad, "id", "name"),                    
+        ]);
+    }
+    
+    public function actionExpexcelcertificadogen() {
+        ini_set('memory_limit', '256M');
+        $content_type = Utilities::mimeContentType("xls");
+        $nombarch = "Report-" . date("YmdHis") . ".xls";
+        header("Content-Type: $content_type");
+        header("Content-Disposition: attachment;filename=" . $nombarch);
+        header('Cache-Control: max-age=0');
+        $colPosition = array("C", "D", "E", "F", "G", "H", "I", "J");
+        $arrHeader = array(
+            Especie::t("Especies", "Número"),
+            Especie::t("Especies", "Número Especie"),
+            Especie::t("Especies", "Student"),
+            Especie::t("Especies", "Academic unit"),
+            academico::t("Academico", "Modality"),
+            academico::t("certificados", "Certificate Code"),
+            academico::t("certificados", "Date Generated"),
+        );
+        $mod_certificado = new CertificadosGeneradas();
+        $data = Yii::$app->request->get();
+        $arrSearch["f_ini"] = $data['f_ini'];
+        $arrSearch["f_fin"] = $data['f_fin'];
+        $arrSearch["unidad"] = $data['unidad'];
+        $arrSearch["modalidad"] = $data['modalidad'];
+        $arrSearch["search"] = $data['search'];        
 
+        $arrData = array();
+        if (empty($arrSearch)) {
+            $arrData = $mod_certificado->listarCertificadosGenerados(array(), true,0);
+        } else {
+            $arrData = $mod_certificado->listarCertificadosGenerados($arrSearch, true,0);
+        }
+        $nameReport = certificados::t("certificados", "List of generated certificate");
+        Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
+        exit;
+    }   
+    
+    public function actionExppdfcertificadogen() {
+        $report = new ExportFile();
+        $arrHeader = array(
+            Especie::t("Especies", "Número"),
+            Especie::t("Especies", "Número Especie"),
+            Especie::t("Especies", "Student"),
+            Especie::t("Especies", "Academic unit"),
+            academico::t("Academico", "Modality"),
+            academico::t("certificados", "Certificate Code"),
+            academico::t("certificados", "Date Generated"),
+        );
+        $mod_certificado = new CertificadosGeneradas();
+        $data = Yii::$app->request->get();
+        $arrSearch["f_ini"] = $data['f_ini'];
+        $arrSearch["f_fin"] = $data['f_fin'];
+        $arrSearch["unidad"] = $data['unidad'];
+        $arrSearch["modalidad"] = $data['modalidad'];
+        $arrSearch["search"] = $data['search'];
+        
+        $arrData = array();
+        if (empty($arrSearch)) {
+            $arrData = $mod_certificado->listarCertificadosGenerados(array(), true,0);
+        } else {
+            $arrData = $mod_certificado->listarCertificadosGenerados($arrSearch, true,0);
+        }
+
+        $this->view->title = certificados::t("certificados", "List of generated certificate"); // Titulo del reporte                
+        $report->orientation = "L"; // tipo de orientacion L => Horizontal, P => Vertical
+        $report->createReportPdf(
+                $this->render('exportpdf', [
+                    'arr_head' => $arrHeader,
+                    'arr_body' => $arrData
+                ])
+        );
+        $report->mpdf->Output('Reporte_' . date("Ymdhis") . ".pdf", ExportFile::OUTPUT_TO_DOWNLOAD);
+        return;
+    }
 }

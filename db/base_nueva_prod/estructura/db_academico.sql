@@ -1658,8 +1658,8 @@ CREATE TABLE `certificados_generadas` (
   `egen_id` bigint(20) not null,
   `cgen_codigo` varchar(100) not null,
   `cgen_observacion` text,
-  `cgen_fecha_codigo_generado` timestamp DEFAULT NULL,
-  `cgen_fecha_certificado_subido` timestamp DEFAULT NULL,
+  `cgen_fecha_codigo_generado` timestamp null DEFAULT NULL,
+  `cgen_fecha_certificado_subido` timestamp null DEFAULT NULL,
   `cgen_fecha_caducidad` date DEFAULT NULL,
   `cgen_ruta_archivo_pdf` varchar(500) DEFAULT NULL,
   `cgen_estado_certificado` varchar(1) NOT NULL, -- null pendiente, 1 codigo generado, 2 certificado generado 
