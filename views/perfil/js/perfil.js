@@ -192,12 +192,12 @@ function saveCropImage() {
     arrParams.y = objCropImg.y;
     arrParams.w = objCropImg.w;
     arrParams.h = objCropImg.h;
-    var link = $('#txth_base').val() + "/perfil/guardartab1";
+    var link = $('#txth_base').val() + "/perfil/savepicture";
     requestHttpAjax(link, arrParams, function(response) {
         showAlert(response.status, response.label, response.message);
         if (response.status == "OK") {
             parent.setTimeout(function() {
-                parent.window.location.href = $('#txth_base').val() + "/perfil/savepicture";
+                parent.window.location.href = $('#txth_base').val() + "/perfil/update";
             }, 3000);
         }
     }, true);
