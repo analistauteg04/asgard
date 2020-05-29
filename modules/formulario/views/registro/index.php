@@ -9,25 +9,24 @@ use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 use app\widgets\PbSearchBox\PbSearchBox;
+use app\modules\academico\Module as academico;
+academico::registerTranslations();
 ?>
 
-<div class="row">
-    <div class="col-md-6">
-        <?= 
-            PbSearchBox::widget([
-                'boxId' => 'boxgrid',
-                'type' => 'searchBox',
-                'boxLabel' => Yii::t("accion","Search"),
-                'placeHolder' => Yii::t("accion","Search").": ".Yii::t("formulario", "Names").", ".Yii::t("formulario", 'Last Names').", ".Yii::t("formulario", "Dni").", ".Yii::t("perfil", 'Email'),
-                'controller' => '',
-                'callbackListSource' => 'searchModules',
-                'callbackListSourceParams' => ["'boxgrid'","'grid_personaform_list'"],
+<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
+    <form class="form-horizontal">
+        <?=
+        $this->render('index-search', [                       
+            'arr_unidad' => $arr_unidad,
+            'arr_carrera_prog' => $arr_carrera_prog,            
             ]);
         ?>
-    </div>
+    </form>
 </div>
-<br />
-<?=
-    $this->render('index-grid', 
-            ['model' => $model, ]);
-?>
+<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
+    <?=
+    $this->render('index-grid', [
+        'model' => $model,             
+        ]);
+    ?>
+</div>

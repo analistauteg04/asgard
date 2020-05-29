@@ -10,7 +10,7 @@ academico::registerTranslations();
 
 <?=
     PbGridView::widget([
-        'id' => 'grid_personaform_list',
+        'id' => 'PBgrid_personaform',
         'showExport' => true,
         'fnExportEXCEL' => "exportExcel",
         'fnExportPDF' => "exportPdf",
@@ -67,7 +67,12 @@ academico::registerTranslations();
                 'attribute' => 'Carrera',
                 'header' => academico::t("Academico", "Career/Program"),
                 'value' => 'carrera',
-            ],            
+            ],  
+            [
+                'attribute' => 'Fecha',
+                'header' => Yii::t("formulario", "Registration Date"),
+                'value' => 'fecha_registro',
+            ],  
         ],
     ])
 ?>

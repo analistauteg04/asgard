@@ -4,8 +4,10 @@ namespace app\modules\formulario\controllers;
 
 use Yii;
 use app\modules\formulario\models\PersonaFormulario;
+use yii\helpers\ArrayHelper;
 use app\models\ExportFile;
 use app\models\Utilities;
+use app\modules\academico\models\UnidadAcademica;
 //use app\modules\piensaecuador\Module as piensaecuador;
 //piensaecuador::registerTranslations();
 
@@ -13,16 +15,36 @@ class RegistroController extends \app\components\CController {
 
     public function actionIndex() {
         $mod_PersForm = new PersonaFormulario();
+        $mod_unidad = new UnidadAcademica();
         if (Yii::$app->request->isAjax) {
-            $data = Yii::$app->request->get();
-            if (isset($data["search"])) {
-                return $this->renderPartial('index-grid', [
-                    "model" => $mod_PersForm->getAllPersonaFormGrid($data["search"], true),                   
-                ]);
-            }
+            $data = Yii::$app->request->post();
+            if (isset($data["getcarrera"])) {
+                $uaca_id = $data["uaca_id"];
+                $carrera_programa = $mod_PersForm->consultarCarreraProgXUnidad($uaca_id);   
+                $message = array("carr_prog" => $carrera_programa);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);                
+            }                               
+        }        
+            
+        $data = Yii::$app->request->get();
+        if ($data['PBgetFilter']) {
+            $arrSearch["f_ini"] = $data['f_ini'];
+            $arrSearch["f_fin"] = $data['f_fin'];
+            $arrSearch["unidad"] = $data['unidad'];
+            $arrSearch["carrera"] = $data['carrera'];
+            $arrSearch["search"] = $data['search'];            
+            $respForm = $mod_PersForm->getAllPersonaFormGrid($arrSearch, false);
+            return $this->renderPartial('index-grid', [
+                        "model" => $respForm,
+            ]);
         }
+        
+        $arr_unidad_Uteg = $mod_unidad->consultarUnidadAcademicasxUteg();   
+        $arr_carrera_prog = $mod_PersForm->consultarCarreraProgXUnidad(1); 
         return $this->render('index', [
-            'model' => $mod_PersForm->getAllPersonaFormGrid(NULL, true),            
+            'model' => $mod_PersForm->getAllPersonaFormGrid(NULL, false),   
+            "arr_unidad" => ArrayHelper::map($arr_unidad_Uteg, "id", "name"),
+            "arr_carrera_prog" => ArrayHelper::map($arr_carrera_prog, "id", "name"),
         ]);
     }
 
