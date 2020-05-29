@@ -3,6 +3,8 @@
 namespace app\controllers;
 
 use Yii;
+use app\modules\academico\models\Estudiante;
+use app\modules\academico\models\Profesor;
 use app\models\Etnia;
 use app\models\Pais;
 use app\models\Provincia;
@@ -29,6 +31,9 @@ use yii\helpers\VarDumper;
  * @author Diana Lopez
  */
 class PerfilController extends \app\components\CController {
+
+    protected $widthImg = "147";
+    protected $heightImg = "209";
 
     public function actionUpdate() {
         $mod_areapais = new Pais();
@@ -86,7 +91,7 @@ class PerfilController extends \app\components\CController {
         $respotraetnia = $modpersona->consultarOtraetnia($per_id);
 
         if (empty($respPersona['per_foto'])) {
-            $respPersona['per_foto'] = '/uploads/ficha/silueta_default.jpg';
+            $respPersona['per_foto'] = '/uploads/ficha/silueta_default.jpeg';
         }
 
         return $this->render('update', [
@@ -110,6 +115,8 @@ class PerfilController extends \app\components\CController {
                     "respPerCorInstitucional" => $respPerCorInstitucional,
                     "respContGeneral" => $respContGeneral,
                     "respotraetnia" => $respotraetnia,
+                    "widthImg" => $this->widthImg,
+                    "heightImg" => $this->heightImg,
         ]);
     }
 
@@ -118,16 +125,43 @@ class PerfilController extends \app\components\CController {
         //error_log("Entro a log");        
         $modpersona = new Persona(); //ExpedienteProfesor();
         $per_id = Yii::$app->session->get("PB_perid");
+
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
+            if ($data["crop_file"]) {
+                try{
+                    $src = Yii::$app->basePath . Yii::$app->params["documentFolder"] . "ficha/" . $per_id . "/doc_foto_per_" . $per_id . ".jpeg";
+                    $targ_w = $this->widthImg;
+                    $targ_h = $this->heightImg;
+                    $jpeg_quality = 90;
 
+                    $img_r = imagecreatefromjpeg($src);
+                    $dst_r = ImageCreateTrueColor( $targ_w, $targ_h );
+
+                    imagecopyresampled($dst_r,$img_r,0,0,$data['x'],$data['y'],$targ_w,$targ_h,$data['w'],$data['h']);
+
+                    imagejpeg($dst_r,$src,$jpeg_quality);
+                    $message = array(
+                        "wtmessage" => Yii::t("notificaciones", "La infomación ha sido grabada."),
+                        "title" => Yii::t('jslang', 'Success'),
+                    );
+                    return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Success"), false, $message);
+                }catch(Exception $ex){
+                    $message = array(
+                        "wtmessage" => Yii::t("notificaciones", "Error al Procesar Imagen."),
+                        "title" => Yii::t('jslang', 'Success'),
+                    );
+                    return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), false, $message);
+                }
+                
+            }
             if ($data["upload_file"]) {
+                $files = $_FILES[key($_FILES)];
                 if (empty($_FILES)) {
                     echo json_encode(['error' => Yii::t("notificaciones", "Error to process File {file}. Try again.", ['{file}' => basename($files['name'])])]);
                     return;
                 }
                 //Recibe Paramentros
-                $files = $_FILES[key($_FILES)];
                 $arrIm = explode(".", basename($files['name']));
                 $typeFile = strtolower($arrIm[count($arrIm) - 1]);
                 $dirFileEnd = Yii::$app->params["documentFolder"] . "ficha/" . $per_id . "/" . $data["name_file"] . "_per_" . $per_id . ".jpeg";
@@ -262,14 +296,14 @@ class PerfilController extends \app\components\CController {
                         "wtmessage" => Yii::t("notificaciones", "La infomación ha sido grabada."),
                         "title" => Yii::t('jslang', 'Success'),
                     );
-                    return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                    return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Success"), false, $message);
                 } else {
                     $transaction->rollback();
                     $message = array(
                         "wtmessage" => Yii::t("notificaciones", "Error al grabar."),
                         "title" => Yii::t('jslang', 'Success'),
                     );
-                    return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                    return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), false, $message);
                 }
             } catch (Exception $ex) {
                 $transaction->rollback();
@@ -277,41 +311,106 @@ class PerfilController extends \app\components\CController {
                     "wtmessage" => Yii::t("notificaciones", "Error al grabar."),
                     "title" => Yii::t('jslang', 'Success'),
                 );
-                return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), false, $message);
             }
         }
+
+    }
+
+    public function actionSetpicture(){
+        $data = Yii::$app->request->get();
+        $per_id = Yii::$app->session->get("PB_perid");
+        $model_persona = Persona::findOne($per_id);
+        if(isset($data['popup']) && $data['popup'] == true){
+            return $this->render('crop', [
+                'per_foto' => $model_persona->per_foto,
+                "widthImg" => $this->widthImg,
+                "heightImg" => $this->heightImg,
+            ]);
+        }
+    }
+
+    public function actionSavepicture(){
+        $per_id = Yii::$app->session->get("PB_perid");
+
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+            if ($data["crop_file"]) {
+                try{
+                    $src = Yii::$app->basePath . Yii::$app->params["documentFolder"] . "ficha/" . $per_id . "/doc_foto_per_" . $per_id . ".jpeg";
+                    $targ_w = $this->widthImg;
+                    $targ_h = $this->heightImg;
+                    $jpeg_quality = 90;
+
+                    $img_r = imagecreatefromjpeg($src);
+                    $dst_r = ImageCreateTrueColor( $targ_w, $targ_h );
+
+                    imagecopyresampled($dst_r,$img_r,0,0,$data['x'],$data['y'],$targ_w,$targ_h,$data['w'],$data['h']);
+
+                    imagejpeg($dst_r,$src,$jpeg_quality);
+                    $message = array(
+                        "wtmessage" => Yii::t("notificaciones", "La infomación ha sido grabada."),
+                        "title" => Yii::t('jslang', 'Success'),
+                    );
+                    return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Success"), false, $message);
+                }catch(Exception $ex){
+                    $message = array(
+                        "wtmessage" => Yii::t("notificaciones", "Error al Procesar Imagen."),
+                        "title" => Yii::t('jslang', 'Success'),
+                    );
+                    return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), false, $message);
+                }
+                
+            }
+        }
+
     }
 
     public function actionCredencial(){
         $iduser = Yii::$app->session->get('PB_iduser', FALSE);
         $idper  = Yii::$app->session->get('PB_perid', FALSE);
+        $idemp  = Yii::$app->session->get('PB_idempresa', FALSE);
         
         if (Yii::$app->session->get('PB_isuser')) {
+            $modelPersona = Persona::findOne($idper);
+            $modelEstudiante = Estudiante::findOne(['per_id' => $idper, 'est_estado_logico' => '1', 'est_estado' => '1']);
+            $modelDocente = Profesor::findOne(['per_id' => $idper, 'pro_estado_logico' => '1', 'pro_estado' => '1']);
+            $isEstudiante = false;
+            $isDocente = false;
+            $images_dir = 'rounded_corners';
+            $corner_radius = 20; // El radio de la esquina redondeada se establece en 20px por defecto
             $foto_archivo = Yii::$app->basePath . Yii::$app->params["documentFolder"] . "ficha/" . $idper . "/doc_foto_per_" . $idper . ".jpeg";
-            $bg_credencial = Yii::$app->basePath . Yii::$app->params["documentFolder"] . "ficha/credencial-admin-front.jpeg";
-            $bg_credencial = Yii::$app->basePath . Yii::$app->params["documentFolder"] . "ficha/credencial-estudiante-front.jpeg";
-            $foto_archivo = Yii::$app->basePath . Yii::$app->params["documentFolder"] . "ficha/test.jpeg";
+            $bg_credencial = Yii::$app->basePath . Yii::$app->params["documentFolder"] . "Credencial/credencial-admin-front.jpeg";
+            $bb_credencial = Yii::$app->basePath . Yii::$app->params["documentFolder"] . "Credencial/credencial-admin-back.jpeg";
+            $marginPhoto = 24; // Para credenciales Administrativas
+            $image_rounded = Yii::$app->basePath . Yii::$app->params["documentFolder"] . "Credencial/$images_dir/rounded_corner_".$corner_radius."px.b.png";
+            if($modelEstudiante){
+                $marginPhoto = 31; // Para credenciales Estudiantes
+                $image_rounded = Yii::$app->basePath . Yii::$app->params["documentFolder"] . "Credencial/$images_dir/rounded_corner_".$corner_radius."px.w.png";
+                $bg_credencial = Yii::$app->basePath . Yii::$app->params["documentFolder"] . "Credencial/credencial-estudiante-front.jpeg";
+                $bb_credencial = Yii::$app->basePath . Yii::$app->params["documentFolder"] . "Credencial/credencial-estudiante-back.jpeg";
+                $isEstudiante = true;
+            }
+            if($modelDocente){
+                $bg_credencial = Yii::$app->basePath . Yii::$app->params["documentFolder"] . "Credencial/credencial-docente-front.jpeg";
+                $bb_credencial = Yii::$app->basePath . Yii::$app->params["documentFolder"] . "Credencial/credencial-docente-back.jpeg";
+                $isDocente = true;
+            }
+            
             if(is_file($foto_archivo)){
                 // mostrar los archivos
-                Header("Content-type: image/jpeg");
-                
+                //Header("Content-type: image/png");
+                $size = [$this->widthImg,$this->heightImg];
                 $im1 = imagecreatefromjpeg($bg_credencial); //image 325 x 523 
-                $im2 = imagecreatefromjpeg($foto_archivo); //image 160 x 160 
-
-                //redondeando esquinas
-                $corner_radius = 20; // El radio de la esquina redondeada se establece en 20px por defecto
+                $im2 = imagecreatefromjpeg($foto_archivo); //image 147 x 209 
+                $image = ImageCreateTrueColor($size[0], $size[1]);
+                imagecopyresampled($image,$im2,0,0,0,0,$size[0], $size[1], $size[0], $size[1]);
+                
                 $angle = 0; // The default angle is set to 0º
                 $topleft = true; // La esquina superior izquierda se muestra por defecto
                 $bottomleft = true; // La esquina inferior izquierda se muestra por defecto
                 $bottomright = true; // La esquina inferior derecha se muestra por defecto
                 $topright = true; // La esquina superior derecha se muestra por defecto
-                $images_dir = 'rounded_corners';
-                $bgColor = "#e6edf5"; //rgb(230,237,245)
-                $marginPhoto = 31; // Para credenciales Estudiantes
-                //$marginPhoto = 24; // Para credenciales Administrativas
-                $bgColorAdmin = "#e8eff7"; //rgb(232,239,247)
-                //$image_rounded = Yii::$app->basePath . Yii::$app->params["documentFolder"] . "ficha/$images_dir/rounded_corner_".$corner_radius."px.b.png";
-                $image_rounded = Yii::$app->basePath . Yii::$app->params["documentFolder"] . "ficha/$images_dir/rounded_corner_".$corner_radius."px.w.png";
                 $corner_source = imagecreatefrompng($image_rounded);
                 $corner_width = imagesx($corner_source);  
                 $corner_height = imagesy($corner_source);  
@@ -319,9 +418,9 @@ class PerfilController extends \app\components\CController {
                 ImageCopyResampled($corner_resized, $corner_source, 0, 0, 0, 0, $corner_radius, $corner_radius, $corner_width, $corner_height);
                 $corner_width = imagesx($corner_resized);  
                 $corner_height = imagesy($corner_resized);  
-                $image = imagecreatetruecolor($corner_width, $corner_height);  
-                $image = imagecreatefromjpeg($foto_archivo);
-                $size = getimagesize($foto_archivo);
+                //$image = imagecreatetruecolor($corner_width, $corner_height);  
+                //$image = imagecreatefromjpeg($foto_archivo); //image 147 x 209 
+                //$size = getimagesize($foto_archivo);
                 $white = ImageColorAllocate($image,255,255,255);
                 $black = ImageColorAllocate($image,0,0,0);
 
@@ -364,86 +463,143 @@ class PerfilController extends \app\components\CController {
                 $image_rn = imagerotate($image, $angle, $white);
 
                 // Texto
+                $ttf_lightS = Yii::$app->basePath . Yii::$app->params["documentFolder"] . "fonts/Gotham-Light.otf";
                 $ttf_light = Yii::$app->basePath . Yii::$app->params["documentFolder"] . "fonts/Gotham-Book.otf";
                 $ttf_bold = Yii::$app->basePath . Yii::$app->params["documentFolder"] . "fonts/Gotham-Medium.ttf";
-                $colorB = imagecolorallocate($im1, 0, 84, 139);//#00548b
+                $ttf_boldH = Yii::$app->basePath . Yii::$app->params["documentFolder"] . "fonts/Gotham-Bold.ttf";
+                $ttf_arial = Yii::$app->basePath . Yii::$app->params["documentFolder"] . "fonts/Arial.ttf";
+                $ttf_arialB = Yii::$app->basePath . Yii::$app->params["documentFolder"] . "fonts/Arial-Bold.ttf";
+                $colorB = imagecolorallocate($im1, 255, 255, 255);//#FFFFFF
+                if($isEstudiante){
+                    $colorB = imagecolorallocate($im1, 0, 84, 139);//#00548b
+                }
+                
                 $colorW = imagecolorallocate($im1, 255, 255, 255);//#FFFFFF
                 $font_size = 11;
                 $angulo = 0;
                 $posX = 12;
                 $posY = 370;
 
-                //Imagen, tamaño, ángulo, x, y, color, fuente, texto
-                imagefttext($im1, $font_size, $angulo, $posX, $posY, $colorB, $ttf_light, "Antonio Leyton Cadena");
-                imagefttext($im1, $font_size, $angulo, $posX, 390, $colorB, $ttf_light, "Mercadotecnia");
-                imagefttext($im1, $font_size, $angulo, $posX, 410, $colorB, $ttf_light, "Presencial");
+                // Get image dimensions
+                $width = imagesx($im1);
+                $height = imagesy($im1);
+                // Get center coordinates of image
+                $centerX = $width / 2;
+                $centerY = $height / 2;
 
-                // Periodo
-                $periodo = date("Y") . " - " . ( 1 + date("Y"));
+                $nombre = $modelPersona->per_pri_nombre . " " . $modelPersona->per_pri_apellido . " " . $modelPersona->per_seg_apellido; // limite 30 caracteres
+                if(strlen($nombre) > 30){
+                    $nombre = $modelPersona->per_pri_nombre . " " . $modelPersona->per_pri_apellido; 
+                }
+                //$nombre = str_replace(array("Á","É", "Í", "Ó", "Ú"), array("A", "E", "I", "O", "U"), $nombre);
+                $carrera = ""; // limite 30 caracteres
+                $modalidad = ""; // limite 30 caracteres
+                $cargo = ""; // limite 30 caracteres
+                $matricula = "";
+                $ttf_font = $ttf_boldH;
+                $widthDifference = 7;
+                if($isEstudiante){
+                    $dataCarrera = $modelEstudiante->getInfoCarreraEstudiante($modelEstudiante->est_id, $idemp);
+                    $ttf_font = $ttf_light;
+                    $widthDifference = 0;
+                    $carrera = $dataCarrera['Carrera']; // limite 30 caracteres
+                    if(strlen($carrera) > 30){
+                        $carrera = substr($carrera, 0, 31) . ".";
+                    }
+                    $modalidad = $dataCarrera['Modalidad']; // limite 30 caracteres
+                    $matricula = $modelEstudiante->est_matricula;
+                }
+
+                // Get size of text
+                list($left, $bottom, $right, , , $top) = imageftbbox($font_size, $angulo, $ttf_font, strtoupper($nombre));
+                // Determine offset of text
+                $left_offset = ($right - $left) / 2;
+                $top_offset = ($bottom - $top) / 2;
+                // Generate coordinates
+                $x = $centerX - $left_offset;
+                $y = $centerY - $top_offset;
+                // Add text to image
                 //Imagen, tamaño, ángulo, x, y, color, fuente, texto
-                imagefttext($im1, 19, 0, 15, 495, $colorW, $ttf_bold, $periodo);
+                imagefttext($im1, $font_size, $angulo, $x, $posY + $widthDifference, $colorB, $ttf_font, strtoupper($nombre));
+                
+                if(!$isEstudiante && !$isDocente){
+                    $cargo = ""; ///********************************************************* */ LLENAR CARGO
+                    // Get size of text
+                    list($left, $bottom, $right, , , $top) = imageftbbox($font_size, $angulo, $ttf_font, strtoupper($cargo));
+                    // Determine offset of text
+                    $left_offset = ($right - $left) / 2;
+                    $top_offset = ($bottom - $top) / 2;
+                    // Generate coordinates
+                    $x = $centerX - $left_offset;
+                    $y = $centerY - $top_offset;
+                    // Add text to image
+                    imagefttext($im1, $font_size, $angle, $x, 397, $colorB, $ttf_font, strtoupper($cargo));
+                }
+                
+                if($isEstudiante){
+                    // Get size of text
+                    list($left, $bottom, $right, , , $top) = imageftbbox($font_size, $angulo, $ttf_light, $carrera);
+                    // Determine offset of text
+                    $left_offset = ($right - $left) / 2;
+                    $top_offset = ($bottom - $top) / 2;
+                    // Generate coordinates
+                    $x = $centerX - $left_offset;
+                    $y = $centerY - $top_offset;
+                    // Add text to image
+                    imagefttext($im1, $font_size, $angulo, $x, 390, $colorB, $ttf_light, $carrera);
+                
+                
+                    // Get size of text
+                    list($left, $bottom, $right, , , $top) = imageftbbox($font_size, $angulo, $ttf_light, $modalidad);
+                    // Determine offset of text
+                    $left_offset = ($right - $left) / 2;
+                    $top_offset = ($bottom - $top) / 2;
+                    // Generate coordinates
+                    $x = $centerX - $left_offset;
+                    $y = $centerY - $top_offset;
+                    // Add text to image
+                    imagefttext($im1, $font_size, $angle, $x, 410, $colorB, $ttf_light, $modalidad);
+
+                    // Periodo
+                    $periodo = date("Y") . " - " . ( 1 + date("Y"));
+                    // Get size of text
+                    list($left, $bottom, $right, , , $top) = imageftbbox(19, $angulo, $ttf_light, $periodo);
+                    // Determine offset of text
+                    $left_offset = ($right - $left) / 2;
+                    $top_offset = ($bottom - $top) / 2;
+                    // Generate coordinates
+                    $x = $centerX - $left_offset;
+                    $y = $centerY - $top_offset;
+                    //Imagen, tamaño, ángulo, x, y, color, fuente, texto
+                    imagefttext($im1, 19, 0, 85, 498, $colorW, $ttf_bold, $periodo);
+                }
 
                 // Crear la imagen final
                 //imagejpeg($image);
                 imagecopy($im1, $image_rn, (imagesx($im1)/2)-(imagesx($image_rn)/2), (imagesy($im1)/2)-(imagesy($image_rn)/2)-$marginPhoto, 0, 0, imagesx($image_rn), imagesy($image_rn));
                 
-                //imagecopy($im1, $im2, (imagesx($im1)/2)-(imagesx($im2)/2), (imagesy($im1)/2)-(imagesy($im2)/2)-32, 0, 0, imagesx($im2), imagesy($im2));
-                //imagejpeg($im,"test4.jpg",90);
-                imagepng($im1);
+                $tempFile = Utilities::createTemporalFile("test");
+                imagepng($im1, $tempFile);
                 imagedestroy($im1);
-                imagedestroy($im2);
                 imagedestroy($image_rn);
-                exit();
+                $front_file = file_get_contents($tempFile);
+                $back_file = file_get_contents($bb_credencial);
+                Utilities::removeTemporalFile($tempFile);
+                return $this->render('credencial', [
+                    'nombre_estudiante' => $nombre,
+                    'carrera' => $carrera,
+                    'modalidad' => $modalidad,
+                    'matricula' => $matricula,
+                    'img_front' => 'data:image/png;base64,' . base64_encode($front_file),
+                    'img_back' => 'data:image/png;base64,' . base64_encode($back_file),
+                    'isEstudiante' => $isEstudiante,
+                    'isDocente' => $isDocente,
+                    'cargo' => $cargo,
+                ]);
             }else{
-                // no existe hay q crear la imagen base
-                Header("Content-type: image/jpeg");
-                $cadena = "2020 - 2021";
-                $im      = imagecreatefromjpeg($foto_archivo);
-                $naranja = imagecolorallocate($im, 220, 210, 60);
-                $px      = (imagesx($im) - 7.5 * strlen($cadena)) / 2;
-                imagestring($im, 3, $px, 9, $cadena, $naranja);
-                imagejpeg($im);
-                imagedestroy($im);
-                exit();
+                Yii::$app->session->setFlash('error',"<h4>".Yii::t('notificaciones', 'Error')."</h4>".Yii::t("perfil","Please upload your picture to your Profile."));
+                return $this->redirect('update');
             }
-            /*if (preg_match("/^\/uploads\//", $route)) {
-                $url_image = Yii::$app->basePath . $route;
-                $arrIm = explode(".", $url_image);
-                $typeImage = $arrIm[count($arrIm) - 1];
-                if (file_exists($url_image)) {
-                    if (strtolower($typeImage) == "png") {
-                        Header("Content-type: image/png");
-                        $im = imagecreatefromPng($url_image);
-                        ImagePng($im); // Mostramos la imagen
-                        ImageDestroy($im); // Liberamos la memoria que ocupaba la imagen
-                    } elseif (strtolower($typeImage) == "jpg" || strtolower($typeImage) == "jpeg") {
-                        Header("Content-type: image/jpeg");
-                        $im = imagecreatefromJpeg($url_image);
-                        ImageJpeg($im); // Mostramos la imagen
-                        ImageDestroy($im); // Liberamos la memoria que ocupaba la imagen
-                    } elseif (strtolower($typeImage) == "pdf") {
-                        Header("Content-type: application/pdf");
-                        return file_get_contents($url_image);
-                    }
-                    exit();
-                }
-            }*/
         }
-        /* Crear una imagen en blanco */
-        
-
-/*
-        $im = imagecreatetruecolor(90, 90);
-        $fondo = imagecolorallocate($im, 255, 255, 255);
-        $ct = imagecolorallocate($im, 0, 0, 0);
-        imagefilledrectangle($im, 0, 0, 150, 30, $fondo);
-// Imprimir un mensaje de error
-        imagestring($im, 1, 5, 5, Yii::t('jslang', 'Bad Request') . ": " . $route, $ct);
-        ImagePng($im); // Mostramos la imagen
-        ImageDestroy($im); // Liberamos la memoria que ocupaba la imagen
-        exit();
-*/
-        
     }
-
 }

@@ -9,6 +9,7 @@
 namespace app\models;
 
 use Yii;
+use yii\base\Exception;
 use yii\helpers\Url;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
@@ -57,7 +58,7 @@ class Utilities {
         }
         try {
             $mail->send();
-        } catch (Exception $ex) {
+        } catch (\Exception $ex) {
             self::putMessageLogFile($ex);
         }
     }
@@ -425,6 +426,14 @@ class Utilities {
             }
         }
     }
+
+    public static function base64_url_encode($input) {
+        return strtr(base64_encode($input), '+/=', '._-');
+    }
+    
+    public static function base64_url_decode($input) {
+        return base64_decode(strtr($input, '._-', '+/='));
+    }
     
     public static function generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition = array(), $typeExp = "Xls", $emp_id = null){
         if (is_null($emp_id)) {
@@ -560,7 +569,7 @@ class Utilities {
             }
             $objWriter = IOFactory::createWriter($objPHPExcel, $typeExp);
             $objWriter->save('php://output');
-        }catch(Exception $e){
+        }catch(\Exception $e){
             echo Yii::t("reporte","Error to export Excel");
         }
 
@@ -590,7 +599,7 @@ class Utilities {
             $dataTable->showHeaders()->addRows($data);
             return $dataTable->fillXLSX($uriFile);//attachToFile($uriFile, $out, false);
             
-        }catch(Exception $e){
+        }catch(\Exception $e){
             echo Yii::t("reporte","Error to export Excel");
         }
     }

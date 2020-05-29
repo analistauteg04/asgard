@@ -539,6 +539,7 @@ return [
     "Save" => "Grabar",
     "Save Profile" => "Guardar Perfil",
     "Save in Mangage Contact" => "Guardar en contacto gestion",
+    "Scan QR Code" => "QR para ver su Credencial",
     "Schedule" => "Horario",
     "Schedule Contact" => "Horario Contacto",
     "Scholarship" => "Beca",
