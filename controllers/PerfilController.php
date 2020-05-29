@@ -225,7 +225,7 @@ class PerfilController extends \app\components\CController {
             if (isset($data["foto_persona"]) && $data["foto_persona"] != "") {
                 $arrIm = explode(".", basename($data["foto_persona"]));
                 $typeFile = strtolower($arrIm[count($arrIm) - 1]);
-                $foto_archivo = Yii::$app->params["documentFolder"] . "ficha/" . $per_id . "/doc_foto_per_" . $per_id . "." . $typeFile;
+                $foto_archivo = Yii::$app->params["documentFolder"] . "ficha/" . $per_id . "/doc_foto_per_" . $per_id . ".jpeg";
             }
             $con = \Yii::$app->db;
             $transaction = $con->beginTransaction();
