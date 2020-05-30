@@ -32,11 +32,20 @@ function actualizarGrid() {
 }
 
 function exportExcel() {
-    var search = $("#boxgrid").val();
-    window.location.href = $('#txth_base').val() + "/piensaecuador/registro/expexcel?search=" + search;
+    var search = $('#txt_buscarData').val();
+    var f_ini = $('#txt_fecha_ini').val();
+    var f_fin = $('#txt_fecha_fin').val();
+    var unidad = $('#cmb_unidad').val();
+    var carrera = $('#cmb_carrera_programa').val();  
+    window.location.href = $('#txth_base').val() + "/formulario/registro/expexcel?search=" + search + "&f_ini=" + f_ini + "&f_fin=" + f_fin + '&unidad=' + unidad + "&carrera=" + carrera;
 }
 
 function exportPdf() {
-    var search = $("#boxgrid").val();
-    window.location.href = $('#txth_base').val() + "/piensaecuador/registro/exppdf?pdf=1&search=" + search;
+    var search = $('#txt_buscarData').val();
+    var f_ini = $('#txt_fecha_ini').val();
+    var f_fin = $('#txt_fecha_fin').val();
+    var unidad = $('#cmb_unidad').val();
+    var carrera = $('#cmb_carrera_programa').val();    
+
+    window.location.href = $('#txth_base').val() + "/formulario/registro/exppdf?pdf=1&search=" + search + "&f_ini=" + f_ini + "&f_fin=" + f_fin + '&unidad=' + unidad + "&carrera=" + carrera;
 }

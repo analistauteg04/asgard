@@ -8,8 +8,8 @@ use yii\helpers\ArrayHelper;
 use app\models\ExportFile;
 use app\models\Utilities;
 use app\modules\academico\models\UnidadAcademica;
-//use app\modules\piensaecuador\Module as piensaecuador;
-//piensaecuador::registerTranslations();
+use app\modules\academico\Module as academico;
+Academico::registerTranslations();
 
 class RegistroController extends \app\components\CController {
 
@@ -82,15 +82,14 @@ class RegistroController extends \app\components\CController {
         } else {
             $arrData = $mod_PersForm->getAllPersonaFormGrid($arrSearch, true);
         }
-        $nameReport = Yii::t("formulario", "List of Persons");
+        $nameReport = Yii::t("formulario", "Listar Registros de Ficha");
         Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
         exit;
     }
 
     public function actionExppdf() {
-        $report = new ExportFile();
-        $mod_PersForm = new PersonaFormulario();
-        $this->view->title = piensaecuador::t("interes", "Registries"); // Titulo del reporte
+        $report = new ExportFile();        
+        $this->view->title = Yii::t("formulario", "Listar Registros de Ficha"); // Titulo del reporte
         $arrHeader = array(
             Yii::t("formulario", "Names"),
             Yii::t("formulario", 'Last Names'),
@@ -104,14 +103,19 @@ class RegistroController extends \app\components\CController {
             academico::t("Academico", "Career/Program"),
             Yii::t("formulario", "Registration Date"),   
         );
-        $data = Yii::$app->request->get();
+        $mod_PersForm = new PersonaFormulario();
+        $data = Yii::$app->request->get();    
+        $arrSearch["f_ini"] = $data['f_ini'];
+        $arrSearch["f_fin"] = $data['f_fin'];
+        $arrSearch["unidad"] = $data['unidad'];
+        $arrSearch["carrera"] = $data['carrera'];
+        $arrSearch["search"] = $data['search'];      
         $arrData = array();
         if (empty($arrSearch)) {
             $arrData = $mod_PersForm->getAllPersonaFormGrid(array(), true);
         } else {
             $arrData = $mod_PersForm->getAllPersonaFormGrid($arrSearch, true);
         }
-
         $report->orientation = "L"; // tipo de orientacion L => Horizontal, P => Vertical                                
         $report->createReportPdf(
                 $this->render('exportpdf', [
@@ -121,6 +125,4 @@ class RegistroController extends \app\components\CController {
         );
         $report->mpdf->Output('Reporte_' . date("Ymdhis") . ".pdf", ExportFile::OUTPUT_TO_DOWNLOAD);
     }
-
-
 }
