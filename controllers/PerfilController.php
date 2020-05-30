@@ -128,50 +128,31 @@ class PerfilController extends \app\components\CController {
 
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
-            if ($data["crop_file"]) {
-                try{
-                    $src = Yii::$app->basePath . Yii::$app->params["documentFolder"] . "ficha/" . $per_id . "/doc_foto_per_" . $per_id . ".jpeg";
-                    $targ_w = $this->widthImg;
-                    $targ_h = $this->heightImg;
-                    $jpeg_quality = 90;
-
-                    $img_r = imagecreatefromjpeg($src);
-                    $dst_r = ImageCreateTrueColor( $targ_w, $targ_h );
-
-                    imagecopyresampled($dst_r,$img_r,0,0,$data['x'],$data['y'],$targ_w,$targ_h,$data['w'],$data['h']);
-
-                    imagejpeg($dst_r,$src,$jpeg_quality);
-                    $message = array(
-                        "wtmessage" => Yii::t("notificaciones", "La infomación ha sido grabada."),
-                        "title" => Yii::t('jslang', 'Success'),
-                    );
-                    return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Success"), false, $message);
-                }catch(Exception $ex){
-                    $message = array(
-                        "wtmessage" => Yii::t("notificaciones", "Error al Procesar Imagen."),
-                        "title" => Yii::t('jslang', 'Success'),
-                    );
-                    return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), false, $message);
-                }
-                
-            }
+            
             if ($data["upload_file"]) {
                 $files = $_FILES[key($_FILES)];
-                if (empty($_FILES)) {
+                if (!isset($files) || count($files) == 0) {
                     echo json_encode(['error' => Yii::t("notificaciones", "Error to process File {file}. Try again.", ['{file}' => basename($files['name'])])]);
                     return;
                 }
                 //Recibe Paramentros
                 $arrIm = explode(".", basename($files['name']));
                 $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                $dirCurrent = Yii::$app->params["documentFolder"] . "ficha/" . $per_id . "/" . $data["name_file"] . "_per_" . $per_id . "." . $typeFile;
                 $dirFileEnd = Yii::$app->params["documentFolder"] . "ficha/" . $per_id . "/" . $data["name_file"] . "_per_" . $per_id . ".jpeg";
                 $status = false;
                 if(strtolower($typeFile) == 'jpg' || strtolower($typeFile) == 'jpeg'){
                     $status = Utilities::moveUploadFile($files['tmp_name'], $dirFileEnd);
                 }else{
-                    $status = Utilities::changeIMGtoJPG($files['tmp_name'], $dirFileEnd);
+                    $status = Utilities::moveUploadFile($files['tmp_name'], $dirCurrent);
+                    if($status){
+                        $status = Utilities::changeIMGtoJPG($dirCurrent, $dirFileEnd);
+                    }
                 }
                 if ($status) {
+                    $modelpersona = Persona::findOne($per_id);
+                    $modelpersona->per_foto = $dirFileEnd;
+                    $modelpersona->save();
                     return true;
                 } else {
                     echo json_encode(['error' => Yii::t("notificaciones", "Error to process File {file}. Try again.", ['{file}' => basename($files['name'])])]);
@@ -225,7 +206,7 @@ class PerfilController extends \app\components\CController {
             if (isset($data["foto_persona"]) && $data["foto_persona"] != "") {
                 $arrIm = explode(".", basename($data["foto_persona"]));
                 $typeFile = strtolower($arrIm[count($arrIm) - 1]);
-                $foto_archivo = Yii::$app->params["documentFolder"] . "ficha/" . $per_id . "/doc_foto_per_" . $per_id . "." . $typeFile;
+                $foto_archivo = Yii::$app->params["documentFolder"] . "ficha/" . $per_id . "/doc_foto_per_" . $per_id . ".jpeg";
             }
             $con = \Yii::$app->db;
             $transaction = $con->beginTransaction();
@@ -321,13 +302,12 @@ class PerfilController extends \app\components\CController {
         $data = Yii::$app->request->get();
         $per_id = Yii::$app->session->get("PB_perid");
         $model_persona = Persona::findOne($per_id);
-        if(isset($data['popup']) && $data['popup'] == true){
-            return $this->render('crop', [
-                'per_foto' => $model_persona->per_foto,
-                "widthImg" => $this->widthImg,
-                "heightImg" => $this->heightImg,
-            ]);
-        }
+        $foto = Yii::$app->params["documentFolder"] . "ficha/" . $per_id . "/doc_foto_per_" . $per_id . ".jpeg";
+        return $this->render('crop', [
+            'per_foto' => $foto,
+            "widthImg" => $this->widthImg,
+            "heightImg" => $this->heightImg,
+        ]);
     }
 
     public function actionSavepicture(){

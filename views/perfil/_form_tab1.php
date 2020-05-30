@@ -197,7 +197,7 @@ use app\components\CFileInputAjax;
                                     }",
                                                         "fileuploaded" => "function (event, data, previewId, index) {
                                         $(this).parent().parent().children().first().addClass('hide');
-                                        $('#showCropPhoto').trigger('click');
+                                        location.href=$('#showCropPhoto').attr('href');
                                         var acciones = [{id: 'reloadpage', class: 'btn btn-primary', value: objLang.Accept, callback: 'reloadPage'}];
                                         //showAlert('OK', 'Success', {'wtmessage': objLang.File_uploaded_successfully__Do_you_refresh_the_web_page_, 'title': objLang.Success, 'acciones': acciones});                              
                                     }",
@@ -555,4 +555,4 @@ use app\components\CFileInputAjax;
         </div>       
     </div>
 </div>
-<a id="showCropPhoto" class="pbpopup" href="<?= Url::to(['perfil/setpicture', 'popup' => true,]) ?>" style="display: none;">go</a>
+<a id="showCropPhoto" href="<?= Url::to(['perfil/setpicture']) ?>" style="display: none;">go</a>

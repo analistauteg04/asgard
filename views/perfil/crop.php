@@ -58,6 +58,7 @@ use app\vendor\penblu\jcrop\JCrop;
     "selectBoxPosW" => $widthImg,
     "selectBoxPosH" => $heightImg,
     "callBackFn" => "getPosCoord",
+    "showFnSelect" => true,
 ]); 
 ?>
  </div>

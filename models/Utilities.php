@@ -223,6 +223,17 @@ class Utilities {
         }
     }
 
+    public static function getDocumentRoot($http = null){
+        if($http)  return Url::base(true);
+        return Url::base();
+        //Url::base('http');
+        //Url::base('https');
+    }
+
+    public static function getBaseDirRoot(){
+        return Yii::$app->basePath;
+    }
+
     /**
      * Función que cambia la extension de una imagen a jpg
      *
@@ -234,26 +245,33 @@ class Utilities {
      */
     public static function changeIMGtoJPG($dirImg, $destino = NULL) {
         $dirImg = Yii::$app->basePath . str_replace("../", "", $dirImg);
-        if (is_file($dirImg)) {
-            $arrIm = explode(".", basename($dirImg));
-            $typeImage = $arrIm[count($arrIm) - 1];
-            if (strtolower($typeImage) == "png") {
-                $image = imagecreatefrompng($dirImg);
-                $newFile = preg_replace("/\.(png|Png|PNG)$/", '.jpg', $dirImg);
-                if(isset($destino))
-                    $newFile = $destino;
-                imagejpeg($image, $newFile, "100");
-                imagedestroy($image);
-                unlink($dirImg);
-            } if(strtolower($typeImage) == "gif") {
-                $image = imagecreatefromgif($dirImg);
-                $newFile = preg_replace("/\.(gif|Gif|GIF)$/", '.jpg', $dirImg);
-                if(isset($destino))
-                    $newFile = $destino;
-                imagejpeg($image, $newFile, "100");
-                imagedestroy($image);
-                unlink($dirImg);
+        try{
+            if (is_file($dirImg)) {
+                $arrIm = explode(".", basename($dirImg));
+                $typeImage = $arrIm[count($arrIm) - 1];
+                if (strtolower($typeImage) == "png") {
+                    $image = imagecreatefrompng($dirImg);
+                    $newFile = preg_replace("/\.(png|Png|PNG)$/", '.jpeg', $dirImg);
+                    if(isset($destino))
+                        $newFile = Yii::$app->basePath . str_replace("../", "", $destino);
+                    imagejpeg($image, $newFile, "100");
+                    imagedestroy($image);
+                    unlink($dirImg);
+                    return true;
+                } if(strtolower($typeImage) == "gif") {
+                    $image = imagecreatefromgif($dirImg);
+                    $newFile = preg_replace("/\.(gif|Gif|GIF)$/", '.jpeg', $dirImg);
+                    if(isset($destino))
+                        $newFile = Yii::$app->basePath . str_replace("../", "", $destino);
+                    imagejpeg($image, $newFile, "100");
+                    imagedestroy($image);
+                    unlink($dirImg);
+                    return true;
+                }
             }
+            return false;
+        }catch(Exception $e){
+            return false;
         }
     }
     
