@@ -172,9 +172,6 @@ class PerfilController extends \app\components\CController {
                     $status = Utilities::changeIMGtoJPG($files['tmp_name'], $dirFileEnd);
                 }
                 if ($status) {
-                    $modelpersona = Persona::findOne($per_id);
-                    $modelpersona->per_foto = $dirFileEnd;
-                    $modelpersona->save();
                     return true;
                 } else {
                     echo json_encode(['error' => Yii::t("notificaciones", "Error to process File {file}. Try again.", ['{file}' => basename($files['name'])])]);
@@ -324,10 +321,9 @@ class PerfilController extends \app\components\CController {
         $data = Yii::$app->request->get();
         $per_id = Yii::$app->session->get("PB_perid");
         $model_persona = Persona::findOne($per_id);
-        $foto_archivo = Yii::$app->params["documentFolder"] . "ficha/" . $per_id . "/doc_foto_per_" . $per_id . ".jpeg";
         if(isset($data['popup']) && $data['popup'] == true){
             return $this->render('crop', [
-                'per_foto' => $foto_archivo,
+                'per_foto' => $model_persona->per_foto,
                 "widthImg" => $this->widthImg,
                 "heightImg" => $this->heightImg,
             ]);

@@ -61,7 +61,5 @@ use app\vendor\penblu\jcrop\JCrop;
 ]); 
 ?>
  </div>
- <input type="hidden" id="per_id" value="<?= Yii::$app->session->get("PB_perid"); ?>" />
- <input type="hidden" id="tmp_up" value="<?= Yii::$app->params["documentFolder"]; ?>" />
  <input type="button" class="btn btn-default" onclick="saveCropImage()" value="test" />
                                      
