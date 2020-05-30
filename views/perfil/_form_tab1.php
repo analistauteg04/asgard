@@ -556,3 +556,5 @@ use app\components\CFileInputAjax;
     </div>
 </div>
 <a id="showCropPhoto" class="pbpopup" href="<?= Url::to(['perfil/setpicture', 'popup' => true,]) ?>" style="display: none;">go</a>
+<input type="hidden" id="per_id" value="<?= Yii::$app->session->get("PB_perid"); ?>" />
+<input type="hidden" id="tmp_up" value="<?= Yii::$app->params["documentFolder"]; ?>" />

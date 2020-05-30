@@ -184,6 +184,13 @@ function mostrarImagen(input) { 
         reader.readAsDataURL(input.files[0]); 
     }
 } 
+
+function setImage() {
+    console.log(imag);
+    console.log($('img#img_destino', window.parent.document).val());
+    $('img#img_destino', window.parent.document).val(imag);
+}
+
 function saveCropImage() {
     var objCropImg = getPosCoord();
     var arrParams = new Object();
@@ -197,7 +204,12 @@ function saveCropImage() {
         showAlert(response.status, response.label, response.message);
         if (response.status == "OK") {
             parent.setTimeout(function() {
-                parent.window.location.href = $('#txth_base').val() + "/perfil/update";
+                var imag = $('#txth_base').val() + "/site/getimage?route=" + $('#tmp_up').val() + "ficha/" + $('#per_id').val() + "/doc_foto_per_" + $('#per_id').val() + ".jpeg";
+                $('img#img_destino', window.parent.document).val('');
+                $('img#img_destino', window.parent.document).val(imag);
+                console.log($('img#img_destino', window.parent.document).val());
+                //parent.window.location.href = $('#txth_base').val() + "/perfil/update";
+                parent.closeIframePopup();
             }, 3000);
         }
     }, true);
