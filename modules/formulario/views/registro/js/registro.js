@@ -11,7 +11,7 @@ $(document).ready(function() {
         requestHttpAjax(link, arrParams, function(response) {
             if (response.status == "OK") {
                 data = response.message;
-                setComboData(data.carr_prog, "cmb_carrera_programa");
+                setComboDataselect(data.carr_prog, "cmb_carrera_programa", "Todos");                
             }
         }, true);
     });
@@ -48,4 +48,16 @@ function exportPdf() {
     var carrera = $('#cmb_carrera_programa').val();    
 
     window.location.href = $('#txth_base').val() + "/formulario/registro/exppdf?pdf=1&search=" + search + "&f_ini=" + f_ini + "&f_fin=" + f_fin + '&unidad=' + unidad + "&carrera=" + carrera;
+}
+
+function setComboDataselect(arr_data, element_id, texto) {
+    var option_arr = "";
+    option_arr += "<option value= '0'>" + texto + "</option>";
+    for (var i = 0; i < arr_data.length; i++) {
+        var id = arr_data[i].id;
+        var value = arr_data[i].name;
+
+        option_arr += "<option value='" + id + "'>" + value + "</option>";
+    }
+    $("#" + element_id).html(option_arr);
 }
