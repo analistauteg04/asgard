@@ -822,7 +822,7 @@ class Utilities {
             }
             
         }
-        catch(\Exception $e){ Utilities::putMessageLogFile($e->getMessage());
+        catch(\Exception $e){ 
             echo Yii::t("reporte","Error to export Word");
         }
     }
