@@ -55,4 +55,5 @@ return [
     'Produced by' => 'Elaborado por',
     'To' => 'Hasta',
     "Error to export Excel" => "Error al exportar Excel",
+    "Error to export Word" => "Error al exportar Word",
 ];
