@@ -75,7 +75,7 @@ PbGridView::widget([
             'template' => '{descarga}', 
             'buttons' => [                
                 'descarga' => function ($url, $model) {                    
-                return Html::a('<span class="glyphicon glyphicon-download-alt"></span>', Url::to(['/site/getimage', 'route' => '/uploads/certificados/' . $model['imagen']]), ["download" => $model['imagen'], "data-toggle" => "tooltip", "title" => "Descargar Justificación", "data-pjax" => 0]);
+                return Html::a('<span class="glyphicon glyphicon-download-alt"></span>', Url::to(['/site/getimage', 'route' => '/uploads/certificados/' . $model['imagen']]), ["download" => $model['imagen'], "data-toggle" => "tooltip", "title" => "Descargar Certificado PDF", "data-pjax" => 0]);
                 },                
             ],
         ],
