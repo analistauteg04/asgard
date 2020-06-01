@@ -1,30 +1,50 @@
 <?php
 
-namespace app\modules\piensaecuador\controllers;
+namespace app\modules\formulario\controllers;
 
 use Yii;
-use app\modules\piensaecuador\models\PersonaExterna;
+use app\modules\formulario\models\PersonaFormulario;
+use yii\helpers\ArrayHelper;
 use app\models\ExportFile;
 use app\models\Utilities;
-use app\modules\piensaecuador\Module as piensaecuador;
-piensaecuador::registerTranslations();
+use app\modules\academico\models\UnidadAcademica;
+use app\modules\academico\Module as academico;
+Academico::registerTranslations();
 
 class RegistroController extends \app\components\CController {
 
     public function actionIndex() {
-        $model = new PersonaExterna();
+        $mod_PersForm = new PersonaFormulario();
+        $mod_unidad = new UnidadAcademica();
         if (Yii::$app->request->isAjax) {
-            $data = Yii::$app->request->get();
-            if (isset($data["search"])) {
-                return $this->renderPartial('index-grid', [
-                    "model" => $model->getAllPersonaExtGrid($data["search"], true),
-                    'dataInteres' => $model->getAllInteresByPersona(NULL)
-                ]);
-            }
+            $data = Yii::$app->request->post();
+            if (isset($data["getcarrera"])) {
+                $uaca_id = $data["uaca_id"];
+                $carrera_programa = $mod_PersForm->consultarCarreraProgXUnidad($uaca_id);   
+                $message = array("carr_prog" => $carrera_programa);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);                
+            }                               
+        }        
+            
+        $data = Yii::$app->request->get();
+        if ($data['PBgetFilter']) {
+            $arrSearch["f_ini"] = $data['f_ini'];
+            $arrSearch["f_fin"] = $data['f_fin'];
+            $arrSearch["unidad"] = $data['unidad'];
+            $arrSearch["carrera"] = $data['carrera'];
+            $arrSearch["search"] = $data['search'];            
+            $respForm = $mod_PersForm->getAllPersonaFormGrid($arrSearch, false);
+            return $this->renderPartial('index-grid', [
+                        "model" => $respForm,
+            ]);
         }
+        
+        $arr_unidad_Uteg = $mod_unidad->consultarUnidadAcademicasxUteg();   
+        $arr_carrera_prog = $mod_PersForm->consultarCarreraProgXUnidad(1); 
         return $this->render('index', [
-            'model' => $model->getAllPersonaExtGrid(NULL, true),
-            'dataInteres' => $model->getAllInteresByPersona(NULL)
+            'model' => $mod_PersForm->getAllPersonaFormGrid(NULL, false),   
+            "arr_unidad" => ArrayHelper::map($arr_unidad_Uteg, "id", "name"),
+            "arr_carrera_prog" => ArrayHelper::map($arr_carrera_prog, "id", "name"),
         ]);
     }
 
@@ -35,109 +55,67 @@ class RegistroController extends \app\components\CController {
         header("Content-Type: $content_type");
         header("Content-Disposition: attachment;filename=" . $nombarch);
         header('Cache-Control: max-age=0');
-        $colPosition = array("C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R","S");
-        $arrHeader = array(
-            'Id',
+        $colPosition = array("C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N");
+        $arrHeader = array(           
             Yii::t("formulario", "Names"),
             Yii::t("formulario", 'Last Names'),
             Yii::t("formulario", "Dni"),
             Yii::t("perfil", 'Email'),
-            Yii::t("perfil", 'CellPhone'),
-            Yii::t("perfil", 'Phone'),
-            Yii::t("perfil", 'Sex'),
-            Yii::t("perfil", 'Birth Date'),
+            Yii::t("perfil", 'CellPhone')."/".Yii::t("formulario", 'Phone'),
+            Yii::t("formulario", 'Institution'),
             Yii::t("general", 'State'),
             Yii::t("general", 'City'),
-            //piensaecuador::t("interes", 'Event'),
-            piensaecuador::t("interes", 'Instruction Level'),
-            piensaecuador::t("interes", 'Activity'),
-            piensaecuador::t("interes", 'Occupation'),
-            piensaecuador::t("interes",'Registry Date'),
-            Yii::t("general", "Status")
+            Yii::t("formulario",'Academic unit'),
+            academico::t("Academico", "Career/Program"),
+            Yii::t("formulario", "Registration Date"),           
         );
-        $model = new PersonaExterna();
-        $data = Yii::$app->request->get();
-        $arrData = $queryData = array();
-        $arrSearch["search"] = $data['search'];
+        $mod_PersForm = new PersonaFormulario();
+        $data = Yii::$app->request->get();    
+        $arrSearch["f_ini"] = $data['f_ini'];
+        $arrSearch["f_fin"] = $data['f_fin'];
+        $arrSearch["unidad"] = $data['unidad'];
+        $arrSearch["carrera"] = $data['carrera'];
+        $arrSearch["search"] = $data['search'];      
+        $arrData = array();
         if (empty($arrSearch)) {
-            $arrData = $model->getAllPersonaExtGrid(NULL, false);
-            $queryData = $model->getAllInteresByPersona(NULL);
+            $arrData = $mod_PersForm->getAllPersonaFormGrid(array(), true);
         } else {
-            $arrData = $model->getAllPersonaExtGrid($data["search"], false);
-            $queryData = $model->getAllInteresByPersona($data["search"]);
+            $arrData = $mod_PersForm->getAllPersonaFormGrid($arrSearch, true);
         }
-        
-        foreach($arrData as $key => $value){
-            $pext_id = $value['id'];
-            $keys = array_keys(array_column($queryData, 'id'), $pext_id);
-            
-            $cont = 0;
-            $newValue = "";
-            foreach($keys as $key2 => $value2){
-                $id = $value2;
-                $newValue .= $queryData[$id]['interes'];
-                $cont++;
-                if(count($keys) > $cont)
-                    $newValue .= " | ";
-            }
-            $arrData[$key]['NivelInteresId'] = $newValue;
-        }
-
-        $nameReport = piensaecuador::t("interes", "Registries");
+        $nameReport = Yii::t("formulario", "Listar Registros de Ficha");
         Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
         exit;
     }
 
     public function actionExppdf() {
-        $report = new ExportFile();
-        $model = new PersonaExterna();
-        $this->view->title = piensaecuador::t("interes", "Registries"); // Titulo del reporte
+        $report = new ExportFile();        
+        $this->view->title = Yii::t("formulario", "Listar Registros de Ficha"); // Titulo del reporte
         $arrHeader = array(
-            'Id',
             Yii::t("formulario", "Names"),
             Yii::t("formulario", 'Last Names'),
             Yii::t("formulario", "Dni"),
             Yii::t("perfil", 'Email'),
-            Yii::t("perfil", 'CellPhone'),
-            Yii::t("perfil", 'Phone'),
-            Yii::t("perfil", 'Sex'),
-            Yii::t("perfil", 'Birth Date'),
+            Yii::t("perfil", 'CellPhone')."/".Yii::t("formulario", 'Phone'),
+            Yii::t("formulario", 'Institution'),
             Yii::t("general", 'State'),
             Yii::t("general", 'City'),
-            //piensaecuador::t("interes", 'Event'),
-            piensaecuador::t("interes", 'Instruction Level'),
-            piensaecuador::t("interes", 'Activity'),
-            piensaecuador::t("interes", 'Occupation'),
-            piensaecuador::t("interes",'Registry Date'),
-            Yii::t("general", "Status")
+            Yii::t("formulario",'Academic unit'),
+            academico::t("Academico", "Career/Program"),
+            Yii::t("formulario", "Registration Date"),   
         );
-        $data = Yii::$app->request->get();
-        $arrData = $queryData = array();
-        $arrSearch["search"] = $data['search'];
+        $mod_PersForm = new PersonaFormulario();
+        $data = Yii::$app->request->get();    
+        $arrSearch["f_ini"] = $data['f_ini'];
+        $arrSearch["f_fin"] = $data['f_fin'];
+        $arrSearch["unidad"] = $data['unidad'];
+        $arrSearch["carrera"] = $data['carrera'];
+        $arrSearch["search"] = $data['search'];      
+        $arrData = array();
         if (empty($arrSearch)) {
-            $arrData = $model->getAllPersonaExtGrid(NULL, false);
-            $queryData = $model->getAllInteresByPersona(NULL);
+            $arrData = $mod_PersForm->getAllPersonaFormGrid(array(), true);
         } else {
-            $arrData = $model->getAllPersonaExtGrid($data["search"], false);
-            $queryData = $model->getAllInteresByPersona($data["search"]);
+            $arrData = $mod_PersForm->getAllPersonaFormGrid($arrSearch, true);
         }
-
-        foreach($arrData as $key => $value){
-            $pext_id = $value['id'];
-            $keys = array_keys(array_column($queryData, 'id'), $pext_id);
-            
-            $cont = 0;
-            $newValue = "";
-            foreach($keys as $key2 => $value2){
-                $id = $value2;
-                $newValue .= $queryData[$id]['interes'];
-                $cont++;
-                if(count($keys) > $cont)
-                    $newValue .= " | ";
-            }
-            $arrData[$key]['NivelInteresId'] = $newValue;
-        }
-
         $report->orientation = "L"; // tipo de orientacion L => Horizontal, P => Vertical                                
         $report->createReportPdf(
                 $this->render('exportpdf', [
@@ -147,6 +125,4 @@ class RegistroController extends \app\components\CController {
         );
         $report->mpdf->Output('Reporte_' . date("Ymdhis") . ".pdf", ExportFile::OUTPUT_TO_DOWNLOAD);
     }
-
-
 }

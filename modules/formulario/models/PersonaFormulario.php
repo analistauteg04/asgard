@@ -1,6 +1,7 @@
 <?php
 
 namespace app\modules\formulario\models;
+use \yii\data\ArrayDataProvider;
 
 use Yii;
 
@@ -200,5 +201,100 @@ class PersonaFormulario extends \yii\db\ActiveRecord
         $command->bindParam(":pfor_estado", $estado, \PDO::PARAM_STR);      
         $command->execute();
         return $con->getLastInsertID();
+    }
+    
+     /**
+     * Function getAllPersonaFormGrid
+     * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>;
+     * @property       
+     * @return  
+     */
+    public function getAllPersonaFormGrid($arrFiltro = array(), $onlyData = false){        
+        $con = \Yii::$app->db_externo;
+        $con3 = \Yii::$app->db_academico;
+        $con2 = \Yii::$app->db;     
+        $estado = "1";
+        $str_search = "";
+        if (isset($arrFiltro) && count($arrFiltro) > 0) {
+            if ($arrFiltro['search'] != "") {
+                $str_search  = "(a.pfor_nombres like :search OR ";
+                $str_search .= "a.pfor_apellidos like :search OR ";
+                $str_search .= "a.pfor_identificacion like :search OR ";
+                $str_search .= "a.pfor_correo like :search) AND ";
+            }
+            if ($arrFiltro['unidad'] > 0) {
+                $str_search .= "a.uaca_id = :unidad AND ";
+            }
+            if ($arrFiltro['carrera'] > 0) {
+                $str_search .= "a.eaca_id = :carrera AND ";
+            }
+            if (($arrFiltro['f_ini'] != "") && ($arrFiltro['f_fin'] != "")) {
+                $str_search .= "a.pfor_fecha_registro >= :fini AND ";
+                $str_search .= "a.pfor_fecha_registro <= :ffin AND ";                
+            }
+        }
+        
+        $sql = "SELECT  a.pfor_nombres as nombres,
+                        a.pfor_apellidos as apellidos,
+                        a.pfor_identificacion as dni,
+                        a.pfor_correo as correo,
+                        ifnull(a.pfor_celular, a.pfor_telefono) as celular_telefono,	
+                        a.pfor_institucion as institucion,
+                        p.pro_nombre as provincia,
+                        c.can_nombre as canton,
+                        u.uaca_nombre as unidad,
+                        e.eaca_nombre as carrera,
+                        DATE_FORMAT(a.pfor_fecha_registro,'%Y-%m-%d') as fecha_registro                    
+                FROM    " . $con->dbname . ".persona_formulario AS a 
+                        INNER JOIN " . $con2->dbname . ".provincia AS p ON p.pro_id = a.pro_id
+                        INNER JOIN " . $con2->dbname . ".canton AS c ON c.can_id = a.can_id
+                        INNER JOIN " . $con3->dbname . ".unidad_academica AS u ON u.uaca_id = a.uaca_id
+                        INNER JOIN " . $con3->dbname . ".estudio_academico AS e ON e.eaca_id = a.eaca_id
+                WHERE   $str_search       
+                        a.pfor_estado=:estado AND
+                        a.pfor_estado_logico=:estado
+		ORDER BY a.pfor_id desc;";
+        
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        
+        if (isset($arrFiltro) && count($arrFiltro) > 0) {
+            $search_cond = "%" . $arrFiltro["search"] . "%";
+            $comando->bindParam(":search", $search_cond, \PDO::PARAM_STR);
+            $fecha_ini = $arrFiltro["f_ini"] . " 00:00:00";
+            $fecha_fin = $arrFiltro["f_fin"] . " 23:59:59";
+            $unidad = $arrFiltro["unidad"];
+            $carrera = $arrFiltro["carrera"];            
+
+            if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
+                $comando->bindParam(":fini", $fecha_ini, \PDO::PARAM_STR);
+                $comando->bindParam(":ffin", $fecha_fin, \PDO::PARAM_STR);
+            }
+            if ($arrFiltro['unidad'] > 0) {               
+                $comando->bindParam(":unidad", $unidad, \PDO::PARAM_INT);
+            }
+            if ($arrFiltro['carrera'] != "0") {                
+                $comando->bindParam(":carrera", $carrera, \PDO::PARAM_INT);
+            }
+        }                
+        $resultData = $comando->queryAll();
+        $dataProvider = new ArrayDataProvider([
+            'key' => 'id',
+            'allModels' => $resultData,
+            'pagination' => [
+                'pageSize' => Yii::$app->params["pageSize"],
+            ],
+            'sort' => [
+                'attributes' => [
+                    'egen_id',
+                    'fecha_creacion',
+                ],
+            ],
+        ]);
+        if ($onlyData) {
+            return $resultData;
+        } else {
+            return $dataProvider;
+        }
     }
 }

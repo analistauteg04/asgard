@@ -455,7 +455,7 @@ class Distributivo extends \yii\db\ActiveRecord {
             }
             if ($arrFiltro['estado'] == "0" or $arrFiltro['estado'] == "1") {
                 $str_search .= "ifnull(m.eppa_estado_pago,'0') = :estpago AND ";
-            }    
+            }
             if ($arrFiltro['jornada'] != "" && $arrFiltro['jornada'] > 0) {
                 $str_search .= "a.daca_jornada = :jornada AND ";
             }
@@ -465,7 +465,7 @@ class Distributivo extends \yii\db\ActiveRecord {
                         concat(p.per_pri_nombre, ' ', p.per_pri_apellido, ' ', ifnull(p.per_seg_apellido,'')) as estudiante,
                         concat(saca_nombre, '-', baca_nombre,'-',baca_anio) as periodo,
                         z.asi_nombre as asignatura,
-                        case when m.eppa_estado_pago = '1' then 'Pagado' else 'Pendiente' end as pago
+                        case when m.eppa_estado_pago = '1' then 'Autorizado' else 'No Autorizado' end as pago
                 FROM " . $con->dbname . ".distributivo_academico a inner join " . $con->dbname . ".profesor b
                     on b.pro_id = a.pro_id 
                     inner join " . $con1->dbname . ".persona c on c.per_id = b.per_id
@@ -568,11 +568,18 @@ class Distributivo extends \yii\db\ActiveRecord {
             if ($arrFiltro['asignatura'] != "" && $arrFiltro['asignatura'] > 0) {
                 $str_search .= "a.asi_id = :asignatura AND ";
             }
-            if ($arrFiltro['estado_pago'] != '-1' && $arrFiltro['estado_pago'] != 'null') {
-                $str_search .= " m.eppa_estado_pago = :estado_pago AND ";
-            }
-            if ($arrFiltro['estado_pago'] == 'null') {
-                $str_search .= " (m.eppa_estado_pago IS NULL) AND ";
+            /* if ($arrFiltro['estado_pago'] != '-1' && $arrFiltro['estado_pago'] != 'null') {
+              $str_search .= " m.eppa_estado_pago = :estado_pago AND ";
+              }
+              if ($arrFiltro['estado_pago'] == 'null') {
+              $str_search .= " (m.eppa_estado_pago IS NULL) AND ";
+              } */
+            if ($arrFiltro['estado_pago'] != '-1') {
+                if ($arrFiltro['estado_pago'] == '0') {
+                    $str_search .= " (m.eppa_estado_pago = :estado_pago OR m.eppa_estado_pago IS NULL) AND ";
+                }else{
+                    $str_search .= " m.eppa_estado_pago = :estado_pago AND ";
+                }                
             }
             if ($arrFiltro['jornada'] != "" && $arrFiltro['jornada'] > 0) {
                 $str_search .= "a.daca_jornada = :jornada AND ";
@@ -586,9 +593,9 @@ class Distributivo extends \yii\db\ActiveRecord {
                         concat(saca_nombre, '-', baca_nombre,'-',baca_anio) as periodo,
                         z.asi_nombre as asignatura,
                         case 
-                             when m.eppa_estado_pago = '0' then 'Deuda' 
-                             when m.eppa_estado_pago = '1' then 'Pagado'
-                             else 'Pendiente'
+                             when m.eppa_estado_pago = '0' then 'No Autorizado' 
+                             when m.eppa_estado_pago = '1' then 'Autorizado'
+                             else 'No Autorizado'
                              end as 'pago',                           
                         ifnull(DATE_FORMAT(m.eppa_fecha_registro, '%Y-%m-%d'), ' ') as fecha_pago 
                 FROM " . $con->dbname . ".distributivo_academico a inner join " . $con->dbname . ".profesor b

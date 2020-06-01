@@ -4,21 +4,42 @@
  * and open the template in the editor.
  */
 
-$(document).ready(function () {
-    $('#btn_buscarCertificado').click(function () {
+$(document).ready(function() {
+    $('#btn_buscarCertificado').click(function() {
         actualizarGridCertificadosGeneradas();
     });
 
-    $('#cmb_unidad_cer').change(function () {
+    $('#btn_subircertificado').click(function() {
+        subircertificado();
+    });
+    $('#btn_buscarCertGenerado').click(function() {
+        actualizarGridCertGenerado();
+    });
+
+    $('#cmb_unidad_cer').change(function() {
         var link = $('#txth_base').val() + "/academico/certificados/index";
         var arrParams = new Object();
         arrParams.unidad = $('#cmb_unidad_cer').val();
         //arrParams.moda_id = $(this).val();
         arrParams.getmodalidad = true;
-        requestHttpAjax(link, arrParams, function (response) {
+        requestHttpAjax(link, arrParams, function(response) {
             if (response.status == "OK") {
                 data = response.message;
                 setComboDataselect(data.modalidad, "cmb_modalidad_cer", "Todos");
+            }
+        }, true);
+    });
+
+    $('#cmb_unidad_cergen').change(function() {
+        var link = $('#txth_base').val() + "/academico/certificados/listadogenerados";
+        var arrParams = new Object();
+        arrParams.unidad = $('#cmb_unidad_cergen').val();
+        //arrParams.moda_id = $(this).val();
+        arrParams.getmodalidad = true;
+        requestHttpAjax(link, arrParams, function(response) {
+            if (response.status == "OK") {
+                data = response.message;
+                setComboDataselect(data.modalidad, "cmb_modalidad_cergen", "Todos");
             }
         }, true);
     });
@@ -46,7 +67,7 @@ function actualizarGridCertificadosGeneradas() {
     //Buscar almenos una clase con el nombre para ejecutar
     if (!$(".blockUI").length) {
         showLoadingPopup();
-        $('#TbG_Certificados').PbGridView('applyFilterData', {'f_ini': f_ini, 'f_fin': f_fin, 'unidad': unidad, 'modalidad': modalidad, 'search': search, 'estdocerti': estdocerti});
+        $('#TbG_Certificados').PbGridView('applyFilterData', { 'f_ini': f_ini, 'f_fin': f_fin, 'unidad': unidad, 'modalidad': modalidad, 'search': search, 'estdocerti': estdocerti });
         setTimeout(hideLoadingPopup, 2000);
     }
 }
@@ -71,4 +92,58 @@ function exportPdf() {
     var estdocerti = $('#cmb_estadocertificado_cer').val();
 
     window.location.href = $('#txth_base').val() + "/academico/certificados/exppdfcertificado?pdf=1&search=" + search + "&f_ini=" + f_ini + "&f_fin=" + f_fin + '&unidad=' + unidad + "&modalidad=" + modalidad + "&estdocerti=" + estdocerti;
+}
+
+function subircertificado() {
+    var arrParams = new Object();
+    var link = $('#txth_base').val() + "/academico/certificados/savecertificado";
+    arrParams.cgen_id = $('#txth_cgenid').val();
+    arrParams.documento = $('#txth_doc_certificado').val();
+    arrParams.observacion = $('#txt_observa').val();
+    arrParams.codigocerti = $('txt_codigocerti').val();
+    arrParams.per_id = $('#txth_perid').val();
+
+    if (!validateForm()) {
+        requestHttpAjax(link, arrParams, function(response) {
+            showAlert(response.status, response.label, response.message);
+            setTimeout(function() {
+                parent.window.location.href = $('#txth_base').val() + "/academico/certificados/index";
+            }, 2000);
+
+        }, true);
+    }
+}
+
+function actualizarGridCertGenerado() {
+    var search = $('#txt_buscarDataCertificado').val();
+    var f_ini = $('#txt_fecha_ini').val();
+    var f_fin = $('#txt_fecha_fin').val();
+    var unidad = $('#cmb_unidad_cergen').val();
+    var modalidad = $('#cmb_modalidad_cergen').val();
+    //Buscar almenos una clase con el nombre para ejecutar
+    if (!$(".blockUI").length) {
+        showLoadingPopup();
+        $('#TbG_CertGenerado').PbGridView('applyFilterData', { 'f_ini': f_ini, 'f_fin': f_fin, 'unidad': unidad, 'modalidad': modalidad, 'search': search });
+        setTimeout(hideLoadingPopup, 2000);
+    }
+}
+
+function exportExcelcert() {
+    var search = $('#txt_buscarDataCertificado').val();
+    var f_ini = $('#txt_fecha_ini').val();
+    var f_fin = $('#txt_fecha_fin').val();
+    var unidad = $('#cmb_unidad_cergen').val();
+    var modalidad = $('#cmb_modalidad_cergen').val();
+
+    window.location.href = $('#txth_base').val() + "/academico/certificados/expexcelcertificadogen?search=" + search + "&f_ini=" + f_ini + "&f_fin=" + f_fin + '&unidad=' + unidad + "&modalidad=" + modalidad;
+}
+
+function exportPdfcert() {
+    var search = $('#txt_buscarDataCertificado').val();
+    var f_ini = $('#txt_fecha_ini').val();
+    var f_fin = $('#txt_fecha_fin').val();
+    var unidad = $('#cmb_unidad_cergen').val();
+    var modalidad = $('#cmb_modalidad_cergen').val();
+
+    window.location.href = $('#txth_base').val() + "/academico/certificados/exppdfcertificadogen?pdf=1&search=" + search + "&f_ini=" + f_ini + "&f_fin=" + f_fin + '&unidad=' + unidad + "&modalidad=" + modalidad;
 }

@@ -39,16 +39,9 @@ PbGridView::widget([
             'value' => 'Nombres',
         ],
         [
-            'attribute' => 'Especie',
-            //'class' => 'yii\grid\ActionColumn',
+            'attribute' => 'Especie',           
             'header' => Especies::t("Especies", "Número Especie"),
-            //'template' => '{view}',
-            'value' => 'egen_numero_solicitud',
-            /*'buttons' => [
-                'view' => function ($url, $model) {
-                    return Html::a('<span>' . substr($model['egen_numero_solicitud'], 0, 10) . '... </span>', Url::to(['#']), ["data-toggle" => "tooltip", "title" => $model['egen_numero_solicitud']]);
-                },
-            ],*/
+            'value' => 'egen_numero_solicitud',            
         ],
                         [
             'class' => 'yii\grid\ActionColumn',
@@ -81,23 +74,19 @@ PbGridView::widget([
             'header' => especies::t("Especies", "Certified Status"),           
             'value' => 'cgen_estado_certificado',
         ],                    
-        /*[
+        [
             'class' => 'yii\grid\ActionColumn',
             'header' => Yii::t("formulario", "Actions"),
-            'template' => '{descarga} {certificado}', //
+            'template' => '{descarga} {certificado}', 
             'buttons' => [                
                 'descarga' => function ($url, $model) {
-                    return Html::a('<span class="glyphicon glyphicon-download-alt"></span>', Url::to(['/academico/especies/descargarimagen', 'espgen_id' => base64_encode($model['egen_id'])]), ["data-toggle" => "tooltip", "title" => "Descargar Especie/Justificación", "data-pjax" => "0"]);
-                },
+                    return Html::a('<span class="glyphicon glyphicon-upload"></span>', Url::to(['/academico/certificados/subircertificado', 'cgen_id' => base64_encode($model['cgen_id'])]), ["data-toggle" => "tooltip", "title" => "Subir Certificado PDF", "data-pjax" => "0"]);
+                },              
                 'certificado' => function ($url, $model) {
-                    if ($model["egen_certificado"] == "SI" && $model["codigo_generado"] == " ") { // tambien preguntar si ya no se ha generado el codigo ne la tabla certificados_generados
-                        return Html::a('<span class="glyphicon glyphicon-barcode"></span>', "#", ["onclick" => "generarCodigocer(" . $model['egen_id'] . ",'" . $model["egen_numero_solicitud"] . "','" . $model['per_cedula'] . "');", "data-toggle" => "tooltip", "title" => "Generar Codigo Certificado", "data-pjax" => 0]);
-                    } else {
-                        return "<span class = 'glyphicon glyphicon-barcode' data-toggle = 'tooltip' title ='Especie no genera codigo o ya fue generado'  data-pjax = 0></span>";
-                    }
-                },
+                    return Html::a('<span class="glyphicon glyphicon-barcode"></span>', Url::to(['/academico/certificados/downloadcertificado', 'cod' => base64_encode($model['cgen_codigo'])]), ["data-toggle" => "tooltip", "title" => "Descargar Word Certificado", "data-pjax" => "0"]);
+                },   
             ],
-        ],*/
+        ],
     ],
 ])
 ?>

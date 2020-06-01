@@ -212,7 +212,7 @@ class DistributivoController extends \app\components\CController {
                     'mod_unidad' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_unidad), "id", "name"),
                     'mod_modalidad' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_modalidad), "id", "name"),
                     'mod_periodo' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_periodo), "id", "name"),
-                    'mod_estado' => ArrayHelper::map(array_merge([["id" => "2", "name" => Yii::t("formulario", "Grid")]], [["id" => "0", "name" => Yii::t("formulario", "Pendiente")]], [["id" => "1", "name" => Yii::t("formulario", "Pagado")]]), "id", "name"),
+                    'mod_estado' => ArrayHelper::map(array_merge([["id" => "2", "name" => Yii::t("formulario", "Grid")]], [["id" => "0", "name" => Yii::t("formulario", "No Autorizado")]], [["id" => "1", "name" => Yii::t("formulario", "Autorizado")]]), "id", "name"),
                     'model' => $model,
                     'mod_jornada' => array("0" => "Todos", "1" => "(M) Matutino", "2" => "(N) Nocturno", "3" => "(S) Semipresencial" , "4" => "(D) Distancia"),    
         ]);
@@ -341,7 +341,8 @@ class DistributivoController extends \app\components\CController {
                     "mod_periodo" => ArrayHelper::map($arr_periodo, "id", "name"),
                     'mod_asignatura' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_asignatura), "id", "name"),
                     'model' => $model,
-                    'mod_estado' => array("-1" => "Todos", "null" => "Pendiente", "0" => "Deuda", "1" => "Pagado"),
+                    //'mod_estado' => array("-1" => "Todos", "null" => "Pendiente", "0" => "Deuda", "1" => "Pagado"),
+                    'mod_estado' => array("-1" => "Todos", "0" => "No Autorizado", "1" => "Autorizado"),
                     'mod_jornada' => array("0" => "Todos", "1" => "(M) Matutino", "2" => "(N) Nocturno", "3" => "(S) Semipresencial" , "4" => "(D) Distancia"),    
         ]);
     }
