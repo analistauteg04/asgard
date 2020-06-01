@@ -744,7 +744,7 @@ create table if not exists `planifica_academic_malla_det` (
 --  
 -- Estructura de tabla para la tabla `paralelo_planificacion`
 -- 
-/*create table if not exists `paralelo_planificacion` (
+create table if not exists `paralelo_planificacion` (
   `ppla_id` bigint(20) not null auto_increment primary key,   
   `pamd_id` bigint(20) not null,
   `pppr_id` bigint(20) null, 
@@ -758,7 +758,7 @@ create table if not exists `planifica_academic_malla_det` (
   `ppla_estado_logico` varchar(1) not null,  
   foreign key (pamd_id) references `planifica_academic_malla_det`(pamd_id),
   foreign key (pppr_id) references `paralelo_promocion_programa`(pppr_id)
-);*/
+);
 
 -- --------------------------------------------------------
 -- 

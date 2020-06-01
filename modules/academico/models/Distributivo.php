@@ -465,7 +465,7 @@ class Distributivo extends \yii\db\ActiveRecord {
                         concat(p.per_pri_nombre, ' ', p.per_pri_apellido, ' ', ifnull(p.per_seg_apellido,'')) as estudiante,
                         concat(saca_nombre, '-', baca_nombre,'-',baca_anio) as periodo,
                         z.asi_nombre as asignatura,
-                        case when m.eppa_estado_pago = '1' then 'Pagado' else 'Pendiente' end as pago
+                        case when m.eppa_estado_pago = '1' then 'Autorizado' else 'No Autorizado' end as pago
                 FROM " . $con->dbname . ".distributivo_academico a inner join " . $con->dbname . ".profesor b
                     on b.pro_id = a.pro_id 
                     inner join " . $con1->dbname . ".persona c on c.per_id = b.per_id

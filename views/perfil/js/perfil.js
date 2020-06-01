@@ -196,8 +196,8 @@ function saveCropImage() {
     requestHttpAjax(link, arrParams, function(response) {
         showAlert(response.status, response.label, response.message);
         if (response.status == "OK") {
-            parent.setTimeout(function() {
-                parent.window.location.href = $('#txth_base').val() + "/perfil/update";
+            setTimeout(function() {
+                location.href = $('#txth_base').val() + "/perfil/update";
             }, 3000);
         }
     }, true);

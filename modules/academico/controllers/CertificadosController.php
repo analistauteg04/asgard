@@ -343,4 +343,21 @@ class CertificadosController extends \app\components\CController {
         $report->mpdf->Output('Reporte_' . date("Ymdhis") . ".pdf", ExportFile::OUTPUT_TO_DOWNLOAD);
         return;
     }
+
+    public function actionDownloadcertificado(){
+        $data = Yii::$app->request->get();
+        if($data['cod']){
+            ini_set('memory_limit', '256M');
+            $content_type = Utilities::mimeContentType("doc");
+            $nombarch = "Certificado-".base64_decode($data['cod'])."-" . date("YmdHis") . ".docx";
+            header("Content-Type: $content_type");
+            header("Content-Disposition: attachment;filename=" . $nombarch);
+            header('Cache-Control: max-age=0');
+            $file_template = Yii::$app->basePath . "/modules/academico/templates/certificados/template_certificado.docx";
+            $loadFileValues = ['CODE' => base64_decode($data['cod'])];
+            Utilities::generarReportDoc($file_template, null, null, false, true, $loadFileValues);
+            exit;
+        }
+        $this->redirect('index');
+    }
 }
