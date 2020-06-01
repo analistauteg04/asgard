@@ -75,6 +75,7 @@ return [
     'Parish' => 'Parroquia',
     'Passport' => 'Pasaporte',
     'Phone' => 'Teléfono',
+    'Please upload your picture to your Profile.' => 'Por favor primero suba su Foto a su Perfil',
     'Postal Code' => 'Código Postal',
     'Profession' => 'Profesión',
     'Profile' => 'Perfil',

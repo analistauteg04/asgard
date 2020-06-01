@@ -173,3 +173,5 @@ create table if not exists db_academico.`estudiante_carrera_programa` (
 );
 
 
+ALTER TABLE `db_academico`.`unidad_academica` 
+ADD COLUMN `uaca_nomenclatura` VARCHAR(5) NULL AFTER `uaca_descripcion`;

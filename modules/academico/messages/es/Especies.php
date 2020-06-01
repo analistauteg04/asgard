@@ -13,7 +13,7 @@ return [
     "Approval date" => "Fecha Aprobación",  
     "Certified Code" => "Código Certificado",
     "Certified Status" => "Estado Certificado",
-    "Create Application for Registration" => "datos datos",
+    "Create Application for Registration" => "datos datos",    
     "Date validity" => "Fecha Validez",
     "Generate Code" => "Genera Código",
     "List of generated species" => "Listado de Especies Generadas",

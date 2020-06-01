@@ -60,57 +60,76 @@ use app\components\CFileInputAjax;
             <div class='row'>
                 <div class="col-xs-12 col-sm-12 col-md-12">                    
                     <div class="col-xs-6 col-sm-6 col-md-6">
-                           <div class="col-md-12">
-                                 <div class="row">
-                                    <div class="form-group">
+                        <div class="col-md-12">
+                                <div class="row">
+                                <div class="form-group">
 
-                                            <div class="col-sm-7">
-                                                </br>
-                                            </div>        
-                                    </div>
-                                 </div>
-                            </div>
-                            <div class="col-md-12">
-                                 <div class="row">
-                                    <div class="form-group">
-                                            <label for="txt_primer_nombre" class="col-sm-5 control-label"> <?= Yii::t("formulario", "First Name") ?> <span class="text-danger">*</span></label>
-                                            <div class="col-sm-7">
-                                                <input type="text" class="form-control PBvalidation keyupmce" value="<?= $per_pri_nombre ?>" id="txt_primer_nombre" data-type="alfa" data-keydown="true" placeholder="<?= Yii::t("formulario", "First Name") ?>"> 
-                                            </div>        
-                                    </div>
-                                 </div>
-                            </div>
-                            <div class="col-md-12">
-                                <div class="row">
-                                    <div class="form-group">
-                                            <label for="txt_segundo_nombre" class="col-sm-5 control-label"><?= Yii::t("formulario", "Middle Name") ?></label>
-                                            <div class="col-sm-7">
-                                                <input type="text" class="form-control keyupmce" value="<?= $per_seg_nombre ?>" id="txt_segundo_nombre" data-type="alfa" data-keydown="true" placeholder="<?= Yii::t("formulario", "Middle Name") ?>">
-                                            </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-12">
-                                <div class="row">
-                                    <div class="form-group">
-                                        <label for="txt_primer_nombre" class="col-sm-5 control-label"> <?= Yii::t("formulario", "Last Name2") ?> <span class="text-danger">*</span></label>
                                         <div class="col-sm-7">
-                                            <input type="text" class="form-control PBvalidation keyupmce" value="<?= $per_pri_apellido ?>" id="txt_primer_apellido" data-type="alfa" data-keydown="true" placeholder="<?= Yii::t("formulario", "Last Name") ?>">
+                                            </br>
                                         </div>        
+                                </div>
+                                </div>
+                        </div>
+                        <div class="col-md-12">
+                                <div class="row">
+                                <div class="form-group">
+                                        <label for="txt_primer_nombre" class="col-sm-5 control-label"> <?= Yii::t("formulario", "First Name") ?> <span class="text-danger">*</span></label>
+                                        <div class="col-sm-7">
+                                            <input type="text" class="form-control PBvalidation keyupmce" value="<?= $per_pri_nombre ?>" id="txt_primer_nombre" data-type="alfa" data-keydown="true" placeholder="<?= Yii::t("formulario", "First Name") ?>"> 
+                                        </div>        
+                                </div>
+                                </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="form-group">
+                                        <label for="txt_segundo_nombre" class="col-sm-5 control-label"><?= Yii::t("formulario", "Middle Name") ?></label>
+                                        <div class="col-sm-7">
+                                            <input type="text" class="form-control keyupmce" value="<?= $per_seg_nombre ?>" id="txt_segundo_nombre" data-type="alfa" data-keydown="true" placeholder="<?= Yii::t("formulario", "Middle Name") ?>">
+                                        </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="form-group">
+                                    <label for="txt_primer_nombre" class="col-sm-5 control-label"> <?= Yii::t("formulario", "Last Name2") ?> <span class="text-danger">*</span></label>
+                                    <div class="col-sm-7">
+                                        <input type="text" class="form-control PBvalidation keyupmce" value="<?= $per_pri_apellido ?>" id="txt_primer_apellido" data-type="alfa" data-keydown="true" placeholder="<?= Yii::t("formulario", "Last Name") ?>">
+                                    </div>        
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="form-group">
+                                    <label for="txt_segundo_nombre" class="col-sm-5 control-label"><?= Yii::t("formulario", "Last Second Name1") ?><span class="text-danger">*</span></label>
+                                    <div class="col-sm-7">
+                                    <input type="text" class="form-control keyupmce" value="<?= $per_seg_apellido ?>" id="txt_segundo_apellido" data-type="alfa" data-keydown="true" placeholder="<?= Yii::t("formulario", "Last Second Name") ?>">
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-12">
-                                <div class="row">
-                                    <div class="form-group">
-                                        <label for="txt_segundo_nombre" class="col-sm-5 control-label"><?= Yii::t("formulario", "Last Second Name1") ?><span class="text-danger">*</span></label>
-                                        <div class="col-sm-7">
-                                        <input type="text" class="form-control keyupmce" value="<?= $per_seg_apellido ?>" id="txt_segundo_apellido" data-type="alfa" data-keydown="true" placeholder="<?= Yii::t("formulario", "Last Second Name") ?>">
-                                        </div>
+                        </div> 
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="form-group">
+                                    <label for="txt_estado_civil" class="col-sm-5 control-label"><?= Yii::t("formulario", "Marital Status") ?> <span class="text-danger">*</span> </label>
+                                    <div class="col-sm-7">
+                                            <?= Html::dropDownList("txt_estado_civil", $eciv_id, $estado_civil, ["class" => "form-control", "id" => "txt_estado_civil"]) ?>
                                     </div>
                                 </div>
-                            </div> 
-
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="form-group">
+                                    <label for="cmb_genero" class="col-sm-5 control-label"><?= Yii::t("formulario", "Gender") ?> <span class="text-danger">*</span> </label>
+                                    <div class="col-sm-7">
+                                    <?= Html::dropDownList("cmb_genero", $per_genero, $genero, ["class" => "form-control", "id" => "cmb_genero"]) ?>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     
                     <div class="col-xs-6 col-sm-6 col-md-6">
@@ -122,7 +141,7 @@ use app\components\CFileInputAjax;
                                     <input id="files" class="col-sm-12" style="visibility:hidden;" type="file">                            
                                 </div>  
                                 <div class="col-sm-12 text-center">
-                                <img src="<?= Url::base(). '/site/getimage/?route='.$per_foto ?>" width="135px" height="135px" id='img_destino' class="img-circle" alt="User Image" />
+                                <img src="<?= Url::base(). '/site/getimage/?route='.$per_foto ?>" width="<?= $widthImg ?>px" height="<?= $heightImg ?>px" id='img_destino' <?php //class="img-circle" ?> alt="User Image" />
                                      
                                     <!-- https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTs8lPPHhK9VPELO2BbHfSCmWSU9JQv6elO_xDTZWSVQN4kRuIE -->
                                 </div>
@@ -178,6 +197,7 @@ use app\components\CFileInputAjax;
                                     }",
                                                         "fileuploaded" => "function (event, data, previewId, index) {
                                         $(this).parent().parent().children().first().addClass('hide');
+                                        location.href=$('#showCropPhoto').attr('href');
                                         var acciones = [{id: 'reloadpage', class: 'btn btn-primary', value: objLang.Accept, callback: 'reloadPage'}];
                                         //showAlert('OK', 'Success', {'wtmessage': objLang.File_uploaded_successfully__Do_you_refresh_the_web_page_, 'title': objLang.Success, 'acciones': acciones});                              
                                     }",
@@ -189,7 +209,7 @@ use app\components\CFileInputAjax;
                                     </div>         
                                 </div>
                                 <div class="col-sm-12">
-                                        <label for="txt_msj_alerta_avatar" class="col-sm-12 control-label text-center lbltxtTamañoImgAvatar"><span class="text-danger">*</span><?= Yii::t("formulario", "La imagen no debe ser superior a 100px de ancho y 100px de altura") ?></label>
+                                        <label for="txt_msj_alerta_avatar" class="col-sm-12 control-label text-center lbltxtTamañoImgAvatar"><span class="text-danger">*</span><?= Yii::t("formulario", "La imagen debe ser 147px de ancho y 209px de alto") ?></label>
                                 </div>                                 
                             </div>
                             <div class="col-sm-1">                        
@@ -249,10 +269,10 @@ use app\components\CFileInputAjax;
                 <div class="col-md-12"> 
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label for="cmb_genero" class="col-sm-5 control-label"><?= Yii::t("formulario", "Gender") ?> <span class="text-danger">*</span> </label>
-                            <div class="col-sm-7">
-                            <?= Html::dropDownList("cmb_genero", $per_genero, $genero, ["class" => "form-control", "id" => "cmb_genero"]) ?>
-                            </div>
+                            <label for="cmb_tipo_sangre" class="col-sm-5 control-label"><?= Yii::t("formulario", "Blood Type") ?><span class="text-danger">*</span></label>
+                                <div class="col-sm-7">
+                                <?= Html::dropDownList("cmb_tipo_sangre", $tsan_id, $tipos_sangre, ["class" => "form-control", "id" => "cmb_tipo_sangre"]) ?>
+                                </div>
                         </div>
                     </div>
                     
@@ -344,29 +364,14 @@ use app\components\CFileInputAjax;
                 <div class="col-md-12">
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label for="txt_estado_civil" class="col-sm-5 control-label"><?= Yii::t("formulario", "Marital Status") ?> <span class="text-danger">*</span> </label>
-                            <div class="col-sm-7">
-                                    <?= Html::dropDownList("txt_estado_civil", $eciv_id, $estado_civil, ["class" => "form-control", "id" => "txt_estado_civil"]) ?>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="cmb_tipo_sangre" class="col-sm-5 control-label"><?= Yii::t("formulario", "Blood Type") ?><span class="text-danger">*</span></label>
-                                <div class="col-sm-7">
-                                <?= Html::dropDownList("cmb_tipo_sangre", $tsan_id, $tipos_sangre, ["class" => "form-control", "id" => "cmb_tipo_sangre"]) ?>
-                                </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-12">
-                    <div class="col-md-6">
-                        <div class="form-group">
                             <label for="txt_celular" class="col-sm-5 control-label"><?= Yii::t("formulario", "CellPhone") ?></label>
                             <div class="col-sm-7">
                                 <input type="text" class="form-control PBvalidation keyupmce" value="<?= $per_celular ?>" data-required="false" id="txt_celular" data-type="celular_sin" data-keydown="true" placeholder="<?= Yii::t("formulario", "CellPhone") ?>">
                             </div>
                         </div>
+                    </div>
+                    <div class="col-md-6">
+                        
                     </div>
                 </div>
 <!--***************************** Informacion de Domicilio ***********************************************-->  
@@ -550,4 +555,4 @@ use app\components\CFileInputAjax;
         </div>       
     </div>
 </div>
-
+<a id="showCropPhoto" href="<?= Url::to(['perfil/setpicture']) ?>" style="display: none;">go</a>

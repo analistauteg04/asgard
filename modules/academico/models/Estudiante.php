@@ -192,4 +192,31 @@ class Estudiante extends \yii\db\ActiveRecord {
         return $resultData;
     }
 
+    public function getInfoCarreraEstudiante($est_id, $emp_id){
+        $con = \Yii::$app->db_academico;
+        $sql = "
+            SELECT
+                ea.eaca_nombre AS Carrera,
+                ea.eaca_alias AS Alias,
+                m.mod_nombre AS Modalidad
+            FROM
+            " . $con->dbname . ".estudiante AS e 
+            INNER JOIN " . $con->dbname . ".estudiante_carrera_programa AS ecp ON e.est_id = ecp.est_id
+            INNER JOIN " . $con->dbname . ".modalidad_estudio_unidad AS mea ON ecp.meun_id = mea.meun_id
+            INNER JOIN " . $con->dbname . ".estudio_academico AS ea ON ea.eaca_id = mea.eaca_id
+            -- INNER JOIN " . $con->dbname . ".unidad_academica AS ua ON ua.uaca_id = mea.uaca_id
+            INNER JOIN " . $con->dbname . ".modalidad AS m ON m.mod_id = mea.mod_id
+            
+            WHERE 
+                e.est_id = :est_id AND
+                mea.emp_id = :emp_id AND
+                e.est_estado = 1 AND
+                e.est_estado_logico = 1;";
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":est_id", $est_id, \PDO::PARAM_INT);   
+        $comando->bindParam(":emp_id", $emp_id, \PDO::PARAM_INT);   
+        $resultData = $comando->queryOne();
+        return $resultData;
+    }
+
 }
