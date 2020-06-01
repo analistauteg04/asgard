@@ -83,7 +83,7 @@ PbGridView::widget([
                     return Html::a('<span class="glyphicon glyphicon-upload"></span>', Url::to(['/academico/certificados/subircertificado', 'cgen_id' => base64_encode($model['cgen_id'])]), ["data-toggle" => "tooltip", "title" => "Subir Certificado PDF", "data-pjax" => "0"]);
                 },              
                 'certificado' => function ($url, $model) {
-                    return Html::a('<span class="glyphicon glyphicon-barcode"></span>', Url::to(['/academico/certificados/downloadcertificado', 'cod' => base64_encode($model['cgen_codigo'])]), ["data-toggle" => "tooltip", "title" => "Descargar Certificado", "data-pjax" => "0"]);
+                    return Html::a('<span class="glyphicon glyphicon-barcode"></span>', Url::to(['/academico/certificados/downloadcertificado', 'cod' => base64_encode($model['cgen_codigo'])]), ["data-toggle" => "tooltip", "title" => "Descargar Word Certificado", "data-pjax" => "0"]);
                 },   
             ],
         ],
