@@ -279,7 +279,7 @@ class CertificadosGeneradas extends \yii\db\ActiveRecord {
                     ceg.cgen_fecha_codigo_generado,
                     case ceg.cgen_estado_certificado  
                       when 1 then 'Código Generado'  
-                      when 2 then 'Certificado Generaado'    
+                      when 2 then 'Certificado Generado'    
                     end as cgen_estado_certificado
                 FROM db_academico.certificados_generadas ceg
                 INNER JOIN " . $con->dbname . ".especies_generadas esg on esg.egen_id = ceg.egen_id
