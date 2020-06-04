@@ -189,7 +189,6 @@ class CertificadosGeneradas extends \yii\db\ActiveRecord {
             if ($arrFiltro['estdocerti'] > 0) {
                 $str_search .= "ceg.cgen_estado_certificado = :estdocerti AND"; // son los pendientes no estan en la tabla
             }
-            
         }
 
         $sql = "SELECT cgen_id,
@@ -264,6 +263,13 @@ class CertificadosGeneradas extends \yii\db\ActiveRecord {
             return $dataProvider;
         }
     }
+
+    /**
+     * Function consultarCertificadosGeneradas
+     * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;
+     * @param
+     * @return 
+     */
     
     public function consultarCertificadosGeneradas($cgen_id) {
         $con = \Yii::$app->db_academico;
@@ -271,6 +277,8 @@ class CertificadosGeneradas extends \yii\db\ActiveRecord {
         $estado = 1;
         $sql = "SELECT cgen_id,
                     D.per_id,
+                    D.per_correo,
+                    C.esp_rubro,
                     concat(F.uaca_nomenclatura,T.tra_nomenclatura,lpad(ifnull(C.esp_codigo,0),3,'0'),'-',esg.egen_numero_solicitud) as egen_numero_solicitud,
                     concat(D.per_pri_nombre,' ',D.per_pri_apellido) Nombres,
                     F.uaca_nombre,
@@ -301,6 +309,7 @@ class CertificadosGeneradas extends \yii\db\ActiveRecord {
         $comando->bindParam(":cgen_id", $cgen_id, \PDO::PARAM_INT);
         return $comando->queryAll();
     }
+
     /**
      * Function subirCertificadopdf (Actualiza el certiifcado generado una vez subido el archivo pdf)
      * @author  Giovanni Vergara <analistadesarrollo01@uteg.edu.ec>
@@ -331,13 +340,13 @@ class CertificadosGeneradas extends \yii\db\ActiveRecord {
         $comando->bindParam(":cgen_fecha_certificado_subido", $fecha_modificacion, \PDO::PARAM_STR);
         $comando->bindParam(":cgen_ruta_archivo_pdf", $cgen_ruta_archivo_pdf, \PDO::PARAM_STR);
         $comando->bindParam(":cgen_usuario_modifica", $cgen_usuario_modifica, \PDO::PARAM_INT);
-        $comando->bindParam(":cgen_fecha_modificacion", $fecha_modificacion, \PDO::PARAM_STR);        
+        $comando->bindParam(":cgen_fecha_modificacion", $fecha_modificacion, \PDO::PARAM_STR);
         $response = $comando->execute();
 
         return $response;
     }
 
-     /**
+    /**
      * Function listarCertificadosGeneradas
      * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>;
      * @param
@@ -362,9 +371,9 @@ class CertificadosGeneradas extends \yii\db\ActiveRecord {
             }
             if ($arrFiltro['modalidad'] > 0) {
                 $str_search .= "esg.mod_id = :modalidad AND ";
-            }                    
+            }
         }
-        if ($opcion==1) {
+        if ($opcion == 1) {
             $imagen = ", cgen_ruta_archivo_pdf as imagen";
         } else {
             $imagen = "";
@@ -400,7 +409,7 @@ class CertificadosGeneradas extends \yii\db\ActiveRecord {
             $fecha_fin = $arrFiltro["f_fin"] . " 23:59:59";
             $search_cond = "%" . $arrFiltro["search"] . "%";
             $unidad = $arrFiltro['unidad'];
-            $modalidad = $arrFiltro['modalidad'];            
+            $modalidad = $arrFiltro['modalidad'];
             if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
                 $comando->bindParam(":fec_ini", $fecha_ini, \PDO::PARAM_STR);
                 $comando->bindParam(":fec_fin", $fecha_fin, \PDO::PARAM_STR);
@@ -413,7 +422,7 @@ class CertificadosGeneradas extends \yii\db\ActiveRecord {
             }
             if ($arrFiltro['modalidad'] > 0) {
                 $comando->bindParam(":modalidad", $modalidad, \PDO::PARAM_INT);
-            }            
+            }
         }
         $resultData = $comando->queryAll();
         $dataProvider = new ArrayDataProvider([
@@ -435,4 +444,5 @@ class CertificadosGeneradas extends \yii\db\ActiveRecord {
             return $dataProvider;
         }
     }
+
 }

@@ -200,12 +200,24 @@ class CertificadosController extends \app\components\CController {
             try {
                 $usuario_modifica = @Yii::$app->user->identity->usu_id;   //Se obtiene el id del usuario.                            
                 $mod_certificado = new CertificadosGeneradas();
+                $respcertificado = $mod_certificado->consultarCertificadosGeneradas($cgen_id);
                 $resp_certifica = $mod_certificado->subirCertificadopdf($cgen_id, $observacion, $imagen, $usuario_modifica);
                 if ($resp_certifica) {
                     $exito = 1;
-                } 
+                }
                 if ($exito) {
                     $transaction->commit();
+                    $correo_estudiante = $respcertificado[0]['per_correo'];
+                    $user = $respcertificado[0]['Nombres'];
+                    $especie = $respcertificado[0]['esp_rubro'];
+                    $tituloMensaje = 'Certificado en Línea';
+                    $asunto = 'Certificado en Línea';
+                    $body = Utilities::getMailMessage("notificarcertificado", array(
+                                "[[user]]" => $user,
+                                "[[link]]" => "https://asgard.uteg.edu.ec/asgard/",
+                                "[[especie]]" => $especie), Yii::$app->language, Yii::$app->basePath . "/modules/academico");
+                    Utilities::sendEmail(
+                            $tituloMensaje, Yii::$app->params["adminEmail"], [$correo_estudiante => $user], $asunto, $body);
                     $message = array(
                         "wtmessage" => Yii::t("notificaciones", "La infomación ha sido grabada. "),
                         "title" => Yii::t('jslang', 'Success'),
@@ -230,7 +242,7 @@ class CertificadosController extends \app\components\CController {
             return;
         }
     }
-    
+
     public function actionListadogenerados() {
         $mod_certificado = new CertificadosGeneradas();
         $mod_unidad = new UnidadAcademica();
@@ -254,22 +266,22 @@ class CertificadosController extends \app\components\CController {
             $arrSearch["f_fin"] = $data['f_fin'];
             $arrSearch["unidad"] = $data['unidad'];
             $arrSearch["modalidad"] = $data['modalidad'];
-            $arrSearch["search"] = $data['search'];            
-            $resp_cert = $mod_certificado->listarCertificadosGenerados($arrSearch, false,1);
+            $arrSearch["search"] = $data['search'];
+            $resp_cert = $mod_certificado->listarCertificadosGenerados($arrSearch, false, 1);
             return $this->renderPartial('_index-grid_certgen', [
                         "model" => $resp_cert,
             ]);
         }
-        $model = $mod_certificado->listarCertificadosGenerados(null, false,1);
+        $model = $mod_certificado->listarCertificadosGenerados(null, false, 1);
         $arr_unidadac = $mod_unidad->consultarUnidadAcademicas();
         $arr_modalidad = $mod_modalidad->consultarModalidad($arr_unidadac[0]["id"], 1);
         return $this->render('index_certgen', [
-                    'model' => $model,                    
+                    'model' => $model,
                     'arr_unidad' => ArrayHelper::map($arr_unidadac, "id", "name"),
-                    'arr_modalidad' => ArrayHelper::map($arr_modalidad, "id", "name"),                    
+                    'arr_modalidad' => ArrayHelper::map($arr_modalidad, "id", "name"),
         ]);
     }
-    
+
     public function actionExpexcelcertificadogen() {
         ini_set('memory_limit', '256M');
         $content_type = Utilities::mimeContentType("xls");
@@ -293,19 +305,19 @@ class CertificadosController extends \app\components\CController {
         $arrSearch["f_fin"] = $data['f_fin'];
         $arrSearch["unidad"] = $data['unidad'];
         $arrSearch["modalidad"] = $data['modalidad'];
-        $arrSearch["search"] = $data['search'];        
+        $arrSearch["search"] = $data['search'];
 
         $arrData = array();
         if (empty($arrSearch)) {
-            $arrData = $mod_certificado->listarCertificadosGenerados(array(), true,0);
+            $arrData = $mod_certificado->listarCertificadosGenerados(array(), true, 0);
         } else {
-            $arrData = $mod_certificado->listarCertificadosGenerados($arrSearch, true,0);
+            $arrData = $mod_certificado->listarCertificadosGenerados($arrSearch, true, 0);
         }
         $nameReport = certificados::t("certificados", "List of generated certificate");
         Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
         exit;
-    }   
-    
+    }
+
     public function actionExppdfcertificadogen() {
         $report = new ExportFile();
         $arrHeader = array(
@@ -324,12 +336,12 @@ class CertificadosController extends \app\components\CController {
         $arrSearch["unidad"] = $data['unidad'];
         $arrSearch["modalidad"] = $data['modalidad'];
         $arrSearch["search"] = $data['search'];
-        
+
         $arrData = array();
         if (empty($arrSearch)) {
-            $arrData = $mod_certificado->listarCertificadosGenerados(array(), true,0);
+            $arrData = $mod_certificado->listarCertificadosGenerados(array(), true, 0);
         } else {
-            $arrData = $mod_certificado->listarCertificadosGenerados($arrSearch, true,0);
+            $arrData = $mod_certificado->listarCertificadosGenerados($arrSearch, true, 0);
         }
 
         $this->view->title = certificados::t("certificados", "List of generated certificate"); // Titulo del reporte                
@@ -344,12 +356,12 @@ class CertificadosController extends \app\components\CController {
         return;
     }
 
-    public function actionDownloadcertificado(){
+    public function actionDownloadcertificado() {
         $data = Yii::$app->request->get();
-        if($data['cod']){
+        if ($data['cod']) {
             ini_set('memory_limit', '256M');
             $content_type = Utilities::mimeContentType("doc");
-            $nombarch = "Certificado-".base64_decode($data['cod'])."-" . date("YmdHis") . ".docx";
+            $nombarch = "Certificado-" . base64_decode($data['cod']) . "-" . date("YmdHis") . ".docx";
             header("Content-Type: $content_type");
             header("Content-Disposition: attachment;filename=" . $nombarch);
             header('Cache-Control: max-age=0');
@@ -360,4 +372,5 @@ class CertificadosController extends \app\components\CController {
         }
         $this->redirect('index');
     }
+
 }
