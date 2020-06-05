@@ -398,7 +398,7 @@ class EspeciesController extends \app\components\CController {
                                     Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], ["secretariogeneral@yopmail" => "secretario", "coordinacionsecretaria@yopmail.com" => "coordinador", "yazar@yopmail.com" => "yazar"], $asunto, $body);
                                     break;
                                 case "4": //Financiero -- Grado
-
+                                        Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], ["colecturia@yopmail" => "colecturia", "supervisorcolecturia@yopmail.com" => "supervisor"], $asunto, $body);
                                     break;
                                 case "5": //Decanato
                                     if ($solicitud_correo[$a]["uaca_id"] == "1") {
@@ -467,7 +467,7 @@ class EspeciesController extends \app\components\CController {
                                     Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], ["secretariogeneral@yopmail" => "secretario", "coordinacionsecretaria@yopmail.com" => "coordinador", "yazar@yopmail.com" => "yazar"], $asunto, $body);
                                     break;
                                 case "9": //Financiero -- Posgrado
-
+                                    Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], ["colecturia@yopmail" => "colecturia", "supervisorcolecturia@yopmail.com" => "supervisor"], $asunto, $body);
                                     break;
                             }
                         }
