@@ -100,7 +100,7 @@ class Especies extends \yii\db\ActiveRecord {
                     INNER JOIN " . $con->dbname . ".modalidad C ON C.mod_id=A.mod_id
                     INNER JOIN " . $con1->dbname . ".forma_pago D ON D.fpag_id=A.fpag_id
                     INNER JOIN " . $con->dbname . ".estudiante E ON E.est_id=A.est_id    
-                    INNER JOIN " . $con2->dbname . ".persona P ON P.per_id=E.per_id
+                    INNER JOIN " . $con2->dbname . ".persona P ON P.per_id=E.per_id                        
                 WHERE  A.csol_estado=:estado AND A.csol_estado_logico=:estado $estudiante  $str_search  ORDER BY A.csol_id DESC;";
 
         $comando = $con->createCommand($sql);
@@ -666,7 +666,7 @@ class Especies extends \yii\db\ActiveRecord {
         $sql = "SELECT A.egen_id, concat(F.uaca_nomenclatura,T.tra_nomenclatura,lpad(ifnull(C.esp_codigo,0),3,'0'),'-',A.egen_numero_solicitud) as egen_numero_solicitud,
                     T.tra_nombre as tramite, C.esp_rubro,concat(D.per_pri_nombre,' ',D.per_pri_apellido) Nombres,D.per_cedula,
                     F.uaca_nombre,G.mod_nombre,date(A.egen_fecha_aprobacion) fecha_aprobacion,
-                    A.egen_fecha_caducidad
+                    A.egen_fecha_caducidad, Z.cgen_ruta_archivo_pdf as imagen, Z.cgen_estado_certificado
                 FROM " . $con->dbname . ".especies_generadas A
                             INNER JOIN (" . $con->dbname . ".estudiante B 
                                             INNER JOIN " . $con1->dbname . ".persona D ON B.per_id=D.per_id)
@@ -677,6 +677,7 @@ class Especies extends \yii\db\ActiveRecord {
                             INNER JOIN " . $con->dbname . ".unidad_academica F ON F.uaca_id=A.uaca_id
                             INNER JOIN " . $con->dbname . ".modalidad G ON G.mod_id=A.mod_id
                             INNER JOIN " . $con->dbname . ".tramite T ON T.tra_id = A.tra_id  
+                            LEFT JOIN " . $con->dbname . ".certificados_generadas Z ON Z.egen_id = A.egen_id  
                 WHERE cs.csol_id = :csol_id AND 
                       A.egen_estado=:estado AND 
                       A.egen_estado_logico=:estado  
