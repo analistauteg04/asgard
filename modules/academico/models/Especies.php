@@ -814,7 +814,7 @@ class Especies extends \yii\db\ActiveRecord {
         $con = \Yii::$app->db_academico;
         $estado = 1;
         if (!empty($paca_id)) {
-            $periodo = 'paca_id in ('. $paca_id .') AND';
+            $periodo = 'paca_id in (' . $paca_id . ') AND';
         }
         $sql = "SELECT count(*) as eppa_estado_pago
                   FROM " . $con->dbname . ".estudiante_periodo_pago                       
@@ -825,10 +825,31 @@ class Especies extends \yii\db\ActiveRecord {
                     eppa_estado_logico = :estado";
 
         $comando = $con->createCommand($sql);
-        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);        
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":est_id", $est_id, \PDO::PARAM_INT);
         $resultData = $comando->queryOne();
         return $resultData;
     }
 
+    /**
+     * Function 
+     * @author  Giovanni Vergara <abalistadesarrollo02@uteg.edu.ec>
+     * @property      
+     * @return  
+     */
+       public function consultarSolicitudXcorreo($csol_id) {
+        $con = \Yii::$app->db_academico;
+        $estado = 1;
+        $sql = "SELECT A.*,C.tra_nombre,B.esp_rubro, B.esp_emision_certificado,me.uaca_id, me.mod_id
+                 FROM " . $con->dbname . ".detalle_solicitud A
+			INNER JOIN " . $con->dbname . ".especies B ON A.esp_id=B.esp_id
+			INNER JOIN " . $con->dbname . ".tramite C ON A.tra_id=C.tra_id
+                        INNER JOIN " . $con->dbname . ".estudiante_carrera_programa ec ON ec.est_id = A.est_id
+                        INNER JOIN " . $con->dbname . ".modalidad_estudio_unidad me ON me.meun_id = ec.meun_id
+		 WHERE A.dsol_estado= :estado AND A.dsol_estado_logico= :estado  AND A.csol_id=:csol_id; ";
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":csol_id", $csol_id, \PDO::PARAM_INT);
+        return $comando->queryAll();
+    }
 }
