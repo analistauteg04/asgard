@@ -838,19 +838,24 @@ class Especies extends \yii\db\ActiveRecord {
      * @property      
      * @return  
      */
-       public function consultarSolicitudXcorreo($csol_id) {
+    public function consultarSolicitudXcorreo($csol_id) {
         $con = \Yii::$app->db_academico;
+        $con1 = \Yii::$app->db_asgard;
         $estado = 1;
         $sql = "SELECT A.*,C.tra_nombre,B.esp_rubro, B.esp_emision_certificado,me.uaca_id, me.mod_id
+                , CONCAT(pers.per_pri_nombre , ' ' , pers.per_pri_apellido) as nombres
                  FROM " . $con->dbname . ".detalle_solicitud A
 			INNER JOIN " . $con->dbname . ".especies B ON A.esp_id=B.esp_id
 			INNER JOIN " . $con->dbname . ".tramite C ON A.tra_id=C.tra_id
                         INNER JOIN " . $con->dbname . ".estudiante_carrera_programa ec ON ec.est_id = A.est_id
                         INNER JOIN " . $con->dbname . ".modalidad_estudio_unidad me ON me.meun_id = ec.meun_id
+                        INNER JOIN " . $con->dbname . ".estudiante est ON est.est_id = A.est_id
+                        INNER JOIN " . $con1->dbname . ".persona pers ON pers.per_id = est.per_id
 		 WHERE A.dsol_estado= :estado AND A.dsol_estado_logico= :estado  AND A.csol_id=:csol_id; ";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":csol_id", $csol_id, \PDO::PARAM_INT);
         return $comando->queryAll();
     }
+
 }
