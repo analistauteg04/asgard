@@ -96,10 +96,13 @@ $qrCode
                                 <th><?= Yii::t('academico', 'Career') ?>:</th>
                                 <td><?= $carrera ?></td>
                             </tr>
+                            <?php /*
                             <tr>
                                 <th><?= Yii::t('formulario','Study mode') ?>:</th>
                                 <td><?= $modalidad ?></td>
                             </tr>
+                            */
+                            ?>
                             <tr>
                                 <th><?= Yii::t('formulario', 'Register') ?>:</th>
                                 <td><?= $matricula ?></td>

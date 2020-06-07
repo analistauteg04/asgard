@@ -486,7 +486,7 @@ class PerfilController extends \app\components\CController {
                     if(strlen($carrera) > 30){
                         $carrera = substr($carrera, 0, 31) . ".";
                     }
-                    $modalidad = $dataCarrera['Modalidad']; // limite 30 caracteres
+                    //$modalidad = $dataCarrera['Modalidad']; // limite 30 caracteres
                     $matricula = $modelEstudiante->est_matricula;
                 }
 

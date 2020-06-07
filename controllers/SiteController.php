@@ -720,7 +720,7 @@ class SiteController extends CController {
                 if(strlen($carrera) > 30){
                     $carrera = substr($carrera, 0, 31) . ".";
                 }
-                $modalidad = $dataCarrera['Modalidad']; // limite 30 caracteres
+                //$modalidad = $dataCarrera['Modalidad']; // limite 30 caracteres
                 $matricula = $modelEstudiante->est_matricula;
             }
 
@@ -763,7 +763,7 @@ class SiteController extends CController {
                 imagefttext($im1, $font_size, $angulo, $x, 390, $colorB, $ttf_light, $carrera);
             
             
-                // Get size of text
+                // Get size of text 
                 list($left, $bottom, $right, , , $top) = imageftbbox($font_size, $angulo, $ttf_light, $modalidad);
                 // Determine offset of text
                 $left_offset = ($right - $left) / 2;
