@@ -131,7 +131,7 @@ create table if not exists `estudio_academico` (
   `eaca_nombre` varchar(300) not null,
   `eaca_descripcion` varchar(500) not null, 
   `eaca_alias` varchar(300) not null,
-  `eaca_alias_resumen` varchar(300) null,
+  `eaca_alias_resumen` varchar(30) null,
   `eaca_usuario_ingreso` bigint(20) not null,
   `eaca_usuario_modifica` bigint(20)  null,  
   `eaca_estado` varchar(1) not null,
