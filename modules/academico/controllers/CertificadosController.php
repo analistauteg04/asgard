@@ -30,9 +30,18 @@ class CertificadosController extends \app\components\CController {
     private function estadoPagos() {
         return [
             '0' => Yii::t("formulario", "Todos"),
-            '1' => Yii::t("formulario", "Pendiente"),
-            '2' => Yii::t("formulario", "Pago Solicitud - Rechazado"),
-            '3' => Yii::t("formulario", "Generado"),
+            '1' => Yii::t("formulario", "Codigo Generado"),
+            '2' => Yii::t("formulario", "Certificado por Revisar"),
+            '3' => Yii::t("formulario", "Certificado Autorizado"),
+            '4' => Yii::t("formulario", "Certificado Rechazado"),
+        ];
+    }
+    
+     private function estadoAutorizacion() {
+        return [
+            '0' => Yii::t("formulario", "Todos"),
+            '3' => Yii::t("formulario", "Certificado Autorizado"),
+            '4' => Yii::t("formulario", "Certificado Rechazado"),
         ];
     }
 
@@ -373,4 +382,60 @@ class CertificadosController extends \app\components\CController {
         $this->redirect('index');
     }
 
+    public function actionListadoautorizacion() {
+        $mod_certificado = new CertificadosGeneradas();
+        $mod_unidad = new UnidadAcademica();
+        $mod_modalidad = new Modalidad();
+        $modestudio = new ModuloEstudio();
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+            if (isset($data["getmodalidad"])) {
+                if (($data["unidad"] == 1) or ( $data["unidad"] == 2)) {
+                    $modalidad = $mod_modalidad->consultarModalidad($data["unidad"], 1);
+                } else {
+                    $modalidad = $modestudio->consultarModalidadModestudio();
+                }
+                $message = array("modalidad" => $modalidad);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+            }
+        }
+        $data = Yii::$app->request->get();
+        if ($data['PBgetFilter']) {
+            $arrSearch["f_ini"] = $data['f_ini'];
+            $arrSearch["f_fin"] = $data['f_fin'];
+            $arrSearch["unidad"] = $data['unidad'];
+            $arrSearch["modalidad"] = $data['modalidad'];
+            $arrSearch["search"] = $data['search'];
+            $resp_cert = $mod_certificado->listarCertificadosSubidos($arrSearch, false, 1);
+            return $this->renderPartial('_index-grid_autorizacion', [
+                        "model" => $resp_cert,
+            ]);
+        }
+        $model = $mod_certificado->listarCertificadosSubidos(null, false, 1);
+        $arr_unidadac = $mod_unidad->consultarUnidadAcademicas();
+        $arr_modalidad = $mod_modalidad->consultarModalidad($arr_unidadac[0]["id"], 1);
+        return $this->render('index_autorizacion', [
+                    'model' => $model,
+                    'arr_unidad' => ArrayHelper::map($arr_unidadac, "id", "name"),
+                    'arr_modalidad' => ArrayHelper::map($arr_modalidad, "id", "name"),
+        ]);
+    }
+    
+    public function actionAutorizarcertificado() {
+        $cgen_id = base64_decode($_GET["cgen_id"]);
+        $mod_certificado = new CertificadosGeneradas();
+        $mod_unidad = new UnidadAcademica();
+        $mod_modalidad = new Modalidad();                        
+                
+        $model = $mod_certificado->consultarCertificadosGeneradas($cgen_id);
+        $arr_unidadac = $mod_unidad->consultarUnidadAcademicas();
+        $arr_modalidad = $mod_modalidad->consultarModalidad($arr_unidadac[0]["id"], 1);
+        return $this->render('autorizarcertificado', [
+                    'model' => $model,                    
+                    'arr_unidad' => ArrayHelper::map($arr_unidadac, "id", "name"),
+                    'arr_modalidad' => ArrayHelper::map($arr_modalidad, "id", "name"),
+                    'arrEstados' => $this->estadoAutorizacion(),
+                    'arrObservacion' => array("" => "Seleccione una opción", "Archivo Ilegible" => "Archivo Ilegible", "Archivo sin Firmas" => "Archivo sin Firmas", "Archivo con Errores" => "Archivo con Errores"),
+        ]);
+    }
 }

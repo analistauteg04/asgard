@@ -1664,6 +1664,9 @@ CREATE TABLE `certificados_generadas` (
   `cgen_fecha_caducidad` date DEFAULT NULL,
   `cgen_ruta_archivo_pdf` varchar(500) DEFAULT NULL,
   `cgen_estado_certificado` varchar(1) NOT NULL, -- null pendiente, 1 codigo generado, 2 certificado generado 
+  `cgen_observacion_autorizacion` varchar(500) NOT NULL,
+  `cgen_fecha_autorizacion` timestamp null DEFAULT NULL,
+  `cgen_usuario_autorizacion` bigint(20) DEFAULT NULL,
   `cgen_usuario_ingreso` bigint(20) DEFAULT NULL,
   `cgen_usuario_modifica` bigint(20) DEFAULT NULL,
   `cgen_estado` varchar(1) NOT NULL,
@@ -1672,9 +1675,7 @@ CREATE TABLE `certificados_generadas` (
   `cgen_estado_logico` varchar(1) NOT NULL,
   foreign key (egen_id) references `especies_generadas`(egen_id),
   unique cgen_codigo(cgen_codigo) 
-
 );
-
 
 -- --------------------------------------------------------
 -- 

@@ -13,9 +13,6 @@ certificados::registerTranslations();
 
 ?>
 <?= Html::hiddenInput('txth_per_id', base64_encode($personalData['per_id']), ['id' => 'txth_per_id']); ?>
-<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
-    <h4><span id="lbl_general"><?= certificados::t("certificados", "List of generated certificate") ?></span></h4> 
-</div>
 
 
 <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">

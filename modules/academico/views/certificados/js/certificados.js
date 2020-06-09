@@ -43,6 +43,17 @@ $(document).ready(function() {
             }
         }, true);
     });
+    
+    $('#cmb_estado_autoriza').change(function () {
+        if ($('#cmb_estado_autoriza').val() == 4)
+        {
+            $('#Divobservacion').show();
+        } else
+        {
+            $('#Divobservacion').hide();
+        }
+    });
+    
 });
 
 function setComboDataselect(arr_data, element_id, texto) {
