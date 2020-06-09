@@ -373,7 +373,7 @@ class PerfilController extends \app\components\CController {
                 $bb_credencial = Yii::$app->basePath . Yii::$app->params["documentFolder"] . "Credencial/credencial-estudiante-back.jpeg";
                 $isEstudiante = true;
             }
-            if($modelDocente){
+            if($modelDocente && !$isEstudiante){
                 $bg_credencial = Yii::$app->basePath . Yii::$app->params["documentFolder"] . "Credencial/credencial-docente-front.jpeg";
                 $bb_credencial = Yii::$app->basePath . Yii::$app->params["documentFolder"] . "Credencial/credencial-docente-back.jpeg";
                 $isDocente = true;
@@ -489,7 +489,7 @@ class PerfilController extends \app\components\CController {
                     $dataCarrera = $modelEstudiante->getInfoCarreraEstudiante($modelEstudiante->est_id, $idemp);
                     $ttf_font = $ttf_light;
                     $widthDifference = 0;
-                    $carrera = $dataCarrera['Carrera']; // limite 30 caracteres
+                    $carrera = (isset($dataCarrera['ResumenCarrera']) && $dataCarrera['ResumenCarrera'] != "")?$dataCarrera['ResumenCarrera']:$dataCarrera['Carrera']; // limite 30 caracteres
                     if(strlen($carrera) > 30){
                         $carrera = substr($carrera, 0, 31) . ".";
                     }
