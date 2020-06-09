@@ -13,12 +13,12 @@ INSERT INTO db_academico.`asignatura` (`asi_id`, `scon_id`, `uaca_id`, `asi_nomb
 
 
 INSERT INTO db_academico.`profesor` (`pro_id`, `per_id`, `pro_usuario_ingreso`, `pro_estado`,`pro_estado_logico`) VALUES
-(180,226,1,1,1),
-(181,227,1,1,1),
-(182,228,1,1,1),
-(183,229,1,1,1),
-(184,230,1,1,1),
-(185,231,1,1,1);
+(180,225,1,1,1),
+(181,226,1,1,1),
+(182,227,1,1,1),
+(183,228,1,1,1),
+(184,229,1,1,1),
+(185,230,1,1,1);
 
 
 INSERT INTO db_academico.`distributivo_academico_horario` (`daho_id`, `uaca_id`, `mod_id`, `daho_jornada`, `daho_horario`, `daho_hora_inicio`, `daho_hora_fin`,  `daho_lunes`, `daho_martes`, `daho_miercoles`, `daho_jueves`, `daho_viernes`, `daho_sabado`, `daho_domingo`, `daho_estado`, `daho_estado_logico`) VALUES

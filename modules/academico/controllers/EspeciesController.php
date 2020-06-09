@@ -341,8 +341,10 @@ class EspeciesController extends \app\components\CController {
                     Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [$correo => $user], $asunto, $body);
                     // si la especie generar certiifcado otro correo
                     $solicitud_correo = $especiesADO->consultarSolicitudXcorreo($csol_id);
+                    \app\models\Utilities::putMessageLogFile('Cab solic:'. $csol_id);                
                     //recorrer en un for pueden venir varias con si y cada uno enviar un correo
                     for ($a = 0; $a < count($solicitud_correo); $a++) {
+                        \app\models\Utilities::putMessageLogFile('Contador:'. count($solicitud_correo));                
                         $tituloMensaje = 'Especie genera certificado';
                         $asunto = 'Especie genera certificado';
                         $body = Utilities::getMailMessage("especiegencertificado", array(
@@ -353,12 +355,14 @@ class EspeciesController extends \app\components\CController {
                             switch ($solicitud_correo[$a]["tra_id"]) {
                                 case "1": //Academicos
                                     if ($solicitud_correo[$a]["uaca_id"] == "1") {
-                                        switch ($solicitud_correo[$a]["mod_id"]) {
+                                        switch ($solicitud_correo[$a]["mod_id"]) {                                            
                                             case "1": //online  
                                                 Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], ["decanato_online@yopmail.com" => "decano", "secretariaonline@yopmail.com" => "secretaria", "ahernandez@yopmail.com" => "coordinador"], $asunto, $body);
+                                                \app\models\Utilities::putMessageLogFile('Academicos 1');   
                                                 break;
                                             case "2": //presencial
-                                                    Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], ["decanopresencial@yopmail.com" => "decano", "secretariapresencial@yopmail.com" => "secretaria"], $asunto, $body);
+                                                    Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], ["decanopresencial@yopmail.com" => "decano", "secretariapresencial@yopmail.com" => "secretaria", "coordinadoracademicogrado@yopmail.com" => "coordinador"], $asunto, $body);
+                                                    \app\models\Utilities::putMessageLogFile('Academicos 1');                
                                                 break;
                                             case "3": //semipresencial                                        
                                                 Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], ["subdecanogrado@yopmail.com" => "decano", "secretariasemipresencial@yopmail.com" => "secretaria", "coordinadoracademicogrado@yopmail.com" => "coordinador"], $asunto, $body);
@@ -371,14 +375,17 @@ class EspeciesController extends \app\components\CController {
                                         Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], ["olmedo.farfan@yopmail.com" => "decano", "secretariaposgrado@yopmail.com" => "secretaria", "coordinacionposgrado@yopmail.com" => "coordinador", "coordinacionposgradosonline@yopmail.com" => "coordinador1"], $asunto, $body);
                                         break;
                                     }
+                                    break;
                                 case "2": //Graduacion
                                     if ($solicitud_correo[$a]["uaca_id"] == "1") {
                                         switch ($solicitud_correo[$a]["mod_id"]) {
                                             case "1": //online  
                                                 Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], ["decanato_online@yopmail.com" => "decano", "secretariaonline@yopmail.com" => "secretaria", "ahernandez@yopmail.com" => "coordinador"], $asunto, $body);
+                                                \app\models\Utilities::putMessageLogFile('Graduacion 1');   
                                                 break;
                                             case "2": //presencial
-                                                Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], ["decanopresencial@yopmail.com" => "decano", "secretariapresencial@yopmail.com" => "secretaria"], $asunto, $body);
+                                                Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], ["decanopresencial@yopmail.com" => "decano", "secretariapresencial@yopmail.com" => "secretaria", "coordinadoracademicogrado@yopmail.com" => "coordinador"], $asunto, $body);
+                                                \app\models\Utilities::putMessageLogFile('Graduación 1');                
                                                 break;
                                             case "3": //semipresencial                                        
                                                 Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], ["subdecanogrado@yopmail.com" => "decano", "secretariasemipresencial@yopmail.com" => "secretaria", "coordinadoracademicogrado@yopmail.com" => "coordinador"], $asunto, $body);
@@ -391,7 +398,7 @@ class EspeciesController extends \app\components\CController {
                                         Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], ["olmedo.farfan@yopmail.com" => "decano", "secretariaposgrado@yopmail.com" => "secretaria", "coordinacionposgrado@yopmail.com" => "coordinador", "coordinacionposgradosonline@yopmail.com" => "coordinador1"], $asunto, $body);
                                         break;
                                     }
-
+                                    break;
                                 case "3": //Secretaria General -- Grado
                                     Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], ["secretariogeneral@yopmail" => "secretario", "coordinacionsecretaria@yopmail.com" => "coordinador", "yazar@yopmail.com" => "yazar"], $asunto, $body);
                                     break;
@@ -403,9 +410,11 @@ class EspeciesController extends \app\components\CController {
                                         switch ($solicitud_correo[$a]["mod_id"]) {
                                             case "1": //online  
                                                 Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], ["decanato_online@yopmail.com" => "decano", "secretariaonline@yopmail.com" => "secretaria", "ahernandez@yopmail.com" => "coordinador"], $asunto, $body);
+                                                \app\models\Utilities::putMessageLogFile('Decanato 1');   
                                                 break;
                                             case "2": //presencial
-                                                Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], ["decanopresencial@yopmail.com" => "decano", "secretariapresencial@yopmail.com" => "secretaria"], $asunto, $body);
+                                                Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], ["decanopresencial@yopmail.com" => "decano", "secretariapresencial@yopmail.com" => "secretaria", "coordinadoracademicogrado@yopmail.com" => "coordinador"], $asunto, $body);
+                                                \app\models\Utilities::putMessageLogFile('Decanato 1');                
                                                 break;
                                             case "3": //semipresencial                                        
                                                 Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], ["subdecanogrado@yopmail.com" => "decano", "secretariasemipresencial@yopmail.com" => "secretaria", "coordinadoracademicogrado@yopmail.com" => "coordinador"], $asunto, $body);
@@ -418,15 +427,17 @@ class EspeciesController extends \app\components\CController {
                                         Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], ["olmedo.farfan@yopmail.com" => "decano", "secretariaposgrado@yopmail.com" => "secretaria", "coordinacionposgrado@yopmail.com" => "coordinador", "coordinacionposgradosonline@yopmail.com" => "coordinador1"], $asunto, $body);
                                         break;
                                     }
-
+                                    break;
                                 case "6": //Graduacion
                                     if ($solicitud_correo[$a]["uaca_id"] == "1") {
                                         switch ($solicitud_correo[$a]["mod_id"]) {
                                             case "1": //online  
                                                 Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], ["decanato_online@yopmail.com" => "decano", "secretariaonline@yopmail.com" => "secretaria", "ahernandez@yopmail.com" => "coordinador"], $asunto, $body);
+                                                \app\models\Utilities::putMessageLogFile('Graduacion 1');   
                                                 break;
                                             case "2": //presencial
-                                                Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], ["decanopresencial@yopmail.com" => "decano", "secretariapresencial@yopmail.com" => "secretaria"], $asunto, $body);
+                                                Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], ["decanopresencial@yopmail.com" => "decano", "secretariapresencial@yopmail.com" => "secretaria", "coordinadoracademicogrado@yopmail.com" => "coordinador"], $asunto, $body);
+                                                \app\models\Utilities::putMessageLogFile('Graduacion 2');                
                                                 break;
                                             case "3": //semipresencial                                        
                                                 Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], ["subdecanogrado@yopmail.com" => "decano", "secretariasemipresencial@yopmail.com" => "secretaria", "coordinadoracademicogrado@yopmail.com" => "coordinador"], $asunto, $body);
@@ -439,15 +450,17 @@ class EspeciesController extends \app\components\CController {
                                         Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], ["olmedo.farfan@yopmail.com" => "decano", "secretariaposgrado@yopmail.com" => "secretaria", "coordinacionposgrado@yopmail.com" => "coordinador", "coordinacionposgradosonline@yopmail.com" => "coordinador1"], $asunto, $body);
                                         break;
                                     }
-
-                                case "7": //Examen complecivo
+                                    break;
+                                case "7": //Examen complexivo
                                     if ($solicitud_correo[$a]["uaca_id"] == "1") {
                                         switch ($solicitud_correo[$a]["mod_id"]) {
                                             case "1": //online  
                                                 Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], ["decanato_online@yopmail.com" => "decano", "secretariaonline@yopmail.com" => "secretaria", "ahernandez@yopmail.com" => "coordinador"], $asunto, $body);
+                                                \app\models\Utilities::putMessageLogFile('Examen Comp 1');   
                                                 break;
                                             case "2": //presencial
-                                                Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], ["decanopresencial@yopmail.com" => "decano", "secretariapresencial@yopmail.com" => "secretaria"], $asunto, $body);
+                                                Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], ["decanopresencial@yopmail.com" => "decano", "secretariapresencial@yopmail.com" => "secretaria", "coordinadoracademicogrado@yopmail.com" => "coordinador"], $asunto, $body);
+                                                \app\models\Utilities::putMessageLogFile('Examen Complexivo');                                                                
                                                 break;
                                             case "3": //semipresencial                                        
                                                 Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], ["subdecanogrado@yopmail.com" => "decano", "secretariasemipresencial@yopmail.com" => "secretaria", "coordinadoracademicogrado@yopmail.com" => "coordinador"], $asunto, $body);
@@ -460,7 +473,7 @@ class EspeciesController extends \app\components\CController {
                                         Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], ["olmedo.farfan@yopmail.com" => "decano", "secretariaposgrado@yopmail.com" => "secretaria", "coordinacionposgrado@yopmail.com" => "coordinador", "coordinacionposgradosonline@yopmail.com" => "coordinador1"], $asunto, $body);
                                         break;
                                     }
-
+                                    break;
                                 case "8": //Secretaria General -- Posgrado
                                     Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], ["secretariogeneral@yopmail" => "secretario", "coordinacionsecretaria@yopmail.com" => "coordinador", "yazar@yopmail.com" => "yazar"], $asunto, $body);
                                     break;
