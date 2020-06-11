@@ -435,7 +435,38 @@ class CertificadosController extends \app\components\CController {
                     'arr_unidad' => ArrayHelper::map($arr_unidadac, "id", "name"),
                     'arr_modalidad' => ArrayHelper::map($arr_modalidad, "id", "name"),
                     'arrEstados' => $this->estadoAutorizacion(),
-                    'arrObservacion' => array("" => "Seleccione una opción", "Archivo Ilegible" => "Archivo Ilegible", "Archivo sin Firmas" => "Archivo sin Firmas", "Archivo con Errores" => "Archivo con Errores"),
+                    'arrObservacion' => array("0" => "Seleccione una opción", "Archivo Ilegible" => "Archivo Ilegible", "Archivo sin Firmas" => "Archivo sin Firmas", "Archivo con Errores" => "Archivo con Errores"),
         ]);
+    }
+    
+    public function actionSaveautorizacion() {         
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+            $mod_certificado = new CertificadosGeneradas();            
+            //Utilities::putMessageLogFile('csdfsd' . $pagodia['eppa_estado_pago']);
+            $id = $data['cgen_id'];
+            $resultado = $data['resultado'];
+            $observacion = $data['observacion'];
+            if ($resultado != "0") {  
+                if (($resultado == "4") && ($observacion==0)) {
+                    $message = ["info" => Yii::t('exception', 'Seleccione una observación')];
+                    echo Utilities::ajaxResponse('NO_OK', 'alert', Yii::t('jslang', 'Error'), 'false', $message);
+                    return;
+                }   
+                $resul = $mod_certificado->grabarAutorizacion($id, $resultado, $observacion);               
+                //Utilities::putMessageLogFile($resul);
+                if ($resul['status']) {
+                    $message = ["info" => Yii::t('exception', 'La infomación ha sido grabada. ')];
+                    echo Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message, $resul);
+                } else {
+                    $message = ["info" => Yii::t('exception', 'Error al grabar.')];
+                    echo Utilities::ajaxResponse('NO_OK', 'alert', Yii::t('jslang', 'Error'), 'false', $message);
+                }                
+            } else {
+                $message = ["info" => Yii::t('exception', 'Seleccione el Resultado de la Autorización.')];
+                echo Utilities::ajaxResponse('NO_OK', 'alert', Yii::t('jslang', 'Error'), 'false', $message);
+            }
+            return;
+        }
     }
 }

@@ -15,6 +15,9 @@ $(document).ready(function() {
     $('#btn_buscarCertGenerado').click(function() {
         actualizarGridCertGenerado();
     });
+     $('#btn_grabar').click(function() {
+        autorizarCertificado();
+    });
 
     $('#cmb_unidad_cer').change(function() {
         var link = $('#txth_base').val() + "/academico/certificados/index";
@@ -157,4 +160,23 @@ function exportPdfcert() {
     var modalidad = $('#cmb_modalidad_cergen').val();
 
     window.location.href = $('#txth_base').val() + "/academico/certificados/exppdfcertificadogen?pdf=1&search=" + search + "&f_ini=" + f_ini + "&f_fin=" + f_fin + '&unidad=' + unidad + "&modalidad=" + modalidad;
+}
+
+
+function autorizarCertificado() {
+    var arrParams = new Object();
+    var link = $('#txth_base').val() + "/academico/certificados/saveautorizacion";
+    arrParams.cgen_id = $('#txth_cgenid').val();
+    arrParams.resultado = $('#cmb_estado_autoriza').val();
+    arrParams.observacion = $('#cmb_observacion').val();    
+
+    if (!validateForm()) {
+        requestHttpAjax(link, arrParams, function(response) {
+            showAlert(response.status, response.label, response.message);
+            setTimeout(function() {
+                parent.window.location.href = $('#txth_base').val() + "/academico/certificados/listadoautorizacion";
+            }, 2000);
+
+        }, true);
+    }
 }

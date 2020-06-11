@@ -10,6 +10,7 @@ use app\modules\financiero\Module as Financiero;
 Especies::registerTranslations();
 Financiero::registerTranslations();
 ?>
+<?= Html::hiddenInput('txth_cgenid', base64_decode($_GET["cgen_id"]), ['id' => 'txth_cgenid']); ?>
 <form class="form-horizontal" enctype="multipart/form-data" id="formsolicitud"> 
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">        
         <h3>Certificado: <span id="lbl_num_solicitud"><?= app\models\Utilities::add_ceros($model[0]['egen_numero_solicitud'], 9) ?><?php echo "-".$model[0]['identificacion'] ?></span></h3>
@@ -94,6 +95,12 @@ Financiero::registerTranslations();
                     </div>
                 </div>
             </div>            
-        </div>        
+        </div> 
+        <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
+        <div class="col-sm-8 col-md-8 col-xs-8 col-lg-8"></div>
+        <div class="col-sm-2 col-md-2 col-xs-4 col-lg-2">            
+            <a id="btn_grabar" href="javascript:" class="btn btn-primary btn-block"> <?= Yii::t("formulario", "Save") ?></a>
+        </div>
+    </div>
     </div>   
 </form>

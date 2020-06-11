@@ -549,4 +549,36 @@ class CertificadosGeneradas extends \yii\db\ActiveRecord {
             return $dataProvider;
         }
     }
+    
+    /**
+     * Function grabarAutorizacion (Actualiza el certiifcado generado una vez subido el archivo pdf)
+     * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
+     * @param   
+     * @return  
+     */
+    public function grabarAutorizacion($cgen_id, $resultado, $observacion) {
+        $con = \Yii::$app->db_academico;
+        $estado = 1;
+        $fecha_autorizacion = date(Yii::$app->params["dateTimeByDefault"]);
+        $usuario_autoriza = @Yii::$app->user->identity->usu_id; 
+        $comando = $con->createCommand
+                ("UPDATE " . $con->dbname . ".certificados_generadas
+                SET cgen_observacion_autorizacion = :cgen_observacion,
+                    cgen_fecha_autorizacion = :cgen_fecha_autoriza,                   
+                    cgen_estado_certificado = :cgen_resultado,
+                    cgen_usuario_autorizacion = :cgen_usuario_autoriza,
+                    cgen_fecha_modificacion = :cgen_fecha_autoriza
+                WHERE cgen_id = :cgen_id AND 
+                      cgen_estado =:estado AND
+                      cgen_estado_logico = :estado");
+
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":cgen_id", $cgen_id, \PDO::PARAM_INT);
+        $comando->bindParam(":cgen_observacion", $observacion, \PDO::PARAM_STR);
+        $comando->bindParam(":cgen_resultado", $resultado, \PDO::PARAM_INT);
+        $comando->bindParam(":cgen_fecha_autoriza", $fecha_autorizacion, \PDO::PARAM_STR);        
+        $comando->bindParam(":cgen_usuario_autoriza", $usuario_autoriza, \PDO::PARAM_INT);        
+        $response = $comando->execute();
+        return $response;
+    }
 }
