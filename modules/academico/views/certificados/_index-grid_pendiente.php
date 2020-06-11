@@ -21,10 +21,10 @@ Especies::registerTranslations();
 <?=
 
 PbGridView::widget([
-    'id' => 'TbG_CertGenerado',
+    'id' => 'TbG_CertPendiente',
     'showExport' => true,
-    'fnExportEXCEL' => "exportExcelcert",
-    'fnExportPDF' => "exportPdfcert",
+    'fnExportEXCEL' => "exportExcelcertpend",
+    'fnExportPDF' => "exportPdfcertpend",
     'dataProvider' => $model,
     'columns' =>
     [
@@ -47,7 +47,8 @@ PbGridView::widget([
             'attribute' => 'Certificado',           
             'header' => Especies::t("certificados", "Certificate Code"),
             'value' => 'cgen_codigo',            
-        ],           
+        ],
+                              
         [
             'attribute' => 'Unidad Academica',
             'header' => Especies::t("Especies", "Academic unit"),
@@ -59,18 +60,29 @@ PbGridView::widget([
             'value' => 'mod_nombre',
         ],
         [
-            'attribute' => 'Fecha Aprobación',
+            'attribute' => 'Fecha Generación',
             'header' => academico::t("certificados", "Date Generated"),
             'format' => ['date', 'php:d-m-Y'],
             'value' => 'cgen_fecha_certificado_subido',
-        ],                       
+        ],   
+        [
+            'attribute' => 'Fecha Rechazo',
+            'header' => academico::t("certificados", "Rejection date"),
+            //'format' => ['date', 'php:d-m-Y'],
+            'value' => 'cgen_fecha_autorizacion',
+        ],      
+         [
+            'attribute' => 'Estado',
+            'header' => especies::t("Especies", "Certified Status"),           
+            'value' => 'cgen_estado_certificado',
+        ],  
         [
             'class' => 'yii\grid\ActionColumn',
             'header' => Yii::t("formulario", "Actions"),
             'template' => '{descarga}', 
             'buttons' => [                
-                'descarga' => function ($url, $model) {                    
-                return Html::a('<span class="glyphicon glyphicon-download-alt"></span>', Url::to(['/site/getimage', 'route' => '/uploads/certificados/' . $model['imagen']]), ["download" => $model['imagen'], "data-toggle" => "tooltip", "title" => "Descargar Certificado PDF", "data-pjax" => 0]);
+                'descarga' => function ($url, $model) {                                    
+                return Html::a('<span class="glyphicon glyphicon-thumbs-up"></span>', Url::to(['/academico/certificados/autorizarcertificado', 'cgen_id' => base64_encode($model['cgen_id'])]), ["data-toggle" => "tooltip", "title" => "Autorizar Certificado", "data-pjax" => "0"]);
                 },                
             ],
         ],

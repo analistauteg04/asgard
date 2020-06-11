@@ -80,7 +80,7 @@ Especies::registerTranslations();
             <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">   
                 <?=
                 Html::dropDownList(
-                        "cmb_estadocertificado_cer", -1, $arr_estadocertificado, ["class" => "form-control", "id" => "cmb_estadocertificado_cer"]
+                        "cmb_estadocertificado_cer", -1, $arrEstados, ["class" => "form-control", "id" => "cmb_estadocertificado_cer"]
                 )
                 ?></div> 
         </div>

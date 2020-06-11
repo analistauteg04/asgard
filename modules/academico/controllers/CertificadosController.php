@@ -27,11 +27,11 @@ Especie::registerTranslations();
 
 class CertificadosController extends \app\components\CController {
 
-    private function estadoPagos() {
+    private function estados() {
         return [
             '0' => Yii::t("formulario", "Todos"),
             '1' => Yii::t("formulario", "Codigo Generado"),
-            '2' => Yii::t("formulario", "Certificado por Revisar"),
+            '2' => Yii::t("formulario", "Certificado Generado"),
             '3' => Yii::t("formulario", "Certificado Autorizado"),
             '4' => Yii::t("formulario", "Certificado Rechazado"),
         ];
@@ -80,10 +80,10 @@ class CertificadosController extends \app\components\CController {
         $arr_modalidad = $mod_modalidad->consultarModalidad($arr_unidadac[0]["id"], 1);
         return $this->render('index', [
                     'model' => $model,
-                    'arrEstados' => $this->estadoPagos(),
+                    'arrEstados' => $this->estados(),
                     'arr_unidad' => ArrayHelper::map($arr_unidadac, "id", "name"),
                     'arr_modalidad' => ArrayHelper::map($arr_modalidad, "id", "name"),
-                    'arr_estadocertificado' => array("0" => "Todos", "1" => "Código Generado", "2" => "Certificado Generado"),
+                   // 'arr_estadocertificado' => array("0" => "Todos", "1" => "Código Generado", "2" => "Certificado Generado"),
         ]);
     }
 
@@ -252,7 +252,7 @@ class CertificadosController extends \app\components\CController {
         }
     }
 
-    public function actionListadogenerados() {
+    public function actionListadoautorizados() {
         $mod_certificado = new CertificadosGeneradas();
         $mod_unidad = new UnidadAcademica();
         $mod_modalidad = new Modalidad();
@@ -276,15 +276,15 @@ class CertificadosController extends \app\components\CController {
             $arrSearch["unidad"] = $data['unidad'];
             $arrSearch["modalidad"] = $data['modalidad'];
             $arrSearch["search"] = $data['search'];
-            $resp_cert = $mod_certificado->listarCertificadosGenerados($arrSearch, false, 1);
-            return $this->renderPartial('_index-grid_certgen', [
+            $resp_cert = $mod_certificado->listarCertificadosAutorizados($arrSearch, false, 1);
+            return $this->renderPartial('_index-grid_autorizado', [
                         "model" => $resp_cert,
             ]);
         }
-        $model = $mod_certificado->listarCertificadosGenerados(null, false, 1);
+        $model = $mod_certificado->listarCertificadosAutorizados(null, false, 1);
         $arr_unidadac = $mod_unidad->consultarUnidadAcademicas();
         $arr_modalidad = $mod_modalidad->consultarModalidad($arr_unidadac[0]["id"], 1);
-        return $this->render('index_certgen', [
+        return $this->render('index_autorizado', [
                     'model' => $model,
                     'arr_unidad' => ArrayHelper::map($arr_unidadac, "id", "name"),
                     'arr_modalidad' => ArrayHelper::map($arr_modalidad, "id", "name"),
@@ -318,9 +318,9 @@ class CertificadosController extends \app\components\CController {
 
         $arrData = array();
         if (empty($arrSearch)) {
-            $arrData = $mod_certificado->listarCertificadosGenerados(array(), true, 0);
+            $arrData = $mod_certificado->listarCertificadosAutorizados(array(), true, 0);
         } else {
-            $arrData = $mod_certificado->listarCertificadosGenerados($arrSearch, true, 0);
+            $arrData = $mod_certificado->listarCertificadosAutorizados($arrSearch, true, 0);
         }
         $nameReport = certificados::t("certificados", "List of generated certificate");
         Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
@@ -353,7 +353,7 @@ class CertificadosController extends \app\components\CController {
             $arrData = $mod_certificado->listarCertificadosGenerados($arrSearch, true, 0);
         }
 
-        $this->view->title = certificados::t("certificados", "List of generated certificate"); // Titulo del reporte                
+        $this->view->title = certificados::t("certificados", "List of authorized certificate"); // Titulo del reporte                
         $report->orientation = "L"; // tipo de orientacion L => Horizontal, P => Vertical
         $report->createReportPdf(
                 $this->render('exportpdf', [
@@ -382,7 +382,7 @@ class CertificadosController extends \app\components\CController {
         $this->redirect('index');
     }
 
-    public function actionListadoautorizacion() {
+    public function actionListadopendientes() {
         $mod_certificado = new CertificadosGeneradas();
         $mod_unidad = new UnidadAcademica();
         $mod_modalidad = new Modalidad();
@@ -407,14 +407,14 @@ class CertificadosController extends \app\components\CController {
             $arrSearch["modalidad"] = $data['modalidad'];
             $arrSearch["search"] = $data['search'];
             $resp_cert = $mod_certificado->listarCertificadosSubidos($arrSearch, false, 1);
-            return $this->renderPartial('_index-grid_autorizacion', [
+            return $this->renderPartial('_index-grid_pendiente', [
                         "model" => $resp_cert,
             ]);
         }
         $model = $mod_certificado->listarCertificadosSubidos(null, false, 1);
         $arr_unidadac = $mod_unidad->consultarUnidadAcademicas();
         $arr_modalidad = $mod_modalidad->consultarModalidad($arr_unidadac[0]["id"], 1);
-        return $this->render('index_autorizacion', [
+        return $this->render('index_pendiente', [
                     'model' => $model,
                     'arr_unidad' => ArrayHelper::map($arr_unidadac, "id", "name"),
                     'arr_modalidad' => ArrayHelper::map($arr_modalidad, "id", "name"),
@@ -447,24 +447,54 @@ class CertificadosController extends \app\components\CController {
             $id = $data['cgen_id'];
             $resultado = $data['resultado'];
             $observacion = $data['observacion'];
+            Utilities::putMessageLogFile('resultado' . $resultado);
+            Utilities::putMessageLogFile('observacion' . $observacion);
             if ($resultado != "0") {  
-                if (($resultado == "4") && ($observacion==0)) {
-                    $message = ["info" => Yii::t('exception', 'Seleccione una observación')];
-                    echo Utilities::ajaxResponse('NO_OK', 'alert', Yii::t('jslang', 'Error'), 'false', $message);
+                Utilities::putMessageLogFile('ingresa');
+                if (($resultado == "4") && ($observacion=="0")) {
+                    Utilities::putMessageLogFile('ingresa porque no tiene observacion');                   
+                    $message = array(
+                            "wtmessage" => Yii::t("notificaciones", "Seleccione una observación"),
+                            "title" => Yii::t('jslang', 'Success'),
+                            );
+                        echo Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
                     return;
                 }   
-                $resul = $mod_certificado->grabarAutorizacion($id, $resultado, $observacion);               
-                //Utilities::putMessageLogFile($resul);
-                if ($resul['status']) {
-                    $message = ["info" => Yii::t('exception', 'La infomación ha sido grabada. ')];
-                    echo Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message, $resul);
-                } else {
-                    $message = ["info" => Yii::t('exception', 'Error al grabar.')];
-                    echo Utilities::ajaxResponse('NO_OK', 'alert', Yii::t('jslang', 'Error'), 'false', $message);
-                }                
+                
+                $con = \Yii::$app->db_academico;
+                $transaction = $con->beginTransaction();
+                try {
+                    $resul = $mod_certificado->grabarAutorizacion($id, $resultado, $observacion);               
+                    //Utilities::putMessageLogFile($resul);
+                    if ($resul) {
+                        Utilities::putMessageLogFile('graba la transaccion');
+                        $transaction->commit();
+                        $message = array(
+                            "wtmessage" => Yii::t("notificaciones", "La infomación ha sido grabada"),
+                            "title" => Yii::t('jslang', 'Success'),
+                            );
+                        echo Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                    } else {
+                        $message = ["info" => Yii::t('exception', 'Error al grabar.')];
+                        echo Utilities::ajaxResponse('NO_OK', 'alert', Yii::t('jslang', 'Error'), 'false', $message);
+                    } 
+                } catch (Exception $ex) {
+                    $transaction->rollback();
+                    $message = array(
+                            "wtmessage" => Yii::t("notificaciones", "Error al grabar."),
+                            "title" => Yii::t('jslang', 'Success'),
+                            );
+                        echo Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                }
+                return;
+                               
             } else {
-                $message = ["info" => Yii::t('exception', 'Seleccione el Resultado de la Autorización.')];
-                echo Utilities::ajaxResponse('NO_OK', 'alert', Yii::t('jslang', 'Error'), 'false', $message);
+                $message = array(
+                            "wtmessage" => Yii::t("notificaciones", "Seleccione el resultado de la autorización"),
+                            "title" => Yii::t('jslang', 'Success'),
+                            );
+                        echo Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                    return;
             }
             return;
         }

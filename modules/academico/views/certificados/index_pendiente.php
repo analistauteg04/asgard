@@ -17,7 +17,7 @@ certificados::registerTranslations();
 <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
     <form class="form-horizontal">
         <?=
-        $this->render('_index-search_autorizacion', [                       
+        $this->render('_index-search_pendiente', [                       
             'arr_unidad' => $arr_unidad,
             'arr_modalidad' => $arr_modalidad,            
             ]);
@@ -26,7 +26,7 @@ certificados::registerTranslations();
 </div>
 <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
     <?=
-    $this->render('_index-grid_autorizacion', [
+    $this->render('_index-grid_pendiente', [
         'model' => $model,
         //'url' => $url,         
         ]);

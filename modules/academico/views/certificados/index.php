@@ -22,7 +22,7 @@ certificados::registerTranslations();
             'arrEstados' => $arrEstados,
             'arr_unidad' => $arr_unidad,
             'arr_modalidad' => $arr_modalidad,
-            'arr_estadocertificado' => $arr_estadocertificado,
+            //'arr_estadocertificado' => $arr_estadocertificado,
             ]);
         ?>
     </form>

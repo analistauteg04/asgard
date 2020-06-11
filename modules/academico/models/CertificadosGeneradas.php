@@ -201,6 +201,8 @@ class CertificadosGeneradas extends \yii\db\ActiveRecord {
                     case ceg.cgen_estado_certificado  
                       when 1 then 'Código Generado'  
                       when 2 then 'Certificado Generado'    
+                      when 3 then 'Certificado Autorizado'   
+                      when 4 then 'Certificado Rechazado'   
                     end as cgen_estado_certificado
                 FROM db_academico.certificados_generadas ceg
                 INNER JOIN " . $con->dbname . ".especies_generadas esg on esg.egen_id = ceg.egen_id
@@ -290,7 +292,7 @@ class CertificadosGeneradas extends \yii\db\ActiveRecord {
                     ceg.cgen_fecha_codigo_generado,
                     case ceg.cgen_estado_certificado  
                       when 1 then 'Código Generado'  
-                      when 2 then 'Certificado por Revisar' 
+                      when 2 then 'Certificado Generado' 
                       when 3 then 'Certificado Autorizado' 
                       when 4 then 'Certificado Rechazado' 
                     end as cgen_estado_certificado,
@@ -358,7 +360,7 @@ class CertificadosGeneradas extends \yii\db\ActiveRecord {
      * @param
      * @return 
      */
-    public static function listarCertificadosGenerados($arrFiltro = array(), $onlyData = false, $opcion) {
+    public static function listarCertificadosAutorizados($arrFiltro = array(), $onlyData = false, $opcion) {
         $con = \Yii::$app->db_academico;
         $con1 = \Yii::$app->db_asgard;
         $estado = 1;
@@ -390,7 +392,7 @@ class CertificadosGeneradas extends \yii\db\ActiveRecord {
                     F.uaca_nombre,
                     G.mod_nombre,
                     ceg.cgen_codigo,
-                    ceg.cgen_fecha_certificado_subido
+                    ceg.cgen_fecha_autorizacion
                     $imagen
                 FROM db_academico.certificados_generadas ceg
                 INNER JOIN " . $con->dbname . ".especies_generadas esg on esg.egen_id = ceg.egen_id
@@ -489,7 +491,12 @@ class CertificadosGeneradas extends \yii\db\ActiveRecord {
                     F.uaca_nombre,
                     G.mod_nombre,
                     ceg.cgen_codigo,
-                    ceg.cgen_fecha_certificado_subido
+                    ceg.cgen_fecha_certificado_subido,
+                    ifnull(ceg.cgen_fecha_autorizacion,'') cgen_fecha_autorizacion,
+                    case ceg.cgen_estado_certificado                        
+                      when 2 then 'Certificado Generado'                       
+                      when 4 then 'Certificado Rechazado' 
+                    end as cgen_estado_certificado
                     $imagen
                 FROM " . $con->dbname . ".certificados_generadas ceg
                 INNER JOIN " . $con->dbname . ".especies_generadas esg on esg.egen_id = ceg.egen_id
@@ -500,7 +507,7 @@ class CertificadosGeneradas extends \yii\db\ActiveRecord {
                 INNER JOIN (" . $con->dbname . ".estudiante B 
                 INNER JOIN " . $con1->dbname . ".persona D ON B.per_id=D.per_id) ON esg.est_id=B.est_id
                 WHERE $str_search
-                    cgen_estado_certificado = 2 AND
+                    cgen_estado_certificado in (2,4) AND
                     ceg.cgen_estado = :estado AND 
                     ceg.cgen_estado_logico = :estado AND
                     esg.egen_estado = :estado AND 

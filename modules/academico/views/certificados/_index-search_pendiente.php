@@ -63,21 +63,21 @@ Especies::registerTranslations();
     </div>
     <div class="col-md-12 col-xs-12 col-lg-12 col-sm-12">   
         <div class="form-group">
-            <label for="lbl_unidad_cergen" class="col-sm-2 col-md-2 col-xs-2 col-lg-2 control-label" id="lbl_unidad"><?= Especies::t("Especies", "Academic unit") ?></label>
+            <label for="lbl_unidad_certpend" class="col-sm-2 col-md-2 col-xs-2 col-lg-2 control-label" id="lbl_unidad"><?= Especies::t("Especies", "Academic unit") ?></label>
             <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">                                      
-                <?= Html::dropDownList("cmb_unidad_cergen", 0, array_merge([Yii::t("formulario", "All")], $arr_unidad), ["class" => "form-control", "id" => "cmb_unidad_cergen"]) ?>                                       
+                <?= Html::dropDownList("cmb_unidad_certpend", 0, array_merge([Yii::t("formulario", "All")], $arr_unidad), ["class" => "form-control", "id" => "cmb_unidad_certpend"]) ?>                                       
             </div>
 
-            <label for="lbl_modalidad_cergen" class="col-sm-2 col-md-2 col-xs-2 col-lg-2 control-label"><?= Especies::t("Academico", "Modality") ?></label>
+            <label for="lbl_modalidad_cerpend" class="col-sm-2 col-md-2 col-xs-2 col-lg-2 control-label"><?= Especies::t("Academico", "Modality") ?></label>
             <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">                                
-                <?= Html::dropDownList("cmb_modalidad_cergen", 0, array_merge([Yii::t("formulario", "All")], $arr_modalidad), ["class" => "form-control", "id" => "cmb_modalidad_cergen"]) ?>
+                <?= Html::dropDownList("cmb_modalidad_certpend", 0, array_merge([Yii::t("formulario", "All")], $arr_modalidad), ["class" => "form-control", "id" => "cmb_modalidad_certpend"]) ?>
             </div>            
         </div>
     </div>        
     <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
         <div class="col-sm-8 col-md-8 col-xs-8 col-lg-8"></div>
         <div class="col-sm-2 col-md-2 col-xs-4 col-lg-2">                
-            <a id="btn_buscarCertGenerado" href="javascript:" class="btn btn-primary btn-block"> <?= Yii::t("formulario", "Search") ?></a>
+            <a id="btn_buscarCertPendiente" href="javascript:" class="btn btn-primary btn-block"> <?= Yii::t("formulario", "Search") ?></a>
         </div>
     </div>
 </div></br>
