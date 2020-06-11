@@ -46,7 +46,7 @@ academico::registerTranslations();
             ],
             [
                 'attribute' => 'Programa',
-                'header' => academico::t("Academico", "Career/Program/Course"),
+                'header' => academico::t("diploma", "Program/Course"),
                 'value' => 'Programa',
             ],
 
@@ -62,7 +62,7 @@ academico::registerTranslations();
             ],
             [
                 'attribute' => 'Horas',
-                'header' => Yii::t("diploma", 'Hours'),
+                'header' => academico::t("diploma", 'Hours'),
                 'value' => 'Horas',
             ],
             [

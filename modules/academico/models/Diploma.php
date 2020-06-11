@@ -85,17 +85,33 @@ class Diploma extends \yii\db\ActiveRecord
         ];
     }
 
-    function getAllDiplomasGrid($search = NULL, $onlyData = false){
+    function getAllDiplomasGrid($search = NULL, $carrera = NULL, $programa = NULL, $modalidad = NULL, $onlyData = false){
         $con_academico = \Yii::$app->db_academico;
         $search_cond = "%" . $search . "%";
+        $carrera_cond = "%" . $carrera . "%";
+        $modalidad_cond = "%" . $modalidad . "%";
+        $programa_cond = "%" . $programa . "%";
         $condition = "";
         $str_search = "";
+        $str_carrera = "";
+        $str_programa = "";
+        $str_modalidad = "";
 
         if (isset($search) && $search != "") {
             $str_search = "(d.dip_nombres like :search OR ";
             $str_search .= "d.dip_apellidos like :search OR ";
             $str_search .= "d.dip_cedula like :search) AND ";
         }
+        if (isset($carrera) && $carrera != "") {
+            $str_carrera = "d.dip_carrera like :carrera AND ";
+        }
+        if (isset($programa) && $programa != "") {
+            $str_programa = "d.dip_programa like :programa AND ";
+        }
+        if (isset($modalidad) && $modalidad != "") {
+            $str_modalidad = "d.dip_modalidad like :modalidad AND ";
+        }
+        
 
         $sql = "SELECT 
                     d.dip_id AS Id, 
@@ -110,10 +126,25 @@ class Diploma extends \yii\db\ActiveRecord
                     d.dip_horas AS Horas,
                     d.dip_descargado AS Descarga
                 FROM " . $con_academico->dbname . ".diploma AS d
-                WHERE $str_search d.dip_estado_logico = 1 and d.dip_estado_logico = 1";
+                WHERE 
+                    $str_search 
+                    $str_modalidad 
+                    $str_carrera 
+                    $str_programa 
+                    d.dip_estado_logico = 1 AND 
+                    d.dip_estado_logico = 1";
         $comando = $con_academico->createCommand($sql);
-        if(isset($search)){
+        if(isset($search) && $search != ""){
             $comando->bindParam(":search",$search_cond, \PDO::PARAM_STR);
+        }
+        if(isset($carrera) && $carrera != ""){
+            $comando->bindParam(":carrera",$carrera_cond, \PDO::PARAM_STR);
+        }
+        if(isset($programa) && $programa != ""){
+            $comando->bindParam(":programa",$programa_cond, \PDO::PARAM_STR);
+        }
+        if(isset($modalidad) && $modalidad != ""){
+            $comando->bindParam(":modalidad",$modalidad_cond, \PDO::PARAM_STR);
         }
         $res = $comando->queryAll();
         if($onlyData)   return $res;

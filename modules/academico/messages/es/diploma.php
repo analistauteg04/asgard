@@ -13,5 +13,9 @@ return [
     "End Date" => "Fecha Fin",
     "Hours" => "Horas",
     "File Downloaded" => "Archivo Descargado",
+    "Program/Course" => "Programa/Curso",
+    "-- Select Career --" => "-- Seleccione la Carrera --",
+    "-- Select Modality --" => "-- Seleccione la Modalidad --",
+    "-- Select Program/Course --" => "-- Seleccione el Programa/Curso --",
 ];
 

@@ -38,7 +38,7 @@ academico::registerTranslations();
     </div>
     <div class="row">
         <div class="col-md-6 form-group">
-            <label for="cmb_programa" class="col-sm-3 control-label"><?= academico::t("Academico", "Career/Program/Course") ?></label>
+            <label for="cmb_programa" class="col-sm-3 control-label"><?= academico::t("diploma", "Program/Course") ?></label>
             <div class="col-sm-9">
                 <?= Html::dropDownList("cmb_programa", "0", $arr_programas, ["class" => "form-control", "id" => "cmb_programa"]) ?>
             </div>

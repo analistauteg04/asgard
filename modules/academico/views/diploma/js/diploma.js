@@ -1,11 +1,19 @@
 $(document).ready(function() {
-
+    $('#cmb_modalidad, #cmb_programa, #cmb_carrera').change(function() {
+        searchModules('boxgrid', 'grid_diploma_list')
+    });
 });
 
 function searchModules(idbox, idgrid) {
     var arrParams = new Object();
     arrParams.PBgetFilter = true;
     arrParams.search = $("#" + idbox).val();
+    arrParams.carrera = $('#cmb_carrera option:selected').text();
+    arrParams.modalidad = $('#cmb_modalidad option:selected').text();
+    arrParams.programa = $('#cmb_programa option:selected').text();
+    if ($('#cmb_carrera').val() == 0) arrParams.carrera = "";
+    if ($('#cmb_modalidad').val() == 0) arrParams.modalidad = "";
+    if ($('#cmb_programa').val() == 0) arrParams.programa = "";
     $("#" + idgrid).PbGridView("applyFilterData", arrParams);
 }
 

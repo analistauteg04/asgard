@@ -13,5 +13,9 @@ return [
     "End Date" => "End Date",
     "Hours" => "Hours",
     "File Downloaded" => "File Downloaded",
+    "Program/Course" => "Program/Course",
+    "-- Select Career --" => "-- Select Career --",
+    "-- Select Modality --" => "-- Select Modality --",
+    "-- Select Program/Course --" => "-- Select Program/Course --",
 ];
 
