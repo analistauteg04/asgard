@@ -30,7 +30,7 @@ class CertificadosController extends \app\components\CController {
     private function estados() {
         return [
             '0' => Yii::t("formulario", "Todos"),
-            '1' => Yii::t("formulario", "Codigo Generado"),
+            '1' => Yii::t("formulario", "Código Generado"),
             '2' => Yii::t("formulario", "Certificado Generado"),
             '3' => Yii::t("formulario", "Certificado Autorizado"),
             '4' => Yii::t("formulario", "Certificado Rechazado"),
@@ -44,7 +44,15 @@ class CertificadosController extends \app\components\CController {
             '4' => Yii::t("formulario", "Certificado Rechazado"),
         ];
     }
-
+    
+    private function estadosPendiente() {
+        return [
+            '0' => Yii::t("formulario", "Todos"),
+            '1' => Yii::t("formulario", "Código Generado"),
+            '2' => Yii::t("formulario", "Certificado Generado"),            
+            '4' => Yii::t("formulario", "Certificado Rechazado"),
+        ];
+    }
     public function actionIndex() {
         $mod_certificado = new CertificadosGeneradas();
         $mod_unidad = new UnidadAcademica();
@@ -80,7 +88,7 @@ class CertificadosController extends \app\components\CController {
         $arr_modalidad = $mod_modalidad->consultarModalidad($arr_unidadac[0]["id"], 1);
         return $this->render('index', [
                     'model' => $model,
-                    'arrEstados' => $this->estados(),
+                    'arrEstados' => $this->estadosPendiente(),
                     'arr_unidad' => ArrayHelper::map($arr_unidadac, "id", "name"),
                     'arr_modalidad' => ArrayHelper::map($arr_modalidad, "id", "name"),
                    // 'arr_estadocertificado' => array("0" => "Todos", "1" => "Código Generado", "2" => "Certificado Generado"),
@@ -120,7 +128,7 @@ class CertificadosController extends \app\components\CController {
         } else {
             $arrData = $mod_certificado->getCertificadosGeneradas($arrSearch, true);
         }
-        $nameReport = certificados::t("certificados", "List of generated certificate");
+        $nameReport = certificados::t("certificados", "Certificate List");
         Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
         exit;
     }
@@ -152,7 +160,7 @@ class CertificadosController extends \app\components\CController {
             $arrData = $mod_certificado->getCertificadosGeneradas($arrSearch, true);
         }
 
-        $this->view->title = certificados::t("certificados", "List of generated certificate"); // Titulo del reporte                
+        $this->view->title = certificados::t("certificados", "Certificate List"); // Titulo del reporte                
         $report->orientation = "L"; // tipo de orientacion L => Horizontal, P => Vertical
         $report->createReportPdf(
                 $this->render('exportpdf', [
@@ -306,7 +314,7 @@ class CertificadosController extends \app\components\CController {
             Especie::t("Especies", "Academic unit"),
             academico::t("Academico", "Modality"),
             academico::t("certificados", "Certificate Code"),
-            academico::t("certificados", "Date Generated"),
+            academico::t("certificados", "Authorization date"),
         );
         $mod_certificado = new CertificadosGeneradas();
         $data = Yii::$app->request->get();
@@ -322,7 +330,7 @@ class CertificadosController extends \app\components\CController {
         } else {
             $arrData = $mod_certificado->listarCertificadosAutorizados($arrSearch, true, 0);
         }
-        $nameReport = certificados::t("certificados", "List of generated certificate");
+        $nameReport = certificados::t("certificados", "List of authorized certificate");
         Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
         exit;
     }
@@ -336,7 +344,7 @@ class CertificadosController extends \app\components\CController {
             Especie::t("Especies", "Academic unit"),
             academico::t("Academico", "Modality"),
             academico::t("certificados", "Certificate Code"),
-            academico::t("certificados", "Date Generated"),
+            academico::t("certificados", "Authorization date"),
         );
         $mod_certificado = new CertificadosGeneradas();
         $data = Yii::$app->request->get();
@@ -348,9 +356,9 @@ class CertificadosController extends \app\components\CController {
 
         $arrData = array();
         if (empty($arrSearch)) {
-            $arrData = $mod_certificado->listarCertificadosGenerados(array(), true, 0);
+            $arrData = $mod_certificado->listarCertificadosAutorizados(array(), true, 0);
         } else {
-            $arrData = $mod_certificado->listarCertificadosGenerados($arrSearch, true, 0);
+            $arrData = $mod_certificado->listarCertificadosAutorizados($arrSearch, true, 0);
         }
 
         $this->view->title = certificados::t("certificados", "List of authorized certificate"); // Titulo del reporte                
@@ -498,5 +506,83 @@ class CertificadosController extends \app\components\CController {
             }
             return;
         }
+    }
+    
+    public function actionExpexcelcertificadopend() {
+        ini_set('memory_limit', '256M');
+        $content_type = Utilities::mimeContentType("xls");
+        $nombarch = "Report-" . date("YmdHis") . ".xls";
+        header("Content-Type: $content_type");
+        header("Content-Disposition: attachment;filename=" . $nombarch);
+        header('Cache-Control: max-age=0');
+        $colPosition = array("C", "D", "E", "F", "G", "H", "I", "J", "K", "L");
+        $arrHeader = array(
+            Especie::t("Especies", "Número"),
+            Especie::t("Especies", "Número Especie"),
+            Especie::t("Especies", "Student"),
+            Especie::t("Especies", "Academic unit"),
+            academico::t("Academico", "Modality"),
+            Especie::t("certificados", "Certificate Code"),
+            academico::t("certificados", "Date Generated"),
+            academico::t("certificados", "Rejection date"),
+            Especie::t("Especies", "Certified Status"),      
+        );
+        $mod_certificado = new CertificadosGeneradas();
+        $data = Yii::$app->request->get();
+        $arrSearch["f_ini"] = $data['f_ini'];
+        $arrSearch["f_fin"] = $data['f_fin'];
+        $arrSearch["unidad"] = $data['unidad'];
+        $arrSearch["modalidad"] = $data['modalidad'];
+        $arrSearch["search"] = $data['search'];
+
+        $arrData = array();
+        if (empty($arrSearch)) {            
+            $arrData = $mod_certificado->listarCertificadosSubidos(array(), true, 0);
+        } else {
+            $arrData = $mod_certificado->listarCertificadosSubidos($arrSearch, true, 0);
+        }
+        $nameReport = certificados::t("certificados", "List of Pending Certificates to Authorize");
+        Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
+        exit;
+    }
+
+    public function actionExppdfcertificadopend() {
+        $report = new ExportFile();
+        $arrHeader = array(
+            Especie::t("Especies", "Número"),
+            Especie::t("Especies", "Número Especie"),
+            Especie::t("Especies", "Student"),
+            Especie::t("Especies", "Academic unit"),
+            academico::t("Academico", "Modality"),
+            Especie::t("certificados", "Certificate Code"),
+            academico::t("certificados", "Date Generated"),
+            academico::t("certificados", "Rejection date"),
+            Especie::t("Especies", "Certified Status"),      
+        );
+        $mod_certificado = new CertificadosGeneradas();
+        $data = Yii::$app->request->get();
+        $arrSearch["f_ini"] = $data['f_ini'];
+        $arrSearch["f_fin"] = $data['f_fin'];
+        $arrSearch["unidad"] = $data['unidad'];
+        $arrSearch["modalidad"] = $data['modalidad'];
+        $arrSearch["search"] = $data['search'];
+
+        $arrData = array();
+        if (empty($arrSearch)) {
+            $arrData = $mod_certificado->listarCertificadosSubidos(array(), true, 0);
+        } else {
+            $arrData = $mod_certificado->listarCertificadosSubidos($arrSearch, true, 0);
+        }
+
+        $this->view->title = certificados::t("certificados", "List of Pending Certificates to Authorize"); // Titulo del reporte                
+        $report->orientation = "L"; // tipo de orientacion L => Horizontal, P => Vertical
+        $report->createReportPdf(
+                $this->render('exportpdf', [
+                    'arr_head' => $arrHeader,
+                    'arr_body' => $arrData
+                ])
+        );
+        $report->mpdf->Output('Reporte_' . date("Ymdhis") . ".pdf", ExportFile::OUTPUT_TO_DOWNLOAD);
+        return;
     }
 }

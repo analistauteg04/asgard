@@ -213,6 +213,7 @@ class CertificadosGeneradas extends \yii\db\ActiveRecord {
                 INNER JOIN (" . $con->dbname . ".estudiante B 
                 INNER JOIN " . $con1->dbname . ".persona D ON B.per_id=D.per_id) ON esg.est_id=B.est_id
                 WHERE $str_search
+                    ceg.cgen_estado_certificado in (1,2,4) AND
                     ceg.cgen_estado = :estado AND 
                     ceg.cgen_estado_logico = :estado AND
                     esg.egen_estado = :estado AND 
@@ -367,7 +368,7 @@ class CertificadosGeneradas extends \yii\db\ActiveRecord {
         $str_search = "";
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
             if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
-                $str_search .= " ceg.cgen_fecha_certificado_subido BETWEEN :fec_ini AND :fec_fin AND ";
+                $str_search .= " ceg.cgen_fecha_autorizacion BETWEEN :fec_ini AND :fec_fin AND ";
             }
             if ($arrFiltro['search'] != "") {
                 $str_search .= "(D.per_pri_nombre like :estudiante OR ";
