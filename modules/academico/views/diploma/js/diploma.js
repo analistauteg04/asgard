@@ -32,3 +32,8 @@ function update() {
         }, true);
     }
 }
+
+function downloadDiploma(id) {
+    var link = $('#txth_base').val() + "/academico/diploma/diplomadownload" + "?id=" + id;
+    window.location = link;
+}

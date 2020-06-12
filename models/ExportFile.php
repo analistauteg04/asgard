@@ -54,6 +54,8 @@ class ExportFile {
     public $footer = TRUE;
     public $typeExport = ""; // OUTPUT_TO_DOWNLOAD, INLINE, DOWNLOAD, FILE, STRING_RETURN
     public $reportName = "";
+    public $fontDir = "";
+    public $fontdata = "";
 
     function __construct() {
         ini_set("pcre.backtrack_limit", "5000000"); //aumento de memoria para generacion de reportes
@@ -77,6 +79,12 @@ class ExportFile {
                 "margin_header" => $this->mgh, 
                 "margin_footer" => $this->mgf, 
                 "orientation"   => $this->orientation]);
+        if($this->fontDir != ""){
+            $this->mpdf->AddFontDirectory($this->fontDir);
+            if($this->fontdata != ""){
+                $this->mpdf->fontdata = $this->fontdata;
+            }
+        }
         if ($this->footer)
             $this->mpdf->SetHTMLFooter("<div class='footer' style='font-size: 10px;'><div style='float: left; width: 50%;'>Pag: {PAGENO}</div><div style='float: left;width: 50%;text-align: right;'>Hora: " . date("H:i") . "</div></div>");
         $this->mpdf->WriteHTML($content);

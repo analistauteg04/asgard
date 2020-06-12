@@ -73,7 +73,7 @@ academico::registerTranslations();
                 'template' => '{download} {revision}',
                 'buttons' => [
                     'download' => function ($url, $model) {
-                        return Html::a('<span class="glyphicon glyphicon-download"></span>', Url::to(['/academico/diploma/download', 'id' => $model['id']]), ["data-toggle" => "tooltip", "title" => Yii::t("accion","Download")]);                        
+                        return Html::a('<span class="glyphicon glyphicon-download"></span>', null, ['href' => 'javascript:downloadDiploma('.$model['Id'].')', "data-toggle" => "tooltip", "title" => Yii::t("accion","Download")]);                        
                     },
                     'revision' => function ($url, $model) {
                         if($model['Descarga'] == 1)
