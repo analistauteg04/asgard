@@ -216,25 +216,13 @@ class CertificadosController extends \app\components\CController {
 
             try {
                 $usuario_modifica = @Yii::$app->user->identity->usu_id;   //Se obtiene el id del usuario.                            
-                $mod_certificado = new CertificadosGeneradas();
-                $respcertificado = $mod_certificado->consultarCertificadosGeneradas($cgen_id);
+                $mod_certificado = new CertificadosGeneradas();                
                 $resp_certifica = $mod_certificado->subirCertificadopdf($cgen_id, $observacion, $imagen, $usuario_modifica);
                 if ($resp_certifica) {
                     $exito = 1;
                 }
                 if ($exito) {
-                    $transaction->commit();
-                    $correo_estudiante = $respcertificado[0]['per_correo'];
-                    $user = $respcertificado[0]['Nombres'];
-                    $especie = $respcertificado[0]['esp_rubro'];
-                    $tituloMensaje = 'Certificado en Línea';
-                    $asunto = 'Certificado en Línea';
-                    $body = Utilities::getMailMessage("notificarcertificado", array(
-                                "[[user]]" => $user,
-                                "[[link]]" => "https://asgard.uteg.edu.ec/asgard/",
-                                "[[especie]]" => $especie), Yii::$app->language, Yii::$app->basePath . "/modules/academico");
-                    Utilities::sendEmail(
-                            $tituloMensaje, Yii::$app->params["adminEmail"], [$correo_estudiante => $user], $asunto, $body);
+                    $transaction->commit();                    
                     $message = array(
                         "wtmessage" => Yii::t("notificaciones", "La infomación ha sido grabada. "),
                         "title" => Yii::t('jslang', 'Success'),
@@ -454,29 +442,42 @@ class CertificadosController extends \app\components\CController {
             //Utilities::putMessageLogFile('csdfsd' . $pagodia['eppa_estado_pago']);
             $id = $data['cgen_id'];
             $resultado = $data['resultado'];
-            $observacion = $data['observacion'];
-            Utilities::putMessageLogFile('resultado' . $resultado);
-            Utilities::putMessageLogFile('observacion' . $observacion);
+            $observacion = $data['observacion'];          
             if ($resultado != "0") {  
                 Utilities::putMessageLogFile('ingresa');
-                if (($resultado == "4") && ($observacion=="0")) {
-                    Utilities::putMessageLogFile('ingresa porque no tiene observacion');                   
+                if (($resultado == "4") && ($observacion=="0")) {                    
                     $message = array(
                             "wtmessage" => Yii::t("notificaciones", "Seleccione una observación"),
                             "title" => Yii::t('jslang', 'Success'),
                             );
                         echo Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
                     return;
-                }   
-                
+                }                   
                 $con = \Yii::$app->db_academico;
                 $transaction = $con->beginTransaction();
                 try {
+                    $respcertificado = $mod_certificado->consultarCertificadosGeneradas($id);
                     $resul = $mod_certificado->grabarAutorizacion($id, $resultado, $observacion);               
                     //Utilities::putMessageLogFile($resul);
                     if ($resul) {
-                        Utilities::putMessageLogFile('graba la transaccion');
                         $transaction->commit();
+                        //Correo enviado al estudiante cuando se ha autorizado el certificado.
+                        if ($resultado == "3") { 
+                            $correo_estudiante = $respcertificado[0]['per_correo'];                            
+                            $user = $respcertificado[0]['Nombres'];
+                            $especie = $respcertificado[0]['esp_rubro'];                                           
+                            $tituloMensaje = 'Certificado en Línea';
+                            $asunto = 'Certificado en Línea';
+                            $body = Utilities::getMailMessage("notificarcertificado", array(
+                                        "[[user]]" => $user,
+                                        "[[link]]" => "https://asgard.uteg.edu.ec/asgard/",
+                                        "[[especie]]" => $especie), Yii::$app->language, Yii::$app->basePath . "/modules/academico");
+                            Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [$correo_estudiante => $user], $asunto, $body);
+                        } else {
+                            //Cuando el certificado ha sido rechazado, se envia correo al personal encargado.
+                            
+                        }
+                        Utilities::putMessageLogFile('graba la transaccion');                        
                         $message = array(
                             "wtmessage" => Yii::t("notificaciones", "La infomación ha sido grabada"),
                             "title" => Yii::t('jslang', 'Success'),
