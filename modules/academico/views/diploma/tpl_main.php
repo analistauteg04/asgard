@@ -4,24 +4,10 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <style>
-        @font-face {
-            font-family: 'GothamBook';
-            src: url('<?= __DIR__ ?>/fonts/GothamBook.ttf') format('truetype');
-        }
-        
-        @font-face {
-            font-family: 'Blacksword';
-            src: url('<?= __DIR__ ?>/fonts/Blacksword.otf');
-        }
-        
-        @font-face {
-            font-family: 'Gotham-Bold';
-            src: url('<?= __DIR__ ?>/fonts/Gotham-Bold.otf');
-        }
         
         body {
             line-height: 1;
-            width: 1169px;
+            width: 1122px;
             height: 826px;
             background-image: url('data:image/png;base64,<?= base64_encode(file_get_contents(__DIR__ . "/img/dip_template.png")) ?>');
             background-repeat: no-repeat;
@@ -78,7 +64,7 @@
         }
         
         .name {
-            height: 100px;
+            height: 155px;
             position: relative;
         }
         
@@ -86,30 +72,55 @@
             height: 105px;
             position: relative;
         }
+
+        .tcontent, .ncontent, .bcontent {
+            margin-right: 20px;
+            margin-left: 20px;
+        }
         
         .titleContent {
             text-align: center;
-            width: 800px;
-            font-family: 'Gotham-Bold';
+            /*width: 800px;*/
+            font-family: gothambold;
             font-size: 20px;
             color: #575756FF;
-            padding-top: 230px;
+            padding-top: 240px;
         }
         
         .nameContent {
             text-align: center;
-            width: 800px;
-            font-family: 'Blacksword';
-            font-size: 58px;
+            /*width: 800px;*/
+            font-family: blacksword;
+            font-size: 56px;
             color: #00548bff;
+            padding-top: 55px;
+        }
+
+        .nameContent2 {
+            text-align: center;
+            /*width: 800px;*/
+            font-family: blacksword;
+            font-size: 50px; /*56px*/
+            color: #00548bff;
+            padding-top: 60px; /*40px*/
         }
         
         .bodyContent {
             text-align: center;
-            width: 800px;
-            font-family: 'GothamBook';
-            font-size: 18px;
+            /*width: 800px;*/
+            font-family: gothambook;
+            font-size: 17px;
             color: #575756ff;
+            line-height: 22px;
+        }
+        span {
+            font-family: gothambold;
+        }
+
+        .qr {
+            text-align: right;
+            margin-top: 105px;
+            margin-right: 20px;
         }
     </style>
 </head>
@@ -119,26 +130,7 @@
         <div id="container">
             <div class="left col1">&nbsp;</div>
             <div class="left col2">
-                <div class="title">
-                    <div class="tcontent">
-                        <div class="titleContent">El Departamento de Vinculación con la Sociedad<br/>conﬁere el presente certiﬁcado a:</div>
-                    </div>
-                </div>
-                <div class="name">
-                    <div class="ncontent">
-                        <div class="nameContent">
-                            Félix Javier Alejandro Escalante
-                        </div>
-                    </div>
-                </div>
-                <div class="body">
-                    <div class="bcontent">
-                        <div class="bodyContent">
-                            Por haber participado en el curso:<span>"Habilidades blandas para la Vinculación <br />con la Sociedad",</span> realizado <span>desde el 3 hasta el 17 de marzo del 2020</span> con una duracion de <span>20 horas pedagogicas.</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="qr"><?php echo $content; ?></div>
+                <?php echo $content; ?>
             </div>
             <div class="clear"></div>
         </div>

@@ -61,11 +61,24 @@ class DiplomaController extends \app\components\CController {
     public function actionDiplomadownload(){
         try {
             $ids = $_GET['id'];
-            $this->view->title = "Aqui va el titulo del diploma"; // Titulo del reporte
+            $model = Diploma::findOne($ids);
+            $desde = date('j', strtotime($model->dip_fecha_inicio)) . " de " . academico::t('matriculacion',date('F', strtotime($model->dip_fecha_inicio))).' del '.date('Y', strtotime($model->dip_fecha_inicio));
+            $hasta = date('j', strtotime($model->dip_fecha_fin)).' de '.academico::t('matriculacion',date('F', strtotime($model->dip_fecha_fin))).' del '.date('Y', strtotime($model->dip_fecha_fin));
+            if(date('Y', strtotime($model->dip_fecha_inicio)) == date('Y', strtotime($model->dip_fecha_fin))){
+                if(date('m', strtotime($model->dip_fecha_inicio)) == date('m', strtotime($model->dip_fecha_fin)))
+                    $desde = date('j', strtotime($model->dip_fecha_inicio));
+                else
+                    $desde = date('j', strtotime($model->dip_fecha_inicio)) . " de " . academico::t('matriculacion',date('F', strtotime($model->dip_fecha_inicio)));
+            }
+            $title = "El Departamento de Vinculación con la Sociedad<br/>conﬁere el presente certiﬁcado a:";
+            $body  = 'Por haber participado en el curso: ';
+            $body .= '<span>"'.$model->dip_programa.'",</span> realizado ';
+            $body .= '<span>desde el '.$desde.' hasta el '.$hasta.'</span>';
+            $body .= ' con una duración de <span>'.$model->dip_horas.' horas pedagógicas.</span>';
+
             $rep = new ExportFile();
             //$this->layout = false;
             $this->layout = '@modules/academico/views/diploma/tpl_main';
-
 
             $rep->mgl = 0;
             $rep->mgr = 0;
@@ -75,26 +88,22 @@ class DiplomaController extends \app\components\CController {
             $rep->mgf = 0;
 
             $rep->fontDir = __DIR__ . "/../views/diploma/fonts";
-            $rep->fontdata = array(
-                "GothamBook" => array(
-                    'R' => 'GothamBook.ttf'
-                ),
-                "Blacksword" => array(
-                    'R' => 'Blacksword.otf'
-                ),
-                "Gotham-Bold" => array(
-                    'B' => 'Gotham-Bold.otf'
-                ),
-            );
+            $fontdata["gothambook"] = ['R' => 'GothamBook.ttf'];
+            $fontdata["blacksword"] = ['R' => 'Blacksword.ttf'];
+            $fontdata["gothambold"] = ['R' => 'GothamBold.ttf'];
+            $rep->fontdata = $fontdata;
             
             $rep->orientation = "L"; // tipo de orientacion L => Horizontal, P => Vertical   
             $rep->footer = FALSE;
             $rep->createReportPdf(
                     $this->render('@modules/academico/views/diploma/tpl_diploma', [
-                        
+                        'title' => $title,
+                        'body' => $body,
+                        'code' => $model->dip_codigo,
+                        'name' => $model->dip_nombres . " " . $model->dip_apellidos,
                     ])
             );
-            $rep->mpdf->Output('DIPLOMA_' . $ids . ".pdf", ExportFile::OUTPUT_TO_DOWNLOAD);
+            $rep->mpdf->Output('DIPLOMA_' . str_replace(" ", "_",$model->dip_nombres . " " . $model->dip_apellidos) . ".pdf", ExportFile::OUTPUT_TO_DOWNLOAD);
             exit;
         } catch (Exception $e) {
             echo $e->getMessage();
