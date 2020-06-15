@@ -690,5 +690,5 @@ create table if not exists `detalle_pagos_factura` (
   `dpfa_estado` varchar(1) not null,
   `dpfa_fecha_creacion` timestamp not null default current_timestamp,
   `dpfa_fecha_modificacion` timestamp null default null,
-  `dpfa_estado_logico` varchar(1) not null,   
+  `dpfa_estado_logico` varchar(1) not null
 );
