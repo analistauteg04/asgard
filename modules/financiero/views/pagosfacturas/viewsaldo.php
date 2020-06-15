@@ -5,9 +5,11 @@ use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 use app\components\CFileInputAjax;
 use app\modules\academico\Module as Especies;
+use app\modules\financiero\Module as Pagos;
 
 //print_r($arr_persona);
 Especies::registerTranslations();
+Pagos::registerTranslations();
 ?>
 
 <?= Html::hiddenInput('txth_idest', $arr_persona['est_id'], ['id' => 'txth_idest']); ?>
@@ -17,7 +19,7 @@ Especies::registerTranslations();
     <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
         <div class="col-md-7 col-sm-7 col-xs-7 col-lg-7">
             <div class="form-group">
-                <h4><span id="lbl_general"><?= Especies::t("Especies", "Datos del Estudiante") ?></span></h4> 
+                <h4><span id="lbl_general"><?= Pagos::t("Pagos", "Student Data") ?></span></h4> 
             </div>
         </div>
         <div class='col-md-12 col-sm-12 col-xs-12 col-lg-12'>
@@ -31,7 +33,7 @@ Especies::registerTranslations();
             </div>
             <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
                 <div class="form-group">
-                    <label for="txt_cedula" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_nombre1">Cédula</label>
+                    <label for="txt_cedula" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_nombre1"><?= Pagos::t("Pagos", "Cell")?></label>
                     <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
                         <input type="text" class="form-control keyupmce" value="<?php echo $arr_persona['per_cedula'] ?>" id="txt_cedula" data-type="alfa" disabled placeholder="<?= Yii::t("formulario", "DNI Document") ?>">
                     </div>
@@ -41,7 +43,7 @@ Especies::registerTranslations();
         <div class='col-md-12 col-sm-12 col-xs-12 col-lg-12'>
             <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
                 <div class="form-group">
-                    <label for="txt_matricula" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_nombre1"><?= Yii::t("formulario", "Matricula") ?></label>
+                    <label for="txt_matricula" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_nombre1"><?= Yii::t("formulario", "Enrollment") ?></label>
                     <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
                         <input type="text" class="form-control keyupmce" value="<?php echo $arr_persona['est_matricula'] ?>" id="txt_nombres" disabled data-type="alfa" placeholder="<?= Yii::t("formulario", "First Name") ?>">
                     </div>
@@ -49,7 +51,7 @@ Especies::registerTranslations();
             </div>
             <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
                 <div class="form-group">
-                    <label for="txt_categoria" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_nombre1">Cátegoria</label>
+                    <label for="txt_categoria" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_nombre1"><?= Yii::t("formulario", "Category") ?></label>
                     <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
                         <input type="text" class="form-control keyupmce" value="<?php echo $arr_persona['est_categoria'] ?>" id="txt_cedula" data-type="alfa" disabled placeholder="<?= Yii::t("formulario", "DNI Document") ?>">
                     </div>
@@ -84,7 +86,7 @@ Especies::registerTranslations();
         <div class='col-md-12 col-sm-12 col-xs-12 col-lg-12'>
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                 <div class="form-group">
-                    <label for="cmb_carrera" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label"><?= Especies::t("Academico", "Carrera/Programa") ?></label>
+                    <label for="cmb_carrera" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label"><?= Especies::t("Academico", "Career/Program") ?></label>
                     <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
                         <?= Html::dropDownList("cmb_carrera", $arr_persona['eaca_id'],  $arr_carrera, ["class" => "form-control", "id" => "cmb_carrera", "disabled" => "true"]) ?>
                     </div>
@@ -111,13 +113,13 @@ Especies::registerTranslations();
                 <table  id="TbG_Productos" class="table table-hover">
                     <thead>
                         <tr>
-                            <th><?= Yii::t("formulario", "Factura") ?></th>
-                            <th><?= Yii::t("formulario", "Motivo/Item/Servicio") ?></th>
-                            <th><?= Yii::t("formulario", "Fecha Factura") ?></th>
-                            <th><?= Yii::t("formulario", "Saldo") ?></th>
-                            <th><?= Yii::t("formulario", "Cuota Pendiente") ?></th>
-                            <th><?= Yii::t("formulario", "Fecha Vencimiento") ?></th>
-                            <th><?= Yii::t("formulario", "Cantidad Cuotas") ?></th>
+                            <th><?= Pagos::t("Pagos", "Bill") ?></th>
+                            <th><?= Pagos::t("Pagos", "Motivo/Item/Servicio") ?></th>
+                            <th><?= Pagos::t("Pagos", "Date Bill") ?></th>
+                            <th><?= Pagos::t("Pagos", "Balance") ?></th>
+                            <th><?= Pagos::t("Pagos", "Pending Fee") ?></th>
+                            <th><?= Pagos::t("Pagos", "Expiration date") ?></th>
+                            <th><?= Pagos::t("Pagos", "Amount Fees") ?></th>
                             <th></th>
                         </tr>
                     </thead>
