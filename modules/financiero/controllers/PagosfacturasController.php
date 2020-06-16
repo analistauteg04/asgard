@@ -27,15 +27,17 @@ admision::registerTranslations();
 academico::registerTranslations();
 
 class PagosfacturasController extends \app\components\CController {
- private function estados() {
+
+    private function estados() {
         return [
             '0' => Yii::t("formulario", "Todos"),
             '1' => Yii::t("formulario", "Pendiente"),
             '2' => Yii::t("formulario", "Aprobado"),
-            '3' => Yii::t("formulario", "Rechazado"),            
+            '3' => Yii::t("formulario", "Rechazado"),
         ];
     }
- public function actionRevisionpagos() {
+
+    public function actionRevisionpagos() {
         $mod_pagos = new PagosFacturaEstudiante();
         $mod_unidad = new UnidadAcademica();
         $mod_modalidad = new Modalidad();
@@ -60,7 +62,7 @@ class PagosfacturasController extends \app\components\CController {
             $arrSearch["modalidad"] = $data['modalidad'];
             $arrSearch["search"] = $data['search'];
             $arrSearch["estadopago"] = $data['estadopago'];
-            $resp_pago= $mod_pagos->getPagos($arrSearch, false);
+            $resp_pago = $mod_pagos->getPagos($arrSearch, false);
             return $this->renderPartial('_index-grid_revisionpago', [
                         "model" => $resp_pago,
             ]);
@@ -69,13 +71,13 @@ class PagosfacturasController extends \app\components\CController {
         $arr_unidadac = $mod_unidad->consultarUnidadAcademicas();
         $arr_modalidad = $mod_modalidad->consultarModalidad($arr_unidadac[0]["id"], 1);
         return $this->render('index_revisionpago', [
-                    'model' => $model,                    
+                    'model' => $model,
                     'arr_unidad' => ArrayHelper::map($arr_unidadac, "id", "name"),
                     'arr_modalidad' => ArrayHelper::map($arr_modalidad, "id", "name"),
                     'arr_estado' => $this->estados(),
         ]);
     }
-    
+
     public function actionViewsaldo() {
         $per_idsession = @Yii::$app->session->get("PB_perid");
         $especiesADO = new Especies();
@@ -98,6 +100,7 @@ class PagosfacturasController extends \app\components\CController {
                     'arr_carrera' => ArrayHelper::map($carrera, "id", "name"),
         ]);
     }
+
     public function actionSubirpago() {
         $per_idsession = @Yii::$app->session->get("PB_perid");
         $especiesADO = new Especies();
@@ -123,4 +126,57 @@ class PagosfacturasController extends \app\components\CController {
                     "arr_forma_pago" => ArrayHelper::map($arr_forma_pago, "id", "value"),
         ]);
     }
+
+    public function actionCargarpago() {
+        $per_id = @Yii::$app->session->get("PB_perid");
+        $ids = isset($_GET['ids']) ? base64_decode($_GET['ids']) : NULL;
+        $especiesADO = new Especies();
+        $est_id = $especiesADO->recuperarIdsEstudiente($per_id);
+        $mod_unidad = new UnidadAcademica();
+        $mod_modalidad = new Modalidad();
+        $mod_persona = new Persona();
+        $data_persona = $mod_persona->consultaPersonaId($per_id);
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+            if ($data["upload_file"]) {
+                if (empty($_FILES)) {
+                    return json_encode(['error' => Yii::t("notificaciones", "Error to process File {file}. Try again.", ['{file}' => basename($files['name'])])]);
+                }
+                //Recibe Parámetros
+                $files = $_FILES[key($_FILES)];
+                $arrIm = explode(".", basename($files['name']));
+                $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                if ($typeFile == 'jpg' || $typeFile == 'png' || $typeFile == 'pdf') {
+                    $dirFileEnd = Yii::$app->params["documentFolder"] . "pagosfinanciero/" . $data["name_file"] . "." . $typeFile;
+                    $status = Utilities::moveUploadFile($files['tmp_name'], $dirFileEnd);
+                    if ($status) {
+                        return true;
+                    } else {
+                        return json_encode(['error' => Yii::t("notificaciones", "Error to process File {file}. Try again.", ['{file}' => basename($files['name'])])]);
+                    }
+                }
+            }
+            if ($data["procesar_file"]) {
+                $message = array(
+                    "wtmessage" => Yii::t("notificaciones", "Archivo procesado correctamente." . $carga_archivo['data']),
+                    "title" => Yii::t('jslang', 'Success'),
+                );
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Success"), false, $message);
+            } else {
+                $message = array(
+                    "wtmessage" => Yii::t("notificaciones", "Error al procesar el archivo. " . $carga_archivo['message']),
+                    "title" => Yii::t('jslang', 'Error'),
+                );
+                return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), true, $message);
+            }
+            return;
+        }
+        /* $personaData = $especiesADO->consultaDatosEstudiante($per_id);
+          $arr_unidadac = $mod_unidad->consultarUnidadAcademicas();
+          $arr_modalidad = $mod_modalidad->consultarModalidad($arr_unidadac[0]["id"], 1);
+          $model = $especiesADO->getSolicitudesAlumnos($est_id, null, false); */
+        return $this->render('subirpago', [
+        ]);
+    }
+
 }

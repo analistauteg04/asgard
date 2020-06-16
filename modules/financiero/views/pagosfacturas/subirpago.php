@@ -152,7 +152,7 @@ $leyendarc = '<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
                 <div class="form-group">
                     <label for="txth_doc_pago" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce" id="txth_doc_titulo" name="txth_doc_pago"><?= Yii::t("formulario", "Attach document") ?></label>
                     <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7 ">
-                        <?= Html::hiddenInput('txth_per', $per_id, ['id' => 'txth_per']); ?>
+                        <?= Html::hiddenInput('txth_per', @Yii::$app->session->get("PB_perid"), ['id' => 'txth_per']); ?>
                         <?= Html::hiddenInput('txth_doc_pago', '', ['id' => 'txth_doc_pago']); ?>
                         <?php
                         echo CFileInputAjax::widget([
@@ -169,7 +169,7 @@ $leyendarc = '<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
                                 'browseClass' => 'btn btn-primary btn-block',
                                 'browseIcon' => '<i class="fa fa-folder-open"></i> ',
                                 'browseLabel' => "Subir Archivo",
-                                'uploadUrl' => Url::to(['pagosfacturas/savepago']),
+                                'uploadUrl' => Url::to(['pagosfacturas/cargarpago']),
                                 'maxFileSize' => Yii::$app->params["MaxFileSize"], // en Kbytes
                                 'uploadExtraData' => 'javascript:function (previewId,index) {
                         var name_pago= $("#txth_doc_pago").val();
