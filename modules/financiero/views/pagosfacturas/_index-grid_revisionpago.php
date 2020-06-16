@@ -11,47 +11,36 @@ use yii\helpers\Url;
 use app\widgets\PbGridView\PbGridView;
 use app\modules\academico\Module as academico;
 use app\modules\financiero\Module as financiero;
-use app\modules\academico\Module as Especies;
+
 
 //print_r($model);
 academico::registerTranslations();
 financiero::registerTranslations();
-Especies::registerTranslations();
+
 ?>
 <?=
 
 PbGridView::widget([
-    'id' => 'TbG_CertPendiente',
+    'id' => 'TbG_Revisionpago',
     'showExport' => true,
-    'fnExportEXCEL' => "exportExcelcertpend",
-    'fnExportPDF' => "exportPdfcertpend",
+    'fnExportEXCEL' => "exportExcelrevpago",
+    'fnExportPDF' => "exportPdfrevpago",
     'dataProvider' => $model,
     'columns' =>
     [
         [
-            'attribute' => 'Numero',
-            'header' => Especies::t("Especies", "Número"),
+            'attribute' => 'Identificación',
+            'header' => Yii::t("formulario", "DNI"),
             'value' => 'cgen_id',
         ],
         [
             'attribute' => 'Nombres',
-            'header' => Especies::t("Especies", "Student"),
+            'header' => Yii::t("formulario", "Student"),
             'value' => 'Nombres',
         ],
         [
-            'attribute' => 'Especie',           
-            'header' => Especies::t("Especies", "Número Especie"),
-            'value' => 'egen_numero_solicitud',            
-        ],
-        [
-            'attribute' => 'Certificado',           
-            'header' => Especies::t("certificados", "Certificate Code"),
-            'value' => 'cgen_codigo',            
-        ],
-                              
-        [
             'attribute' => 'Unidad Academica',
-            'header' => Especies::t("Especies", "Academic unit"),
+            'header' => academico::t("Academico", "Academic unit"),
             'value' => 'uaca_nombre',
         ],
         [
@@ -60,20 +49,34 @@ PbGridView::widget([
             'value' => 'mod_nombre',
         ],
         [
-            'attribute' => 'Fecha Generación',
-            'header' => academico::t("certificados", "Date Generated"),
-            'format' => ['date', 'php:d-m-Y'],
-            'value' => 'cgen_fecha_certificado_subido',
+            'attribute' => 'Carrera/Programa',           
+            'header' => academico::t("Academico", "Career/Program"),
+            'value' => 'egen_numero_solicitud',            
+        ],
+        [
+            'attribute' => 'Método pago',           
+            'header' => Yii::t("formulario", "Paid form"),
+            'value' => 'cgen_codigo',            
+        ],
+        [
+            'attribute' => 'Cuota',           
+            'header' => financiero::t("Pagos", "Monthly fee"),
+            'value' => 'cgen_codigo',            
+        ],                  
+        [
+            'attribute' => 'Factura',           
+            'header' => financiero::t("Pagos", "Bill"),
+            'value' => 'cgen_codigo',            
         ],   
         [
-            'attribute' => 'Fecha Rechazo',
-            'header' => academico::t("certificados", "Rejection date"),
-            //'format' => ['date', 'php:d-m-Y'],
-            'value' => 'cgen_fecha_autorizacion',
-        ],      
-         [
+            'attribute' => 'Fecha Registro',
+            'header' => Yii::t("formulario", "Registration Date"),
+            'format' => ['date', 'php:d-m-Y'],
+            'value' => 'cgen_fecha_certificado_subido',
+        ],           
+        [
             'attribute' => 'Estado',
-            'header' => especies::t("Especies", "Certified Status"),           
+            'header' => Yii::t("formulario", "Status"),           
             'value' => 'cgen_estado_certificado',
         ],  
         [

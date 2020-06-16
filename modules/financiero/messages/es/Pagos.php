@@ -10,6 +10,7 @@ namespace app\modules\financiero\messages;
      "Amount" => "Cantidad",
      "Amount Paid" => "Valor Pagado",
      "Approval Payment" => "Aprobación de Pago",
+     "Bill" => "Factura",
      "Billing Data" => "Datos de Facturación",
      "Boton Payment status" =>"Estado boton pago",
      "Check External Payments" => "Verificar Pagos Externos",
@@ -20,6 +21,7 @@ namespace app\modules\financiero\messages;
      "Item" => "Item",
      "Items Detail" => "Detalle de items",
      "List Payment" => "Listar pagos",
+     "Monthly fee" => "Cuota",
      "Outstanding balance" => "Saldo Pendiente",
      "Paid form" => "Forma Pago",
      "Payment" => "Pago", 
@@ -46,6 +48,5 @@ namespace app\modules\financiero\messages;
      "Upload Contract" => "Cargar Contrato",
      "Upload Payments" => "Cargar Pagos",
      "Value" => "Valor",
-     "Way to pay" => "Forma Pago",
-     
+     "Way to pay" => "Forma Pago",     
  ];
