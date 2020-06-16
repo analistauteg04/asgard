@@ -26,6 +26,7 @@ namespace app\modules\financiero\messages;
      "Item" => "Item",
      "Items Detail" => "Detalle de items",
      "List Payment" => "Listar pagos",
+     "Monthly fee" => "Cuota",
      "Outstanding balance" => "Saldo Pendiente",
      "Paid form" => "Forma Pago",
      "Payment" => "Pago", 
@@ -55,6 +56,5 @@ namespace app\modules\financiero\messages;
      "Upload Contract" => "Cargar Contrato",
      "Upload Payments" => "Cargar Pagos",
      "Value" => "Valor",
-     "Way to pay" => "Forma Pago",
-     
+     "Way to pay" => "Forma Pago",     
  ];
