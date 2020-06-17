@@ -104,6 +104,7 @@ class PagosFacturaEstudiante extends \yii\db\ActiveRecord
         $con = \Yii::$app->db_academico;
         $con1 = \Yii::$app->db_asgard;
         $con2 = \Yii::$app->db_facturacion;
+        $con3 = \Yii::$app->db_sea;
         $sql = "SELECT 	p.per_cedula as identificacion, 
                         concat(p.per_pri_nombre, ' ', p.per_pri_apellido, ' ', ifnull(p.per_seg_apellido,'')) as estudiante,
                         u.uaca_nombre as unidad,
