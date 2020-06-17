@@ -48,6 +48,7 @@ namespace app\modules\financiero\messages;
      "Pending Fee" => "Cuota Pendiente",
      "Price" => "Precio",
      "Price with discount" => "Precio Descuento",
+     "Quota value" => "Valor cuota",
      "Reason/Item/Service" => "Motivo/Item/Servicio",
      "Reference" => "Referencia",
      "Registration Payments for Collections" => "Registro Pagos por Colecturía",  

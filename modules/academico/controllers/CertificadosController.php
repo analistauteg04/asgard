@@ -39,7 +39,7 @@ class CertificadosController extends \app\components\CController {
     
      private function estadoAutorizacion() {
         return [
-            '0' => Yii::t("formulario", "Todos"),
+            '0' => Yii::t("formulario", "Seleccione"),
             '3' => Yii::t("formulario", "Certificado Autorizado"),
             '4' => Yii::t("formulario", "Certificado Rechazado"),
         ];

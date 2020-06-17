@@ -85,7 +85,7 @@ PbGridView::widget([
             'template' => '{descarga}', 
             'buttons' => [                
                 'descarga' => function ($url, $model) {                                    
-                return Html::a('<span class="glyphicon glyphicon-thumbs-up"></span>', Url::to(['/academico/certificados/autorizarcertificado', 'cgen_id' => base64_encode($model['cgen_id'])]), ["data-toggle" => "tooltip", "title" => "Autorizar Certificado", "data-pjax" => "0"]);
+                return Html::a('<span class="glyphicon glyphicon-thumbs-up"></span>', Url::to(['/financiero/pagosfacturas/rechazar', 'dpfa_id' => base64_encode($model['dpfa_id'])]), ["data-toggle" => "tooltip", "title" => "Ver Pago", "data-pjax" => "0"]);
                 },                
             ],
         ],
