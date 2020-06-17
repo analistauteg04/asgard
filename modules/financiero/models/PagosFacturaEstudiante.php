@@ -167,9 +167,15 @@ class PagosFacturaEstudiante extends \yii\db\ActiveRecord
                   A.F_VEN_D,
                   A.VALOR_D,
                   (A.VALOR_D-A.VALOR_C-A.VAL_DEV) SALDO,
-                  (SELECT GROUP_CONCAT( NOM_ART) FROM pruebasea.VD010101 B WHERE A.TIP_NOF=B.TIP_NOF AND A.NUM_NOF=B.NUM_NOF AND A.COD_CLI=B.COD_CLI) MOTIVO,
-                  SUBSTRING(A.NUM_DOC,-3) as cantidad,
-                  SUBSTRING(A.NUM_DOC,1,3) as cuota
+                  CASE 
+                    WHEN A.NUM_DOC = A.NUM_NOF THEN '01'                    
+                    ELSE SUBSTRING(A.NUM_DOC,1,3)
+                  END  as cuota,
+                  (SELECT GROUP_CONCAT( NOM_ART) FROM pruebasea.VD010101 B WHERE A.TIP_NOF=B.TIP_NOF AND A.NUM_NOF=B.NUM_NOF AND A.COD_CLI=B.COD_CLI) MOTIVO,               
+                  CASE 
+                    WHEN A.NUM_DOC = A.NUM_NOF THEN '01'                    
+                    ELSE SUBSTRING(A.NUM_DOC,-3)
+                  END  as cantidad               
                 FROM " . $con->dbname . ".CC0002 A
                 WHERE A.COD_CLI= :cedula AND A.CANCELA='N' AND A.COD_PTO='001' AND TIP_NOF='FE'";        
         $comando = $con->createCommand($sql);

@@ -144,7 +144,7 @@ Pagos::registerTranslations();
                 [
                     'attribute' => 'Cuota_pendiente',
                     'header' => Pagos::t("Pagos", "Pending Fee"),
-                    'value' => 'NUM_NOF',
+                    'value' => 'cuota',
                 ],
                 [
                     'attribute' => 'vencimiento',
@@ -154,7 +154,7 @@ Pagos::registerTranslations();
                 [
                     'attribute' => 'cantidad',
                     'header' => Pagos::t("Pagos", "Amount Fees"),
-                    'value' => 'NUM_DOC',
+                    'value' => 'cantidad',
                 ],
             ],
         ])
