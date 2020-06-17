@@ -36,6 +36,12 @@ class PagosfacturasController extends \app\components\CController {
             '3' => Yii::t("formulario", "Rechazado"),
         ];
     }
+    private function estadoRechazo() {
+        return [
+            '0' => Yii::t("formulario", "Seleccione"),            
+            '3' => Yii::t("formulario", "Rechazado"),
+        ];
+    }
 
     public function actionRevisionpagos() {
         $mod_pagos = new PagosFacturaEstudiante();
@@ -116,8 +122,9 @@ class PagosfacturasController extends \app\components\CController {
         return $this->render('rechazar', [
                     'model' => $model,                    
                     'arr_unidad' => ArrayHelper::map($arr_unidadac, "id", "name"),
-                    'arr_modalidad' => ArrayHelper::map($arr_modalidad, "id", "name"),                    
-                    'arrObservacion' => array("0" => "Seleccione una opción", "Archivo Ilegible" => "Archivo Ilegible", "Archivo no corresponde al pago" => "Archivo no corresponde al pago", "Archivo con Error" => "Archivo con Error"),
+                    'arr_modalidad' => ArrayHelper::map($arr_modalidad, "id", "name"),         
+                    'arrEstados' => $this->estadoRechazo(),
+                    'arrObservacion' => array("0" => "Seleccione", "Archivo Ilegible" => "Archivo Ilegible", "Archivo no corresponde al pago" => "Archivo no corresponde al pago", "Archivo con Error" => "Archivo con Error"),
         ]);
     }
 

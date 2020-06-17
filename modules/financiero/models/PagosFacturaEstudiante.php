@@ -116,7 +116,8 @@ class PagosFacturaEstudiante extends \yii\db\ActiveRecord
                             when 1 then 'Pendiente'  
                             when 2 then 'Aprobado'                                
                             when 3 then 'Rechazado'   
-                        end as estado_pago
+                        end as estado_pago,
+                        dpfa_id
                 from " . $con2->dbname . ".pagos_factura_estudiante pfe inner join " . $con2->dbname . ".detalle_pagos_factura d on d.pfes_id = pfe.pfes_id
                 inner join " . $con->dbname . ".estudiante e on e.est_id = pfe.est_id
                 inner join " . $con1->dbname . ".persona p on p.per_id = e.per_id
@@ -206,9 +207,9 @@ class PagosFacturaEstudiante extends \yii\db\ActiveRecord
         $estado = 1;
         $sql = "SELECT 	p.per_cedula as identificacion, 
                         concat(p.per_pri_nombre, ' ', p.per_pri_apellido, ' ', ifnull(p.per_seg_apellido,'')) as estudiante,
-                        u.uaca_id as unidad,
-                        mo.mod_id as modalidad,
-                        ea.eaca_nombre as carrera,
+                        u.uaca_id,
+                        mo.mod_id,
+                        ea.eaca_nombre as c,
                         f.fpag_nombre as forma_pago,
                         d.dpfa_num_cuota,
                         d.dpfa_factura,
@@ -217,7 +218,8 @@ class PagosFacturaEstudiante extends \yii\db\ActiveRecord
                             when 1 then 'Pendiente'  
                             when 2 then 'Aprobado'                                
                             when 3 then 'Rechazado'   
-                        end as estado_pago
+                        end as estado_pago,
+                        dpfa_id
                 from " . $con2->dbname . ".pagos_factura_estudiante pfe inner join " . $con2->dbname . ".detalle_pagos_factura d on d.pfes_id = pfe.pfes_id
                     inner join " . $con->dbname . ".estudiante e on e.est_id = pfe.est_id
                     inner join " . $con1->dbname . ".persona p on p.per_id = e.per_id
@@ -228,7 +230,7 @@ class PagosFacturaEstudiante extends \yii\db\ActiveRecord
                     inner join " . $con->dbname . ".estudio_academico ea on ea.eaca_id = m.eaca_id
                     inner join " . $con2->dbname . ".forma_pago f on f.fpag_id = pfe.fpag_id                        
                 where dpfa_id = :dpfa_id
-                    pfes_estado = :estado
+                    and pfes_estado = :estado
                     and pfes_estado_logico = :estado
                     and dpfa_estado = :estado
                     and dpfa_estado_logico = :estado
