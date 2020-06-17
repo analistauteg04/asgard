@@ -85,6 +85,7 @@ class PagosfacturasController extends \app\components\CController {
         $mod_modalidad = new Modalidad();
         $modestudio = new ModuloEstudio();
         $modcanal = new Oportunidad();
+        $mod_pagos = new PagosFacturaEstudiante();
         $personaData = $especiesADO->consultaDatosEstudiante($per_idsession);
         $arr_unidadac = $mod_unidad->consultarUnidadAcademicas();
         $arr_modalidad = $mod_modalidad->consultarModalidad($personaData['uaca_id'], 1);
@@ -93,11 +94,13 @@ class PagosfacturasController extends \app\components\CController {
         } else {
             $carrera = $modestudio->consultarCursoModalidad($personaData['uaca_id'], $personaData['mod_id']); // tomar id de impresa
         }
+        $pagospendientesea = $mod_pagos->getPagospendientexest(/*$personaData['per_cedula']*/ '0102481074', false);
         return $this->render('viewsaldo', [
                     'arr_persona' => $personaData,
                     'arr_unidad' => ArrayHelper::map($arr_unidadac, "id", "name"),
                     'arr_modalidad' => ArrayHelper::map($arr_modalidad, "id", "name"),
                     'arr_carrera' => ArrayHelper::map($carrera, "id", "name"),
+                    'model' => $pagospendientesea,
         ]);
     }
     
@@ -106,7 +109,7 @@ class PagosfacturasController extends \app\components\CController {
         $mod_pagos = new PagosFacturaEstudiante();
         $mod_unidad = new UnidadAcademica();
         $mod_modalidad = new Modalidad();                        
-                
+        
         $model = $mod_pagos->consultarPago($dpfa_id);
         $arr_unidadac = $mod_unidad->consultarUnidadAcademicas();
         $arr_modalidad = $mod_modalidad->consultarModalidad($arr_unidadac[0]["id"], 1);
@@ -126,6 +129,7 @@ class PagosfacturasController extends \app\components\CController {
         $modestudio = new ModuloEstudio();
         $modcanal = new Oportunidad();
         $mod_fpago = new FormaPago();
+        $mod_pagos = new PagosFacturaEstudiante();
         $personaData = $especiesADO->consultaDatosEstudiante($per_idsession);
         $arr_unidadac = $mod_unidad->consultarUnidadAcademicas();
         $arr_modalidad = $mod_modalidad->consultarModalidad($personaData['uaca_id'], 1);
@@ -134,13 +138,15 @@ class PagosfacturasController extends \app\components\CController {
         } else {
             $carrera = $modestudio->consultarCursoModalidad($personaData['uaca_id'], $personaData['mod_id']); // tomar id de impresa
         }
-        $arr_forma_pago = $mod_fpago->consultarFormaPago();
+        $arr_forma_pago = $mod_fpago->consultarFormaPagosaldo();
+        $pagospendientesea = $mod_pagos->getPagospendientexest(/*$personaData['per_cedula']*/ '0503297871', false);
         return $this->render('subirpago', [
                     'arr_persona' => $personaData,
                     'arr_unidad' => ArrayHelper::map($arr_unidadac, "id", "name"),
                     'arr_modalidad' => ArrayHelper::map($arr_modalidad, "id", "name"),
                     'arr_carrera' => ArrayHelper::map($carrera, "id", "name"),
                     "arr_forma_pago" => ArrayHelper::map($arr_forma_pago, "id", "value"),
+                    'model' => $pagospendientesea,
         ]);
     }
 

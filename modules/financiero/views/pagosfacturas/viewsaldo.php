@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 use app\components\CFileInputAjax;
+use app\widgets\PbGridView\PbGridView;
 use app\modules\academico\Module as Especies;
 use app\modules\financiero\Module as Pagos;
 
@@ -14,8 +15,7 @@ Pagos::registerTranslations();
 
 <?= Html::hiddenInput('txth_idest', $arr_persona['est_id'], ['id' => 'txth_idest']); ?>
 <?= Html::hiddenInput('txth_per', @Yii::$app->session->get("PB_perid"), ['id' => 'txth_per']); ?>
-<form class="form-horizontal" enctype="multipart/form-data" id="formsolicitud">   
-
+<form class="form-horizontal" enctype="multipart/form-data" id="formsolicitud">  
     <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
         <div class="col-md-7 col-sm-7 col-xs-7 col-lg-7">
             <div class="form-group">
@@ -33,7 +33,7 @@ Pagos::registerTranslations();
             </div>
             <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
                 <div class="form-group">
-                    <label for="txt_cedula" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_nombre1"><?= Pagos::t("Pagos", "Cell")?></label>
+                    <label for="txt_cedula" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_nombre1"><?= Pagos::t("Pagos", "Cell") ?></label>
                     <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
                         <input type="text" class="form-control keyupmce" value="<?php echo $arr_persona['per_cedula'] ?>" id="txt_cedula" data-type="alfa" disabled placeholder="<?= Yii::t("formulario", "DNI Document") ?>">
                     </div>
@@ -88,9 +88,10 @@ Pagos::registerTranslations();
                 <div class="form-group">
                     <label for="cmb_carrera" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label"><?= Especies::t("Academico", "Career/Program") ?></label>
                     <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                        <?= Html::dropDownList("cmb_carrera", $arr_persona['eaca_id'],  $arr_carrera, ["class" => "form-control", "id" => "cmb_carrera", "disabled" => "true"]) ?>
+                        <?= Html::dropDownList("cmb_carrera", $arr_persona['eaca_id'], $arr_carrera, ["class" => "form-control", "id" => "cmb_carrera", "disabled" => "true"]) ?>
                     </div>
                 </div>                                        
+            </div>
         </div>
     </div>
     <div id="div_detalle" class="col-md-12 col-sm-12 col-xs-12 col-lg-12"></div>
@@ -107,41 +108,49 @@ Pagos::registerTranslations();
             </div>
         </div>
     </div>
-    <div class='col-md-12 col-sm-12 col-xs-12 col-lg-12'>      
-        <div class="form-group">
-            <div class="box-body table-responsive no-padding">
-                <table  id="TbG_Productos" class="table table-hover">
-                    <thead>
-                        <tr>
-                            <th><?= Pagos::t("Pagos", "Bill") ?></th>
-                            <th><?= Pagos::t("Pagos", "Motivo/Item/Servicio") ?></th>
-                            <th><?= Pagos::t("Pagos", "Date Bill") ?></th>
-                            <th><?= Pagos::t("Pagos", "Balance") ?></th>
-                            <th><?= Pagos::t("Pagos", "Pending Fee") ?></th>
-                            <th><?= Pagos::t("Pagos", "Expiration date") ?></th>
-                            <th><?= Pagos::t("Pagos", "Amount Fees") ?></th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <thead>
-                        <tr>
-                            <th>&nbsp;</th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
+    <div class='col-md-12 col-sm-12 col-xs-12 col-lg-12'>
+        <?=
+        PbGridView::widget([
+            'id' => 'TbgPagopendiente',
+            'dataProvider' => $model,
+            'columns' => [
+                [
+                    'attribute' => 'Factura',
+                    'header' => Pagos::t("Pagos", "Bill"),
+                    'value' => 'NUM_DOC',
+                ],
+                [
+                    'attribute' => 'Motivo',
+                    'header' => Pagos::t("Pagos", "Reason/Item/Service"),
+                    'value' => 'MOTIVO',
+                ],
+                [
+                    'attribute' => 'Fecha_factura',
+                    'header' => Pagos::t("Pagos", "Date Bill"),
+                    'value' => 'F_SUS_D',
+                ],
+                [
+                    'attribute' => 'Saldo',
+                    'header' => Pagos::t("Pagos", "Balance"),
+                    'value' => 'SALDO',
+                ],
+                [
+                    'attribute' => 'Cuota_pendiente',
+                    'header' => Pagos::t("Pagos", "Pending Fee"),
+                    'value' => 'NUM_NOF',
+                ],
+                [
+                    'attribute' => 'vencimiento',
+                    'header' => Pagos::t("Pagos", "Expiration date"),
+                    'value' => 'F_VEN_D',
+                ],
+                [
+                    'attribute' => 'cantidad',
+                    'header' => Pagos::t("Pagos", "Amount Fees"),
+                    'value' => 'NUM_NOF',
+                ],
+            ],
+        ])
+        ?>
+    </div>          
 </form>
-<script>
-    var AccionTipo = 'Create';
-</script>
