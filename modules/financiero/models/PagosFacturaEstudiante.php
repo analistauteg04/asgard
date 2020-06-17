@@ -288,4 +288,98 @@ class PagosFacturaEstudiante extends \yii\db\ActiveRecord
         $response = $comando->execute();
         return $response;
     }
+    /**
+     * Function insertarPagospendientes
+     * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;
+     * @param
+     * @return pfes_id
+     */
+    public function insertarPagospendientes($est_id, $pfes_referencia, $fpag_id, $pfes_valor_pago, $pfes_fecha_pago, $pfes_observacion, $pfes_archivo_pago, $pfes_usu_ingreso) {
+        $con = \Yii::$app->db_facturacion;
+        $trans = $con->getTransaction(); // se obtiene la transacción actual
+        if ($trans !== null) {
+            $trans = null; // si existe la transacción entonces no se crea una
+        } else {
+            $trans = $con->beginTransaction(); // si no existe la transacción entonces se crea una
+        }
+        $fecha = date(Yii::$app->params["dateTimeByDefault"]);
+        $param_sql = "pfes_estado";
+        $bdet_sql = "1";
+
+        $param_sql .= ", pfes_estado_logico";
+        $bdet_sql .= ", 1";
+        
+        $param_sql .= ", pfes_fecha_registro";
+        $bdet_sql .= ", :pfes_fecha_registro";
+
+        if (isset($est_id)) {
+            $param_sql .= ", est_id";
+            $bdet_sql .= ", :est_id";
+        }
+        if (isset($pfes_referencia)) {
+            $param_sql .= ", pfes_referencia";
+            $bdet_sql .= ", :pfes_referencia";
+        }
+        if (isset($fpag_id)) {
+            $param_sql .= ", fpag_id";
+            $bdet_sql .= ", :fpag_id";
+        }
+        if (isset($pfes_valor_pago)) {
+            $param_sql .= ", pfes_valor_pago";
+            $bdet_sql .= ", :pfes_valor_pago";
+        }
+        if (isset($pfes_fecha_pago)) {
+            $param_sql .= ", pfes_fecha_pago";
+            $bdet_sql .= ", :pfes_fecha_pago";
+        }
+        if (isset($pfes_observacion)) {
+            $param_sql .= ", pfes_observacion";
+            $bdet_sql .= ", :pfes_observacion";
+        }
+        if (isset($pfes_archivo_pago)) {
+            $param_sql .= ", pfes_archivo_pago";
+            $bdet_sql .= ", :pfes_archivo_pago";
+        }
+        if (isset($pfes_usu_ingreso)) {
+            $param_sql .= ", pfes_usu_ingreso";
+            $bdet_sql .= ", :pfes_usu_ingreso";
+        }
+        try {
+            $sql = "INSERT INTO " . $con->dbname . ".pagos_factura_estudiante ($param_sql) VALUES($bdet_sql)";
+            $comando = $con->createCommand($sql);            
+            if (isset($est_id)) {
+                $comando->bindParam(':est_id', $est_id, \PDO::PARAM_INT);
+            }
+            if (isset($pfes_referencia)) {
+                $comando->bindParam(':pfes_referencia', $pfes_referencia, \PDO::PARAM_STR);
+            }
+            if (!empty((isset($fpag_id)))) {
+                $comando->bindParam(':fpag_id', $fpag_id, \PDO::PARAM_INT);
+            }
+            if (!empty((isset($pfes_valor_pago)))) {
+                $comando->bindParam(':pfes_valor_pago', $pfes_valor_pago, \PDO::PARAM_STR);
+            }
+            if (!empty((isset($pfes_fecha_pago)))) {
+                $comando->bindParam(':pfes_fecha_pago', $pfes_fecha_pago, \PDO::PARAM_STR);
+            }
+            if (!empty((isset($pfes_observacion)))) {
+                $comando->bindParam(':pfes_observacion', ucfirst(mb_strtolower($pfes_observacion, 'UTF-8')), \PDO::PARAM_STR);
+            }
+            if (!empty((isset($pfes_archivo_pago)))) {
+                $comando->bindParam(':pfes_archivo_pago', $pfes_archivo_pago, \PDO::PARAM_STR);
+            }
+            if (!empty((isset($pfes_usu_ingreso)))) {
+                $comando->bindParam(':pfes_usu_ingreso', $pfes_usu_ingreso, \PDO::PARAM_INT);
+            }           
+            $comando->bindParam(":pfes_fecha_registro", $fecha, \PDO::PARAM_STR);
+            $result = $comando->execute();
+            if ($trans !== null)
+                $trans->commit();
+            return $con->getLastInsertID($con->dbname . '.pagos_factura_estudiante');
+        } catch (Exception $ex) {
+            if ($trans !== null)
+                $trans->rollback();
+            return FALSE;
+        }
+    }
 }

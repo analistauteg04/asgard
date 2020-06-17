@@ -297,7 +297,7 @@ $leyendarc = '<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
                     'template' => '{select}',
                     'buttons' => [
                         'select' => function ($url, $model) {
-                            return Html::checkbox("", false, ["value" => $model['NUM_DOC']]);
+                            return Html::checkbox("", false, ["value" => $model['NUM_NOF'].'/'.$model['cuota']]);
                         },
                     ],
                 ],

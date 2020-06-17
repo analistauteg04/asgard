@@ -650,7 +650,7 @@ create table if not exists `factura_docente` (
 -- Estructura de tabla para la tabla `pagos_factura_estudiante`
 -- -------------------------------------------------------------
 create table if not exists `pagos_factura_estudiante` (
-  `pfes_id` bigint(20) not null primary key,
+  `pfes_id` bigint(20) not null auto_increment  primary key,
   `est_id`  bigint(20) not null,
   `pfes_referencia` varchar(50) null, 
   `fpag_id` bigint(20) not null,
@@ -672,7 +672,7 @@ create table if not exists `pagos_factura_estudiante` (
 -- Estructura de tabla para la tabla `detalle_pagos_factura`
 -- -------------------------------------------------------------
 create table if not exists `detalle_pagos_factura` (
-  `dpfa_id` bigint(20) not null primary key,
+  `dpfa_id` bigint(20) not null auto_increment primary key,
   `pfes_id` bigint(20) not null,  
   `dpfa_tipo_factura` varchar(05) not null, 
   `dpfa_factura` varchar(50) not null, 
