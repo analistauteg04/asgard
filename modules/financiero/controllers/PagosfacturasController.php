@@ -208,4 +208,65 @@ class PagosfacturasController extends \app\components\CController {
         return $this->render('subirpago', [
         ]);
     }
+    
+    public function actionSaverechazo() {         
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();                                
+            $mod_pagos = new PagosFacturaEstudiante();
+            $id = $data['dpfa_id'];
+            $resultado = $data['resultado'];
+            $observacion = $data['observacion'];          
+            if (($resultado == "0") or ($observacion=="0")){  
+                Utilities::putMessageLogFile('ingresa');                                  
+                $message = array(
+                        "wtmessage" => Yii::t("notificaciones", "Seleccione un valor para los campos de 'Resultado' y 'Observación'"),
+                        "title" => Yii::t('jslang', 'Success'),
+                        );
+                    echo Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                return;
+             } else {                   
+                $con = \Yii::$app->db_facturacion;
+                $transaction = $con->beginTransaction();
+                try {
+                    $datos = $mod_pagos->consultarPago($id);
+                    $respago = $mod_pagos->grabarRechazo($id, $resultado, $observacion);                    
+                    //Utilities::putMessageLogFile($resul);
+                    if ($respago) {
+                        $transaction->commit();
+                        //Correo enviado al estudiante cuando se ha autorizado el certificado.                       
+                        $correo_estudiante = $datos['per_correo'];                            
+                        $user = $datos['estudiante'];
+                        $especie = $datos['esp_rubro'];                                           
+                        $tituloMensaje = 'Pagos en Línea';
+                        $asunto = 'Pagos en Línea';
+                        $body = Utilities::getMailMessage("notificarpago", array(
+                                    "[[user]]" => $user,
+                                    "[[link]]" => "https://asgard.uteg.edu.ec/asgard/",
+                                    "[[especie]]" => $especie), 
+                        Yii::$app->language, Yii::$app->basePath . "/modules/academico");
+                        Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [$correo_estudiante => $user], $asunto, $body);
+                    
+                        Utilities::putMessageLogFile('graba la transaccion');                        
+                        $message = array(
+                            "wtmessage" => Yii::t("notificaciones", "La infomación ha sido grabada"),
+                            "title" => Yii::t('jslang', 'Success'),
+                            );
+                        echo Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                    } else {
+                        $message = ["info" => Yii::t('exception', 'Error al grabar.')];
+                        echo Utilities::ajaxResponse('NO_OK', 'alert', Yii::t('jslang', 'Error'), 'false', $message);
+                    } 
+                } catch (Exception $ex) {
+                    $transaction->rollback();
+                    $message = array(
+                            "wtmessage" => Yii::t("notificaciones", "Error al grabar."),
+                            "title" => Yii::t('jslang', 'Success'),
+                            );
+                        echo Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                }
+                return;                               
+            } 
+            return;
+        }
+    }
 }
