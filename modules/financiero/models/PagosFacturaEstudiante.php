@@ -140,14 +140,24 @@ class PagosFacturaEstudiante extends \yii\db\ActiveRecord
                             when 3 then 'Rechazado'   
                         end as estado_pago
                 from " . $con2->dbname . ".pagos_factura_estudiante pfe inner join " . $con2->dbname . ".detalle_pagos_factura d on d.pfes_id = pfe.pfes_id
-                inner join " . $con->dbname . ".estudiante e on e.est_id = pfe.est_id
-                inner join " . $con1->dbname . ".persona p on p.per_id = e.per_id
-                inner join " . $con->dbname . ".estudiante_carrera_programa ec on ec.est_id = e.est_id
-                inner join " . $con->dbname . ".modalidad_estudio_unidad m on m.meun_id = ec.meun_id
-                inner join " . $con->dbname . ".unidad_academica u on u.uaca_id = m.uaca_id
-                inner join " . $con->dbname . ".modalidad mo on mo.mod_id = m.mod_id
-                inner join " . $con->dbname . ".estudio_academico ea on ea.eaca_id = m.eaca_id
-                inner join " . $con2->dbname . ".forma_pago f on f.fpag_id = pfe.fpag_id ";
+                    inner join " . $con->dbname . ".estudiante e on e.est_id = pfe.est_id
+                    inner join " . $con1->dbname . ".persona p on p.per_id = e.per_id
+                    inner join " . $con->dbname . ".estudiante_carrera_programa ec on ec.est_id = e.est_id
+                    inner join " . $con->dbname . ".modalidad_estudio_unidad m on m.meun_id = ec.meun_id
+                    inner join " . $con->dbname . ".unidad_academica u on u.uaca_id = m.uaca_id
+                    inner join " . $con->dbname . ".modalidad mo on mo.mod_id = m.mod_id
+                    inner join " . $con->dbname . ".estudio_academico ea on ea.eaca_id = m.eaca_id
+                    inner join " . $con2->dbname . ".forma_pago f on f.fpag_id = pfe.fpag_id                        
+                where $str_search
+                    pfes_estado = :estado
+                    and pfes_estado_logico = :estado
+                    and dpfa_estado = :estado
+                    and dpfa_estado_logico = :estado
+                    and est_estado = :estado
+                    and est_estado_logico = :estado
+                    and per_estado = :estado
+                    and per_estado_logico = :estado
+                ORDER BY pfe.pfes_fecha_registro";
 
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
@@ -194,5 +204,56 @@ class PagosFacturaEstudiante extends \yii\db\ActiveRecord
         } else {
             return $dataProvider;
         }
+    }
+    
+    
+    /**
+     * Function consultarPago
+     * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>;
+     * @param
+     * @return 
+     */
+    
+    public function consultarPago($dpfa_id) {
+        $con = \Yii::$app->db_academico;
+        $con1 = \Yii::$app->db_asgard;
+        $con2 = \Yii::$app->db_facturacion;
+        $estado = 1;
+        $sql = "SELECT 	p.per_cedula as identificacion, 
+                        concat(p.per_pri_nombre, ' ', p.per_pri_apellido, ' ', ifnull(p.per_seg_apellido,'')) as estudiante,
+                        u.uaca_id as unidad,
+                        mo.mod_id as modalidad,
+                        ea.eaca_nombre as carrera,
+                        f.fpag_nombre as forma_pago,
+                        d.dpfa_num_cuota,
+                        d.dpfa_factura,
+                        pfe.pfes_fecha_registro,                
+                        case d.dpfa_estado_pago  
+                            when 1 then 'Pendiente'  
+                            when 2 then 'Aprobado'                                
+                            when 3 then 'Rechazado'   
+                        end as estado_pago
+                from " . $con2->dbname . ".pagos_factura_estudiante pfe inner join " . $con2->dbname . ".detalle_pagos_factura d on d.pfes_id = pfe.pfes_id
+                    inner join " . $con->dbname . ".estudiante e on e.est_id = pfe.est_id
+                    inner join " . $con1->dbname . ".persona p on p.per_id = e.per_id
+                    inner join " . $con->dbname . ".estudiante_carrera_programa ec on ec.est_id = e.est_id
+                    inner join " . $con->dbname . ".modalidad_estudio_unidad m on m.meun_id = ec.meun_id
+                    inner join " . $con->dbname . ".unidad_academica u on u.uaca_id = m.uaca_id
+                    inner join " . $con->dbname . ".modalidad mo on mo.mod_id = m.mod_id
+                    inner join " . $con->dbname . ".estudio_academico ea on ea.eaca_id = m.eaca_id
+                    inner join " . $con2->dbname . ".forma_pago f on f.fpag_id = pfe.fpag_id                        
+                where dpfa_id = :dpfa_id
+                    pfes_estado = :estado
+                    and pfes_estado_logico = :estado
+                    and dpfa_estado = :estado
+                    and dpfa_estado_logico = :estado
+                    and est_estado = :estado
+                    and est_estado_logico = :estado
+                    and per_estado = :estado
+                    and per_estado_logico = :estado";
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":dpfa_id", $dpfa_id, \PDO::PARAM_INT);
+        return $comando->queryOne();
     }
 }

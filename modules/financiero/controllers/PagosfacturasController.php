@@ -102,12 +102,12 @@ class PagosfacturasController extends \app\components\CController {
     }
     
     public function actionRechazar() {
-        $cgen_id = base64_decode($_GET["cgen_id"]);
-        $mod_certificado = new CertificadosGeneradas();
+        $dpfa_id = base64_decode($_GET["dpfa_id"]);
+        $mod_pagos = new PagosFacturaEstudiante();
         $mod_unidad = new UnidadAcademica();
         $mod_modalidad = new Modalidad();                        
                 
-        $model = $mod_certificado->consultarCertificadosGeneradas($cgen_id);
+        $model = $mod_pagos->consultarPago($dpfa_id);
         $arr_unidadac = $mod_unidad->consultarUnidadAcademicas();
         $arr_modalidad = $mod_modalidad->consultarModalidad($arr_unidadac[0]["id"], 1);
         return $this->render('rechazar', [
