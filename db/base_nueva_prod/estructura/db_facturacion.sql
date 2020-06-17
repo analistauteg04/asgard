@@ -674,12 +674,13 @@ create table if not exists `pagos_factura_estudiante` (
 create table if not exists `detalle_pagos_factura` (
   `dpfa_id` bigint(20) not null primary key,
   `pfes_id` bigint(20) not null,  
-  `dpfa_factura` varchar(50) null, 
+  `dpfa_tipo_factura` varchar(05) not null, 
+  `dpfa_factura` varchar(50) not null, 
   `dpfa_descripcion_factura` varchar(500) not null,
   `dpfa_valor_factura` double not null,
   `dpfa_fecha_factura` timestamp null default null,  
   `dpfa_saldo_factura` double not null,
-  `dpfa_num_cuota` integer not null,
+  `dpfa_num_cuota` varchar(10) not null,
   `dpfa_valor_cuota` double not null,
   `dpfa_fecha_vence_cuota` timestamp null default null,  
   `dpfa_estado_pago` varchar(1) not null,  /* '1' Pendiente, '2' Aprobada, '3' Rechazada*/
