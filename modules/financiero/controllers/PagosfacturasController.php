@@ -95,4 +95,21 @@ class PagosfacturasController extends \app\components\CController {
                     'arr_carrera' => ArrayHelper::map($carrera, "id", "name"),
         ]);
     }
+    
+    public function actionRechazar() {
+        $cgen_id = base64_decode($_GET["cgen_id"]);
+        $mod_certificado = new CertificadosGeneradas();
+        $mod_unidad = new UnidadAcademica();
+        $mod_modalidad = new Modalidad();                        
+                
+        $model = $mod_certificado->consultarCertificadosGeneradas($cgen_id);
+        $arr_unidadac = $mod_unidad->consultarUnidadAcademicas();
+        $arr_modalidad = $mod_modalidad->consultarModalidad($arr_unidadac[0]["id"], 1);
+        return $this->render('rechazar', [
+                    'model' => $model,                    
+                    'arr_unidad' => ArrayHelper::map($arr_unidadac, "id", "name"),
+                    'arr_modalidad' => ArrayHelper::map($arr_modalidad, "id", "name"),                    
+                    'arrObservacion' => array("0" => "Seleccione una opción", "Archivo Ilegible" => "Archivo Ilegible", "Archivo no corresponde al pago" => "Archivo no corresponde al pago", "Archivo con Error" => "Archivo con Error"),
+        ]);
+    }
 }
