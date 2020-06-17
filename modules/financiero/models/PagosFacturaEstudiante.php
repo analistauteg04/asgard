@@ -3,6 +3,7 @@
 namespace app\modules\financiero\models;
 use yii\data\ArrayDataProvider;
 use Yii;
+use app\models\Utilities;
 
 /**
  * This is the model class for table "pagos_factura_estudiante".
@@ -225,7 +226,8 @@ class PagosFacturaEstudiante extends \yii\db\ActiveRecord
                             when 2 then 'Aprobado'                                
                             when 3 then 'Rechazado'   
                         end as estado_pago,
-                        dpfa_id
+                        dpfa_id,
+                        pfes_archivo_pago as imagen
                 from " . $con2->dbname . ".pagos_factura_estudiante pfe inner join " . $con2->dbname . ".detalle_pagos_factura d on d.pfes_id = pfe.pfes_id
                     inner join " . $con->dbname . ".estudiante e on e.est_id = pfe.est_id
                     inner join " . $con1->dbname . ".persona p on p.per_id = e.per_id
@@ -258,27 +260,28 @@ class PagosFacturaEstudiante extends \yii\db\ActiveRecord
      * @return  
      */
     public function grabarRechazo($dpfa_id, $resultado, $observacion) {
-        $con = \Yii::$app->db_academico;
+        $con = \Yii::$app->db_facturacion;
         $estado = 1;
-        $fecha_autorizacion = date(Yii::$app->params["dateTimeByDefault"]);
-        $usuario_autoriza = @Yii::$app->user->identity->usu_id; 
+        $fecha_rechazo = date(Yii::$app->params["dateTimeByDefault"]);
+        $usuario_rechazo = @Yii::$app->user->identity->usu_id; 
         $comando = $con->createCommand
-                ("UPDATE " . $con->dbname . ".certificados_generadas
-                SET cgen_observacion_autorizacion = :cgen_observacion,
-                    cgen_fecha_autorizacion = :cgen_fecha_autoriza,                   
-                    cgen_estado_certificado = :cgen_resultado,
-                    cgen_usuario_autorizacion = :cgen_usuario_autoriza,
-                    cgen_fecha_modificacion = :cgen_fecha_autoriza
-                WHERE cgen_id = :cgen_id AND 
-                      cgen_estado =:estado AND
-                      cgen_estado_logico = :estado");
-
+                ("UPDATE " . $con->dbname . ".detalle_pagos_factura
+                SET dpfa_observacion_rechazo = :observacion,
+                    dpfa_fecha_aprueba_rechaza = :fecha_rechazo,                   
+                    dpfa_estado_pago = :resultado,
+                    dpfa_usu_aprueba_rechaza = :usuario_rechazo,
+                    dpfa_fecha_modificacion = :fecha_rechazo
+                WHERE dpfa_id = :dpfa_id AND 
+                      dpfa_estado =:estado AND
+                      dpfa_estado_logico = :estado");   
+        
+        
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
-        $comando->bindParam(":cgen_id", $cgen_id, \PDO::PARAM_INT);
-        $comando->bindParam(":cgen_observacion", $observacion, \PDO::PARAM_STR);
-        $comando->bindParam(":cgen_resultado", $resultado, \PDO::PARAM_INT);
-        $comando->bindParam(":cgen_fecha_autoriza", $fecha_autorizacion, \PDO::PARAM_STR);        
-        $comando->bindParam(":cgen_usuario_autoriza", $usuario_autoriza, \PDO::PARAM_INT);        
+        $comando->bindParam(":dpfa_id", $dpfa_id, \PDO::PARAM_INT);
+        $comando->bindParam(":observacion", $observacion, \PDO::PARAM_STR);
+        $comando->bindParam(":resultado", $resultado, \PDO::PARAM_INT);
+        $comando->bindParam(":fecha_rechazo", $fecha_rechazo, \PDO::PARAM_STR);        
+        $comando->bindParam(":usuario_rechazo", $usuario_rechazo, \PDO::PARAM_INT);        
         $response = $comando->execute();
         return $response;
     }

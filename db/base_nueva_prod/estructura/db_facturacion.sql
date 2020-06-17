@@ -684,6 +684,7 @@ create table if not exists `detalle_pagos_factura` (
   `dpfa_valor_cuota` double not null,
   `dpfa_fecha_vence_cuota` timestamp null default null,  
   `dpfa_estado_pago` varchar(1) not null,  /* '1' Pendiente, '2' Aprobada, '3' Rechazada*/
+  `dpfa_observacion_rechazo` varchar(500) null, 
   `dpfa_fecha_aprueba_rechaza` timestamp null default null,  
   `dpfa_usu_aprueba_rechaza` bigint(20) null,
   `dpfa_fecha_registro` timestamp null default null,

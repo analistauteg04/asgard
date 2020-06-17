@@ -82,9 +82,9 @@ PbGridView::widget([
         [
             'class' => 'yii\grid\ActionColumn',
             'header' => Yii::t("formulario", "Actions"),
-            'template' => '{descarga}', 
+            'template' => '{ver}', 
             'buttons' => [                
-                'descarga' => function ($url, $model) {  
+                'ver' => function ($url, $model) {  
                     if (($model['estado_pago']== 'Pendiente') or ($model['estado_pago']== 'Rechazado')) {
                         return Html::a('<span class="glyphicon glyphicon-thumbs-up"></span>', Url::to(['/financiero/pagosfacturas/rechazar', 'dpfa_id' => base64_encode($model['dpfa_id'])]), ["data-toggle" => "tooltip", "title" => "Rechazar Pago", "data-pjax" => "0"]);
                     } 
