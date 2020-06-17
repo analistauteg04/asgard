@@ -13,9 +13,9 @@ Financiero::registerTranslations();
 academico::registerTranslations();
 ?>
 <?= Html::hiddenInput('txth_dpfa_id', base64_decode($_GET["dpfa_id"]), ['id' => 'txth_dpfa_id']); ?>
-<form class="form-horizontal" enctype="multipart/form-data" id="formsolicitud"> 
+<form class="form-horizontal" enctype="multipart/form-data" id="formver"> 
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">        
-        <h3>Factura: <span id="lbl_num_solicitud"><?= $model[0]['dpfa_factura'] ?></span></h3>
+        <h3>Factura: <span id="lbl_num_solicitud"><?= $model['dpfa_factura'] ?></span></h3>
     </div>
     <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
         <div class="col-md-7 col-sm-7 col-xs-7 col-lg-7">
@@ -28,7 +28,7 @@ academico::registerTranslations();
                 <div class="form-group">
                     <label for="txt_nombres" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_nombre1"><?= Yii::t("formulario", "Names") ?></label>
                     <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                        <input type="text" class="form-control keyupmce" value="<?php echo $model[0]['estudiante'] ?>" id="txt_nombres" disabled data-type="alfa" placeholder="<?= Yii::t("formulario", "Names") ?>">
+                        <input type="text" class="form-control keyupmce" value="<?php echo $model['estudiante'] ?>" id="txt_nombres" disabled data-type="alfa" placeholder="<?= Yii::t("formulario", "Names") ?>">
                     </div>
                 </div>
             </div>
@@ -36,7 +36,7 @@ academico::registerTranslations();
                 <div class="form-group">
                     <label for="txt_cedula" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_nombre1">Cédula</label>
                     <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                        <input type="text" class="form-control keyupmce" value="<?php echo $model[0]['identificacion'] ?>" id="txt_cedula" data-type="alfa" disabled placeholder="<?= Yii::t("formulario", "DNI Document") ?>">
+                        <input type="text" class="form-control keyupmce" value="<?php echo $model['identificacion'] ?>" id="txt_cedula" data-type="alfa" disabled placeholder="<?= Yii::t("formulario", "DNI Document") ?>">
                     </div>
                 </div>
             </div>
@@ -46,7 +46,7 @@ academico::registerTranslations();
                 <div class="form-group">
                     <label for="cmb_ninteres" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label"><?= academico::t("Academico", "Academic unit") ?></label>
                     <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                        <?= Html::dropDownList("cmb_ninteres", $model[0]['uaca_id'], array_merge([Yii::t("formulario", "Select")], $arr_unidad), ["class" => "form-control", "id" => "cmb_ninteres", "disabled" => "true"]) ?>
+                        <?= Html::dropDownList("cmb_ninteres", $model['uaca_id'], array_merge([Yii::t("formulario", "Select")], $arr_unidad), ["class" => "form-control", "id" => "cmb_ninteres", "disabled" => "true"]) ?>
                     </div>
                 </div>  
             </div>
@@ -54,7 +54,7 @@ academico::registerTranslations();
                 <div class="form-group">
                     <label for="cmb_modalidad" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label"><?= academico::t("Academico", "Modality") ?></label>
                     <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                        <?= Html::dropDownList("cmb_modalidad", $model[0]['mod_id'], array_merge([Yii::t("formulario", "Select")], $arr_modalidad), ["class" => "form-control", "id" => "cmb_modalidad", "disabled" => "true"]) ?>
+                        <?= Html::dropDownList("cmb_modalidad", $model['mod_id'], array_merge([Yii::t("formulario", "Select")], $arr_modalidad), ["class" => "form-control", "id" => "cmb_modalidad", "disabled" => "true"]) ?>
                     </div>
                 </div>
             </div>                        
@@ -65,7 +65,7 @@ academico::registerTranslations();
                 <div class="form-group">
                     <label for="txt_carrera" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_nombre1"><?= academico::t("Academico", "Career/Program") ?></label>
                     <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                        <input type="text" class="form-control keyupmce" value="<?php echo $model[0]['carrera'] ?>" id="txt_carrera" disabled data-type="alfa" placeholder="<?= academico::t("Academico", "Career/Program") ?>">
+                        <input type="text" class="form-control keyupmce" value="<?php echo $model['carrera'] ?>" id="txt_carrera" disabled data-type="alfa" placeholder="<?= academico::t("Academico", "Career/Program") ?>">
                     </div>
                 </div>
             </div>            
@@ -81,7 +81,7 @@ academico::registerTranslations();
             <div class="form-group">
                 <label for="txt_cuota" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_nombre1"><?= Financiero::t("Pagos", "Monthly fee") ?></label>
                 <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                    <input type="text" class="form-control keyupmce" value="<?php echo $model[0]['forma_pago'] ?>" id="txt_cuota" disabled data-type="alfa" placeholder="<?= financiero::t("Pagos", "Monthly fee") ?>">
+                    <input type="text" class="form-control keyupmce" value="<?php echo $model['dpfa_num_cuota'] ?>" id="txt_cuota" disabled data-type="alfa" placeholder="<?= financiero::t("Pagos", "Monthly fee") ?>">
                 </div>
             </div>
         </div>    
@@ -89,7 +89,7 @@ academico::registerTranslations();
             <div class="form-group">
                 <label for="txt_valor_cuota" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Financiero::t("Pagos", "Quota value") ?></label>
                 <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7 ">                
-                   <input type="text" class="form-control keyupmce" value="<?php echo $model[0]['forma_pago'] ?>" id="txt_valor_cuota" disabled data-type="alfa" placeholder="<?= Financiero::t("Pagos", "Quota value") ?>">
+                   <input type="text" class="form-control keyupmce" value="<?php echo $model['valor_cuota'] ?>" id="txt_valor_cuota" disabled data-type="alfa" placeholder="<?= Financiero::t("Pagos", "Quota value") ?>">
                 </div>
             </div>
         </div> 
@@ -99,16 +99,26 @@ academico::registerTranslations();
             <div class="form-group">
                 <label for="txt_forma_pago" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_nombre1"><?= Yii::t("formulario", "Paid form") ?></label>
                 <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                    <input type="text" class="form-control keyupmce" value="<?php echo $model[0]['forma_pago'] ?>" id="txt_forma_pago" disabled data-type="alfa" placeholder="<?= Yii::t("formulario", "Paid form") ?>">
+                    <input type="text" class="form-control keyupmce" value="<?php echo $model['forma_pago'] ?>" id="txt_forma_pago" disabled data-type="alfa" placeholder="<?= Yii::t("formulario", "Paid form") ?>">
                 </div>
             </div>
         </div>    
         <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
             <div class="form-group">
+                <label for="txt_val_pago" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= financiero::t("Pagos", "Amount Paid") ?></label>
+                <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7 ">                
+                   <input type="text" class="form-control keyupmce" value="<?php echo $model['valor_pago'] ?>" id="txt_val_pago" disabled data-type="alfa" placeholder="<?= financiero::t("Pagos", "Amount Paid") ?>">
+                </div>
+            </div>
+        </div> 
+    </div>
+    <div class='col-md-12 col-sm-12 col-xs-12 col-lg-12'>           
+        <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
+            <div class="form-group">
                 <label for="txth_doc_pago" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Especies::t("Especies", "Payment") ?></label>
                 <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7 ">                
                     <?php
-                    echo "<a href='" . Url::to(['/site/getimage', 'route' => "/uploads/certificados/" . $model[0]['imagen']]) . "' download='" . $model[0]['imagen'] . "' ><span class='glyphicon glyphicon-download-alt'></span>Descargar Pago</a>"
+                    echo "<a href='" . Url::to(['/site/getimage', 'route' => "/uploads/certificados/" . $model['imagen']]) . "' download='" . $model[0]['imagen'] . "' ><span class='glyphicon glyphicon-download-alt'></span>Descargar Pago</a>"
                     ?>
                 </div>
             </div>

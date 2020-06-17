@@ -133,12 +133,13 @@ class PagosFacturaEstudiante extends \yii\db\ActiveRecord
                         f.fpag_nombre as forma_pago,
                         d.dpfa_num_cuota,
                         d.dpfa_factura,
+                        pfe.pfes_valor_pago valor_pago,
                         pfe.pfes_fecha_registro,                
                         case d.dpfa_estado_pago  
                             when 1 then 'Pendiente'  
                             when 2 then 'Aprobado'                                
                             when 3 then 'Rechazado'   
-                        end as estado_pago,
+                        end as estado_pago,                        
                         dpfa_id
                 from " . $con2->dbname . ".pagos_factura_estudiante pfe inner join " . $con2->dbname . ".detalle_pagos_factura d on d.pfes_id = pfe.pfes_id
                     inner join " . $con->dbname . ".estudiante e on e.est_id = pfe.est_id
@@ -222,13 +223,16 @@ class PagosFacturaEstudiante extends \yii\db\ActiveRecord
         $estado = 1;
         $sql = "SELECT 	p.per_cedula as identificacion, 
                         concat(p.per_pri_nombre, ' ', p.per_pri_apellido, ' ', ifnull(p.per_seg_apellido,'')) as estudiante,
+                        p.per_correo,
                         u.uaca_id,
                         mo.mod_id,
-                        ea.eaca_nombre as c,
+                        ea.eaca_nombre as carrera,
                         f.fpag_nombre as forma_pago,
                         d.dpfa_num_cuota,
+                        d.dpfa_valor_cuota as valor_cuota,
                         d.dpfa_factura,
-                        pfe.pfes_fecha_registro,                
+                        pfe.pfes_fecha_registro,   
+                        pfe.pfes_valor_pago valor_pago,                        
                         case d.dpfa_estado_pago  
                             when 1 then 'Pendiente'  
                             when 2 then 'Aprobado'                                
@@ -253,9 +257,42 @@ class PagosFacturaEstudiante extends \yii\db\ActiveRecord
                     and est_estado_logico = :estado
                     and per_estado = :estado
                     and per_estado_logico = :estado";
+        
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":dpfa_id", $dpfa_id, \PDO::PARAM_INT);
         return $comando->queryOne();
+    }
+    
+    /**
+     * Function grabarRechazo (Actualiza el estado del pago)
+     * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
+     * @param   
+     * @return  
+     */
+    public function grabarRechazo($dpfa_id, $resultado, $observacion) {
+        $con = \Yii::$app->db_academico;
+        $estado = 1;
+        $fecha_autorizacion = date(Yii::$app->params["dateTimeByDefault"]);
+        $usuario_autoriza = @Yii::$app->user->identity->usu_id; 
+        $comando = $con->createCommand
+                ("UPDATE " . $con->dbname . ".certificados_generadas
+                SET cgen_observacion_autorizacion = :cgen_observacion,
+                    cgen_fecha_autorizacion = :cgen_fecha_autoriza,                   
+                    cgen_estado_certificado = :cgen_resultado,
+                    cgen_usuario_autorizacion = :cgen_usuario_autoriza,
+                    cgen_fecha_modificacion = :cgen_fecha_autoriza
+                WHERE cgen_id = :cgen_id AND 
+                      cgen_estado =:estado AND
+                      cgen_estado_logico = :estado");
+
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":cgen_id", $cgen_id, \PDO::PARAM_INT);
+        $comando->bindParam(":cgen_observacion", $observacion, \PDO::PARAM_STR);
+        $comando->bindParam(":cgen_resultado", $resultado, \PDO::PARAM_INT);
+        $comando->bindParam(":cgen_fecha_autoriza", $fecha_autorizacion, \PDO::PARAM_STR);        
+        $comando->bindParam(":cgen_usuario_autoriza", $usuario_autoriza, \PDO::PARAM_INT);        
+        $response = $comando->execute();
+        return $response;
     }
 }
