@@ -8,7 +8,6 @@ use app\widgets\PbGridView\PbGridView;
 use app\modules\academico\Module as Especies;
 use app\modules\financiero\Module as Pagos;
 
-//print_r($arr_persona);
 Especies::registerTranslations();
 Pagos::registerTranslations();
 ?>
@@ -62,7 +61,7 @@ Pagos::registerTranslations();
     <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
         <div class="col-md-7 col-sm-7 col-xs-7 col-lg-7">
             <div class="form-group">
-                <h4><span id="lbl_general"><?= Especies::t("Especies", "Datos Académicos") ?></span></h4> 
+                <h4><span id="lbl_general"><?= Pagos::t("Pagos", "Academic Data") ?></span></h4> 
             </div>
         </div>
         <div class='col-md-12 col-sm-12 col-xs-12 col-lg-12'>
@@ -104,7 +103,7 @@ Pagos::registerTranslations();
     <div class='col-md-12 col-sm-12 col-xs-12 col-lg-12'>
         <div class="col-md-7 col-sm-7 col-xs-7 col-lg-7">
             <div class="form-group">
-                <h4><span id="lbl_general"><?= Especies::t("Especies", "Datos Facturas Pendientes") ?></span></h4> 
+                <h4><span id="lbl_general"><?= Pagos::t("Pagos", "Pending Invoices Data") ?></span></h4> 
             </div>
         </div>
     </div>
@@ -117,12 +116,20 @@ Pagos::registerTranslations();
                 [
                     'attribute' => 'Factura',
                     'header' => Pagos::t("Pagos", "Bill"),
-                    'value' => 'NUM_DOC',
+                    'value' => 'NUM_NOF',
                 ],
                 [
-                    'attribute' => 'Motivo',
-                    'header' => Pagos::t("Pagos", "Reason/Item/Service"),
-                    'value' => 'MOTIVO',
+                    'class' => 'yii\grid\ActionColumn',
+                    'header' => Yii::t("formulario", "Subject"),
+                    'template' => '{view}',
+                    'buttons' => [
+                        'view' => function ($url, $model) {
+                            if (strlen($model['MOTIVO']) > 30) {
+                                $texto = '...';
+                            }
+                            return Html::a('<span>' . substr($model['MOTIVO'], 0, 20) . $texto . '</span>', "javascript:", ["data-toggle" => "tooltip", "title" => $model['MOTIVO']]);
+                        },
+                    ],
                 ],
                 [
                     'attribute' => 'Fecha_factura',
@@ -147,7 +154,7 @@ Pagos::registerTranslations();
                 [
                     'attribute' => 'cantidad',
                     'header' => Pagos::t("Pagos", "Amount Fees"),
-                    'value' => 'NUM_NOF',
+                    'value' => 'NUM_DOC',
                 ],
             ],
         ])

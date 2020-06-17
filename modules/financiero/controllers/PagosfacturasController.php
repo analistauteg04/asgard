@@ -100,7 +100,7 @@ class PagosfacturasController extends \app\components\CController {
         } else {
             $carrera = $modestudio->consultarCursoModalidad($personaData['uaca_id'], $personaData['mod_id']); // tomar id de impresa
         }
-        $pagospendientesea = $mod_pagos->getPagospendientexest(/*$personaData['per_cedula']*/ '0102481074', false);
+        $pagospendientesea = $mod_pagos->getPagospendientexest(/*$personaData['per_cedula']*/ '0202501573', false);
         return $this->render('viewsaldo', [
                     'arr_persona' => $personaData,
                     'arr_unidad' => ArrayHelper::map($arr_unidadac, "id", "name"),
@@ -146,7 +146,7 @@ class PagosfacturasController extends \app\components\CController {
             $carrera = $modestudio->consultarCursoModalidad($personaData['uaca_id'], $personaData['mod_id']); // tomar id de impresa
         }
         $arr_forma_pago = $mod_fpago->consultarFormaPagosaldo();
-        $pagospendientesea = $mod_pagos->getPagospendientexest(/*$personaData['per_cedula']*/ '0503297871', false);
+        $pagospendientesea = $mod_pagos->getPagospendientexest(/*$personaData['per_cedula']*/ '0202501573', false);
         return $this->render('subirpago', [
                     'arr_persona' => $personaData,
                     'arr_unidad' => ArrayHelper::map($arr_unidadac, "id", "name"),

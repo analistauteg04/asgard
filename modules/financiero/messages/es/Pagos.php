@@ -6,6 +6,7 @@ namespace app\modules\financiero\messages;
  * and open the template in the editor.
  */
  return [
+     "Academic Data" => "Datos Académicos",
      "Apply Discount" => "Aplica Descuento",
      "Amount" => "Cantidad",
      "Amount Fees" => "Cantidad Cuotas",
@@ -45,6 +46,7 @@ namespace app\modules\financiero\messages;
      "Payment status" => "Estado Pago",
      "Payments made" => "Pagos Realizados",
      "Pay Total" => "Pago Total",
+     "Pending Invoices Data" => "Datos Facturas Pendientes",
      "Pending Fee" => "Cuota Pendiente",
      "Price" => "Precio",
      "Price with discount" => "Precio Descuento",
