@@ -103,28 +103,6 @@ class PagosFacturaEstudiante extends \yii\db\ActiveRecord
         $con = \Yii::$app->db_academico;
         $con1 = \Yii::$app->db_asgard;
         $con2 = \Yii::$app->db_facturacion;
-        $estado = 1;
-        $str_search = "";
-        if (isset($arrFiltro) && count($arrFiltro) > 0) {
-            if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
-                $str_search .= " pfe.pfes_fecha_registro BETWEEN :fec_ini AND :fec_fin AND ";
-            }
-            if ($arrFiltro['search'] != "") {
-                $str_search .= "(p.per_pri_nombre like :estudiante OR ";
-                $str_search .= "p.per_pri_apellido like :estudiante OR ";
-                $str_search .= "p.per_cedula like :estudiante )  AND ";
-            }
-            if ($arrFiltro['unidad'] > 0) {
-                $str_search .= "m.uaca_id = :unidad AND ";
-            }
-            if ($arrFiltro['modalidad'] > 0) {
-                $str_search .= "m.mod_id = :modalidad AND ";
-            }
-            if ($arrFiltro['estadopago'] > 0) {
-                $str_search .= "d.dpfa_estado_pago = :estadopago AND"; 
-            }
-        }
-
         $sql = "SELECT 	p.per_cedula as identificacion, 
                         concat(p.per_pri_nombre, ' ', p.per_pri_apellido, ' ', ifnull(p.per_seg_apellido,'')) as estudiante,
                         u.uaca_nombre as unidad,
@@ -142,51 +120,16 @@ class PagosFacturaEstudiante extends \yii\db\ActiveRecord
                         end as estado_pago,                        
                         dpfa_id
                 from " . $con2->dbname . ".pagos_factura_estudiante pfe inner join " . $con2->dbname . ".detalle_pagos_factura d on d.pfes_id = pfe.pfes_id
-                    inner join " . $con->dbname . ".estudiante e on e.est_id = pfe.est_id
-                    inner join " . $con1->dbname . ".persona p on p.per_id = e.per_id
-                    inner join " . $con->dbname . ".estudiante_carrera_programa ec on ec.est_id = e.est_id
-                    inner join " . $con->dbname . ".modalidad_estudio_unidad m on m.meun_id = ec.meun_id
-                    inner join " . $con->dbname . ".unidad_academica u on u.uaca_id = m.uaca_id
-                    inner join " . $con->dbname . ".modalidad mo on mo.mod_id = m.mod_id
-                    inner join " . $con->dbname . ".estudio_academico ea on ea.eaca_id = m.eaca_id
-                    inner join " . $con2->dbname . ".forma_pago f on f.fpag_id = pfe.fpag_id                        
-                where $str_search
-                    pfes_estado = :estado
-                    and pfes_estado_logico = :estado
-                    and dpfa_estado = :estado
-                    and dpfa_estado_logico = :estado
-                    and est_estado = :estado
-                    and est_estado_logico = :estado
-                    and per_estado = :estado
-                    and per_estado_logico = :estado
-                ORDER BY pfe.pfes_fecha_registro";
+                inner join " . $con->dbname . ".estudiante e on e.est_id = pfe.est_id
+                inner join " . $con1->dbname . ".persona p on p.per_id = e.per_id
+                inner join " . $con->dbname . ".estudiante_carrera_programa ec on ec.est_id = e.est_id
+                inner join " . $con->dbname . ".modalidad_estudio_unidad m on m.meun_id = ec.meun_id
+                inner join " . $con->dbname . ".unidad_academica u on u.uaca_id = m.uaca_id
+                inner join " . $con->dbname . ".modalidad mo on mo.mod_id = m.mod_id
+                inner join " . $con->dbname . ".estudio_academico ea on ea.eaca_id = m.eaca_id
+                inner join " . $con2->dbname . ".forma_pago f on f.fpag_id = pfe.fpag_id ";
 
-        $comando = $con->createCommand($sql);
-        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
-        if (isset($arrFiltro) && count($arrFiltro) > 0) {
-            $fecha_ini = $arrFiltro["f_ini"] . " 00:00:00";
-            $fecha_fin = $arrFiltro["f_fin"] . " 23:59:59";
-            $search_cond = "%" . $arrFiltro["search"] . "%";
-            $unidad = $arrFiltro['unidad'];
-            $modalidad = $arrFiltro['modalidad'];
-            $estadopago = $arrFiltro['estadopago'];
-            if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
-                $comando->bindParam(":fec_ini", $fecha_ini, \PDO::PARAM_STR);
-                $comando->bindParam(":fec_fin", $fecha_fin, \PDO::PARAM_STR);
-            }
-            if ($arrFiltro['search'] != "") {
-                $comando->bindParam(":estudiante", $search_cond, \PDO::PARAM_STR);
-            }
-            if ($arrFiltro['unidad'] > 0) {
-                $comando->bindParam(":unidad", $unidad, \PDO::PARAM_INT);
-            }
-            if ($arrFiltro['modalidad'] > 0) {
-                $comando->bindParam(":modalidad", $modalidad, \PDO::PARAM_INT);
-            }
-            if ($arrFiltro['estadopago'] > 0) {
-                $comando->bindParam(":estadopago", $estadopago, \PDO::PARAM_INT);
-            }
-        }
+        $comando = $con->createCommand($sql);        
         $resultData = $comando->queryAll();
         $dataProvider = new ArrayDataProvider([
             'key' => 'id',
@@ -198,6 +141,50 @@ class PagosFacturaEstudiante extends \yii\db\ActiveRecord
                 'attributes' => [
                     'egen_id',
                     'fecha_creacion',
+                ],
+            ],
+        ]);
+        if ($onlyData) {
+            return $resultData;
+        } else {
+            return $dataProvider;
+        }
+    }
+    /**
+     * Function getPagospendientexest
+     * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;
+     * @param
+     * @return 
+     */
+    public static function getPagospendientexest($cedula, $onlyData = false) {
+        $con = \Yii::$app->db_sea;
+        $sql = "SELECT 
+                  A.TIP_NOF,
+                  A.NUM_NOF,
+                  A.COD_CLI,
+                  A.C_TRA_E,
+                  A.NUM_DOC,
+                  A.F_SUS_D,
+                  A.F_VEN_D,
+                  A.VALOR_D,
+                  (A.VALOR_D-A.VALOR_C-A.VAL_DEV) SALDO,
+                  (SELECT GROUP_CONCAT( NOM_ART) FROM pruebasea.VD010101 B WHERE A.TIP_NOF=B.TIP_NOF AND A.NUM_NOF=B.NUM_NOF AND A.COD_CLI=B.COD_CLI) MOTIVO,
+                  SUBSTRING(A.NUM_DOC,-3) as cantidad,
+                  SUBSTRING(A.NUM_DOC,1,3) as cuota
+                FROM " . $con->dbname . ".CC0002 A
+                WHERE A.COD_CLI= :cedula AND A.CANCELA='N' AND A.COD_PTO='001' AND TIP_NOF='FE'";        
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":cedula", $cedula, \PDO::PARAM_STR);
+ 
+        $resultData = $comando->queryAll();
+        $dataProvider = new ArrayDataProvider([
+            'key' => 'id',
+            'allModels' => $resultData,
+            'pagination' => [
+                'pageSize' => Yii::$app->params["pageSize"],
+            ],
+            'sort' => [
+                'attributes' => [                    
                 ],
             ],
         ]);
