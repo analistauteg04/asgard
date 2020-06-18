@@ -7,6 +7,10 @@ $(document).ready(function () {
     $('#btn_guardarpago').click(function () {
         guardarPagofactura();
     });
+    
+    $('#btn_grabar_rechazo').click(function() {
+        rechazarPago();
+    });
 });
 
 function guardarPagofactura() {
@@ -34,6 +38,24 @@ function guardarPagofactura() {
 
             }, true);
         }
+    }
+}
+
+function rechazarPago() {
+    var arrParams = new Object();
+    var link = $('#txth_base').val() + "/financiero/pagosfacturas/saverechazo";
+    arrParams.dpfa_id = $('#txth_dpfa_id').val();
+    arrParams.resultado = $('#cmb_estado').val();
+    arrParams.observacion = $('#cmb_observacion').val();    
+
+    if (!validateForm()) {
+        requestHttpAjax(link, arrParams, function(response) {
+            showAlert(response.status, response.label, response.message);
+            setTimeout(function() {
+                parent.window.location.href = $('#txth_base').val() + "/financiero/pagosfacturas/revisionpagos";
+            }, 2000);
+
+        }, true);
     }
 }
 

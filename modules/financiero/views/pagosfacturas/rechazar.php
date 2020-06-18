@@ -118,7 +118,7 @@ academico::registerTranslations();
                 <label for="txth_doc_pago" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Especies::t("Especies", "Payment") ?></label>
                 <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7 ">                
                     <?php
-                    echo "<a href='" . Url::to(['/site/getimage', 'route' => "/uploads/certificados/" . $model['imagen']]) . "' download='" . $model[0]['imagen'] . "' ><span class='glyphicon glyphicon-download-alt'></span>Descargar Pago</a>"
+                    echo "<a href='" . Url::to(['/site/getimage', 'route' => "/uploads/pagosfinanciero/" . $model['imagen']]) . "' download='" . $model['imagen'] . "' ><span class='glyphicon glyphicon-download-alt'></span>Descargar Pago</a>"
                     ?>
                 </div>
             </div>
@@ -132,7 +132,7 @@ academico::registerTranslations();
     <div class='col-md-12 col-sm-12 col-xs-12 col-lg-12'>
         <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6" id="Divobservacion" style="display: block;">
             <div class="form-group">
-                <label for="cmb_observacion" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Yii::t("formulario", "Result") ?></label>
+                <label for="cmb_estado" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Yii::t("formulario", "Result") ?></label>
                 <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
                     <?= Html::dropDownList("cmb_estado", 0, $arrEstados, ["class" => "form-control", "id" => "cmb_estado"]) ?>
                 </div>
@@ -150,7 +150,7 @@ academico::registerTranslations();
     <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
         <div class="col-sm-8 col-md-8 col-xs-8 col-lg-8"></div>
         <div class="col-sm-2 col-md-2 col-xs-4 col-lg-2">            
-            <a id="btn_grabar" href="javascript:" class="btn btn-primary btn-block"> <?= Yii::t("formulario", "Save") ?></a>
+            <a id="btn_grabar_rechazo" href="javascript:" class="btn btn-primary btn-block"> <?= Yii::t("formulario", "Save") ?></a>
         </div>
     </div>
     
