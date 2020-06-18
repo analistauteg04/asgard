@@ -85,7 +85,7 @@ function update() {
     arrParams.password = $('#txt_password').val();
     arrParams.confirm_password = $('#txt_confirm_password').val();
     if (arrParams.password != arrParams.confirm_password) {
-        showAlert("NOOK", "Error", { "wtmessage": "Passwords are differents, please enter passwords again.", "title": 'Error' });
+        showAlert("NOOK", "Error", { "wtmessage": objLang.Passwords_are_differents__please_enter_passwords_again_, "title": objLang.Error });
     } else {
         if (!validateForm()) {
             requestHttpAjax(link, arrParams, function(response) {

@@ -1703,3 +1703,25 @@ create table if not exists `distributivo_academico_horario` (
   foreign key (uaca_id) references `unidad_academica`(uaca_id), 
   foreign key (mod_id) references `modalidad`(mod_id)
 );
+
+-- --------------------------------------------------------
+-- 
+-- Estructura de tabla para la tabla `diploma` 
+-- --------------------------------------------------------
+create table if not exists `diploma` (
+  `dip_id` bigint(20) not null auto_increment primary key,
+  `dip_codigo` varchar(100) null,
+  `dip_nombres` varchar(100) not null,
+  `dip_apellidos` varchar(100) not null,
+  `dip_cedula` varchar(10) null,
+  `dip_carrera` varchar(150) null,
+  `dip_modalidad` varchar(50) null,
+  `dip_programa` varchar(200) null,
+  `dip_fecha_inicio` timestamp null DEFAULT NULL,
+  `dip_fecha_fin` timestamp null DEFAULT NULL,
+  `dip_horas` varchar(100) null,
+  `dip_estado` varchar(1) not null,
+  `dip_fecha_creacion` timestamp not null default current_timestamp,
+  `dip_fecha_modificacion` timestamp null default null,
+  `dip_estado_logico` varchar(1) not null
+); 
