@@ -1,6 +1,6 @@
 $(document).ready(function() {
-    $('#cmb_modalidad, #cmb_programa, #cmb_carrera').change(function() {
-        searchModules('boxgrid', 'grid_diploma_list')
+    $('#btn_buscarData').click(function() {
+        searchModules('txt_buscarData', 'grid_diploma_list');
     });
 });
 

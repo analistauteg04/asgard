@@ -511,10 +511,10 @@ Yii Software LLC (http://www.yiisoft.com) Copyright © 2008
 /* Style to Select2 */
 
 .select2-container--default .select2-selection--multiple .select2-selection__choice {
-    background-color: #3c8dbc;
-    border-color: #367fa9;
-    padding: 1px 10px;
-    color: #fff;
+    background-color: #3c8dbc !important;
+    border-color: #367fa9 !important;
+    padding: 1px 10px !important;
+    color: #fff !important;
 }
 
 .select2-container--default.select2-container--focus .select2-selection--multiple,
@@ -528,5 +528,19 @@ Yii Software LLC (http://www.yiisoft.com) Copyright © 2008
 .select2-selection:focus,
 .select2-container--default:active,
 .select2-selection:active {
-    outline: none;
+    outline: none !important;
+}
+
+.select2-container--default .select2-selection--multiple {
+    border: 1px solid #d2d6de !important;
+    border-radius: 0 !important;
+}
+
+.select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+    margin-right: 5px !important;
+    color: rgba(255, 255, 255, 0.7) !important;
+}
+
+.select2-container--default.select2-container--focus .select2-selection--multiple {
+    border-color: #d2d6de;
 }
