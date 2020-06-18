@@ -71,6 +71,18 @@ INSERT INTO `conocimiento_servicio` (`cser_id`, `cser_nombre`, `cser_descripcion
 
 -- --------------------------------------------------------
 --
+-- Volcado de datos para la tabla `conocimiento_servicio`
+--
+INSERT INTO `bitacora_seguimiento` (`bseg_id`, `bseg_nombre`, `bseg_descripcion`, `bseg_estado`, `bseg_estado_logico`) VALUES
+(1, 'Whatsapp', 'Whatsapp', '1', '1'),
+(2, 'Facebook', 'Facebook', '1', '1'),
+(3, 'Instagram', 'Instagram', '1', '1'),
+(4, 'Correo', 'Correo', '1', '1'),
+(5, 'Llamada Telefónica', 'Llamada Telefónica', '1', '1'),
+(6, 'SMS', 'SMS', '1', '1');
+
+-- --------------------------------------------------------
+--
 -- Volcado de datos para la tabla `tipo_oportunidad_venta`
 --
 INSERT INTO `tipo_oportunidad_venta` (`tove_id`, `uaca_id`, `tove_nombre`, `tove_descripcion`, `tove_estado`, `tove_estado_logico`) VALUES
