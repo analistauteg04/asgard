@@ -283,10 +283,12 @@ class PagosfacturasController extends \app\components\CController {
     }
 
     public function actionSavepagopendiente() {
-        //online que sube doc capturar asi el id de la persona         
+        //online que sube doc capturar asi el id de la persona   
+        $per_idsession = @Yii::$app->session->get("PB_perid");
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
             $mod_pagos = new PagosFacturaEstudiante();
+            $mod_estudiante = new Especies();
             if ($data["upload_file"]) {
                 if (empty($_FILES)) {
                     echo json_encode(['error' => Yii::t("notificaciones", "Error to process File {file}. Try again.", ['{file}' => basename($files['name'])])]);
@@ -314,18 +316,34 @@ class PagosfacturasController extends \app\components\CController {
             $pfes_fecha_pago = $data["fechapago"];
             $pfes_observacion = $data["observacion"];
             $est_id = $data["estid"];
+            $pagado = $data["pagado"];
+            $personaData = $mod_estudiante->consultaDatosEstudiante($per_idsession); //$personaData['per_cedula']
             $con = \Yii::$app->db_facturacion;
             $transaction = $con->beginTransaction();
             try {
                 $usuario = @Yii::$app->user->identity->usu_id;   //Se obtiene el id del usuario.
                 $resp_pagofactura = $mod_pagos->insertarPagospendientes($est_id, $pfes_referencia, $fpag_id, $pfes_valor_pago, $pfes_fecha_pago, $pfes_observacion, $imagen, $usuario);
                 if ($resp_pagofactura) {
-                    $transaction->commit();
-                    $message = array(
-                        "wtmessage" => Yii::t("notificaciones", "La infomación ha sido grabada. "),
-                        "title" => Yii::t('jslang', 'Success'),
-                    );
-                    echo Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                    // se graba el detalle
+                    $pagados = explode("*", $pagado); //PAGADOS
+                    foreach ($pagados as $datos) {
+                        //  consultar la informacion seleccionada de cuota factura
+                        $personaData['per_cedula'] = '0202501573'; // DEBE BORRARSE CUANDO SE TENGA EL DATO
+                        \app\models\Utilities::putMessageLogFile('fsefd: ' . $pagados[0]);
+                        \app\models\Utilities::putMessageLogFile('gfd: ' . $pagados[1]);
+                        $resp_consfactura = $mod_pagos->consultarPagospendientesp($personaData['per_cedula'], $pagados[0], $pagados[1]);
+                        // insertar el detalle
+                        $resp_consfactura['factura'] = '777'; // DEBE BORRARSE CUANDO SE TENGA EL DATO
+                        $resp_detpagofactura = $mod_pagos->insertarDetpagospendientes($resp_pagofactura, $resp_consfactura['tipofactura'], $resp_consfactura['factura'], $resp_consfactura['descripcion'], $resp_consfactura['valor'], $resp_consfactura['fecha'], $resp_consfactura['saldo'], $resp_consfactura['numcuota'], $resp_consfactura['valorcuota'], $resp_consfactura['fechavence'],$usuario);
+                    }
+                    if ($resp_detpagofactura) {
+                        $transaction->commit();
+                        $message = array(
+                            "wtmessage" => Yii::t("notificaciones", "La infomación ha sido grabada. "),
+                            "title" => Yii::t('jslang', 'Success'),
+                        );
+                        echo Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                    }
                 } else {
                     $transaction->rollback();
                     $message = array(

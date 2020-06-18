@@ -11,7 +11,7 @@ use app\modules\financiero\Module as Pagos;
 use app\modules\admision\Module as crm;
 use app\modules\academico\Module as academico;
 
-//print_r($arr_persona);
+//print_r($model);
 Especies::registerTranslations();
 Pagos::registerTranslations();
 crm::registerTranslations();
@@ -297,7 +297,7 @@ $leyendarc = '<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
                     'template' => '{select}',
                     'buttons' => [
                         'select' => function ($url, $model) {
-                            return Html::checkbox("", false, ["value" => $model['NUM_NOF'].'/'.$model['cuota']]);
+                            return Html::checkbox("", false, ["value" => $model['NUM_NOF'].';'.$model['NUM_DOC']]);
                         },
                     ],
                 ],

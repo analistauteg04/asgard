@@ -1,6 +1,7 @@
 <?php
 
 namespace app\modules\financiero\models;
+
 use yii\data\ArrayDataProvider;
 use Yii;
 use app\models\Utilities;
@@ -25,29 +26,26 @@ use app\models\Utilities;
  *
  * @property FormaPago $fpag
  */
-class PagosFacturaEstudiante extends \yii\db\ActiveRecord
-{
+class PagosFacturaEstudiante extends \yii\db\ActiveRecord {
+
     /**
      * {@inheritdoc}
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return 'pagos_factura_estudiante';
     }
 
     /**
      * @return \yii\db\Connection the database connection used by this AR class.
      */
-    public static function getDb()
-    {
+    public static function getDb() {
         return Yii::$app->get('db_facturacion');
     }
 
     /**
      * {@inheritdoc}
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['pfes_id', 'est_id', 'fpag_id', 'pfes_valor_pago', 'pfes_archivo_pago', 'pfes_usu_ingreso', 'pfes_estado', 'pfes_estado_logico'], 'required'],
             [['pfes_id', 'est_id', 'fpag_id', 'pfes_usu_ingreso'], 'integer'],
@@ -65,8 +63,7 @@ class PagosFacturaEstudiante extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'pfes_id' => 'Pfes ID',
             'est_id' => 'Est ID',
@@ -88,12 +85,10 @@ class PagosFacturaEstudiante extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getFpag()
-    {
+    public function getFpag() {
         return $this->hasOne(FormaPago::className(), ['fpag_id' => 'fpag_id']);
     }
-    
-        
+
     /**
      * Function getPagos
      * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>;
@@ -131,7 +126,7 @@ class PagosFacturaEstudiante extends \yii\db\ActiveRecord
                 inner join " . $con->dbname . ".estudio_academico ea on ea.eaca_id = m.eaca_id
                 inner join " . $con2->dbname . ".forma_pago f on f.fpag_id = pfe.fpag_id ";
 
-        $comando = $con->createCommand($sql);        
+        $comando = $con->createCommand($sql);
         $resultData = $comando->queryAll();
         $dataProvider = new ArrayDataProvider([
             'key' => 'id',
@@ -152,6 +147,7 @@ class PagosFacturaEstudiante extends \yii\db\ActiveRecord
             return $dataProvider;
         }
     }
+
     /**
      * Function getPagospendientexest
      * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;
@@ -160,7 +156,7 @@ class PagosFacturaEstudiante extends \yii\db\ActiveRecord
      */
     public static function getPagospendientexest($cedula, $onlyData = false) {
         $con = \Yii::$app->db_sea;
-        $sql = "SELECT 
+        $sql = "SELECT  
                   A.TIP_NOF,
                   A.NUM_NOF,
                   A.COD_CLI,
@@ -180,10 +176,10 @@ class PagosFacturaEstudiante extends \yii\db\ActiveRecord
                     ELSE SUBSTRING(A.NUM_DOC,-3)
                   END  as cantidad               
                 FROM " . $con->dbname . ".CC0002 A
-                WHERE A.COD_CLI= :cedula AND A.CANCELA='N' AND A.COD_PTO='001' AND TIP_NOF='FE'";        
+                WHERE A.COD_CLI= :cedula AND A.CANCELA='N' AND A.COD_PTO='001' AND TIP_NOF='FE'";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":cedula", $cedula, \PDO::PARAM_STR);
- 
+
         $resultData = $comando->queryAll();
         $dataProvider = new ArrayDataProvider([
             'key' => 'id',
@@ -192,7 +188,7 @@ class PagosFacturaEstudiante extends \yii\db\ActiveRecord
                 'pageSize' => Yii::$app->params["pageSize"],
             ],
             'sort' => [
-                'attributes' => [                    
+                'attributes' => [
                 ],
             ],
         ]);
@@ -202,15 +198,13 @@ class PagosFacturaEstudiante extends \yii\db\ActiveRecord
             return $dataProvider;
         }
     }
-    
-    
+
     /**
      * Function consultarPago
      * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>;
      * @param
      * @return 
      */
-    
     public function consultarPago($dpfa_id) {
         $con = \Yii::$app->db_academico;
         $con1 = \Yii::$app->db_asgard;
@@ -253,13 +247,13 @@ class PagosFacturaEstudiante extends \yii\db\ActiveRecord
                     and est_estado_logico = :estado
                     and per_estado = :estado
                     and per_estado_logico = :estado";
-        
+
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":dpfa_id", $dpfa_id, \PDO::PARAM_INT);
         return $comando->queryOne();
     }
-    
+
     /**
      * Function grabarRechazo (Actualiza el estado del pago)
      * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
@@ -270,7 +264,7 @@ class PagosFacturaEstudiante extends \yii\db\ActiveRecord
         $con = \Yii::$app->db_facturacion;
         $estado = 1;
         $fecha_rechazo = date(Yii::$app->params["dateTimeByDefault"]);
-        $usuario_rechazo = @Yii::$app->user->identity->usu_id; 
+        $usuario_rechazo = @Yii::$app->user->identity->usu_id;
         $comando = $con->createCommand
                 ("UPDATE " . $con->dbname . ".detalle_pagos_factura
                 SET dpfa_observacion_rechazo = :observacion,
@@ -280,18 +274,19 @@ class PagosFacturaEstudiante extends \yii\db\ActiveRecord
                     dpfa_fecha_modificacion = :fecha_rechazo
                 WHERE dpfa_id = :dpfa_id AND 
                       dpfa_estado =:estado AND
-                      dpfa_estado_logico = :estado");   
-        
-        
+                      dpfa_estado_logico = :estado");
+
+
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":dpfa_id", $dpfa_id, \PDO::PARAM_INT);
         $comando->bindParam(":observacion", $observacion, \PDO::PARAM_STR);
         $comando->bindParam(":resultado", $resultado, \PDO::PARAM_INT);
-        $comando->bindParam(":fecha_rechazo", $fecha_rechazo, \PDO::PARAM_STR);        
-        $comando->bindParam(":usuario_rechazo", $usuario_rechazo, \PDO::PARAM_INT);        
+        $comando->bindParam(":fecha_rechazo", $fecha_rechazo, \PDO::PARAM_STR);
+        $comando->bindParam(":usuario_rechazo", $usuario_rechazo, \PDO::PARAM_INT);
         $response = $comando->execute();
         return $response;
     }
+
     /**
      * Function insertarPagospendientes
      * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;
@@ -312,7 +307,7 @@ class PagosFacturaEstudiante extends \yii\db\ActiveRecord
 
         $param_sql .= ", pfes_estado_logico";
         $bdet_sql .= ", 1";
-        
+
         $param_sql .= ", pfes_fecha_registro";
         $bdet_sql .= ", :pfes_fecha_registro";
 
@@ -350,7 +345,7 @@ class PagosFacturaEstudiante extends \yii\db\ActiveRecord
         }
         try {
             $sql = "INSERT INTO " . $con->dbname . ".pagos_factura_estudiante ($param_sql) VALUES($bdet_sql)";
-            $comando = $con->createCommand($sql);            
+            $comando = $con->createCommand($sql);
             if (isset($est_id)) {
                 $comando->bindParam(':est_id', $est_id, \PDO::PARAM_INT);
             }
@@ -374,7 +369,7 @@ class PagosFacturaEstudiante extends \yii\db\ActiveRecord
             }
             if (!empty((isset($pfes_usu_ingreso)))) {
                 $comando->bindParam(':pfes_usu_ingreso', $pfes_usu_ingreso, \PDO::PARAM_INT);
-            }           
+            }
             $comando->bindParam(":pfes_fecha_registro", $fecha, \PDO::PARAM_STR);
             $result = $comando->execute();
             if ($trans !== null)
@@ -386,4 +381,156 @@ class PagosFacturaEstudiante extends \yii\db\ActiveRecord
             return FALSE;
         }
     }
+
+    /**
+     * Function Consulta las cuotas seleccionada al cargar imagenes de facturas pendientes de pago.
+     * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>
+     * @param   
+     * @return  
+     */
+    public function consultarPagospendientesp($cedula, $factura, $cuota) {
+        $con = \Yii::$app->db_sea;
+        $sql = "SELECT 
+                  A.TIP_NOF as tipofactura,
+                  A.NUM_NOF as factura,
+                  (SELECT GROUP_CONCAT( NOM_ART) FROM pruebasea.VD010101 B WHERE A.TIP_NOF=B.TIP_NOF AND A.NUM_NOF=B.NUM_NOF AND A.COD_CLI=B.COD_CLI) as descripcion,
+                  -- falta el valor total en est linea as valor
+                  A.F_SUS_D as fecha,
+                  (A.VALOR_D-A.VALOR_C-A.VAL_DEV) as saldo,  
+                  CASE 
+                    WHEN A.NUM_DOC = A.NUM_NOF THEN '01'                    
+                    ELSE SUBSTRING(A.NUM_DOC,1,3)
+                  END  as numcuota,
+                  A.VALOR_D as valorcuota,
+                  A.F_VEN_D as fechavence
+                                                               
+                FROM " . $con->dbname . ".CC0002 A
+                WHERE A.COD_CLI= :cedula AND A.CANCELA='N' AND A.COD_PTO='001' AND TIP_NOF='FE' AND A.NUM_NOF = :factura AND A.NUM_DOC = :cuota";
+
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":cedula", $cedula, \PDO::PARAM_STR);
+        $comando->bindParam(":factura", $factura, \PDO::PARAM_STR);
+        $comando->bindParam(":cuota", $cuota, \PDO::PARAM_STR);
+        $resultData = $comando->queryOne();
+        return $resultData;
+    }
+
+    /**
+     * Function insertarDetpagospendientes
+     * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;
+     * @param
+     * @return dpfa_id
+     */
+    public function insertarDetpagospendientes($pfes_id, $dpfa_tipo_factura, $dpfa_factura, $dpfa_descripcion_factura, $dpfa_valor_factura, $dpfa_fecha_factura, 
+            $dpfa_saldo_factura, $dpfa_num_cuota, $dpfa_valor_cuota, $dpfa_fecha_vence_cuota, $dpfa_usu_ingreso) {
+        $con = \Yii::$app->db_facturacion;
+        $trans = $con->getTransaction(); // se obtiene la transacción actual
+        if ($trans !== null) {
+            $trans = null; // si existe la transacción entonces no se crea una
+        } else {
+            $trans = $con->beginTransaction(); // si no existe la transacción entonces se crea una
+        }
+        $fecha = date(Yii::$app->params["dateTimeByDefault"]);
+        $param_sql = "dpfa_estado";
+        $bdet_sql = "1";
+
+        $param_sql .= ", dpfa_estado_logico";
+        $bdet_sql .= ", 1";
+
+        $param_sql .= ", dpfa_fecha_registro";
+        $bdet_sql .= ", :dpfa_fecha_registro";
+
+        if (isset($pfes_id)) {
+            $param_sql .= ", pfes_id";
+            $bdet_sql .= ", :pfes_id";
+        }
+        if (isset($dpfa_tipo_factura)) {
+            $param_sql .= ", dpfa_tipo_factura";
+            $bdet_sql .= ", :dpfa_tipo_factura";
+        }
+        if (isset($dpfa_factura)) {
+            $param_sql .= ", dpfa_factura";
+            $bdet_sql .= ", :dpfa_factura";
+        }
+        if (isset($dpfa_descripcion_factura)) {
+            $param_sql .= ", dpfa_descripcion_factura";
+            $bdet_sql .= ", :dpfa_descripcion_factura";
+        }
+        if (isset($dpfa_valor_factura)) {
+            $param_sql .= ", dpfa_valor_factura";
+            $bdet_sql .= ", :dpfa_valor_factura";
+        }
+        if (isset($dpfa_fecha_factura)) {
+            $param_sql .= ", dpfa_fecha_factura";
+            $bdet_sql .= ", :dpfa_fecha_factura";
+        }
+        if (isset($dpfa_saldo_factura)) {
+            $param_sql .= ", dpfa_saldo_factura";
+            $bdet_sql .= ", :dpfa_saldo_factura";
+        }
+        if (isset($dpfa_num_cuota)) {
+            $param_sql .= ", dpfa_num_cuota";
+            $bdet_sql .= ", :dpfa_num_cuota";
+        }
+        /*---*/
+        if (isset($dpfa_valor_cuota)) {
+            $param_sql .= ", dpfa_valor_cuota";
+            $bdet_sql .= ", :dpfa_valor_cuota";
+        }
+        if (isset($dpfa_fecha_vence_cuota)) {
+            $param_sql .= ", dpfa_fecha_vence_cuota";
+            $bdet_sql .= ", :dpfa_fecha_vence_cuota";
+        }
+        if (isset($dpfa_usu_ingreso)) {
+            $param_sql .= ", dpfa_usu_ingreso";
+            $bdet_sql .= ", :dpfa_usu_ingreso";
+        }
+        try {
+            $sql = "INSERT INTO " . $con->dbname . ".detalle_pagos_factura ($param_sql) VALUES($bdet_sql)";
+            $comando = $con->createCommand($sql);
+            if (isset($pfes_id)) {
+                $comando->bindParam(':pfes_id', $pfes_id, \PDO::PARAM_INT);
+            }
+            if (isset($dpfa_tipo_factura)) {
+                $comando->bindParam(':dpfa_tipo_factura', $dpfa_tipo_factura, \PDO::PARAM_STR);
+            }
+            if (!empty((isset($dpfa_factura)))) {
+                $comando->bindParam(':dpfa_factura', $dpfa_factura, \PDO::PARAM_STR);
+            }
+            if (!empty((isset($dpfa_descripcion_factura)))) {
+                $comando->bindParam(':dpfa_descripcion_factura', ucfirst(mb_strtolower($dpfa_descripcion_factura, 'UTF-8')), \PDO::PARAM_STR);
+            }
+            if (!empty((isset($dpfa_valor_factura)))) {
+                $comando->bindParam(':dpfa_valor_factura', $dpfa_valor_factura, \PDO::PARAM_STR);
+            }
+            if (!empty((isset($dpfa_fecha_factura)))) {
+                $comando->bindParam(':dpfa_fecha_factura', $dpfa_fecha_factura, \PDO::PARAM_STR);
+            }            
+            if (!empty((isset($dpfa_saldo_factura)))) {
+                $comando->bindParam(':dpfa_saldo_factura', $dpfa_saldo_factura, \PDO::PARAM_STR);
+            }
+            if (!empty((isset($dpfa_num_cuota)))) {
+                $comando->bindParam(':dpfa_num_cuota', $dpfa_num_cuota, \PDO::PARAM_STR);
+            }
+            if (!empty((isset($dpfa_valor_cuota)))) {
+                $comando->bindParam(':dpfa_valor_cuota', $dpfa_valor_cuota, \PDO::PARAM_STR);
+            }
+            if (!empty((isset($dpfa_fecha_vence_cuota)))) {
+                $comando->bindParam(':dpfa_fecha_vence_cuota', $dpfa_fecha_vence_cuota, \PDO::PARAM_STR);
+            }
+            if (!empty((isset($dpfa_usu_ingreso)))) {
+                $comando->bindParam(':dpfa_usu_ingreso', $dpfa_usu_ingreso, \PDO::PARAM_INT);
+            }
+            $comando->bindParam(":dpfa_fecha_registro", $fecha, \PDO::PARAM_STR);
+            $result = $comando->execute();
+            if ($trans !== null)
+                $trans->commit();
+            return $con->getLastInsertID($con->dbname . '.detalle_pagos_factura');
+        } catch (Exception $ex) {
+            if ($trans !== null)
+                $trans->rollback();
+            return FALSE;
+        }
+    }
+
 }
