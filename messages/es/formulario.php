@@ -646,6 +646,7 @@ return [
     "University/Institution" => "Universidad/Institución",
     "Update" => "Actualizar",
     "Update DNI to generate interested" => "Actualizar cedula para generar interesado",
+    "Update Email to generate interested" => "Actualizar Email para generar interesado",
     "Update Contact" => "Actualizar Contacto",
     "Update Picture" => "Actualizar Imagen",
     "Updated" => "Modificado",

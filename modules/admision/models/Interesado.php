@@ -1044,41 +1044,44 @@ class Interesado extends \app\modules\admision\components\CActiveRecord {
         }
         $sql = "
                 select 
-                inte.int_id as id,
-                concat(ifnull(per.per_pri_nombre,''),' ',ifnull(per.per_seg_nombre,'')) as nombres,
-                concat(ifnull(per.per_pri_apellido,''),' ',ifnull(per.per_seg_apellido,'')) as apellidos,
-                ifnull(per.per_cedula,per.per_pasaporte) as DNI,
-                emp.emp_nombre_comercial as empresa,                 
-                DATE(inte.int_fecha_creacion) as fecha_interes,
-                per.per_id,
-                ifnull((SELECT uaca.uaca_nombre
-                    FROM " . $con->dbname . ".solicitud_inscripcion sins
-                    INNER JOIN " . $con2->dbname . ".unidad_academica uaca on uaca.uaca_id = sins.uaca_id
-                    WHERE int_id = inte.int_id
-                    and sins.sins_estado = :estado
-                    and sins.sins_estado_logico = :estado
-                    ORDER BY sins_fecha_solicitud desc
-                    LIMIT 1),'') as unidad,
-                    case emp.emp_id
-                    when 1 then (select eaca.eaca_nombre from db_academico.estudio_academico eaca inner join db_captacion.solicitud_inscripcion sins on sins.eaca_id = eaca.eaca_id  WHERE int_id = inte.int_id ORDER BY sins_fecha_solicitud desc LIMIT 1)
-                    when 2 then (select mes.mest_nombre from db_academico.modulo_estudio mes inner join db_captacion.solicitud_inscripcion sins on sins.mest_id = mes.mest_id WHERE int_id = inte.int_id ORDER BY sins_fecha_solicitud desc LIMIT 1)
-                    when 3 then (select mes.mest_nombre from db_academico.modulo_estudio mes inner join db_captacion.solicitud_inscripcion sins on sins.mest_id = mes.mest_id WHERE int_id = inte.int_id ORDER BY sins_fecha_solicitud desc LIMIT 1)
-                    else null
-                    end as 'carrera'
+                    inte.int_id as id,
+                    concat(ifnull(per.per_pri_nombre,''),' ',ifnull(per.per_seg_nombre,'')) as nombres,
+                    concat(ifnull(per.per_pri_apellido,''),' ',ifnull(per.per_seg_apellido,'')) as apellidos,
+                    ifnull(per.per_cedula,per.per_pasaporte) as DNI,
+                    emp.emp_nombre_comercial as empresa,                 
+                    DATE(inte.int_fecha_creacion) as fecha_interes,
+                    per.per_id,
+                    ifnull((SELECT uaca.uaca_nombre
+                        FROM " . $con->dbname . ".solicitud_inscripcion sins
+                        INNER JOIN " . $con2->dbname . ".unidad_academica uaca on uaca.uaca_id = sins.uaca_id
+                        WHERE int_id = inte.int_id
+                        and sins.sins_estado = :estado
+                        and sins.sins_estado_logico = :estado
+                        ORDER BY sins_fecha_solicitud desc
+                        LIMIT 1),'') as unidad,
+                        case emp.emp_id
+                        when 1 then (select eaca.eaca_nombre from db_academico.estudio_academico eaca inner join db_captacion.solicitud_inscripcion sins on sins.eaca_id = eaca.eaca_id  WHERE int_id = inte.int_id ORDER BY sins_fecha_solicitud desc LIMIT 1)
+                        when 2 then (select mes.mest_nombre from db_academico.modulo_estudio mes inner join db_captacion.solicitud_inscripcion sins on sins.mest_id = mes.mest_id WHERE int_id = inte.int_id ORDER BY sins_fecha_solicitud desc LIMIT 1)
+                        when 3 then (select mes.mest_nombre from db_academico.modulo_estudio mes inner join db_captacion.solicitud_inscripcion sins on sins.mest_id = mes.mest_id WHERE int_id = inte.int_id ORDER BY sins_fecha_solicitud desc LIMIT 1)
+                        else null
+                        end as 'carrera',
+                    concat(pges.per_pri_nombre, ' ', pges.per_pri_apellido) as Agente
                 from " . $con->dbname . ".interesado inte
-                join " . $con1->dbname . ".persona as per on inte.per_id=per.per_id
-                join " . $con->dbname . ".interesado_empresa as iemp on iemp.int_id=inte.int_id
-                join " . $con1->dbname . ".empresa as emp on emp.emp_id=iemp.emp_id
+                    join " . $con1->dbname . ".persona as per on inte.per_id=per.per_id
+                    join " . $con->dbname . ".interesado_empresa as iemp on iemp.int_id=inte.int_id
+                    join " . $con1->dbname . ".empresa as emp on emp.emp_id=iemp.emp_id
+                    left join " . $con1->dbname . ".persona as pges on pges.per_id=inte.int_usuario_ingreso
+                    left join " . $con1->dbname . ".usuario as uges on uges.per_id=pges.per_id
                 where $str_search
-                inte.int_estado_logico=:estado AND
-                inte.int_estado=:estado AND                    
-                per.per_estado_logico=:estado AND						
-                per.per_estado=:estado AND
-                iemp.iemp_estado_logico=:estado AND						
-                iemp.iemp_estado=:estado AND
-                emp.emp_estado_logico=:estado AND						
-                emp.emp_estado=:estado
-                order by inte.int_fecha_creacion desc
+                    inte.int_estado_logico=:estado AND
+                    inte.int_estado=:estado AND                    
+                    per.per_estado_logico=:estado AND						
+                    per.per_estado=:estado AND
+                    iemp.iemp_estado_logico=:estado AND						
+                    iemp.iemp_estado=:estado AND
+                    emp.emp_estado_logico=:estado AND						
+                    emp.emp_estado=:estado
+                    order by inte.int_fecha_creacion desc
                 ";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
@@ -1776,6 +1779,7 @@ class Interesado extends \app\modules\admision\components\CActiveRecord {
                     DATE(inte.int_fecha_creacion) as fecha_interes,
                     concat(ifnull(per.per_pri_nombre,''),' ',ifnull(per.per_seg_nombre,'')) as nombres,
                     concat(ifnull(per.per_pri_apellido,''),' ',ifnull(per.per_seg_apellido,'')) as apellidos,
+                    concat(pges.per_pri_nombre, ' ', pges.per_pri_apellido) as agente,
                     emp.emp_nombre_comercial as empresa,
                     ifnull((SELECT uaca.uaca_nombre
                             FROM db_captacion.solicitud_inscripcion sins
@@ -1795,6 +1799,8 @@ class Interesado extends \app\modules\admision\components\CActiveRecord {
                         join " . $con1->dbname . ".persona as per on inte.per_id=per.per_id
                         join " . $con->dbname . ".interesado_empresa as iemp on iemp.int_id=inte.int_id
                         join " . $con1->dbname . ".empresa as emp on emp.emp_id=iemp.emp_id
+                        left join " . $con1->dbname . ".persona as pges on pges.per_id=inte.int_usuario_ingreso
+                        left join " . $con1->dbname . ".usuario as uges on uges.per_id=pges.per_id
                 WHERE $str_search
                     inte.int_estado_logico=:estado AND
                     inte.int_estado=:estado AND                    

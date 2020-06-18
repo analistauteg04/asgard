@@ -2053,7 +2053,8 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
                     des_modalidad,
                     des_estado,
                     fecha_registro,
-                    fecha_proxima 
+                    fecha_proxima,
+                    agente
                 FROM (                    
                     SELECT  
                             lpad(ifnull(o.opo_codigo,0),7,'0') as opo_codigo, 
@@ -2075,9 +2076,11 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
                                     '' else 
                                     (select max(bact_fecha_proxima_atencion) from db_crm.bitacora_actividades b 
                                      where b.opo_id = o.opo_id and b.bact_estado = 1 and bact_estado_logico = 1) end as fecha_proxima,
+                            
+                            concat(p.per_pri_nombre, ' ', ifnull(p.per_seg_nombre,' '), ' ', p.per_pri_apellido, ' ', ifnull(p.per_seg_apellido,' ')) as agente,
                             o.emp_id,
                             o.eopo_id,
-                            o.opo_id                          
+                            o.opo_id                         
                     FROM " . $con->dbname . ".oportunidad o inner join " . $con->dbname . ".persona_gestion pg on pg.pges_id = o.pges_id
                          inner join " . $con1->dbname . ".empresa e on e.emp_id = o.emp_id
                          inner join " . $con2->dbname . ".unidad_academica ua on ua.uaca_id = o.uaca_id

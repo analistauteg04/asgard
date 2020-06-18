@@ -115,7 +115,6 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
             [['pges_telefono_empresa'], 'string', 'max' => 10],
             [['pges_cargo', 'pges_domicilio_num'], 'string', 'max' => 100],
             [['pges_genero', 'pges_nac_ecuatoriano', 'pges_estado_contacto', 'pges_estado', 'pges_estado_logico'], 'string', 'max' => 1],
-            [['cser_id'], 'exist', 'skipOnError' => true, 'targetClass' => ConocimientoServicio::className(), 'targetAttribute' => ['cser_id' => 'cser_id']],
             [['econ_id'], 'exist', 'skipOnError' => true, 'targetClass' => EstadoContacto::className(), 'targetAttribute' => ['econ_id' => 'econ_id']],
             [['ccan_id'], 'exist', 'skipOnError' => true, 'targetClass' => ConocimientoCanal::className(), 'targetAttribute' => ['ccan_id' => 'ccan_id']],
         ];
@@ -191,13 +190,6 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
      */
     public function getOportunidads() {
         return $this->hasMany(Oportunidad::className(), ['pges_id' => 'pges_id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getCser() {
-        return $this->hasOne(ConocimientoServicio::className(), ['cser_id' => 'cser_id']);
     }
 
     /**
@@ -942,6 +934,7 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
         $con1 = \Yii::$app->db;
         $con2 = \Yii::$app->db_academico;
         $estado = 1;
+        $str_search = "";
         $columnsAdd = "";
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
             $str_search .= "(a.pges_pri_nombre like :search OR ";
@@ -1008,6 +1001,7 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
                         pg.pges_codigo,
                         pg.pges_correo,
                         pg.pges_fecha_creacion,
+                        concat(pe.per_pri_nombre, ' ', pe.per_pri_apellido) as agente,
                         ifnull((select concat(pers.per_pri_nombre, ' ', ifnull(pers.per_pri_apellido,' ')) 
                                   from " . $con1->dbname . ".usuario usu 
                                   inner join " . $con1->dbname . ".persona pers on pers.per_id = usu.per_id
@@ -1023,13 +1017,13 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
                         emp.emp_id,
                         uaca.uaca_id,                        
                         case when (select ifnull(count(ba.bact_id),0)
-				from db_crm.oportunidad o 
-				inner join db_crm.bitacora_actividades ba on ba.opo_id = o.opo_id
-				inner join db_asgard.usua_grol_eper uge on uge.usu_id = ba.usu_id
-				where o.pges_id = pg.pges_id
-                                -- and ba.eopo_id = 3 
-				and o.opo_estado = :estado
-				and o.opo_estado_logico = :estado) < 2 then 1 else 2 end as gestion
+                            from db_crm.oportunidad o 
+                            inner join db_crm.bitacora_actividades ba on ba.opo_id = o.opo_id
+                            inner join db_asgard.usua_grol_eper uge on uge.usu_id = ba.usu_id
+                            where o.pges_id = pg.pges_id
+                                            -- and ba.eopo_id = 3 
+                            and o.opo_estado = :estado
+                            and o.opo_estado_logico = :estado) < 2 then 1 else 2 end as gestion
                 FROM " . $con->dbname . ".persona_gestion pg
                 INNER JOIN " . $con->dbname . ".estado_contacto ec on ec.econ_id = pg.econ_id
                 INNER JOIN " . $con1->dbname . ".tipo_persona tp on tp.tper_id = pg.tper_id  
@@ -1042,6 +1036,7 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
                 left JOIN " . $con->dbname . ".oportunidad opo on opo.opo_id = max_opor.opo_id                                          
                 left join " . $con1->dbname . ".empresa as emp on emp.emp_id=opo.emp_id
                 left JOIN " . $con2->dbname . ".unidad_academica uaca on uaca.uaca_id = opo.uaca_id
+                left JOIN ". $con1->dbname .".persona pe ON pe.per_id=pg.pges_usuario_ingreso
                 WHERE                           
                         pg.pges_estado = :estado
                         and pg.pges_estado_logico = :estado

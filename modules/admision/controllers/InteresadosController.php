@@ -50,6 +50,7 @@ class InteresadosController extends \app\components\CController
         $per_id = @Yii::$app->session->get("PB_perid");
         $usuario_ingreso = @Yii::$app->session->get("PB_iduser");
         $error = 0;
+        $error_message = "";
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
             $id_opor = $data["id_pgest"];
@@ -95,7 +96,7 @@ class InteresadosController extends \app\components\CController
                         }
                         if ($emp_per_id > 0) {
                             $usuario = new Usuario();
-                            $usuario_id = $usuario->consultarIdUsuario($id_persona, $pgest['pges_correo']);
+                            $usuario_id = $usuario->consultarIdUsuario(null, $pgest['pges_correo']);
                             if ($usuario_id == 0) {
                                 $security = new Security();
                                 $hash = $security->generateRandomString();
@@ -116,7 +117,8 @@ class InteresadosController extends \app\components\CController
                                     $mod_interesado = new Interesado(); // se guarda con estado_interesado 1
                                     $interesado_id = $mod_interesado->consultaInteresadoById($id_persona);
                                     $keys = ['per_id', 'int_estado_interesado', 'int_usuario_ingreso', 'int_estado', 'int_estado_logico'];
-                                    $parametros = [$id_persona, 1, $usuario_id, 1, 1];
+                                    $usuario_ingreso = ((isset($usuario_ingreso))?$usuario_ingreso:$usuario_id);
+                                    $parametros = [$id_persona, 1, $usuario_ingreso, 1, 1];
                                     if ($interesado_id == 0) {
                                         $interesado_id = $mod_interesado->insertarInteresado($concap, $parametros, $keys, 'interesado');
                                     }
@@ -186,7 +188,7 @@ class InteresadosController extends \app\components\CController
                     );
                     return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Bad Request"), false, $message);
                 }
-            } catch (Exception $ex) {
+            } catch (\Exception $ex) {
                 $transaction->rollback();
                 $message = array(
                     "wtmessage" => Yii::t("formulario", "Mensaje: " . $error_message),
@@ -237,6 +239,7 @@ class InteresadosController extends \app\components\CController
             Yii::t("formulario", "Date"),
             Yii::t("formulario", "Name"),                        
             Yii::t("formulario", "Last Names"),
+            Yii::t("formulario", "User login"),
             Yii::t("formulario", "Company"),
             Yii::t("formulario", "Academic unit"),
             academico::t("Academico", "Career/Program/Course"));            
@@ -266,6 +269,7 @@ class InteresadosController extends \app\components\CController
             Yii::t("formulario", "Date"),
             Yii::t("formulario", "Name"),                        
             Yii::t("formulario", "Last Names"),
+            Yii::t("formulario", "User login"),
             Yii::t("formulario", "Company"),
             Yii::t("formulario", "Academic unit"),
             academico::t("Academico", "Career/Program/Course"));            

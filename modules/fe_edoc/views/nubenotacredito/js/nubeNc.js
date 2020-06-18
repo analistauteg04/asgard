@@ -126,7 +126,7 @@ function fun_EnviarDocumento() {
     } else {
         $("#messageInfo").html(selecDoc + buttonAlert);
         alerMessage();
-        resetSession(objLang.Select_an_item_to_process_the_request_, 'error', 'NO_OK');
+        shortModal(objLang.Select_an_item_to_process_the_request_, 'error', 'NO_OK');
     }
     return true;
 }
@@ -166,7 +166,7 @@ function fun_EnviarCorreccion() {
     } else {
         $("#messageInfo").html(selecDocAnu + buttonAlert);
         alerMessage();
-        resetSession(objLang.Select_an_item_to_process_the_request_, 'error', 'NO_OK');
+        shortModal(objLang.Select_an_item_to_process_the_request_, 'error', 'NO_OK');
     }
     return true;
 }
@@ -197,7 +197,7 @@ function fun_EnviarAnular() {
     } else {
         $("#messageInfo").html(selecDocAnu + buttonAlert);
         alerMessage();
-        resetSession(objLang.Select_an_item_to_process_the_request_, 'error', 'NO_OK');
+        shortModal(objLang.Select_an_item_to_process_the_request_, 'error', 'NO_OK');
     }
     return true;
 }
@@ -228,7 +228,7 @@ function fun_EnviarCorreo() {
     } else {
         $("#messageInfo").html(selecDocMail + buttonAlert);
         alerMessage();
-        resetSession(objLang.Select_an_item_to_process_the_request_, 'error', 'NO_OK');
+        shortModal(objLang.Select_an_item_to_process_the_request_, 'error', 'NO_OK');
     }
     return true;
 }
@@ -245,7 +245,7 @@ function fun_UpdateMail() {
         link = $('#txth_base').val() + "/fe_edoc/nubenotacredito/updatemail?";
         $('#btn_Update').attr("href", link + "id=" + id);
     } else {
-        resetSession(objLang.Select_an_item_to_process_the_request_, 'error', 'NO_OK');
+        shortModal(objLang.Select_an_item_to_process_the_request_, 'error', 'NO_OK');
     }
 }
 
@@ -271,7 +271,7 @@ function fun_CambiaMail() {
             }
         }, true);
     } else {
-        resetSession(objLang.Email_is_incorrect_, 'error', 'NO_OK');
+        shortModal(objLang.Email_is_incorrect_, 'error', 'NO_OK');
         //alert('Los Datos de correo no son correctos.');
     }
 }

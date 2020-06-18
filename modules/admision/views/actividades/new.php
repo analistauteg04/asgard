@@ -60,7 +60,7 @@ if (!empty($personalData['pges_cedula'])) {
             <div class="form-group">
                 <label for="txt_cedula" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label"><?= $tipodoc ?></label> 
                 <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                    <input type="text" class="form-control keyupmce" value="<?= $dni ?>" id="txt_cedula" disabled = "true" data-type="alfa" data-keydown="true"> 
+                    <input type="text" class="form-control keyupmce" value="<?= $dni ?>" id="txt_cedula" <?php if(trim($dni) != ""): ?>disabled = "true"<?php endif;?> data-type="alfa" data-keydown="true"> 
                 </div>
             </div>
         </div>
@@ -78,7 +78,7 @@ if (!empty($personalData['pges_cedula'])) {
             <div class="form-group">
                 <label for="txt_correo" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label"><?= Yii::t("formulario", "Email") ?></label> 
                 <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                    <input type="text" class="form-control keyupmce" value="<?= $personalData['pges_correo'] ?>" id="txt_correo" disabled = "true" data-type="alfa" data-keydown="true"> 
+                    <input type="text" class="form-control keyupmce" value="<?= $personalData['pges_correo'] ?>" id="txt_correo" <?php if(trim($personalData['pges_correo']) != ""): ?>disabled = "true"<?php endif;?> data-type="alfa" data-keydown="true"> 
                 </div>
             </div>
         </div>

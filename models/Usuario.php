@@ -322,13 +322,18 @@ class Usuario extends \yii\db\ActiveRecord implements IdentityInterface {
     public function consultarIdUsuario($per_id=null, $usuario=null) {
         $con = \Yii::$app->db_asgard;
         $estado = 1;
+        $qryPer = "";
+        if(isset($per_id)){
+            $qryPer = "per_id=$per_id and ";
+        }
         $sql = "
                 SELECT ifnull(usu_id,0) as usu_id
                 FROM usuario
                 WHERE 
-                per_id=$per_id and usu_user='$usuario' and
-                usu_estado = $estado AND
-                usu_estado_logico=$estado
+                    $qryPer
+                    usu_user='$usuario' and
+                    usu_estado = $estado AND
+                    usu_estado_logico=$estado
               ";
         $comando = $con->createCommand($sql);
         $resultData = $comando->queryOne();

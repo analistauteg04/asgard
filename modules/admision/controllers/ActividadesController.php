@@ -11,8 +11,11 @@ use app\modules\academico\models\UnidadAcademica;
 use app\modules\academico\models\Modalidad;
 use app\modules\academico\models\ModuloEstudio;
 use app\models\Empresa;
+use app\models\Persona;
+use app\models\Usuario;
 use app\models\Utilities;
 use yii\helpers\ArrayHelper;
+use app\modules\admision\Module as admision;
 
 class ActividadesController extends \app\components\CController {
     public function actionListaractividadxoportunidad() {
@@ -125,6 +128,8 @@ class ActividadesController extends \app\components\CController {
     public function actionNewactividad() {
         $opor_id = base64_decode($_GET["opid"]);
         $pges_id = base64_decode($_GET["pgid"]);
+        $_SESSION['JSLANG']['Please enter a valid dni.'] = admision::t("crm",'Please enter a valid dni.');
+        $_SESSION['JSLANG']['Please enter a valid Email.'] = admision::t("crm",'Please enter a valid Email.');
         $persges_mod = new PersonaGestion();
         $uni_aca_model = new UnidadAcademica();
         $modestudio = new ModuloEstudio();
@@ -174,6 +179,32 @@ class ActividadesController extends \app\components\CController {
             $descripcion = ucwords(strtolower($data["descripcion"]));
             if (!empty($data["fecproxima"])) {
                 $fecproxima = $data["fecproxima"] . ' ' . $data["horproxima"];
+            }
+            $modOpor = Oportunidad::findOne(base64_decode($data['oportunidad']));
+            $modelPges = PersonaGestion::findOne($modOpor->pges_id);
+            if(isset($data["cedula"]) && $data["cedula"] != "" && $data["estado_oportunidad"] == 3){
+                $modelPges->pges_cedula = $data["cedula"];
+                /*$modelPer = Persona::findOne(['per_cedula' => $data["cedula"], 'per_estado' => '1', 'per_estado_logico' => '1']);
+                if($modelPer){
+                    $message = array(
+                        "wtmessage" => Yii::t("formulario", "Update DNI to generate interested"),
+                        "title" => Yii::t('jslang', 'Error'),
+                    );
+                    return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Bad Request"), false, $message);
+                }*/
+                $modelPges->save();
+            }
+            if(isset($data["correo"]) && $data["correo"] != "" && $data["estado_oportunidad"] == 3){
+                $modelPges->pges_correo = $data["correo"];
+                /*$modelUsu = Usuario::findOne(['usu_user' => $data["correo"], 'usu_estado' => '1', 'usu_estado_logico' => '1']);
+                if($modelUsu){
+                    $message = array(
+                        "wtmessage" => Yii::t("formulario", "Update Email to generate interested"),
+                        "title" => Yii::t('jslang', 'Error'),
+                    );
+                    return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Bad Request"), false, $message);
+                }*/
+                $modelPges->save();
             }
             // Datos Generales Contacto            
             $con = \Yii::$app->db_crm;

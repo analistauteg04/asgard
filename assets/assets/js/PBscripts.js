@@ -430,7 +430,7 @@ function requestHttpAjax(link, arrParams, callback, loading, isUploadFile, dataT
             if (!recursive)
                 hideLoadingPopup();
             if (objXMLHttpRequest.status == 200 && objXMLHttpRequest.readyState == 4)
-                resetSession(msg, objLang.Error, "error", "goHome");
+                shortModal(msg, objLang.Error, "error", "goHome");
         },
         statusCode: {
             301: function() {
@@ -884,7 +884,7 @@ function loadSessionCampos(elementId, data, btnactions, label) {
 
 /**
  Funcion para mostrar un mensaje de alerta cuando hay un error
- @function resetSession
+ @function shortModal
  @author Eduardo Cueva
  @param  {string} message   - Url del sitio a pedir informacion
  @param  {string} label     - Es la etiqueta de la imagen en la alerta. Esta puede ser {error, info, success, warning}
@@ -893,7 +893,7 @@ function loadSessionCampos(elementId, data, btnactions, label) {
  @param  {string} lblAccept - Nombre del boton que se va a mostrar
  @param  {object} style     - Objecto con las varibles estilo que se desean que esten en el alert. Ejemplo: messageGM.htmloptions.style.width
  */
-function resetSession(message, label, status, callback, lblAccept, style) {
+function shortModal(message, label, status, callback, lblAccept, style) {
     var messagePB = new Object();
     messagePB.wtmessage = message;
     messagePB.title = label;
