@@ -1070,8 +1070,8 @@ class Interesado extends \app\modules\admision\components\CActiveRecord {
                     join " . $con1->dbname . ".persona as per on inte.per_id=per.per_id
                     join " . $con->dbname . ".interesado_empresa as iemp on iemp.int_id=inte.int_id
                     join " . $con1->dbname . ".empresa as emp on emp.emp_id=iemp.emp_id
-                    left join " . $con1->dbname . ".persona as pges on pges.per_id=inte.int_usuario_ingreso
-                    left join " . $con1->dbname . ".usuario as uges on uges.per_id=pges.per_id
+                    left join " . $con1->dbname . ".usuario as uges on inte.int_usuario_ingreso=uges.usu_id
+                    left join " . $con1->dbname . ".persona as pges on pges.per_id=uges.per_id
                 where $str_search
                     inte.int_estado_logico=:estado AND
                     inte.int_estado=:estado AND                    
@@ -1799,8 +1799,8 @@ class Interesado extends \app\modules\admision\components\CActiveRecord {
                         join " . $con1->dbname . ".persona as per on inte.per_id=per.per_id
                         join " . $con->dbname . ".interesado_empresa as iemp on iemp.int_id=inte.int_id
                         join " . $con1->dbname . ".empresa as emp on emp.emp_id=iemp.emp_id
-                        left join " . $con1->dbname . ".persona as pges on pges.per_id=inte.int_usuario_ingreso
-                        left join " . $con1->dbname . ".usuario as uges on uges.per_id=pges.per_id
+                        left join " . $con1->dbname . ".usuario as uges on inte.int_usuario_ingreso=uges.usu_id
+                        left join " . $con1->dbname . ".persona as pges on pges.per_id=uges.per_id
                 WHERE $str_search
                     inte.int_estado_logico=:estado AND
                     inte.int_estado=:estado AND                    

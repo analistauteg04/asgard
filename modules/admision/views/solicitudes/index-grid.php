@@ -59,7 +59,14 @@ PbGridView::widget([
             'header' => academico::t("Academico", "Income Method"),
             'value' => 'ming_nombre',
         ], 
-       
+        [
+            'attribute' => 'Agente',
+            'header' => Yii::t("formulario", "User login"),
+            'value' => function($data){
+                if(isset($data['Agente']) && $data['Agente'] != "") return $data['Agente'];
+                return "-";
+            },
+        ], 
         [
             'class' => 'yii\grid\ActionColumn',
             'header' => academico::t("Academico", "Career/Program/Course"),
