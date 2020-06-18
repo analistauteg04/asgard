@@ -156,7 +156,7 @@ class PagosFacturaEstudiante extends \yii\db\ActiveRecord {
      */
     public static function getPagospendientexest($cedula, $onlyData = false) {
         $con = \Yii::$app->db_sea;
-        $sql = "SELECT  
+        $sql = "SELECT                  
                   A.TIP_NOF,
                   A.NUM_NOF,
                   A.COD_CLI,
@@ -394,7 +394,7 @@ class PagosFacturaEstudiante extends \yii\db\ActiveRecord {
                   A.TIP_NOF as tipofactura,
                   A.NUM_NOF as factura,
                   (SELECT GROUP_CONCAT( NOM_ART) FROM pruebasea.VD010101 B WHERE A.TIP_NOF=B.TIP_NOF AND A.NUM_NOF=B.NUM_NOF AND A.COD_CLI=B.COD_CLI) as descripcion,
-                  -- falta el valor total en est linea as valor
+                  SUM(A.VALOR_D) as valor,
                   A.F_SUS_D as fecha,
                   (A.VALOR_D-A.VALOR_C-A.VAL_DEV) as saldo,  
                   CASE 
