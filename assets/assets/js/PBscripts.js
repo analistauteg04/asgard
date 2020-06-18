@@ -52,6 +52,7 @@ $(document).ready(function() {
         type: 'iframe',
         preloader: true,
     });
+    $('.multiSelects').select2();
 });
 var pageValues = [];
 var my_skins = [

@@ -21,12 +21,14 @@ class AppAsset extends AssetBundle {
     public $css = [
         'css/PBstyles.css',
         'css/PBvalida.css',
+        'plugins/select2/css/select2.min.css',
     ];
     public $js = [
         'js/PBscripts.js',
         'js/PBvalidation.js',
         'js/cedulaRucPass.js',
         'js/base64.js',
+        'plugins/select2/js/select2.full.min.js',
     ];
     public $jsOptions = ['position' => \yii\web\View::POS_END];
     public $depends = [
