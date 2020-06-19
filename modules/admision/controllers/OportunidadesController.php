@@ -11,6 +11,8 @@ use app\modules\admision\models\TipoOportunidadVenta;
 use app\modules\academico\models\Modalidad;
 use app\modules\academico\models\ModuloEstudio;
 use app\modules\academico\models\UnidadAcademica;
+use app\modules\admision\models\BitacoraSeguimiento;
+use app\modules\admision\models\ActividadSeguimiento;
 use app\models\Empresa;
 use app\models\Persona;
 use app\models\Usuario;
@@ -196,6 +198,10 @@ class OportunidadesController extends \app\components\CController {
         $arr_moduloEstudio = $modestudio->consultarEstudioEmpresa($respOportunidad["empresa"]); // tomar id de impresa
         $empresa_mod = new Empresa();
         $empresa = $empresa_mod->getAllEmpresa();
+        $modelSegui = BitacoraSeguimiento::findAll(['bseg_estado' => '1', 'bseg_estado_logico' => '1']);
+        $arrSeg = array('Todos');
+        $arrSeg = array_merge($arrSeg, ArrayHelper::getColumn($modelSegui, "bseg_nombre"));
+        unset($arrSeg[0]);
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
             if (isset($data["getuacademias"])) {                
@@ -253,6 +259,7 @@ class OportunidadesController extends \app\components\CController {
                     "arr_subcarrerra" => ArrayHelper::map($arr_subcarrera, "id", "name"),
                     'arr_empresa' => ArrayHelper::map($empresa, "id", "value"),
                     "emp_id" => $emp_id,
+                    'arr_seguimiento' => $arrSeg,
         ]);
     }
 
@@ -337,6 +344,18 @@ class OportunidadesController extends \app\components\CController {
                             $bact_descripcion = "";
                             $res_actividad = $mod_gestion->insertarActividad($opo_id, $usuario, $padm_id, $eopo_id, $bact_fecha_registro, $oact_id, $bact_descripcion, $bact_fecha_proxima_atencion);
                             if ($res_actividad) {
+                                if(isset($data["seguimiento"])){
+                                    foreach($data["seguimiento"] as $key => $value){
+                                        $modelSeguimiento = new ActividadSeguimiento();
+                                        $modelSeguimiento->bseg_id = $value;
+                                        $modelSeguimiento->bact_id = $res_actividad;
+                                        $modelSeguimiento->aseg_estado = '1';
+                                        $modelSeguimiento->aseg_estado_logico = '1';
+                                        if(!$modelSeguimiento->save()){
+                                            throw new \Exception("Error al grabar");
+                                        }
+                                    }
+                                }
                                 $transaction->commit();
                                 $message = array(
                                     "wtmessage" => Yii::t("notificaciones", "La infomación ha sido grabada. "),
@@ -375,7 +394,7 @@ class OportunidadesController extends \app\components\CController {
                     );
                     return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Bad Request"), false, $message);
                 }
-            } catch (Exception $ex) {
+            } catch (\Exception $ex) {
                 $transaction->rollback();
                 $message = array(
                     "wtmessage" => Yii::t("notificaciones", "Error al grabar." . $mensaje),

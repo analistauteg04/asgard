@@ -294,6 +294,7 @@ function save() {
         shortModal(msg, objLang.Error, "error");
         return;
     }
+    arrParams.seguimiento = $('#cmb_medio_contacto').val();
     if (!validateForm()) {
         requestHttpAjax(link, arrParams, function(response) {
             showAlert(response.status, response.label, response.message);

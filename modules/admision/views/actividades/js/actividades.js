@@ -74,6 +74,7 @@ function save() {
         shortModal(msg, objLang.Error, "error");
         return;
     }
+    arrParams.seguimiento = $('#cmb_medio_contacto').val();
 
     if (!validateForm()) {
         requestHttpAjax(link, arrParams, function(response) {
@@ -99,6 +100,7 @@ function update() {
     //Datos Próxima Atención
     arrParams.fecproxima = $('#txt_fecha_proxima').val();
     arrParams.horproxima = $('#txt_hora_proxima').val();
+    arrParams.seguimiento = $('#cmb_medio_contacto').val();
     if (!validateForm()) {
         requestHttpAjax(link, arrParams, function(response) {
             showAlert(response.status, response.label, response.message);
