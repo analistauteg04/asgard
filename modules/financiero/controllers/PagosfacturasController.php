@@ -101,7 +101,7 @@ class PagosfacturasController extends \app\components\CController {
         } else {
             $carrera = $modestudio->consultarCursoModalidad($personaData['uaca_id'], $personaData['mod_id']); // tomar id de impresa
         }
-        $personaData['per_cedula'] = '0704629815'; // DEBE BORRARSE LUEGO DE LAS PREUBAS
+        $personaData['per_cedula'] = '0202501573'; // DEBE BORRARSE LUEGO DE LAS PREUBAS
         $pagospendientesea = $mod_pagos->getPagospendientexest($personaData['per_cedula'], false);
         return $this->render('viewsaldo', [
                     'arr_persona' => $personaData,

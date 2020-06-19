@@ -404,7 +404,11 @@ class PagosFacturaEstudiante extends \yii\db\ActiveRecord {
                     /*ELSE SUBSTRING(A.NUM_DOC,1,3)*/
                     ELSE A.NUM_DOC
                   END  as numcuota,
-                  A.VALOR_D as valorcuota,
+                  -- A.VALOR_D as valorcuota,
+                   CASE 
+                    WHEN A.NUM_DOC = A.NUM_NOF THEN ' '                                        
+                    ELSE A.VALOR_D
+                  END  as valorcuota,
                   A.F_VEN_D as fechavence
                                                                
                 FROM " . $con->dbname . ".CC0002 A
