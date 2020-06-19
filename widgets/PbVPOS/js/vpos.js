@@ -76,7 +76,7 @@ function setResponseData(data, execute) {
             var msg_alert = (data["status"]["status"] == "APPROVED") ?
                 VPOS_VAR.MSJ_OK : ((data["status"]["status"] == "REJECTED") ? VPOS_VAR.MSJ_REJ : VPOS_VAR.MSJ_PEN);
             showResumen(label_message, wtmessage, status);
-            resetSession(msg_alert, label, status, callback, lblAccept);
+            shortModal(msg_alert, label, status, callback, lblAccept);
         }, true);
     }
 }

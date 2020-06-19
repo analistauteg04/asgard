@@ -23,7 +23,7 @@ Especies::registerTranslations();
         <div class="form-group">
             <label for="txt_buscarDataCertificado" class="col-sm-2 col-md-2 col-xs-2 col-lg-2 control-label"><?= Yii::t("formulario", "Search") ?></label>
             <div class="col-sm-8 col-md-8 col-xs-8 col-lg-8">
-                <input type="text" class="form-control" value="" id="txt_buscarDataCertificado" placeholder="<?= Yii::t("formulario", "Search by Names") ?>">
+                <input type="text" class="form-control" value="" id="txt_buscarDataCertificado" placeholder="<?= Yii::t("formulario", "Search by Names") ." o ". Yii::t("formulario", "Identification document")?>">
             </div>
         </div>
     </div>
@@ -80,7 +80,7 @@ Especies::registerTranslations();
             <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">   
                 <?=
                 Html::dropDownList(
-                        "cmb_estadocertificado_cer", -1, $arr_estadocertificado, ["class" => "form-control", "id" => "cmb_estadocertificado_cer"]
+                        "cmb_estadocertificado_cer", -1, $arrEstados, ["class" => "form-control", "id" => "cmb_estadocertificado_cer"]
                 )
                 ?></div> 
         </div>

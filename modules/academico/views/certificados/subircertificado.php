@@ -129,7 +129,7 @@ $leyendarc = '<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
         </div>    
         <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
             <div class="col-sm-2 col-md-2 col-xs-4 col-lg-2">                
-                <a id="btn_subircertificado" href="javascript:" class="btn btn-primary btn-block"> <?= Yii::t("formulario", "Send") ?> <span class=""></span></a>
+            <!--    <a id="btn_subircertificado" href="javascript:" class="btn btn-primary btn-block"> <?= Yii::t("formulario", "Send") ?> <span class=""></span></a> -->
             </div>
         </div> 
         <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">

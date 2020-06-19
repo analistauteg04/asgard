@@ -411,7 +411,6 @@ class ContactosController extends \app\components\CController {
         } else {
             $arrData = $modPersonaGestion->consultarReportContactos($arrSearch, true);
         }
-        \app\models\Utilities::putMessageLogFile($arrSearch);
         $nameReport = admision::t("crm", "Contacts");
         Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
         exit;

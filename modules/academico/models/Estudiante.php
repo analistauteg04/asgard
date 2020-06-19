@@ -198,7 +198,8 @@ class Estudiante extends \yii\db\ActiveRecord {
             SELECT
                 ea.eaca_nombre AS Carrera,
                 ea.eaca_alias AS Alias,
-                m.mod_nombre AS Modalidad
+                m.mod_nombre AS Modalidad,
+                ea.eaca_alias_resumen AS ResumenCarrera
             FROM
             " . $con->dbname . ".estudiante AS e 
             INNER JOIN " . $con->dbname . ".estudiante_carrera_programa AS ecp ON e.est_id = ecp.est_id

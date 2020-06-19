@@ -54,7 +54,7 @@ class Especies extends \yii\db\ActiveRecord {
         $con1 = \Yii::$app->db_asgard;
         $estado = 1;
         $sql = "SELECT A.est_id, B.per_id Ids,B.per_pri_nombre,B.per_seg_nombre,B.per_pri_apellido, 
-                            B.per_seg_apellido,B.per_cedula, B.per_correo, D.uaca_id, D.mod_id, D.eaca_id
+                            B.per_seg_apellido,B.per_cedula, B.per_correo, D.uaca_id, D.mod_id, D.eaca_id, A.est_matricula, A.est_categoria
                     FROM " . $con->dbname . ".estudiante A 
                             INNER JOIN " . $con1->dbname . ".persona B ON A.per_id=B.per_id
                             INNER JOIN " . $con->dbname . ".estudiante_carrera_programa C ON C.est_id = A.est_id
@@ -100,7 +100,7 @@ class Especies extends \yii\db\ActiveRecord {
                     INNER JOIN " . $con->dbname . ".modalidad C ON C.mod_id=A.mod_id
                     INNER JOIN " . $con1->dbname . ".forma_pago D ON D.fpag_id=A.fpag_id
                     INNER JOIN " . $con->dbname . ".estudiante E ON E.est_id=A.est_id    
-                    INNER JOIN " . $con2->dbname . ".persona P ON P.per_id=E.per_id
+                    INNER JOIN " . $con2->dbname . ".persona P ON P.per_id=E.per_id                        
                 WHERE  A.csol_estado=:estado AND A.csol_estado_logico=:estado $estudiante  $str_search  ORDER BY A.csol_id DESC;";
 
         $comando = $con->createCommand($sql);
@@ -666,7 +666,7 @@ class Especies extends \yii\db\ActiveRecord {
         $sql = "SELECT A.egen_id, concat(F.uaca_nomenclatura,T.tra_nomenclatura,lpad(ifnull(C.esp_codigo,0),3,'0'),'-',A.egen_numero_solicitud) as egen_numero_solicitud,
                     T.tra_nombre as tramite, C.esp_rubro,concat(D.per_pri_nombre,' ',D.per_pri_apellido) Nombres,D.per_cedula,
                     F.uaca_nombre,G.mod_nombre,date(A.egen_fecha_aprobacion) fecha_aprobacion,
-                    A.egen_fecha_caducidad
+                    A.egen_fecha_caducidad, Z.cgen_ruta_archivo_pdf as imagen, Z.cgen_estado_certificado
                 FROM " . $con->dbname . ".especies_generadas A
                             INNER JOIN (" . $con->dbname . ".estudiante B 
                                             INNER JOIN " . $con1->dbname . ".persona D ON B.per_id=D.per_id)
@@ -677,6 +677,7 @@ class Especies extends \yii\db\ActiveRecord {
                             INNER JOIN " . $con->dbname . ".unidad_academica F ON F.uaca_id=A.uaca_id
                             INNER JOIN " . $con->dbname . ".modalidad G ON G.mod_id=A.mod_id
                             INNER JOIN " . $con->dbname . ".tramite T ON T.tra_id = A.tra_id  
+                            LEFT JOIN " . $con->dbname . ".certificados_generadas Z ON Z.egen_id = A.egen_id  
                 WHERE cs.csol_id = :csol_id AND 
                       A.egen_estado=:estado AND 
                       A.egen_estado_logico=:estado  
@@ -814,7 +815,7 @@ class Especies extends \yii\db\ActiveRecord {
         $con = \Yii::$app->db_academico;
         $estado = 1;
         if (!empty($paca_id)) {
-            $periodo = 'paca_id in ('. $paca_id .') AND';
+            $periodo = 'paca_id in (' . $paca_id . ') AND';
         }
         $sql = "SELECT count(*) as eppa_estado_pago
                   FROM " . $con->dbname . ".estudiante_periodo_pago                       
@@ -825,10 +826,36 @@ class Especies extends \yii\db\ActiveRecord {
                     eppa_estado_logico = :estado";
 
         $comando = $con->createCommand($sql);
-        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);        
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":est_id", $est_id, \PDO::PARAM_INT);
         $resultData = $comando->queryOne();
         return $resultData;
+    }
+
+    /**
+     * Function 
+     * @author  Giovanni Vergara <abalistadesarrollo02@uteg.edu.ec>
+     * @property      
+     * @return  
+     */
+    public function consultarSolicitudXcorreo($csol_id) {
+        $con = \Yii::$app->db_academico;
+        $con1 = \Yii::$app->db_asgard;
+        $estado = 1;
+        $sql = "SELECT A.*,C.tra_nombre,B.esp_rubro, B.esp_emision_certificado,me.uaca_id, me.mod_id
+                , CONCAT(pers.per_pri_nombre , ' ' , pers.per_pri_apellido) as nombres
+                 FROM " . $con->dbname . ".detalle_solicitud A
+			INNER JOIN " . $con->dbname . ".especies B ON A.esp_id=B.esp_id
+			INNER JOIN " . $con->dbname . ".tramite C ON A.tra_id=C.tra_id
+                        INNER JOIN " . $con->dbname . ".estudiante_carrera_programa ec ON ec.est_id = A.est_id
+                        INNER JOIN " . $con->dbname . ".modalidad_estudio_unidad me ON me.meun_id = ec.meun_id
+                        INNER JOIN " . $con->dbname . ".estudiante est ON est.est_id = A.est_id
+                        INNER JOIN " . $con1->dbname . ".persona pers ON pers.per_id = est.per_id
+		 WHERE A.dsol_estado= :estado AND A.dsol_estado_logico= :estado  AND A.csol_id=:csol_id; ";
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":csol_id", $csol_id, \PDO::PARAM_INT);
+        return $comando->queryAll();
     }
 
 }

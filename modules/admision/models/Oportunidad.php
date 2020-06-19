@@ -1672,9 +1672,7 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
             $path = Yii::$app->basePath . Yii::$app->params['documentFolder'] . "leads/" . $fname;
             //return $mod_pergestion->insertarDtosPersonaGestion($emp_id, $tipoProceso);
             $carga_archivo = $mod_perTemp->uploadFile($emp_id, $path);
-            if ($carga_archivo['status']) {  
-                \app\models\Utilities::putMessageLogFile('empresa:'.$emp_id);   
-                \app\models\Utilities::putMessageLogFile('tipo proceso:'.$tipoProceso);   
+            if ($carga_archivo['status']) {
                 return $mod_pergestion->insertarDtosPersonaGestion($emp_id, $tipoProceso);
             } else {
                 return $carga_archivo;
@@ -1904,8 +1902,7 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
                    eopo.eopo_estado_logico = :estado AND
                    opo.opo_estado = :estado AND
                    opo.opo_estado_logico = :estado";
-
-        \app\models\Utilities::putMessageLogFile('sql oportunidad:'.$sql);                        
+                   
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":emp_id", $emp_id, \PDO::PARAM_INT);
@@ -1983,7 +1980,6 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
                                 INNER JOIN db_academico.unidad_academica C ON A.uaca_id=C.uaca_id
                 WHERE A.opo_estado_logico=1 GROUP BY A.uaca_id,A.oper_id ORDER BY A.oper_id; ";
         $comando = $con->createCommand($sql);
-        \app\models\Utilities::putMessageLogFile($sql);
         return $comando->queryAll();
     }
 
@@ -2053,7 +2049,8 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
                     des_modalidad,
                     des_estado,
                     fecha_registro,
-                    fecha_proxima 
+                    fecha_proxima,
+                    agente
                 FROM (                    
                     SELECT  
                             lpad(ifnull(o.opo_codigo,0),7,'0') as opo_codigo, 
@@ -2075,9 +2072,11 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
                                     '' else 
                                     (select max(bact_fecha_proxima_atencion) from db_crm.bitacora_actividades b 
                                      where b.opo_id = o.opo_id and b.bact_estado = 1 and bact_estado_logico = 1) end as fecha_proxima,
+                            
+                            concat(p.per_pri_nombre, ' ', ifnull(p.per_seg_nombre,' '), ' ', p.per_pri_apellido, ' ', ifnull(p.per_seg_apellido,' ')) as agente,
                             o.emp_id,
                             o.eopo_id,
-                            o.opo_id                          
+                            o.opo_id                         
                     FROM " . $con->dbname . ".oportunidad o inner join " . $con->dbname . ".persona_gestion pg on pg.pges_id = o.pges_id
                          inner join " . $con1->dbname . ".empresa e on e.emp_id = o.emp_id
                          inner join " . $con2->dbname . ".unidad_academica ua on ua.uaca_id = o.uaca_id
@@ -2196,8 +2195,7 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
     public function CargarArchivoGestion($emp_id, $fname, $usu_id, $padm_id) {
         $mod_actividadTemp = new BitacoraActividadesTmp();
         $mod_actividad = new Oportunidad();       
-        $path = Yii::$app->basePath . Yii::$app->params['documentFolder'] . "gestion/" . $fname;     
-        \app\models\Utilities::putMessageLogFile('usuario:'.$usu_id);
+        $path = Yii::$app->basePath . Yii::$app->params['documentFolder'] . "gestion/" . $fname;
         $carga_archivo = $mod_actividadTemp->uploadFile($emp_id, $usu_id, $padm_id, $path);
         if ($carga_archivo['status']) {            
             $data = $mod_actividadTemp->consultarBitacoraTemp($usu_id);                          
@@ -2264,8 +2262,7 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
                    opo.pges_id = :pges_id AND
                    opo.opo_estado = :estado AND
                    opo.opo_estado_logico = :estado";
-
-        \app\models\Utilities::putMessageLogFile('sql oportunidad:'.$sql);                        
+                      
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":emp_id", $emp_id, \PDO::PARAM_INT);        

@@ -65,7 +65,7 @@ PbGridView::widget([
         ],
         [
             'attribute' => 'Fecha Aprobación',
-            'header' => Especies::t("Especies", "Fecha Genarado"),
+            'header' => Especies::t("Especies", "Fecha Generado"),
             'format' => ['date', 'php:d-m-Y'],
             'value' => 'cgen_fecha_codigo_generado',
         ],

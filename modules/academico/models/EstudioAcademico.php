@@ -13,6 +13,7 @@ use Yii;
  * @property string $eaca_nombre
  * @property string $eaca_descripcion
  * @property string $eaca_alias
+ * @property string $eaca_alias_resumen
  * @property int $eaca_usuario_ingreso
  * @property int $eaca_usuario_modifica
  * @property string $eaca_estado
@@ -48,10 +49,11 @@ class EstudioAcademico extends \app\modules\admision\components\CActiveRecord
     public function rules()
     {
         return [
-            [['teac_id', 'eaca_nombre', 'eaca_descripcion', 'eaca_alias', 'eaca_usuario_ingreso', 'eaca_estado', 'eaca_estado_logico'], 'required'],
+            [['teac_id', 'eaca_nombre', 'eaca_descripcion', 'eaca_alias', 'eaca_alias_resumen', 'eaca_usuario_ingreso', 'eaca_estado', 'eaca_estado_logico'], 'required'],
             [['teac_id', 'eaca_usuario_ingreso', 'eaca_usuario_modifica'], 'integer'],
             [['eaca_fecha_creacion', 'eaca_fecha_modificacion'], 'safe'],
-            [['eaca_nombre', 'eaca_alias'], 'string', 'max' => 300],
+            [['eaca_nombre', 'eaca_alias',], 'string', 'max' => 300],
+            [['eaca_alias_resumen'], 'string', 'max' => 30],
             [['eaca_descripcion'], 'string', 'max' => 500],
             [['eaca_estado', 'eaca_estado_logico'], 'string', 'max' => 1],
             [['teac_id'], 'exist', 'skipOnError' => true, 'targetClass' => TipoEstudioAcademico::className(), 'targetAttribute' => ['teac_id' => 'teac_id']],
@@ -69,6 +71,7 @@ class EstudioAcademico extends \app\modules\admision\components\CActiveRecord
             'eaca_nombre' => 'Eaca Nombre',
             'eaca_descripcion' => 'Eaca Descripcion',
             'eaca_alias' => 'Eaca Alias',
+            'eaca_alias_resumen' => 'Alias Resumen',
             'eaca_usuario_ingreso' => 'Eaca Usuario Ingreso',
             'eaca_usuario_modifica' => 'Eaca Usuario Modifica',
             'eaca_estado' => 'Eaca Estado',

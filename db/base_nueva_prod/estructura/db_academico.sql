@@ -131,6 +131,7 @@ create table if not exists `estudio_academico` (
   `eaca_nombre` varchar(300) not null,
   `eaca_descripcion` varchar(500) not null, 
   `eaca_alias` varchar(300) not null,
+  `eaca_alias_resumen` varchar(30) null,
   `eaca_usuario_ingreso` bigint(20) not null,
   `eaca_usuario_modifica` bigint(20)  null,  
   `eaca_estado` varchar(1) not null,
@@ -1663,6 +1664,9 @@ CREATE TABLE `certificados_generadas` (
   `cgen_fecha_caducidad` date DEFAULT NULL,
   `cgen_ruta_archivo_pdf` varchar(500) DEFAULT NULL,
   `cgen_estado_certificado` varchar(1) NOT NULL, -- null pendiente, 1 codigo generado, 2 certificado generado 
+  `cgen_observacion_autorizacion` varchar(500) NOT NULL,
+  `cgen_fecha_autorizacion` timestamp null DEFAULT NULL,
+  `cgen_usuario_autorizacion` bigint(20) DEFAULT NULL,
   `cgen_usuario_ingreso` bigint(20) DEFAULT NULL,
   `cgen_usuario_modifica` bigint(20) DEFAULT NULL,
   `cgen_estado` varchar(1) NOT NULL,
@@ -1671,9 +1675,7 @@ CREATE TABLE `certificados_generadas` (
   `cgen_estado_logico` varchar(1) NOT NULL,
   foreign key (egen_id) references `especies_generadas`(egen_id),
   unique cgen_codigo(cgen_codigo) 
-
 );
-
 
 -- --------------------------------------------------------
 -- 
@@ -1701,3 +1703,25 @@ create table if not exists `distributivo_academico_horario` (
   foreign key (uaca_id) references `unidad_academica`(uaca_id), 
   foreign key (mod_id) references `modalidad`(mod_id)
 );
+
+-- --------------------------------------------------------
+-- 
+-- Estructura de tabla para la tabla `diploma` 
+-- --------------------------------------------------------
+create table if not exists `diploma` (
+  `dip_id` bigint(20) not null auto_increment primary key,
+  `dip_codigo` varchar(100) null,
+  `dip_nombres` varchar(100) not null,
+  `dip_apellidos` varchar(100) not null,
+  `dip_cedula` varchar(10) null,
+  `dip_carrera` varchar(150) null,
+  `dip_modalidad` varchar(50) null,
+  `dip_programa` varchar(200) null,
+  `dip_fecha_inicio` timestamp null DEFAULT NULL,
+  `dip_fecha_fin` timestamp null DEFAULT NULL,
+  `dip_horas` varchar(100) null,
+  `dip_estado` varchar(1) not null,
+  `dip_fecha_creacion` timestamp not null default current_timestamp,
+  `dip_fecha_modificacion` timestamp null default null,
+  `dip_estado_logico` varchar(1) not null
+); 

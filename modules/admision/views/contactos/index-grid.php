@@ -50,6 +50,11 @@ admision::registerTranslations();
                 'value' => 'empresa',
             ],
             [
+                'attribute' => 'agente',
+                'header' => Yii::t("formulario", "User login"),
+                'value' => 'agente',
+            ],
+            [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => Module::t("crm", "Channel"),
                 'template' => '{view}',
