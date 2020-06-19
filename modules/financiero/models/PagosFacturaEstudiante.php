@@ -400,8 +400,9 @@ class PagosFacturaEstudiante extends \yii\db\ActiveRecord {
                   A.F_SUS_D as fecha,
                   (A.VALOR_D-A.VALOR_C-A.VAL_DEV) as saldo,  
                   CASE 
-                    WHEN A.NUM_DOC = A.NUM_NOF THEN '01'                    
-                    ELSE SUBSTRING(A.NUM_DOC,1,3)
+                    WHEN A.NUM_DOC = A.NUM_NOF THEN ' '                    
+                    /*ELSE SUBSTRING(A.NUM_DOC,1,3)*/
+                    ELSE A.NUM_DOC
                   END  as numcuota,
                   A.VALOR_D as valorcuota,
                   A.F_VEN_D as fechavence
