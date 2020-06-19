@@ -349,7 +349,7 @@ class PagosfacturasController extends \app\components\CController {
                 } else {
                     $transaction->rollback();
                     $message = array(
-                        "wtmessage" => Yii::t("notificaciones", "Error al grabar pago factura.1" . $mensaje),
+                        "wtmessage" => Yii::t("notificaciones", "Error al grabar pago factura." . $mensaje),
                         "title" => Yii::t('jslang', 'Error'),
                     );
                     echo Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), false, $message);
@@ -357,7 +357,7 @@ class PagosfacturasController extends \app\components\CController {
             } catch (Exception $ex) {
                 $transaction->rollback();
                 $message = array(
-                    "wtmessage" => Yii::t("notificaciones", "Error al grabar pago factura.2" . $mensaje),
+                    "wtmessage" => Yii::t("notificaciones", "Error al grabar pago factura." . $mensaje),
                     "title" => Yii::t('jslang', 'Error'),
                 );
                 echo Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), false, $message);
