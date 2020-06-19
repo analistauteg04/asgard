@@ -28,6 +28,7 @@ $leyendarc = '<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
 
 <?= Html::hiddenInput('txth_idest', $arr_persona['est_id'], ['id' => 'txth_idest']); ?>
 <?= Html::hiddenInput('txth_per', @Yii::$app->session->get("PB_perid"), ['id' => 'txth_per']); ?>
+
 <form class="form-horizontal" enctype="multipart/form-data" id="formsolicitud">   
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <p class="text-danger"> <?= Yii::t("formulario", "Fields with * are required") ?> </p>
@@ -240,7 +241,7 @@ $leyendarc = '<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
             </div>
         </div>
     </div>
-    <div class='col-md-12 col-sm-12 col-xs-12 col-lg-12'>
+    <div class='col-md-12 col-sm-12 col-xs-12 col-lg-12'>        
         <?=
         PbGridView::widget([
             'id' => 'TbgPagopendiente',
@@ -297,7 +298,7 @@ $leyendarc = '<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
                     'template' => '{select}',
                     'buttons' => [
                         'select' => function ($url, $model) {
-                            return Html::checkbox("", false, ["value" => $model['NUM_NOF'].';'.$model['NUM_DOC']]);
+                            return Html::checkbox("", false, ["value" => $model['NUM_NOF'].';'.$model['NUM_DOC'].';'.$model['total_deuda']]);
                         },
                     ],
                 ],
@@ -305,10 +306,10 @@ $leyendarc = '<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
         ])
         ?>
     </div>   
-    <div class="row"> 
+    <!--<div class="row"> 
         <div class="col-lg-11 col-md-11 col-sm-11 col-xs-11"></div>
         <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">&nbsp;&nbsp;  
-            <a id="btn_guardarpago" href="javascript:" class="btn btn-primary btn-block"> <?= Yii::t("formulario", "Save") ?> </a>
+            <a id="btn_guardarpago" href="javascript:" class="btn btn-primary btn-block"> <? Yii::t("formulario", "Save") ?> </a>
         </div>
-    </div>
+    </div>-->
 </form>

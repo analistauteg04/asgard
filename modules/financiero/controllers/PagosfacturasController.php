@@ -148,7 +148,7 @@ class PagosfacturasController extends \app\components\CController {
             $carrera = $modestudio->consultarCursoModalidad($personaData['uaca_id'], $personaData['mod_id']); // tomar id de impresa
         }
         $arr_forma_pago = $mod_fpago->consultarFormaPagosaldo();
-        $personaData['per_cedula'] = '0202501573'; // DEBE BORRARSE LUEGO DE LAS PREUBAS
+        $personaData['per_cedula'] = '0704629815'; // DEBE BORRARSE LUEGO DE LAS PREUBAS
         $pagospendientesea = $mod_pagos->getPagospendientexest($personaData['per_cedula'], false);
         return $this->render('subirpago', [
                     'arr_persona' => $personaData,
@@ -331,11 +331,11 @@ class PagosfacturasController extends \app\components\CController {
                     $x = 0;
                     foreach ($pagados as $datos) {
                         //  consultar la informacion seleccionada de cuota factura
-                        $personaData['per_cedula'] = '0202501573'; // DEBE BORRARSE CUANDO SE TENGA EL DATO
+                        $personaData['per_cedula'] = '0704629815'; // DEBE BORRARSE CUANDO SE TENGA EL DATO
                         $parametro = explode(";", $pagados[$x]);
                         $resp_consfactura = $mod_pagos->consultarPagospendientesp($personaData['per_cedula'], $parametro[0], $parametro[1]);
                         // insertar el detalle                        
-                        $resp_detpagofactura = $mod_pagos->insertarDetpagospendientes($resp_pagofactura, $resp_consfactura['tipofactura'], $resp_consfactura['factura'], $resp_consfactura['descripcion'], $resp_consfactura['valor'], $resp_consfactura['fecha'], $resp_consfactura['saldo'], $resp_consfactura['numcuota'], $resp_consfactura['valorcuota'], $resp_consfactura['fechavence'], $usuario);
+                        $resp_detpagofactura = $mod_pagos->insertarDetpagospendientes($resp_pagofactura, $resp_consfactura['tipofactura'], $resp_consfactura['factura'], $resp_consfactura['descripcion'], $parametro[2], $resp_consfactura['fecha'], $resp_consfactura['saldo'], $resp_consfactura['numcuota'], $resp_consfactura['valorcuota'], $resp_consfactura['fechavence'], $usuario);
                         $x++;
                     }
                     if ($resp_detpagofactura) {

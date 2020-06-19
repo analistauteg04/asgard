@@ -156,7 +156,9 @@ class PagosFacturaEstudiante extends \yii\db\ActiveRecord {
      */
     public static function getPagospendientexest($cedula, $onlyData = false) {
         $con = \Yii::$app->db_sea;
-        $sql = "SELECT                  
+        $sql = "SELECT    
+                  (SELECT SUM(A.VALOR_D) FROM " . $con->dbname . ".CC0002 A
+                    WHERE A.COD_CLI= :cedula AND A.CANCELA='N' AND A.COD_PTO='001' AND TIP_NOF='FE')  as total_deuda,
                   A.TIP_NOF,
                   A.NUM_NOF,
                   A.COD_CLI,
@@ -174,7 +176,7 @@ class PagosFacturaEstudiante extends \yii\db\ActiveRecord {
                   CASE 
                     WHEN A.NUM_DOC = A.NUM_NOF THEN '01'                    
                     ELSE SUBSTRING(A.NUM_DOC,-3)
-                  END  as cantidad               
+                  END  as cantidad                  
                 FROM " . $con->dbname . ".CC0002 A
                 WHERE A.COD_CLI= :cedula AND A.CANCELA='N' AND A.COD_PTO='001' AND TIP_NOF='FE'";
         $comando = $con->createCommand($sql);
