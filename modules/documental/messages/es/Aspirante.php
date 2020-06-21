@@ -11,4 +11,5 @@ return [
     "Aspirants" => "Aspirantes",
     "Request by aspirants" => "Solicitudes por Aspirante",
     "Data General Aspirants" => "Datos Generales Aspirante",
+    "Generate Aspitant" => "Generar Aspirante",
 ];

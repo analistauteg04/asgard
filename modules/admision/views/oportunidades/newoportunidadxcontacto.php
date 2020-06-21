@@ -50,7 +50,7 @@ $fecha_actual = date("Y-m-d");
                     <div class="form-group">
                         <label for="txt_cedula" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label"><?= $tipodoc ?></label> 
                         <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-        <input type="text" class="form-control keyupmce" value="<?= trim($dni) ?>" id="txt_cedula" <?php if(trim($dni) != ""): ?>disabled = "true"<?php endif;?> data-type="alfa" data-keydown="true"> 
+                            <input type="text" class="form-control keyupmce" value="<?= trim($dni) ?>" id="txt_cedula" <?php if(trim($dni) != ""): ?>disabled = "true"<?php endif;?> data-type="alfa" data-keydown="true"> 
                         </div>
                     </div>
                 </div>
