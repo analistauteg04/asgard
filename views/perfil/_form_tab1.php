@@ -546,7 +546,7 @@ use app\components\CFileInputAjax;
                 <div class="col-md-12"> 
                     <div class="col-md-10"></div>
                     <div class="col-md-2">
-                        <a id="paso1next" href="javascript:" class="btn btn-primary btn-block"> <?= Yii::t("formulario", "Save") ?> </a>
+                        <!--<a id="paso1next" href="javascript:" class="btn btn-primary btn-block"> <? Yii::t("formulario", "Save") ?> </a>-->
                     </div>
                 </div>
             </div>
