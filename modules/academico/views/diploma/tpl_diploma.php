@@ -22,7 +22,7 @@
 </div>
 <div class="name">
     <div class="ncontent">
-        <div class="<?= (strlen($name) > 28)?"nameContent2":"nameContent" ?>">
+        <div class="<?= (strlen($name) > 27)?"nameContent2":"nameContent" ?>">
             <?= $name ?>
         </div>
     </div>

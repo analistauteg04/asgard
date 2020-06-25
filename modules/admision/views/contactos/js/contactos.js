@@ -1,11 +1,11 @@
-$(document).ready(function () {
-    $('#cmb_pais').change(function () {
+$(document).ready(function() {
+    $('#cmb_pais').change(function() {
         var link = $('#txth_base').val() + "/admision/contactos/edit";
         var arrParams = new Object();
         arrParams.pai_id = $(this).val();
         arrParams.getprovincias = true;
         arrParams.getarea = true;
-        requestHttpAjax(link, arrParams, function (response) {
+        requestHttpAjax(link, arrParams, function(response) {
             if (response.status == "OK") {
                 data = response.message;
                 setComboData(data.provincias, "cmb_prov");
@@ -13,7 +13,7 @@ $(document).ready(function () {
                 if (data.provincias.length > 0) {
                     arrParams.prov_id = data.provincias[0].id;
                     arrParams.getcantones = true;
-                    requestHttpAjax(link, arrParams, function (response) {
+                    requestHttpAjax(link, arrParams, function(response) {
                         if (response.status == "OK") {
                             data = response.message;
                             setComboData(data.cantones, "cmb_ciu");
@@ -27,12 +27,12 @@ $(document).ready(function () {
         $("#lbl_codeCountry").text($("#cmb_pais option:selected").attr("data-code"));
     });
 
-    $('#cmb_prov').change(function () {
+    $('#cmb_prov').change(function() {
         var link = $('#txth_base').val() + "/admision/contactos/edit";
         var arrParams = new Object();
         arrParams.prov_id = $(this).val();
         arrParams.getcantones = true;
-        requestHttpAjax(link, arrParams, function (response) {
+        requestHttpAjax(link, arrParams, function(response) {
             if (response.status == "OK") {
                 data = response.message;
                 setComboData(data.cantones, "cmb_ciu");
@@ -41,7 +41,7 @@ $(document).ready(function () {
     });
 
     //Control del div de beneficiario
-    $('#rdo_beneficio').change(function () {
+    $('#rdo_beneficio').change(function() {
         if ($('#rdo_beneficio').val() == 1) {
             $("#rdo_beneficio_no").prop("checked", "");
             $('#beneficio').css('display', 'none');
@@ -50,7 +50,7 @@ $(document).ready(function () {
         }
     });
 
-    $('#rdo_beneficio_no').change(function () {
+    $('#rdo_beneficio_no').change(function() {
         if ($('#rdo_beneficio_no').val() == 2) {
             $("#rdo_beneficio").prop("checked", "");
             $('#beneficio').css('display', 'block');
@@ -60,22 +60,235 @@ $(document).ready(function () {
     });
 
     function camposnulos(campo) {
-        if ($(campo).val() == "")
-        {
+        if ($(campo).val() == "") {
             $(campo).removeClass("PBvalidation");
-        } else
-        {
+        } else {
             $(campo).addClass("PBvalidation");
         }
     }
-    $('#btn_buscarContacto').click(function () {
+    $('#btn_buscarContacto').click(function() {
         actualizarGridContacto();
     });
-    
-    $('#btn_cargarotroscanales').click(function () {
+
+    $('#btn_cargarotroscanales').click(function() {
         cargarOtrosCanales("OTROS_CANALES");
     });
-    
+
+    $('#genAspirante').change(function() {
+        if ($(this).prop('checked')) {
+            $('#oportunidadDiv').show();
+        } else {
+            $('#oportunidadDiv').hide();
+        }
+    });
+
+
+    $('#cmb_carrera2').change(function() {
+        var ref = $(this).attr("data-ref");
+        if ($(this).val() != 0) {
+            var link = $('#txth_base').val() + "/admision/oportunidades/newoportunidadxcontacto";
+            var arrParams = new Object();
+            arrParams.car_id = $(this).val();
+            arrParams.getsubcarrera = true;
+            requestHttpAjax(link, arrParams, function(response) {
+                if (response.status == "OK") {
+                    data = response.message;
+                    setComboData(data.subcarrera, "cmb_subcarrera");
+                }
+            }, true);
+        } else {
+            $('#cmb_subcarrera').html("<option value='0'>Ninguno</option>");
+        }
+    });
+    $('#cmb_nivelestudio').change(function() {
+        var link = $('#txth_base').val() + "/admision/oportunidades/newoportunidadxcontacto";
+        var arrParams = new Object();
+        arrParams.nint_id = $(this).val();
+        arrParams.getmodalidad = true;
+        arrParams.empresa_id = $('#cmb_empresa').val();
+        if ($('#cmb_nivelestudio').val() > 1) {
+            $('#divtiopor').css('display', 'block');
+        } else {
+            $('#divtiopor').css('display', 'none');
+        }
+        requestHttpAjax(link, arrParams, function(response) {
+            if (response.status == "OK") {
+                data = response.message;
+                setComboData(data.modalidad, "cmb_modalidad");
+                var arrParams = new Object();
+                if (data.modalidad.length > 0) {
+                    arrParams.unidada = $('#cmb_nivelestudio').val();
+                    arrParams.moda_id = data.modalidad[0].id;
+                    arrParams.empresa_id = $('#cmb_empresa').val();
+                    arrParams.getoportunidad = true;
+                    requestHttpAjax(link, arrParams, function(response) {
+                        if (response.status == "OK") {
+                            data = response.message;
+                            setComboData(data.oportunidad, "cmb_tipo_oportunidad");
+                        }
+                    }, true);
+                    var arrParams = new Object();
+                    if (data.modalidad.length > 0) {
+                        arrParams.unidada = $('#cmb_nivelestudio').val();
+                        arrParams.moda_id = data.modalidad[0].id;
+                        arrParams.empresa_id = $('#cmb_empresa').val();
+                        arrParams.getcarrera = true;
+                        requestHttpAjax(link, arrParams, function(response) {
+                            if (response.status == "OK") {
+                                data = response.message;
+                                setComboData(data.carrera, "cmb_carrera1");
+                            }
+                        }, true);
+                    }
+                }
+            }
+        }, true);
+    });
+    $('#cmb_nivelestudio_act').change(function() {
+        var link = $('#txth_base').val() + "/admision/oportunidades/edit";
+        var arrParams = new Object();
+        arrParams.ninter_id = $(this).val();
+        arrParams.empresa_id = $('#cmb_empresa').val();
+        arrParams.getmodalidad = true;
+        if ($('#cmb_nivelestudio_act').val() > 1) {
+            $('#divtiopor').css('display', 'block');
+        } else {
+            $('#divtiopor').css('display', 'none');
+        }
+        requestHttpAjax(link, arrParams, function(response) {
+            if (response.status == "OK") {
+                var arrParams = new Object();
+                data = response.message;
+                setComboData(data.modalidad, "cmb_modalidad_act");
+                arrParams.unidada = $('#cmb_nivelestudio_act').val();
+                arrParams.empresa_id = $('#cmb_empresa').val();
+                arrParams.getoportunidad = true;
+                requestHttpAjax(link, arrParams, function(response) {
+                    if (response.status == "OK") {
+                        data = response.message;
+                        setComboData(data.oportunidad, "cmb_tipo_oportunidad");
+                    }
+                }, true);
+                var arrParams = new Object();
+                if (data.modalidad.length > 0) {
+                    arrParams.unidada = $('#cmb_nivelestudio_act').val();
+                    arrParams.moda_id = data.modalidad[0].id;
+                    arrParams.empresa_id = $('#cmb_empresa').val();
+                    arrParams.getcarrera = true;
+                    requestHttpAjax(link, arrParams, function(response) {
+                        if (response.status == "OK") {
+                            data = response.message;
+                            setComboData(data.carrera, "cmb_carrera_estudio");
+                        }
+                    }, true);
+                }
+            }
+        }, true);
+    });
+    $('#cmb_empresa').change(function() { // cambio 2
+        var link = $('#txth_base').val() + "/admision/contacto/new";
+        var arrParams = new Object();
+        arrParams.empresa_id = $('#cmb_empresa').val();
+        arrParams.getuacademias = true;
+        if ($('#cmb_empresa').val() == 1) {
+            $('#divtiopor').css('display', 'none');
+        } else {
+            $('#divtiopor').css('display', 'block');
+        }
+        requestHttpAjax(link, arrParams, function(response) {
+            if (response.status == "OK") {
+                data = response.message;
+                setComboData(data.unidad_academica, "cmb_nivelestudio");
+                var arrParams = new Object();
+                if (data.unidad_academica.length > 0) {
+                    var arrParams = new Object();
+                    arrParams.nint_id = $('#cmb_nivelestudio').val();
+                    arrParams.empresa_id = $('#cmb_empresa').val();
+                    arrParams.getmodalidad = true;
+                    requestHttpAjax(link, arrParams, function(response) {
+                        if (response.status == "OK") {
+                            data = response.message;
+                            setComboData(data.modalidad, "cmb_modalidad");
+                            if (data.modalidad.length > 0) {
+                                var arrParams = new Object();
+                                arrParams.unidada = $('#cmb_nivelestudio').val();
+                                arrParams.moda_id = $('#cmb_modalidad').val();
+                                arrParams.empresa_id = $('#cmb_empresa').val();
+                                arrParams.getcarrera = true;
+                                requestHttpAjax(link, arrParams, function(response) {
+                                    if (response.status == "OK") {
+                                        data = response.message;
+                                        setComboData(data.carrera, "cmb_carrera1");
+                                    }
+                                }, true);
+                                var arrParams = new Object();
+                                arrParams.unidada = $('#cmb_nivelestudio').val();
+                                arrParams.empresa_id = $('#cmb_empresa').val();
+                                arrParams.getoportunidad = true;
+                                requestHttpAjax(link, arrParams, function(response) {
+                                    if (response.status == "OK") {
+                                        data = response.message;
+                                        setComboData(data.oportunidad, "cmb_tipo_oportunidad");
+                                    }
+                                }, true);
+                            }
+                        }
+                    }, true);
+                }
+            }
+        }, true);
+    });
+    $('#cmb_modalidad').change(function() {
+        var link = $('#txth_base').val() + "/admision/oportunidades/newoportunidadxcontacto";
+        var arrParams = new Object();
+        arrParams.unidada = $('#cmb_nivelestudio').val();
+        arrParams.moda_id = $(this).val();
+        arrParams.empresa_id = $('#cmb_empresa').val();
+        arrParams.getcarrera = true;
+        requestHttpAjax(link, arrParams, function(response) {
+            if (response.status == "OK") {
+                data = response.message;
+                setComboData(data.carrera, "cmb_carrera1");
+            }
+        }, true);
+    });
+    $('#cmb_modalidad_act').change(function() {
+        var link = $('#txth_base').val() + "/admision/oportunidades/edit";
+        var arrParams = new Object();
+        arrParams.unidada = $('#cmb_nivelestudio_act').val();
+        arrParams.empresa_id = $('#cmb_empresa').val();
+        arrParams.moda_id = $(this).val();
+        arrParams.getcarrera = true;
+        requestHttpAjax(link, arrParams, function(response) {
+            if (response.status == "OK") {
+                data = response.message;
+                setComboData(data.carrera, "cmb_carrera_estudio");
+            }
+        }, true);
+    });
+    $('#cmb_state_opportunity').change(function() {
+        if ($('#cmb_state_opportunity').val() == 5 || $('#cmb_state_opportunity').val() == 4) {
+            $("#txt_fecha_proxima").prop("disabled", true);
+            $("#txt_hora_proxima").prop("disabled", true);
+            $('#txt_fecha_proxima').removeClass("PBvalidation");
+            $('#txt_hora_proxima').removeClass("PBvalidation");
+        } else {
+            $("#txt_fecha_proxima").prop("disabled", false);
+            $("#txt_hora_proxima").prop("disabled", false);
+            $('#txt_fecha_proxima').addClass("PBvalidation");
+            $('#txt_hora_proxima').addClass("PBvalidation");
+        }
+        if ($('#cmb_state_opportunity').val() == 5) {
+            $('#divoportunidad_perdida').css('display', 'block');
+        } else {
+            $('#divoportunidad_perdida').css('display', 'none');
+        }
+    });
+
+    $('#btn_cargarGestion').click(function() {
+        cargarGestion();
+    });
+
 });
 
 function actualizarGridContacto() {
@@ -90,16 +303,17 @@ function actualizarGridContacto() {
     var telefono = $('#txt_telefono').val();
     var empresa = $('#cmb_empresa option:selected').val();
     var unidad = $('#cmb_unidad option:selected').val();
-    var gestion = $('#cmb_estado_gestion option:selected').val();   
+    var gestion = $('#cmb_estado_gestion option:selected').val();
     //Buscar almenos una clase con el nombre para ejecutar
     if (!$(".blockUI").length) {
         showLoadingPopup();
-        $('#Pbcontacto').PbGridView('applyFilterData', {'search': search, 'estado': estado, 'fase': fase, 'f_ini': f_ini, 'f_fin': f_fin, 'medio': medio, 'agente': agente, 'correo': correo, 'telefono': telefono, 'empresa': empresa, 'unidad': unidad, 'gestion': gestion});
+        $('#Pbcontacto').PbGridView('applyFilterData', { 'search': search, 'estado': estado, 'fase': fase, 'f_ini': f_ini, 'f_fin': f_fin, 'medio': medio, 'agente': agente, 'correo': correo, 'telefono': telefono, 'empresa': empresa, 'unidad': unidad, 'gestion': gestion });
         setTimeout(hideLoadingPopup, 2000);
     }
 }
+
 function exportExcel() {
-    var search = $('#txt_buscarDataPersona').val();   
+    var search = $('#txt_buscarDataPersona').val();
     var f_ini = $('#txt_fecha_ini').val();
     var f_fin = $('#txt_fecha_fin').val();
     var medio = $('#cmb_medio option:selected').val();
@@ -108,9 +322,10 @@ function exportExcel() {
     var telefono = $('#txt_telefono').val();
     var empresa = $('#cmb_empresa option:selected').val();
     var unidad = $('#cmb_unidad option:selected').val();
-    var gestion = $('#cmb_estado_gestion option:selected').val();   
+    var gestion = $('#cmb_estado_gestion option:selected').val();
     window.location.href = $('#txth_base').val() + "/admision/contactos/expexcel?search=" + search + "&f_ini=" + f_ini + "&f_fin=" + f_fin + "&medio=" + medio + "&agente=" + agente + "&correo=" + correo + "&telefono=" + telefono + "&empresa=" + empresa + "&unidad=" + unidad + "&gestion=" + gestion;
 }
+
 function exportPdf() {
     var search = $('#txt_buscarDataPersona').val();
     var f_ini = $('#txt_fecha_ini').val();
@@ -121,21 +336,22 @@ function exportPdf() {
     var telefono = $('#txt_telefono').val();
     var empresa = $('#cmb_empresa option:selected').val();
     var unidad = $('#cmb_unidad option:selected').val();
-    var gestion = $('#cmb_estado_gestion option:selected').val();   
-    window.location.href = $('#txth_base').val() + "/admision/contactos/exppdf?pdf=1&search=" + search  + "&f_ini=" + f_ini + "&f_fin=" + f_fin + "&medio=" + medio + "&agente=" + agente + "&correo=" + correo + "&telefono=" + telefono + "&empresa=" + empresa + "&unidad=" + unidad + "&gestion=" + gestion;
+    var gestion = $('#cmb_estado_gestion option:selected').val();
+    window.location.href = $('#txth_base').val() + "/admision/contactos/exppdf?pdf=1&search=" + search + "&f_ini=" + f_ini + "&f_fin=" + f_fin + "&medio=" + medio + "&agente=" + agente + "&correo=" + correo + "&telefono=" + telefono + "&empresa=" + empresa + "&unidad=" + unidad + "&gestion=" + gestion;
 }
 
-function loadLeads(){
+function loadLeads() {
     window.location.href = $('#txth_base').val() + "/admision/contactos/cargarleads";
 }
 
-function loadFile(){
+function loadFile() {
     cargarLeads('LEADS');
 }
 
-function loadCall(){
+function loadCall() {
     cargarLeads('LOTES');
 }
+
 function edit() {
     var codigo = $('#txth_pcon_id').val();
     var tper_id = $('#txth_tper_id').val();
@@ -258,11 +474,44 @@ function save() {
     } else {
         arrParams.nacecuador = 0;
     }
+    arrParams.genAspirante = $('#genAspirante').prop('checked');
+    if ($('#genAspirante').prop('checked')) {
+        var sub_carrera = ($('#cmb_subcarrera').val() != 0 && $('#cmb_subcarrera').val() != '') ? $('#cmb_subcarrera').val() : 0;
+        $('#txt_correo').addClass("PBvalidation");
+        arrParams.id_tipo_oportunidad = null;
+        arrParams.id_pgest = $('#txth_pgid').val();
+        arrParams.empresaid = $('#cmb_empresa').val();
+        arrParams.id_unidad_academica = $('#cmb_nivelestudio').val();
+        arrParams.id_modalidad = $('#cmb_modalidad').val();
+        if ($('#cmb_nivelestudio').val() > 1) {
+            arrParams.id_tipo_oportunidad = $('#cmb_tipo_oportunidad').val();
+        }
+        arrParams.id_estado_oportunidad = $('#cmb_state_opportunity').val();
+        arrParams.id_estudio_academico = $('#cmb_carrera1').val();
+        arrParams.canal_conocimiento = $('#cmb_knowledge_channel').val();
+        arrParams.carrera2 = $('#cmb_carrera2').val();
+        arrParams.sub_carrera = sub_carrera;
+        arrParams.modulo_estudio = $('#cmb_modalidad_estudio').val();
+        arrParams.cedula = $('#txt_cedula').val();
+        arrParams.correobeni = (arrParams.correobeni).toLowerCase();
+        if ($('#cmb_state_opportunity').val() == "3" && $('#txt_cedula').val() == "") {
+            var msg = objLang.Please_enter_a_valid_dni_;
+            shortModal(msg, objLang.Error, "error");
+            return;
+        }
+        if ($('#cmb_state_opportunity').val() == "3" && $('#txt_correo').val() == "") {
+            var msg = objLang.Please_enter_a_valid_Email_;
+            shortModal(msg, objLang.Error, "error");
+            return;
+        }
+        arrParams.seguimiento = $('#cmb_medio_contacto').val();
+    }
+
     if (!validateForm()) {
-        requestHttpAjax(link, arrParams, function (response) {
+        requestHttpAjax(link, arrParams, function(response) {
             showAlert(response.status, response.label, response.message);
-            if (response.status == "OK"){
-                setTimeout(function () {
+            if (response.status == "OK") {
+                setTimeout(function() {
                     window.location.href = $('#txth_base').val() + "/admision/contactos/index";
                 }, 3000);
             }
@@ -320,24 +569,25 @@ function update() {
         arrParams.nacecuador = 0;
     }
     if (!validateForm()) {
-        requestHttpAjax(link, arrParams, function (response) {
+        requestHttpAjax(link, arrParams, function(response) {
             showAlert(response.status, response.label, response.message);
-            if (response.status){
-                setTimeout(function () {
+            if (response.status) {
+                setTimeout(function() {
                     window.location.href = $('#txth_base').val() + "/admision/contactos/index";
                 }, 3000);
             }
         }, true);
     }
 }
+
 function grabarInteresado(pgest_id) {
     var link = $('#txth_base').val() + "/admision/interesados/guardarinteresado";
     var arrParams = new Object();
     arrParams.id_pgest = pgest_id;
     if (!validateForm()) {
-        requestHttpAjax(link, arrParams, function (response) {
+        requestHttpAjax(link, arrParams, function(response) {
             showAlert(response.status, response.label, response.message);
-            setTimeout(function () {
+            setTimeout(function() {
                 if (response.status == "OK") {
                     parent.window.location.href = $('#txth_base').val() + "/admision/interesados/index";
                 }
@@ -345,12 +595,11 @@ function grabarInteresado(pgest_id) {
         }, true);
     }
 }
+
 function camposnulos(campo) {
-    if ($(campo).val() == "")
-    {
+    if ($(campo).val() == "") {
         $(campo).removeClass("PBvalidation");
-    } else
-    {
+    } else {
         $(campo).addClass("PBvalidation");
     }
 }
@@ -364,21 +613,22 @@ function cargarLeads(proceso) {
     arrParams.archivo = $('#txth_doc_adj_leads2').val() + "." + $('#txth_doc_adj_leads').val().split('.').pop();
 
     if (!validateForm()) {
-        requestHttpAjax(link, arrParams, function (response) {
+        requestHttpAjax(link, arrParams, function(response) {
             showAlert(response.status, response.label, response.message);
-            setTimeout(function () {
+            setTimeout(function() {
                 window.location.href = $('#txth_base').val() + "/admision/contactos/index";
             }, 3000);
         }, true);
     }
 }
 
-function exportLostContact(){
-    var op=1;
+function exportLostContact() {
+    var op = 1;
     window.location.href = $('#txth_base').val() + "/admision/contactos/export?op=" + op;
 }
-function exportStatContact(){
-    var op=2;
+
+function exportStatContact() {
+    var op = 2;
     window.location.href = $('#txth_base').val() + "/admision/contactos/export?op=" + op;
 }
 
@@ -391,10 +641,27 @@ function cargarOtrosCanales(proceso) {
     arrParams.archivo = $('#txth_doc_adj_leads2').val() + "." + $('#txth_doc_adj_leads').val().split('.').pop();
 
     if (!validateForm()) {
-        requestHttpAjax(link, arrParams, function (response) {
+        requestHttpAjax(link, arrParams, function(response) {
             showAlert(response.status, response.label, response.message);
-            setTimeout(function () {
+            setTimeout(function() {
                 window.location.href = $('#txth_base').val() + "/admision/contactos/index";
+            }, 3000);
+        }, true);
+    }
+}
+
+function cargarGestion() {
+    var arrParams = new Object();
+    var link = $('#txth_base').val() + "/admision/oportunidades/cargargestion";
+    arrParams.procesar_file = true;
+    //arrParams.tipo_proceso = proceso;*/
+    arrParams.emp_id = $('#cmb_empresa option:selected').val();
+    arrParams.archivo = $('#txth_doc_adj_leads2').val() + "." + $('#txth_doc_adj_leads').val().split('.').pop();
+    if (!validateForm()) {
+        requestHttpAjax(link, arrParams, function(response) {
+            showAlert(response.status, response.label, response.message);
+            setTimeout(function() {
+                window.location.href = $('#txth_base').val() + "/admision/oportunidades/index";
             }, 3000);
         }, true);
     }

@@ -45,11 +45,18 @@ academico::registerTranslations();
                 'value' => 'Modalidad',
             ],
             [
-                'attribute' => 'Programa',
+                'class' => 'yii\grid\ActionColumn',
                 'header' => academico::t("diploma", "Program/Course"),
-                'value' => 'Programa',
+                'template' => '{view}',
+                'buttons' => [
+                    'view' => function ($url, $model) {
+                        if (strlen($model['Programa']) > 30) {
+                            $texto = '...';
+                        }
+                        return Html::a('<span>' . substr($model['Programa'], 0, 20) . $texto . '</span>', "javascript:", ["data-toggle" => "tooltip", "title" => $model['Programa']]);
+                    },
+                ],
             ],
-
             [
                 'attribute' => 'FechaInicio',
                 'header' => academico::t("diploma", 'Initial Date'),

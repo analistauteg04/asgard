@@ -1237,7 +1237,8 @@ class Solicitudinscripcion extends \yii\db\ActiveRecord {
                     sins_fecha_reprobacion,
                     sins_fecha_prenoprobacion,
                     sins_observacion, 		
-                    sins.sins_usuario_preaprueba as usu_preaprueba,                    
+                    sins.sins_usuario_preaprueba as usu_preaprueba,     
+                    sins.sins_usuario_ingreso as agente,               
                     case when ifnull((select opag_estado_pago
                                             from " . $con3->dbname . ".orden_pago op
                                             where op.sins_id = sins.sins_id
@@ -1249,7 +1250,8 @@ class Solicitudinscripcion extends \yii\db\ActiveRecord {
                     else 'Pagado' end as pago,
                     ifnull((select count(*) from " . $con->dbname . ".solicitudins_documento sd 
                             where sd.sins_id = sins.sins_id and sd.sdoc_estado = :estado and sd.sdoc_estado_logico = :estado),0) as numDocumentos,
-                    sins.emp_id
+                    sins.emp_id,
+                    concat(pges.per_pri_nombre, ' ', pges.per_pri_apellido) as Agente
                 FROM 
                     " . $con->dbname . ".solicitud_inscripcion as sins
                     INNER JOIN " . $con->dbname . ".interesado as inte on sins.int_id = inte.int_id                    
@@ -1258,6 +1260,8 @@ class Solicitudinscripcion extends \yii\db\ActiveRecord {
                     INNER JOIN " . $con1->dbname . ".modalidad as m on sins.mod_id = m.mod_id
                     INNER JOIN " . $con->dbname . ".res_sol_inscripcion as rsol on rsol.rsin_id = sins.rsin_id                    
                     -- INNER JOIN " . $con1->dbname . ".estudio_academico as eac on eac.eaca_id = sins.eaca_id 
+                    LEFT JOIN " . $con2->dbname . ".usuario as uges on uges.usu_id = sins.sins_usuario_ingreso 
+                    LEFT JOIN " . $con2->dbname . ".persona as pges on pges.per_id = uges.per_id 
                 WHERE 
                     $str_search        
                     sins.sins_estado_logico=:estado AND
@@ -1437,6 +1441,7 @@ class Solicitudinscripcion extends \yii\db\ActiveRecord {
                     per.per_cedula as per_dni,
                     concat(per.per_pri_nombre ,' ', ifnull(per.per_seg_nombre,' ')) as per_nombres,
                     concat(per.per_pri_apellido ,' ', ifnull(per.per_seg_apellido,' ')) as per_apellidos,
+                    concat(pges.per_pri_nombre, ' ', pges.per_pri_apellido) as Agente,
                     uaca.uaca_nombre,
                     ifnull((select ming.ming_alias 
                                     from " . $con->dbname . ".metodo_ingreso as ming 
@@ -1462,6 +1467,8 @@ class Solicitudinscripcion extends \yii\db\ActiveRecord {
                     INNER JOIN " . $con1->dbname . ".modalidad as m on sins.mod_id = m.mod_id
                     INNER JOIN " . $con->dbname . ".res_sol_inscripcion as rsol on rsol.rsin_id = sins.rsin_id                    
                     INNER JOIN " . $con1->dbname . ".estudio_academico as eac on eac.eaca_id = sins.eaca_id 
+                    LEFT JOIN " . $con2->dbname . ".usuario as uges on uges.usu_id = sins.sins_usuario_ingreso 
+                    LEFT JOIN " . $con2->dbname . ".persona as pges on pges.per_id = uges.per_id 
                 WHERE 
                     $str_search         
                     sins.sins_estado_logico=:estado AND

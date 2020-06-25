@@ -121,9 +121,9 @@ class Diploma extends \yii\db\ActiveRecord
                     d.dip_carrera AS Carrera,
                     d.dip_modalidad AS Modalidad,
                     d.dip_programa AS Programa,
-                    d.dip_fecha_inicio AS FechaInicio,
-                    d.dip_fecha_fin AS FechaFin,
-                    d.dip_horas AS Horas,
+                    ifnull(d.dip_fecha_inicio, '') AS FechaInicio,
+                    ifnull(d.dip_fecha_fin, '') AS FechaFin,
+                    ifnull(d.dip_horas, '') AS Horas,
                     d.dip_descargado AS Descarga
                 FROM " . $con_academico->dbname . ".diploma AS d
                 WHERE 

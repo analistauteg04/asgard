@@ -25,9 +25,12 @@ class DiplomaController extends \app\components\CController {
                 "model" => $model->getAllDiplomasGrid($data["search"], $data["carrera"], $data["programa"], $data["modalidad"]),
             ]);
         }
-        $arr_carreras = ["0" => academico::t("diploma", "-- Select Career --")];
+        /*$arr_carreras = ["0" => academico::t("diploma", "-- Select Career --")];
         $arr_modalidades = ["0" => academico::t("diploma", "-- Select Modality --")];
-        $arr_programas = ["0" => academico::t("diploma", "-- Select Program/Course --")];
+        $arr_programas = ["0" => academico::t("diploma", "-- Select Program/Course --")];*/
+        $arr_carreras = ["0" => Yii::t("formulario", "All")];
+        $arr_modalidades = ["0" =>Yii::t("formulario", "All")];
+        $arr_programas = ["0" => Yii::t("formulario", "All")];
         $carreras = Diploma::find()
                     ->select(['dip_carrera'])
                     ->where(['dip_estado_logico' => '1', 'dip_estado' => '1'])

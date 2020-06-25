@@ -851,105 +851,107 @@ class SolicitudesController extends \app\components\CController {
                     throw new Exception('Error documento aceptacion no creado.');
                 }
             }
-            if ((($uaca_id == 1) && !empty($titulo_archivo) && !empty($dni_archivo) && !empty($foto_archivo)) or ( !empty($curriculum_archivo) && !empty($titulo_archivo) && !empty($dni_archivo) && !empty($foto_archivo) && ($uaca_id == "2"))) {
+            if ((($uaca_id == 1) && /*!empty($titulo_archivo) &&*/ !empty($dni_archivo) && !empty($foto_archivo)) or ( !empty($curriculum_archivo) /*&& !empty($titulo_archivo)*/ && !empty($dni_archivo) && !empty($foto_archivo) && ($uaca_id == "2"))) {
                 $mod_solinsxdoc1 = new SolicitudinsDocumento();
-                //1-Título, 2-DNI,3-Cert votación, 4-Foto, 5-Doc-Beca                       
-                $mod_solinsxdoc1->sins_id = $sins_id;
-                $mod_solinsxdoc1->int_id = $interesado_id;
-                $mod_solinsxdoc1->dadj_id = 1;
-                $mod_solinsxdoc1->sdoc_archivo = $titulo_archivo;
-                $mod_solinsxdoc1->sdoc_observacion = $observacion;
-                $mod_solinsxdoc1->sdoc_estado = "1";
-                $mod_solinsxdoc1->sdoc_estado_logico = "1";
-                if ($mod_solinsxdoc1->save()) {
-                    $mod_solinsxdoc2 = new SolicitudinsDocumento();
-                    $mod_solinsxdoc2->sins_id = $sins_id;
-                    $mod_solinsxdoc2->int_id = $interesado_id;
-                    $mod_solinsxdoc2->dadj_id = 2;
-                    $mod_solinsxdoc2->sdoc_archivo = $dni_archivo;
-                    $mod_solinsxdoc2->sdoc_observacion = $observacion;
-                    $mod_solinsxdoc2->sdoc_estado = "1";
-                    $mod_solinsxdoc2->sdoc_estado_logico = "1";
+                //1-Título, 2-DNI,3-Cert votación, 4-Foto, 5-Doc-Beca  
+                if(isset($titulo_archivo)){
+                    $mod_solinsxdoc1->sins_id = $sins_id;
+                    $mod_solinsxdoc1->int_id = $interesado_id;
+                    $mod_solinsxdoc1->dadj_id = 1;
+                    $mod_solinsxdoc1->sdoc_archivo = $titulo_archivo;
+                    $mod_solinsxdoc1->sdoc_observacion = $observacion;
+                    $mod_solinsxdoc1->sdoc_estado = "1";
+                    $mod_solinsxdoc1->sdoc_estado_logico = "1";
+                    if (!$mod_solinsxdoc1->save()) {
+                        throw new Exception('Error doc titulo no creado.');
+                    }
+                }
+                
+                $mod_solinsxdoc2 = new SolicitudinsDocumento();
+                $mod_solinsxdoc2->sins_id = $sins_id;
+                $mod_solinsxdoc2->int_id = $interesado_id;
+                $mod_solinsxdoc2->dadj_id = 2;
+                $mod_solinsxdoc2->sdoc_archivo = $dni_archivo;
+                $mod_solinsxdoc2->sdoc_observacion = $observacion;
+                $mod_solinsxdoc2->sdoc_estado = "1";
+                $mod_solinsxdoc2->sdoc_estado_logico = "1";
 
-                    if ($mod_solinsxdoc2->save()) {
-                        $mod_solinsxdoc3 = new SolicitudinsDocumento();
-                        $mod_solinsxdoc3->sins_id = $sins_id;
-                        $mod_solinsxdoc3->int_id = $interesado_id;
-                        $mod_solinsxdoc3->dadj_id = 4;
-                        $mod_solinsxdoc3->sdoc_archivo = $foto_archivo;
-                        $mod_solinsxdoc3->sdoc_observacion = $observacion;
-                        $mod_solinsxdoc3->sdoc_estado = "1";
-                        $mod_solinsxdoc3->sdoc_estado_logico = "1";
+                if ($mod_solinsxdoc2->save()) {
+                    $mod_solinsxdoc3 = new SolicitudinsDocumento();
+                    $mod_solinsxdoc3->sins_id = $sins_id;
+                    $mod_solinsxdoc3->int_id = $interesado_id;
+                    $mod_solinsxdoc3->dadj_id = 4;
+                    $mod_solinsxdoc3->sdoc_archivo = $foto_archivo;
+                    $mod_solinsxdoc3->sdoc_observacion = $observacion;
+                    $mod_solinsxdoc3->sdoc_estado = "1";
+                    $mod_solinsxdoc3->sdoc_estado_logico = "1";
 
-                        if ($mod_solinsxdoc3->save()) {
-                            /* if ($es_extranjero == "1" or ( empty($es_extranjero))) {
-                              $mod_solinsxdoc4 = new SolicitudinsDocumento();
-                              $mod_solinsxdoc4->sins_id = $sins_id;
-                              $mod_solinsxdoc4->int_id = $interesado_id;
-                              $mod_solinsxdoc4->dadj_id = 3;
-                              $mod_solinsxdoc4->sdoc_archivo = $certvota_archivo;
-                              $mod_solinsxdoc4->sdoc_observacion = $observacion;
-                              $mod_solinsxdoc4->sdoc_estado = "1";
-                              $mod_solinsxdoc4->sdoc_estado_logico = "1";
-                              if (!$mod_solinsxdoc4->save()) {
-                              throw new Exception('Error doc certvot no creado.');
-                              }
-                              } */
-                            if ($beca == "1") {
-                                $mod_solinsxdoc5 = new SolicitudinsDocumento();
-                                $mod_solinsxdoc5->sins_id = $sins_id;
-                                $mod_solinsxdoc5->int_id = $interesado_id;
-                                $mod_solinsxdoc5->dadj_id = 5;
-                                $mod_solinsxdoc5->sdoc_archivo = $beca_archivo;
-                                $mod_solinsxdoc5->sdoc_observacion = $observacion;
-                                $mod_solinsxdoc5->sdoc_estado = "1";
-                                $mod_solinsxdoc5->sdoc_estado_logico = "1";
-                                if (!$mod_solinsxdoc5->save()) {
-                                    throw new Exception('Error doc beca no creado.');
-                                }
+                    if ($mod_solinsxdoc3->save()) {
+                        /* if ($es_extranjero == "1" or ( empty($es_extranjero))) {
+                            $mod_solinsxdoc4 = new SolicitudinsDocumento();
+                            $mod_solinsxdoc4->sins_id = $sins_id;
+                            $mod_solinsxdoc4->int_id = $interesado_id;
+                            $mod_solinsxdoc4->dadj_id = 3;
+                            $mod_solinsxdoc4->sdoc_archivo = $certvota_archivo;
+                            $mod_solinsxdoc4->sdoc_observacion = $observacion;
+                            $mod_solinsxdoc4->sdoc_estado = "1";
+                            $mod_solinsxdoc4->sdoc_estado_logico = "1";
+                            if (!$mod_solinsxdoc4->save()) {
+                            throw new Exception('Error doc certvot no creado.');
                             }
-                            if ($uaca_id == "2") {
-                                //\app\models\Utilities::putMessageLogFile('sins_id ' . $sins_id);
-                                /* if (!empty($certmate_archivo)) {
-                                  $mod_solinsxdoc6 = new SolicitudinsDocumento();
-                                  $mod_solinsxdoc6->sins_id = $sins_id;
-                                  $mod_solinsxdoc6->int_id = $interesado_id;
-                                  $mod_solinsxdoc6->dadj_id = 6;
-                                  $mod_solinsxdoc6->sdoc_archivo = $certmate_archivo;
-                                  $mod_solinsxdoc6->sdoc_observacion = $observacion;
-                                  $mod_solinsxdoc6->sdoc_estado = "1";
-                                  $mod_solinsxdoc6->sdoc_estado_logico = "1";
-                                  if (!$mod_solinsxdoc6->save()) {
-                                  throw new Exception('Error doc certificado materia no creado.');
-                                  }
-                                  } */
-                                if (!empty($curriculum_archivo)) {
-                                    $mod_solinsxdoc7 = new SolicitudinsDocumento();
-                                    $mod_solinsxdoc7->sins_id = $sins_id;
-                                    $mod_solinsxdoc7->int_id = $interesado_id;
-                                    $mod_solinsxdoc7->dadj_id = 7;
-                                    $mod_solinsxdoc7->sdoc_archivo = $curriculum_archivo;
-                                    $mod_solinsxdoc7->sdoc_observacion = $observacion;
-                                    $mod_solinsxdoc7->sdoc_estado = "1";
-                                    $mod_solinsxdoc7->sdoc_estado_logico = "1";
-                                    if (!$mod_solinsxdoc7->save()) {
-                                        throw new Exception('Error doc curriculum no creado.');
-                                    }
-                                    $exito = 1;
-                                } else {
-                                    throw new Exception('Tiene que subir curriculum.');
+                            } */
+                        if ($beca == "1") {
+                            $mod_solinsxdoc5 = new SolicitudinsDocumento();
+                            $mod_solinsxdoc5->sins_id = $sins_id;
+                            $mod_solinsxdoc5->int_id = $interesado_id;
+                            $mod_solinsxdoc5->dadj_id = 5;
+                            $mod_solinsxdoc5->sdoc_archivo = $beca_archivo;
+                            $mod_solinsxdoc5->sdoc_observacion = $observacion;
+                            $mod_solinsxdoc5->sdoc_estado = "1";
+                            $mod_solinsxdoc5->sdoc_estado_logico = "1";
+                            if (!$mod_solinsxdoc5->save()) {
+                                throw new Exception('Error doc beca no creado.');
+                            }
+                        }
+                        if ($uaca_id == "2") {
+                            //\app\models\Utilities::putMessageLogFile('sins_id ' . $sins_id);
+                            /* if (!empty($certmate_archivo)) {
+                                $mod_solinsxdoc6 = new SolicitudinsDocumento();
+                                $mod_solinsxdoc6->sins_id = $sins_id;
+                                $mod_solinsxdoc6->int_id = $interesado_id;
+                                $mod_solinsxdoc6->dadj_id = 6;
+                                $mod_solinsxdoc6->sdoc_archivo = $certmate_archivo;
+                                $mod_solinsxdoc6->sdoc_observacion = $observacion;
+                                $mod_solinsxdoc6->sdoc_estado = "1";
+                                $mod_solinsxdoc6->sdoc_estado_logico = "1";
+                                if (!$mod_solinsxdoc6->save()) {
+                                throw new Exception('Error doc certificado materia no creado.');
                                 }
-                            } else {
+                                } */
+                            if (!empty($curriculum_archivo)) {
+                                $mod_solinsxdoc7 = new SolicitudinsDocumento();
+                                $mod_solinsxdoc7->sins_id = $sins_id;
+                                $mod_solinsxdoc7->int_id = $interesado_id;
+                                $mod_solinsxdoc7->dadj_id = 7;
+                                $mod_solinsxdoc7->sdoc_archivo = $curriculum_archivo;
+                                $mod_solinsxdoc7->sdoc_observacion = $observacion;
+                                $mod_solinsxdoc7->sdoc_estado = "1";
+                                $mod_solinsxdoc7->sdoc_estado_logico = "1";
+                                if (!$mod_solinsxdoc7->save()) {
+                                    throw new Exception('Error doc curriculum no creado.');
+                                }
                                 $exito = 1;
+                            } else {
+                                throw new Exception('Tiene que subir curriculum.');
                             }
                         } else {
-                            throw new Exception('Error doc foto no creado.');
+                            $exito = 1;
                         }
                     } else {
-                        throw new Exception('Error doc dni no creado.');
+                        throw new Exception('Error doc foto no creado.');
                     }
                 } else {
-                    throw new Exception('Error doc titulo no creado.');
+                    throw new Exception('Error doc dni no creado.');
                 }
             } else {
                 throw new Exception('Tiene que subir todos los documentos.');
@@ -1574,6 +1576,7 @@ class SolicitudesController extends \app\components\CController {
             Yii::t("formulario", "DNI 1"),
             Yii::t("formulario", "First Names"),
             Yii::t("formulario", "Last Names"),
+            Yii::t("formulario", "User login"),
             academico::t("Academico", "Academic unit"),
             academico::t("Academico", "Income Method"),
             academico::t("Academico", "Career/Program"),
@@ -1627,6 +1630,7 @@ class SolicitudesController extends \app\components\CController {
             Yii::t("formulario", "DNI 1"),
             Yii::t("formulario", "First Names"),
             Yii::t("formulario", "Last Names"),
+            Yii::t("formulario", "User login"),
             academico::t("Academico", "Academic unit"),
             academico::t("Academico", "Income Method"),
             academico::t("Academico", "Career/Program"),

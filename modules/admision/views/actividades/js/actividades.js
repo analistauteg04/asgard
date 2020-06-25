@@ -1,6 +1,6 @@
-$(document).ready(function () {
-//*********** FUNCIONES QUE SE DEBEN REMOVER CUANDO ESTEN HABILITADOS LOS MENUS **********
-    $('#cmb_state_opportunity').change(function () {
+$(document).ready(function() {
+    //*********** FUNCIONES QUE SE DEBEN REMOVER CUANDO ESTEN HABILITADOS LOS MENUS **********
+    $('#cmb_state_opportunity').change(function() {
         if ($('#cmb_state_opportunity').val() == 5 || $('#cmb_state_opportunity').val() == 4 || $('#cmb_state_opportunity').val() == 3) {
             $("#txt_fecha_proxima").prop("disabled", true);
             $("#txt_hora_proxima").prop("disabled", true);
@@ -8,7 +8,7 @@ $(document).ready(function () {
             $('#txt_hora_proxima').removeClass("PBvalidation");
             $('#txt_fecha_proxima').val('');
             $('#txt_hora_proxima').val('');
-            
+
         } else {
             $("#txt_fecha_proxima").prop("disabled", false);
             $("#txt_hora_proxima").prop("disabled", false);
@@ -23,14 +23,15 @@ $(document).ready(function () {
             $('#divoportunidad_perdida').css('display', 'none');
         }
     });
-    $('#cmb_lost_opportunity').change(function () {
-        if ($('#cmb_lost_opportunity').val() == 13 ) {
+    $('#cmb_lost_opportunity').change(function() {
+        if ($('#cmb_lost_opportunity').val() == 13) {
             $('#div_otro_estudio').css('display', 'block');
-        }else{
+        } else {
             $('#div_otro_estudio').css('display', 'none');
         }
     });
 });
+
 function newItem() {
     var opid = $('#txth_opid').val();
     var pgid = $('#txth_pgid').val();
@@ -49,7 +50,7 @@ function save() {
     arrParams.descripcion = $('#txt_descripcion').val();
     if (arrParams.estado_oportunidad == 5) {
         arrParams.oportunidad_perdida = $('#cmb_lost_opportunity').val();
-        if (arrParams.oportunidad_perdida==13){
+        if (arrParams.oportunidad_perdida == 13) {
             arrParams.otro_estudio = $('#cmb_otras_maestrias').val();
         }
     }
@@ -61,11 +62,24 @@ function save() {
         arrParams.fecproxima = $('#txt_fecha_proxima').val();
         arrParams.horproxima = $('#txt_hora_proxima').val();
     }
+    arrParams.cedula = $('#txt_cedula').val();
+    arrParams.correo = ($('#txt_correo').val()).toLowerCase();
+    if ($('#cmb_state_opportunity').val() == "3" && $('#txt_cedula').val() == "") {
+        var msg = objLang.Please_enter_a_valid_dni_;
+        shortModal(msg, objLang.Error, "error");
+        return;
+    }
+    if ($('#cmb_state_opportunity').val() == "3" && $('#txt_correo').val() == "") {
+        var msg = objLang.Please_enter_a_valid_Email_;
+        shortModal(msg, objLang.Error, "error");
+        return;
+    }
+    arrParams.seguimiento = $('#cmb_medio_contacto').val();
 
     if (!validateForm()) {
-        requestHttpAjax(link, arrParams, function (response) {
+        requestHttpAjax(link, arrParams, function(response) {
             showAlert(response.status, response.label, response.message);
-            setTimeout(function () {
+            setTimeout(function() {
                 var opor_id = $('#txth_opo_id').val();
                 var pges_id = $('#txth_pgid').val();
                 window.location.href = $('#txth_base').val() + "/admision/actividades/listaractividadxoportunidad?opor_id=" + opor_id + "&pges_id=" + pges_id;
@@ -73,6 +87,7 @@ function save() {
         }, true);
     }
 }
+
 function update() {
     var link = $('#txth_base').val() + "/admision/actividades/update";
     var arrParams = new Object();
@@ -85,10 +100,11 @@ function update() {
     //Datos Próxima Atención
     arrParams.fecproxima = $('#txt_fecha_proxima').val();
     arrParams.horproxima = $('#txt_hora_proxima').val();
+    arrParams.seguimiento = $('#cmb_medio_contacto').val();
     if (!validateForm()) {
-        requestHttpAjax(link, arrParams, function (response) {
+        requestHttpAjax(link, arrParams, function(response) {
             showAlert(response.status, response.label, response.message);
-            setTimeout(function () {
+            setTimeout(function() {
                 var opor_id = $('#txth_opo_id').val();
                 var pges_id = $('#txth_pgid').val();
                 window.location.href = $('#txth_base').val() + "/admision/actividades/listaractividadxoportunidad?opor_id=" + opor_id + "&pges_id=" + pges_id;
@@ -96,14 +112,15 @@ function update() {
         }, true);
     }
 }
+
 function grabarInteresado(pgest_id) {
     var link = $('#txth_base').val() + "/admision/interesados/guardarinteresado";
     var arrParams = new Object();
     arrParams.id_pgest = pgest_id;
     if (!validateForm()) {
-        requestHttpAjax(link, arrParams, function (response) {
+        requestHttpAjax(link, arrParams, function(response) {
             showAlert(response.status, response.label, response.message);
-            setTimeout(function () {
+            setTimeout(function() {
                 if (response.status == "OK") {
                     parent.window.location.href = $('#txth_base').val() + "/admision/interesados/index";
                 }

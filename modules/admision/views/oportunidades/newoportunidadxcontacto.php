@@ -50,7 +50,7 @@ $fecha_actual = date("Y-m-d");
                     <div class="form-group">
                         <label for="txt_cedula" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label"><?= $tipodoc ?></label> 
                         <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                            <input type="text" class="form-control keyupmce" value="<?= $dni ?>" id="txt_cedula" disabled = "true" data-type="alfa" data-keydown="true"> 
+                            <input type="text" class="form-control keyupmce" value="<?= trim($dni) ?>" id="txt_cedula" <?php if(trim($dni) != ""): ?>disabled = "true"<?php endif;?> data-type="alfa" data-keydown="true"> 
                         </div>
                     </div>
                 </div>
@@ -68,7 +68,7 @@ $fecha_actual = date("Y-m-d");
                     <div class="form-group">
                         <label for="txt_correo" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label"><?= Yii::t("formulario", "Email") ?></label> 
                         <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                            <input type="text" class="form-control keyupmce" value="<?= $personalData['pges_correo'] ?>" id="txt_correo" disabled = "true" data-type="alfa" data-keydown="true"> 
+                            <input type="text" class="form-control keyupmce" value="<?= $personalData['pges_correo'] ?>" id="txt_correo" <?php if(trim($personalData['pges_correo']) != ""): ?>disabled = "true"<?php endif;?> data-type="alfa" data-keydown="true"> 
                         </div>
                     </div>
                 </div>
@@ -198,6 +198,16 @@ $fecha_actual = date("Y-m-d");
                     <label for="cmb_knowledge_channel" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Module::t("crm", "Contact Channel") ?></label>
                     <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
                         <?= Html::dropDownList("cmb_knowledge_channel", 1, $arr_knowledge_channel, ["class" => "form-control", "id" => "cmb_knowledge_channel"]) ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class='col-md-12 col-sm-12 col-xs-12 col-lg-12'>        
+            <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">  
+                <div class="form-group">
+                    <label for="cmb_medio_contacto" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_descripcion"><?= Yii::t("formulario", "Half Contact") ?> </label>
+                    <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">                  
+                        <?= Html::dropDownList("cmb_medio_contacto", 0, $arr_seguimiento, ["class" => "multiSelects form-control", "id" => "cmb_medio_contacto", "name" => "cmb_medio_contacto[]", "multiple"=>"multiple"]) ?>                
                     </div>
                 </div>
             </div>

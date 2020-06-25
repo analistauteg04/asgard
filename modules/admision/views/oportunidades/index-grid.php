@@ -52,6 +52,11 @@ use app\modules\admision\Module;
                 'value' => 'des_modalidad',
             ],
             [
+                'attribute' => 'agente',
+                'header' => Yii::t("formulario", "User login"),
+                'value' => 'agente',
+            ],
+            [
                 'attribute' => 'Estado Oportunidad',
                 'header' => Yii::t("formulario", "Status"),
                 'value' => 'des_estado',

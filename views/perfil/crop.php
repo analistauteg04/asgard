@@ -62,5 +62,5 @@ use app\vendor\penblu\jcrop\JCrop;
 ]); 
 ?>
  </div>
- <input type="button" class="btn btn-default" onclick="saveCropImage()" value="test" />
+ <!-- <input type="button" class="btn btn-default" onclick="saveCropImage()" value="test" />-->
                                      

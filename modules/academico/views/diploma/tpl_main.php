@@ -100,7 +100,7 @@
             text-align: center;
             /*width: 800px;*/
             font-family: blacksword;
-            font-size: 50px; /*56px*/
+            font-size: 48px; /*56px*/
             color: #00548bff;
             padding-top: 60px; /*40px*/
         }

@@ -42,6 +42,11 @@ PbGridView::widget([
             'value' => 'empresa',
         ],
         [
+            'attribute' => 'Agente',
+            'header' => Yii::t("formulario", "User login"),
+            'value' => 'Agente',
+        ],
+        [
             'attribute' => 'unidad_academica',
             'header' => Yii::t("formulario", "Academic unit"),
             'value' => 'unidad',

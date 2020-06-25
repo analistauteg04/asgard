@@ -474,6 +474,35 @@ create table if not exists db_crm.`bitacora_actividades_noprocesadas` (
  `bano_fecha_creacion` timestamp not null default current_timestamp
 );
 
+
+-- --------------------------------------------------------
+--
+-- Estructura de tabla `bitacora_seguimiento`
+--
+create table if not exists `bitacora_seguimiento` (
+ `bseg_id` bigint(20) not null auto_increment primary key,
+ `bseg_nombre` varchar(300) not null, 
+ `bseg_descripcion` varchar(500) not null, 
+ `bseg_estado` varchar(1) not null,
+ `bseg_fecha_creacion` timestamp not null default current_timestamp,
+ `bseg_fecha_modificacion` timestamp null default null,
+ `bseg_estado_logico` varchar(1) not null
+);
+
+-- --------------------------------------------------------
+--
+-- Estructura de tabla `actividad_seguimiento`
+--
+create table if not exists `actividad_seguimiento` (
+ `aseg_id` bigint(20) not null auto_increment primary key,
+ `bseg_id` bigint(20) not null,
+ `bact_id` bigint(20) not null,
+ `aseg_estado` varchar(1) not null,
+ `aseg_fecha_creacion` timestamp not null default current_timestamp,
+ `aseg_fecha_modificacion` timestamp null default null,
+ `aseg_estado_logico` varchar(1) not null
+);
+
 -- --------------------------------------------------------
 --
 -- Estructura de tabla `grupo_introductotio`

@@ -30,6 +30,7 @@ class PerfilController extends \app\components\CController {
 
     public function actionIndex() {
 
+        $_SESSION['JSLANG']['Passwords are differents, please enter passwords again.'] = Yii::t("perfil",'Passwords are differents, please enter passwords again.');
         $model = new Provincia();
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
