@@ -63,11 +63,11 @@ class PagosfacturasController extends \app\components\CController {
         }
         $data = Yii::$app->request->get();
         if ($data['PBgetFilter']) {
+            $arrSearch["search"] = $data['search'];
             $arrSearch["f_ini"] = $data['f_ini'];
             $arrSearch["f_fin"] = $data['f_fin'];
             $arrSearch["unidad"] = $data['unidad'];
             $arrSearch["modalidad"] = $data['modalidad'];
-            $arrSearch["search"] = $data['search'];
             $arrSearch["estadopago"] = $data['estadopago'];
             $resp_pago = $mod_pagos->getPagos($arrSearch, false);
             return $this->renderPartial('_index-grid_revisionpago', [

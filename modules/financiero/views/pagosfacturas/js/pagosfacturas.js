@@ -10,6 +10,9 @@ $(document).ready(function () {
     $('#btn_grabar_rechazo').click(function () {
         rechazarPago();
     });
+    $('#btn_buscarpago').click(function () {
+        actualizarGridRevisionPago();
+    });
 });
 function guardarPagofactura() {
     var arrParams = new Object();
@@ -28,7 +31,7 @@ function guardarPagofactura() {
             selected += $(this).val() + '*';
         }
     });
-    arrParams.pagado = selected.slice(0, -1);    
+    arrParams.pagado = selected.slice(0, -1);
     if (arrParams.pagado != '') {
 
         if (arrParams.formapago == '0') {
@@ -63,6 +66,21 @@ function rechazarPago() {
                 parent.window.location.href = $('#txth_base').val() + "/financiero/pagosfacturas/revisionpagos";
             }, 2000);
         }, true);
+    }
+}
+
+function actualizarGridRevisionPago() {
+    var search = $('#txt_buscarDataEstudiante').val();
+    var f_ini = $('#txt_fecha_ini').val();
+    var f_fin = $('#txt_fecha_fin').val();
+    var unidad = $('#cmb_unidad_revpago').val();
+    var modalidad = $('#cmb_modalidad_revpago').val();
+    var estadopago = $('#cmb_estado_revpago').val();    
+    //Buscar almenos una clase con el nombre para ejecutar
+    if (!$(".blockUI").length) {
+        showLoadingPopup();
+        $('#TbG_Revisionpago').PbGridView('applyFilterData', {'search': search, 'f_ini': f_ini, 'f_fin': f_fin, 'unidad': unidad, 'modalidad': modalidad, 'estadopago': estadopago});
+        setTimeout(hideLoadingPopup, 2000);
     }
 }
 
