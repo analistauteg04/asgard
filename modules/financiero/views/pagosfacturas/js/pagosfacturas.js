@@ -84,3 +84,24 @@ function actualizarGridRevisionPago() {
     }
 }
 
+function exportExcelrevpago() {
+    var search = $('#txt_buscarDataEstudiante').val();
+    var f_ini = $('#txt_fecha_ini').val();
+    var f_fin = $('#txt_fecha_fin').val();
+    var unidad = $('#cmb_unidad_revpago').val();
+    var modalidad = $('#cmb_modalidad_revpago').val();
+    var estadopago = $('#cmb_estado_revpago').val();
+
+    window.location.href = $('#txth_base').val() + "/financiero/pagosfacturas/expexcelfacpendiente?search=" + search + "&f_ini=" + f_ini + "&f_fin=" + f_fin + '&unidad=' + unidad + "&modalidad=" + modalidad +  "&estadopago=" + estadopago;
+}
+
+function exportPdfrevpago() {
+    var search = $('#txt_buscarDataEstudiante').val();
+    var f_ini = $('#txt_fecha_ini').val();
+    var f_fin = $('#txt_fecha_fin').val();
+    var unidad = $('#cmb_unidad_revpago').val();
+    var modalidad = $('#cmb_modalidad_revpago').val();
+    var estadopago = $('#cmb_estado_revpago').val();
+
+    window.location.href = $('#txth_base').val() + "/financiero/pagosfacturas/exppdffacpendiente?pdf=1&search=" + search + "&f_ini=" + f_ini + "&f_fin=" + f_fin + '&unidad=' + unidad + "&modalidad=" + modalidad + "&estadopago=" + estadopago;
+}

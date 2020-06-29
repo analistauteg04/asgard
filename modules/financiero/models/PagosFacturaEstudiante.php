@@ -122,7 +122,8 @@ class PagosFacturaEstudiante extends \yii\db\ActiveRecord {
               $str_search .= "CG.cgen_estado_certificado IS NULL AND A.egen_certificado = 'SI' AND"; // son los pendientes no estan en la tabla
               } */
         }
-        $sql = "SELECT 	p.per_cedula as identificacion, 
+        $sql = "SELECT 
+                        p.per_cedula as identificacion, 
                         concat(p.per_pri_nombre, ' ', p.per_pri_apellido, ' ', ifnull(p.per_seg_apellido,'')) as estudiante,
                         u.uaca_nombre as unidad,
                         mo.mod_nombre as modalidad,
