@@ -132,13 +132,17 @@ class PagosFacturaEstudiante extends \yii\db\ActiveRecord {
                         d.dpfa_num_cuota,
                         d.dpfa_factura,
                         pfe.pfes_valor_pago valor_pago,
-                        pfe.pfes_fecha_registro,                
-                        case d.dpfa_estado_pago  
+                        pfe.pfes_fecha_registro,";   
+        /* $sql1 = "SELECT A.CANCELA  FROM " . $con3->dbname . ".CC0002 A
+                            WHERE A.COD_CLI= 0202501573 AND A.NUM_DOC = 02 / 06 AND A.COD_PTO='001' AND TIP_NOF='FE' "; */
+                        
+        $sql .=  " 
+                case d.dpfa_estado_pago  
                             when 1 then 'Pendiente'  
                             when 2 then 'Aprobado'                                
                             when 3 then 'Rechazado'   
-                        end as estado_pago,                        
-                        dpfa_id
+                        end as estado_pago,    
+                dpfa_id
                 from " . $con2->dbname . ".pagos_factura_estudiante pfe inner join " . $con2->dbname . ".detalle_pagos_factura d on d.pfes_id = pfe.pfes_id
                 inner join " . $con->dbname . ".estudiante e on e.est_id = pfe.est_id
                 inner join " . $con1->dbname . ".persona p on p.per_id = e.per_id
@@ -150,14 +154,15 @@ class PagosFacturaEstudiante extends \yii\db\ActiveRecord {
                 inner join " . $con2->dbname . ".forma_pago f on f.fpag_id = pfe.fpag_id 
                 WHERE $str_search pfe.pfes_estado=:estado AND pfe.pfes_estado_logico=:estado  ORDER BY pfe.pfes_fecha_registro DESC ";
 
-        $comando = $con->createCommand($sql);
+        $comando = $con->createCommand($sql); 
+        //$comando1 = $con3->createCommand($sql1);         
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
             $fecha_ini = $arrFiltro["f_ini"] . " 00:00:00";
             $fecha_fin = $arrFiltro["f_fin"] . " 23:59:59";
             $search_cond = "%" . $arrFiltro["search"] . "%";
             $unidad = $arrFiltro['unidad'];
-            $modalidad = $arrFiltro['modalidad'];            
+            $modalidad = $arrFiltro['modalidad'];
             // $estadopago = $arrFiltro['estadopago'];
             if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
                 $comando->bindParam(":fec_ini", $fecha_ini, \PDO::PARAM_STR);
@@ -172,9 +177,9 @@ class PagosFacturaEstudiante extends \yii\db\ActiveRecord {
             if ($arrFiltro['modalidad'] > 0) {
                 $comando->bindParam(":modalidad", $modalidad, \PDO::PARAM_INT);
             }
-           /* if ($arrFiltro['estadopago'] > 0) {
-                $comando->bindParam(":estadopago", $estadopago, \PDO::PARAM_INT);
-            }*/            
+            /* if ($arrFiltro['estadopago'] > 0) {
+              $comando->bindParam(":estadopago", $estadopago, \PDO::PARAM_INT);
+              } */
         }
         $resultData = $comando->queryAll();
         $dataProvider = new ArrayDataProvider([
