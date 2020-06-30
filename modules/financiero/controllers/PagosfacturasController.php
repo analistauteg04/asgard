@@ -25,6 +25,7 @@ use app\modules\academico\Module as academico;
 
 admision::registerTranslations();
 academico::registerTranslations();
+financiero::registerTranslations();
 
 class PagosfacturasController extends \app\components\CController {
 
@@ -63,11 +64,11 @@ class PagosfacturasController extends \app\components\CController {
         }
         $data = Yii::$app->request->get();
         if ($data['PBgetFilter']) {
+            $arrSearch["search"] = $data['search'];
             $arrSearch["f_ini"] = $data['f_ini'];
             $arrSearch["f_fin"] = $data['f_fin'];
             $arrSearch["unidad"] = $data['unidad'];
             $arrSearch["modalidad"] = $data['modalidad'];
-            $arrSearch["search"] = $data['search'];
             $arrSearch["estadopago"] = $data['estadopago'];
             $resp_pago = $mod_pagos->getPagos($arrSearch, false);
             return $this->renderPartial('_index-grid_revisionpago', [
@@ -364,6 +365,90 @@ class PagosfacturasController extends \app\components\CController {
             }
             return;
         }
+    }
+
+    public function actionExpexcelfacpendiente() {
+        ini_set('memory_limit', '256M');
+        $content_type = Utilities::mimeContentType("xls");
+        $nombarch = "Report-" . date("YmdHis") . ".xls";
+        header("Content-Type: $content_type");
+        header("Content-Disposition: attachment;filename=" . $nombarch);
+        header('Cache-Control: max-age=0');
+        $colPosition = array("C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N");
+        $arrHeader = array(
+            Yii::t("formulario", "DNI"),
+            Yii::t("formulario", "Student"),
+            academico::t("Academico", "Academic unit"),
+            academico::t("Academico", "Modality"),
+            academico::t("Academico", "Career/Program"),
+            Yii::t("formulario", "Paid form"),
+            financiero::t("Pagos", "Amount Paid"),
+            financiero::t("Pagos", "Monthly fee"),
+            financiero::t("Pagos", "Bill"),
+            Yii::t("formulario", "Registration Date"),
+            Yii::t("formulario", "Status"),
+            financiero::t("Pagos", "Payment id"),
+        );
+        $mod_pagos = new PagosFacturaEstudiante();
+        $data = Yii::$app->request->get();
+        $arrSearch["search"] = $data['search'];
+        $arrSearch["f_ini"] = $data['f_ini'];
+        $arrSearch["f_fin"] = $data['f_fin'];
+        $arrSearch["unidad"] = $data['unidad'];
+        $arrSearch["modalidad"] = $data['modalidad'];
+        //$arrSearch["estadopago"] = $data['estadopago'];
+
+        $arrData = array();
+        if (empty($arrSearch)) {
+            $arrData = $mod_pagos->getPagos(array(), true);
+        } else {
+            $arrData = $mod_pagos->getPagos($arrSearch, true);
+        }
+        $nameReport = financiero::t("Pagos", "List Payment Pending");
+        Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
+        exit;
+    }
+    public function actionExppdffacpendiente() {
+        $report = new ExportFile();
+        $arrHeader = array(
+            Yii::t("formulario", "DNI"),
+            Yii::t("formulario", "Student"),
+            academico::t("Academico", "Academic unit"),
+            academico::t("Academico", "Modality"),
+            academico::t("Academico", "Career/Program"),
+            Yii::t("formulario", "Paid form"),
+            financiero::t("Pagos", "Amount Paid"),
+            financiero::t("Pagos", "Monthly fee"),
+            financiero::t("Pagos", "Bill"),
+            Yii::t("formulario", "Registration Date"),
+            Yii::t("formulario", "Status"),
+            financiero::t("Pagos", "Payment id"),
+        );
+        $mod_pagos = new PagosFacturaEstudiante();
+        $data = Yii::$app->request->get();
+        $arrSearch["search"] = $data['search'];      
+        $arrSearch["f_ini"] = $data['f_ini'];
+        $arrSearch["f_fin"] = $data['f_fin'];
+        $arrSearch["unidad"] = $data['unidad'];
+        $arrSearch["modalidad"] = $data['modalidad'];
+        // $arrSearch["estadopago"] = $data['estadopago'];
+        $arrData = array();
+        if (empty($arrSearch)) {
+            $arrData = $mod_pagos->getPagos(array(), true);
+        } else {
+            $arrData = $mod_pagos->getPagos($arrSearch, true);
+        }
+
+        $this->view->title = financiero::t("Pagos", "List Payment Pending");; // Titulo del reporte                
+        $report->orientation = "L"; // tipo de orientacion L => Horizontal, P => Vertical
+        $report->createReportPdf(
+                $this->render('exportpdf', [
+                    'arr_head' => $arrHeader,
+                    'arr_body' => $arrData
+                ])
+        );
+        $report->mpdf->Output('Reporte_' . date("Ymdhis") . ".pdf", ExportFile::OUTPUT_TO_DOWNLOAD);
+        return;
     }
 
 }

@@ -99,8 +99,31 @@ class PagosFacturaEstudiante extends \yii\db\ActiveRecord {
         $con = \Yii::$app->db_academico;
         $con1 = \Yii::$app->db_asgard;
         $con2 = \Yii::$app->db_facturacion;
-        $con3 = \Yii::$app->db_sea;
-        $sql = "SELECT 	p.per_cedula as identificacion, 
+        //$con3 = \Yii::$app->db_sea;
+        $estado = 1;
+        $str_search = "";
+        if (isset($arrFiltro) && count($arrFiltro) > 0) {
+            if ($arrFiltro['search'] != "") {
+                $str_search .= "(p.per_pri_nombre like :estudiante OR ";
+                $str_search .= "p.per_pri_apellido like :estudiante OR ";
+                $str_search .= "p.per_cedula like :estudiante )  AND ";
+            }
+            if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
+                $str_search .= " pfe.pfes_fecha_registro BETWEEN :fec_ini AND :fec_fin AND ";
+            }
+            if ($arrFiltro['unidad'] > 0) {
+                $str_search .= "u.uaca_id = :unidad AND ";
+            }
+            if ($arrFiltro['modalidad'] > 0) {
+                $str_search .= "mo.mod_id = :modalidad AND ";
+            }
+            // FALTA FILTRAR POR ESTADO, DEBE OBTENERSE 1RO DE SEA
+            /* if ($arrFiltro['estadopago'] > 0) {
+              $str_search .= "CG.cgen_estado_certificado IS NULL AND A.egen_certificado = 'SI' AND"; // son los pendientes no estan en la tabla
+              } */
+        }
+        $sql = "SELECT 
+                        p.per_cedula as identificacion, 
                         concat(p.per_pri_nombre, ' ', p.per_pri_apellido, ' ', ifnull(p.per_seg_apellido,'')) as estudiante,
                         u.uaca_nombre as unidad,
                         mo.mod_nombre as modalidad,
@@ -109,13 +132,17 @@ class PagosFacturaEstudiante extends \yii\db\ActiveRecord {
                         d.dpfa_num_cuota,
                         d.dpfa_factura,
                         pfe.pfes_valor_pago valor_pago,
-                        pfe.pfes_fecha_registro,                
-                        case d.dpfa_estado_pago  
+                        pfe.pfes_fecha_registro,";   
+        /* $sql1 = "SELECT A.CANCELA  FROM " . $con3->dbname . ".CC0002 A
+                            WHERE A.COD_CLI= 0202501573 AND A.NUM_DOC = 02 / 06 AND A.COD_PTO='001' AND TIP_NOF='FE' "; */
+                        
+        $sql .=  " 
+                case d.dpfa_estado_pago  
                             when 1 then 'Pendiente'  
                             when 2 then 'Aprobado'                                
                             when 3 then 'Rechazado'   
-                        end as estado_pago,                        
-                        dpfa_id
+                        end as estado_pago,    
+                dpfa_id
                 from " . $con2->dbname . ".pagos_factura_estudiante pfe inner join " . $con2->dbname . ".detalle_pagos_factura d on d.pfes_id = pfe.pfes_id
                 inner join " . $con->dbname . ".estudiante e on e.est_id = pfe.est_id
                 inner join " . $con1->dbname . ".persona p on p.per_id = e.per_id
@@ -124,9 +151,36 @@ class PagosFacturaEstudiante extends \yii\db\ActiveRecord {
                 inner join " . $con->dbname . ".unidad_academica u on u.uaca_id = m.uaca_id
                 inner join " . $con->dbname . ".modalidad mo on mo.mod_id = m.mod_id
                 inner join " . $con->dbname . ".estudio_academico ea on ea.eaca_id = m.eaca_id
-                inner join " . $con2->dbname . ".forma_pago f on f.fpag_id = pfe.fpag_id ";
+                inner join " . $con2->dbname . ".forma_pago f on f.fpag_id = pfe.fpag_id 
+                WHERE $str_search pfe.pfes_estado=:estado AND pfe.pfes_estado_logico=:estado  ORDER BY pfe.pfes_fecha_registro DESC ";
 
-        $comando = $con->createCommand($sql);
+        $comando = $con->createCommand($sql); 
+        //$comando1 = $con3->createCommand($sql1);         
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        if (isset($arrFiltro) && count($arrFiltro) > 0) {
+            $fecha_ini = $arrFiltro["f_ini"] . " 00:00:00";
+            $fecha_fin = $arrFiltro["f_fin"] . " 23:59:59";
+            $search_cond = "%" . $arrFiltro["search"] . "%";
+            $unidad = $arrFiltro['unidad'];
+            $modalidad = $arrFiltro['modalidad'];
+            // $estadopago = $arrFiltro['estadopago'];
+            if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
+                $comando->bindParam(":fec_ini", $fecha_ini, \PDO::PARAM_STR);
+                $comando->bindParam(":fec_fin", $fecha_fin, \PDO::PARAM_STR);
+            }
+            if ($arrFiltro['search'] != "") {
+                $comando->bindParam(":estudiante", $search_cond, \PDO::PARAM_STR);
+            }
+            if ($arrFiltro['unidad'] > 0) {
+                $comando->bindParam(":unidad", $unidad, \PDO::PARAM_INT);
+            }
+            if ($arrFiltro['modalidad'] > 0) {
+                $comando->bindParam(":modalidad", $modalidad, \PDO::PARAM_INT);
+            }
+            /* if ($arrFiltro['estadopago'] > 0) {
+              $comando->bindParam(":estadopago", $estadopago, \PDO::PARAM_INT);
+              } */
+        }
         $resultData = $comando->queryAll();
         $dataProvider = new ArrayDataProvider([
             'key' => 'id',
@@ -428,8 +482,7 @@ class PagosFacturaEstudiante extends \yii\db\ActiveRecord {
      * @param
      * @return dpfa_id
      */
-    public function insertarDetpagospendientes($pfes_id, $dpfa_tipo_factura, $dpfa_factura, $dpfa_descripcion_factura, $dpfa_valor_factura, $dpfa_fecha_factura, 
-            $dpfa_saldo_factura, $dpfa_num_cuota, $dpfa_valor_cuota, $dpfa_fecha_vence_cuota, $dpfa_usu_ingreso) {
+    public function insertarDetpagospendientes($pfes_id, $dpfa_tipo_factura, $dpfa_factura, $dpfa_descripcion_factura, $dpfa_valor_factura, $dpfa_fecha_factura, $dpfa_saldo_factura, $dpfa_num_cuota, $dpfa_valor_cuota, $dpfa_fecha_vence_cuota, $dpfa_usu_ingreso) {
         $con = \Yii::$app->db_facturacion;
         $trans = $con->getTransaction(); // se obtiene la transacción actual
         if ($trans !== null) {
@@ -479,7 +532,7 @@ class PagosFacturaEstudiante extends \yii\db\ActiveRecord {
             $param_sql .= ", dpfa_num_cuota";
             $bdet_sql .= ", :dpfa_num_cuota";
         }
-        /*---*/
+        /* --- */
         if (isset($dpfa_valor_cuota)) {
             $param_sql .= ", dpfa_valor_cuota";
             $bdet_sql .= ", :dpfa_valor_cuota";
@@ -512,7 +565,7 @@ class PagosFacturaEstudiante extends \yii\db\ActiveRecord {
             }
             if (!empty((isset($dpfa_fecha_factura)))) {
                 $comando->bindParam(':dpfa_fecha_factura', $dpfa_fecha_factura, \PDO::PARAM_STR);
-            }            
+            }
             if (!empty((isset($dpfa_saldo_factura)))) {
                 $comando->bindParam(':dpfa_saldo_factura', $dpfa_saldo_factura, \PDO::PARAM_STR);
             }
