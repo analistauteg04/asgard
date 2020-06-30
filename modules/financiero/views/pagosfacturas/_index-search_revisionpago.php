@@ -8,7 +8,10 @@ use kartik\date\DatePicker;
 use yii\helpers\ArrayHelper;
 use app\modules\admision\Module as admision;
 use app\modules\academico\Module as academico;
+use app\modules\financiero\Module as financiero;
 
+
+financiero::registerTranslations();
 admision::registerTranslations();
 academico::registerTranslations();
 
@@ -76,9 +79,14 @@ academico::registerTranslations();
     </div>        
     <div class="col-md-12 col-xs-12 col-lg-12 col-sm-12">   
         <div class="form-group">
-            <label for="lbl_estado_revpago" class="col-sm-2 col-md-2 col-xs-2 col-lg-2 control-label" id="lbl_unidad"><?= Yii::t("formulario", "Status") ?></label>
+            <label for="lbl_estado_revpago" class="col-sm-2 col-md-2 col-xs-2 col-lg-2 control-label" id="lbl_unidad"><?= Yii::t("formulario", "Review Status") ?></label>
             <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">                                      
                 <?= Html::dropDownList("cmb_estado_revpago", 0,  $arr_estado, ["class" => "form-control", "id" => "cmb_estado_revpago"]) ?>                                       
+            </div>                
+      
+            <label for="lbl_estado_financiero" class="col-sm-2 col-md-2 col-xs-2 col-lg-2 control-label" id="lbl_unidad"><?= financiero::t("Pagos", "Financial Status") ?></label>
+            <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">                                      
+                <?= Html::dropDownList("cmb_estado_financiero", 0,  $arr_estado_financiero, ["class" => "form-control", "id" => "cmb_estado_financiero"]) ?>                                       
             </div>                
         </div>
     </div>     

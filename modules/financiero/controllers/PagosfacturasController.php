@@ -44,6 +44,14 @@ class PagosfacturasController extends \app\components\CController {
             '3' => Yii::t("formulario", "Rechazado"),
         ];
     }
+    
+    private function estadoFinanciero() {
+        return [
+            '0' => Yii::t("formulario", "Todos"),
+            'N' => Yii::t("formulario", "Pendiente"),
+            'C' => Yii::t("formulario", "Cancelado"),
+        ];
+    }
 
     public function actionRevisionpagos() {
         $mod_pagos = new PagosFacturaEstudiante();
@@ -70,6 +78,7 @@ class PagosfacturasController extends \app\components\CController {
             $arrSearch["unidad"] = $data['unidad'];
             $arrSearch["modalidad"] = $data['modalidad'];
             $arrSearch["estadopago"] = $data['estadopago'];
+            $arrSearch["estadofinanciero"] = $data['estadofinanciero'];
             $resp_pago = $mod_pagos->getPagos($arrSearch, false);
             return $this->renderPartial('_index-grid_revisionpago', [
                         "model" => $resp_pago,
@@ -83,6 +92,7 @@ class PagosfacturasController extends \app\components\CController {
                     'arr_unidad' => ArrayHelper::map($arr_unidadac, "id", "name"),
                     'arr_modalidad' => ArrayHelper::map($arr_modalidad, "id", "name"),
                     'arr_estado' => $this->estados(),
+                    'arr_estado_financiero' => $this->estadoFinanciero(),
         ]);
     }
 
@@ -374,7 +384,7 @@ class PagosfacturasController extends \app\components\CController {
         header("Content-Type: $content_type");
         header("Content-Disposition: attachment;filename=" . $nombarch);
         header('Cache-Control: max-age=0');
-        $colPosition = array("C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N");
+        $colPosition = array("C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "L");
         $arrHeader = array(
             Yii::t("formulario", "DNI"),
             Yii::t("formulario", "Student"),
@@ -386,7 +396,8 @@ class PagosfacturasController extends \app\components\CController {
             financiero::t("Pagos", "Monthly fee"),
             financiero::t("Pagos", "Bill"),
             Yii::t("formulario", "Registration Date"),
-            Yii::t("formulario", "Status"),
+            Yii::t("formulario", "Review Status"),
+            financiero::t("Pagos", "Financial Status"),
             financiero::t("Pagos", "Payment id"),
         );
         $mod_pagos = new PagosFacturaEstudiante();
@@ -396,7 +407,8 @@ class PagosfacturasController extends \app\components\CController {
         $arrSearch["f_fin"] = $data['f_fin'];
         $arrSearch["unidad"] = $data['unidad'];
         $arrSearch["modalidad"] = $data['modalidad'];
-        //$arrSearch["estadopago"] = $data['estadopago'];
+        $arrSearch["estadopago"] = $data['estadopago'];
+        $arrSearch["estadofinanciero"] = $data['estadofinanciero'];
 
         $arrData = array();
         if (empty($arrSearch)) {
@@ -421,7 +433,8 @@ class PagosfacturasController extends \app\components\CController {
             financiero::t("Pagos", "Monthly fee"),
             financiero::t("Pagos", "Bill"),
             Yii::t("formulario", "Registration Date"),
-            Yii::t("formulario", "Status"),
+            Yii::t("formulario", "Review Status"),
+            financiero::t("Pagos", "Financial Status"),
             financiero::t("Pagos", "Payment id"),
         );
         $mod_pagos = new PagosFacturaEstudiante();
@@ -431,7 +444,8 @@ class PagosfacturasController extends \app\components\CController {
         $arrSearch["f_fin"] = $data['f_fin'];
         $arrSearch["unidad"] = $data['unidad'];
         $arrSearch["modalidad"] = $data['modalidad'];
-        // $arrSearch["estadopago"] = $data['estadopago'];
+        $arrSearch["estadopago"] = $data['estadopago'];
+        $arrSearch["estadofinanciero"] = $data['estadofinanciero'];
         $arrData = array();
         if (empty($arrSearch)) {
             $arrData = $mod_pagos->getPagos(array(), true);

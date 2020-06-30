@@ -76,9 +76,14 @@ PbGridView::widget([
         ],           
         [
             'attribute' => 'Estado',
-            'header' => Yii::t("formulario", "Status"),           
+            'header' => Yii::t("formulario", "Review Status"),           
             'value' => 'estado_pago',
         ],  
+        [
+            'attribute' => 'Financiero',           
+            'header' => financiero::t("Pagos", "Financial Status"),
+            'value' => 'estado_financiero',            
+        ],   
         [
             'class' => 'yii\grid\ActionColumn',
             'header' => Yii::t("formulario", "Actions"),
