@@ -118,11 +118,11 @@ class PagosFacturaEstudiante extends \yii\db\ActiveRecord {
                 $str_search .= "mo.mod_id = :modalidad AND ";
             }
             if ($arrFiltro['estadopago'] > 0) { // estado de revision
-                $str_search .= "d.dpfa_estado_pago = :estadopago AND"; 
+                $str_search .= "d.dpfa_estado_pago = :estadopago AND";
             }
             if ($arrFiltro['estadofinanciero'] != '0') { // estado financiero
                 if ($arrFiltro['estadofinanciero'] == 'N') {
-                    $str_search .= "( d.dpfa_estado_financiero IS NULL OR d.dpfa_estado_financiero = :estadofinanciero) AND"; 
+                    $str_search .= "( d.dpfa_estado_financiero IS NULL OR d.dpfa_estado_financiero = :estadofinanciero) AND";
                 } else {
                     $str_search .= "d.dpfa_estado_financiero = :estadofinanciero AND"; // son los pendientes no estan en la tabla
                 }
@@ -514,6 +514,9 @@ class PagosFacturaEstudiante extends \yii\db\ActiveRecord {
 
         $param_sql .= ", dpfa_fecha_registro";
         $bdet_sql .= ", :dpfa_fecha_registro";
+
+        $param_sql .= ", dpfa_estado_pago";
+        $bdet_sql .= ", 1";
 
         if (isset($pfes_id)) {
             $param_sql .= ", pfes_id";
