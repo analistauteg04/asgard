@@ -24,6 +24,7 @@ namespace app\modules\financiero\messages;
      "Details of payment" => "Datos del Pago",
      "Discount" => "Descuento",
      "Expiration date" => "Fecha Vencimiento",
+     "Financial Status" => "Estado Financiero",
      "Item" => "Item",
      "Items Detail" => "Detalle de items",
      "List Payment" => "Listar pagos",

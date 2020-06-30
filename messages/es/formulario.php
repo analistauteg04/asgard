@@ -533,6 +533,7 @@ return [
     "Result" => "Resultado",
     "Results and beneficiaries" => "Resultados y beneficiarios",
     "Results evaluation" => "Resultados evaluación",
+    "Review Status" => "Estado Revisión",
     "Role" => "Rol",
     "RUC" => "RUC",
     "Sale Opportunity" => "Oportunidad de Venta",

@@ -75,11 +75,12 @@ function actualizarGridRevisionPago() {
     var f_fin = $('#txt_fecha_fin').val();
     var unidad = $('#cmb_unidad_revpago').val();
     var modalidad = $('#cmb_modalidad_revpago').val();
-    var estadopago = $('#cmb_estado_revpago').val();    
+    var estadopago = $('#cmb_estado_revpago').val();  
+    var estadofinanciero = $('#cmb_estado_financiero').val();
     //Buscar almenos una clase con el nombre para ejecutar
     if (!$(".blockUI").length) {
         showLoadingPopup();
-        $('#TbG_Revisionpago').PbGridView('applyFilterData', {'search': search, 'f_ini': f_ini, 'f_fin': f_fin, 'unidad': unidad, 'modalidad': modalidad, 'estadopago': estadopago});
+        $('#TbG_Revisionpago').PbGridView('applyFilterData', {'search': search, 'f_ini': f_ini, 'f_fin': f_fin, 'unidad': unidad, 'modalidad': modalidad, 'estadopago': estadopago, 'estadofinanciero': estadofinanciero});
         setTimeout(hideLoadingPopup, 2000);
     }
 }
@@ -91,8 +92,9 @@ function exportExcelrevpago() {
     var unidad = $('#cmb_unidad_revpago').val();
     var modalidad = $('#cmb_modalidad_revpago').val();
     var estadopago = $('#cmb_estado_revpago').val();
+    var estadofinanciero = $('#cmb_estado_financiero').val();
 
-    window.location.href = $('#txth_base').val() + "/financiero/pagosfacturas/expexcelfacpendiente?search=" + search + "&f_ini=" + f_ini + "&f_fin=" + f_fin + '&unidad=' + unidad + "&modalidad=" + modalidad +  "&estadopago=" + estadopago;
+    window.location.href = $('#txth_base').val() + "/financiero/pagosfacturas/expexcelfacpendiente?search=" + search + "&f_ini=" + f_ini + "&f_fin=" + f_fin + '&unidad=' + unidad + "&modalidad=" + modalidad +  "&estadopago=" + estadopago + "&estadofinanciero=" + estadofinanciero;
 }
 
 function exportPdfrevpago() {
@@ -102,6 +104,7 @@ function exportPdfrevpago() {
     var unidad = $('#cmb_unidad_revpago').val();
     var modalidad = $('#cmb_modalidad_revpago').val();
     var estadopago = $('#cmb_estado_revpago').val();
-
-    window.location.href = $('#txth_base').val() + "/financiero/pagosfacturas/exppdffacpendiente?pdf=1&search=" + search + "&f_ini=" + f_ini + "&f_fin=" + f_fin + '&unidad=' + unidad + "&modalidad=" + modalidad + "&estadopago=" + estadopago;
+    var estadofinanciero = $('#cmb_estado_financiero').val();
+    
+    window.location.href = $('#txth_base').val() + "/financiero/pagosfacturas/exppdffacpendiente?pdf=1&search=" + search + "&f_ini=" + f_ini + "&f_fin=" + f_fin + '&unidad=' + unidad + "&modalidad=" + modalidad + "&estadopago=" + estadopago + "&estadofinanciero=" + estadofinanciero;
 }

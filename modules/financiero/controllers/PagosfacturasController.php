@@ -41,7 +41,16 @@ class PagosfacturasController extends \app\components\CController {
     private function estadoRechazo() {
         return [
             '0' => Yii::t("formulario", "Seleccione"),
+            '2' => Yii::t("formulario", "Aprobado"),
             '3' => Yii::t("formulario", "Rechazado"),
+        ];
+    }
+
+    private function estadoFinanciero() {
+        return [
+            '0' => Yii::t("formulario", "Todos"),
+            'N' => Yii::t("formulario", "Pendiente"),
+            'C' => Yii::t("formulario", "Cancelado"),
         ];
     }
 
@@ -70,6 +79,7 @@ class PagosfacturasController extends \app\components\CController {
             $arrSearch["unidad"] = $data['unidad'];
             $arrSearch["modalidad"] = $data['modalidad'];
             $arrSearch["estadopago"] = $data['estadopago'];
+            $arrSearch["estadofinanciero"] = $data['estadofinanciero'];
             $resp_pago = $mod_pagos->getPagos($arrSearch, false);
             return $this->renderPartial('_index-grid_revisionpago', [
                         "model" => $resp_pago,
@@ -83,6 +93,7 @@ class PagosfacturasController extends \app\components\CController {
                     'arr_unidad' => ArrayHelper::map($arr_unidadac, "id", "name"),
                     'arr_modalidad' => ArrayHelper::map($arr_modalidad, "id", "name"),
                     'arr_estado' => $this->estados(),
+                    'arr_estado_financiero' => $this->estadoFinanciero(),
         ]);
     }
 
@@ -220,66 +231,79 @@ class PagosfacturasController extends \app\components\CController {
             $id = $data['dpfa_id'];
             $resultado = $data['resultado'];
             $observacion = $data['observacion'];
-            if (($resultado == "0") or ( $observacion == "0")) {
-                Utilities::putMessageLogFile('ingresa');
+            if (($resultado == "0") /* or ( $observacion == "0") */) {
+                //Utilities::putMessageLogFile('ingresa');
                 $message = array(
-                    "wtmessage" => Yii::t("notificaciones", "Seleccione un valor para los campos de 'Resultado' y 'Observación'"),
+                    "wtmessage" => Yii::t("notificaciones", "Seleccione un valor para los campos de 'Resultado' "),
                     "title" => Yii::t('jslang', 'Success'),
                 );
                 echo Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), false, $message);
                 return;
             } else {
-                $con = \Yii::$app->db_facturacion;
-                $transaction = $con->beginTransaction();
-                try {
-                    $datos = $mod_pagos->consultarPago($id);
-                    Utilities::putMessageLogFile('$cuota:' . $datos['dpfa_num_cuota']);
-                    $respago = $mod_pagos->grabarRechazo($id, $resultado, $observacion);
-
-                    if ($respago) {
-                        $transaction->commit();
-
-                        $correo_estudiante = $datos['per_correo'];
-                        $user = $datos['estudiante'];
-                        $tituloMensaje = 'Pagos en Línea';
-                        $asunto = 'Pagos en Línea';
-                        if (!empty($datos['dpfa_num_cuota'])) {
-                            Utilities::putMessageLogFile('$cuota:' . $datos['dpfa_num_cuota']);
-                            $body = Utilities::getMailMessage("pagonegadocuota", array(
-                                        "[[user]]" => $user,
-                                        "[[link]]" => "https://asgard.uteg.edu.ec/asgard/",
-                                        "[[motivo]]" => $observacion,
-                                        "[[factura]]" => $datos['dpfa_factura'],
-                                        "[[cuota]]" => $datos['dpfa_num_cuota'],
-                                            ), Yii::$app->language, Yii::$app->basePath . "/modules/financiero");
-                        } else {
-                            $body = Utilities::getMailMessage("pagonegado", array(
-                                        "[[user]]" => $user,
-                                        "[[link]]" => "https://asgard.uteg.edu.ec/asgard/",
-                                        "[[motivo]]" => $observacion,
-                                        "[[factura]]" => $datos['dpfa_factura'],
-                                            ), Yii::$app->language, Yii::$app->basePath . "/modules/financiero");
+                if (($resultado == "3" && $observacion != "0") or $resultado == "2") {
+                    $con = \Yii::$app->db_facturacion;
+                    $transaction = $con->beginTransaction();
+                    try {
+                        $datos = $mod_pagos->consultarPago($id);
+                        //Utilities::putMessageLogFile('$cuota:' . $datos['dpfa_num_cuota']);
+                        if ($observacion == 0 && $resultado == "2"){
+                            $observacion = null;    
                         }
-                        Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [$correo_estudiante => $user], $asunto, $body);
-                        Utilities::putMessageLogFile('graba la transaccion');
+                        $respago = $mod_pagos->grabarRechazo($id, $resultado, $observacion);
+                        if ($respago) {
+                            $transaction->commit();
+
+                            $correo_estudiante = $datos['per_correo'];
+                            $user = $datos['estudiante'];
+                            $tituloMensaje = 'Pagos en Línea';
+                            $asunto = 'Pagos en Línea';
+                            if ($resultado != "2") {
+                                if (!empty($datos['dpfa_num_cuota'])) {
+                                    //Utilities::putMessageLogFile('$cuota:' . $datos['dpfa_num_cuota']);
+                                    $body = Utilities::getMailMessage("pagonegadocuota", array(
+                                                "[[user]]" => $user,
+                                                "[[link]]" => "https://asgard.uteg.edu.ec/asgard/",
+                                                "[[motivo]]" => $observacion,
+                                                "[[factura]]" => $datos['dpfa_factura'],
+                                                "[[cuota]]" => $datos['dpfa_num_cuota'],
+                                                    ), Yii::$app->language, Yii::$app->basePath . "/modules/financiero");
+                                } else {
+                                    $body = Utilities::getMailMessage("pagonegado", array(
+                                                "[[user]]" => $user,
+                                                "[[link]]" => "https://asgard.uteg.edu.ec/asgard/",
+                                                "[[motivo]]" => $observacion,
+                                                "[[factura]]" => $datos['dpfa_factura'],
+                                                    ), Yii::$app->language, Yii::$app->basePath . "/modules/financiero");
+                                }
+                                Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [$correo_estudiante => $user], $asunto, $body);
+                            }
+                            //Utilities::putMessageLogFile('graba la transaccion');
+                            $message = array(
+                                "wtmessage" => Yii::t("notificaciones", "La infomación ha sido grabada"),
+                                "title" => Yii::t('jslang', 'Success'),
+                            );
+                            echo Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                        } else {
+                            $message = ["info" => Yii::t('exception', 'Error al grabar 0.')];
+                            echo Utilities::ajaxResponse('NO_OK', 'alert', Yii::t('jslang', 'Error'), 'false', $message);
+                        }
+                    } catch (Exception $ex) {
+                        $transaction->rollback();
                         $message = array(
-                            "wtmessage" => Yii::t("notificaciones", "La infomación ha sido grabada"),
+                            "wtmessage" => Yii::t("notificaciones", "Error al grabar 1."),
                             "title" => Yii::t('jslang', 'Success'),
                         );
                         echo Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
-                    } else {
-                        $message = ["info" => Yii::t('exception', 'Error al grabar 0.')];
-                        echo Utilities::ajaxResponse('NO_OK', 'alert', Yii::t('jslang', 'Error'), 'false', $message);
                     }
-                } catch (Exception $ex) {
-                    $transaction->rollback();
+                    return;
+                } else {
                     $message = array(
-                        "wtmessage" => Yii::t("notificaciones", "Error al grabar 1."),
+                        "wtmessage" => Yii::t("notificaciones", "Seleccione un valor para los campos de 'Observación' "),
                         "title" => Yii::t('jslang', 'Success'),
                     );
-                    echo Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                    echo Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), false, $message);
+                    return;
                 }
-                return;
             }
             return;
         }
@@ -374,7 +398,7 @@ class PagosfacturasController extends \app\components\CController {
         header("Content-Type: $content_type");
         header("Content-Disposition: attachment;filename=" . $nombarch);
         header('Cache-Control: max-age=0');
-        $colPosition = array("C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N");
+        $colPosition = array("C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "L");
         $arrHeader = array(
             Yii::t("formulario", "DNI"),
             Yii::t("formulario", "Student"),
@@ -386,7 +410,8 @@ class PagosfacturasController extends \app\components\CController {
             financiero::t("Pagos", "Monthly fee"),
             financiero::t("Pagos", "Bill"),
             Yii::t("formulario", "Registration Date"),
-            Yii::t("formulario", "Status"),
+            Yii::t("formulario", "Review Status"),
+            financiero::t("Pagos", "Financial Status"),
             financiero::t("Pagos", "Payment id"),
         );
         $mod_pagos = new PagosFacturaEstudiante();
@@ -396,7 +421,8 @@ class PagosfacturasController extends \app\components\CController {
         $arrSearch["f_fin"] = $data['f_fin'];
         $arrSearch["unidad"] = $data['unidad'];
         $arrSearch["modalidad"] = $data['modalidad'];
-        //$arrSearch["estadopago"] = $data['estadopago'];
+        $arrSearch["estadopago"] = $data['estadopago'];
+        $arrSearch["estadofinanciero"] = $data['estadofinanciero'];
 
         $arrData = array();
         if (empty($arrSearch)) {
@@ -408,6 +434,7 @@ class PagosfacturasController extends \app\components\CController {
         Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
         exit;
     }
+
     public function actionExppdffacpendiente() {
         $report = new ExportFile();
         $arrHeader = array(
@@ -421,17 +448,19 @@ class PagosfacturasController extends \app\components\CController {
             financiero::t("Pagos", "Monthly fee"),
             financiero::t("Pagos", "Bill"),
             Yii::t("formulario", "Registration Date"),
-            Yii::t("formulario", "Status"),
+            Yii::t("formulario", "Review Status"),
+            financiero::t("Pagos", "Financial Status"),
             financiero::t("Pagos", "Payment id"),
         );
         $mod_pagos = new PagosFacturaEstudiante();
         $data = Yii::$app->request->get();
-        $arrSearch["search"] = $data['search'];      
+        $arrSearch["search"] = $data['search'];
         $arrSearch["f_ini"] = $data['f_ini'];
         $arrSearch["f_fin"] = $data['f_fin'];
         $arrSearch["unidad"] = $data['unidad'];
         $arrSearch["modalidad"] = $data['modalidad'];
-        // $arrSearch["estadopago"] = $data['estadopago'];
+        $arrSearch["estadopago"] = $data['estadopago'];
+        $arrSearch["estadofinanciero"] = $data['estadofinanciero'];
         $arrData = array();
         if (empty($arrSearch)) {
             $arrData = $mod_pagos->getPagos(array(), true);
@@ -439,7 +468,8 @@ class PagosfacturasController extends \app\components\CController {
             $arrData = $mod_pagos->getPagos($arrSearch, true);
         }
 
-        $this->view->title = financiero::t("Pagos", "List Payment Pending");; // Titulo del reporte                
+        $this->view->title = financiero::t("Pagos", "List Payment Pending");
+        ; // Titulo del reporte                
         $report->orientation = "L"; // tipo de orientacion L => Horizontal, P => Vertical
         $report->createReportPdf(
                 $this->render('exportpdf', [
