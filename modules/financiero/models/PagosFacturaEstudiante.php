@@ -148,10 +148,11 @@ class PagosFacturaEstudiante extends \yii\db\ActiveRecord {
                             when 2 then 'Aprobado'                                
                             when 3 then 'Rechazado'   
                         end as estado_pago,                   
-                case d.dpfa_estado_financiero
-                             when (d.dpfa_estado_financiero = 'C') THEN 'Cancelado'
-                             else 'Pendiente'
-			end as estado_financiero,
+                case d.dpfa_estado_financiero  
+                            when 'C' then 'Cancelado'  
+                            when 'N' then 'Pendiente'                                                              
+                            else 'Pendiente'
+                        end as estado_financiero,
                 dpfa_id
                 from " . $con2->dbname . ".pagos_factura_estudiante pfe inner join " . $con2->dbname . ".detalle_pagos_factura d on d.pfes_id = pfe.pfes_id
                 inner join " . $con->dbname . ".estudiante e on e.est_id = pfe.est_id

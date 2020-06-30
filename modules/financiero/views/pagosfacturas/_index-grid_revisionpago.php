@@ -12,11 +12,9 @@ use app\widgets\PbGridView\PbGridView;
 use app\modules\academico\Module as academico;
 use app\modules\financiero\Module as financiero;
 
-
 //print_r($model);
 academico::registerTranslations();
 financiero::registerTranslations();
-
 ?>
 <?=
 
@@ -47,54 +45,55 @@ PbGridView::widget([
             'attribute' => 'Modalidad',
             'header' => academico::t("Academico", "Modality"),
             'value' => 'modalidad',
-        ],     
+        ],
         [
-            'attribute' => 'Método pago',           
+            'attribute' => 'Método pago',
             'header' => Yii::t("formulario", "Paid form"),
-            'value' => 'forma_pago',            
+            'value' => 'forma_pago',
         ],
         [
-            'attribute' => 'Valor pago',           
+            'attribute' => 'Valor pago',
             'header' => financiero::t("Pagos", "Amount Paid"),
-            'value' => 'valor_pago',            
+            'value' => 'valor_pago',
         ],
         [
-            'attribute' => 'Cuota',           
+            'attribute' => 'Cuota',
             'header' => financiero::t("Pagos", "Monthly fee"),
-            'value' => 'dpfa_num_cuota',            
-        ],                  
+            'value' => 'dpfa_num_cuota',
+        ],
         [
-            'attribute' => 'Factura',           
+            'attribute' => 'Factura',
             'header' => financiero::t("Pagos", "Bill"),
-            'value' => 'dpfa_factura',            
-        ],   
+            'value' => 'dpfa_factura',
+        ],
         [
             'attribute' => 'Fecha Registro',
             'header' => Yii::t("formulario", "Registration Date"),
             'format' => ['date', 'php:d-m-Y'],
             'value' => 'pfes_fecha_registro',
-        ],           
+        ],
         [
             'attribute' => 'Estado',
-            'header' => Yii::t("formulario", "Review Status"),           
+            'header' => Yii::t("formulario", "Review Status"),
             'value' => 'estado_pago',
-        ],  
+        ],
         [
-            'attribute' => 'Financiero',           
+            'attribute' => 'Financiero',
             'header' => financiero::t("Pagos", "Financial Status"),
-            'value' => 'estado_financiero',            
-        ],   
+            'value' => 'estado_financiero',
+        ],
         [
             'class' => 'yii\grid\ActionColumn',
             'header' => Yii::t("formulario", "Actions"),
-            'template' => '{ver}', 
-            'buttons' => [                
-                'ver' => function ($url, $model) {  
-                    if (($model['estado_pago']== 'Pendiente') or ($model['estado_pago']== 'Rechazado')) {
+            'template' => '{ver}',
+            'buttons' => [
+                'ver' => function ($url, $model) {
+                    if (($model['estado_pago'] == 'Pendiente') || ($model['estado_pago'] == 'Rechazado') && ($model['estado_financiero'] == 'Cancelado')) {
                         return Html::a('<span class="glyphicon glyphicon-remove"></span>', Url::to(['/financiero/pagosfacturas/rechazar', 'dpfa_id' => base64_encode($model['dpfa_id'])]), ["data-toggle" => "tooltip", "title" => "Rechazar Pago", "data-pjax" => "0"]);
-                    } 
-                
-                },                
+                    } else {
+                        return '<span class="glyphicon glyphicon-remove"></span>';
+                    }
+                },
             ],
         ],
     ],

@@ -41,6 +41,7 @@ class PagosfacturasController extends \app\components\CController {
     private function estadoRechazo() {
         return [
             '0' => Yii::t("formulario", "Seleccione"),
+            '2' => Yii::t("formulario", "Aprobado"),
             '3' => Yii::t("formulario", "Rechazado"),
         ];
     }
