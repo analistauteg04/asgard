@@ -694,3 +694,13 @@ create table if not exists `detalle_pagos_factura` (
   `dpfa_fecha_modificacion` timestamp null default null,
   `dpfa_estado_logico` varchar(1) not null
 );
+
+/* tabla temporal */
+create table db_facturacion.tmp_facturas_aprobadas
+(dpfa_id				 bigint(20) not null,
+ dpfa_tipo_factura  	 varchar(05) not null, 
+ dpfa_factura			 varchar(50) not null, 
+ dpfa_num_cuota     	 varchar(10) not null,
+ identificacion     	 varchar(13) not null,
+ dpfa_estado_financiero  varchar(1) not null
+);
