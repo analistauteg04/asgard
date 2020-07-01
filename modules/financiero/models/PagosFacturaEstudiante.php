@@ -610,5 +610,4 @@ class PagosFacturaEstudiante extends \yii\db\ActiveRecord {
             return FALSE;
         }
     }
-
 }
