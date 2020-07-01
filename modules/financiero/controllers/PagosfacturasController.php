@@ -347,20 +347,21 @@ class PagosfacturasController extends \app\components\CController {
             $personaData = $mod_estudiante->consultaDatosEstudiante($per_idsession); //$personaData['per_cedula']
             $con = \Yii::$app->db_facturacion;
             $transaction = $con->beginTransaction();
-            try {
+            try {                
                 $usuario = @Yii::$app->user->identity->usu_id;   //Se obtiene el id del usuario.
-                $resp_pagofactura = $mod_pagos->insertarPagospendientes($est_id, $pfes_referencia, $fpag_id, $pfes_valor_pago, $pfes_fecha_pago, $pfes_observacion, $imagen, $usuario);
-                if ($resp_pagofactura) {
+                //Utilities::putMessageLogFile('usuario:'. $usuario);
+                $resp_pagofactura = $mod_pagos->insertarPagospendientes($est_id, $pfes_referencia, $fpag_id, $pfes_valor_pago, $pfes_fecha_pago, $pfes_observacion, $imagen, $usuario);                
+                if ($resp_pagofactura) {                    
                     // se graba el detalle
                     $pagados = explode("*", $pagado); //PAGADOS
                     $x = 0;
-                    foreach ($pagados as $datos) {
+                    foreach ($pagados as $datos) {                        
                         //  consultar la informacion seleccionada de cuota factura
                         //$personaData['per_cedula'] = '0202501573'; // DEBE BORRARSE CUANDO SE TENGA EL DATO
-                        $parametro = explode(";", $pagados[$x]);
+                        $parametro = explode(";", $pagados[$x]);                        
                         $resp_consfactura = $mod_pagos->consultarPagospendientesp($personaData['per_cedula'], $parametro[0], $parametro[1]);
-                        // insertar el detalle                        
-                        $resp_detpagofactura = $mod_pagos->insertarDetpagospendientes($resp_pagofactura, $resp_consfactura['tipofactura'], $resp_consfactura['factura'], $resp_consfactura['descripcion'], $parametro[2], $resp_consfactura['fecha'], $resp_consfactura['saldo'], $resp_consfactura['numcuota'], $resp_consfactura['valorcuota'], $resp_consfactura['fechavence'], $usuario);
+                        // insertar el detalle                                                
+                        $resp_detpagofactura = $mod_pagos->insertarDetpagospendientes($resp_pagofactura, $resp_consfactura['tipofactura'], $resp_consfactura['factura'], $resp_consfactura['descripcion'], $parametro[2], $resp_consfactura['fecha'], $resp_consfactura['saldo'], $resp_consfactura['numcuota'], $resp_consfactura['valorcuota'], $resp_consfactura['fechavence'], $usuario);                        
                         $x++;
                     }
                     if ($resp_detpagofactura) {

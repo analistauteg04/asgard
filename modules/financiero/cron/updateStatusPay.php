@@ -2,6 +2,7 @@
 
 $logFile = dirname(__FILE__) . "/../../../runtime/logs/pb.log";
 $dataDB = include_once(dirname(__FILE__) . "/../config/mod.php");
+$dataDBF = include_once(dirname(__FILE__) . "/../data/db_sea.php");
 $payment_gateway = "";
 $dbname = 'db_facturacion';
 $dbuser = $dataDB["financiero"]["db_facturacion"]["username"];
@@ -15,11 +16,11 @@ $nounce = "";
 $transKey = "";
 $dsn = "mysql:host=$dbserver;dbname=$dbname;port=$dbport";
 $dbnamef = 'pruebasea';
-$dbuserf = $dataDB["financiero"]["db_sea"]["username"];
-$dbpassf = $dataDB["financiero"]["db_sea"]["password"];
+$dbuserf = $dataDBF["username"];
+$dbpassf = $dataDBF["password"];
 $dbserverf = "181.39.139.70"; 
 $dsnf = "mysql:host=$dbserverf;dbname=$dbnamef;port=$dbport";
-spl_autoload_register('my_autoloader');
+//spl_autoload_register('my_autoloader');
 putMessageLogFile('Inicio Proceso cron:'.date('c'));
 borrarTablatemporal();
 consultarPagospendAsgard();
@@ -46,6 +47,7 @@ function putMessageLogFile($message) {
 */
 function consultarPagospendAsgard() { 
     try {
+        GLOBAL $dsn, $dbuser, $dbpass; 
         $pdo = new \PDO($dsn, $dbuser, $dbpass);
         $estado = "1";
         $sql = "SELECT dpfa_id, dpfa_tipo_factura, dpfa_factura, dpfa_num_cuota, trim(r.per_cedula) as identificacion
@@ -53,7 +55,7 @@ function consultarPagospendAsgard() {
                     inner join db_facturacion.pagos_factura_estudiante p on p.pfes_id = d.pfes_id
                     inner join db_academico.estudiante e on e.est_id = p.est_id
                     inner join db_asgard.persona r on r.per_id = e.per_id
-                where dpfa_estado_financiero is null -- and dpfa_estado_pago = 2
+                where dpfa_estado_financiero is null and dpfa_estado_pago = 2
                       and dpfa_estado = " .$estado ." and dpfa_estado_logico = ". $estado
                       ." and p.pfes_estado = " . $estado . " and p.pfes_estado_logico = " . $estado
                       ." and e.est_estado = ". $estado . " and e.est_estado_logico = " . $estado;
@@ -81,6 +83,7 @@ function consultarPagospendAsgard() {
 */
  function consultarPagospendFinanciero($cedula, $factura, $cuota, $idDetFact) {
      try {
+            GLOBAL $dsn, $dbuser, $dbpass, $dsnf, $dbuserf, $dbpassf; 
             $pdo = new \PDO($dsnf, $dbuserf, $dbpassf);            
             $pdo2 = new \PDO($dsn, $dbuser, $dbpass);
             $sql = "SELECT 
@@ -96,6 +99,7 @@ function consultarPagospendAsgard() {
                      END  as numcuota
                    FROM CC0002 A
                    WHERE A.COD_CLI= ". $cedula ." AND A.COD_PTO='001' AND TIP_NOF='FE' AND A.NUM_NOF = " . $factura . " AND A.NUM_DOC = " . $cuota;
+            putMessageLogFile('sql:'.sql);
             $cmd = $pdo->prepare($sql);        
             $cmd->execute();
             $rows = $cmd->fetchAll(\PDO::FETCH_ASSOC);  
@@ -127,6 +131,7 @@ function consultarPagospendAsgard() {
 */
 function actualizarEstadoFinanciero() { 
     try {
+        GLOBAL $dsn, $dbuser, $dbpass; 
         $pdo = new \PDO($dsn, $dbuser, $dbpass);        
         $sql = "update db_facturacion.detalle_pagos_factura a, db_facturacion.tmp_facturas_aprobadas b
                 set a.dpfa_estado_financiero = b.dpfa_estado_financiero
@@ -148,6 +153,7 @@ function actualizarEstadoFinanciero() {
 */
 function borrarTablatemporal() { 
     try {
+        GLOBAL $dsn, $dbuser, $dbpass; 
         $pdo = new \PDO($dsn, $dbuser, $dbpass);        
         $sql = "delete from db_facturacion.tmp_facturas_aprobadas;";
         
@@ -158,5 +164,4 @@ function borrarTablatemporal() {
         exit;
     }        
 }
-
 ?>

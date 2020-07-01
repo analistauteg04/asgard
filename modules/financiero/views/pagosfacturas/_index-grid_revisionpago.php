@@ -89,9 +89,9 @@ PbGridView::widget([
             'buttons' => [
                 'ver' => function ($url, $model) {
                     if (($model['estado_pago'] == 'Pendiente') || ($model['estado_pago'] == 'Rechazado') && ($model['estado_financiero'] == 'Pendiente')) {
-                        return Html::a('<span class="glyphicon glyphicon-remove"></span>', Url::to(['/financiero/pagosfacturas/rechazar', 'dpfa_id' => base64_encode($model['dpfa_id'])]), ["data-toggle" => "tooltip", "title" => "Rechazar Pago", "data-pjax" => "0"]);
+                        return Html::a('<span class="glyphicon glyphicon-check"></span>', Url::to(['/financiero/pagosfacturas/rechazar', 'dpfa_id' => base64_encode($model['dpfa_id'])]), ["data-toggle" => "tooltip", "title" => "Revisar Pago", "data-pjax" => "0"]);
                     } else {
-                        return '<span class="glyphicon glyphicon-remove"></span>';
+                        return '<span class="glyphicon glyphicon-check"></span>';
                     }
                 },
             ],
