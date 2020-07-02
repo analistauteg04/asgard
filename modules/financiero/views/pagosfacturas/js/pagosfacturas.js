@@ -13,6 +13,15 @@ $(document).ready(function () {
     $('#btn_buscarpago').click(function () {
         actualizarGridRevisionPago();
     });
+    $('#cmb_estado').change(function () {
+        if ($('#cmb_estado').val() == 3)
+        {
+            $('#Divobservacion').show();
+        } else
+        {
+            $('#Divobservacion').hide();
+        }
+    });
 });
 function guardarPagofactura() {
     var arrParams = new Object();

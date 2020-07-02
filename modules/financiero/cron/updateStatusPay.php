@@ -49,7 +49,7 @@ function consultarPagospendAsgard() {
     try {
         GLOBAL $dsn, $dbuser, $dbpass; 
         $pdo = new \PDO($dsn, $dbuser, $dbpass);
-        $estado = "1";
+        $estado = "1";        
         $sql = "SELECT dpfa_id, dpfa_tipo_factura, dpfa_factura, dpfa_num_cuota, trim(r.per_cedula) as identificacion
                 FROM db_facturacion.detalle_pagos_factura d
                     inner join db_facturacion.pagos_factura_estudiante p on p.pfes_id = d.pfes_id
@@ -60,11 +60,12 @@ function consultarPagospendAsgard() {
                       ." and p.pfes_estado = " . $estado . " and p.pfes_estado_logico = " . $estado
                       ." and e.est_estado = ". $estado . " and e.est_estado_logico = " . $estado;
         
-        $cmd = $pdo->prepare($sql);        
-        $cmd->execute();
+        $cmd = $pdo->prepare($sql);
+        $cmd->execute();    
         $rows = $cmd->fetchAll(\PDO::FETCH_ASSOC);  
         if (count($rows) > 0) {
             for ($i = 0; $i < count($rows); $i++) {
+                putMessageLogFile('en for iteracion:'.$i);
                 consultarPagospendFinanciero($rows[$i]["identificacion"], $rows[$i]["dpfa_factura"], $rows[$i]["dpfa_num_cuota"], $rows[$i]["dpfa_id"]);
             }
         }
@@ -84,8 +85,8 @@ function consultarPagospendAsgard() {
  function consultarPagospendFinanciero($cedula, $factura, $cuota, $idDetFact) {
      try {
             GLOBAL $dsn, $dbuser, $dbpass, $dsnf, $dbuserf, $dbpassf; 
-            $pdo = new \PDO($dsnf, $dbuserf, $dbpassf);            
-            $pdo2 = new \PDO($dsn, $dbuser, $dbpass);
+            $pdo2 = new \PDO($dsnf, $dbuserf, $dbpassf);            
+            $pdo = new \PDO($dsn, $dbuser, $dbpass);
             $sql = "SELECT 
                      A.COD_PTO as punto_emision,
                      A.TIP_NOF as tipofactura,
@@ -97,25 +98,25 @@ function consultarPagospendAsgard() {
                        WHEN A.NUM_DOC = A.NUM_NOF THEN ' '                                        
                        ELSE A.NUM_DOC
                      END  as numcuota
-                   FROM CC0002 A
-                   WHERE A.COD_CLI= ". $cedula ." AND A.COD_PTO='001' AND TIP_NOF='FE' AND A.NUM_NOF = " . $factura . " AND A.NUM_DOC = " . $cuota;
-            putMessageLogFile('sql:'.sql);
-            $cmd = $pdo->prepare($sql);        
+                   FROM pruebasea.CC0002 A
+                   WHERE A.COD_CLI= '". $cedula ."' AND A.COD_PTO='001' AND TIP_NOF='FE' AND A.NUM_NOF = '" . $factura . "' AND A.NUM_DOC = '" . $cuota ."'";           
+            //putMessageLogFile('conexion:'.$pdo2);
+            $cmd = $pdo2->prepare($sql);        
             $cmd->execute();
-            $rows = $cmd->fetchAll(\PDO::FETCH_ASSOC);  
-            if ((count($rows) > 0) && ($rows["estadopago"]=='C')) {            
+            $rows1 = $cmd->fetchAll(\PDO::FETCH_ASSOC);              
+            if ((count($rows1) > 0) && ($rows1[0]["estadopago"]=='C')) {            
                 // insertar en tabla temporal                
                 $id = $idDetFact;
-                $tipofact = $rows["tipofactura"];
-                $factura = $rows["factura"];
-                $codcliente = $rows["cliente"];
-                $cuotanum = $rows["numcuota"];
-                $estadopago = $rows["estadopago"];
+                $tipofact = $rows1[0]["tipofactura"];
+                $factura = $rows1[0]["factura"];
+                $codcliente = $rows1[0]["cliente"];
+                $cuotanum = $rows1[0]["numcuota"];
+                $estadopago = $rows1[0]["estadopago"];
                 $sql = "INSERT INTO db_facturacion.tmp_facturas_aprobadas
                         (dpfa_id, dpfa_tipo_factura, dpfa_factura, dpfa_num_cuota, identificacion, dpfa_estado_financiero)
-                        values ('$id', '$tipofact','$factura', '$cuotanum', '$codcliente', $estadopago')";
-                $cmd = $pdo2->prepare($sql);
-                $cmd->execute();
+                        values ('$id', '$tipofact','$factura', '$cuotanum', '$codcliente', '$estadopago')";                
+                $cmd = $pdo->prepare($sql);
+                $cmd->execute();          
             }
      } catch (PDOException $e) {
         putMessageLogFile('Error: ' . $e->getMessage());
