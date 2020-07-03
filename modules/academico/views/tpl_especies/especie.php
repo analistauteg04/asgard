@@ -131,7 +131,7 @@
     </div>
 
     <div>
-        <p>Motivo: <?php echo $cabFact['detalle'] ?></p><br><br> 
+        <p><?php if($cabFact['detalle'] != "") echo 'Motivo:'; ?> <?php echo $cabFact['detalle'] ?></p><br><br> 
     </div>
 
     <div>
