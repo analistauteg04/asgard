@@ -367,7 +367,7 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
         WHERE $str_search              
               ((date_format(r.rmtm_fecha_transaccion, '%Y-%m-%d') <= date_format(curdate(),'%Y-%m-%d')
                   and date_format(r.rmtm_fecha_transaccion, '%Y-%m-%d') between peri.paca_fecha_inicio and peri.paca_fecha_fin))
-        ORDER BY 4 desc, 5 asc";
+        ORDER BY 4,6 desc";
 
         $comando = $con->createCommand($sql);
         //$comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
