@@ -186,6 +186,7 @@ function autorizarCertificado() {
     arrParams.cgen_id = $('#txth_cgenid').val();
     arrParams.resultado = $('#cmb_estado_autoriza').val();
     arrParams.observacion = $('#cmb_observacion').val();    
+    arrParams.detobserva = $('#txt_observacion').val();    
 
     if (!validateForm()) {
         requestHttpAjax(link, arrParams, function(response) {

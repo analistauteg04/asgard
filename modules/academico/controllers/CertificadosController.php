@@ -442,7 +442,9 @@ class CertificadosController extends \app\components\CController {
             //Utilities::putMessageLogFile('csdfsd' . $pagodia['eppa_estado_pago']);
             $id = $data['cgen_id'];
             $resultado = $data['resultado'];
-            $observacion = $data['observacion'];          
+            $observacion = $data['observacion'];    
+            $detobserva = ucfirst(mb_strtolower($data['detobserva'], 'UTF-8'));
+            
             if ($resultado != "0") {  
                 Utilities::putMessageLogFile('ingresa');
                 if (($resultado == "4") && ($observacion=="0")) {                    
@@ -457,7 +459,7 @@ class CertificadosController extends \app\components\CController {
                 $transaction = $con->beginTransaction();
                 try {
                     $respcertificado = $mod_certificado->consultarCertificadosGeneradas($id);
-                    $resul = $mod_certificado->grabarAutorizacion($id, $resultado, $observacion);               
+                    $resul = $mod_certificado->grabarAutorizacion($id, $resultado, $observacion, $detobserva);               
                     //Utilities::putMessageLogFile($resul);
                     if ($resul) {
                         $transaction->commit();
