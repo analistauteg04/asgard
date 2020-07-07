@@ -10,6 +10,18 @@ $(document).ready(function () {
     $('#btn_grabar_rechazo').click(function () {
         rechazarPago();
     });
+    $('#btn_buscarpago').click(function () {
+        actualizarGridRevisionPago();
+    });
+    $('#cmb_estado').change(function () {
+        if ($('#cmb_estado').val() == 3)
+        {
+            $('#Divobservacion').show();
+        } else
+        {
+            $('#Divobservacion').hide();
+        }
+    });
 });
 function guardarPagofactura() {
     var arrParams = new Object();
@@ -28,7 +40,7 @@ function guardarPagofactura() {
             selected += $(this).val() + '*';
         }
     });
-    arrParams.pagado = selected.slice(0, -1);    
+    arrParams.pagado = selected.slice(0, -1);
     if (arrParams.pagado != '') {
 
         if (arrParams.formapago == '0') {
@@ -66,3 +78,42 @@ function rechazarPago() {
     }
 }
 
+function actualizarGridRevisionPago() {
+    var search = $('#txt_buscarDataEstudiante').val();
+    var f_ini = $('#txt_fecha_ini').val();
+    var f_fin = $('#txt_fecha_fin').val();
+    var unidad = $('#cmb_unidad_revpago').val();
+    var modalidad = $('#cmb_modalidad_revpago').val();
+    var estadopago = $('#cmb_estado_revpago').val();  
+    var estadofinanciero = $('#cmb_estado_financiero').val();
+    //Buscar almenos una clase con el nombre para ejecutar
+    if (!$(".blockUI").length) {
+        showLoadingPopup();
+        $('#TbG_Revisionpago').PbGridView('applyFilterData', {'search': search, 'f_ini': f_ini, 'f_fin': f_fin, 'unidad': unidad, 'modalidad': modalidad, 'estadopago': estadopago, 'estadofinanciero': estadofinanciero});
+        setTimeout(hideLoadingPopup, 2000);
+    }
+}
+
+function exportExcelrevpago() {
+    var search = $('#txt_buscarDataEstudiante').val();
+    var f_ini = $('#txt_fecha_ini').val();
+    var f_fin = $('#txt_fecha_fin').val();
+    var unidad = $('#cmb_unidad_revpago').val();
+    var modalidad = $('#cmb_modalidad_revpago').val();
+    var estadopago = $('#cmb_estado_revpago').val();
+    var estadofinanciero = $('#cmb_estado_financiero').val();
+
+    window.location.href = $('#txth_base').val() + "/financiero/pagosfacturas/expexcelfacpendiente?search=" + search + "&f_ini=" + f_ini + "&f_fin=" + f_fin + '&unidad=' + unidad + "&modalidad=" + modalidad +  "&estadopago=" + estadopago + "&estadofinanciero=" + estadofinanciero;
+}
+
+function exportPdfrevpago() {
+    var search = $('#txt_buscarDataEstudiante').val();
+    var f_ini = $('#txt_fecha_ini').val();
+    var f_fin = $('#txt_fecha_fin').val();
+    var unidad = $('#cmb_unidad_revpago').val();
+    var modalidad = $('#cmb_modalidad_revpago').val();
+    var estadopago = $('#cmb_estado_revpago').val();
+    var estadofinanciero = $('#cmb_estado_financiero').val();
+    
+    window.location.href = $('#txth_base').val() + "/financiero/pagosfacturas/exppdffacpendiente?pdf=1&search=" + search + "&f_ini=" + f_ini + "&f_fin=" + f_fin + '&unidad=' + unidad + "&modalidad=" + modalidad + "&estadopago=" + estadopago + "&estadofinanciero=" + estadofinanciero;
+}

@@ -1,5 +1,5 @@
 -- drop procedure db_academico.SP_GENERA_MARCACION;
--- CALL db_academico.SP_GENERA_MARCACION (8)
+-- CALL db_academico.SP_GENERA_MARCACION (10)
 DELIMITER $$
 CREATE PROCEDURE db_academico.SP_GENERA_MARCACION 
 	(IN pi_periodo BIGINT)
@@ -37,7 +37,8 @@ BEGIN
         END IF;
         
         -- Determina la fecha inicial
-        if (v_mod_id=2 or v_mod_id=3) then
+        -- if (v_mod_id=2 or v_mod_id=3) then
+        if (v_fecha_clase is null) then
 			if v_dia_id=1 then
 				set v_fecha = v_fec_ini;
 			elseif v_dia_id=2 then

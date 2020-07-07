@@ -22,6 +22,7 @@ class AppAsset extends AssetBundle {
         'css/PBstyles.css',
         'css/PBvalida.css',
         'plugins/select2/css/select2.min.css',
+        'plugins/bootstrap-toggle/css/bootstrap-toggle.min.css',
     ];
     public $js = [
         'js/PBscripts.js',
@@ -29,6 +30,7 @@ class AppAsset extends AssetBundle {
         'js/cedulaRucPass.js',
         'js/base64.js',
         'plugins/select2/js/select2.full.min.js',
+        'plugins/bootstrap-toggle/js/bootstrap-toggle.min.js',
     ];
     public $jsOptions = ['position' => \yii\web\View::POS_END];
     public $depends = [
@@ -37,7 +39,6 @@ class AppAsset extends AssetBundle {
         'yii\jui\JuiAsset',
         'yii\bootstrap\BootstrapAsset',
         'yii\bootstrap\BootstrapPluginAsset',
-        
     ];
 
 }

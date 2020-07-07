@@ -1,5 +1,5 @@
 
-INSERT INTO db_academico.`estudiante_carrera` (`ecpr_id`, `est_id`, `meun_id`, `ecpr_usuario_ingreso`, `ecpr_estado`, `ecpr_estado_logico`) VALUES
+INSERT INTO db_academico.`estudiante_carrera_programa` (`ecpr_id`, `est_id`, `meun_id`, `ecpr_usuario_ingreso`, `ecpr_estado`, `ecpr_estado_logico`) VALUES
 (1314, 1314, 27, 1, 1, 1),
 (1315, 1315, 27, 1, 1, 1),
 (1316, 1316, 27, 1, 1, 1),

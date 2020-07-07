@@ -681,9 +681,10 @@ create table if not exists `detalle_pagos_factura` (
   `dpfa_fecha_factura` timestamp null default null,  
   `dpfa_saldo_factura` double not null,
   `dpfa_num_cuota` varchar(10) not null,
-  `dpfa_valor_cuota` double not null,
+  `dpfa_valor_cuota` double null,
   `dpfa_fecha_vence_cuota` timestamp null default null,  
   `dpfa_estado_pago` varchar(1) not null,  /* '1' Pendiente, '2' Aprobada, '3' Rechazada*/
+  `dpfa_estado_financiero` varchar(1) null,  /* 'N' Pendiente, 'C' Cancelado */
   `dpfa_observacion_rechazo` varchar(500) null, 
   `dpfa_fecha_aprueba_rechaza` timestamp null default null,  
   `dpfa_usu_aprueba_rechaza` bigint(20) null,
@@ -693,4 +694,14 @@ create table if not exists `detalle_pagos_factura` (
   `dpfa_fecha_creacion` timestamp not null default current_timestamp,
   `dpfa_fecha_modificacion` timestamp null default null,
   `dpfa_estado_logico` varchar(1) not null
+);
+
+/* tabla temporal */
+create table db_facturacion.tmp_facturas_aprobadas
+(dpfa_id		 bigint(20) not null,
+ dpfa_tipo_factura  	 varchar(05) not null, 
+ dpfa_factura		 varchar(50) not null, 
+ dpfa_num_cuota     	 varchar(10) not null,
+ identificacion     	 varchar(13) not null,
+ dpfa_estado_financiero  varchar(1) not null
 );

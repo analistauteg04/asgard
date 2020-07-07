@@ -130,7 +130,7 @@ academico::registerTranslations();
         </div>
     </div>
     <div class='col-md-12 col-sm-12 col-xs-12 col-lg-12'>
-        <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6" id="Divobservacion" style="display: block;">
+        <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6" ">
             <div class="form-group">
                 <label for="cmb_estado" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Yii::t("formulario", "Result") ?></label>
                 <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">

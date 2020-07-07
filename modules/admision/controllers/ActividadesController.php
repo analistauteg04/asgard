@@ -147,6 +147,7 @@ class ActividadesController extends \app\components\CController {
     public function actionNewactividad() {
         $opor_id = base64_decode($_GET["opid"]);
         $pges_id = base64_decode($_GET["pgid"]);
+        $emp_id = @Yii::$app->session->get("PB_idempresa");
         $_SESSION['JSLANG']['Please enter a valid dni.'] = admision::t("crm",'Please enter a valid dni.');
         $_SESSION['JSLANG']['Please enter a valid Email.'] = admision::t("crm",'Please enter a valid Email.');
         $persges_mod = new PersonaGestion();
@@ -188,6 +189,8 @@ class ActividadesController extends \app\components\CController {
                     'arr_empresa' => ArrayHelper::map($empresa, "id", "value"),
                     'arr_observacion' => ArrayHelper::map($observacion, "id", "name"),
                     'arr_seguimiento' => $arrSeg,
+                    'emp_id' => $emp_id,
+                    'arr_empresa' => ArrayHelper::map($empresa, "id", "value"),
         ]);
     }
 
