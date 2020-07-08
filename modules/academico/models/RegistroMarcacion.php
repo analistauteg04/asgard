@@ -315,6 +315,7 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
     /**
      * Function consultarRegistroMarcacion
      * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>    
+     * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>    
      * @property  
      * @return  
      */
