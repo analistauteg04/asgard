@@ -564,7 +564,7 @@ class CertificadosGeneradas extends \yii\db\ActiveRecord {
      * @param   
      * @return  
      */
-    public function grabarAutorizacion($cgen_id, $resultado, $observacion) {
+    public function grabarAutorizacion($cgen_id, $resultado, $observacion, $detobserva) {
         $con = \Yii::$app->db_academico;
         $estado = 1;
         $fecha_autorizacion = date(Yii::$app->params["dateTimeByDefault"]);
@@ -575,7 +575,8 @@ class CertificadosGeneradas extends \yii\db\ActiveRecord {
                     cgen_fecha_autorizacion = :cgen_fecha_autoriza,                   
                     cgen_estado_certificado = :cgen_resultado,
                     cgen_usuario_autorizacion = :cgen_usuario_autoriza,
-                    cgen_fecha_modificacion = :cgen_fecha_autoriza
+                    cgen_fecha_modificacion = :cgen_fecha_autoriza,
+                    cgen_observacion_detalle_aut = :cgen_detobservacion
                 WHERE cgen_id = :cgen_id AND 
                       cgen_estado =:estado AND
                       cgen_estado_logico = :estado");
@@ -586,6 +587,7 @@ class CertificadosGeneradas extends \yii\db\ActiveRecord {
         $comando->bindParam(":cgen_resultado", $resultado, \PDO::PARAM_INT);
         $comando->bindParam(":cgen_fecha_autoriza", $fecha_autorizacion, \PDO::PARAM_STR);        
         $comando->bindParam(":cgen_usuario_autoriza", $usuario_autoriza, \PDO::PARAM_INT);        
+        $comando->bindParam(":cgen_detobservacion", $detobserva, \PDO::PARAM_STR);
         $response = $comando->execute();
         return $response;
     }
