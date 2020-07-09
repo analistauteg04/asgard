@@ -124,7 +124,7 @@ class PagosfacturasController extends \app\components\CController {
         ]);
     }
 
-    public function actionRechazar() {
+    public function actionRevisar() {
         $dpfa_id = base64_decode($_GET["dpfa_id"]);
         $mod_pagos = new PagosFacturaEstudiante();
         $mod_unidad = new UnidadAcademica();
@@ -133,7 +133,7 @@ class PagosfacturasController extends \app\components\CController {
         $model = $mod_pagos->consultarPago($dpfa_id);
         $arr_unidadac = $mod_unidad->consultarUnidadAcademicas();
         $arr_modalidad = $mod_modalidad->consultarModalidad($arr_unidadac[0]["id"], 1);
-        return $this->render('rechazar', [
+        return $this->render('revisar', [
                     'model' => $model,
                     'arr_unidad' => ArrayHelper::map($arr_unidadac, "id", "name"),
                     'arr_modalidad' => ArrayHelper::map($arr_modalidad, "id", "name"),
@@ -482,4 +482,21 @@ class PagosfacturasController extends \app\components\CController {
         return;
     }
 
+    public function actionConsultarevision() {
+        $dpfa_id = base64_decode($_GET["dpfa_id"]);
+        $mod_pagos = new PagosFacturaEstudiante();
+        $mod_unidad = new UnidadAcademica();
+        $mod_modalidad = new Modalidad();
+
+        $model = $mod_pagos->consultarPago($dpfa_id);
+        $arr_unidadac = $mod_unidad->consultarUnidadAcademicas();
+        $arr_modalidad = $mod_modalidad->consultarModalidad($arr_unidadac[0]["id"], 1);
+        return $this->render('viewrevisionpago', [
+                    'model' => $model,
+                    'arr_unidad' => ArrayHelper::map($arr_unidadac, "id", "name"),
+                    'arr_modalidad' => ArrayHelper::map($arr_modalidad, "id", "name"),
+                    'arrEstados' => $this->estadoRechazo(),
+                    'arrObservacion' => array("0" => "Seleccione", "Archivo Ilegible" => "Archivo Ilegible", "Archivo no corresponde al pago" => "Archivo no corresponde al pago", "Archivo con Error" => "Archivo con Error", "Valor pagado no cubre factura" => "Valor pagado no cubre factura"),
+        ]);
+    }
 }

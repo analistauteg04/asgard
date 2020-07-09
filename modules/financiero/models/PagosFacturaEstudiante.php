@@ -299,7 +299,9 @@ class PagosFacturaEstudiante extends \yii\db\ActiveRecord {
                             when 3 then 'Rechazado'   
                         end as estado_pago,
                         dpfa_id,
-                        pfes_archivo_pago as imagen
+                        pfes_archivo_pago as imagen,
+                        d.dpfa_estado_pago as estado,
+                        d.dpfa_observacion_rechazo as observacion
                 from " . $con2->dbname . ".pagos_factura_estudiante pfe inner join " . $con2->dbname . ".detalle_pagos_factura d on d.pfes_id = pfe.pfes_id
                     inner join " . $con->dbname . ".estudiante e on e.est_id = pfe.est_id
                     inner join " . $con1->dbname . ".persona p on p.per_id = e.per_id

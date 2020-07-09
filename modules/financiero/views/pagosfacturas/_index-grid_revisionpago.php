@@ -85,11 +85,18 @@ PbGridView::widget([
         [
             'class' => 'yii\grid\ActionColumn',
             'header' => Yii::t("formulario", "Actions"),
-            'template' => '{ver}',
+            'template' => '{revisar}{ver}',
             'buttons' => [
-                'ver' => function ($url, $model) {
+                'revisar' => function ($url, $model) {
                     if (($model['estado_pago'] == 'Pendiente') || ($model['estado_pago'] == 'Rechazado') && ($model['estado_financiero'] == 'Pendiente')) {
-                        return Html::a('<span class="glyphicon glyphicon-check"></span>', Url::to(['/financiero/pagosfacturas/rechazar', 'dpfa_id' => base64_encode($model['dpfa_id'])]), ["data-toggle" => "tooltip", "title" => "Revisar Pago", "data-pjax" => "0"]);
+                        return Html::a('<span class="glyphicon glyphicon-check"></span>', Url::to(['/financiero/pagosfacturas/revisar', 'dpfa_id' => base64_encode($model['dpfa_id'])]), ["data-toggle" => "tooltip", "title" => "Revisar Pago", "data-pjax" => "0"]);
+                    } else {
+                        return '<span class="glyphicon glyphicon-check"></span>';
+                    }
+                },
+                'ver' => function ($url, $model) {
+                    if ($model['estado_pago'] != 'Pendiente')  {
+                        return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', Url::to(['/financiero/pagosfacturas/consultarevision', 'dpfa_id' => base64_encode($model['dpfa_id'])]), ["data-toggle" => "tooltip", "title" => "Ver revisión de pago", "data-pjax" => "0"]);
                     } else {
                         return '<span class="glyphicon glyphicon-check"></span>';
                     }
