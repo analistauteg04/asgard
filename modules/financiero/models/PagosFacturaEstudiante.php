@@ -300,6 +300,7 @@ class PagosFacturaEstudiante extends \yii\db\ActiveRecord {
                         end as estado_pago,
                         dpfa_id,
                         pfes_archivo_pago as imagen,
+<<<<<<< HEAD
                         pfe.pfes_referencia as referencia,
                         pfe.fpag_id as pago_id,
                         DATE_FORMAT(pfe.pfes_fecha_pago,'%Y-%m-%d') as fecha_pago,
@@ -307,6 +308,10 @@ class PagosFacturaEstudiante extends \yii\db\ActiveRecord {
                         d.dpfa_descripcion_factura as descripcion_factura,
                         d.dpfa_observacion_rechazo,
                         pfe.pfes_id as cabecera_id
+=======
+                        d.dpfa_estado_pago as estado,
+                        d.dpfa_observacion_rechazo as observacion
+>>>>>>> d9fac26849b67433963fabf7f33433acf7a6e805
                 from " . $con2->dbname . ".pagos_factura_estudiante pfe inner join " . $con2->dbname . ".detalle_pagos_factura d on d.pfes_id = pfe.pfes_id
                     inner join " . $con->dbname . ".estudiante e on e.est_id = pfe.est_id
                     inner join " . $con1->dbname . ".persona p on p.per_id = e.per_id
