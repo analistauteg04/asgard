@@ -113,7 +113,6 @@ class PagosfacturasController extends \app\components\CController {
         } else {
             $carrera = $modestudio->consultarCursoModalidad($personaData['uaca_id'], $personaData['mod_id']); // tomar id de impresa
         }
-        //$personaData['per_cedula'] = '0202501573'; // DEBE BORRARSE LUEGO DE LAS PREUBAS
         $pagospendientesea = $mod_pagos->getPagospendientexest($personaData['per_cedula'], false);
         return $this->render('viewsaldo', [
                     'arr_persona' => $personaData,
@@ -124,7 +123,7 @@ class PagosfacturasController extends \app\components\CController {
         ]);
     }
 
-    public function actionRechazar() {
+    public function actionRevisar() {
         $dpfa_id = base64_decode($_GET["dpfa_id"]);
         $mod_pagos = new PagosFacturaEstudiante();
         $mod_unidad = new UnidadAcademica();
@@ -133,7 +132,7 @@ class PagosfacturasController extends \app\components\CController {
         $model = $mod_pagos->consultarPago($dpfa_id);
         $arr_unidadac = $mod_unidad->consultarUnidadAcademicas();
         $arr_modalidad = $mod_modalidad->consultarModalidad($arr_unidadac[0]["id"], 1);
-        return $this->render('rechazar', [
+        return $this->render('revisar', [
                     'model' => $model,
                     'arr_unidad' => ArrayHelper::map($arr_unidadac, "id", "name"),
                     'arr_modalidad' => ArrayHelper::map($arr_modalidad, "id", "name"),
@@ -160,7 +159,6 @@ class PagosfacturasController extends \app\components\CController {
             $carrera = $modestudio->consultarCursoModalidad($personaData['uaca_id'], $personaData['mod_id']); // tomar id de impresa
         }
         $arr_forma_pago = $mod_fpago->consultarFormaPagosaldo();
-        //$personaData['per_cedula'] = '0202501573'; // DEBE BORRARSE LUEGO DE LAS PREUBAS
         $pagospendientesea = $mod_pagos->getPagospendientexest($personaData['per_cedula'], false);
         return $this->render('subirpago', [
                     'arr_persona' => $personaData,
@@ -174,7 +172,7 @@ class PagosfacturasController extends \app\components\CController {
 
     public function actionCargarpago() {
         $per_id = @Yii::$app->session->get("PB_perid");
-        $ids = isset($_GET['ids']) ? base64_decode($_GET['ids']) : NULL;
+        //$ids = isset($_GET['ids']) ? base64_decode($_GET['ids']) : NULL;
         $especiesADO = new Especies();
         $est_id = $especiesADO->recuperarIdsEstudiente($per_id);
         $mod_unidad = new UnidadAcademica();
@@ -216,10 +214,6 @@ class PagosfacturasController extends \app\components\CController {
             }
             return;
         }
-        /* $personaData = $especiesADO->consultaDatosEstudiante($per_id);
-          $arr_unidadac = $mod_unidad->consultarUnidadAcademicas();
-          $arr_modalidad = $mod_modalidad->consultarModalidad($arr_unidadac[0]["id"], 1);
-          $model = $especiesADO->getSolicitudesAlumnos($est_id, null, false); */
         return $this->render('subirpago', [
         ]);
     }
@@ -246,8 +240,8 @@ class PagosfacturasController extends \app\components\CController {
                     try {
                         $datos = $mod_pagos->consultarPago($id);
                         //Utilities::putMessageLogFile('$cuota:' . $datos['dpfa_num_cuota']);
-                        if ($observacion == 0 && $resultado == "2"){
-                            $observacion = null;    
+                        if ($observacion == 0 && $resultado == "2") {
+                            $observacion = null;
                         }
                         $respago = $mod_pagos->grabarRechazo($id, $resultado, $observacion);
                         if ($respago) {
@@ -290,7 +284,7 @@ class PagosfacturasController extends \app\components\CController {
                     } catch (Exception $ex) {
                         $transaction->rollback();
                         $message = array(
-                            "wtmessage" => Yii::t("notificaciones", "Error al grabar 1."),
+                            "wtmessage" => Yii::t("notificaciones", "Error al grabar."),
                             "title" => Yii::t('jslang', 'Success'),
                         );
                         echo Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
@@ -347,21 +341,20 @@ class PagosfacturasController extends \app\components\CController {
             $personaData = $mod_estudiante->consultaDatosEstudiante($per_idsession); //$personaData['per_cedula']
             $con = \Yii::$app->db_facturacion;
             $transaction = $con->beginTransaction();
-            try {                
+            try {
                 $usuario = @Yii::$app->user->identity->usu_id;   //Se obtiene el id del usuario.
                 //Utilities::putMessageLogFile('usuario:'. $usuario);
-                $resp_pagofactura = $mod_pagos->insertarPagospendientes($est_id, $pfes_referencia, $fpag_id, $pfes_valor_pago, $pfes_fecha_pago, $pfes_observacion, $imagen, $usuario);                
-                if ($resp_pagofactura) {                    
+                $resp_pagofactura = $mod_pagos->insertarPagospendientes($est_id, $pfes_referencia, $fpag_id, $pfes_valor_pago, $pfes_fecha_pago, $pfes_observacion, $imagen, $usuario);
+                if ($resp_pagofactura) {
                     // se graba el detalle
                     $pagados = explode("*", $pagado); //PAGADOS
                     $x = 0;
-                    foreach ($pagados as $datos) {                        
+                    foreach ($pagados as $datos) {
                         //  consultar la informacion seleccionada de cuota factura
-                        //$personaData['per_cedula'] = '0202501573'; // DEBE BORRARSE CUANDO SE TENGA EL DATO
-                        $parametro = explode(";", $pagados[$x]);                        
+                        $parametro = explode(";", $pagados[$x]);
                         $resp_consfactura = $mod_pagos->consultarPagospendientesp($personaData['per_cedula'], $parametro[0], $parametro[1]);
                         // insertar el detalle                                                
-                        $resp_detpagofactura = $mod_pagos->insertarDetpagospendientes($resp_pagofactura, $resp_consfactura['tipofactura'], $resp_consfactura['factura'], $resp_consfactura['descripcion'], $parametro[2], $resp_consfactura['fecha'], $resp_consfactura['saldo'], $resp_consfactura['numcuota'], $resp_consfactura['valorcuota'], $resp_consfactura['fechavence'], $usuario);                        
+                        $resp_detpagofactura = $mod_pagos->insertarDetpagospendientes($resp_pagofactura, $resp_consfactura['tipofactura'], $resp_consfactura['factura'], $resp_consfactura['descripcion'], $parametro[2], $resp_consfactura['fecha'], $resp_consfactura['saldo'], $resp_consfactura['numcuota'], $resp_consfactura['valorcuota'], $resp_consfactura['fechavence'], $usuario);
                         $x++;
                     }
                     if ($resp_detpagofactura) {
@@ -480,6 +473,123 @@ class PagosfacturasController extends \app\components\CController {
         );
         $report->mpdf->Output('Reporte_' . date("Ymdhis") . ".pdf", ExportFile::OUTPUT_TO_DOWNLOAD);
         return;
+    }
+
+    public function actionUpdatepago() {
+        $per_idsession = @Yii::$app->session->get("PB_perid");
+        $especiesADO = new Especies();
+        $mod_unidad = new UnidadAcademica();
+        $mod_modalidad = new Modalidad();
+        $modestudio = new ModuloEstudio();
+        $modcanal = new Oportunidad();
+        $mod_fpago = new FormaPago();
+        $mod_pagos = new PagosFacturaEstudiante();
+        $personaData = $especiesADO->consultaDatosEstudiante($per_idsession);
+        $arr_unidadac = $mod_unidad->consultarUnidadAcademicas();
+        $arr_modalidad = $mod_modalidad->consultarModalidad($personaData['uaca_id'], 1);
+        if (($personaData['uaca_id'] == 1) or ( $personaData['uaca_id'] == 2)) {
+            $carrera = $modcanal->consultarCarreraModalidad($personaData['uaca_id'], $personaData['mod_id']);
+        } else {
+            $carrera = $modestudio->consultarCursoModalidad($personaData['uaca_id'], $personaData['mod_id']); // tomar id de impresa
+        }
+        $arr_forma_pago = $mod_fpago->consultarFormaPagosaldo();
+        // se debe capturar desde url borrar al hacer las pruebas
+        /*         * ***************************************************** */
+        $dpfa_id = 4;
+        /*         * ***************************************************** */
+        $pagodetalle = $mod_pagos->consultarPago($dpfa_id);
+        return $this->render('updatepago', [
+                    'arr_persona' => $personaData,
+                    'arr_unidad' => ArrayHelper::map($arr_unidadac, "id", "name"),
+                    'arr_modalidad' => ArrayHelper::map($arr_modalidad, "id", "name"),
+                    'arr_carrera' => ArrayHelper::map($carrera, "id", "name"),
+                    "arr_forma_pago" => ArrayHelper::map($arr_forma_pago, "id", "value"),
+                    'pagodetalle' => $pagodetalle,
+        ]);
+    }
+
+    public function actionModificarpagopendiente() {
+        //online que sube doc capturar asi el id de la persona 
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+            $mod_pagos = new PagosFacturaEstudiante();
+            if ($data["upload_file"]) {
+                if (empty($_FILES)) {
+                    echo json_encode(['error' => Yii::t("notificaciones", "Error to process File {file}. Try again.", ['{file}' => basename($files['name'])])]);
+                    return;
+                }
+                //Recibe Parametros
+                $files = $_FILES[key($_FILES)];
+                $arrIm = explode(".", basename($files['name']));
+                $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+                $dirFileEnd = Yii::$app->params["documentFolder"] . "pagosfinanciero/" . $data["per_id"] . "/" . $data["name_file"] . "." . $typeFile;
+                $status = Utilities::moveUploadFile($files['tmp_name'], $dirFileEnd);
+                if ($status) {
+                    return true;
+                } else {
+                    echo json_encode(['error' => Yii::t("notificaciones", "Error to process File {file}. Try again.", ['{file}' => basename($files['name'])])]);
+                    return;
+                }
+            }
+            $arrIm = explode(".", basename($data["documento"]));
+            $typeFile = strtolower($arrIm[count($arrIm) - 1]);
+            $imagen = $arrIm[0] . "." . $typeFile;
+            $pfes_referencia = $data["referencia"];
+            $fpag_id = $data["formapago"];
+            $pfes_valor_pago = $data["valor"];
+            $pfes_fecha_pago = $data["fechapago"];
+            $pfes_observacion = $data["observacion"];
+            $est_id = $data["estid"];
+            $pfes_id = $data["pfes_id"];
+            $con = \Yii::$app->db_facturacion;
+            $transaction = $con->beginTransaction();
+            try {
+                //$usuario = @Yii::$app->user->identity->usu_id;   //Se obtiene el id del usuario.
+                //Utilities::putMessageLogFile('usuario:'. $usuario);
+                $resp_pagofactura = $mod_pagos->modificarPagosrechazado($pfes_id, $est_id, $pfes_referencia, $fpag_id, $pfes_valor_pago, $pfes_fecha_pago, $pfes_observacion, $imagen);
+                if ($resp_pagofactura) {
+                    $transaction->commit();
+                    $message = array(
+                        "wtmessage" => Yii::t("notificaciones", "La infomación ha sido modificada. "),
+                        "title" => Yii::t('jslang', 'Success'),
+                    );
+                    echo Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                } else {
+                    $transaction->rollback();
+                    $message = array(
+                        "wtmessage" => Yii::t("notificaciones", "Error al modificar pago factura1." . $mensaje),
+                        "title" => Yii::t('jslang', 'Error'),
+                    );
+                    echo Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), false, $message);
+                }
+            } catch (Exception $ex) {
+                $transaction->rollback();
+                $message = array(
+                    "wtmessage" => Yii::t("notificaciones", "Error al modificar pago factura2." . $mensaje),
+                    "title" => Yii::t('jslang', 'Error'),
+                );
+                echo Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), false, $message);
+            }
+            return;
+        }
+    }
+
+    public function actionConsultarevision() {
+        $dpfa_id = base64_decode($_GET["dpfa_id"]);
+        $mod_pagos = new PagosFacturaEstudiante();
+        $mod_unidad = new UnidadAcademica();
+        $mod_modalidad = new Modalidad();
+
+        $model = $mod_pagos->consultarPago($dpfa_id);
+        $arr_unidadac = $mod_unidad->consultarUnidadAcademicas();
+        $arr_modalidad = $mod_modalidad->consultarModalidad($arr_unidadac[0]["id"], 1);
+        return $this->render('viewrevisionpago', [
+                    'model' => $model,
+                    'arr_unidad' => ArrayHelper::map($arr_unidadac, "id", "name"),
+                    'arr_modalidad' => ArrayHelper::map($arr_modalidad, "id", "name"),
+                    'arrEstados' => $this->estadoRechazo(),
+                    'arrObservacion' => array("0" => "Seleccione", "Archivo Ilegible" => "Archivo Ilegible", "Archivo no corresponde al pago" => "Archivo no corresponde al pago", "Archivo con Error" => "Archivo con Error", "Valor pagado no cubre factura" => "Valor pagado no cubre factura"),
+        ]);
     }
 
 }

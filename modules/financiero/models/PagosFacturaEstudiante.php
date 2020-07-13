@@ -299,7 +299,16 @@ class PagosFacturaEstudiante extends \yii\db\ActiveRecord {
                             when 3 then 'Rechazado'   
                         end as estado_pago,
                         dpfa_id,
-                        pfes_archivo_pago as imagen
+                        pfes_archivo_pago as imagen,
+                        pfe.pfes_referencia as referencia,
+                        pfe.fpag_id as pago_id,
+                        DATE_FORMAT(pfe.pfes_fecha_pago,'%Y-%m-%d') as fecha_pago,
+                        pfe.pfes_observacion as observacion,
+                        d.dpfa_descripcion_factura as descripcion_factura,
+                        d.dpfa_observacion_rechazo,
+                        pfe.pfes_id as cabecera_id,
+                        d.dpfa_estado_pago as estado,
+                        d.dpfa_observacion_rechazo as dpfa_observacion_rechazo
                 from " . $con2->dbname . ".pagos_factura_estudiante pfe inner join " . $con2->dbname . ".detalle_pagos_factura d on d.pfes_id = pfe.pfes_id
                     inner join " . $con->dbname . ".estudiante e on e.est_id = pfe.est_id
                     inner join " . $con1->dbname . ".persona p on p.per_id = e.per_id
@@ -610,4 +619,59 @@ class PagosFacturaEstudiante extends \yii\db\ActiveRecord {
             return FALSE;
         }
     }
+
+    /**
+     * Function modificarPagosrechazado (Actualiza data cabecera)
+     * @author  Giovanni Vergara <analistadesarrollo01@uteg.edu.ec>
+     * @param   
+     * @return  
+     */
+    public function modificarPagosrechazado($pfes_id, $est_id, $pfes_referencia, $fpag_id, $pfes_valor_pago, $pfes_fecha_pago, $pfes_observacion, $pfes_archivo_pago) {
+        $con = \Yii::$app->db_facturacion;
+        $trans = $con->getTransaction(); // se obtiene la transacción actual
+        if ($trans !== null) {
+            $trans = null; // si existe la transacción entonces no se crea una
+        } else {
+            $trans = $con->beginTransaction(); // si no existe la transacción entonces se crea una
+        }
+        $estado = 1;
+        $fecha_modificacion = date(Yii::$app->params["dateTimeByDefault"]);
+        try {
+            $comando = $con->createCommand
+                    ("UPDATE " . $con->dbname . ".pagos_factura_estudiante
+                SET pfes_referencia = :pfes_referencia,
+                    fpag_id = :fpag_id,                   
+                    pfes_valor_pago = :pfes_valor_pago,
+                    pfes_fecha_pago = :pfes_fecha_pago,
+                    pfes_observacion = :pfes_observacion,
+                    pfes_archivo_pago = :pfes_archivo_pago,
+                    pfes_fecha_modificacion = :fecha_modificacion
+                WHERE pfes_id = :pfes_id AND 
+                      est_id = :est_id AND
+                      pfes_estado =:estado AND
+                      pfes_estado_logico = :estado");
+
+
+            $comando->bindParam(":pfes_id", $pfes_id, \PDO::PARAM_INT);
+            $comando->bindParam(":est_id", $est_id, \PDO::PARAM_INT);
+            $comando->bindParam(":pfes_referencia", $pfes_referencia, \PDO::PARAM_STR);
+            $comando->bindParam(":fpag_id", $fpag_id, \PDO::PARAM_INT);
+            $comando->bindParam(":pfes_valor_pago", $pfes_valor_pago, \PDO::PARAM_STR);
+            $comando->bindParam(":pfes_fecha_pago", $pfes_fecha_pago, \PDO::PARAM_STR);
+            $comando->bindParam(":pfes_observacion", ucfirst(mb_strtolower($pfes_observacion, 'UTF-8')), \PDO::PARAM_STR);
+            $comando->bindParam(":pfes_archivo_pago", $pfes_archivo_pago, \PDO::PARAM_STR);
+            $comando->bindParam(":fecha_modificacion", $fecha_modificacion, \PDO::PARAM_STR);
+            $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+
+            $response = $comando->execute();
+            if ($trans !== null)
+                $trans->commit();           
+            return TRUE;
+        } catch (Exception $ex) {
+            if ($trans !== null)
+                $trans->rollback();
+            return FALSE;
+        }
+    }
+
 }
