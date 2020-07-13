@@ -25,29 +25,26 @@ use yii\data\ArrayDataProvider;
  * @property string $dip_fecha_modificacion
  * @property string $dip_estado_logico
  */
-class Diploma extends \yii\db\ActiveRecord
-{
+class Diploma extends \yii\db\ActiveRecord {
+
     /**
      * {@inheritdoc}
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return 'diploma';
     }
 
     /**
      * @return \yii\db\Connection the database connection used by this AR class.
      */
-    public static function getDb()
-    {
+    public static function getDb() {
         return Yii::$app->get('db_academico');
     }
 
     /**
      * {@inheritdoc}
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['dip_nombres', 'dip_apellidos', 'dip_estado', 'dip_estado_logico'], 'required'],
             [['dip_fecha_inicio', 'dip_fecha_fin', 'dip_fecha_creacion', 'dip_fecha_modificacion'], 'safe'],
@@ -63,8 +60,7 @@ class Diploma extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'dip_id' => 'Dip ID',
             'dip_codigo' => 'Dip Codigo',
@@ -85,7 +81,7 @@ class Diploma extends \yii\db\ActiveRecord
         ];
     }
 
-    function getAllDiplomasGrid($search = NULL, $carrera = NULL, $programa = NULL, $modalidad = NULL, $onlyData = false){
+    function getAllDiplomasGrid($search = NULL, $carrera = NULL, $programa = NULL, $modalidad = NULL, $fechainicio = NULL, $fechafin = NULL, $onlyData = false) {
         $con_academico = \Yii::$app->db_academico;
         $search_cond = "%" . $search . "%";
         $carrera_cond = "%" . $carrera . "%";
@@ -111,7 +107,10 @@ class Diploma extends \yii\db\ActiveRecord
         if (isset($modalidad) && $modalidad != "") {
             $str_modalidad = "d.dip_modalidad like :modalidad AND ";
         }
-        
+        if ($fechainicio != "" && $fechafin != "") {
+            $str_search .= "d.dip_fecha_inicio >= :fec_ini AND ";
+            $str_search .= "d.dip_fecha_fin <= :fec_fin AND ";
+        }
 
         $sql = "SELECT 
                     d.dip_id AS Id, 
@@ -134,20 +133,28 @@ class Diploma extends \yii\db\ActiveRecord
                     d.dip_estado_logico = 1 AND 
                     d.dip_estado_logico = 1";
         $comando = $con_academico->createCommand($sql);
-        if(isset($search) && $search != ""){
-            $comando->bindParam(":search",$search_cond, \PDO::PARAM_STR);
+        if (isset($search) && $search != "") {
+            $comando->bindParam(":search", $search_cond, \PDO::PARAM_STR);
         }
-        if(isset($carrera) && $carrera != ""){
-            $comando->bindParam(":carrera",$carrera_cond, \PDO::PARAM_STR);
+        if (isset($carrera) && $carrera != "") {
+            $comando->bindParam(":carrera", $carrera_cond, \PDO::PARAM_STR);
         }
-        if(isset($programa) && $programa != ""){
-            $comando->bindParam(":programa",$programa_cond, \PDO::PARAM_STR);
+        if (isset($programa) && $programa != "") {
+            $comando->bindParam(":programa", $programa_cond, \PDO::PARAM_STR);
         }
-        if(isset($modalidad) && $modalidad != ""){
-            $comando->bindParam(":modalidad",$modalidad_cond, \PDO::PARAM_STR);
+        if (isset($modalidad) && $modalidad != "") {
+            $comando->bindParam(":modalidad", $modalidad_cond, \PDO::PARAM_STR);
+        }
+        $fecha_ini = $fechainicio . " 00:00:00";
+        $fecha_fin = $fechafin . " 23:59:59";
+
+        if ($fechainicio != "" && $fechafin != "") {
+            $comando->bindParam(":fec_ini", $fecha_ini, \PDO::PARAM_STR);
+            $comando->bindParam(":fec_fin", $fecha_fin, \PDO::PARAM_STR);
         }
         $res = $comando->queryAll();
-        if($onlyData)   return $res;
+        if ($onlyData)
+            return $res;
         $dataProvider = new ArrayDataProvider([
             'key' => 'Id',
             'allModels' => $res,
@@ -155,10 +162,11 @@ class Diploma extends \yii\db\ActiveRecord
                 'pageSize' => Yii::$app->params["pageSize"],
             ],
             'sort' => [
-                'attributes' => ['Nombres', 'Apellidos',"Cedula","Carrera","Modalidad","Programa"],
+                'attributes' => ['Nombres', 'Apellidos', "Cedula", "Carrera", "Modalidad", "Programa"],
             ],
         ]);
 
         return $dataProvider;
     }
+
 }

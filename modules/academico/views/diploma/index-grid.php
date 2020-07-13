@@ -59,7 +59,7 @@ academico::registerTranslations();
             ],
             [
                 'attribute' => 'FechaInicio',
-                'header' => academico::t("diploma", 'Initial Date'),
+                'header' => Yii::t("formulario", "Start date"),
                 'value' => 'FechaInicio',
             ],
             [
