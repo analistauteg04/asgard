@@ -22,7 +22,7 @@ class DiplomaController extends \app\components\CController {
         $data = Yii::$app->request->get();
         if (isset($data["PBgetFilter"]) && $data["PBgetFilter"] == TRUE) {
             return $this->renderPartial('index-grid', [
-                "model" => $model->getAllDiplomasGrid($data["search"], $data["carrera"], $data["programa"], $data["modalidad"]),
+                "model" => $model->getAllDiplomasGrid($data["search"], $data["carrera"], $data["programa"], $data["modalidad"], $data["fechainicio"], $data["fechafin"]),
             ]);
         }
         /*$arr_carreras = ["0" => academico::t("diploma", "-- Select Career --")];

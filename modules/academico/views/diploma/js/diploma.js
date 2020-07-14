@@ -11,6 +11,8 @@ function searchModules(idbox, idgrid) {
     arrParams.carrera = $('#cmb_carrera option:selected').text();
     arrParams.modalidad = $('#cmb_modalidad option:selected').text();
     arrParams.programa = $('#cmb_programa option:selected').text();
+    arrParams.fechainicio = $('#txt_fecha_ini').val();
+    arrParams.fechafin = $('#txt_fecha_fin').val();
     if ($('#cmb_carrera').val() == 0) arrParams.carrera = "";
     if ($('#cmb_modalidad').val() == 0) arrParams.modalidad = "";
     if ($('#cmb_programa').val() == 0) arrParams.programa = "";

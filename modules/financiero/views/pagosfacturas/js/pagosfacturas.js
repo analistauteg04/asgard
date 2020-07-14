@@ -22,6 +22,9 @@ $(document).ready(function () {
             $('#Divobservacion').hide();
         }
     });
+    $('#btn_modificarpago').click(function () {
+        modificarPagofactura();
+    });
 });
 function guardarPagofactura() {
     var arrParams = new Object();
@@ -84,7 +87,7 @@ function actualizarGridRevisionPago() {
     var f_fin = $('#txt_fecha_fin').val();
     var unidad = $('#cmb_unidad_revpago').val();
     var modalidad = $('#cmb_modalidad_revpago').val();
-    var estadopago = $('#cmb_estado_revpago').val();  
+    var estadopago = $('#cmb_estado_revpago').val();
     var estadofinanciero = $('#cmb_estado_financiero').val();
     //Buscar almenos una clase con el nombre para ejecutar
     if (!$(".blockUI").length) {
@@ -103,7 +106,7 @@ function exportExcelrevpago() {
     var estadopago = $('#cmb_estado_revpago').val();
     var estadofinanciero = $('#cmb_estado_financiero').val();
 
-    window.location.href = $('#txth_base').val() + "/financiero/pagosfacturas/expexcelfacpendiente?search=" + search + "&f_ini=" + f_ini + "&f_fin=" + f_fin + '&unidad=' + unidad + "&modalidad=" + modalidad +  "&estadopago=" + estadopago + "&estadofinanciero=" + estadofinanciero;
+    window.location.href = $('#txth_base').val() + "/financiero/pagosfacturas/expexcelfacpendiente?search=" + search + "&f_ini=" + f_ini + "&f_fin=" + f_fin + '&unidad=' + unidad + "&modalidad=" + modalidad + "&estadopago=" + estadopago + "&estadofinanciero=" + estadofinanciero;
 }
 
 function exportPdfrevpago() {
@@ -114,6 +117,30 @@ function exportPdfrevpago() {
     var modalidad = $('#cmb_modalidad_revpago').val();
     var estadopago = $('#cmb_estado_revpago').val();
     var estadofinanciero = $('#cmb_estado_financiero').val();
-    
+
     window.location.href = $('#txth_base').val() + "/financiero/pagosfacturas/exppdffacpendiente?pdf=1&search=" + search + "&f_ini=" + f_ini + "&f_fin=" + f_fin + '&unidad=' + unidad + "&modalidad=" + modalidad + "&estadopago=" + estadopago + "&estadofinanciero=" + estadofinanciero;
+}
+function modificarPagofactura() {
+    var arrParams = new Object();
+    var link = $('#txth_base').val() + "/financiero/pagosfacturas/modificarpagopendiente";
+    arrParams.estid = $('#txth_idest').val();
+    arrParams.per_id = $('#txth_per').val();
+    arrParams.pfes_id = $('#txth_pfes_id').val();
+    arrParams.referencia = $('#txt_referencia').val();
+    arrParams.formapago = $('#cmb_formapago').val();
+    arrParams.valor = $('#txt_valor').val();
+    arrParams.fechapago = $('#txt_fechapago').val();
+    arrParams.observacion = $('#txt_observa').val();
+    arrParams.documento = $('#txth_doc_pago').val();
+
+    if (!validateForm()) {
+        requestHttpAjax(link, arrParams, function (response) {
+            showAlert(response.status, response.label, response.message);
+            setTimeout(function () {
+                parent.window.location.href = $('#txth_base').val() + "/financiero/pagosfacturas/viewsaldo";
+            }, 2000);
+        }, true);
+    }
+
+
 }
