@@ -135,12 +135,12 @@ function modificarPagofactura() {
     arrParams.fechapago = $('#txt_fechapago').val();
     arrParams.observacion = $('#txt_observa').val();
     arrParams.documento = $('#txth_doc_pago').val();
-
+    arrParams.pfesid = $('#txth_pfesid').val();
     if (!validateForm()) {
         requestHttpAjax(link, arrParams, function (response) {
             showAlert(response.status, response.label, response.message);
             setTimeout(function () {
-                parent.window.location.href = $('#txth_base').val() + "/financiero/pagosfacturas/viewsaldo";
+                parent.window.location.href = $('#txth_base').val() + "/financiero/pagosfacturas/detallepagosfactura?pfes_id="+arrParams.pfesid ;
             }, 2000);
         }, true);
     }

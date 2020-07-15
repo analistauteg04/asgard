@@ -62,7 +62,7 @@ PbGridView::widget([
         [
             'class' => 'yii\grid\ActionColumn',
             'header' => Yii::t("formulario", "Actions"),
-            'template' => '{ver}',
+            'template' => '{ver} {update}',
             'buttons' => [
                 'ver' => function ($url, $model) {                      
                     if ($model['estado_pago'] != 'Pendiente')  {
@@ -70,7 +70,14 @@ PbGridView::widget([
                     } else {
                         return '<span class="glyphicon glyphicon-check"></span>';
                     }
-                },                             
+                }, 
+                'update' => function ($url, $model) {                      
+                    if ($model['estado_pago'] == 'Rechazado')  {
+                        return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Url::to(['/financiero/pagosfacturas/updatepago', 'dpfa_id' => base64_encode($model['dpfa_id'])]), ["data-toggle" => "tooltip", "title" => "Modificar pago", "data-pjax" => "0"]);
+                    } else {
+                        return '<span class="glyphicon glyphicon-pencil"></span>';
+                    }
+                },
             ],
         ],
     ],

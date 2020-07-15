@@ -29,6 +29,7 @@ $leyendarc = '<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
 <?= Html::hiddenInput('txth_idest', $arr_persona['est_id'], ['id' => 'txth_idest']); ?>
 <?= Html::hiddenInput('txth_per', @Yii::$app->session->get("PB_perid"), ['id' => 'txth_per']); ?>
 <?= Html::hiddenInput('txth_pfes_id', $pagodetalle['cabecera_id'], ['id' => 'txth_pfes_id']); ?>
+<?= Html::hiddenInput('txth_pfesid', base64_encode($pagodetalle['cabecera_id']), ['id' => 'txth_pfesid']); ?>
 <form class="form-horizontal" enctype="multipart/form-data" id="formsolicitud">   
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <p class="text-danger"> <?= Yii::t("formulario", "Fields with * are required") ?> </p>
@@ -104,7 +105,7 @@ $leyendarc = '<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
                 <div class="form-group">
                     <label for="txt_referencia" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label"><?= Pagos::t("Pagos", "Reference") ?></label>
                     <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                        <input type="text" class="form-control keyupmce" value="<?php echo $pagodetalle['referencia'] ?>" id="txt_referencia" data-type="number" placeholder="<?= Pagos::t("Pagos", "Reference") ?>">
+                        <input type="text" class="form-control keyupmce" value="<?php echo $pagodetalle['referencia'] ?>" id="txt_referencia" data-type="number" disabled placeholder="<?= Pagos::t("Pagos", "Reference") ?>">
                     </div>
                 </div>  
             </div>
@@ -112,7 +113,7 @@ $leyendarc = '<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
                 <div class="form-group">
                     <label for="cmb_formapago" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label"><?= crm::t("crm", "Payment Method") ?><span class="text-danger"> * </span></label>
                     <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                        <?= Html::dropDownList("cmb_formapago", $pagodetalle['pago_id'], ['0' => Yii::t('formulario', 'Select')] + $arr_forma_pago, ["class" => "form-control PBvalidation", "id" => "cmb_formapago"]) ?>
+                        <?= Html::dropDownList("cmb_formapago", $pagodetalle['pago_id'], ['0' => Yii::t('formulario', 'Select')] + $arr_forma_pago, ["class" => "form-control PBvalidation", "id" => "cmb_formapago", "disabled" => "disabled"]) ?>
                     </div>
                 </div>
             </div>                             
@@ -122,7 +123,7 @@ $leyendarc = '<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
                 <div class="form-group">
                     <label for="txt_valor" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label"><?= Pagos::t("Pagos", "Value") ?><span class="text-danger"> * </span></label>
                     <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                        <input type="text" class="form-control PBvalidation keyupmce" value="<?php echo $pagodetalle['valor_pago'] ?>" id="txt_valor" data-type="dinero" placeholder="<?= Pagos::t("Pagos", "Value") ?>">
+                        <input type="text" class="form-control PBvalidation keyupmce" value="<?php echo $pagodetalle['valor_pago'] ?>" id="txt_valor" data-type="dinero" disabled  placeholder="<?= Pagos::t("Pagos", "Value") ?>">
                     </div>
                 </div>                                        
             </div>
@@ -133,6 +134,7 @@ $leyendarc = '<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
                         <?=
                         DatePicker::widget([
                             'name' => 'txt_fechapago',
+                            'disabled'=> true,
                             'value' => $pagodetalle['fecha_pago'],
                             'type' => DatePicker::TYPE_INPUT,
                             'options' => ["class" => "form-control PBvalidation keyupmce", "id" => "txt_fechapago", "placeholder" => Pagos::t("Pagos", "Payment Date")],
@@ -150,7 +152,7 @@ $leyendarc = '<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
                 <div class="form-group">
                     <label for="txt_observa" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Yii::t("formulario", "Observation") ?></label>
                     <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                        <textarea  class="form-control keyupmce" id="txt_observa" rows="3"><?php echo $pagodetalle['observacion'] ?></textarea>                        
+                        <textarea  class="form-control keyupmce" id="txt_observa" disabled rows="3"><?php echo $pagodetalle['observacion'] ?></textarea>                        
                     </div>
                 </div>   
             </div> 

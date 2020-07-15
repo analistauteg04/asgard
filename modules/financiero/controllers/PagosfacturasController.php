@@ -475,7 +475,8 @@ class PagosfacturasController extends \app\components\CController {
         return;
     }
 
-    public function actionUpdatepago() {
+    public function actionUpdatepago() {        
+        $dpfa_id = base64_decode($_GET["dpfa_id"]);
         $per_idsession = @Yii::$app->session->get("PB_perid");
         $especiesADO = new Especies();
         $mod_unidad = new UnidadAcademica();
@@ -493,10 +494,7 @@ class PagosfacturasController extends \app\components\CController {
             $carrera = $modestudio->consultarCursoModalidad($personaData['uaca_id'], $personaData['mod_id']); // tomar id de impresa
         }
         $arr_forma_pago = $mod_fpago->consultarFormaPagosaldo();
-        // se debe capturar desde url borrar al hacer las pruebas
-        /*         * ***************************************************** */
-        $dpfa_id = 4;
-        /*         * ***************************************************** */
+        // se debe capturar desde url borrar al hacer las pruebas       
         $pagodetalle = $mod_pagos->consultarPago($dpfa_id);
         return $this->render('updatepago', [
                     'arr_persona' => $personaData,
