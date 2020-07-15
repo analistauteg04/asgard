@@ -10,18 +10,18 @@ aspirante::registerTranslations();
 admision::registerTranslations();
 
 ?>
+
 <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
     <form class="form-horizontal">
         <?=
-        $this->render('_index-search_pagos', [   
-                    'data' => $data,
+        $this->render('_index-search_pagosfacturas', [                                   
             ]);
         ?>
     </form>
 </div>
 <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
     <?=
-    $this->render('_index-grid_pagos', [
+    $this->render('_index-grid_pagosfacturas', [
         'model' => $model,       
         ]);
     ?>

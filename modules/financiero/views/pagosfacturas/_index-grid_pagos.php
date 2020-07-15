@@ -19,23 +19,10 @@ financiero::registerTranslations();
 <?=
 
 PbGridView::widget([
-    'id' => 'TbG_Pagos',
-    'showExport' => true,
-    'fnExportEXCEL' => "exportExcelpago",
-    'fnExportPDF' => "exportPdfpago",
+    'id' => 'TbG_Pagos',  
     'dataProvider' => $model,
     'columns' =>
-    [        
-        [
-            'attribute' => 'Unidad Academica',
-            'header' => academico::t("Academico", "Academic unit"),
-            'value' => 'unidad',
-        ],
-        [
-            'attribute' => 'Modalidad',
-            'header' => academico::t("Academico", "Modality"),
-            'value' => 'modalidad',
-        ],
+    [                
         [
             'attribute' => 'Método pago',
             'header' => Yii::t("formulario", "Paid form"),

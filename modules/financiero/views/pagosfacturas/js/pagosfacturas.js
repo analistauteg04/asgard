@@ -13,6 +13,9 @@ $(document).ready(function () {
     $('#btn_buscarpago').click(function () {
         actualizarGridRevisionPago();
     });
+    $('#btn_buscarpagoest').click(function () {
+        actualizarGridPagoFactura();
+    });    
     $('#cmb_estado').change(function () {
         if ($('#cmb_estado').val() == 3)
         {
@@ -141,6 +144,15 @@ function modificarPagofactura() {
             }, 2000);
         }, true);
     }
+}
 
-
+function actualizarGridPagoFactura() {    
+    var f_ini = $('#txt_fecha_ini').val();
+    var f_fin = $('#txt_fecha_fin').val();    
+    //Buscar almenos una clase con el nombre para ejecutar
+    if (!$(".blockUI").length) {
+        showLoadingPopup();
+        $('#TbG_PagosFacturas').PbGridView('applyFilterData', {'f_ini': f_ini, 'f_fin': f_fin});
+        setTimeout(hideLoadingPopup, 2000);
+    }
 }
