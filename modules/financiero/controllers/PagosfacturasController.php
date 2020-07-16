@@ -475,7 +475,8 @@ class PagosfacturasController extends \app\components\CController {
         return;
     }
 
-    public function actionUpdatepago() {
+    public function actionUpdatepago() {        
+        $dpfa_id = base64_decode($_GET["dpfa_id"]);
         $per_idsession = @Yii::$app->session->get("PB_perid");
         $especiesADO = new Especies();
         $mod_unidad = new UnidadAcademica();
@@ -493,10 +494,7 @@ class PagosfacturasController extends \app\components\CController {
             $carrera = $modestudio->consultarCursoModalidad($personaData['uaca_id'], $personaData['mod_id']); // tomar id de impresa
         }
         $arr_forma_pago = $mod_fpago->consultarFormaPagosaldo();
-        // se debe capturar desde url borrar al hacer las pruebas
-        /*         * ***************************************************** */
-        $dpfa_id = 4;
-        /*         * ***************************************************** */
+        // se debe capturar desde url borrar al hacer las pruebas       
         $pagodetalle = $mod_pagos->consultarPago($dpfa_id);
         return $this->render('updatepago', [
                     'arr_persona' => $personaData,
@@ -591,5 +589,41 @@ class PagosfacturasController extends \app\components\CController {
                     'arrObservacion' => array("0" => "Seleccione", "Archivo Ilegible" => "Archivo Ilegible", "Archivo no corresponde al pago" => "Archivo no corresponde al pago", "Archivo con Error" => "Archivo con Error", "Valor pagado no cubre factura" => "Valor pagado no cubre factura"),
         ]);
     }
-
+    
+    public function actionPagos() {
+        $per_idsession = @Yii::$app->session->get("PB_perid");
+        $mod_pagos = new PagosFacturaEstudiante();        
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();            
+        }
+        $data = Yii::$app->request->get();
+        if ($data['PBgetFilter']) {            
+            $arrSearch["f_ini"] = $data['f_ini'];
+            $arrSearch["f_fin"] = $data['f_fin'];            
+            $resp_pago = $mod_pagos->getPagosxestudiante($arrSearch, false, $per_idsession);
+            return $this->renderPartial('_index-grid_pagosfacturas', [
+                        "model" => $resp_pago,
+            ]);
+        }
+        $model = $mod_pagos->getPagosxestudiante(null, false, $per_idsession);        
+        return $this->render('index_pagosfacturas', [
+                    'model' => $model,                   
+        ]);
+    }
+    
+    public function actionDetallepagosfactura() {
+        $factura = base64_decode($_GET["pfes_id"]);
+        $per_id = @Yii::$app->session->get("PB_perid");
+        $mod_pagos = new PagosFacturaEstudiante();        
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();            
+        }
+        $data = Yii::$app->request->get();        
+        $dataEstudiante = $mod_pagos->consultarDatosestudiante($per_id);
+        $model = $mod_pagos->getPagosDetxestudiante(null, false, $factura);        
+        return $this->render('index_pagos', [
+                    'model' => $model,     
+                    'data' => $dataEstudiante,
+        ]);
+    }
 }

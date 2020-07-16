@@ -48,7 +48,7 @@ class ProfesorController extends \app\components\CController {
         $search = NULL;
         //$grupPerm = array(1,15);
         $arr_grupos = $grupo_model->getAllGruposByUser($user_usermane);
-        if(!in_array(['id' => '1'], $arr_grupos) && !in_array(['id' => '15'], $arr_grupos))
+        if (!in_array(['id' => '1'], $arr_grupos) && !in_array(['id' => '15'], $arr_grupos))
             $search = $user_perId;
 
         if (Yii::$app->request->isAjax) {
@@ -1684,19 +1684,27 @@ class ProfesorController extends \app\components\CController {
                 if ($persona_model->update() !== false) {
                     $profesor_model = Profesor::findOne(["per_id" => $per_id]);
                     $profesor_model->pro_estado_logico = '0';
+                    $profesor_model->pro_usuario_modifica = $user_ingresa;
+                    $profesor_model->pro_fecha_modificacion = date(Yii::$app->params["dateTimeByDefault"]);
                     $profesor_model->update();
 
                     $usuario_model = Usuario::findOne(["per_id" => $per_id]);
                     $usu_id = $usuario_model->usu_id;
                     $usuario_model->usu_estado_logico = '0';
+                    $usuario_model->usu_usuario_modifica = $user_ingresa;
+                    $usuario_model->usu_fecha_modificacion = date(Yii::$app->params["dateTimeByDefault"]);
                     $usuario_model->update();
 
                     $empresa_persona_model = EmpresaPersona::findOne(["per_id" => $per_id]);
                     $empresa_persona_model->eper_estado_logico = '0';
+                    $empresa_persona_model->eper_usuario_modifica = $user_ingresa;
+                    $empresa_persona_model->eper_fecha_modificacion = date(Yii::$app->params["dateTimeByDefault"]);
                     $empresa_persona_model->update();
 
                     $usua_grol_eper_model = UsuaGrolEper::findOne(["usu_id" => $usu_id]);
                     $usua_grol_eper_model->ugep_estado_logico = '0';
+                    $usua_grol_eper_model->ugep_usuario_modifica = $user_ingresa;
+                    $usua_grol_eper_model->ugep_fecha_modificacion= date(Yii::$app->params["dateTimeByDefault"]);
                     $usua_grol_eper_model->update();
 
                     return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);

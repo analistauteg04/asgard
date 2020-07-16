@@ -13,6 +13,9 @@ $(document).ready(function () {
     $('#btn_buscarpago').click(function () {
         actualizarGridRevisionPago();
     });
+    $('#btn_buscarpagoest').click(function () {
+        actualizarGridPagoFactura();
+    });    
     $('#cmb_estado').change(function () {
         if ($('#cmb_estado').val() == 3)
         {
@@ -132,15 +135,24 @@ function modificarPagofactura() {
     arrParams.fechapago = $('#txt_fechapago').val();
     arrParams.observacion = $('#txt_observa').val();
     arrParams.documento = $('#txth_doc_pago').val();
-
+    arrParams.pfesid = $('#txth_pfesid').val();
     if (!validateForm()) {
         requestHttpAjax(link, arrParams, function (response) {
             showAlert(response.status, response.label, response.message);
             setTimeout(function () {
-                parent.window.location.href = $('#txth_base').val() + "/financiero/pagosfacturas/viewsaldo";
+                parent.window.location.href = $('#txth_base').val() + "/financiero/pagosfacturas/detallepagosfactura?pfes_id="+arrParams.pfesid ;
             }, 2000);
         }, true);
     }
+}
 
-
+function actualizarGridPagoFactura() {    
+    var f_ini = $('#txt_fecha_ini').val();
+    var f_fin = $('#txt_fecha_fin').val();    
+    //Buscar almenos una clase con el nombre para ejecutar
+    if (!$(".blockUI").length) {
+        showLoadingPopup();
+        $('#TbG_PagosFacturas').PbGridView('applyFilterData', {'f_ini': f_ini, 'f_fin': f_fin});
+        setTimeout(hideLoadingPopup, 2000);
+    }
 }

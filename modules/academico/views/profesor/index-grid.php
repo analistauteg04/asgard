@@ -68,7 +68,13 @@ academico::registerTranslations();
                         return Html::a('<span class="'.Utilities::getIcon('view').'"></span>', Url::to(['profesor/view', 'id' => $model['per_id']]), ["data-toggle" => "tooltip", "title" => Yii::t("accion","View")]);
                     },
                     'delete' => function ($url, $model) {
-                         return Html::a('<span class="'.Utilities::getIcon('remove').'"></span>', null, ['href' => 'javascript:confirmDelete(\'deleteItem\',[\'' . $model['per_id'] . '\']);', "data-toggle" => "tooltip", "title" => Yii::t("accion","Delete")]);
+                         if ($model['estado'] == 1) {
+                             return Html::a('<span class="'.Utilities::getIcon('remove').'"></span>', null, ['href' => 'javascript:confirmDelete(\'deleteItem\',[\'' . $model['per_id'] . '\']);', "data-toggle" => "tooltip", "title" => Yii::t("accion","Delete")]);
+                         } else {
+                             return '<span class="'.Utilities::getIcon('remove').'"></span>';
+                             // glyphicon glyphicon-check
+                         }
+                         
                     },
                     'download' => function ($url, $model) {
                         if($model['Cv'] != "")
