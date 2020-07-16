@@ -344,7 +344,7 @@ class Especies extends \yii\db\ActiveRecord {
                 $dataResp = $this->recuperarIdsResponsable($cabSol[0]['uaca_id'], $cabSol[0]['mod_id']);
                 $detSol[$i]['resp_id'] = $dataResp; //$dataResp[0]['resp_id']; //Responsable de firma
                 $detSol[$i]['egen_usuario_ingreso'] = $usu_id;
-                $detSol[$i]['egen_numero_solicitud'] = $this->nuevaSecuencia($con, $esp_id);
+                $detSol[$i]['egen_numero_solicitud'] = "U".$this->nuevaSecuencia($con, $esp_id);
                 $dataEsp = $this->consultarDataEspecie($esp_id);
                 $dias = $dataEsp[0]['esp_dia_vigencia'];
                 $detSol[$i]['egen_fecha_caducidad'] = date("Y-m-d", strtotime($fecha_actual . "+" . $dias . " days"));
