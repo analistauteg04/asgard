@@ -119,7 +119,7 @@ class ProfesorController extends \app\components\CController {
              * Inf. Cuenta
              */
             
-            $gru_id = 13;   //Docente
+            /*$gru_id = 13;   //Docente
             $rol_id = 17;   //Docente
 
             $arr_grupos = Grupo::findAll(["gru_estado" => 1, "gru_estado_logico" => 1]);
@@ -142,7 +142,7 @@ class ProfesorController extends \app\components\CController {
                 'usuario_model' => $usuario_model,
                 'empresa_persona_model' => $empresa_persona_model,
             ]);
-
+            */
             $profesor_model = Profesor::findOne(['per_id' => $persona_model->per_id]);
             $arr_inst_level = NivelInstruccion::findAll(["nins_estado" => 1, "nins_estado_logico" => 1]);
             $instruccion_model = new ProfesorInstruccion();
@@ -260,11 +260,7 @@ class ProfesorController extends \app\components\CController {
                 [
                     'label'=> Academico::t('profesor','References'),
                     'content'=>$ViewFormTab14,
-                ],
-                [
-                    'label'=>Academico::t('profesor','Account Info'),
-                    'content'=>$ViewFormTab3,
-                ]
+                ],                
                     
             ];        
             return $this->render('view', ['items'=>$items, 'persona_model' => $persona_model, 'pro_id' => $profesor_model->pro_id]);
@@ -279,13 +275,13 @@ class ProfesorController extends \app\components\CController {
             if ($data["upload_file"]) {
                 
                 if (empty($_FILES)) {
-                    return json_encode(['error' => Yii::t("notificaciones", "Error to process File ". "CV" .". Try again.")]);
+                    return json_encode(['error' => Yii::t("notificaciones", "Error to process File. Try again.")]);
                 }
                 //Recibe Parámetros
                 $files = $_FILES[key($_FILES)];
                 $arrIm = explode(".", basename($files['name']));
                 $typeFile = strtolower($arrIm[count($arrIm) - 1]);
-                if ($typeFile == 'pdf') {
+                if (($typeFile == 'png') or ($typeFile == 'jpg') or ($typeFile == 'jpeg')){
                     $dirFileEnd = Yii::$app->params["documentFolder"] . "expediente/" . $data["name_file"] . "." . $typeFile;
                     $status = Utilities::moveUploadFile($files['tmp_name'], $dirFileEnd);
                     if ($status) {
@@ -371,7 +367,7 @@ class ProfesorController extends \app\components\CController {
              * Inf. Cuenta
              */
             
-            $gru_id = 13;   //Docente
+           /* $gru_id = 13;   //Docente
             $rol_id = 17;   //Docente
 
             $arr_grupos = Grupo::findAll(["gru_estado" => 1, "gru_estado_logico" => 1]);
@@ -395,7 +391,7 @@ class ProfesorController extends \app\components\CController {
                 'empresa_persona_model' => $empresa_persona_model,
                 'email' => $email,
                 ]);
-
+                */
             $profesor_model = Profesor::findOne(['per_id' => $persona_model->per_id]);
             $arr_inst_level = NivelInstruccion::findAll(["nins_estado" => 1, "nins_estado_logico" => 1]);
             $instruccion_model = new ProfesorInstruccion();
@@ -517,11 +513,7 @@ class ProfesorController extends \app\components\CController {
                 [
                     'label'=> Academico::t('profesor','References'),
                     'content'=>$EditFormTab14,
-                ],
-                [
-                    'label'=>Academico::t('profesor','Account Info'),
-                    'content'=>$EditFormTab3,
-                ]
+                ],             
                     
             ];        
             
@@ -583,13 +575,13 @@ class ProfesorController extends \app\components\CController {
 
             if ($data["upload_file"]) {
                 if (empty($_FILES)) {
-                    return json_encode(['error' => Yii::t("notificaciones", "Error to process File ". "CV" .". Try again.")]);
+                    return json_encode(['error' => Yii::t("notificaciones", "Error to process File. Try again.")]);
                 }
                 //Recibe Parámetros
                 $files = $_FILES[key($_FILES)];
                 $arrIm = explode(".", basename($files['name']));
                 $typeFile = strtolower($arrIm[count($arrIm) - 1]);
-                if ($typeFile == 'pdf') {
+                if (($typeFile == 'jpg') or ($typeFile == 'jpeg') or ($typeFile == 'png')) {
                     $dirFileEnd = Yii::$app->params["documentFolder"] . "expediente/" . $data["name_file"] . "." . $typeFile;
                     $status = Utilities::moveUploadFile($files['tmp_name'], $dirFileEnd);
                     if ($status) {
@@ -617,7 +609,7 @@ class ProfesorController extends \app\components\CController {
         ]);
             
          //gru_id=13 -> Docente
-        $gru_id = 13;
+        /*$gru_id = 13;
         $rol_id = 17;
 
          $arr_grupos = Grupo::findAll(["gru_id"=>13, "gru_estado" => 1, "gru_estado_logico" => 1]);
@@ -644,7 +636,7 @@ class ProfesorController extends \app\components\CController {
              'arr_empresa' => (empty(ArrayHelper::map($arr_empresa, "emp_id", "emp_nombre_comercial"))) ? array(Yii::t("empresa", "-- Select Empresa --")) : (ArrayHelper::map($arr_empresa, "emp_id", "emp_nombre_comercial")),
              'grup_id' => $gru_id,
              'rol_id' => $rol_id
-             ]);
+             ]);*/
 
         $arr_inst_level = NivelInstruccion::findAll(["nins_estado" => 1, "nins_estado_logico" => 1]);;
         $NewFormTab4 = $this->renderPartial('NewFormTab4',[
@@ -751,12 +743,7 @@ class ProfesorController extends \app\components\CController {
             [
                 'label'=> Academico::t('profesor','References'),
                 'content'=>$NewFormTab14,
-            ],
-            [
-                'label'=> Academico::t('profesor','Account Info'),
-                'content'=>$NewFormTab3,
-            ]
-            
+            ],             
         ];
 
         return $this->render('new', ['items'=>$items]);
@@ -783,7 +770,7 @@ class ProfesorController extends \app\components\CController {
                 $celular = $data["celular"];
                 $phone = $data["phone"];
                 $fecha_nacimiento = $data["fecha_nacimiento"];
-                $cv = $data['cv'];
+                $foto = $data['foto'];
 
                 /**
                  * Inf. Domicilio
@@ -802,12 +789,12 @@ class ProfesorController extends \app\components\CController {
                  * Inf. Cuenta
                  */
 
-                $usuario = strtolower($data["usuario"]);
-                $clave = $data["clave"];
-                $gru_id = $data["gru_id"];
-                $rol_id = $data["rol_id"];
-                $emp_id = $data["emp_id"];
-
+                $usuario = $correo; //strtolower($data["usuario"]);
+                $clave = $cedula;//$data["clave"];
+                $gru_id = 13;//$data["gru_id"];
+                $rol_id = 17;//$data["rol_id"];
+                $emp_id = 1;//$data["emp_id"];                 
+                 
                 /**
                  * Inf. Session Storages
                  */
@@ -859,8 +846,15 @@ class ProfesorController extends \app\components\CController {
                     $persona_model->per_nacionalidad = $nacionalidad;
                     $persona_model->per_domicilio_telefono = $phone;
                     $persona_model->per_celular = $celular;
-                    $persona_model->per_fecha_nacimiento = $fecha_nacimiento;
-
+                    $persona_model->per_fecha_nacimiento = $fecha_nacimiento;   
+                    $arr_file = explode($foto, '.jpg');
+                    if(isset($arr_file[0]) && $arr_file[0] != ""){
+                            $oldFile = $this->folder_cv.'/' . $foto;
+                            $persona_model->per_foto = $this->folder_cv.'/'. $per_id_existente . "_" . $foto;
+                            $urlBase = Yii::$app->basePath . Yii::$app->params["documentFolder"];
+                            rename($urlBase . $oldFile, $urlBase . $persona_model->per_foto);
+                    }
+                    
                     if($ruc!=""){
                         $persona_model->per_ruc = $ruc;
                     }
@@ -885,13 +879,13 @@ class ProfesorController extends \app\components\CController {
                         $profesor_model->pro_estado = '1';
                         $profesor_model->pro_estado_logico = '1';
                         $profesor_model->pro_usuario_ingreso = $user_ingresa;
-                        $arr_file = explode($cv, '.pdf');
+                        /*$arr_file = explode($foto, '.jpg');
                         if(isset($arr_file[0]) && $arr_file[0] != ""){
-                            $oldFile = $this->folder_cv.'/' . $cv;
-                            $profesor_model->pro_cv = $this->folder_cv.'/'. $per_id_existente . "_" . $cv;
+                            $oldFile = $this->folder_cv.'/' . $foto;
+                            $profesor_model->pro_cv = $this->folder_cv.'/'. $per_id_existente . "_" . $foto;
                             $urlBase = Yii::$app->basePath . Yii::$app->params["documentFolder"];
                             rename($urlBase . $oldFile, $urlBase . $profesor_model->pro_cv);
-                        }
+                        }*/
 
                         $profesor_model->save();
 
@@ -1122,6 +1116,13 @@ class ProfesorController extends \app\components\CController {
                     $persona_model->per_domicilio_ref = $referencia;
                     $persona_model->per_estado = '1';
                     $persona_model->per_estado_logico = '1';
+                    $arr_file = explode($foto, '.jpg');
+                    if(isset($arr_file[0]) && $arr_file[0] != ""){
+                            $oldFile = $this->folder_cv.'/' . $foto;
+                            $persona_model->per_foto = $this->folder_cv.'/'. $per_id_existente . "_" . $foto;
+                            $urlBase = Yii::$app->basePath . Yii::$app->params["documentFolder"];
+                            rename($urlBase . $oldFile, $urlBase . $persona_model->per_foto);
+                    }
                                         
                     if ($persona_model->save()) {
                         $per_id = $persona_model->getPrimaryKey();
@@ -1130,13 +1131,13 @@ class ProfesorController extends \app\components\CController {
                         $profesor_model->pro_estado = '1';
                         $profesor_model->pro_estado_logico = '1';
                         $profesor_model->pro_usuario_ingreso = $user_ingresa;
-                        $arr_file = explode($cv, '.pdf');
+                        /*$arr_file = explode($cv, '.pdf');
                         if(isset($arr_file[0]) && $arr_file[0] != ""){
                             $oldFile = $this->folder_cv.'/' . $cv;
                             $profesor_model->pro_cv = $this->folder_cv.'/'. $persona_model->per_id . "_" . $cv;
                             $urlBase = Yii::$app->basePath . Yii::$app->params["documentFolder"];
                             rename($urlBase . $oldFile, $urlBase . $profesor_model->pro_cv);
-                        }
+                        }*/
                         $profesor_model->save();
 
                         $usuario_model = new Usuario();
@@ -1378,7 +1379,7 @@ class ProfesorController extends \app\components\CController {
                 $celular = $data["celular"];
                 $phone = $data["phone"];
                 $fecha_nacimiento = $data["fecha_nacimiento"];
-                $cv = $data['cv'];
+                $foto = $data['foto'];
 
                 /**
                  * Inf. Domicilio
@@ -1428,7 +1429,14 @@ class ProfesorController extends \app\components\CController {
                 $persona_model->per_domicilio_csec = $calle_sec;
                 $persona_model->per_domicilio_num = $numeracion;
                 $persona_model->per_domicilio_ref = $referencia;
-
+                $arr_file = explode($foto, '.jpg');
+                if(isset($arr_file[0]) && $arr_file[0] != ""){
+                        $oldFile = $this->folder_cv.'/' . $foto;
+                        $persona_model->per_foto = $this->folder_cv.'/'. $per_id . "_" . $foto;
+                        $urlBase = Yii::$app->basePath . Yii::$app->params["documentFolder"];
+                        rename($urlBase . $oldFile, $urlBase . $persona_model->per_foto);
+                }
+                    
                 /**
                  * Inf. Session Storages
                  */
@@ -1464,14 +1472,14 @@ class ProfesorController extends \app\components\CController {
 
                     /** Se agregan Informacion de Expediente **/
                     $profesor_model = Profesor::findOne(["per_id" => $per_id]);
-                    $arr_file = explode($cv, '.pdf');
+                    /*$arr_file = explode($cv, '.pdf');
                     if(isset($arr_file[0]) && $arr_file[0] != ""){
                         $oldFile = $this->folder_cv.'/' . $cv;
-                        $profesor_model->pro_cv = $this->folder_cv.'/'. $persona_model->per_id . "_" . $cv;
+                        $profesor_model->pro_cv = $this->folder_cv.'/'. $persona_model->per_id . "_" . $foto;
                         $urlBase = Yii::$app->basePath . Yii::$app->params["documentFolder"];
                         rename($urlBase . $oldFile, $urlBase . $profesor_model->pro_cv);
                         $profesor_model->save();
-                    }
+                    }*/
 
                     ProfesorInstruccion::deleteAllInfo($profesor_model->pro_id);
                     if(isset($arr_instuccion)){
