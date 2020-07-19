@@ -1280,11 +1280,20 @@ class SolicitudesController extends \app\components\CController {
                                         $resp_inte = $mod_ordenpago->actualizaEstadointeresado($int_id, $respusuario['usu_id']);
                                         if ($resp_inte) {
                                             //Se obtienen el método de ingreso y el nivel de interés según la solicitud.                                                
-                                            $resp_sol = $mod_solins->Obtenerdatosolicitud($sins_id);
+                                            $resp_sol = $mod_solins->Obtenerdatosolicitud($sins_id); // Aqui esta ya el uaca_id, mod_id, se debe tambien regresar el eaca_id en la consulta
                                             //Se obtiene el curso para luego registrarlo.
                                             if ($resp_sol) {
                                                 $mod_persona = new Persona();
                                                 $resp_persona = $mod_persona->consultaPersonaId($per_id);
+                                                // ********* OJO Aqui el desarrollo ********** /
+                                                // YA ESTA EN PERSONA, EMPRESA PERSONA
+                                                // YA ESTA EN USUARIO PERO INACTIVO CON EL LINK DE ACTVACION (PONER CAMPO usu_link_activo = null y usu_estado = 1), cambiar la contraseña a 
+                                                // numero de cedula porq crea la clave Uteg2018 SE DEBE ENVIAR EL USU_ID
+                                                // YA TIENE USUARIO GROL PERO CON ROL 30 DEBERIA MODIFICARSE A 37 SE DEBE ENVIAR EL USU_ID
+                                                // NO ESTA EN ESTUDIANTE , ni estudiante_carrera_programa GUARDAR EN AMBAS TABLAS
+                                                // ANTES DE GUARDAR EN estudiante_carrera_programa SE CONSULTA EN MODOALIDA_ESTUDIO UNIDAD
+                                                // EL meun_id envuando el uaca_id, mod_id, eaca_id
+                                                // si todo guarda enviar correo
                                                 $correo = $resp_persona["usu_user"];
                                                 $apellidos = $resp_persona["per_pri_apellido"];
                                                 $nombres = $resp_persona["per_pri_nombre"];
