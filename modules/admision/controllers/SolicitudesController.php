@@ -1280,7 +1280,7 @@ class SolicitudesController extends \app\components\CController {
                                         $resp_inte = $mod_ordenpago->actualizaEstadointeresado($int_id, $respusuario['usu_id']);
                                         if ($resp_inte) {
                                             //Se obtienen el método de ingreso y el nivel de interés según la solicitud.                                                
-                                            $resp_sol = $mod_solins->Obtenerdatosolicitud($sins_id); // Aqui esta ya el uaca_id, mod_id, se debe tambien regresar el eaca_id en la consulta
+                                            $resp_sol = $mod_solins->Obtenerdatosolicitud($sins_id); 
                                             //Se obtiene el curso para luego registrarlo.
                                             if ($resp_sol) {
                                                 $mod_persona = new Persona();
