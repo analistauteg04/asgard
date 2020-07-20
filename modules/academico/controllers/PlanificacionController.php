@@ -53,7 +53,7 @@ class PlanificacionController extends \app\components\CController {
         */
         $arr_pla = Planificacion::getPeriodosAcademico();
         /* print_r($arr_pla); */
-        if (count($arr_pla) > 0) {
+        //if (count($arr_pla) > 0) {
             $arr_modalidad = Modalidad::findAll(["mod_estado" => 1, "mod_estado_logico" => 1]);
             $pla_periodo_academico = $arr_pla[0]->pla_periodo_academico;
             $mod_id = $arr_modalidad[0]->mod_id;
@@ -70,12 +70,12 @@ class PlanificacionController extends \app\components\CController {
             ]);
             return $this->render('index', [
                 'arr_pla' => (empty(ArrayHelper::map($arr_pla, "pla_periodo_academico", "pla_periodo_academico"))) ? array(Yii::t("planificacion", "-- Select periodo --")) : (ArrayHelper::map($arr_pla, "pla_periodo_academico", "pla_periodo_academico")),
-                'arr_modalidad' => (empty(ArrayHelper::map($arr_modalidad, "mod_id", "mod_nombre"))) ? array(Yii::t("planificacion", "-- Select periodo --")) : (ArrayHelper::map($arr_modalidad, "mod_id", "mod_nombre")),
+                'arr_modalidad' => (empty(ArrayHelper::map($arr_modalidad, "mod_id", "mod_nombre"))) ? array(Yii::t("planificacion", "-- Select Modality --")) : (ArrayHelper::map($arr_modalidad, "mod_id", "mod_nombre")),
                 'model' => $dataProvider,
                 'pla_periodo_academico' => $pla_periodo_academico,
                 'mod_id' => $mod_id,
             ]);
-        } 
+        //} 
     }
 
     public function actionUpload() {

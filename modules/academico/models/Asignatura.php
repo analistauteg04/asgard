@@ -13,6 +13,7 @@ use \yii\data\ArrayDataProvider;
  * @property int $uaca_id
  * @property string $asi_nombre
  * @property string $asi_descripcion
+ * @property string $asi_alias
  * @property int $asi_usuario_ingreso
  * @property int $asi_usuario_modifica
  * @property string $asi_estado
@@ -53,7 +54,7 @@ class Asignatura extends \yii\db\ActiveRecord
             [['scon_id', 'uaca_id', 'asi_nombre', 'asi_descripcion', 'asi_usuario_ingreso', 'asi_estado', 'asi_estado_logico'], 'required'],
             [['scon_id', 'uaca_id', 'asi_usuario_ingreso', 'asi_usuario_modifica'], 'integer'],
             [['asi_fecha_creacion', 'asi_fecha_modificacion'], 'safe'],
-            [['asi_nombre'], 'string', 'max' => 300],
+            [['asi_nombre', 'asi_alias'], 'string', 'max' => 300],
             [['asi_descripcion'], 'string', 'max' => 500],
             [['asi_estado', 'asi_estado_logico'], 'string', 'max' => 1],
             [['scon_id'], 'exist', 'skipOnError' => true, 'targetClass' => SubareaConocimiento::className(), 'targetAttribute' => ['scon_id' => 'scon_id']],
@@ -71,6 +72,7 @@ class Asignatura extends \yii\db\ActiveRecord
             'scon_id' => 'Scon ID',
             'uaca_id' => 'Uaca ID',
             'asi_nombre' => 'Asi Nombre',
+            'asi_alias' => 'asi_alias',
             'asi_descripcion' => 'Asi Descripcion',
             'asi_usuario_ingreso' => 'Asi Usuario Ingreso',
             'asi_usuario_modifica' => 'Asi Usuario Modifica',
