@@ -84,7 +84,7 @@ class Estudiante extends \yii\db\ActiveRecord {
      * @param   
      * @return  $resultData (Retornar el código de estudiante).
      */
-    public function insertarEstudiante($per_id, $est_matricula, $est_usuario_ingreso, $est_usuario_modifica, $est_fecha_creacion, $est_fecha_modificacion ) {
+    public function insertarEstudiante($per_id, $est_matricula, $est_usuario_ingreso, $est_usuario_modifica, $est_fecha_creacion, $est_fecha_modificacion) {
 
         $con = \Yii::$app->db_academico;
         $trans = $con->getTransaction(); // se obtiene la transacción actual
@@ -102,7 +102,7 @@ class Estudiante extends \yii\db\ActiveRecord {
             $param_sql .= ", per_id";
             $bsol_sql .= ", :per_id";
         }
-        
+
         if (isset($est_matricula)) {
             $param_sql .= ", est_matricula";
             $bsol_sql .= ", :est_matricula";
@@ -117,7 +117,7 @@ class Estudiante extends \yii\db\ActiveRecord {
             $param_sql .= ", est_usuario_modifica";
             $bsol_sql .= ", :est_usuario_modifica";
         }
-        
+
         if (isset($est_fecha_creacion)) {
             $param_sql .= ", est_fecha_creacion";
             $bsol_sql .= ", :est_fecha_creacion";
@@ -136,23 +136,23 @@ class Estudiante extends \yii\db\ActiveRecord {
             if (isset($per_id)) {
                 $comando->bindParam(':per_id', $per_id, \PDO::PARAM_INT);
             }
-            
+
             if (isset($est_matricula)) {
                 $comando->bindParam(':est_matricula', $est_matricula, \PDO::PARAM_STR);
             }
-            
+
             if (isset($est_usuario_ingreso)) {
                 $comando->bindParam(':est_usuario_ingreso', $est_usuario_ingreso, \PDO::PARAM_INT);
             }
-            
+
             if (isset($est_usuario_modifica)) {
                 $comando->bindParam(':est_usuario_modifica', $est_usuario_modifica, \PDO::PARAM_INT);
             }
-            
+
             if (isset($est_fecha_creacion)) {
                 $comando->bindParam(':est_fecha_creacion', $est_fecha_creacion, \PDO::PARAM_STR);
             }
-            
+
             if (isset($est_fecha_modificacion)) {
                 $comando->bindParam(':est_fecha_modificacion', $est_fecha_modificacion, \PDO::PARAM_STR);
             }
@@ -166,8 +166,8 @@ class Estudiante extends \yii\db\ActiveRecord {
             return FALSE;
         }
     }
-    
-     /**
+
+    /**
      * Function Consultar estudiante existe.
      * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;
      * @property       
@@ -187,12 +187,12 @@ class Estudiante extends \yii\db\ActiveRecord {
 
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
-        $comando->bindParam(":per_id", $per_id, \PDO::PARAM_INT);   
+        $comando->bindParam(":per_id", $per_id, \PDO::PARAM_INT);
         $resultData = $comando->queryOne();
         return $resultData;
     }
 
-    public function getInfoCarreraEstudiante($est_id, $emp_id){
+    public function getInfoCarreraEstudiante($est_id, $emp_id) {
         $con = \Yii::$app->db_academico;
         $sql = "
             SELECT
@@ -214,27 +214,107 @@ class Estudiante extends \yii\db\ActiveRecord {
                 e.est_estado = 1 AND
                 e.est_estado_logico = 1;";
         $comando = $con->createCommand($sql);
-        $comando->bindParam(":est_id", $est_id, \PDO::PARAM_INT);   
-        $comando->bindParam(":emp_id", $emp_id, \PDO::PARAM_INT);   
+        $comando->bindParam(":est_id", $est_id, \PDO::PARAM_INT);
+        $comando->bindParam(":emp_id", $emp_id, \PDO::PARAM_INT);
         $resultData = $comando->queryOne();
         return $resultData;
     }
 
-    public function getCategoryCost(){
+    public function getCategoryCost() {
         $con = \Yii::$app->db_sea;
         $sql = "SELECT COD_CAT AS Cod, NOM_CAT AS Nombre, VAL_ARA AS Precio FROM pruebasea.CAT_ARANCEL WHERE EST_LOG = 1";
-        $comando = $con->createCommand($sql); 
+        $comando = $con->createCommand($sql);
         $resultData = $comando->queryAll();
         return $resultData;
     }
 
-    public function getGastosMatricula(){
+    public function getGastosMatricula() {
         $con = \Yii::$app->db_sea;
         $sql = "SELECT COD_ART AS Cod, DES_COM AS Nombre, P_LISTA AS Precio FROM pruebasea.IG0020 
                 WHERE TIP_PRO = 'A' AND (COD_ART = 'ASOEST' OR COD_ART = 'MAT-GRAD' OR COD_ART = 'MAT-ONLINE')";
-        $comando = $con->createCommand($sql); 
+        $comando = $con->createCommand($sql);
         $resultData = $comando->queryAll();
         return $resultData;
+        }
+
+        /**
+         * Function guardar estudiante carrera programa
+         * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>
+         * @param   
+         * @return  $resultData (Retornar el código de ecpr_id).
+         */
+        public function insertarEstcarreraprog($est_id, $meun_id, $ecpr_fecha_registro, $ecpr_usuario_ingreso, $ecpr_fecha_creacion) {
+
+        $con = \Yii::$app->db_academico;
+        $trans = $con->getTransaction(); // se obtiene la transacción actual
+        if ($trans !== null) {
+            $trans = null; // si existe la transacción entonces no se crea una
+        } else {
+            $trans = $con->beginTransaction(); // si no existe la transacción entonces se crea una
+        }
+        $param_sql = "ecpr_estado_logico";
+        $bsol_sql = "1";
+
+        $param_sql .= ", ecpr_estado";
+        $bsol_sql .= ", 1";
+        if (isset($est_id)) {
+            $param_sql .= ", est_id";
+            $bsol_sql .= ", :est_id";
+        }
+
+        if (isset($meun_id)) {
+            $param_sql .= ", meun_id";
+            $bsol_sql .= ", :meun_id";
+        }
+        
+        if (isset($ecpr_fecha_registro)) {
+            $param_sql .= ", ecpr_fecha_registro";
+            $bsol_sql .= ", :ecpr_fecha_registro";
+        }
+
+        if (isset($ecpr_usuario_ingreso)) {
+            $param_sql .= ", ecpr_usuario_ingreso";
+            $bsol_sql .= ", :ecpr_usuario_ingreso";
+        }        
+
+        if (isset($ecpr_fecha_creacion)) {
+            $param_sql .= ", ecpr_fecha_creacion";
+            $bsol_sql .= ", :ecpr_fecha_creacion";
+        }
+
+
+        try {
+            $sql = "INSERT INTO " . $con->dbname . ".estudiante_carrera_programa ($param_sql) VALUES($bsol_sql)";
+            $comando = $con->createCommand($sql);
+
+            if (isset($est_id)) {
+                $comando->bindParam(':est_id', $est_id, \PDO::PARAM_INT);
+            }
+
+            if (isset($meun_id)) {
+                $comando->bindParam(':meun_id', $meun_id, \PDO::PARAM_INT);
+            }
+            
+            if (isset($ecpr_fecha_registro)) {
+                $comando->bindParam(':ecpr_fecha_registro', $ecpr_fecha_registro, \PDO::PARAM_STR);
+            }
+
+            if (isset($ecpr_usuario_ingreso)) {
+                $comando->bindParam(':ecpr_usuario_ingreso', $ecpr_usuario_ingreso, \PDO::PARAM_INT);
+            }            
+
+            if (isset($ecpr_fecha_creacion)) {
+                $comando->bindParam(':ecpr_fecha_creacion', $ecpr_fecha_creacion, \PDO::PARAM_STR);
+            }
+            $result = $comando->execute();
+            if ($trans !== null)
+                $trans->commit();
+            return $con->getLastInsertID($con->dbname . '.estudiante_carrera_programa');
+        } catch (Exception $ex) {
+            if ($trans !== null)
+                $trans->rollback();
+            return FALSE;
+        }
     }
 
 }

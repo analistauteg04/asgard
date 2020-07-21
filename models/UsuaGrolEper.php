@@ -188,5 +188,34 @@ class UsuaGrolEper extends \yii\db\ActiveRecord {
         $command->execute();
         //return $con->getLastInsertID();
     }
+    
+     /**
+     * Function actualizarRolEstudiante para estudiante.
+     * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>
+     * @param      
+     * @return  
+     */    
+    public function actualizarRolEstudiante($usu_id) {
+        $con = \Yii::$app->db;
+        $grol_id = 37;
+        $trans = $con->beginTransaction();
+        try {            
+            
+            $sql = "UPDATE " . $con->dbname . ".usua_grol_eper 
+                    SET grol_id = :grol_id
+                    WHERE usu_id=:usu_id; ";
+            $command = $con->createCommand($sql);
+            $command->bindParam(":usu_id", $usu_id, \PDO::PARAM_INT);
+            $command->bindParam(":grol_id", $grol_id, \PDO::PARAM_INT);
+            $command->execute();
+            $trans->commit();
+            $con->close();
+            return true;
+        } catch (\Exception $e) {
+            $trans->rollBack();
+            $con->close();            
+            return false;
+        }
+    }    
 
 }

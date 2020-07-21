@@ -665,6 +665,7 @@ class Solicitudinscripcion extends \yii\db\ActiveRecord {
                         sins.ming_id as metodo_ingreso,
                         sins.mod_id,
                         sins.eaca_id,
+                        sins.emp_id,
                         (select ming.ming_nombre from " . $con->dbname . ".metodo_ingreso ming where ming.ming_id = sins.ming_id and ming.ming_estado = :estado AND ming.ming_estado_logico = :estado) as nombre_metodo_ingreso,
                         (select uaca.uaca_nombre from " . $con3->dbname . ".unidad_academica uaca where uaca.uaca_id = sins.uaca_id and uaca.uaca_estado = :estado AND uaca.uaca_estado_logico = :estado) as nombre_nivel_interes,
                         (select m.mod_nombre from " . $con3->dbname . ".modalidad m where  m.mod_id = sins.mod_id and m.mod_estado = :estado AND m.mod_estado_logico = :estado) as nombre_modalidad

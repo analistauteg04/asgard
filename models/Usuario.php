@@ -858,7 +858,8 @@ class Usuario extends \yii\db\ActiveRecord implements IdentityInterface {
             
             $sql = "UPDATE " . $con->dbname . ".usuario 
                     SET usu_sha = :usu_sha,
-                    usu_password= :usu_password
+                    usu_password= :usu_password,
+                    usu_estado= 1
                     WHERE usu_id=:usu_id; ";
             $command = $con->createCommand($sql);
             $command->bindParam(":usu_id", $usu_id, \PDO::PARAM_INT);

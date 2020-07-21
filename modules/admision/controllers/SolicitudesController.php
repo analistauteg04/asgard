@@ -28,7 +28,11 @@ use app\modules\academico\Module as academico;
 use app\modules\financiero\Module as financiero;
 use app\modules\financiero\models\Secuencias;
 use app\modules\admision\models\ConvenioEmpresa;
+use app\models\Usuario;
+use yii\base\Security;
 use app\models\Empresa;
+use app\models\UsuaGrolEper;
+use app\modules\academico\models\Estudiante;
 
 academico::registerTranslations();
 financiero::registerTranslations();
@@ -209,23 +213,22 @@ class SolicitudesController extends \app\components\CController {
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }
             if (isset($data["getmodalidad"])) {
-                if ($data["nint_id"]==1 or $data["nint_id"]==2) {
-                $modalidad = $mod_modalidad->consultarModalidad($data["nint_id"], $data["empresa_id"]);                
+                if ($data["nint_id"] == 1 or $data["nint_id"] == 2) {
+                    $modalidad = $mod_modalidad->consultarModalidad($data["nint_id"], $data["empresa_id"]);
                 } else {
-                    $modalidad = $modestudio->consultarModalidadModestudio();                    
+                    $modalidad = $modestudio->consultarModalidadModestudio();
                 }
                 $message = array("modalidad" => $modalidad);
-                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);                
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }
-            if (isset($data["getmetodo"])) {                
-                $metodos = $mod_metodo->consultarMetodoIngNivelInt($data['nint_id']);                
+            if (isset($data["getmetodo"])) {
+                $metodos = $mod_metodo->consultarMetodoIngNivelInt($data['nint_id']);
                 $message = array("metodos" => $metodos);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
-                
             }
             if (isset($data["getcarrera"])) {
-                if ($data["unidada"] ==1 or $data["unidada"] ==2) {
-                    $carrera = $modcanal->consultarCarreraModalidad($data["unidada"], $data["moda_id"]);                    
+                if ($data["unidada"] == 1 or $data["unidada"] == 2) {
+                    $carrera = $modcanal->consultarCarreraModalidad($data["unidada"], $data["moda_id"]);
                 } else {
                     $carrera = $modestudio->consultarCursoModalidad($data["unidada"], $data["moda_id"]);
                 }
@@ -565,31 +568,31 @@ class SolicitudesController extends \app\components\CController {
                         }
                     }
                     //SE COMENTA NO ENVIE CORREO EN SOLICITUD DE INSCRIPCION
-                    /*if ($resp_sol["nivel_interes"] == 1) {
-                        $tituloMensaje = Yii::t("interesado", "UTEG - Registration Online");
-                        $asunto = Yii::t("interesado", "UTEG - Registration Online");
-                        $body = Utilities::getMailMessage("Applicantrecord", array("[[nombre]]" => $nombres, "[[apellido]]" => $apellidos, "[[modalidad]]" => $modalidad, "[[link]]" => $link), Yii::$app->language);
-                        $bodycolecturia = Utilities::getMailMessage("Approvedapplicationcollected", array("[[nombres_completos]]" => $nombres . " " . $apellidos, "[[modalidad]]" => $modalidad, "[[unidad]]" => $unidad_academica, "[[nombre]]" => $respDatoFactura["sdfa_nombres"], "[[apellido]]" => $respDatoFactura["sdfa_apellidos"], "[[identificacion]]" => $respDatoFactura["sdfa_dni"], "[[tipoDNI]]" => $respDatoFactura["sdfa_tipo_dni"], "[[direccion]]" => $respDatoFactura["sdfa_direccion"], "[[telefono]]" => $respDatoFactura["sdfa_telefono"]), Yii::$app->language);
-                        $bodyadmision = Utilities::getMailMessage("Paidadmissions", array("[[nombre]]" => $nombres, "[[apellido]]" => $apellidos, "[[correo]]" => $correo, "[[identificacion]]" => $identificacion, "[[tipoDNI]]" => $tipoDNI, "[[modalidad]]" => $modalidad, "[[unidad]]" => $unidad_academica, "[[telefono]]" => $telefono), Yii::$app->language);
-                        // if (!empty($rutaFile)) {
-                        //     Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [$correo => $apellidos . " " . $nombres], $asunto, $body, $rutaFile);
-                        // } else {
-                        Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [$correo => $apellidos . " " . $nombres], $asunto, $body);
-                        Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["soporteEmail"] => "Soporte"], $asunto, $body);
-                        Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["colecturia"] => "Colecturia"], $asunto, $bodycolecturia);
-                        Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["soporteEmail"] => "Soporte"], $asunto, $bodyadmision);
-                    } else {
-                        $tituloMensaje = Yii::t("interesado", "UTEG - Registration Online");
-                        $asunto = Yii::t("interesado", "UTEG - Registration Online");
-                        $body = Utilities::getMailMessage("Paidinterested", array("[[nombre]]" => $nombres, "[[metodo]]" => $metodo, "[[precio]]" => $val_total, "[[link]]" => $link, "[[link1]]" => $link1, "[[link_pypal]]" => $link_paypal), Yii::$app->language);
-                        $bodyadmision = Utilities::getMailMessage("Paidadmissions", array("[[nombre]]" => $pri_nombre, "[[apellido]]" => $pri_apellido, "[[correo]]" => $correo, "[[identificacion]]" => $identificacion, "[[tipoDNI]]" => $tipoDNI, "[[curso]]" => $curso, "[[telefono]]" => $telefono), Yii::$app->language);
-                        $bodycolecturia = Utilities::getMailMessage("Approvedapplicationcollected", array("[[nombres_completos]]" => $nombres, "[[metodo]]" => $metodo, "[[nombre]]" => $respDatoFactura["sdfa_nombres"], "[[apellido]]" => $respDatoFactura["sdfa_apellidos"], "[[identificacion]]" => $respDatoFactura["sdfa_dni"], "[[tipoDNI]]" => $respDatoFactura["sdfa_tipo_dni"], "[[direccion]]" => $respDatoFactura["sdfa_direccion"], "[[telefono]]" => $respDatoFactura["sdfa_telefono"]), Yii::$app->language);
-                        Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [$correo => $pri_apellido . " " . $pri_nombre], $asunto, $body);
-                        Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["admisiones"] => "Jefe"], $asunto, $bodyadmision);
-                        Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["soporteEmail"] => "Soporte"], $asunto, $body);
-                        Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["soporteEmail"] => "Soporte"], $asunto, $bodyadmision);
-                        Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["colecturia"] => "Colecturia"], $asunto, $bodycolecturia);
-                    }*/
+                    /* if ($resp_sol["nivel_interes"] == 1) {
+                      $tituloMensaje = Yii::t("interesado", "UTEG - Registration Online");
+                      $asunto = Yii::t("interesado", "UTEG - Registration Online");
+                      $body = Utilities::getMailMessage("Applicantrecord", array("[[nombre]]" => $nombres, "[[apellido]]" => $apellidos, "[[modalidad]]" => $modalidad, "[[link]]" => $link), Yii::$app->language);
+                      $bodycolecturia = Utilities::getMailMessage("Approvedapplicationcollected", array("[[nombres_completos]]" => $nombres . " " . $apellidos, "[[modalidad]]" => $modalidad, "[[unidad]]" => $unidad_academica, "[[nombre]]" => $respDatoFactura["sdfa_nombres"], "[[apellido]]" => $respDatoFactura["sdfa_apellidos"], "[[identificacion]]" => $respDatoFactura["sdfa_dni"], "[[tipoDNI]]" => $respDatoFactura["sdfa_tipo_dni"], "[[direccion]]" => $respDatoFactura["sdfa_direccion"], "[[telefono]]" => $respDatoFactura["sdfa_telefono"]), Yii::$app->language);
+                      $bodyadmision = Utilities::getMailMessage("Paidadmissions", array("[[nombre]]" => $nombres, "[[apellido]]" => $apellidos, "[[correo]]" => $correo, "[[identificacion]]" => $identificacion, "[[tipoDNI]]" => $tipoDNI, "[[modalidad]]" => $modalidad, "[[unidad]]" => $unidad_academica, "[[telefono]]" => $telefono), Yii::$app->language);
+                      // if (!empty($rutaFile)) {
+                      //     Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [$correo => $apellidos . " " . $nombres], $asunto, $body, $rutaFile);
+                      // } else {
+                      Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [$correo => $apellidos . " " . $nombres], $asunto, $body);
+                      Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["soporteEmail"] => "Soporte"], $asunto, $body);
+                      Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["colecturia"] => "Colecturia"], $asunto, $bodycolecturia);
+                      Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["soporteEmail"] => "Soporte"], $asunto, $bodyadmision);
+                      } else {
+                      $tituloMensaje = Yii::t("interesado", "UTEG - Registration Online");
+                      $asunto = Yii::t("interesado", "UTEG - Registration Online");
+                      $body = Utilities::getMailMessage("Paidinterested", array("[[nombre]]" => $nombres, "[[metodo]]" => $metodo, "[[precio]]" => $val_total, "[[link]]" => $link, "[[link1]]" => $link1, "[[link_pypal]]" => $link_paypal), Yii::$app->language);
+                      $bodyadmision = Utilities::getMailMessage("Paidadmissions", array("[[nombre]]" => $pri_nombre, "[[apellido]]" => $pri_apellido, "[[correo]]" => $correo, "[[identificacion]]" => $identificacion, "[[tipoDNI]]" => $tipoDNI, "[[curso]]" => $curso, "[[telefono]]" => $telefono), Yii::$app->language);
+                      $bodycolecturia = Utilities::getMailMessage("Approvedapplicationcollected", array("[[nombres_completos]]" => $nombres, "[[metodo]]" => $metodo, "[[nombre]]" => $respDatoFactura["sdfa_nombres"], "[[apellido]]" => $respDatoFactura["sdfa_apellidos"], "[[identificacion]]" => $respDatoFactura["sdfa_dni"], "[[tipoDNI]]" => $respDatoFactura["sdfa_tipo_dni"], "[[direccion]]" => $respDatoFactura["sdfa_direccion"], "[[telefono]]" => $respDatoFactura["sdfa_telefono"]), Yii::$app->language);
+                      Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [$correo => $pri_apellido . " " . $pri_nombre], $asunto, $body);
+                      Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["admisiones"] => "Jefe"], $asunto, $bodyadmision);
+                      Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["soporteEmail"] => "Soporte"], $asunto, $body);
+                      Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["soporteEmail"] => "Soporte"], $asunto, $bodyadmision);
+                      Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["colecturia"] => "Colecturia"], $asunto, $bodycolecturia);
+                      } */
                 }
 
                 //$num_secuencia;secuencia que se debe retornar
@@ -851,10 +854,10 @@ class SolicitudesController extends \app\components\CController {
                     throw new Exception('Error documento aceptacion no creado.');
                 }
             }
-            if ((($uaca_id == 1) && /*!empty($titulo_archivo) &&*/ !empty($dni_archivo) && !empty($foto_archivo)) or ( !empty($curriculum_archivo) /*&& !empty($titulo_archivo)*/ && !empty($dni_archivo) && !empty($foto_archivo) && ($uaca_id == "2"))) {
+            if ((($uaca_id == 1) && /* !empty($titulo_archivo) && */!empty($dni_archivo) && !empty($foto_archivo)) or ( !empty($curriculum_archivo) /* && !empty($titulo_archivo) */ && !empty($dni_archivo) && !empty($foto_archivo) && ($uaca_id == "2"))) {
                 $mod_solinsxdoc1 = new SolicitudinsDocumento();
                 //1-Título, 2-DNI,3-Cert votación, 4-Foto, 5-Doc-Beca  
-                if(isset($titulo_archivo)){
+                if (isset($titulo_archivo)) {
                     $mod_solinsxdoc1->sins_id = $sins_id;
                     $mod_solinsxdoc1->int_id = $interesado_id;
                     $mod_solinsxdoc1->dadj_id = 1;
@@ -866,7 +869,7 @@ class SolicitudesController extends \app\components\CController {
                         throw new Exception('Error doc titulo no creado.');
                     }
                 }
-                
+
                 $mod_solinsxdoc2 = new SolicitudinsDocumento();
                 $mod_solinsxdoc2->sins_id = $sins_id;
                 $mod_solinsxdoc2->int_id = $interesado_id;
@@ -888,18 +891,18 @@ class SolicitudesController extends \app\components\CController {
 
                     if ($mod_solinsxdoc3->save()) {
                         /* if ($es_extranjero == "1" or ( empty($es_extranjero))) {
-                            $mod_solinsxdoc4 = new SolicitudinsDocumento();
-                            $mod_solinsxdoc4->sins_id = $sins_id;
-                            $mod_solinsxdoc4->int_id = $interesado_id;
-                            $mod_solinsxdoc4->dadj_id = 3;
-                            $mod_solinsxdoc4->sdoc_archivo = $certvota_archivo;
-                            $mod_solinsxdoc4->sdoc_observacion = $observacion;
-                            $mod_solinsxdoc4->sdoc_estado = "1";
-                            $mod_solinsxdoc4->sdoc_estado_logico = "1";
-                            if (!$mod_solinsxdoc4->save()) {
-                            throw new Exception('Error doc certvot no creado.');
-                            }
-                            } */
+                          $mod_solinsxdoc4 = new SolicitudinsDocumento();
+                          $mod_solinsxdoc4->sins_id = $sins_id;
+                          $mod_solinsxdoc4->int_id = $interesado_id;
+                          $mod_solinsxdoc4->dadj_id = 3;
+                          $mod_solinsxdoc4->sdoc_archivo = $certvota_archivo;
+                          $mod_solinsxdoc4->sdoc_observacion = $observacion;
+                          $mod_solinsxdoc4->sdoc_estado = "1";
+                          $mod_solinsxdoc4->sdoc_estado_logico = "1";
+                          if (!$mod_solinsxdoc4->save()) {
+                          throw new Exception('Error doc certvot no creado.');
+                          }
+                          } */
                         if ($beca == "1") {
                             $mod_solinsxdoc5 = new SolicitudinsDocumento();
                             $mod_solinsxdoc5->sins_id = $sins_id;
@@ -916,18 +919,18 @@ class SolicitudesController extends \app\components\CController {
                         if ($uaca_id == "2") {
                             //\app\models\Utilities::putMessageLogFile('sins_id ' . $sins_id);
                             /* if (!empty($certmate_archivo)) {
-                                $mod_solinsxdoc6 = new SolicitudinsDocumento();
-                                $mod_solinsxdoc6->sins_id = $sins_id;
-                                $mod_solinsxdoc6->int_id = $interesado_id;
-                                $mod_solinsxdoc6->dadj_id = 6;
-                                $mod_solinsxdoc6->sdoc_archivo = $certmate_archivo;
-                                $mod_solinsxdoc6->sdoc_observacion = $observacion;
-                                $mod_solinsxdoc6->sdoc_estado = "1";
-                                $mod_solinsxdoc6->sdoc_estado_logico = "1";
-                                if (!$mod_solinsxdoc6->save()) {
-                                throw new Exception('Error doc certificado materia no creado.');
-                                }
-                                } */
+                              $mod_solinsxdoc6 = new SolicitudinsDocumento();
+                              $mod_solinsxdoc6->sins_id = $sins_id;
+                              $mod_solinsxdoc6->int_id = $interesado_id;
+                              $mod_solinsxdoc6->dadj_id = 6;
+                              $mod_solinsxdoc6->sdoc_archivo = $certmate_archivo;
+                              $mod_solinsxdoc6->sdoc_observacion = $observacion;
+                              $mod_solinsxdoc6->sdoc_estado = "1";
+                              $mod_solinsxdoc6->sdoc_estado_logico = "1";
+                              if (!$mod_solinsxdoc6->save()) {
+                              throw new Exception('Error doc certificado materia no creado.');
+                              }
+                              } */
                             if (!empty($curriculum_archivo)) {
                                 $mod_solinsxdoc7 = new SolicitudinsDocumento();
                                 $mod_solinsxdoc7->sins_id = $sins_id;
@@ -1151,7 +1154,7 @@ class SolicitudesController extends \app\components\CController {
                         throw new Exception('Error no se reemplazo files.');
                     $mod_solinsxdoc1 = new SolicitudinsDocumento();
                     //1-Título, 2-DNI,3-Cert votación, 4-Foto, 5-Doc-Beca  
-                    if($cemp_id > 0){
+                    if ($cemp_id > 0) {
                         $mod_solinsxdoc1->insertNewDocument($sins_id, $interesado_id, 8, $convenio_archivo, $observacion);
                     }
                     if ($mod_solinsxdoc1->insertNewDocument($sins_id, $interesado_id, 1, $titulo_archivo, $observacion)) {
@@ -1216,7 +1219,13 @@ class SolicitudesController extends \app\components\CController {
     }
 
     public function actionSaverevision() {
-        $per_sistema = @Yii::$app->session->get("PB_perid");
+        $usuario = new Usuario();
+        $security = new Security();
+        $usergrol = new UsuaGrolEper();
+        $mod_Estudiante = new Estudiante();
+        $mod_Modestuni = new ModuloEstudio;
+        $per_sistema = @Yii::$app->session->get("PB_perid");        
+        $usu_autenticado = @Yii::$app->session->get("PB_iduser");
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
             $resultado = $data["resultado"];
@@ -1280,20 +1289,43 @@ class SolicitudesController extends \app\components\CController {
                                         $resp_inte = $mod_ordenpago->actualizaEstadointeresado($int_id, $respusuario['usu_id']);
                                         if ($resp_inte) {
                                             //Se obtienen el método de ingreso y el nivel de interés según la solicitud.                                                
-                                            $resp_sol = $mod_solins->Obtenerdatosolicitud($sins_id); 
+                                            $resp_sol = $mod_solins->Obtenerdatosolicitud($sins_id);
                                             //Se obtiene el curso para luego registrarlo.
                                             if ($resp_sol) {
                                                 $mod_persona = new Persona();
                                                 $resp_persona = $mod_persona->consultaPersonaId($per_id);
-                                                // ********* OJO Aqui el desarrollo ********** /
-                                                // YA ESTA EN PERSONA, EMPRESA PERSONA
-                                                // YA ESTA EN USUARIO PERO INACTIVO CON EL LINK DE ACTVACION (PONER CAMPO usu_link_activo = null y usu_estado = 1), cambiar la contraseña a 
-                                                // numero de cedula porq crea la clave Uteg2018 SE DEBE ENVIAR EL USU_ID
-                                                // YA TIENE USUARIO GROL PERO CON ROL 30 DEBERIA MODIFICARSE A 37 SE DEBE ENVIAR EL USU_ID
-                                                // NO ESTA EN ESTUDIANTE , ni estudiante_carrera_programa GUARDAR EN AMBAS TABLAS
-                                                // ANTES DE GUARDAR EN estudiante_carrera_programa SE CONSULTA EN MODOALIDA_ESTUDIO UNIDAD
-                                                // EL meun_id envuando el uaca_id, mod_id, eaca_id
-                                                // si todo guarda enviar correo
+                                                // ********* OJO Aqui el desarrollo ********** /                                              
+                                      
+                                                /* *************************************************** */
+                                                //Modificar y activar clave de usuario con numero de cedula 
+                                                if ($resp_sol["emp_id"] == 1) {
+                                                    $usu_sha = $security->generateRandomString();
+                                                    $usu_pass = base64_encode($security->encryptByPassword($usu_sha, $resp_persona["per_cedula"]));
+                                                    $respUsu = $usuario->actualizarDataUsuario($usu_sha, $usu_pass, $resp_persona["usu_id"]);                                                   
+                                                    // YA TIENE USUARIO GROL PERO CON ROL 30 DEBERIA MODIFICARSE A 37 SE DEBE ENVIAR EL USU_ID
+                                                    if ($respUsu) {                                                  
+                                                        $respUsugrol = $usergrol->actualizarRolEstudiante($resp_persona["usu_id"]);
+                                                        if ($respUsugrol) {
+                                                            // Guardar en tabla esdudiante
+                                                            //\app\models\Utilities::putMessageLogFile('entro estudiante ');                                                            
+                                                            $fecha = date(Yii::$app->params["dateTimeByDefault"]);
+                                                            //\app\models\Utilities::putMessageLogFile('per_id '. $fecha);
+                                                            $resp_estudiante = $mod_Estudiante->insertarEstudiante($per_id, null, $usu_autenticado, null, $fecha, null);
+                                                            \app\models\Utilities::putMessageLogFile('estudiante id'. $resp_estudiante);   
+                                                           // if ($resp_estudiante) {
+                                                                //\app\models\Utilities::putMessageLogFile('entro modalidad estudio unidad');
+                                                                // Obtener el meun_id con lo con el uaca_id, mod_id y eaca_id, el est_id
+                                                                $resp_mestuni = $mod_Modestuni->consultarModalidadestudiouni($resp_sol["nivel_interes"], $resp_sol["mod_id"], $resp_sol["eaca_id"]);
+                                                                /*OJO NO INSERTA EN LA TABLA ESTUDIANTE CARRERA PROGRAMA PORQ NO DEVUELVE EL ID DE ESTUDIANTE LINEA 1313*/
+                                                                /*if ($resp_mestuni) {
+                                                                    \app\models\Utilities::putMessageLogFile('entro estudiante carrera programa ');
+                                                                    // Guardar en tabla estudiante_carrera_programa
+                                                                    $resp_estudcarreprog = $mod_Estudiante->insertarEstcarreraprog($resp_estudiante, $resp_mestuni["meun_id"], $fecha, $usu_autenticado, $fecha);                                                                  
+                                                                }*/
+                                                           // }
+                                                        }
+                                                    }
+                                                }
                                                 $correo = $resp_persona["usu_user"];
                                                 $apellidos = $resp_persona["per_pri_apellido"];
                                                 $nombres = $resp_persona["per_pri_nombre"];
@@ -1428,14 +1460,14 @@ class SolicitudesController extends \app\components\CController {
                                             }
                                         }
                                         // Se bloquea el correo de re probacion de solicitud
-                                       /* $tituloMensaje = Yii::t("interesado", "UTEG - Registration Online");
-                                        $asunto = Yii::t("interesado", "UTEG - Registration Online");
-                                        $body = Utilities::getMailMessage("Requestapplicantdenied", array("[[observacion]]" => $obs_correo), Yii::$app->language);
-                                        $bodyadmision = Utilities::getMailMessage("Requestadmissions", array("[[nombre_aspirante]]" => $nombre_completo, "[[estado_solicitud]]" => $estado), Yii::$app->language);
-                                        Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [$correo => $pri_apellido . " " . $pri_nombre], $asunto, $body);
-                                        Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["soporteEmail"] => "Soporte"], $asunto, $body);
-                                        Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["admisiones"] => "Jefe"], $asunto, $bodyadmision);
-                                        Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["soporteEmail"] => "Soporte"], $asunto, $bodyadmision);*/
+                                        /* $tituloMensaje = Yii::t("interesado", "UTEG - Registration Online");
+                                          $asunto = Yii::t("interesado", "UTEG - Registration Online");
+                                          $body = Utilities::getMailMessage("Requestapplicantdenied", array("[[observacion]]" => $obs_correo), Yii::$app->language);
+                                          $bodyadmision = Utilities::getMailMessage("Requestadmissions", array("[[nombre_aspirante]]" => $nombre_completo, "[[estado_solicitud]]" => $estado), Yii::$app->language);
+                                          Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [$correo => $pri_apellido . " " . $pri_nombre], $asunto, $body);
+                                          Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["soporteEmail"] => "Soporte"], $asunto, $body);
+                                          Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["admisiones"] => "Jefe"], $asunto, $bodyadmision);
+                                          Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["soporteEmail"] => "Soporte"], $asunto, $bodyadmision); */
                                         $exito = 1;
                                     } else {
                                         $message = array
