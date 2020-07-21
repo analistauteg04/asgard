@@ -41,6 +41,7 @@
 
 return [
     'Academic Period' => 'Academic Period',
+    'Administrative Expenses' => 'Administrative Expenses',
     'Period' => 'Period',
     'Student' => 'Student',
     'DNI' => 'DNI',
@@ -49,6 +50,8 @@ return [
     'Phone' => 'Phone',
     'Register Cost' => 'Register Cost',
     'Subject Cod.' => 'Subject Cod.',
+    'Cost per Subject' => 'Cost per Subject',
+    'Students Association' => 'Students Association',
     'Subject' => 'Subject',
     'Credit' => 'Credit',
     'Unit Cost' => 'Unit Cost',
@@ -94,6 +97,7 @@ return [
     'Last register saved (Non-registration time)' => 'Last register saved (Non-registration time)',
     'Payment' => 'Payment',
     'Registration payment' => 'Registration payment',
+    'Registration Number' => 'Registration Number',
     'Payment state' => 'Payment state',
     'Not reviewed' => 'Not reviewed',
     'Approved' => 'Approved',

@@ -3,10 +3,10 @@
 use yii\helpers\Html;
 use app\modules\academico\Module as academico;
 
-$leyenda = '<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
+$leyenda = '
           <div class="form-group">          
-          <div style = "width: 1035px;" class="alert alert-info">
-          <table WIDTH="110%" class="tg">
+          <div class="alert alert-info">
+          <table class="tg">
             <tr>
               <td colspan="2" class="tg-0pky"><span style="font-weight: bold"> Nota: </span>Estimado Estudiante, si tiene alguna observación con la 
               planificación del periodo académico por favor contactar a la secretaría de su facultad, a los siguientes números:</br></br></td>
@@ -31,7 +31,6 @@ $leyenda = '<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
             </tr>
           </table>
           </div>     
-          </div>
           </div>';
 ?>
 
@@ -90,6 +89,14 @@ $leyenda = '<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
                     <span><?= $data_student['per_celular'] ?></span>
                 </div>                
             </div>
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                    <span><strong><?= Academico::t("matriculacion", "Registration Number") ?>: </strong></span>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                    <span><?= $data_student['est_matricula'] ?></span>
+                </div>                
+            </div>
             <!-- <div class="row">
                 <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                     <span><strong><?= Academico::t("matriculacion", "Register Cost") ?>: </strong></span>
@@ -106,10 +113,46 @@ $leyenda = '<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
 <?=
 $this->render('index-grid', ['planificacion' => $planificacion,]);
 ?>
-<?php echo $leyenda; ?>
+
+<div class="col-xs-8"><?php echo $leyenda; ?></div>
+<div class="col-xs-4">
+    <div class="table-responsive">
+        <table style="text-align: right;" class="table">
+            <tbody>
+                <tr>
+                    <th style="width:50%"><?= academico::t('matriculacion','Cost per Subject') ?></th>
+                    <td id="costMat">$0.00</td>
+                </tr>
+                <tr style='display: none;'>
+                    <th><?= academico::t('matriculacion','Registration payment') ?></th>
+                    <td id="costMatr">$<?= isset($dataMat['MAT-GRAD'])?$dataMat['MAT-GRAD']:'0.00' ?></td>
+                </tr>
+                <tr>
+                    <th><?= academico::t('matriculacion','Administrative Expenses') ?></th>
+                    <td id="costAdmin">$<?= isset($dataMat['ADM-GAST'])?$dataMat['ADM-GAST']:'0.00' ?></td>
+                </tr>
+                <tr>
+                    <th><?= academico::t('matriculacion','Students Association') ?></th>
+                    <td id="costStud">$<?= isset($dataMat['ASOEST'])?$dataMat['ASOEST']:'0.00' ?></td>
+                </tr>
+                <tr>
+                    <th style="font-size: 25px;"><?= academico::t('matriculacion', 'Register Cost') ?></th>
+                    <td style="font-size: 25px; font-weight: bold;" id="costTotal">$0.00</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
 
 <input type="hidden" id="frm_pes_id" value="<?= $pes_id ?>">
 <input type="hidden" id="frm_num_min" value="<?= $num_min ?>">
 <input type="hidden" id="frm_num_max" value="<?= $num_max ?>">
 <input type="hidden" id="frm_modalidad" value="<?= $data_student['mod_nombre'] ?>">
 <input type="hidden" id="frm_carrera" value="<?= $data_student['pes_carrera'] ?>">
+<input type="hidden" id="frm_categoria" value="<?= $data_student['est_categoria'] ?>">
+<input type="hidden" id="frm_cat_price" value="<?= $CatPrecio ?>">
+<input type="hidden" id="frm_asc_est" value="<?= isset($dataMat['ASOEST'])?$dataMat['ASOEST']:'0.00' ?>">
+<input type="hidden" id="frm_mat_cos" value="<?= isset($dataMat['MAT-GRAD'])?$dataMat['MAT-GRAD']:'0.00' ?>">
+<input type="hidden" id="frm_gas_adm" value="<?= isset($dataMat['ADM-GAST'])?$dataMat['ADM-GAST']:'0.00' ?>">

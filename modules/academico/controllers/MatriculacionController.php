@@ -10,6 +10,7 @@ use app\models\Utilities;
 use app\models\ExportFile;
 use app\models\Usuario;
 use app\models\Persona;
+use app\modules\academico\models\Estudiante;
 use app\modules\academico\models\Planificacion;
 use app\modules\academico\models\Modalidad;
 use app\modules\academico\models\RegistroOnline;
@@ -138,6 +139,7 @@ class MatriculacionController extends \app\components\CController {
     public function actionIndex() {
         $per_id = Yii::$app->session->get("PB_perid");
 
+        $mod_est = new Estudiante();
         $matriculacion_model = new Matriculacion();
         $today = date("Y-m-d H:i:s");
         $result_process = $matriculacion_model->checkToday($today);
@@ -195,6 +197,9 @@ class MatriculacionController extends \app\components\CController {
                                 'attributes' => ["Subject"],
                             ],
                         ]);
+                        $dataCat = ArrayHelper::map($mod_est->getCategoryCost(), "Cod", "Precio");
+                        $dataMat = ArrayHelper::map($mod_est->getGastosMatricula(), "Cod", "Precio");
+                        $CatPrecio = $dataCat[$data_student['est_categoria']];
 
                         return $this->render('index', [
                                     "planificacion" => $dataProvider,
@@ -202,6 +207,9 @@ class MatriculacionController extends \app\components\CController {
                                     "num_min" => $num_min,
                                     "num_max" => $num_max,
                                     "pes_id" => $pes_id,
+                                    "dataCat" => $dataCat,
+                                    "CatPrecio" => $CatPrecio,
+                                    "dataMat" => $dataMat,
                         ]);
                     }
                 } else {
@@ -217,7 +225,7 @@ class MatriculacionController extends \app\components\CController {
         }
     }
 
-    public function actionRegistropago() {
+    public function actionRegistropago() { // SUBE PAGA DE MATRICULA
         $usu_id = Yii::$app->session->get("PB_iduser");
         $mod_usuario = Usuario::findIdentity($usu_id);
         if ($mod_usuario->usu_upreg == 0) {
@@ -380,7 +388,7 @@ class MatriculacionController extends \app\components\CController {
         return $this->redirect('index');
     }
 
-    public function actionUpdatepagoregistro() {
+    public function actionUpdatepagoregistro() { // ACCION PARA SUBIR PAGO MATRICULA
         $data = Yii::$app->request->get();
         if ($data['filename']) {
             if (Yii::$app->session->get('PB_isuser')) {
@@ -498,6 +506,12 @@ class MatriculacionController extends \app\components\CController {
                 $registro_online_model->ron_anio = date("Y");
                 $registro_online_model->ron_modalidad = $modalidad;
                 $registro_online_model->ron_carrera = $carrera;
+                $registro_online_model->ron_semestre = "";
+                $registro_online_model->ron_categoria_est = $data["categoria"];
+                $registro_online_model->ron_valor_arancel = $data["arancel"];
+                $registro_online_model->ron_valor_aso_estudiante = $data["asociacion"];
+                $registro_online_model->ron_valor_gastos_adm = $data["gastos"];
+                $registro_online_model->ron_valor_matricula = $data["matricula"];
                 $registro_online_model->ron_estado_registro = "0"; //Igual esta tampoco ya no se usa
                 $registro_online_model->ron_fecha_registro = date(Yii::$app->params['dateByDefault']);
                 $registro_online_model->ron_estado = "1";

@@ -1408,6 +1408,9 @@ create table if not exists `registro_online` (
  `ron_carrera` varchar(500) null, -- carrera se debe obtener de la tabla planificacion_estudiante
  `ron_categoria_est` varchar(2) null, -- categoria del estudiante que se debe obtener de la base de datos utegsiga
  `ron_valor_arancel` decimal(10,2) DEFAULT NULL, -- valor que se obtiene por la categoria del estudiante
+ `ron_valor_matricula` decimal(10,2) DEFAULT NULL,
+ `ron_valor_gastos_adm` decimal(10,2) DEFAULT NULL,
+ `ron_valor_aso_estudiante` decimal(10,2) DEFAULT NULL,
  `ron_estado_registro` varchar(1) not null, -- 1 registrado, 0 aun no registrado
  `ron_estado` varchar(1) not null, 
  `ron_fecha_creacion` timestamp not null default current_timestamp,

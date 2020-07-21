@@ -220,4 +220,21 @@ class Estudiante extends \yii\db\ActiveRecord {
         return $resultData;
     }
 
+    public function getCategoryCost(){
+        $con = \Yii::$app->db_sea;
+        $sql = "SELECT COD_CAT AS Cod, NOM_CAT AS Nombre, VAL_ARA AS Precio FROM pruebasea.CAT_ARANCEL WHERE EST_LOG = 1";
+        $comando = $con->createCommand($sql); 
+        $resultData = $comando->queryAll();
+        return $resultData;
+    }
+
+    public function getGastosMatricula(){
+        $con = \Yii::$app->db_sea;
+        $sql = "SELECT COD_ART AS Cod, DES_COM AS Nombre, P_LISTA AS Precio FROM pruebasea.IG0020 
+                WHERE TIP_PRO = 'A' AND (COD_ART = 'ASOEST' OR COD_ART = 'MAT-GRAD' OR COD_ART = 'MAT-ONLINE')";
+        $comando = $con->createCommand($sql); 
+        $resultData = $comando->queryAll();
+        return $resultData;
+    }
+
 }

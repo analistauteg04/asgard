@@ -2,6 +2,7 @@
 
 namespace app\modules\academico\models;
 
+use app\models\Utilities;
 use Yii;
 use yii\data\ArrayDataProvider;
 use yii\base\Exception;
@@ -396,10 +397,11 @@ class Matriculacion extends \yii\db\ActiveRecord {
         $estado = 1;
 
         $sql = "
-            SELECT pla.pla_periodo_academico, pes.pes_nombres, pes.pes_dni, moda.mod_nombre, pes.pes_carrera, per.per_celular
+            SELECT pla.pla_periodo_academico, pes.pes_nombres, pes.pes_dni, moda.mod_nombre, pes.pes_carrera, per.per_celular, e.est_matricula, e.est_categoria
             FROM " . $con_academico->dbname . ".planificacion as pla,
             " . $con_academico->dbname . ".planificacion_estudiante as pes,
             " . $con_academico->dbname . ".modalidad as moda,
+            " . $con_academico->dbname . ".estudiante as e,
             " . $con_asgard->dbname . ".persona as per
             WHERE pla.mod_id = moda.mod_id
             AND pes.per_id = per.per_id            
@@ -433,15 +435,69 @@ class Matriculacion extends \yii\db\ActiveRecord {
         $sql = "
             SELECT pes_dni, " . $str_bloques . "
             FROM " . $con_academico->dbname . ".planificacion_estudiante as pes            
-            WHERE pes.per_id =:per_id
-            AND pes.pla_id =:pla_id;
+            WHERE pes.per_id =:per_id AND pes.pla_id =:pla_id;
         ";
 
         $comando = $con_academico->createCommand($sql);
         $comando->bindParam(":per_id", $per_id, \PDO::PARAM_INT);
         $comando->bindParam(":pla_id", $pla_id, \PDO::PARAM_INT);
         $resultData = $comando->queryOne();
-        $dataPlanificacion = $this->parseDataSubject($resultData);
+        
+
+        $sql = "
+        SELECT
+            -- a.asi_id,
+            a.asi_nombre AS Asignatura,
+            a.asi_alias AS AliasAsignatura,
+            -- ua.uaca_nombre AS UnidadAcademica,
+            -- mo.mod_nombre AS Modalidad,
+            -- ea.eaca_codigo AS CodEstudio,
+            -- ea.eaca_nombre AS EstudioAcademico,
+            -- ea.eaca_alias AS AliasEstudioAca,
+            -- e.est_matricula AS Matricula,
+            -- e.est_categoria AS Categoria,
+            -- ma.maca_nombre AS MallaAcademica,
+            -- ma.maca_codigo AS MallaCod,
+            -- mad.made_codigo_asignatura AS MallaCodAsig, 
+            -- CONCAT(p.per_pri_nombre, ' ',p.per_pri_apellido) AS Estudiante,
+            -- em.emp_nombre_comercial AS Empresa,
+            mad.made_credito AS AsigCreditos
+        FROM 
+            asignatura AS a
+            INNER JOIN unidad_academica AS ua ON ua.uaca_id = a.uaca_id
+            INNER JOIN modalidad_estudio_unidad AS me ON me.uaca_id = ua.uaca_id
+            INNER JOIN modalidad AS mo ON mo.mod_id = me.mod_id
+            INNER JOIN estudio_academico AS ea ON ea.eaca_id = me.eaca_id
+            INNER JOIN tipo_estudio_academico AS tp ON tp.teac_id = ea.teac_id
+            INNER JOIN malla_academica AS ma ON ma.meun_id = me.meun_id
+            INNER JOIN malla_academica_detalle AS mad ON mad.maca_id = ma.maca_id AND mad.asi_id = a.asi_id
+            INNER JOIN estudiante_carrera_programa AS ec ON ec.meun_id = me.meun_id
+            INNER JOIN estudiante AS e ON e.est_id = ec.est_id
+            INNER JOIN ".Yii::$app->db_asgard->dbname.".persona AS p ON p.per_id = e.per_id
+            INNER JOIN ".Yii::$app->db_asgard->dbname.".empresa AS em ON em.emp_id = me.emp_id
+            INNER JOIN planificacion_estudiante AS pes ON pes.pes_dni = p.per_cedula
+        WHERE
+            pes.per_id =:per_id AND
+            a.asi_estado = 1 AND a.asi_estado_logico = 1 AND 
+            ua.uaca_estado = 1 AND ua.uaca_estado_logico = 1 AND 
+            me.meun_estado = 1 AND me.meun_estado_logico = 1 AND
+            mo.mod_estado = 1 AND mo.mod_estado_logico = 1 AND 
+            ea.eaca_estado = 1 AND ea.eaca_estado_logico = 1 AND 
+            tp.teac_estado = 1 AND tp.teac_estado_logico = 1 AND 
+            ma.maca_estado = 1 AND ma.maca_estado_logico = 1 AND 
+            mad.made_estado = 1 AND mad.made_estado_logico = 1 AND
+            ec.ecpr_estado = 1 AND ec.ecpr_estado_logico = 1 AND
+            e.est_estado = 1 AND e.est_estado_logico = 1 AND
+            p.per_estado = 1 AND p.per_estado_logico = 1 AND 
+            em.emp_estado = 1 AND em.emp_estado_logico = 1 AND
+            pes.pes_estado = 1 AND pes.pes_estado_logico = 1 
+        ";
+
+        $comando = $con_academico->createCommand($sql);
+        $comando->bindParam(":per_id", $per_id, \PDO::PARAM_INT);
+        $dataCredits = $comando->queryAll();
+
+        $dataPlanificacion = $this->parseDataSubject($resultData, $dataCredits);
 
         return $dataPlanificacion;
     }
@@ -453,96 +509,186 @@ class Matriculacion extends \yii\db\ActiveRecord {
      * @return $arrData
      */
 
-    public function parseDataSubject($dict)
+    public function parseDataSubject($dict, $dataCredits = array())
     {
         $arrData = array();
 
         if (!is_null($dict['pes_mat_b1_h1_nombre']) && trim($dict['pes_mat_b1_h1_nombre']) != "") {
+            $alias = trim($dict['pes_mat_b1_h1_nombre']);
+            $asignatura = $credits = "";
+            foreach($dataCredits as $key => $value){
+                if($value['AliasAsignatura'] == $alias){
+                    $asignatura = $value['Asignatura'];
+                    $credits = $value['AsigCreditos'];
+                }
+            }
             $arrRow11 = array(
-                "Subject" => trim($dict['pes_mat_b1_h1_nombre']),
+                "Subject" => $asignatura,
                 "Block" => "B1",
                 "Hour" => "H1",
+                "Credit" => $credits,
             );
             array_push($arrData, $arrRow11);
         }
 
         if (!is_null($dict['pes_mat_b1_h2_nombre']) && trim($dict['pes_mat_b1_h2_nombre']) != "") {
+            $alias = trim($dict['pes_mat_b1_h2_nombre']);
+            $asignatura = $credits = "";
+            foreach($dataCredits as $key => $value){
+                if($value['AliasAsignatura'] == $alias){
+                    $asignatura = $value['Asignatura'];
+                    $credits = $value['AsigCreditos'];
+                }
+            }
             $arrRow12 = array(
-                "Subject" => trim($dict['pes_mat_b1_h2_nombre']),
+                "Subject" => $asignatura,
                 "Block" => "B1",
                 "Hour" => "H2",
+                "Credit" => $credits,
             );
             array_push($arrData, $arrRow12);
         }
 
         if (!is_null($dict['pes_mat_b1_h3_nombre']) && trim($dict['pes_mat_b1_h3_nombre']) != "") {
+            $alias = trim($dict['pes_mat_b1_h3_nombre']);
+            $asignatura = $credits = "";
+            foreach($dataCredits as $key => $value){
+                if($value['AliasAsignatura'] == $alias){
+                    $asignatura = $value['Asignatura'];
+                    $credits = $value['AsigCreditos'];
+                }
+            }
             $arrRow13 = array(
-                "Subject" => trim($dict['pes_mat_b1_h3_nombre']),
+                "Subject" => $asignatura,
                 "Block" => "B1",
                 "Hour" => "H3",
+                "Credit" => $credits,
             );
             array_push($arrData, $arrRow13);
         }
 
         if (!is_null($dict['pes_mat_b1_h4_nombre']) && trim($dict['pes_mat_b1_h4_nombre']) != "") {
+            $alias = trim($dict['pes_mat_b1_h4_nombre']);
+            $asignatura = $credits = "";
+            foreach($dataCredits as $key => $value){
+                if($value['AliasAsignatura'] == $alias){
+                    $asignatura = $value['Asignatura'];
+                    $credits = $value['AsigCreditos'];
+                }
+            }
             $arrRow14 = array(
-                "Subject" => trim($dict['pes_mat_b1_h4_nombre']),
+                "Subject" => $asignatura,
                 "Block" => "B1",
                 "Hour" => "H4",
+                "Credit" => $credits,
             );
             array_push($arrData, $arrRow14);
         }
 
         if (!is_null($dict['pes_mat_b1_h5_nombre']) && trim($dict['pes_mat_b1_h5_nombre']) != "") {
+            $alias = trim($dict['pes_mat_b1_h5_nombre']);
+            $asignatura = $credits = "";
+            foreach($dataCredits as $key => $value){
+                if($value['AliasAsignatura'] == $alias){
+                    $asignatura = $value['Asignatura'];
+                    $credits = $value['AsigCreditos'];
+                }
+            }
             $arrRow15 = array(
-                "Subject" => trim($dict['pes_mat_b1_h5_nombre']),
+                "Subject" => $asignatura,
                 "Block" => "B1",
                 "Hour" => "H5",
+                "Credit" => $credits,
             );
             array_push($arrData, $arrRow15);
         }
 
         if (!is_null($dict['pes_mat_b2_h1_nombre']) && trim($dict['pes_mat_b2_h1_nombre']) != "") {
+            $alias = trim($dict['pes_mat_b2_h1_nombre']);
+            $asignatura = $credits = "";
+            foreach($dataCredits as $key => $value){
+                if($value['AliasAsignatura'] == $alias){
+                    $asignatura = $value['Asignatura'];
+                    $credits = $value['AsigCreditos'];
+                }
+            }
             $arrRow21 = array(
-                "Subject" => trim($dict['pes_mat_b2_h1_nombre']),
+                "Subject" => $asignatura,
                 "Block" => "B2",
                 "Hour" => "H1",
+                "Credit" => $credits,
             );
             array_push($arrData, $arrRow21);
         }
 
         if (!is_null($dict['pes_mat_b2_h2_nombre']) && trim($dict['pes_mat_b2_h2_nombre']) != "") {
+            $alias = trim($dict['pes_mat_b2_h2_nombre']);
+            $asignatura = $credits = "";
+            foreach($dataCredits as $key => $value){
+                if($value['AliasAsignatura'] == $alias){
+                    $asignatura = $value['Asignatura'];
+                    $credits = $value['AsigCreditos'];
+                }
+            }
             $arrRow22 = array(
-                "Subject" => trim($dict['pes_mat_b2_h2_nombre']),
+                "Subject" => $asignatura,
                 "Block" => "B2",
                 "Hour" => "H2",
+                "Credit" => $credits,
             );
             array_push($arrData, $arrRow22);
         }
 
         if (!is_null($dict['pes_mat_b2_h3_nombre']) && trim($dict['pes_mat_b2_h3_nombre']) != "") {
+            $alias = trim($dict['pes_mat_b2_h3_nombre']);
+            $asignatura = $credits = "";
+            foreach($dataCredits as $key => $value){
+                if($value['AliasAsignatura'] == $alias){
+                    $asignatura = $value['Asignatura'];
+                    $credits = $value['AsigCreditos'];
+                }
+            }
             $arrRow23 = array(
-                "Subject" => trim($dict['pes_mat_b2_h3_nombre']),
+                "Subject" => $asignatura,
                 "Block" => "B2",
                 "Hour" => "H3",
+                "Credit" => $credits,
             );
             array_push($arrData, $arrRow23);
         }
 
         if (!is_null($dict['pes_mat_b2_h4_nombre']) && trim($dict['pes_mat_b2_h4_nombre']) != "") {
+            $alias = trim($dict['pes_mat_b2_h4_nombre']);
+            $asignatura = $credits = "";
+            foreach($dataCredits as $key => $value){
+                if($value['AliasAsignatura'] == $alias){
+                    $asignatura = $value['Asignatura'];
+                    $credits = $value['AsigCreditos'];
+                }
+            }
             $arrRow24 = array(
-                "Subject" => trim($dict['pes_mat_b2_h4_nombre']),
+                "Subject" => $asignatura,
                 "Block" => "B2",
                 "Hour" => "H4",
+                "Credit" => $credits,
             );
             array_push($arrData, $arrRow24);
         }
 
         if (!is_null($dict['pes_mat_b2_h5_nombre']) && trim($dict['pes_mat_b2_h5_nombre']) != "") {
+            $alias = trim($dict['pes_mat_b2_h5_nombre']);
+            $asignatura = $credits = "";
+            foreach($dataCredits as $key => $value){
+                if($value['AliasAsignatura'] == $alias){
+                    $asignatura = $value['Asignatura'];
+                    $credits = $value['AsigCreditos'];
+                }
+            }
             $arrRow25 = array(
-                "Subject" => trim($dict['pes_mat_b2_h5_nombre']),
+                "Subject" => $asignatura,
                 "Block" => "B2",
                 "Hour" => "H5",
+                "Credit" => $credits,
             );
             array_push($arrData, $arrRow25);
         }

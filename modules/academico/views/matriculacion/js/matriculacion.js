@@ -59,6 +59,25 @@ $(document).ready(function() {
     $('#cmb_carrera, #cmb_per_acad, #cmb_mod, #cmb_status').change(function() {
         searchModulesList('boxgrid', 'grid_listadoregistrados_list');
     });
+
+    $('#grid_registro_list > table > tbody > tr > td > input').change(function() {
+        var subtotal = 0;
+        var total = 0;
+        var asoc = $('#frm_asc_est').val();
+        var mat = $('#frm_mat_cos').val();
+        $('#grid_registro_list > table > tbody > tr > td > input').each(function() {
+            if ($(this).is(':checked')) {
+                var credits = $(this).parent().prev().text();
+                var cat = $('#frm_cat_price').val();
+                var costMat = cat * credits;
+                subtotal += costMat;
+            }
+            $('#costMat').text('$' + subtotal.toFixed(2));
+        });
+        //total = subtotal + parseFloat(asoc) + parseFloat(mat);
+        total = subtotal + parseFloat(asoc);
+        $('#costTotal').text('$' + total.toFixed(2));
+    });
 });
 
 function savemethod() {
@@ -133,6 +152,11 @@ function registro() {
         arrParams.pes_id = $('#frm_pes_id').val();
         arrParams.modalidad = $('#frm_modalidad').val();
         arrParams.carrera = $('#frm_carrera').val();
+        arrParams.arancel = $('#frm_cat_price').val();
+        arrParams.matricula = $('#frm_mat_cos').val();
+        arrParams.categoria = $('#frm_categoria').val();
+        arrParams.asociacion = $('#frm_asc_est').val();
+        arrParams.gastos = $('#frm_gas_adm').val();
         arrParams.pdf = 1;
         materias = materias.substring(0, materias.length - 1);
         arrParams.materias = materias;

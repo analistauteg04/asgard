@@ -41,6 +41,7 @@
 
 return [
     'Academic Period' => 'Periodo Académico',
+    'Administrative Expenses' => 'Gastos Administrativos',
     'Period' => 'Periodo',
     'Student' => 'Estudiante',
     'DNI' => 'DNI',
@@ -49,6 +50,8 @@ return [
     'Phone' => 'Teléfono',    
     'Register Cost' => 'Costo del registro',
     'Subject Cod.' => 'Cod. Materia',
+    'Cost per Subject' => 'Costo por Materias',
+    'Students Association' => 'Asociación de Estudiantes',
     'Subject' => 'Materia',
     'Credit' => 'Créditos',
     'Unit Cost' => 'Costo Unitario',
@@ -94,6 +97,7 @@ return [
     'Last register saved (Non-registration time)' => 'Último registro guardado (Tiempo de no registro)',
     'Payment' => 'Pago',
     'Registration payment' => 'Pago de matriculación',
+    'Registration Number' => 'Número de Matricula',
     'Payment state' => 'Estado del pago',
     'Not reviewed' => 'No revisado',
     'Approved' => 'Aprobado',
