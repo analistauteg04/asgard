@@ -24,19 +24,19 @@ Academico::registerTranslations();
         <div class="form-group">
             <label for="txt_idio_escrito" class="col-lg-3 col-md-3 col-sm-3 col-xs-3 control-label"><?= Academico::t("profesor", "Written Level")?> <span class="text-danger">*</span></label>
             <div class="col-lg-6 col-md-9 col-sm-9 col-xs-9">
-                <input type="text" class="form-control PBvalidations" id="txt_idio_escrito" data-type="alfa" placeholder="<?= Academico::t("profesor", "Written Level") ?>">
+                <?= Html::dropDownList("cmb_nivel_escrito", "", $arr_nivel_ingles, ["class" => "form-control", "id" => "cmb_nivel_escrito"]) ?>                
             </div>
         </div>
         <div class="form-group">
             <label for="txt_idio_oral" class="col-lg-3 col-md-3 col-sm-3 col-xs-3 control-label"><?= Academico::t("profesor", "Oral Level") ?> <span class="text-danger">*</span></label>
             <div class="col-lg-6 col-md-9 col-sm-9 col-xs-9">
-                <input type="text" class="form-control PBvalidations" id="txt_idio_oral" data-type="alfa" placeholder="<?= Academico::t("profesor", "Oral Level") ?>">
+                <?= Html::dropDownList("cmb_nivel_oral", "", $arr_nivel_ingles, ["class" => "form-control", "id" => "cmb_nivel_oral"]) ?>                
             </div>
         </div>
         <div class="form-group">
             <label for="txt_idio_certificado" class="col-lg-3 col-md-3 col-sm-3 col-xs-3 control-label"><?= Academico::t("profesor", "Certificate of Sufficiency") ?> <span class="text-danger">*</span></label>
             <div class="col-lg-6 col-md-9 col-sm-9 col-xs-9">
-                <input type="text" class="form-control PBvalidations" id="txt_idio_certificado" data-type="alfa" placeholder="<?= Academico::t("profesor", "Certificate of Sufficiency") ?>">
+                <?= Html::dropDownList("cmb_certificado", "", $arr_certificado, ["class" => "form-control", "id" => "cmb_certificado"]) ?>                
             </div>
         </div>
         <div class="form-group">

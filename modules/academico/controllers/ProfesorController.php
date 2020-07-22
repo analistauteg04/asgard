@@ -416,9 +416,12 @@ class ProfesorController extends \app\components\CController {
 
             $proIdiomas = new ProfesorIdiomas();
             $arr_profIdi = $proIdiomas->getIdiomas();
+            $arr_nivelIdi = $proIdiomas->getNivelidiomas();
             $EditFormTab7 = $this->renderPartial('EditFormTab7',[
                 'model' => $proIdiomas->getAllIdiomasGrid($profesor_model->pro_id),
                 'arr_languages' => (empty(ArrayHelper::map($arr_profIdi, "id", "nombre"))) ? array(Academico::t("profesor", "-- Select Language --")) : (ArrayHelper::map($arr_profIdi, "id", "nombre")),
+                'arr_certificado' => array("0" => "Seleccione", "1" => "Si", "2" => "No"),
+                'arr_nivel_ingles' => (empty(ArrayHelper::map($arr_nivelIdi, "id", "nombre"))) ? array(Academico::t("profesor", "-- Select Level --")) : (ArrayHelper::map($arr_nivelIdi, "id", "nombre")),                
             ]);
 
             $proInvestigacion = new ProfesorInvestigacion();
@@ -655,10 +658,14 @@ class ProfesorController extends \app\components\CController {
         ]);
         $proIdiomas = new ProfesorIdiomas();
         $arr_profIdi = $proIdiomas->getIdiomas();
+        $arr_nivelIdi = $proIdiomas->getNivelidiomas();
         $NewFormTab7 = $this->renderPartial('NewFormTab7',[
             'model' => new ArrayDataProvider(array()),
             'arr_languages' => (empty(ArrayHelper::map($arr_profIdi, "id", "nombre"))) ? array(Academico::t("profesor", "-- Select Language --")) : (ArrayHelper::map($arr_profIdi, "id", "nombre")),
-        ]);
+            'arr_certificado' => array("0" => "Seleccione", "1" => "Si", "2" => "No"),
+            'arr_nivel_ingles' => (empty(ArrayHelper::map($arr_nivelIdi, "id", "nombre"))) ? array(Academico::t("profesor", "-- Select Level --")) : (ArrayHelper::map($arr_nivelIdi, "id", "nombre")),                
+            ]);
+        
         $NewFormTab8 = $this->renderPartial('NewFormTab8',[
             'model' => new ArrayDataProvider(array()),
         ]);
@@ -966,10 +973,10 @@ class ProfesorController extends \app\components\CController {
                             foreach($arr_idioma as $key3 => $value3){
                                 $idiomas_model = new ProfesorIdiomas();
                                 $idiomas_model->idi_id = $value3[1];
-                                $idiomas_model->pidi_nivel_escrito = strtolower($value3[2]);
-                                $idiomas_model->pidi_nivel_oral = strtolower($value3[3]);
-                                $idiomas_model->pidi_certificado = strtolower($value3[4]);
-                                $idiomas_model->pidi_institucion = strtolower($value3[5]);
+                                $idiomas_model->pidi_nivel_escrito = ucfirst($value3[2]);
+                                $idiomas_model->pidi_nivel_oral = ucfirst($value3[3]);
+                                $idiomas_model->pidi_certificado = ucfirst($value3[4]);
+                                $idiomas_model->pidi_institucion = ucwords($value3[5]);
                                 $idiomas_model->pro_id = $profesor_model->pro_id;
                                 $idiomas_model->pidi_estado = '1';
                                 $idiomas_model->pidi_estado_logico = '1';
@@ -1025,10 +1032,10 @@ class ProfesorController extends \app\components\CController {
                         if(isset($arr_coordinacion)){
                             foreach($arr_coordinacion as $key7 => $value7){
                                 $coordinacion_model = new ProfesorCoordinacion();
-                                $coordinacion_model->pcoo_alumno = strtolower($value7[1]);
-                                $coordinacion_model->pcoo_programa = strtolower($value7[2]);
-                                $coordinacion_model->pcoo_academico = strtolower($value7[3]);
-                                $coordinacion_model->pcoo_institucion = strtolower($value7[4]);
+                                $coordinacion_model->pcoo_alumno = ucwords($value7[1]);
+                                $coordinacion_model->pcoo_programa = ucfirst($value7[2]);
+                                $coordinacion_model->pcoo_academico = ucfirst($value7[3]);
+                                $coordinacion_model->pcoo_institucion = ucwords($value7[4]);
                                 $coordinacion_model->pcoo_anio = strtolower($value7[5]);
                                 $coordinacion_model->pro_id = $profesor_model->pro_id;
                                 $coordinacion_model->pcoo_estado = '1';
@@ -1217,10 +1224,10 @@ class ProfesorController extends \app\components\CController {
                             foreach($arr_idioma as $key3 => $value3){
                                 $idiomas_model = new ProfesorIdiomas();
                                 $idiomas_model->idi_id = $value3[1];
-                                $idiomas_model->pidi_nivel_escrito = strtolower($value3[2]);
-                                $idiomas_model->pidi_nivel_oral = strtolower($value3[3]);
-                                $idiomas_model->pidi_certificado = strtolower($value3[4]);
-                                $idiomas_model->pidi_institucion = strtolower($value3[5]);
+                                $idiomas_model->pidi_nivel_escrito = ucfirst($value3[2]);
+                                $idiomas_model->pidi_nivel_oral = ucfirst($value3[3]);
+                                $idiomas_model->pidi_certificado = ucfirst($value3[4]);
+                                $idiomas_model->pidi_institucion = ucwords($value3[5]);
                                 $idiomas_model->pro_id = $profesor_model->pro_id;
                                 $idiomas_model->pidi_estado = '1';
                                 $idiomas_model->pidi_estado_logico = '1';
@@ -1534,10 +1541,10 @@ class ProfesorController extends \app\components\CController {
                         foreach($arr_idioma as $key3 => $value3){
                             $idiomas_model = new ProfesorIdiomas();
                             $idiomas_model->idi_id = $value3[1];
-                            $idiomas_model->pidi_nivel_escrito = strtolower($value3[2]);
-                            $idiomas_model->pidi_nivel_oral = strtolower($value3[3]);
-                            $idiomas_model->pidi_certificado = strtolower($value3[4]);
-                            $idiomas_model->pidi_institucion = strtolower($value3[5]);
+                            $idiomas_model->pidi_nivel_escrito = ucfirst($value3[2]);
+                            $idiomas_model->pidi_nivel_oral = ucfirst($value3[3]);
+                            $idiomas_model->pidi_certificado = ucfirst($value3[4]);
+                            $idiomas_model->pidi_institucion = ucwords($value3[5]);
                             $idiomas_model->pro_id = $profesor_model->pro_id;
                             $idiomas_model->pidi_estado = '1';
                             $idiomas_model->pidi_estado_logico = '1';

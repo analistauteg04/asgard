@@ -484,10 +484,14 @@ function removeItemExperiencia(ref) {
 function addIdioma() {
     var idio_id = $("#cmb_idiomas").val();
     var idio_name = $("#cmb_idiomas :selected").text();
-    var escrito = $("#txt_idio_escrito").val();
-    var oral = $("#txt_idio_oral").val();
-    var certificado = $("#txt_idio_certificado").val();
+    var escrito = $("#cmb_nivel_escrito :selected").text();
+    var oral = $("#cmb_nivel_oral :selected").text();
+    var certificado = $("#cmb_certificado :selected").text();
     var institucion = $("#txt_idio_institucion").val();
+
+    //var combo_escrito = document.getElementById("#cmb_nivel_escrito");
+   // var res_escrito = $("#cmb_nivel_escrito").options[$("#cmb_nivel_escrito").selectedIndex].text;
+   // alert(res_escrito);
 
     if (escrito == "" || oral == "" || certificado == "" || institucion == "") {
         fillDataAlert();
@@ -551,9 +555,9 @@ function addIdioma() {
     addItemGridContent("grid_idioma_list");
 
     $("#cmb_idiomas").val('');
-    $("#txt_idio_escrito").val('');
-    $("#txt_idio_oral").val('');
-    $("#txt_idio_certificado").val('');
+    $("#cmb_nivel_escrito").val('');
+    $("#cmb_nivel_oral").val('');
+    $("#cmb_certificado").val('');
     $("#txt_idio_institucion").val('');
 }
 

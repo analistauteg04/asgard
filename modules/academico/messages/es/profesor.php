@@ -120,4 +120,6 @@ return [
     'Position' => 'Cargo / Relación',
     'Contact Number' => 'Número de Contacto',
     'CV' => 'CV',
+    '-- Select Level --' => '-- Seleccione un Nivel --',
+    'Thesis topic' => 'Tema de tesis',
 ];

@@ -223,4 +223,21 @@ class ProfesorIdiomas extends \yii\db\ActiveRecord
             return false;
         }
     }
+    
+    public function getNivelidiomas(){        
+    $con_general = \Yii::$app->db_general;    
+    $estado = "1";
+    $sql = "SELECT
+                nidi_id AS id,
+                nidi_descripcion AS nombre
+            FROM nivel_idioma
+            WHERE nidi_estado_logico = :estado
+                AND nidi_estado_logico = :estado
+            ORDER BY nidi_id;";
+    $comando = Yii::$app->db_general->createCommand($sql);        
+    $comando->bindParam(":estado",$estado, \PDO::PARAM_STR);
+
+    $res = $comando->queryAll();        
+    return $res;
+    }
 }
