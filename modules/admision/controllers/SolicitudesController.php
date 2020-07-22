@@ -1222,9 +1222,7 @@ class SolicitudesController extends \app\components\CController {
         $usuario = new Usuario();
         $security = new Security();
         $usergrol = new UsuaGrolEper();
-        $mod_Estudiante = new Estudiante();
-        $mod_Modestuni = new ModuloEstudio;
-        $per_sistema = @Yii::$app->session->get("PB_perid");        
+        $per_sistema = @Yii::$app->session->get("PB_perid");
         $usu_autenticado = @Yii::$app->session->get("PB_iduser");
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
@@ -1251,7 +1249,11 @@ class SolicitudesController extends \app\components\CController {
             $transaction = $con->beginTransaction();
             $con2 = \Yii::$app->db_facturacion;
             $transaction2 = $con2->beginTransaction();
+            $con3 = \Yii::$app->db_academico;
+            $transaction3 = $con3->beginTransaction();
             try {
+                $mod_Estudiante = new Estudiante();
+                $mod_Modestuni = new ModuloEstudio;
                 if ($rsin_id != 2) {
                     $mod_solins = new SolicitudInscripcion();
                     $mod_ordenpago = new OrdenPago();
@@ -1294,16 +1296,13 @@ class SolicitudesController extends \app\components\CController {
                                             if ($resp_sol) {
                                                 $mod_persona = new Persona();
                                                 $resp_persona = $mod_persona->consultaPersonaId($per_id);
-                                                // ********* OJO Aqui el desarrollo ********** /                                              
-                                      
-                                                /* *************************************************** */
-                                                //Modificar y activar clave de usuario con numero de cedula 
+                                                  //Modificar y activar clave de usuario con numero de cedula 
                                                 if ($resp_sol["emp_id"] == 1) {
                                                     $usu_sha = $security->generateRandomString();
                                                     $usu_pass = base64_encode($security->encryptByPassword($usu_sha, $resp_persona["per_cedula"]));
-                                                    $respUsu = $usuario->actualizarDataUsuario($usu_sha, $usu_pass, $resp_persona["usu_id"]);                                                   
+                                                    $respUsu = $usuario->actualizarDataUsuario($usu_sha, $usu_pass, $resp_persona["usu_id"]);
                                                     // YA TIENE USUARIO GROL PERO CON ROL 30 DEBERIA MODIFICARSE A 37 SE DEBE ENVIAR EL USU_ID
-                                                    if ($respUsu) {                                                  
+                                                    if ($respUsu) {
                                                         $respUsugrol = $usergrol->actualizarRolEstudiante($resp_persona["usu_id"]);
                                                         if ($respUsugrol) {
                                                             // Guardar en tabla esdudiante
@@ -1311,18 +1310,17 @@ class SolicitudesController extends \app\components\CController {
                                                             $fecha = date(Yii::$app->params["dateTimeByDefault"]);
                                                             //\app\models\Utilities::putMessageLogFile('per_id '. $fecha);
                                                             $resp_estudiante = $mod_Estudiante->insertarEstudiante($per_id, null, $usu_autenticado, null, $fecha, null);
-                                                            \app\models\Utilities::putMessageLogFile('estudiante id'. $resp_estudiante);   
-                                                           // if ($resp_estudiante) {
+                                                            //\app\models\Utilities::putMessageLogFile('estudiante inscripcion' . $resp_estudiante);
+                                                            if ($resp_estudiante) {
                                                                 //\app\models\Utilities::putMessageLogFile('entro modalidad estudio unidad');
                                                                 // Obtener el meun_id con lo con el uaca_id, mod_id y eaca_id, el est_id
                                                                 $resp_mestuni = $mod_Modestuni->consultarModalidadestudiouni($resp_sol["nivel_interes"], $resp_sol["mod_id"], $resp_sol["eaca_id"]);
-                                                                /*OJO NO INSERTA EN LA TABLA ESTUDIANTE CARRERA PROGRAMA PORQ NO DEVUELVE EL ID DE ESTUDIANTE LINEA 1313*/
-                                                                /*if ($resp_mestuni) {
-                                                                    \app\models\Utilities::putMessageLogFile('entro estudiante carrera programa ');
+                                                                if ($resp_mestuni) {
+                                                                    //\app\models\Utilities::putMessageLogFile('entro estudiante carrera programa ');
                                                                     // Guardar en tabla estudiante_carrera_programa
-                                                                    $resp_estudcarreprog = $mod_Estudiante->insertarEstcarreraprog($resp_estudiante, $resp_mestuni["meun_id"], $fecha, $usu_autenticado, $fecha);                                                                  
-                                                                }*/
-                                                           // }
+                                                                    $resp_estudcarreprog = $mod_Estudiante->insertarEstcarreraprog($resp_estudiante, $resp_mestuni["meun_id"], $fecha, $usu_autenticado, $fecha);
+                                                                }
+                                                            }
                                                         }
                                                     }
                                                 }
@@ -1551,6 +1549,7 @@ class SolicitudesController extends \app\components\CController {
                         if ($exito) {
                             $transaction->commit();
                             $transaction2->commit();
+                            $transaction3->commit();
                             $message = array(
                                 "wtmessage" => Yii::t("notificaciones", "La información ha sido grabada."),
                                 "title" => Yii::t('jslang', 'Success'),
@@ -1560,6 +1559,7 @@ class SolicitudesController extends \app\components\CController {
                             //$paso = 1;
                             $transaction->rollback();
                             $transaction2->rollback();
+                            $transaction3->rollback();
                             if (empty($message)) {
                                 $message = array
                                     (
@@ -1572,6 +1572,7 @@ class SolicitudesController extends \app\components\CController {
                     } else {
                         $transaction->rollback();
                         $transaction2->rollback();
+                        $transaction3->rollback();
                         $message = array
                             (
                             "wtmessage" => Yii::t("notificaciones", "Solicitud no tiene los documentos cargados."), "title" =>
@@ -1582,6 +1583,7 @@ class SolicitudesController extends \app\components\CController {
                 } else {
                     $transaction->rollback();
                     $transaction2->rollback();
+                    $transaction3->rollback();
                     $message = array
                         (
                         "wtmessage" => Yii::t("notificaciones", "Solicitud se encuentra Aprobada."), "title" =>
@@ -1592,6 +1594,7 @@ class SolicitudesController extends \app\components\CController {
             } catch (Exception $ex) {
                 $transaction->rollback();
                 $transaction2->rollback();
+                $transaction3->rollback();
                 $message = array(
                     "wtmessage" => Yii::t("notificaciones", "Error al grabar." . $mensaje),
                     "title" => Yii::t('jslang', 'Success'),
