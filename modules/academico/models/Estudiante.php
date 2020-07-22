@@ -166,21 +166,49 @@ class Estudiante extends \yii\db\ActiveRecord {
             return FALSE;
         }
     }
-
+    
     /**
-     * Function Consultar estudiante existe.
+     * Function Consultar estudiante existe creado y ya esta matriculado.
      * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;
      * @property       
      * @return  
      */
-    public function getEstudiantexids($per_id) {
+    public function getEstudiantexid($per_id) {
         $con = \Yii::$app->db_academico;
         $estado = 1;
 
         $sql = "SELECT 	
-                        count(*) as total
+                        est.est_id as idestudiante                       
                         
-                FROM " . $con->dbname . ".estudiante                     
+                FROM " . $con->dbname . ".estudiante est
+                        INNER JOIN " . $con->dbname . ".matriculacion_programa_inscrito mpi ON mpi.est_id = est.est_id
+                WHERE   per_id = :per_id                        
+                        AND est.est_estado = :estado
+                        AND est.est_estado_logico = :estado 
+                        AND mpi.mpin_estado = :estado
+                        AND mpi.mpin_estado_logico = :estado ";
+
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":per_id", $per_id, \PDO::PARAM_INT);
+        $resultData = $comando->queryOne();
+        return $resultData;
+    }
+
+    /**
+     * Function Consultar id estudiante segun per_id.
+     * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;
+     * @property       
+     * @return  
+     */
+    public function getEstudiantexperid($per_id) {
+        $con = \Yii::$app->db_academico;
+        $estado = 1;
+
+        $sql = "SELECT 	
+                        est_id                       
+                        
+                FROM " . $con->dbname . ".estudiante est                       
                 WHERE   per_id = :per_id                        
                         AND est_estado = :estado
                         AND est_estado_logico = :estado ";

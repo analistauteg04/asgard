@@ -596,18 +596,27 @@ class MatriculacionposgradosController extends \app\components\CController {
                 $mod_Estudiante = new Estudiante();
                 $mod_paralelo = new ParaleloPromocionPrograma();
                 $mod_matricula = new MatriculacionProgramaInscrito();
-                // consultar si el estudiante no ha sido creado antes segun su perid
-                $resp_estudiante = $mod_Estudiante->getEstudiantexids($per_id);
-                if ($resp_estudiante["total"] == 0) {
+                // consultar si el estudiante ya ha sido creado y si esta registrado en alguna materia
+                $resp_estudiante = $mod_Estudiante->getEstudiantexid($per_id);
+                //\app\models\Utilities::putMessageLogFile('resp_estudiante... ' . $resp_estudiante["idestudiante"]);
+                if ($resp_estudiante["idestudiante"] == "") {
                     $resp_cupoparalelo = $mod_paralelo->getParalelosxids($paralelo, $promocion);
                     // \app\models\Utilities::putMessageLogFile('cupo disponible' . $resp_cupoparalelo["pppr_cupo_actual"]);
                     if ($resp_cupoparalelo["pppr_cupo_actual"] > 0) {
                         $fecha = date(Yii::$app->params["dateTimeByDefault"]);
-                        // grabar tabla estudiantes
-                        $resp_estudiante = $mod_Estudiante->insertarEstudiante($per_id, $matricula, $usu_id, null, null, $fecha);
-                        if ($resp_estudiante) {
+                        // consultar si existe el estudiante creado, sino crearlo
+                        $resp_estudianteid = $mod_Estudiante->getEstudiantexperid($per_id);
+                        if ($resp_estudianteid["est_id"] == "") {
+                            // grabar tabla estudiantes
+                            $resp_estudiantes = $mod_Estudiante->insertarEstudiante($per_id, $matricula, $usu_id, null, null, $fecha);
+                        } else {
+                            /*** OJO UNA VEZ QUE SE TENGA EL MODIFICAR ESTUDIANTE ACTUALIZAR EL NUMERO DE MATRICULA ENVIANDO EL EST_ID***/
+                            $resp_estudiantes = $resp_estudianteid["est_id"];
+                        }
+                        //\app\models\Utilities::putMessageLogFile('resp_estudiante... ' . $resp_estudiantes);
+                        if ($resp_estudiantes) {
                             // grabar en matriculacion_programa_inscrito
-                            $resp_matricula_inscrito = $mod_matricula->insertarMatriculainscrito($paralelo, $adm_id, $resp_estudiante, $fecha, $usu_id, $fecha);
+                            $resp_matricula_inscrito = $mod_matricula->insertarMatriculainscrito($paralelo, $adm_id, $resp_estudiantes, $fecha, $usu_id, $fecha);
                             if ($resp_matricula_inscrito) {
                                 // actualizar en paralelo_promocion_programa el cupo
                                 $resp_actualiza_cupo = $mod_paralelo->actualizarCupoparalelo($paralelo, $promocion, $usu_id);
@@ -634,7 +643,7 @@ class MatriculacionposgradosController extends \app\components\CController {
                     if (empty($message)) {
                         $message = array
                             (
-                            "wtmessage" => Yii::t("notificaciones", "Error al grabar. " . $mensaje), "title" =>
+                            "wtmessage" => Yii::t("notificaciones", "Error al grabar1. " . $mensaje), "title" =>
                             Yii::t('jslang', 'Success'),
                         );
                     }
@@ -643,7 +652,7 @@ class MatriculacionposgradosController extends \app\components\CController {
             } catch (Exception $ex) {
                 $transaction->rollback();
                 $message = array(
-                    "wtmessage" => Yii::t("notificaciones", "Error al grabar." . $mensaje),
+                    "wtmessage" => Yii::t("notificaciones", "Error al grabar2." . $mensaje),
                     "title" => Yii::t('jslang', 'Success'),
                 );
                 return \app\models\Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
