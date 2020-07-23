@@ -166,7 +166,7 @@ class Estudiante extends \yii\db\ActiveRecord {
             return FALSE;
         }
     }
-    
+
     /**
      * Function Consultar estudiante existe creado y ya esta matriculado.
      * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;
@@ -263,15 +263,15 @@ class Estudiante extends \yii\db\ActiveRecord {
         $comando = $con->createCommand($sql);
         $resultData = $comando->queryAll();
         return $resultData;
-        }
+    }
 
-        /**
-         * Function guardar estudiante carrera programa
-         * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>
-         * @param   
-         * @return  $resultData (Retornar el código de ecpr_id).
-         */
-        public function insertarEstcarreraprog($est_id, $meun_id, $ecpr_fecha_registro, $ecpr_usuario_ingreso, $ecpr_fecha_creacion) {
+    /**
+     * Function guardar estudiante carrera programa
+     * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>
+     * @param   
+     * @return  $resultData (Retornar el código de ecpr_id).
+     */
+    public function insertarEstcarreraprog($est_id, $meun_id, $ecpr_fecha_registro, $ecpr_usuario_ingreso, $ecpr_fecha_creacion) {
 
         $con = \Yii::$app->db_academico;
         $trans = $con->getTransaction(); // se obtiene la transacción actual
@@ -294,7 +294,7 @@ class Estudiante extends \yii\db\ActiveRecord {
             $param_sql .= ", meun_id";
             $bsol_sql .= ", :meun_id";
         }
-        
+
         if (isset($ecpr_fecha_registro)) {
             $param_sql .= ", ecpr_fecha_registro";
             $bsol_sql .= ", :ecpr_fecha_registro";
@@ -303,7 +303,7 @@ class Estudiante extends \yii\db\ActiveRecord {
         if (isset($ecpr_usuario_ingreso)) {
             $param_sql .= ", ecpr_usuario_ingreso";
             $bsol_sql .= ", :ecpr_usuario_ingreso";
-        }        
+        }
 
         if (isset($ecpr_fecha_creacion)) {
             $param_sql .= ", ecpr_fecha_creacion";
@@ -322,14 +322,14 @@ class Estudiante extends \yii\db\ActiveRecord {
             if (isset($meun_id)) {
                 $comando->bindParam(':meun_id', $meun_id, \PDO::PARAM_INT);
             }
-            
+
             if (isset($ecpr_fecha_registro)) {
                 $comando->bindParam(':ecpr_fecha_registro', $ecpr_fecha_registro, \PDO::PARAM_STR);
             }
 
             if (isset($ecpr_usuario_ingreso)) {
                 $comando->bindParam(':ecpr_usuario_ingreso', $ecpr_usuario_ingreso, \PDO::PARAM_INT);
-            }            
+            }
 
             if (isset($ecpr_fecha_creacion)) {
                 $comando->bindParam(':ecpr_fecha_creacion', $ecpr_fecha_creacion, \PDO::PARAM_STR);
@@ -343,6 +343,116 @@ class Estudiante extends \yii\db\ActiveRecord {
                 $trans->rollback();
             return FALSE;
         }
+    }
+
+    /**
+     * Function consultar informacion del estudiantes
+     * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>         
+     * @property  
+     * @return  
+     */
+    public function consultarEstudiante($arrFiltro = array(), $onlyData = false) {
+        $con = \Yii::$app->db_academico;
+        $con1 = \Yii::$app->db_asgard;
+        /* if (isset($arrFiltro) && count($arrFiltro) > 0) {
+          $str_search .= "(per.per_pri_nombre like :profesor OR ";
+          $str_search .= "per.per_seg_nombre like :profesor OR ";
+          $str_search .= "per.per_pri_apellido like :profesor OR ";
+          $str_search .= "per.per_seg_nombre like :profesor )  AND ";
+          $str_search .= "asig.asi_nombre like :materia  AND ";
+
+          if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
+          $str_search .= "r.rmtm_fecha_transaccion >= :fec_ini AND ";
+          $str_search .= "r.rmtm_fecha_transaccion <= :fec_fin AND ";
+          }
+          if ($arrFiltro['periodo'] != "" && $arrFiltro['periodo'] > 0) {
+          $str_search .= " h.paca_id = :periodo AND ";
+          }
+          if ($arrFiltro['estado'] != "0") {
+          $str_search .= " ifnull(m.rmar_tipo,'N') = :estadoM AND ";
+          }
+          }
+          if ($onlyData == false) {
+          $periodoacademico = 'h.paca_id as periodo, ';
+          $grupoperi = ',periodo';
+          } */
+        $sql = "SELECT 
+	           -- pers.per_id,
+                      concat(pers.per_pri_nombre, ' ', pers.per_pri_apellido) as nombres,
+                      pers.per_cedula as dni,
+                      IFNULL(estu.est_matricula, '') as matricula,
+                      IFNULL(estu.est_categoria, '') as categoria,
+                      IFNULL(estu.est_fecha_creacion, '') as fecha_creacion
+                FROM  " . $con->dbname . ".estudiante estu
+                RIGHT JOIN " . $con1->dbname . ".persona pers ON pers.per_id = estu.per_id		
+                WHERE pers.per_id > 1000                
+                ORDER BY estu.est_fecha_creacion DESC";
+
+        $comando = $con->createCommand($sql);
+        //$comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        /* if (isset($arrFiltro) && count($arrFiltro) > 0) {
+          $search_cond = "%" . $arrFiltro["profesor"] . "%";
+          $comando->bindParam(":profesor", $search_cond, \PDO::PARAM_STR);
+          $fecha_ini = $arrFiltro["f_ini"] . " 00:00:00";
+          $fecha_fin = $arrFiltro["f_fin"] . " 23:59:59";
+          $materia = "%" . $arrFiltro["materia"] . "%";
+          $comando->bindParam(":materia", $materia, \PDO::PARAM_STR);
+
+          if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
+          $comando->bindParam(":fec_ini", $fecha_ini, \PDO::PARAM_STR);
+          $comando->bindParam(":fec_fin", $fecha_fin, \PDO::PARAM_STR);
+          }
+          if ($arrFiltro['periodo'] != "" && $arrFiltro['periodo'] > 0) {
+          $periodo = $arrFiltro["periodo"];
+          $comando->bindParam(":periodo", $periodo, \PDO::PARAM_INT);
+          }
+          if ($arrFiltro['estado'] != "0") {
+          $estadoM = $arrFiltro["estado"];
+          $comando->bindParam(":estadoM", $estadoM, \PDO::PARAM_STR);
+          }
+          } */
+        $resultData = $comando->queryAll();
+        $dataProvider = new ArrayDataProvider([
+            'key' => 'id',
+            'allModels' => $resultData,
+            'pagination' => [
+                'pageSize' => Yii::$app->params["pageSize"],
+            ],
+            'sort' => [
+                'attributes' => [
+                ],
+            ],
+        ]);
+        if ($onlyData) {
+            return $resultData;
+        } else {
+            return $dataProvider;
+        }
+    }
+
+    /**
+     * Function Consultar estudiante existe creado en estudiante_carrera_programa.
+     * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;
+     * @property       
+     * @return  
+     */
+    public function consultarEstcarreraprogrma($est_id) {
+        $con = \Yii::$app->db_academico;
+        $estado = 1;
+
+        $sql = "SELECT 	
+                        ecpr_id as idestcarrera                       
+                        
+                FROM " . $con->dbname . ".estudiante_carrera_programa                        
+                WHERE   est_id = :est_id                        
+                        AND ecpr_estado = :estado
+                        AND ecpr_estado_logico = :estado ";
+
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":est_id", $est_id, \PDO::PARAM_INT);
+        $resultData = $comando->queryOne();
+        return $resultData;
     }
 
 }

@@ -11,7 +11,7 @@ academico::registerTranslations();
 
 <?=
     PbGridView::widget([
-        'id' => 'grid_diploma_list',
+        'id' => 'Tbg_Estudiantes',
         'showExport' => false,
         //'fnExportEXCEL' => "exportExcel",
         //'fnExportPDF' => "exportPdf",
@@ -22,19 +22,14 @@ academico::registerTranslations();
             [
                 'attribute' => 'Nombres',
                 'header' => Yii::t("formulario", "First Names"),
-                'value' => 'Nombres',
-            ],
-            [
-                'attribute' => 'Apellidos',
-                'header' => Yii::t("formulario", "Last Names"),
-                'value' => 'Apellidos',
-            ],
+                'value' => 'nombres',
+            ],            
             [
                 'attribute' => 'Cedula',
                 'header' => academico::t("diploma", "DNI"),
-                'value' => 'Cedula',
+                'value' => 'dni',
             ],
-            [
+            /*[
                 'attribute' => 'Carrera',
                 'header' => academico::t("matriculacion", "Career"),
                 'value' => 'Carrera',
@@ -56,39 +51,22 @@ academico::registerTranslations();
                         return Html::a('<span>' . substr($model['Programa'], 0, 20) . $texto . '</span>', "javascript:", ["data-toggle" => "tooltip", "title" => $model['Programa']]);
                     },
                 ],
+            ],*/
+            [
+                'attribute' => 'matricula',
+                'header' => academico::t("Academico", 'Enrollment Number'),
+                'value' => 'matricula',
             ],
             [
-                'attribute' => 'FechaInicio',
-                'header' => Yii::t("formulario", "Start date"),
-                'value' => 'FechaInicio',
+                'attribute' => 'categoria',
+                'header' => Yii::t("formulario", "Category"),
+                'value' => 'categoria',
             ],
             [
-                'attribute' => 'FechaFin',
-                'header' => academico::t("diploma", 'End Date'),
-                'value' => 'FechaFin',
-            ],
-            [
-                'attribute' => 'Horas',
-                'header' => academico::t("diploma", 'Hours'),
-                'value' => 'Horas',
-            ],
-            [
-                'class' => 'yii\grid\ActionColumn',
-                //'header' => 'Action',
-                'contentOptions' => ['style' => 'text-align: center;'],
-                'headerOptions' => ['width' => '60'],
-                'template' => '{download} {revision}',
-                'buttons' => [
-                    'download' => function ($url, $model) {
-                        return Html::a('<span class="glyphicon glyphicon-download"></span>', null, ['href' => 'javascript:downloadDiploma('.$model['Id'].')', "data-toggle" => "tooltip", "title" => Yii::t("accion","Download")]);                        
-                    },
-                    'revision' => function ($url, $model) {
-                        if($model['Descarga'] == 1)
-                            return Html::a('<span class="glyphicon glyphicon-ok"></span>', null, ['href' => 'javascript:', "data-toggle" => "tooltip", "title" => academico::t("diploma","File Downloaded")]);
-                        return "";
-                    },
-                ],
-            ],
+                'attribute' => 'fechacreacion',
+                'header' => Yii::t("formulario", 'Date Create'),
+                'value' => 'fecha_creacion',
+            ],      
         ],
     ])
 ?>

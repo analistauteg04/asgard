@@ -197,6 +197,7 @@ return [
     "Data Time Class" => "Datos Hora clase",
     "Date" => "Fecha",
     "Date Achievement" => "Fecha Reconocimiento",
+    "Date Create" => "Fecha Creación",
     "Date Entry" => "Fecha Ingreso",
     "Date Next attention" => "Fecha Próxima Atención",
     "Date Next attention End" => "Fecha Próx. Atención Fin",

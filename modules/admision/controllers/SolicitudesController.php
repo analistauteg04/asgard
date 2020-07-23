@@ -1296,7 +1296,7 @@ class SolicitudesController extends \app\components\CController {
                                             if ($resp_sol) {
                                                 $mod_persona = new Persona();
                                                 $resp_persona = $mod_persona->consultaPersonaId($per_id);
-                                                  //Modificar y activar clave de usuario con numero de cedula 
+                                                //Modificar y activar clave de usuario con numero de cedula 
                                                 if ($resp_sol["emp_id"] == 1) {
                                                     $usu_sha = $security->generateRandomString();
                                                     $usu_pass = base64_encode($security->encryptByPassword($usu_sha, $resp_persona["per_cedula"]));
@@ -1305,20 +1305,25 @@ class SolicitudesController extends \app\components\CController {
                                                     if ($respUsu) {
                                                         $respUsugrol = $usergrol->actualizarRolEstudiante($resp_persona["usu_id"]);
                                                         if ($respUsugrol) {
-                                                            // Guardar en tabla esdudiante
-                                                            //\app\models\Utilities::putMessageLogFile('entro estudiante ');                                                            
+                                                            // Guardar en tabla esdudiante                                                                                                                      
                                                             $fecha = date(Yii::$app->params["dateTimeByDefault"]);
-                                                            //\app\models\Utilities::putMessageLogFile('per_id '. $fecha);
-                                                            $resp_estudiante = $mod_Estudiante->insertarEstudiante($per_id, null, $usu_autenticado, null, $fecha, null);
-                                                            //\app\models\Utilities::putMessageLogFile('estudiante inscripcion' . $resp_estudiante);
+                                                            // Consultar el estudiante si no ha sido creado
+                                                            $resp_estudianteid = $mod_Estudiante->getEstudiantexperid($per_id);
+                                                            if ($resp_estudianteid["est_id"] == "") {
+                                                                $resp_estudiante = $mod_Estudiante->insertarEstudiante($per_id, null, $usu_autenticado, null, $fecha, null);
+                                                            } else {
+                                                                $resp_estudiante = $resp_estudianteid["est_id"];
+                                                            }
                                                             if ($resp_estudiante) {
-                                                                //\app\models\Utilities::putMessageLogFile('entro modalidad estudio unidad');
                                                                 // Obtener el meun_id con lo con el uaca_id, mod_id y eaca_id, el est_id
                                                                 $resp_mestuni = $mod_Modestuni->consultarModalidadestudiouni($resp_sol["nivel_interes"], $resp_sol["mod_id"], $resp_sol["eaca_id"]);
                                                                 if ($resp_mestuni) {
-                                                                    //\app\models\Utilities::putMessageLogFile('entro estudiante carrera programa ');
-                                                                    // Guardar en tabla estudiante_carrera_programa
-                                                                    $resp_estudcarreprog = $mod_Estudiante->insertarEstcarreraprog($resp_estudiante, $resp_mestuni["meun_id"], $fecha, $usu_autenticado, $fecha);
+                                                                    //consultar si no esta guardado en estudiante_carrera_programa
+                                                                    $resp_estucarrera = $mod_Estudiante->consultarEstcarreraprogrma($resp_estudiante);
+                                                                    if ($resp_estucarrera["ecpr_id"] == "") {
+                                                                        // Guardar en tabla estudiante_carrera_programa
+                                                                        $resp_estudcarreprog = $mod_Estudiante->insertarEstcarreraprog($resp_estudiante, $resp_mestuni["meun_id"], $fecha, $usu_autenticado, $fecha);
+                                                                    }
                                                                 }
                                                             }
                                                         }
