@@ -71,4 +71,91 @@ class EstudianteController extends \app\components\CController {
         ]);
     }
 
+    public function actionExpexcel() {
+        ini_set('memory_limit', '256M');
+        $content_type = Utilities::mimeContentType("xls");
+        $nombarch = "Report-" . date("YmdHis") . ".xls";
+        header("Content-Type: $content_type");
+        header("Content-Disposition: attachment;filename=" . $nombarch);
+        header('Cache-Control: max-age=0');
+        $colPosition = array("C", "D", "E", "F", "G", "H", "I", "J", "K", "L");
+
+        $arrHeader = array(
+            Yii::t("formulario", "First Names"),
+            academico::t("diploma", "DNI"),
+            academico::t("Academico", 'Enrollment Number'),
+            Yii::t("formulario", "Category"),
+            Yii::t("formulario", 'Date Create'),
+            academico::t("Academico", "Academic unit"),
+            academico::t("matriculacion", "Modality"),
+            academico::t("Academico", "Career/Program")            
+        );
+
+        $mod_estudiante = new Estudiante();
+        $data = Yii::$app->request->get();
+
+        $arrSearch["search"] = $data['search'];
+        $arrSearch["f_ini"] = $data['f_ini'];
+        $arrSearch["f_fin"] = $data['f_fin'];
+        $arrSearch["estadoSol"] = $data['estadoSol'];
+        $arrSearch["unidad"] = $data['unidad'];
+        $arrSearch["modalidad"] = $data['modalidad'];
+        $arrSearch["carrera"] = $data['carrera'];
+
+        $arrData = array();
+        if (empty($arrSearch)) {
+            $arrData = $mod_estudiante->consultarEstudiante(array(), true);
+        } else {
+            $arrData = $mod_estudiante->consultarEstudiante($arrSearch, true);
+        }
+
+        $nameReport = academico::t("Academico", "List students");
+        
+        Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
+        exit;
+    }
+
+    public function actionExppdf() {
+        $report = new ExportFile();
+        $this->view->title = academico::t("Academico", "List students"); // Titulo del reporte
+
+        $mod_estudiante = new Estudiante();
+        $data = Yii::$app->request->get();
+        $arr_body = array();
+
+        $arrSearch["search"] = $data['search'];
+        $arrSearch["f_ini"] = $data['f_ini'];
+        $arrSearch["f_fin"] = $data['f_fin'];   
+        $arrSearch["unidad"] = $data['unidad'];
+        $arrSearch["modalidad"] = $data['modalidad'];
+        $arrSearch["carrera"] = $data['carrera'];
+
+        $arr_head = array(
+            Yii::t("formulario", "First Names"),
+            academico::t("diploma", "DNI"),
+            academico::t("Academico", 'Enrollment Number'),
+            Yii::t("formulario", "Category"),
+            Yii::t("formulario", 'Date Create')  ,
+            academico::t("Academico", "Academic unit"),
+            academico::t("matriculacion", "Modality"),
+            academico::t("Academico", "Career/Program")                      
+        );
+
+        if (empty($arrSearch)) {
+            $arr_body = $mod_estudiante->consultarEstudiante(array(), true);
+        } else {
+            $arr_body = $mod_estudiante->consultarEstudiante($arrSearch, true);
+        }
+
+        $report->orientation = "L"; // tipo de orientacion L => Horizontal, P => Vertical
+        $report->createReportPdf(
+                $this->render('exportpdf', [
+                    'arr_head' => $arr_head,
+                    'arr_body' => $arr_body
+                ])
+        );
+        $report->mpdf->Output('Reporte_' . date("Ymdhis") . ".pdf", ExportFile::OUTPUT_TO_DOWNLOAD);
+        return;
+    }
+
 }

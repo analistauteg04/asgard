@@ -12,9 +12,9 @@ academico::registerTranslations();
 <?=
     PbGridView::widget([
         'id' => 'Tbg_Estudiantes',
-        'showExport' => false,
-        //'fnExportEXCEL' => "exportExcel",
-        //'fnExportPDF' => "exportPdf",
+        'showExport' => true,
+        'fnExportEXCEL' => "exportExcel",
+        'fnExportPDF' => "exportPdf",
         'dataProvider' => $model,
         'pajax' => true,
         'columns' => [
@@ -31,7 +31,7 @@ academico::registerTranslations();
             ],
             [
                 'attribute' => 'Carrera',
-                'header' => academico::t("matriculacion", "Career"),
+                'header' =>  academico::t("Academico", "Academic unit"),
                 'value' => 'undidad',
             ],
             [

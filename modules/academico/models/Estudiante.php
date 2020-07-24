@@ -303,7 +303,6 @@ class Estudiante extends \yii\db\ActiveRecord {
         $resultData = $comando->queryAll();
         return $resultData;
     }
-    
 
     /**
      * Function guardar estudiante carrera programa
@@ -406,9 +405,15 @@ class Estudiante extends \yii\db\ActiveRecord {
                 $str_search .= "estu.est_fecha_creacion >= :fec_ini AND ";
                 $str_search .= "estu.est_fecha_creacion <= :fec_fin AND ";
             }
-            /* if ($arrFiltro['periodo'] != "" && $arrFiltro['periodo'] > 0) {
-              $str_search .= " h.paca_id = :periodo AND ";
-              } */
+            if ($arrFiltro['unidad'] != "" && $arrFiltro['unidad'] > 0) {
+                $str_search .= " meun.uaca_id  = :unidad AND ";
+            }
+            if ($arrFiltro['modalidad'] != "" && $arrFiltro['modalidad'] > 0) {
+                $str_search .= " meun.mod_id  = :modalidad AND ";
+            }
+            if ($arrFiltro['carrera'] != "" && $arrFiltro['carrera'] > 0) {
+                $str_search .= " meun.eaca_id  = :carrera AND ";
+            }
         }
         $sql = "SELECT 
 	           -- pers.per_id,
@@ -445,10 +450,18 @@ class Estudiante extends \yii\db\ActiveRecord {
                 $comando->bindParam(":fec_ini", $fecha_ini, \PDO::PARAM_STR);
                 $comando->bindParam(":fec_fin", $fecha_fin, \PDO::PARAM_STR);
             }
-            /* if ($arrFiltro['periodo'] != "" && $arrFiltro['periodo'] > 0) {
-              $periodo = $arrFiltro["periodo"];
-              $comando->bindParam(":periodo", $periodo, \PDO::PARAM_INT);
-              } */
+            if ($arrFiltro['unidad'] != "" && $arrFiltro['unidad'] > 0) {
+                $unidad = $arrFiltro["unidad"];
+                $comando->bindParam(":unidad", $unidad, \PDO::PARAM_INT);
+            }
+            if ($arrFiltro['modalidad'] != "" && $arrFiltro['modalidad'] > 0) {
+                $modalidad = $arrFiltro["modalidad"];
+                $comando->bindParam(":modalidad", $modalidad, \PDO::PARAM_INT);
+            }
+            if ($arrFiltro['carrera'] != "" && $arrFiltro['carrera'] > 0) {
+                $carrera = $arrFiltro["carrera"];
+                $comando->bindParam(":carrera", $carrera, \PDO::PARAM_INT);
+            }
         }
         $resultData = $comando->queryAll();
         $dataProvider = new ArrayDataProvider([

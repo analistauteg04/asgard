@@ -70,3 +70,23 @@ function actualizarGrid() {
         setTimeout(hideLoadingPopup, 2000);
     }
 }
+
+function exportExcel() {
+    var search = $('#txt_buscarData').val();
+    var f_ini = $('#txt_fecha_ini').val();
+    var f_fin = $('#txt_fecha_fin').val();
+    var unidad = $('#cmb_unidadbus option:selected').val();
+    var modalidad = $('#cmb_modalidadbus option:selected').val();
+    var carrera = $('#cmb_carrerabus option:selected').val();
+    window.location.href = $('#txth_base').val() + "/academico/estudiante/expexcel?search=" + search + "&f_ini=" + f_ini + "&f_fin=" + f_fin + "&unidad=" + unidad + "&modalidad=" + modalidad + "&carrera=" + carrera;
+}
+
+function exportPdf() {
+    var search = $('#txt_buscarData').val();
+    var f_ini = $('#txt_fecha_ini').val();
+    var f_fin = $('#txt_fecha_fin').val();
+    var unidad = $('#cmb_unidadbus option:selected').val();
+    var modalidad = $('#cmb_modalidadbus option:selected').val();
+    var carrera = $('#cmb_carrerabus option:selected').val();
+    window.location.href = $('#txth_base').val() + "/academico/estudiante/exppdf?pdf=1&search=" + search + "&f_ini=" + f_ini + "&f_fin=" + f_fin + "&unidad=" + unidad + "&modalidad=" + modalidad + "&carrera=" + carrera;
+}

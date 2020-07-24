@@ -1353,7 +1353,7 @@ class Solicitudinscripcion extends \yii\db\ActiveRecord {
      * @param   string  $dataTelefono   Telefono de la persona a Facturar
      * @return  $resultData (Retorna true si se realizo la operacion o false si fue error).
      */
-    public function crearDatosFacturaSolicitud($sins_id, $dataNombres, $dataApellidos, $dataTipDNI, $dataDNI, $dataDireccion, $dataTelefono, $dataCorreo=null) {
+    public function crearDatosFacturaSolicitud($sins_id, $dataNombres, $dataApellidos, $dataTipDNI, $dataDNI, $dataDireccion, $dataTelefono, $dataCorreo = null) {
         $con = \Yii::$app->db_captacion;
         $estado = 1;
         $tipo = ((self::$arr_DNI[$dataTipDNI]) ? self::$arr_DNI[$dataTipDNI] : self::$arr_DNI["3"]);
@@ -1578,7 +1578,7 @@ class Solicitudinscripcion extends \yii\db\ActiveRecord {
      * @param   
      * @return  Id del registro insertado.
      */
-    public function insertarSolicitud($int_id, $uaca_id, $mod_id, $ming_id, $eaca_id, $mest_id, $emp_id, $num_solicitud, $rsin_id, $sins_fecha_solicitud, $sins_usuario_ingreso, $cemp_id=null) {
+    public function insertarSolicitud($int_id, $uaca_id, $mod_id, $ming_id, $eaca_id, $mest_id, $emp_id, $num_solicitud, $rsin_id, $sins_fecha_solicitud, $sins_usuario_ingreso, $cemp_id = null) {
         $con = \Yii::$app->db_captacion;
 
         $trans = $con->getTransaction(); // se obtiene la transacción actual.
@@ -1643,9 +1643,9 @@ class Solicitudinscripcion extends \yii\db\ActiveRecord {
             $bsrec_sql .= ", :cemp_id";
         }
         try {
-            $sql = "INSERT INTO " . $con->dbname . ".solicitud_inscripcion ($param_sql) VALUES($bsrec_sql)";            
+            $sql = "INSERT INTO " . $con->dbname . ".solicitud_inscripcion ($param_sql) VALUES($bsrec_sql)";
             $comando = $con->createCommand($sql);
-        
+
             if (isset($int_id))
                 $comando->bindParam(':int_id', $int_id, \PDO::PARAM_INT);
 
@@ -1678,12 +1678,12 @@ class Solicitudinscripcion extends \yii\db\ActiveRecord {
 
             if (isset($sins_usuario_ingreso))
                 $comando->bindParam(':sins_usuario_ingreso', $sins_usuario_ingreso, \PDO::PARAM_INT);
-            
+
             if (isset($sins_usuario_ingreso))
                 $comando->bindParam(':sins_usuario_ingreso', $sins_usuario_ingreso, \PDO::PARAM_INT);
 
             if (!empty($cemp_id)) {
-                if (isset($cemp_id)){
+                if (isset($cemp_id)) {
                     $comando->bindParam(':cemp_id', $cemp_id, \PDO::PARAM_INT);
                 }
             }
@@ -1905,7 +1905,7 @@ class Solicitudinscripcion extends \yii\db\ActiveRecord {
         $resultData = $comando->queryOne();
         return $resultData;
     }
-    
+
     /**
      * Function ConsultarXUnidadModalPrecio
      * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
@@ -1925,7 +1925,7 @@ class Solicitudinscripcion extends \yii\db\ActiveRecord {
                       im.ipar_estado_logico = :estado AND
                       ip.ipre_estado = :estado AND
                       ip.ipre_estado_logico = :estado";
-\app\models\Utilities::putMessageLogFile('$sql precio:'.$sql);
+        \app\models\Utilities::putMessageLogFile('$sql precio:' . $sql);
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":uaca_id", $uaca_id, \PDO::PARAM_INT);
@@ -1933,4 +1933,5 @@ class Solicitudinscripcion extends \yii\db\ActiveRecord {
         $resultData = $comando->queryOne();
         return $resultData;
     }
+
 }

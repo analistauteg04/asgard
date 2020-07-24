@@ -1652,7 +1652,7 @@ class SolicitudesController extends \app\components\CController {
         }
 
         $nameReport = admision::t("Solicitudes", "Request by Interested");
-        ;
+        
         Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
         exit;
     }
