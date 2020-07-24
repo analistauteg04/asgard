@@ -69,7 +69,7 @@ Academico::registerTranslations();
             ],
             [
                 'attribute' => 'Programa',
-                'header' => Academico::t("profesor", "Academic Program"),
+                'header' => Academico::t("profesor", "Thesis topic"),
                 'value' => 'Programa',
             ],
             [

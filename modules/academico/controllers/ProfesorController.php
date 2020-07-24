@@ -1035,7 +1035,7 @@ class ProfesorController extends \app\components\CController {
                                 $coordinacion_model->pcoo_alumno = ucwords($value7[1]);
                                 $coordinacion_model->pcoo_programa = ucfirst($value7[2]);
                                 $coordinacion_model->pcoo_academico = ucfirst($value7[3]);
-                                $coordinacion_model->pcoo_institucion = ucwords($value7[4]);
+                                $coordinacion_model->ins_id = ucwords($value7[4]);
                                 $coordinacion_model->pcoo_anio = strtolower($value7[5]);
                                 $coordinacion_model->pro_id = $profesor_model->pro_id;
                                 $coordinacion_model->pcoo_estado = '1';
@@ -1179,9 +1179,9 @@ class ProfesorController extends \app\components\CController {
                             foreach($arr_instuccion as $key0 => $value0){
                                 $instruccion_model = new ProfesorInstruccion();
                                 $instruccion_model->nins_id = $value0[1];
-                                $instruccion_model->pins_institucion = strtolower($value0[2]);
-                                $instruccion_model->pins_especializacion = strtolower($value0[3]);
-                                $instruccion_model->pins_titulo = strtolower($value0[4]);
+                                $instruccion_model->pins_institucion = ucwords($value0[2]);
+                                $instruccion_model->pins_especializacion = ucwords($value0[3]);
+                                $instruccion_model->pins_titulo = ucwords($value0[4]);
                                 $instruccion_model->pins_senescyt = strtolower($value0[5]);
                                 $instruccion_model->pro_id = $profesor_model->pro_id;
                                 $instruccion_model->pins_estado = '1';
@@ -1196,8 +1196,8 @@ class ProfesorController extends \app\components\CController {
                                 $docencia_model->ins_id = $value1[1];
                                 $docencia_model->pedo_fecha_inicio = $value1[2];
                                 $docencia_model->pedo_fecha_fin = $value1[3];
-                                $docencia_model->pedo_denominacion = strtolower($value1[4]);
-                                $docencia_model->pedo_asignaturas = strtolower($value1[5]);
+                                $docencia_model->pedo_denominacion = ucwords($value1[4]);
+                                $docencia_model->pedo_asignaturas = ucwords($value1[5]);
                                 $docencia_model->pro_id = $profesor_model->pro_id;
                                 $docencia_model->pedo_estado = '1';
                                 $docencia_model->pedo_estado_logico = '1';
@@ -1211,8 +1211,8 @@ class ProfesorController extends \app\components\CController {
                                 $experiencia_model->pepr_organizacion = strtolower($value2[1]);
                                 $experiencia_model->pepr_fecha_inicio = $value2[2];
                                 $experiencia_model->pepr_fecha_fin = $value2[3];
-                                $experiencia_model->pepr_denominacion = strtolower($value2[4]);
-                                $experiencia_model->pepr_funciones = strtolower($value2[5]);
+                                $experiencia_model->pepr_denominacion = ucwords($value2[4]);
+                                $experiencia_model->pepr_funciones = ucwords($value2[5]);
                                 $experiencia_model->pro_id = $profesor_model->pro_id;
                                 $experiencia_model->pepr_estado = '1';
                                 $experiencia_model->pepr_estado_logico = '1';
@@ -1238,10 +1238,10 @@ class ProfesorController extends \app\components\CController {
                         if(isset($arr_investigacion)){
                             foreach($arr_investigacion as $key4 => $value4){
                                 $investigacion_model = new ProfesorInvestigacion();
-                                $investigacion_model->pinv_proyecto = strtolower($value4[1]);
-                                $investigacion_model->pinv_ambito = strtolower($value4[2]);
-                                $investigacion_model->pinv_responsabilidad = strtolower($value4[3]);
-                                $investigacion_model->pinv_entidad = strtolower($value4[4]);
+                                $investigacion_model->pinv_proyecto = ucwords($value4[1]);
+                                $investigacion_model->pinv_ambito = ucwords($value4[2]);
+                                $investigacion_model->pinv_responsabilidad = ucwords($value4[3]);
+                                $investigacion_model->pinv_entidad = ucwords($value4[4]);
                                 $investigacion_model->pinv_anio = strtolower($value4[5]);
                                 $investigacion_model->pinv_duracion = strtolower($value4[6]);
                                 $investigacion_model->pro_id = $profesor_model->pro_id;
@@ -1255,8 +1255,8 @@ class ProfesorController extends \app\components\CController {
                             foreach($arr_evento as $key5 => $value5){
                                 $capacitacion_model = new ProfesorCapacitacion();
                                 $capacitacion_model->pcap_tipo = strtolower($value5[4]);
-                                $capacitacion_model->pcap_evento = strtolower($value5[1]);
-                                $capacitacion_model->pcap_institucion = strtolower($value5[2]);
+                                $capacitacion_model->pcap_evento = ucwords($value5[1]);
+                                $capacitacion_model->pcap_institucion = ucwords($value5[2]);
                                 $capacitacion_model->pcap_anio = strtolower($value5[3]);
                                 $capacitacion_model->pcap_duracion = strtolower($value5[5]);
                                 $capacitacion_model->pro_id = $profesor_model->pro_id;
@@ -1269,10 +1269,10 @@ class ProfesorController extends \app\components\CController {
                         if(isset($arr_conferencia)){
                             foreach($arr_conferencia as $key6 => $value6){
                                 $capacitacion_model = new ProfesorConferencia();
-                                $capacitacion_model->pcon_evento = strtolower($value6[1]);
-                                $capacitacion_model->pcon_institucion = strtolower($value6[2]);
+                                $capacitacion_model->pcon_evento = ucwords($value6[1]);
+                                $capacitacion_model->pcon_institucion = ucwords($value6[2]);
                                 $capacitacion_model->pcon_anio = strtolower($value6[3]);
-                                $capacitacion_model->pcon_ponencia = strtolower($value6[4]);
+                                $capacitacion_model->pcon_ponencia = ucwords($value6[4]);
                                 $capacitacion_model->pro_id = $profesor_model->pro_id;
                                 $capacitacion_model->pcon_estado = '1';
                                 $capacitacion_model->pcon_estado_logico = '1';
@@ -1283,10 +1283,10 @@ class ProfesorController extends \app\components\CController {
                         if(isset($arr_coordinacion)){
                             foreach($arr_coordinacion as $key7 => $value7){
                                 $coordinacion_model = new ProfesorCoordinacion();
-                                $coordinacion_model->pcoo_alumno = strtolower($value7[1]);
-                                $coordinacion_model->pcoo_programa = strtolower($value7[2]);
-                                $coordinacion_model->pcoo_academico = strtolower($value7[3]);
-                                $coordinacion_model->pcoo_institucion = strtolower($value7[4]);
+                                $coordinacion_model->pcoo_alumno = ucwords($value7[1]);
+                                $coordinacion_model->pcoo_programa = ucwords($value7[2]);
+                                $coordinacion_model->pcoo_academico = ucwords($value7[3]);
+                                $coordinacion_model->ins_id = ($value7[4]);
                                 $coordinacion_model->pcoo_anio = strtolower($value7[5]);
                                 $coordinacion_model->pro_id = $profesor_model->pro_id;
                                 $coordinacion_model->pcoo_estado = '1';
@@ -1299,8 +1299,8 @@ class ProfesorController extends \app\components\CController {
                             foreach($arr_evaluacion as $key8 => $value8){
                                 $evaluacion_model = new ProfesorEvaluacion();
                                 $evaluacion_model->peva_periodo = strtolower($value8[1]);
-                                $evaluacion_model->peva_institucion = strtolower($value8[2]);
-                                $evaluacion_model->peva_evaluacion = strtolower($value8[3]);
+                                $evaluacion_model->peva_institucion = ucwords($value8[2]);
+                                $evaluacion_model->peva_evaluacion = ucwords($value8[3]);
                                 $evaluacion_model->pro_id = $profesor_model->pro_id;
                                 $evaluacion_model->peva_estado = '1';
                                 $evaluacion_model->peva_estado_logico = '1';
@@ -1311,11 +1311,11 @@ class ProfesorController extends \app\components\CController {
                         if(isset($arr_publicacion)){
                             foreach($arr_publicacion as $key9 => $value9){
                                 $publicacion_model = new ProfesorPublicacion();
-                                $publicacion_model->ppub_produccion = strtolower($value9[1]);
-                                $publicacion_model->ppub_titulo = strtolower($value9[2]);
-                                $publicacion_model->ppub_editorial = strtolower($value9[3]);
+                                $publicacion_model->ppub_produccion = ucwords($value9[1]);
+                                $publicacion_model->ppub_titulo = ucwords($value9[2]);
+                                $publicacion_model->ppub_editorial = ucwords($value9[3]);
                                 $publicacion_model->ppub_isbn = strtolower($value9[4]);
-                                $publicacion_model->ppub_autoria = strtolower($value9[5]);
+                                $publicacion_model->ppub_autoria = ucwords($value9[5]);
                                 $publicacion_model->pro_id = $profesor_model->pro_id;
                                 $publicacion_model->ppub_estado = '1';
                                 $publicacion_model->ppub_estado_logico = '1';
@@ -1326,9 +1326,9 @@ class ProfesorController extends \app\components\CController {
                         if(isset($arr_referencia)){
                             foreach($arr_referencia as $key10 => $value10){
                                 $referencia_model = new ProfesorReferencia();
-                                $referencia_model->pref_contacto = strtolower($value10[1]);
-                                $referencia_model->pref_relacion_cargo = strtolower($value10[2]);
-                                $referencia_model->pref_organizacion = strtolower($value10[3]);
+                                $referencia_model->pref_contacto = ucwords($value10[1]);
+                                $referencia_model->pref_relacion_cargo = ucwords($value10[2]);
+                                $referencia_model->pref_organizacion = ucwords($value10[3]);
                                 $referencia_model->pref_numero = strtolower($value10[4]);
                                 $referencia_model->pro_id = $profesor_model->pro_id;
                                 $referencia_model->pref_estado = '1';
@@ -1493,9 +1493,9 @@ class ProfesorController extends \app\components\CController {
                         foreach($arr_instuccion as $key0 => $value0){
                             $instruccion_model = new ProfesorInstruccion();
                             $instruccion_model->nins_id = $value0[1];
-                            $instruccion_model->pins_institucion = strtolower($value0[2]);
-                            $instruccion_model->pins_especializacion = strtolower($value0[3]);
-                            $instruccion_model->pins_titulo = strtolower($value0[4]);
+                            $instruccion_model->pins_institucion = ucwords($value0[2]);
+                            $instruccion_model->pins_especializacion = ucwords($value0[3]);
+                            $instruccion_model->pins_titulo = ucwords($value0[4]);
                             $instruccion_model->pins_senescyt = strtolower($value0[5]);
                             $instruccion_model->pro_id = $profesor_model->pro_id;
                             $instruccion_model->pins_estado = '1';
@@ -1511,8 +1511,8 @@ class ProfesorController extends \app\components\CController {
                             $docencia_model->ins_id = $value1[1];
                             $docencia_model->pedo_fecha_inicio = $value1[2];
                             $docencia_model->pedo_fecha_fin = $value1[3];
-                            $docencia_model->pedo_denominacion = strtolower($value1[4]);
-                            $docencia_model->pedo_asignaturas = strtolower($value1[5]);
+                            $docencia_model->pedo_denominacion = ucwords($value1[4]);
+                            $docencia_model->pedo_asignaturas = ucwords($value1[5]);
                             $docencia_model->pro_id = $profesor_model->pro_id;
                             $docencia_model->pedo_estado = '1';
                             $docencia_model->pedo_estado_logico = '1';
@@ -1527,8 +1527,8 @@ class ProfesorController extends \app\components\CController {
                             $experiencia_model->pepr_organizacion = strtolower($value2[1]);
                             $experiencia_model->pepr_fecha_inicio = $value2[2];
                             $experiencia_model->pepr_fecha_fin = $value2[3];
-                            $experiencia_model->pepr_denominacion = strtolower($value2[4]);
-                            $experiencia_model->pepr_funciones = strtolower($value2[5]);
+                            $experiencia_model->pepr_denominacion = ucwords($value2[4]);
+                            $experiencia_model->pepr_funciones = ucwords($value2[5]);
                             $experiencia_model->pro_id = $profesor_model->pro_id;
                             $experiencia_model->pepr_estado = '1';
                             $experiencia_model->pepr_estado_logico = '1';
@@ -1556,10 +1556,10 @@ class ProfesorController extends \app\components\CController {
                     if(isset($arr_investigacion)){
                         foreach($arr_investigacion as $key4 => $value4){
                             $investigacion_model = new ProfesorInvestigacion();
-                            $investigacion_model->pinv_proyecto = strtolower($value4[1]);
-                            $investigacion_model->pinv_ambito = strtolower($value4[2]);
-                            $investigacion_model->pinv_responsabilidad = strtolower($value4[3]);
-                            $investigacion_model->pinv_entidad = strtolower($value4[4]);
+                            $investigacion_model->pinv_proyecto = ucwords($value4[1]);
+                            $investigacion_model->pinv_ambito = ucwords($value4[2]);
+                            $investigacion_model->pinv_responsabilidad = ucwords($value4[3]);
+                            $investigacion_model->pinv_entidad = ucwords($value4[4]);
                             $investigacion_model->pinv_anio = strtolower($value4[5]);
                             $investigacion_model->pinv_duracion = strtolower($value4[6]);
                             $investigacion_model->pro_id = $profesor_model->pro_id;
@@ -1574,8 +1574,8 @@ class ProfesorController extends \app\components\CController {
                         foreach($arr_evento as $key5 => $value5){
                             $capacitacion_model = new ProfesorCapacitacion();
                             $capacitacion_model->pcap_tipo = strtolower($value5[4]);
-                            $capacitacion_model->pcap_evento = strtolower($value5[1]);
-                            $capacitacion_model->pcap_institucion = strtolower($value5[2]);
+                            $capacitacion_model->pcap_evento = ucwords($value5[1]);
+                            $capacitacion_model->pcap_institucion = ucwords($value5[2]);
                             $capacitacion_model->pcap_anio = strtolower($value5[3]);
                             $capacitacion_model->pcap_duracion = strtolower($value5[5]);
                             $capacitacion_model->pro_id = $profesor_model->pro_id;
@@ -1589,10 +1589,10 @@ class ProfesorController extends \app\components\CController {
                     if(isset($arr_conferencia)){
                         foreach($arr_conferencia as $key6 => $value6){
                             $capacitacion_model = new ProfesorConferencia();
-                            $capacitacion_model->pcon_evento = strtolower($value6[1]);
-                            $capacitacion_model->pcon_institucion = strtolower($value6[2]);
+                            $capacitacion_model->pcon_evento = ucwords($value6[1]);
+                            $capacitacion_model->pcon_institucion = ucwords($value6[2]);
                             $capacitacion_model->pcon_anio = strtolower($value6[3]);
-                            $capacitacion_model->pcon_ponencia = strtolower($value6[4]);
+                            $capacitacion_model->pcon_ponencia = ucwords($value6[4]);
                             $capacitacion_model->pro_id = $profesor_model->pro_id;
                             $capacitacion_model->pcon_estado = '1';
                             $capacitacion_model->pcon_estado_logico = '1';
@@ -1604,10 +1604,10 @@ class ProfesorController extends \app\components\CController {
                     if(isset($arr_coordinacion)){
                         foreach($arr_coordinacion as $key7 => $value7){
                             $coordinacion_model = new ProfesorCoordinacion();
-                            $coordinacion_model->pcoo_alumno = strtolower($value7[1]);
-                            $coordinacion_model->pcoo_programa = strtolower($value7[2]);
-                            $coordinacion_model->pcoo_academico = strtolower($value7[3]);
-                            $coordinacion_model->pcoo_institucion = strtolower($value7[4]);
+                            $coordinacion_model->pcoo_alumno = ucwords($value7[1]);
+                            $coordinacion_model->pcoo_programa = ucwords($value7[2]);
+                            $coordinacion_model->pcoo_academico = ucwords($value7[3]);
+                            $coordinacion_model->ins_id = ($value7[4]);
                             $coordinacion_model->pcoo_anio = strtolower($value7[5]);
                             $coordinacion_model->pro_id = $profesor_model->pro_id;
                             $coordinacion_model->pcoo_estado = '1';
@@ -1621,8 +1621,8 @@ class ProfesorController extends \app\components\CController {
                         foreach($arr_evaluacion as $key8 => $value8){
                             $evaluacion_model = new ProfesorEvaluacion();
                             $evaluacion_model->peva_periodo = strtolower($value8[1]);
-                            $evaluacion_model->peva_institucion = strtolower($value8[2]);
-                            $evaluacion_model->peva_evaluacion = strtolower($value8[3]);
+                            $evaluacion_model->peva_institucion = ucwords($value8[2]);
+                            $evaluacion_model->peva_evaluacion = ucwords($value8[3]);
                             $evaluacion_model->pro_id = $profesor_model->pro_id;
                             $evaluacion_model->peva_estado = '1';
                             $evaluacion_model->peva_estado_logico = '1';
@@ -1634,11 +1634,11 @@ class ProfesorController extends \app\components\CController {
                     if(isset($arr_publicacion)){
                         foreach($arr_publicacion as $key9 => $value9){
                             $publicacion_model = new ProfesorPublicacion();
-                            $publicacion_model->ppub_produccion = strtolower($value9[1]);
-                            $publicacion_model->ppub_titulo = strtolower($value9[2]);
-                            $publicacion_model->ppub_editorial = strtolower($value9[3]);
-                            $publicacion_model->ppub_isbn = strtolower($value9[4]);
-                            $publicacion_model->ppub_autoria = strtolower($value9[5]);
+                            $publicacion_model->ppub_produccion = ucwords($value9[1]);
+                            $publicacion_model->ppub_titulo = ucwords($value9[2]);
+                            $publicacion_model->ppub_editorial = ucwords($value9[3]);
+                            $publicacion_model->ppub_isbn = ucwords($value9[4]);
+                            $publicacion_model->ppub_autoria = ucwords($value9[5]);
                             $publicacion_model->pro_id = $profesor_model->pro_id;
                             $publicacion_model->ppub_estado = '1';
                             $publicacion_model->ppub_estado_logico = '1';
@@ -1650,9 +1650,9 @@ class ProfesorController extends \app\components\CController {
                     if(isset($arr_referencia)){
                         foreach($arr_referencia as $key10 => $value10){
                             $referencia_model = new ProfesorReferencia();
-                            $referencia_model->pref_contacto = strtolower($value10[1]);
-                            $referencia_model->pref_relacion_cargo = strtolower($value10[2]);
-                            $referencia_model->pref_organizacion = strtolower($value10[3]);
+                            $referencia_model->pref_contacto = ucwords($value10[1]);
+                            $referencia_model->pref_relacion_cargo = ucwords($value10[2]);
+                            $referencia_model->pref_organizacion = ucwords($value10[3]);
                             $referencia_model->pref_numero = strtolower($value10[4]);
                             $referencia_model->pro_id = $profesor_model->pro_id;
                             $referencia_model->pref_estado = '1';

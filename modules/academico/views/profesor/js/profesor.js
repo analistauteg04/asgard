@@ -968,7 +968,7 @@ function addCoordinacion() {
 }
 
 function removeItemCoordinacion(ref) {
-    var indice = $(ref).parent().parent().attr("data-key")
+    var indice = $(ref).parent().parent().attr("data-key");
     removeItemGridContent("grid_coordinacion_list", indice);
 }
 
