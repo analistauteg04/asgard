@@ -112,5 +112,6 @@ return [
     'Upload registration' => 'Upload registration',
     'Download registration' => 'Download registration',
     'Select' => 'Select',
-    'There is no planning data' => 'There is no planning data'
+    'There is no planning data' => 'There is no planning data',
+    'Subject Code' => 'Subject Code',
 ];

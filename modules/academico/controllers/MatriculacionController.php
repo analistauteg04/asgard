@@ -200,7 +200,7 @@ class MatriculacionController extends \app\components\CController {
                             ],
                         ]);
                         $dataCat = ArrayHelper::map($mod_est->getCategoryCost(), "Cod", "Precio");
-                        $modCode = $modModalidad->getCodeCCostoxModalidad($modelPla->mod_id);Utilities::putMessageLogFile($modCode);
+                        $modCode = $modModalidad->getCodeCCostoxModalidad($modelPla->mod_id);
                         $dataMat = ArrayHelper::map($mod_est->getGastosMatriculaOtros($modCode['Cod']), "Cod", "Precio");
                         $CatPrecio = $dataCat[$data_student['est_categoria']];
 

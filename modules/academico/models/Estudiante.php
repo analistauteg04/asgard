@@ -264,6 +264,7 @@ class Estudiante extends \yii\db\ActiveRecord {
                     DES_COM AS Nombre,
                     P_VENTA AS Precio,
                     '' AS Bloque,
+                    '' AS Semestre,
                     '' AS Periodo,
                     '' AS FechaIniReg,
                     '' AS FechaFinReg
@@ -277,6 +278,7 @@ class Estudiante extends \yii\db\ActiveRecord {
                     '' AS Nombre, 
                     VALOR_P AS Precio,
                     NUM_BLO AS Bloque,
+                    '' AS Semestre,
                     TIP_PER AS Periodo,
                     FREG_INI AS FechaIniReg,
                     FREG_FIN AS FechaFinReg
@@ -290,6 +292,7 @@ class Estudiante extends \yii\db\ActiveRecord {
                     '' AS Nombre, 
                     VALOR_P AS Precio,
                     NUM_BLO AS Bloque,
+                    NUM_SEM AS Semestre,
                     TIP_PER AS Periodo,
                     FREG_INI AS FechaIniReg,
                     FREG_FIN AS FechaFinReg

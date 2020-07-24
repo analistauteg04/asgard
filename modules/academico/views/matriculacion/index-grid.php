@@ -26,6 +26,11 @@ academico::registerTranslations();
                 'value' => 'Subject',
             ],
             [
+                'attribute' => 'CodeAsignatura',
+                'header' => Academico::t("matriculacion", "Subject Code"),
+                'value' => 'CodeAsignatura',
+            ],
+            [
                 'attribute' => 'Block',
                 'header' => Academico::t("matriculacion", "Block"),
                 'value' => 'Block',

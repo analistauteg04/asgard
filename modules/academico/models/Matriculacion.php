@@ -541,15 +541,17 @@ class Matriculacion extends \yii\db\ActiveRecord {
 
         if (!is_null($dict['pes_mat_b1_h1_nombre']) && trim($dict['pes_mat_b1_h1_nombre']) != "") {
             $alias = trim($dict['pes_mat_b1_h1_nombre']);
-            $asignatura = $credits = "";
+            $asignatura = $codeAsignatura = $credits = "";
             foreach($dataCredits as $key => $value){
                 if($value['AliasAsignatura'] == $alias){
                     $asignatura = $value['Asignatura'];
                     $credits = $value['AsigCreditos'];
+                    $codeAsignatura = $value['MallaCodAsig'];
                 }
             }
             $arrRow11 = array(
                 "Subject" => $asignatura,
+                "CodeAsignatura" => $codeAsignatura,
                 "Alias" => $alias,
                 "Block" => "B1",
                 "Hour" => "H1",
@@ -560,15 +562,17 @@ class Matriculacion extends \yii\db\ActiveRecord {
 
         if (!is_null($dict['pes_mat_b1_h2_nombre']) && trim($dict['pes_mat_b1_h2_nombre']) != "") {
             $alias = trim($dict['pes_mat_b1_h2_nombre']);
-            $asignatura = $credits = "";
+            $asignatura = $codeAsignatura = $credits = "";
             foreach($dataCredits as $key => $value){
                 if($value['AliasAsignatura'] == $alias){
                     $asignatura = $value['Asignatura'];
                     $credits = $value['AsigCreditos'];
+                    $codeAsignatura = $value['MallaCodAsig'];
                 }
             }
             $arrRow12 = array(
                 "Subject" => $asignatura,
+                "CodeAsignatura" => $codeAsignatura,
                 "Alias" => $alias,
                 "Block" => "B1",
                 "Hour" => "H2",
@@ -579,15 +583,17 @@ class Matriculacion extends \yii\db\ActiveRecord {
 
         if (!is_null($dict['pes_mat_b1_h3_nombre']) && trim($dict['pes_mat_b1_h3_nombre']) != "") {
             $alias = trim($dict['pes_mat_b1_h3_nombre']);
-            $asignatura = $credits = "";
+            $asignatura = $codeAsignatura = $credits = "";
             foreach($dataCredits as $key => $value){
                 if($value['AliasAsignatura'] == $alias){
                     $asignatura = $value['Asignatura'];
                     $credits = $value['AsigCreditos'];
+                    $codeAsignatura = $value['MallaCodAsig'];
                 }
             }
             $arrRow13 = array(
                 "Subject" => $asignatura,
+                "CodeAsignatura" => $codeAsignatura,
                 "Alias" => $alias,
                 "Block" => "B1",
                 "Hour" => "H3",
@@ -598,15 +604,17 @@ class Matriculacion extends \yii\db\ActiveRecord {
 
         if (!is_null($dict['pes_mat_b1_h4_nombre']) && trim($dict['pes_mat_b1_h4_nombre']) != "") {
             $alias = trim($dict['pes_mat_b1_h4_nombre']);
-            $asignatura = $credits = "";
+            $asignatura = $codeAsignatura = $credits = "";
             foreach($dataCredits as $key => $value){
                 if($value['AliasAsignatura'] == $alias){
                     $asignatura = $value['Asignatura'];
                     $credits = $value['AsigCreditos'];
+                    $codeAsignatura = $value['MallaCodAsig'];
                 }
             }
             $arrRow14 = array(
                 "Subject" => $asignatura,
+                "CodeAsignatura" => $codeAsignatura,
                 "Alias" => $alias,
                 "Block" => "B1",
                 "Hour" => "H4",
@@ -617,15 +625,17 @@ class Matriculacion extends \yii\db\ActiveRecord {
 
         if (!is_null($dict['pes_mat_b1_h5_nombre']) && trim($dict['pes_mat_b1_h5_nombre']) != "") {
             $alias = trim($dict['pes_mat_b1_h5_nombre']);
-            $asignatura = $credits = "";
+            $asignatura = $codeAsignatura = $credits = "";
             foreach($dataCredits as $key => $value){
                 if($value['AliasAsignatura'] == $alias){
                     $asignatura = $value['Asignatura'];
                     $credits = $value['AsigCreditos'];
+                    $codeAsignatura = $value['MallaCodAsig'];
                 }
             }
             $arrRow15 = array(
                 "Subject" => $asignatura,
+                "CodeAsignatura" => $codeAsignatura,
                 "Alias" => $alias,
                 "Block" => "B1",
                 "Hour" => "H5",
@@ -636,15 +646,17 @@ class Matriculacion extends \yii\db\ActiveRecord {
 
         if (!is_null($dict['pes_mat_b2_h1_nombre']) && trim($dict['pes_mat_b2_h1_nombre']) != "") {
             $alias = trim($dict['pes_mat_b2_h1_nombre']);
-            $asignatura = $credits = "";
+            $asignatura = $codeAsignatura = $credits = "";
             foreach($dataCredits as $key => $value){
                 if($value['AliasAsignatura'] == $alias){
                     $asignatura = $value['Asignatura'];
                     $credits = $value['AsigCreditos'];
+                    $codeAsignatura = $value['MallaCodAsig'];
                 }
             }
             $arrRow21 = array(
                 "Subject" => $asignatura,
+                "CodeAsignatura" => $codeAsignatura,
                 "Alias" => $alias,
                 "Block" => "B2",
                 "Hour" => "H1",
@@ -655,15 +667,17 @@ class Matriculacion extends \yii\db\ActiveRecord {
 
         if (!is_null($dict['pes_mat_b2_h2_nombre']) && trim($dict['pes_mat_b2_h2_nombre']) != "") {
             $alias = trim($dict['pes_mat_b2_h2_nombre']);
-            $asignatura = $credits = "";
+            $asignatura = $codeAsignatura = $credits = "";
             foreach($dataCredits as $key => $value){
                 if($value['AliasAsignatura'] == $alias){
                     $asignatura = $value['Asignatura'];
                     $credits = $value['AsigCreditos'];
+                    $codeAsignatura = $value['MallaCodAsig'];
                 }
             }
             $arrRow22 = array(
                 "Subject" => $asignatura,
+                "CodeAsignatura" => $codeAsignatura,
                 "Alias" => $alias,
                 "Block" => "B2",
                 "Hour" => "H2",
@@ -674,15 +688,17 @@ class Matriculacion extends \yii\db\ActiveRecord {
 
         if (!is_null($dict['pes_mat_b2_h3_nombre']) && trim($dict['pes_mat_b2_h3_nombre']) != "") {
             $alias = trim($dict['pes_mat_b2_h3_nombre']);
-            $asignatura = $credits = "";
+            $asignatura = $codeAsignatura = $credits = "";
             foreach($dataCredits as $key => $value){
                 if($value['AliasAsignatura'] == $alias){
                     $asignatura = $value['Asignatura'];
                     $credits = $value['AsigCreditos'];
+                    $codeAsignatura = $value['MallaCodAsig'];
                 }
             }
             $arrRow23 = array(
                 "Subject" => $asignatura,
+                "CodeAsignatura" => $codeAsignatura,
                 "Alias" => $alias,
                 "Block" => "B2",
                 "Hour" => "H3",
@@ -693,15 +709,17 @@ class Matriculacion extends \yii\db\ActiveRecord {
 
         if (!is_null($dict['pes_mat_b2_h4_nombre']) && trim($dict['pes_mat_b2_h4_nombre']) != "") {
             $alias = trim($dict['pes_mat_b2_h4_nombre']);
-            $asignatura = $credits = "";
+            $asignatura = $codeAsignatura = $credits = "";
             foreach($dataCredits as $key => $value){
                 if($value['AliasAsignatura'] == $alias){
                     $asignatura = $value['Asignatura'];
                     $credits = $value['AsigCreditos'];
+                    $codeAsignatura = $value['MallaCodAsig'];
                 }
             }
             $arrRow24 = array(
                 "Subject" => $asignatura,
+                "CodeAsignatura" => $codeAsignatura,
                 "Alias" => $alias,
                 "Block" => "B2",
                 "Hour" => "H4",
@@ -712,15 +730,17 @@ class Matriculacion extends \yii\db\ActiveRecord {
 
         if (!is_null($dict['pes_mat_b2_h5_nombre']) && trim($dict['pes_mat_b2_h5_nombre']) != "") {
             $alias = trim($dict['pes_mat_b2_h5_nombre']);
-            $asignatura = $credits = "";
+            $asignatura = $codeAsignatura = $credits = "";
             foreach($dataCredits as $key => $value){
                 if($value['AliasAsignatura'] == $alias){
                     $asignatura = $value['Asignatura'];
                     $credits = $value['AsigCreditos'];
+                    $codeAsignatura = $value['MallaCodAsig'];
                 }
             }
             $arrRow25 = array(
                 "Subject" => $asignatura,
+                "CodeAsignatura" => $codeAsignatura,
                 "Alias" => $alias,
                 "Block" => "B2",
                 "Hour" => "H5",

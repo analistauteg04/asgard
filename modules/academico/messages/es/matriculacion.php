@@ -112,5 +112,6 @@ return [
     'Upload registration' => 'Subir Hoja Matricula',
     'Download registration' => 'Descargar Hoja Matricula',
     'Select' => 'Seleccionar',
-    'There is no planning data' => 'No existen datos de planificiones'
+    'There is no planning data' => 'No existen datos de planificiones',
+    'Subject Code' => 'Cod. Asignatura',
 ];
