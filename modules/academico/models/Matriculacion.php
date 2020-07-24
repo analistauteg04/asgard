@@ -360,23 +360,41 @@ class Matriculacion extends \yii\db\ActiveRecord {
      * @param $date
      * @return $resultData
      */
-    public function checkToday($date)
+    public function checkToday($date, $per_id=NULL)
     {
         $con = \Yii::$app->db_academico;
         $estado = 1;
-
+        $select = $join = $where = "";
+        if(isset($per_id)){
+            $select = ", pes.pes_id ";
+            $join   = " INNER JOIN  " . $con->dbname . ".planificacion AS plan ON plan.pla_id = reg_conf.pla_id ";
+            $join  .= " INNER JOIN  " . $con->dbname . ".planificacion_estudiante AS pes ON pes.pla_id = plan.pla_id ";
+            $where  = " AND plan.pla_estado =:estado AND plan.pla_estado_logico =:estado ";
+            $where .= " AND pes.pes_estado =:estado AND pes.pes_estado_logico =:estado ";
+            $where .= " AND pes.per_id =:per_id ";
+        }
         $sql = "
-            SELECT rco_id, pla_id, rco_num_bloques
-            FROM " . $con->dbname . ".registro_configuracion as reg_conf
-            WHERE :date
-            BETWEEN reg_conf.rco_fecha_inicio AND reg_conf.rco_fecha_fin
-            AND rco_estado =:estado
-            AND rco_estado_logico =:estado
+            SELECT 
+                reg_conf.rco_id, 
+                reg_conf.pla_id, 
+                reg_conf.rco_num_bloques
+                $select
+            FROM 
+                " . $con->dbname . ".registro_configuracion as reg_conf $join
+            WHERE 
+                :date BETWEEN reg_conf.rco_fecha_inicio AND reg_conf.rco_fecha_fin
+                AND reg_conf.rco_estado =:estado
+                AND reg_conf.rco_estado_logico =:estado
+                $where
+            ORDER BY 
+                reg_conf.rco_fecha_inicio DESC
         ";
 
         $comando = $con->createCommand($sql);
         $comando->bindParam(":date", $date, \PDO::PARAM_STR);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        if(isset($per_id))
+            $comando->bindParam(":per_id", $per_id, \PDO::PARAM_INT);
         $resultData = $comando->queryAll();
         return $resultData;
     }
@@ -442,7 +460,15 @@ class Matriculacion extends \yii\db\ActiveRecord {
         $comando->bindParam(":per_id", $per_id, \PDO::PARAM_INT);
         $comando->bindParam(":pla_id", $pla_id, \PDO::PARAM_INT);
         $resultData = $comando->queryOne();
-        
+        $dataCredits = $this->getInfoMallaEstudiante($per_id);
+        $dataPlanificacion = $this->parseDataSubject($resultData, $dataCredits);
+
+        return $dataPlanificacion;
+    }
+
+    public function getInfoMallaEstudiante($per_id){
+        $con_academico = \Yii::$app->db_academico;
+        $estado = 1;
 
         $sql = "
         SELECT
@@ -458,15 +484,17 @@ class Matriculacion extends \yii\db\ActiveRecord {
             -- e.est_categoria AS Categoria,
             -- ma.maca_nombre AS MallaAcademica,
             -- ma.maca_codigo AS MallaCod,
-            -- mad.made_codigo_asignatura AS MallaCodAsig, 
+            mad.made_codigo_asignatura AS MallaCodAsig, 
             -- CONCAT(p.per_pri_nombre, ' ',p.per_pri_apellido) AS Estudiante,
             -- em.emp_nombre_comercial AS Empresa,
-            mad.made_credito AS AsigCreditos
+            mad.made_credito AS AsigCreditos,
+            mcc.mcco_code AS ModCode
         FROM 
             asignatura AS a
             INNER JOIN unidad_academica AS ua ON ua.uaca_id = a.uaca_id
             INNER JOIN modalidad_estudio_unidad AS me ON me.uaca_id = ua.uaca_id
             INNER JOIN modalidad AS mo ON mo.mod_id = me.mod_id
+            INNER JOIN modalidad_centro_costo AS mcc ON mcc.mod_id = mo.mod_id
             INNER JOIN estudio_academico AS ea ON ea.eaca_id = me.eaca_id
             INNER JOIN tipo_estudio_academico AS tp ON tp.teac_id = ea.teac_id
             INNER JOIN malla_academica AS ma ON ma.meun_id = me.meun_id
@@ -482,6 +510,7 @@ class Matriculacion extends \yii\db\ActiveRecord {
             ua.uaca_estado = 1 AND ua.uaca_estado_logico = 1 AND 
             me.meun_estado = 1 AND me.meun_estado_logico = 1 AND
             mo.mod_estado = 1 AND mo.mod_estado_logico = 1 AND 
+            mcc.mcco_estado = 1 AND mcc.mcco_estado_logico = 1 AND 
             ea.eaca_estado = 1 AND ea.eaca_estado_logico = 1 AND 
             tp.teac_estado = 1 AND tp.teac_estado_logico = 1 AND 
             ma.maca_estado = 1 AND ma.maca_estado_logico = 1 AND 
@@ -496,10 +525,7 @@ class Matriculacion extends \yii\db\ActiveRecord {
         $comando = $con_academico->createCommand($sql);
         $comando->bindParam(":per_id", $per_id, \PDO::PARAM_INT);
         $dataCredits = $comando->queryAll();
-
-        $dataPlanificacion = $this->parseDataSubject($resultData, $dataCredits);
-
-        return $dataPlanificacion;
+        return $dataCredits;
     }
 
     /**
@@ -524,6 +550,7 @@ class Matriculacion extends \yii\db\ActiveRecord {
             }
             $arrRow11 = array(
                 "Subject" => $asignatura,
+                "Alias" => $alias,
                 "Block" => "B1",
                 "Hour" => "H1",
                 "Credit" => $credits,
@@ -542,6 +569,7 @@ class Matriculacion extends \yii\db\ActiveRecord {
             }
             $arrRow12 = array(
                 "Subject" => $asignatura,
+                "Alias" => $alias,
                 "Block" => "B1",
                 "Hour" => "H2",
                 "Credit" => $credits,
@@ -560,6 +588,7 @@ class Matriculacion extends \yii\db\ActiveRecord {
             }
             $arrRow13 = array(
                 "Subject" => $asignatura,
+                "Alias" => $alias,
                 "Block" => "B1",
                 "Hour" => "H3",
                 "Credit" => $credits,
@@ -578,6 +607,7 @@ class Matriculacion extends \yii\db\ActiveRecord {
             }
             $arrRow14 = array(
                 "Subject" => $asignatura,
+                "Alias" => $alias,
                 "Block" => "B1",
                 "Hour" => "H4",
                 "Credit" => $credits,
@@ -596,6 +626,7 @@ class Matriculacion extends \yii\db\ActiveRecord {
             }
             $arrRow15 = array(
                 "Subject" => $asignatura,
+                "Alias" => $alias,
                 "Block" => "B1",
                 "Hour" => "H5",
                 "Credit" => $credits,
@@ -614,6 +645,7 @@ class Matriculacion extends \yii\db\ActiveRecord {
             }
             $arrRow21 = array(
                 "Subject" => $asignatura,
+                "Alias" => $alias,
                 "Block" => "B2",
                 "Hour" => "H1",
                 "Credit" => $credits,
@@ -632,6 +664,7 @@ class Matriculacion extends \yii\db\ActiveRecord {
             }
             $arrRow22 = array(
                 "Subject" => $asignatura,
+                "Alias" => $alias,
                 "Block" => "B2",
                 "Hour" => "H2",
                 "Credit" => $credits,
@@ -650,6 +683,7 @@ class Matriculacion extends \yii\db\ActiveRecord {
             }
             $arrRow23 = array(
                 "Subject" => $asignatura,
+                "Alias" => $alias,
                 "Block" => "B2",
                 "Hour" => "H3",
                 "Credit" => $credits,
@@ -668,6 +702,7 @@ class Matriculacion extends \yii\db\ActiveRecord {
             }
             $arrRow24 = array(
                 "Subject" => $asignatura,
+                "Alias" => $alias,
                 "Block" => "B2",
                 "Hour" => "H4",
                 "Credit" => $credits,
@@ -686,6 +721,7 @@ class Matriculacion extends \yii\db\ActiveRecord {
             }
             $arrRow25 = array(
                 "Subject" => $asignatura,
+                "Alias" => $alias,
                 "Block" => "B2",
                 "Hour" => "H5",
                 "Credit" => $credits,

@@ -75,9 +75,7 @@ class MatriculacionController extends \app\components\CController {
                     $resp_consMatricula = $mod_Matriculacion->consultarMatriculaxId($adm_id, $sins_id);
                     if (!$resp_consMatricula) {
                         $fecha = date(Yii::$app->params["dateTimeByDefault"]);
-                        $descripcion = "Asignación por Matrícula Método Ingreso.";
-                        \app\models\Utilities::putMessageLogFile('periodo:'.$periodo_id);     
-                        \app\models\Utilities::putMessageLogFile('solic:'.$sins_id);     
+                        $descripcion = "Asignación por Matrícula Método Ingreso.";   
                         //Buscar el código de planificación académica según el periodo, unidad, modalidad y carrera.
                         $resp_planificacion = $mod_Matriculacion->consultarPlanificacion($sins_id, $periodo_id);
                         if ($resp_planificacion) { //Si existe código de planificación
@@ -140,9 +138,11 @@ class MatriculacionController extends \app\components\CController {
         $per_id = Yii::$app->session->get("PB_perid");
 
         $mod_est = new Estudiante();
+        $modModalidad = new Modalidad();
+        
         $matriculacion_model = new Matriculacion();
         $today = date("Y-m-d H:i:s");
-        $result_process = $matriculacion_model->checkToday($today);
+        $result_process = $matriculacion_model->checkToday($today, $per_id);
 
         $usu_id = Yii::$app->session->get("PB_iduser");
         $mod_usuario = Usuario::findIdentity($usu_id);
@@ -166,6 +166,8 @@ class MatriculacionController extends \app\components\CController {
                     $pes_id = $resultIdPlanificacionEstudiante[0]['pes_id'];
                     $pla_id = $resultIdPlanificacionEstudiante[0]['pla_id'];
                     $resultRegistroOnline = $matriculacion_model->checkPlanificacionEstudianteRegisterConfiguracion($per_id, $pes_id, $pla_id);
+                    $modelPlaEst = PlanificacionEstudiante::findOne($pes_id);
+                    $modelPla = Planificacion::findOne($modelPlaEst->pla_id);
                     if (count($resultRegistroOnline) > 0) {
                         //Cuando existe un registro en registro_online
                         return $this->redirect('registro');
@@ -198,7 +200,8 @@ class MatriculacionController extends \app\components\CController {
                             ],
                         ]);
                         $dataCat = ArrayHelper::map($mod_est->getCategoryCost(), "Cod", "Precio");
-                        $dataMat = ArrayHelper::map($mod_est->getGastosMatricula(), "Cod", "Precio");
+                        $modCode = $modModalidad->getCodeCCostoxModalidad($modelPla->mod_id);Utilities::putMessageLogFile($modCode);
+                        $dataMat = ArrayHelper::map($mod_est->getGastosMatriculaOtros($modCode['Cod']), "Cod", "Precio");
                         $CatPrecio = $dataCat[$data_student['est_categoria']];
 
                         return $this->render('index', [
@@ -311,7 +314,7 @@ class MatriculacionController extends \app\components\CController {
             $per_id = Yii::$app->session->get("PB_perid");            
             $matriculacion_model = new Matriculacion();
             $today = date("Y-m-d H:i:s");
-            $result_process = $matriculacion_model->checkToday($today);
+            $result_process = $matriculacion_model->checkToday($today, $per_id);
 
             if (count($result_process) > 0) {                
                 /*                 * Exist a register process */
@@ -494,7 +497,14 @@ class MatriculacionController extends \app\components\CController {
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
             if (isset($data["pes_id"])) {
+                $modelPlaEst = PlanificacionEstudiante::findOne($data["pes_id"]);
+                $modelPla = Planificacion::findOne($modelPlaEst->pla_id);
                 $modelPersona = Persona::findOne($per_id);
+                $matriculacion_model = new Matriculacion();
+                $modModalidad = new Modalidad();
+                $mod_est = Estudiante::findOne(['per_id' => $per_id]);
+                $today = date("Y-m-d H:i:s");
+                $result_process = $matriculacion_model->checkToday($today, $per_id);
                 $pes_id = $data["pes_id"];
                 $modalidad = $data["modalidad"];
                 $carrera = $data["carrera"];
@@ -502,7 +512,7 @@ class MatriculacionController extends \app\components\CController {
                 $registro_online_model = new RegistroOnline();
                 $registro_online_model->per_id = $per_id;
                 $registro_online_model->pes_id = $pes_id;
-                $registro_online_model->pes_num_orden = 0; //Ya no se usa pero no permite null, por eso tiene valor de 0
+                $registro_online_model->pes_num_orden = 0; // Ya no se usa pero no permite null, por eso tiene valor de 0
                 $registro_online_model->ron_anio = date("Y");
                 $registro_online_model->ron_modalidad = $modalidad;
                 $registro_online_model->ron_carrera = $carrera;
@@ -512,26 +522,75 @@ class MatriculacionController extends \app\components\CController {
                 $registro_online_model->ron_valor_aso_estudiante = $data["asociacion"];
                 $registro_online_model->ron_valor_gastos_adm = $data["gastos"];
                 $registro_online_model->ron_valor_matricula = $data["matricula"];
-                $registro_online_model->ron_estado_registro = "0"; //Igual esta tampoco ya no se usa
+                $registro_online_model->ron_estado_registro = "0"; // Igual esta tampoco ya no se usa
                 $registro_online_model->ron_fecha_registro = date(Yii::$app->params['dateByDefault']);
                 $registro_online_model->ron_estado = "1";
                 $registro_online_model->ron_estado_logico = "1";
                 if ($registro_online_model->save()) {
                     $ron_id = $registro_online_model->getPrimaryKey();
                     $materias = explode(",", $materias);
+                    $costoMaterias = 0;
+
+                    $rco_id = $result_process[0]['rco_id'];
+                    $rco_num_bloques = $result_process[0]['rco_num_bloques'];
+                    $pla_id = $result_process[0]['pla_id'];
+                    $resultIdPlanificacionEstudiante = $matriculacion_model->getIdPlanificacionEstudiante($per_id, $pla_id);
+                    $pes_id = $resultIdPlanificacionEstudiante[0]['pes_id'];
+                    $pla_id = $resultIdPlanificacionEstudiante[0]['pla_id'];
+                    $resultRegistroOnline = $matriculacion_model->checkPlanificacionEstudianteRegisterConfiguracion($per_id, $pes_id, $pla_id);
+                    if (count($resultRegistroOnline) > 0) {
+                        //Cuando existe un registro en registro_online
+                        $message = array(
+                            "wtmessage" => Yii::t('notificaciones', 'Your information has not been saved. Please try again.'),
+                            "title" => Yii::t('jslang', 'Error'),
+                        );
+                        return Utilities::ajaxResponse('NOOK', 'alert', Yii::t('jslang', 'Error'), 'true', $message);
+                    }
+                    $data_student = $matriculacion_model->getDataStudent($per_id, $pla_id, $pes_id);
+                    $dataPlanificacion = $matriculacion_model->getAllDataPlanificacionEstudiante($per_id, $pla_id, $rco_num_bloques);
+                    $num_min = 0;
+                    $num_max = 10;
+                    if (count($dataPlanificacion) <= 4) {
+                        $num_min = count($dataPlanificacion);
+                        $num_max = count($dataPlanificacion);
+                    } else {
+                        $num_min = 4;
+                    }
+                    $dataMaterias = $matriculacion_model->getInfoMallaEstudiante($per_id);
+                    $dataCat = ArrayHelper::map($mod_est->getCategoryCost(), "Cod", "Precio"); // Precio de Categoria Estudiante
+                    $modCode = $modModalidad->getCodeCCostoxModalidad($modelPla->mod_id);
+                    $dataMat = ArrayHelper::map($mod_est->getGastosMatriculaOtros($modCode['Cod']), "Cod", "Precio"); // Gastos Administrativos
+                    $CatPrecio = $dataCat[$data_student['est_categoria']];
+                    
+                    // Se debe buscar la materia por medio del Alias y obtener el codigo de la asignatura, creditos, y codigo de la malla
                     foreach ($materias as $materia) {
+                        $costo = 0;
+                        $creditos = 0;
+                        $codMateria = 0;
+                        $asignatura = $materia;
+                        foreach($dataMaterias as $key => $value){
+                            if(trim(strtolower($value['AliasAsignatura'])) == trim(strtolower($materia))){
+                                $asignatura = $value['Asignatura'];
+                                $creditos = $value['AsigCreditos'];
+                                $codMateria = $value['MallaCodAsig'];
+                                $costo = $creditos * $CatPrecio;
+                            }
+                        }
                         $registro_online_item_model = new RegistroOnlineItem();
                         $registro_online_item_model->ron_id = $ron_id;
-                        $registro_online_item_model->roi_materia_nombre = $materia;
+                        $registro_online_item_model->roi_materia_cod = $codMateria; // codigo segun malla academica
+                        $registro_online_item_model->roi_materia_nombre = $asignatura;
+                        $registro_online_item_model->roi_creditos = $creditos; // creditos de la materia segun malla academica
+                        $registro_online_item_model->roi_costo = $costo; 
                         $registro_online_item_model->roi_estado = "1";
                         $registro_online_item_model->roi_estado_logico = "1";
-
                         $registro_online_item_model->save();
                     }
-                    //Send email
+                    // Se crea registro de cuotas
+                    $costoTotal = $data["asociacion"] + $data["gastos"] + $data["matricula"];
+                    // Send email
                     $report = new ExportFile();
                     $this->view->title = Academico::t("matriculacion", "Registration"); // Titulo del reporte
-                    $matriculacion_model = new Matriculacion();
                     $materiasxEstudiante = PlanificacionEstudiante::findOne($pes_id);
                     $data_student = $matriculacion_model->getDataStudenbyRonId($ron_id);
                     $dataPlanificacion = $matriculacion_model->getPlanificationFromRegistroOnline($ron_id);
@@ -588,7 +647,7 @@ class MatriculacionController extends \app\components\CController {
 
         $matriculacion_model = new Matriculacion();
         $today = date("Y-m-d H:i:s");
-        $result_process = $matriculacion_model->checkToday($today);
+        $result_process = $matriculacion_model->checkToday($today, $per_id);
 
         if (count($result_process) > 0) {
             /*             * Exist a register process */

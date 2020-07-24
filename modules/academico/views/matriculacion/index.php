@@ -125,15 +125,15 @@ $this->render('index-grid', ['planificacion' => $planificacion,]);
                 </tr>
                 <tr style='display: none;'>
                     <th><?= academico::t('matriculacion','Registration payment') ?></th>
-                    <td id="costMatr">$<?= isset($dataMat['MAT-GRAD'])?$dataMat['MAT-GRAD']:'0.00' ?></td>
+                    <td id="costMatr">$<?= isset($dataMat['MAT-GRAD'])?(number_format($dataMat['MAT-GRAD'], 2, '.', ',')):'0.00' ?></td>
                 </tr>
                 <tr>
                     <th><?= academico::t('matriculacion','Administrative Expenses') ?></th>
-                    <td id="costAdmin">$<?= isset($dataMat['ADM-GAST'])?$dataMat['ADM-GAST']:'0.00' ?></td>
+                    <td id="costAdmin">$<?= isset($dataMat['VARIOS'])?(number_format($dataMat['VARIOS'], 2, '.', ',')):'0.00' ?></td>
                 </tr>
                 <tr>
                     <th><?= academico::t('matriculacion','Students Association') ?></th>
-                    <td id="costStud">$<?= isset($dataMat['ASOEST'])?$dataMat['ASOEST']:'0.00' ?></td>
+                    <td id="costStud">$<?= isset($dataMat['ASOEST'])?(number_format($dataMat['ASOEST'], 2, '.', ',')):'0.00' ?></td>
                 </tr>
                 <tr>
                     <th style="font-size: 25px;"><?= academico::t('matriculacion', 'Register Cost') ?></th>
@@ -153,6 +153,6 @@ $this->render('index-grid', ['planificacion' => $planificacion,]);
 <input type="hidden" id="frm_carrera" value="<?= $data_student['pes_carrera'] ?>">
 <input type="hidden" id="frm_categoria" value="<?= $data_student['est_categoria'] ?>">
 <input type="hidden" id="frm_cat_price" value="<?= $CatPrecio ?>">
-<input type="hidden" id="frm_asc_est" value="<?= isset($dataMat['ASOEST'])?$dataMat['ASOEST']:'0.00' ?>">
-<input type="hidden" id="frm_mat_cos" value="<?= isset($dataMat['MAT-GRAD'])?$dataMat['MAT-GRAD']:'0.00' ?>">
-<input type="hidden" id="frm_gas_adm" value="<?= isset($dataMat['ADM-GAST'])?$dataMat['ADM-GAST']:'0.00' ?>">
+<input type="hidden" id="frm_asc_est" value="<?= isset($dataMat['ASOEST'])?(number_format($dataMat['ASOEST'], 2, '.', ',')):'0.00' ?>">
+<input type="hidden" id="frm_mat_cos" value="<?= isset($dataMat['MAT-GRAD'])?(number_format($dataMat['MAT-GRAD'], 2, '.', ',')):'0.00' ?>">
+<input type="hidden" id="frm_gas_adm" value="<?= isset($dataMat['VARIOS'])?(number_format($dataMat['VARIOS'], 2, '.', ',')):'0.00' ?>">

@@ -48,7 +48,7 @@ academico::registerTranslations();
                 'template' => '{select}',
                 'buttons' => [
                     'select' => function ($url, $planificacion) {
-                        return Html::checkbox("", false, ["value" => $planificacion['Subject']]);
+                        return Html::checkbox("", false, ["value" => $planificacion['Alias']]);
                         /* return Html::checkbox("", false, ["value" => $planificacion['Subject'], "onchange" => "handleChange(this)"]); */
                     },                    
                 ],

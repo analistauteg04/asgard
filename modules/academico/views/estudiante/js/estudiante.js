@@ -1,7 +1,4 @@
 $(document).ready(function () {
-    $('#btn_buscarDataest').click(function () {
-        actualizarGrid();
-    });
     $('#cmb_unidadbus').change(function () {
         var link = $('#txth_base').val() + "/academico/estudiante/index";
         document.getElementById("cmb_carrerabus").options.item(0).selected = 'selected';
@@ -42,6 +39,7 @@ $(document).ready(function () {
         }, true);
     });
 });
+
 function setComboDataselect(arr_data, element_id, texto) {
     var option_arr = "";
     option_arr += "<option value= '0'>" + texto + "</option>";
@@ -52,20 +50,4 @@ function setComboDataselect(arr_data, element_id, texto) {
         option_arr += "<option value='" + id + "'>" + value + "</option>";
     }
     $("#" + element_id).html(option_arr);
-}
-
-function actualizarGrid() {
-    var search = $('#txt_buscarData').val();   
-    var f_ini = $('#txt_fecha_ini').val();
-    var f_fin = $('#txt_fecha_fin').val();
-    var unidad = $('#cmb_unidadbus option:selected').val();
-    var modalidad = $('#cmb_modalidadbus option:selected').val();
-    var carrera = $('#cmb_carrerabus option:selected').val();
-
-    //Buscar almenos una clase con el nombre para ejecutar
-    if (!$(".blockUI").length) {
-        showLoadingPopup();
-        $('#Tbg_Estudiantes').PbGridView('applyFilterData', {'search': search, 'f_ini': f_ini, 'f_fin': f_fin, 'unidad': unidad, 'modalidad': modalidad, 'carrera': carrera});
-        setTimeout(hideLoadingPopup, 2000);
-    }
 }

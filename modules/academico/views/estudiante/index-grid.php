@@ -29,29 +29,29 @@ academico::registerTranslations();
                 'header' => academico::t("diploma", "DNI"),
                 'value' => 'dni',
             ],
-            [
+            /*[
                 'attribute' => 'Carrera',
                 'header' => academico::t("matriculacion", "Career"),
-                'value' => 'undidad',
+                'value' => 'Carrera',
             ],
             [
                 'attribute' => 'Modalidad',
                 'header' => academico::t("matriculacion", "Modality"),
-                'value' => 'modalidad',
+                'value' => 'Modalidad',
             ],
             [
                 'class' => 'yii\grid\ActionColumn',
-                'header' => academico::t("Academico", "Career/Program"),
+                'header' => academico::t("diploma", "Program/Course"),
                 'template' => '{view}',
                 'buttons' => [
                     'view' => function ($url, $model) {
-                        if (strlen($model['carrera']) > 30) {
+                        if (strlen($model['Programa']) > 30) {
                             $texto = '...';
                         }
-                        return Html::a('<span>' . substr($model['carrera'], 0, 20) . $texto . '</span>', "javascript:", ["data-toggle" => "tooltip", "title" => $model['carrera']]);
+                        return Html::a('<span>' . substr($model['Programa'], 0, 20) . $texto . '</span>', "javascript:", ["data-toggle" => "tooltip", "title" => $model['Programa']]);
                     },
                 ],
-            ],
+            ],*/
             [
                 'attribute' => 'matricula',
                 'header' => academico::t("Academico", 'Enrollment Number'),

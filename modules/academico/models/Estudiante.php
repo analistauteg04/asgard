@@ -250,20 +250,60 @@ class Estudiante extends \yii\db\ActiveRecord {
 
     public function getCategoryCost() {
         $con = \Yii::$app->db_sea;
-        $sql = "SELECT COD_CAT AS Cod, NOM_CAT AS Nombre, VAL_ARA AS Precio FROM pruebasea.CAT_ARANCEL WHERE EST_LOG = 1";
+        $sql = "SELECT COD_CAT AS Cod, NOM_CAT AS Nombre, VAL_ARA AS Precio FROM " . $con->dbname . ".CAT_ARANCEL WHERE EST_LOG = 1";
         $comando = $con->createCommand($sql);
         $resultData = $comando->queryAll();
         return $resultData;
     }
 
-    public function getGastosMatricula() {
+    public function getGastosMatriculaOtros($codMod) {
         $con = \Yii::$app->db_sea;
-        $sql = "SELECT COD_ART AS Cod, DES_COM AS Nombre, P_LISTA AS Precio FROM pruebasea.IG0020 
-                WHERE TIP_PRO = 'A' AND (COD_ART = 'ASOEST' OR COD_ART = 'MAT-GRAD' OR COD_ART = 'MAT-ONLINE')";
+        $today = date('Y-m-d');
+        $sql = "SELECT 
+                    COD_ART AS Cod, 
+                    DES_COM AS Nombre,
+                    P_VENTA AS Precio,
+                    '' AS Bloque,
+                    '' AS Periodo,
+                    '' AS FechaIniReg,
+                    '' AS FechaFinReg
+                FROM " . $con->dbname . ".IG0020
+                WHERE 
+                    TIP_PRO = 'A' 
+                    AND (COD_ART = 'ASOEST')
+                UNION ALL
+                SELECT 
+                    COD_ART AS Cod, 
+                    '' AS Nombre, 
+                    VALOR_P AS Precio,
+                    NUM_BLO AS Bloque,
+                    TIP_PER AS Periodo,
+                    FREG_INI AS FechaIniReg,
+                    FREG_FIN AS FechaFinReg
+                FROM " . $con->dbname . ".ADM_ITEMS
+                WHERE 
+                    COD_CEN = '$codMod' AND
+                    COD_ART = 'MAT-GRAD'
+                UNION ALL
+                SELECT 
+                    COD_ART AS Cod, 
+                    '' AS Nombre, 
+                    VALOR_P AS Precio,
+                    NUM_BLO AS Bloque,
+                    TIP_PER AS Periodo,
+                    FREG_INI AS FechaIniReg,
+                    FREG_FIN AS FechaFinReg
+                FROM pruebasea.ADM_ITEMS
+                WHERE 
+                    COD_CEN = 'G-004' AND
+                    (FREG_INI <= '$today' AND FREG_FIN >= '$today') AND
+                    COD_ART = 'VARIOS'
+                ";
         $comando = $con->createCommand($sql);
         $resultData = $comando->queryAll();
         return $resultData;
     }
+    
 
     /**
      * Function guardar estudiante carrera programa
@@ -354,62 +394,63 @@ class Estudiante extends \yii\db\ActiveRecord {
     public function consultarEstudiante($arrFiltro = array(), $onlyData = false) {
         $con = \Yii::$app->db_academico;
         $con1 = \Yii::$app->db_asgard;
-        if (isset($arrFiltro) && count($arrFiltro) > 0) {
-            if ($arrFiltro['search'] != "") {
-                $str_search .= "(pers.per_pri_nombre like :estudiante OR ";
-                $str_search .= "pers.per_seg_nombre like :estudiante OR ";
-                $str_search .= "pers.per_pri_apellido like :estudiante OR ";
-                $str_search .= "pers.per_seg_nombre like :estudiante  OR ";
-                $str_search .= "pers.per_cedula like :estudiante)  AND ";
-            }
-            if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
-                $str_search .= "estu.est_fecha_creacion >= :fec_ini AND ";
-                $str_search .= "estu.est_fecha_creacion <= :fec_fin AND ";
-            }
-            /* if ($arrFiltro['periodo'] != "" && $arrFiltro['periodo'] > 0) {
-              $str_search .= " h.paca_id = :periodo AND ";
-              } */
-        }
+        /* if (isset($arrFiltro) && count($arrFiltro) > 0) {
+          $str_search .= "(per.per_pri_nombre like :profesor OR ";
+          $str_search .= "per.per_seg_nombre like :profesor OR ";
+          $str_search .= "per.per_pri_apellido like :profesor OR ";
+          $str_search .= "per.per_seg_nombre like :profesor )  AND ";
+          $str_search .= "asig.asi_nombre like :materia  AND ";
+
+          if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
+          $str_search .= "r.rmtm_fecha_transaccion >= :fec_ini AND ";
+          $str_search .= "r.rmtm_fecha_transaccion <= :fec_fin AND ";
+          }
+          if ($arrFiltro['periodo'] != "" && $arrFiltro['periodo'] > 0) {
+          $str_search .= " h.paca_id = :periodo AND ";
+          }
+          if ($arrFiltro['estado'] != "0") {
+          $str_search .= " ifnull(m.rmar_tipo,'N') = :estadoM AND ";
+          }
+          }
+          if ($onlyData == false) {
+          $periodoacademico = 'h.paca_id as periodo, ';
+          $grupoperi = ',periodo';
+          } */
         $sql = "SELECT 
 	           -- pers.per_id,
                       concat(pers.per_pri_nombre, ' ', pers.per_pri_apellido) as nombres,
                       pers.per_cedula as dni,
                       IFNULL(estu.est_matricula, '') as matricula,
                       IFNULL(estu.est_categoria, '') as categoria,
-                      IFNULL(DATE_FORMAT(estu.est_fecha_creacion,'%Y-%m-%d'), '') as fecha_creacion,
-                      IFNULL(unid.uaca_nombre, '') as undidad,
-                      IFNULL(moda.mod_nombre, '') as modalidad,
-                      IFNULL(esac.eaca_nombre, '') as carrera
+                      IFNULL(estu.est_fecha_creacion, '') as fecha_creacion
                 FROM  " . $con->dbname . ".estudiante estu
                 RIGHT JOIN " . $con1->dbname . ".persona pers ON pers.per_id = estu.per_id		
-                LEFT JOIN " . $con->dbname . ".estudiante_carrera_programa ecpr ON ecpr.est_id = estu.est_id
-                LEFT JOIN " . $con->dbname . ".modalidad_estudio_unidad meun ON meun.meun_id = ecpr.meun_id	
-                LEFT JOIN " . $con->dbname . ".unidad_academica unid ON unid.uaca_id = meun.uaca_id
-                LEFT JOIN " . $con->dbname . ".modalidad moda ON moda.mod_id = meun.mod_id
-                LEFT JOIN " . $con->dbname . ".estudio_academico esac ON esac.eaca_id = meun.eaca_id
-                WHERE 
-                $str_search
-                pers.per_id > 1000                
+                WHERE pers.per_id > 1000                
                 ORDER BY estu.est_fecha_creacion DESC";
 
         $comando = $con->createCommand($sql);
         //$comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
-        if (isset($arrFiltro) && count($arrFiltro) > 0) {
-            if ($arrFiltro['search'] != "") {
-                $search_cond = "%" . $arrFiltro["search"] . "%";
-                $comando->bindParam(":estudiante", $search_cond, \PDO::PARAM_STR);
-            }
-            if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
-                $fecha_ini = $arrFiltro["f_ini"] . " 00:00:00";
-                $fecha_fin = $arrFiltro["f_fin"] . " 23:59:59";
-                $comando->bindParam(":fec_ini", $fecha_ini, \PDO::PARAM_STR);
-                $comando->bindParam(":fec_fin", $fecha_fin, \PDO::PARAM_STR);
-            }
-            /* if ($arrFiltro['periodo'] != "" && $arrFiltro['periodo'] > 0) {
-              $periodo = $arrFiltro["periodo"];
-              $comando->bindParam(":periodo", $periodo, \PDO::PARAM_INT);
-              } */
-        }
+        /* if (isset($arrFiltro) && count($arrFiltro) > 0) {
+          $search_cond = "%" . $arrFiltro["profesor"] . "%";
+          $comando->bindParam(":profesor", $search_cond, \PDO::PARAM_STR);
+          $fecha_ini = $arrFiltro["f_ini"] . " 00:00:00";
+          $fecha_fin = $arrFiltro["f_fin"] . " 23:59:59";
+          $materia = "%" . $arrFiltro["materia"] . "%";
+          $comando->bindParam(":materia", $materia, \PDO::PARAM_STR);
+
+          if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
+          $comando->bindParam(":fec_ini", $fecha_ini, \PDO::PARAM_STR);
+          $comando->bindParam(":fec_fin", $fecha_fin, \PDO::PARAM_STR);
+          }
+          if ($arrFiltro['periodo'] != "" && $arrFiltro['periodo'] > 0) {
+          $periodo = $arrFiltro["periodo"];
+          $comando->bindParam(":periodo", $periodo, \PDO::PARAM_INT);
+          }
+          if ($arrFiltro['estado'] != "0") {
+          $estadoM = $arrFiltro["estado"];
+          $comando->bindParam(":estadoM", $estadoM, \PDO::PARAM_STR);
+          }
+          } */
         $resultData = $comando->queryAll();
         $dataProvider = new ArrayDataProvider([
             'key' => 'id',

@@ -1458,6 +1458,22 @@ create table if not exists `registro_online_cuota` (
  foreign key (ron_id) references `registro_online`(ron_id)
 );
 
+-- --------------------------------------------------------
+-- 
+-- Estructura de tabla para la tabla `modalidad_centro_costo`
+-- --------------------------------------------------------
+create table if not exists `modalidad_centro_costo` (
+ `mcco_id` bigint(20) not null auto_increment primary key,
+ `mod_id` bigint(20) not null, 
+ `mcco_code` varchar(50) null, 
+ `mcco_estado` varchar(1) not null, 
+ `mcco_fecha_creacion` timestamp not null default current_timestamp,
+ `mcco_usuario_modifica` bigint(20) null,
+ `mcco_fecha_modificacion` timestamp null default null,
+ `mcco_estado_logico` varchar(1) not null,
+ foreign key (mod_id) references `modalidad`(mod_id)
+);
+
 /* Especies */
 
 CREATE TABLE `responsable_especie` (

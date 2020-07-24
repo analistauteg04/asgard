@@ -156,4 +156,22 @@ class Modalidad extends \app\modules\academico\components\CActiveRecord {
         return $resultData;
     }
 
+    public function getCodeCCostoxModalidad($mod_id){
+        $con = \Yii::$app->db_academico;
+        $estado = 1;
+        $sql = "SELECT 
+                    mcco_code AS Cod
+                FROM 
+                    " . $con->dbname . ".modalidad_centro_costo            
+                WHERE   
+                    mod_id=:modalidad AND
+                    mcco_estado_logico=:estado AND 
+                    mcco_estado=:estado";
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":modalidad", $mod_id, \PDO::PARAM_INT);
+        $resultData = $comando->queryOne();
+        return $resultData;
+    }
+
 }

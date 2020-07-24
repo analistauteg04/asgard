@@ -65,6 +65,7 @@ $(document).ready(function() {
         var total = 0;
         var asoc = $('#frm_asc_est').val();
         var mat = $('#frm_mat_cos').val();
+        var gastos = $('#frm_gas_adm').val();
         $('#grid_registro_list > table > tbody > tr > td > input').each(function() {
             if ($(this).is(':checked')) {
                 var credits = $(this).parent().prev().text();
@@ -74,9 +75,9 @@ $(document).ready(function() {
             }
             $('#costMat').text('$' + subtotal.toFixed(2));
         });
-        //total = subtotal + parseFloat(asoc) + parseFloat(mat);
-        total = subtotal + parseFloat(asoc);
-        $('#costTotal').text('$' + total.toFixed(2));
+        //total = subtotal + parseFloat(asoc) + parseFloat(mat) + parseFloat(gastos);
+        total = subtotal + parseFloat(asoc) + parseFloat(gastos);
+        $('#costTotal').text('$' + (total.toFixed(2)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
     });
 });
 
