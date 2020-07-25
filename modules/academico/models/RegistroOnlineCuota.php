@@ -48,6 +48,7 @@ class RegistroOnlineCuota extends \yii\db\ActiveRecord {
             [['ron_id','roc_estado','roc_estado_logico'],'required'],
             [['roc_fecha_creacion','roc_fecha_modificacion'], 'safe'],
             [['roc_estado_logico','roc_estado'], 'string', 'max' => 1],
+            [['roc_porcentaje'], 'string', 'max' => 10],
             [['ron_id'], 'exist', 'skipOnError' => true, 'targetClass' => RegistroOnline::className(), 'targetAttribute' => ['ron_id' => 'ron_id']],
             /* [['pes_id'], 'exist', 'skipOnError' => true, 'targetClass' => PlanificacionEstudiante::className(), 'targetAttribute' => ['pes_id' => 'pes_id']], */
         ];

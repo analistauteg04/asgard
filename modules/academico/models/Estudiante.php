@@ -12,6 +12,9 @@ use Yii;
  * @property int $per_id
  * @property int $est_usuario_ingreso
  * @property int $est_usuario_modifica
+ * @property string $est_categoria
+ * @property string $est_matricula
+ * @property string $est_fecha_ingreso
  * @property string $est_estado
  * @property string $est_fecha_creacion
  * @property string $est_fecha_modificacion
@@ -43,7 +46,9 @@ class Estudiante extends \yii\db\ActiveRecord {
         return [
             [['per_id', 'est_usuario_ingreso', 'est_estado', 'est_estado_logico'], 'required'],
             [['per_id', 'est_usuario_ingreso', 'est_usuario_modifica'], 'integer'],
-            [['est_fecha_creacion', 'est_fecha_modificacion'], 'safe'],
+            [['est_fecha_creacion', 'est_fecha_modificacion', 'est_fecha_ingreso'], 'safe'],
+            [['est_matricula'], 'string', 'max' => 20],
+            [['est_categoria'], 'string', 'max' => 2],
             [['est_estado', 'est_estado_logico'], 'string', 'max' => 1],
         ];
     }
@@ -55,6 +60,9 @@ class Estudiante extends \yii\db\ActiveRecord {
         return [
             'est_id' => 'Est ID',
             'per_id' => 'Per ID',
+            'est_matricula' => 'Matricula',
+            'est_categoria' => 'Categoria',
+            'est_fecha_ingreso' => 'Fecha Ingreso',
             'est_usuario_ingreso' => 'Est Usuario Ingreso',
             'est_usuario_modifica' => 'Est Usuario Modifica',
             'est_estado' => 'Est Estado',
@@ -265,9 +273,12 @@ class Estudiante extends \yii\db\ActiveRecord {
                     P_VENTA AS Precio,
                     '' AS Bloque,
                     '' AS Semestre,
+                    '' AS Cuota,
                     '' AS Periodo,
                     '' AS FechaIniReg,
-                    '' AS FechaFinReg
+                    '' AS FechaFinReg,
+                    '' AS FechaIniPer,
+                    '' AS FechaFinPer
                 FROM " . $con->dbname . ".IG0020
                 WHERE 
                     TIP_PRO = 'A' 
@@ -278,10 +289,13 @@ class Estudiante extends \yii\db\ActiveRecord {
                     '' AS Nombre, 
                     VALOR_P AS Precio,
                     NUM_BLO AS Bloque,
-                    '' AS Semestre,
+                    NUM_SEM AS Semestre,
+                    NUM_CUO AS Cuota,
                     TIP_PER AS Periodo,
                     FREG_INI AS FechaIniReg,
-                    FREG_FIN AS FechaFinReg
+                    FREG_FIN AS FechaFinReg,
+                    FPER_INI AS FechaIniPer,
+                    FPER_FIN AS FechaFinPer
                 FROM " . $con->dbname . ".ADM_ITEMS
                 WHERE 
                     COD_CEN = '$codMod' AND
@@ -293,12 +307,15 @@ class Estudiante extends \yii\db\ActiveRecord {
                     VALOR_P AS Precio,
                     NUM_BLO AS Bloque,
                     NUM_SEM AS Semestre,
+                    NUM_CUO AS Cuota,
                     TIP_PER AS Periodo,
                     FREG_INI AS FechaIniReg,
-                    FREG_FIN AS FechaFinReg
-                FROM pruebasea.ADM_ITEMS
+                    FREG_FIN AS FechaFinReg,
+                    FPER_INI AS FechaIniPer,
+                    FPER_FIN AS FechaFinPer
+                FROM " . $con->dbname . ".ADM_ITEMS
                 WHERE 
-                    COD_CEN = 'G-004' AND
+                    COD_CEN = '$codMod' AND
                     (FREG_INI <= '$today' AND FREG_FIN >= '$today') AND
                     COD_ART = 'VARIOS'
                 ";

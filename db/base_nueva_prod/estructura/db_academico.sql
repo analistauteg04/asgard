@@ -1448,7 +1448,7 @@ create table if not exists `registro_online_cuota` (
  `ron_id` bigint(20) not null, 
  `roc_num_cuota` varchar(50) null, 
  `roc_vencimiento` varchar(100) null,
- `roc_porcentaje` varchar(4) null, 
+ `roc_porcentaje` varchar(10) null, 
  `roc_costo` decimal(10,2) DEFAULT NULL, 
  `roc_estado` varchar(1) not null, 
  `roc_fecha_creacion` timestamp not null default current_timestamp,
