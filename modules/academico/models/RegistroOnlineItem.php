@@ -16,6 +16,8 @@ use app\modules\academico\models\RegistroOnline;
  * @property string $roi_materia_nombre
  * @property string $roi_creditos
  * @property string $roi_costo
+ * @property string $roi_bloque
+ * @property string $roi_hora
  * @property string $roi_estado
  * @property string $roi_fecha_creacion
  * @property string $roi_usuario_modifica
@@ -47,6 +49,7 @@ class RegistroOnlineItem extends \yii\db\ActiveRecord {
         return [
             [['ron_id','roi_estado','roi_estado_logico'],'required'],
             [['roi_fecha_creacion','roi_fecha_modificacion'], 'safe'],
+            [['roi_bloque','roi_hora'], 'string', 'max' => 4],
             [['roi_estado_logico','roi_estado'], 'string', 'max' => 1],
             [['ron_id'], 'exist', 'skipOnError' => true, 'targetClass' => RegistroOnline::className(), 'targetAttribute' => ['ron_id' => 'ron_id']],
             /* [['pes_id'], 'exist', 'skipOnError' => true, 'targetClass' => PlanificacionEstudiante::className(), 'targetAttribute' => ['pes_id' => 'pes_id']], */
@@ -64,6 +67,8 @@ class RegistroOnlineItem extends \yii\db\ActiveRecord {
             'roi_materia_nombre' => 'Roi Materia Nombre',
             'roi_creditos' => 'Roi Creditos',
             'roi_costo' => 'Roi Costo',
+            'roi_bloque' => 'Bloque',
+            'roi_hora' => 'Hora',
             'roi_estado' => 'Roi Estado',
             'roi_fecha_creacion' => 'Roi Fecha Creacion',
             'roi_usuario_modifica' => 'Roi Usuario Modifica',

@@ -73,7 +73,7 @@ $(document).ready(function() {
                 var costMat = cat * credits;
                 subtotal += costMat;
             }
-            $('#costMat').text('$' + subtotal.toFixed(2));
+            $('#costMat').text('$' + (subtotal.toFixed(2)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
         });
         //total = subtotal + parseFloat(asoc) + parseFloat(mat) + parseFloat(gastos);
         total = subtotal + parseFloat(asoc) + parseFloat(gastos);

@@ -3,35 +3,6 @@
 use yii\helpers\Html;
 use app\modules\academico\Module as academico;
 
-$leyenda = '
-          <div class="form-group">          
-          <div class="alert alert-info">
-          <table class="tg">
-            <tr>
-              <td colspan="2" class="tg-0pky"><span style="font-weight: bold"> Nota: </span>Estimado Estudiante, si tiene alguna observación con la 
-              planificación del periodo académico por favor contactar a la secretaría de su facultad, a los siguientes números:</br></br></td>
-            </tr>
-            <tr>
-                <td class="tg-0pky"><span style="font-weight: bold">Datos de Contacto</span></br></br></td>
-            </tr>
-            <tr>
-              <td class="tg-0pky"><span style="font-weight: bold">Facultad Grado Presencial</span></br>
-                Correo: secretariapresencial@uteg.edu.ec</br>
-                Celular: 0993817458</br></br></td>
-              <td class="tg-0pky"><span style="font-weight: bold">Facultad Grado a Distancia y Semipresencial</span></br>
-                Correo: secretariasemipresencial@uteg.edu.ec</br>
-                Celular: 09895899757</br></br></td>
-            </tr>
-            <tr>
-              <td class="tg-0pky"> <span style="font-weight: bold">Facultad Grado Online</span></br>
-                Correo: secretariaonline@uteg.edu.ec</br>
-                Celular: 0991534808</br></br></td>
-              <td class="tg-0pky"><span style="font-weight: bold">Mesa de Servicio UTEG</span></br>
-                Correo: mesaservicio01e@uteg.edu.ec y mesaservicio02@uteg.edu.ec</br></br></td>
-            </tr>
-          </table>
-          </div>     
-          </div>';
 ?>
 
 <div>

@@ -72,4 +72,40 @@ class RegistroOnlineCuota extends \yii\db\ActiveRecord {
             'roc_estado_logico' => 'Roc Estado Logico',
         ];
     }
+
+    public function getDataCuotasRegistroOnline($ron_id, $dataProvider = false)
+    {
+        $con_academico = \Yii::$app->db_academico;
+        $estado = 1;
+        $sql = "
+            SELECT 
+                c.roc_id as Id, 
+                c.roc_num_cuota as Cuota, 
+                c.roc_vencimiento as Vencimiento, 
+                c.roc_porcentaje as Porcentaje, 
+                c.roc_costo as Price
+            FROM " . $con_academico->dbname . ".registro_online_cuota as c
+            WHERE c.ron_id =:ron_id
+            AND c.roc_estado =:estado
+            AND c.roc_estado_logico =:estado
+        ";
+
+        $comando = $con_academico->createCommand($sql);
+        $comando->bindParam(":ron_id", $ron_id, \PDO::PARAM_INT);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $resultData = $comando->queryAll();
+
+        if(!$dataProvider) return $resultData;
+
+        return new ArrayDataProvider([
+            'key' => 'Id',
+            'allModels' => $resultData,
+            'pagination' => [
+                'pageSize' => Yii::$app->params["pageSize"],
+            ],
+            'sort' => [
+                'attributes' => ["Cuota"],
+            ],
+        ]);
+    }
 }

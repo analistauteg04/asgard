@@ -894,9 +894,10 @@ class Matriculacion extends \yii\db\ActiveRecord {
         $con_academico = \Yii::$app->db_academico;
         $estado = 1;
         $sql = "
-            SELECT ron.ron_id, pla.pla_periodo_academico, pes.pes_nombres, pes.pes_dni, ron.ron_modalidad as mod_nombre, ron.ron_carrera as pes_carrera, per.per_celular, per.per_correo
+            SELECT ron.ron_id, pla.pla_periodo_academico, pes.pes_nombres, pes.pes_dni, ron.ron_modalidad as mod_nombre, ron.ron_carrera as pes_carrera, per.per_celular, per.per_correo, est.est_categoria, est.est_matricula
             FROM " . $con_academico->dbname . ".planificacion as pla,
             " . $con_academico->dbname . ".planificacion_estudiante as pes,
+            " . $con_academico->dbname . ".estudiante as est,
             " . $con_asgard->dbname . ".persona as per,
             " . $con_academico->dbname . ".registro_online as ron
             WHERE ron.pes_id = pes.pes_id
@@ -906,6 +907,7 @@ class Matriculacion extends \yii\db\ActiveRecord {
             AND ron.pes_id =:pes_id
             AND ron.ron_estado =:estado
             AND ron.ron_estado_logico =:estado
+            ORDER BY ron.ron_id desc 
         ";
 
         $comando = $con_academico->createCommand($sql);
@@ -981,8 +983,14 @@ class Matriculacion extends \yii\db\ActiveRecord {
         $con_academico = \Yii::$app->db_academico;
         $estado = 1;
         $sql = "
-            SELECT roi.roi_id,                
-                roi.roi_materia_nombre as Subject
+            SELECT 
+                roi.roi_id, 
+                roi.roi_materia_nombre as Subject, 
+                roi_creditos as Credit, 
+                roi_materia_cod as CodeAsignatura, 
+                roi_costo as Price,
+                roi_hora as Hour,
+                roi_bloque as Block
             FROM " . $con_academico->dbname . ".registro_online_item as roi
             WHERE ron_id =:ron_id
             AND roi_estado =:estado

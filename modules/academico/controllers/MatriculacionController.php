@@ -28,6 +28,37 @@ Academico::registerTranslations();
 
 class MatriculacionController extends \app\components\CController {
 
+    public $leyenda = '
+          <div class="form-group">          
+          <div class="alert alert-info">
+          <table class="tg">
+            <tr>
+              <td colspan="2" class="tg-0pky"><span style="font-weight: bold"> Nota: </span>Estimado Estudiante, si tiene alguna observación con la 
+              planificación del periodo académico por favor contactar a la secretaría de su facultad, a los siguientes números:</br></br></td>
+            </tr>
+            <tr>
+                <td class="tg-0pky"><span style="font-weight: bold">Datos de Contacto</span></br></br></td>
+            </tr>
+            <tr>
+              <td class="tg-0pky"><span style="font-weight: bold">Facultad Grado Presencial</span></br>
+                Correo: secretariapresencial@uteg.edu.ec</br>
+                Celular: 0993817458</br></br></td>
+              <td class="tg-0pky"><span style="font-weight: bold">Facultad Grado a Distancia y Semipresencial</span></br>
+                Correo: secretariasemipresencial@uteg.edu.ec</br>
+                Celular: 09895899757</br></br></td>
+            </tr>
+            <tr>
+              <td class="tg-0pky"> <span style="font-weight: bold">Facultad Grado Online</span></br>
+                Correo: secretariaonline@uteg.edu.ec</br>
+                Celular: 0991534808</br></br></td>
+              <td class="tg-0pky"><span style="font-weight: bold">Mesa de Servicio UTEG</span></br>
+                Correo: mesaservicio01e@uteg.edu.ec y mesaservicio02@uteg.edu.ec</br></br></td>
+            </tr>
+          </table>
+          </div>     
+          </div>';
+
+
     public function actionNewhomologacion() {
         return $this->render('newHomologacion', [
         ]);
@@ -214,6 +245,7 @@ class MatriculacionController extends \app\components\CController {
                                     "dataCat" => $dataCat,
                                     "CatPrecio" => $CatPrecio,
                                     "dataMat" => $dataMat,
+                                    "leyenda" => $this->leyenda,
                         ]);
                     }
                 } else {
@@ -589,6 +621,8 @@ class MatriculacionController extends \app\components\CController {
                             $creditos = 0;
                             $codMateria = 0;
                             $asignatura = $materia;
+                            $bloque = "";
+                            $hora = "";
                             foreach($dataMaterias as $key => $value){
                                 if(trim(strtolower($value['AliasAsignatura'])) == trim(strtolower($materia))){
                                     $asignatura = $value['Asignatura'];
@@ -596,6 +630,12 @@ class MatriculacionController extends \app\components\CController {
                                     $codMateria = $value['MallaCodAsig'];
                                     $costo = $creditos * $CatPrecio;
                                     $totalPago += $costo;
+                                    foreach($dataPlanificacion as $ke => $val){
+                                        if(trim(strtolower($val['Alias'])) == trim(strtolower($materia))){
+                                            $bloque = $val['Block'];
+                                            $hora = $val['Hour'];
+                                        }
+                                    }
                                 }
                             }
                             $registro_online_item_model = new RegistroOnlineItem();
@@ -604,6 +644,8 @@ class MatriculacionController extends \app\components\CController {
                             $registro_online_item_model->roi_materia_nombre = $asignatura;
                             $registro_online_item_model->roi_creditos = $creditos; // creditos de la materia segun malla academica
                             $registro_online_item_model->roi_costo = $costo; 
+                            $registro_online_item_model->roi_bloque = $bloque;
+                            $registro_online_item_model->roi_hora = $hora;
                             $registro_online_item_model->roi_estado = "1";
                             $registro_online_item_model->roi_estado_logico = "1";
                             $registro_online_item_model->roi_fecha_creacion = date(Yii::$app->params['dateTimeByDefault']);
@@ -620,7 +662,7 @@ class MatriculacionController extends \app\components\CController {
                         ];
                         $initialMonth = date('F', strtotime($fechaFinReg));
                         $initialMonNum = date('m', strtotime($fechaFinReg));
-                        $initialDay = date('d', strtotime('+1 day',$fechaFinReg));
+                        $initialDay = date('d', strtotime("$fechaFinReg +1 day"));
                         $initialYear = date('y', strtotime($fechaFinReg));
                         for($i=0; $i<$cuotas; $i++){
                             $mod_cuotas = new RegistroOnlineCuota();
@@ -645,7 +687,7 @@ class MatriculacionController extends \app\components\CController {
                                     $initialYear += 1;
                                     $initialMonNum = 1;
                                 }
-                                $initialMonth = date('F', strtotime("+$i months",$fechaFinReg));
+                                $initialMonth = date('F', strtotime("$fechaFinReg +$i months"));
                                 $mod_cuotas->roc_vencimiento = strtoupper(Academico::t('matriculacion', $initialMonth)) . " " . $initialDay . "/" . $initialYear;
                             }
                             $mod_cuotas->roc_estado = '1';
@@ -742,6 +784,13 @@ class MatriculacionController extends \app\components\CController {
                     $ron_id = $data_student["ron_id"];
                     $dataPlanificacion = $matriculacion_model->getPlanificationFromRegistroOnline($ron_id);
                     $materiasxEstudiante = PlanificacionEstudiante::findOne($pes_id);
+                    $model_registroOnline = RegistroOnline::findOne($ron_id);
+                    $arrModel_registroOnlineItem = RegistroOnlineItem::findAll(['ron_id' => $ron_id]);
+                    $model_registroCuota = new RegistroOnlineCuota();
+                    $costoMaterias = 0;
+                    foreach($arrModel_registroOnlineItem as $item){
+                        $costoMaterias += $item->roi_costo;
+                    }
                     $dataProvider = new ArrayDataProvider([
                         'key' => 'Ids',
                         'allModels' => $dataPlanificacion,
@@ -753,12 +802,18 @@ class MatriculacionController extends \app\components\CController {
                         ],
                     ]);
 
+                    $dataProviderCuotas = $model_registroCuota->getDataCuotasRegistroOnline($ron_id, true);
+
                     return $this->render('registro', [
                                 "planificacion" => $dataProvider,
                                 "data_student" => $data_student,
                                 "title" => Academico::t("matriculacion", "Register saved (Record Time)"),
                                 "ron_id" => $ron_id,
                                 "materiasxEstudiante" => $materiasxEstudiante,
+                                "leyenda" => $this->leyenda,
+                                "model_registroOnline" => $model_registroOnline,
+                                "costoMaterias" => $costoMaterias,
+                                "cuotas" => $dataProviderCuotas,
                     ]);
                 } else {
                     return $this->render('index-out', [

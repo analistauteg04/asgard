@@ -1431,6 +1431,8 @@ create table if not exists `registro_online_item` (
  `roi_materia_nombre` varchar(100) null,
  `roi_creditos` varchar(4) null, 
  `roi_costo` decimal(10,2) DEFAULT NULL, 
+ `roi_bloque` varchar(4) DEFAULT null, 
+ `roi_hora` varchar(4) DEFAULT null, 
  `roi_estado` varchar(1) not null, 
  `roi_fecha_creacion` timestamp not null default current_timestamp,
  `roi_usuario_modifica` bigint(20) null,
