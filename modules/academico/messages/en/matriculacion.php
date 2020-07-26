@@ -89,6 +89,7 @@ return [
     'Unregistered Student' => 'Unregistered Student',
     'Registered List' => 'Registered List',
     'Detail Student Unregistered' => 'Detail Student Unregistered',
+    'Detail Online Register' => 'Detail Online Register',
     'Block' => 'Block',
     'Block 1' => 'Block 1',
     'Block 2' => 'Block 2',
@@ -118,4 +119,5 @@ return [
     'Select' => 'Select',
     'There is no planning data' => 'There is no planning data',
     'Subject Code' => 'Subject Code',
+    'Order' => 'Order',
 ];

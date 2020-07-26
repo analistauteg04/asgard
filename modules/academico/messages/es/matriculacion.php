@@ -54,7 +54,7 @@ return [
     'Students Association' => 'Asociación de Estudiantes',
     'Subject' => 'Materia',
     'Credit' => 'Créditos',
-    'Credit Direct' => 'Créditos Directo',
+    'Credit Direct' => 'Crédito Directo',
     'Unit Cost' => 'Costo Unitario',
     'Modality' => 'Modalidad',
     'Expiration Date' => 'Vencimiento',
@@ -89,6 +89,7 @@ return [
     'Unregistered Student' => 'Estudiante por Registrar',
     'Registered List' => 'Listado de Registrados',
     'Detail Student Unregistered' => 'Detalle de Estudiante por Registrar',
+    'Detail Online Register' => 'Detalle de Registro en Línea',
     'Block' => 'Bloque',
     'Block 1' => 'Bloque 1',
     'Block 2' => 'Bloque 2',
@@ -118,4 +119,5 @@ return [
     'Select' => 'Seleccionar',
     'There is no planning data' => 'No existen datos de planificiones',
     'Subject Code' => 'Cod. Asignatura',
+    'Order' => 'Orden',
 ];

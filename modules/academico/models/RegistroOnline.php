@@ -12,7 +12,7 @@ use \yii\data\ArrayDataProvider;
  * @property int $ron_id
  * @property int $per_id
  * @property int $pes_id
- * @property int $pes_num_orden
+ * @property int $ron_num_orden
  * @property string $ron_fecha_registro
  * @property string $ron_anio
  * @property string $ron_semestre
@@ -58,8 +58,8 @@ class RegistroOnline extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['per_id', 'pes_id', 'pes_num_orden', 'ron_fecha_registro', 'ron_estado_registro', 'ron_estado', 'ron_estado_logico'], 'required'],
-            [['per_id', 'pes_id', 'pes_num_orden', 'ron_usuario_modifica'], 'integer'],
+            [['per_id', 'pes_id', 'ron_num_orden', 'ron_fecha_registro', 'ron_estado_registro', 'ron_estado', 'ron_estado_logico'], 'required'],
+            [['per_id', 'pes_id', 'ron_num_orden', 'ron_usuario_modifica'], 'integer'],
             [['ron_fecha_registro', 'ron_fecha_creacion', 'ron_fecha_modificacion'], 'safe'],
             [['ron_valor_arancel', 'ron_valor_matricula', 'ron_valor_gastos_adm', 'ron_valor_aso_estudiante'], 'number'],
             [['ron_anio'], 'string', 'max' => 4],
@@ -80,7 +80,7 @@ class RegistroOnline extends \yii\db\ActiveRecord
             'ron_id' => 'Ron ID',
             'per_id' => 'Per ID',
             'pes_id' => 'Pes ID',
-            'pes_num_orden' => 'Pes Num Orden',
+            'ron_num_orden' => 'Num Orden',
             'ron_fecha_registro' => 'Ron Fecha Registro',
             'ron_anio' => 'Ron Anio',
             'ron_semestre' => 'Ron Semestre',

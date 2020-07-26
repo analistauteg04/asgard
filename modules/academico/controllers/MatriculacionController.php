@@ -584,7 +584,7 @@ class MatriculacionController extends \app\components\CController {
                     $registro_online_model = new RegistroOnline();
                     $registro_online_model->per_id = $per_id;
                     $registro_online_model->pes_id = $pes_id;
-                    $registro_online_model->pes_num_orden = $numOrden; 
+                    $registro_online_model->ron_num_orden = $numOrden; 
                     $registro_online_model->ron_anio = date("Y");
                     $registro_online_model->ron_modalidad = $modalidad;
                     $registro_online_model->ron_carrera = $carrera;
@@ -595,7 +595,7 @@ class MatriculacionController extends \app\components\CController {
                     $registro_online_model->ron_valor_gastos_adm = $dataMat['VARIOS'];
                     $registro_online_model->ron_valor_matricula = $dataMat['MAT-GRAD']; // se asume que se debio haber pagado antes del registro
                     $registro_online_model->ron_estado_registro = "0"; // Igual esta tampoco ya no se usa
-                    $registro_online_model->ron_fecha_registro = date(Yii::$app->params['dateByDefault']);
+                    $registro_online_model->ron_fecha_registro = date(Yii::$app->params['dateTimeByDefault']);
                     $registro_online_model->ron_fecha_creacion = date(Yii::$app->params['dateTimeByDefault']);
                     $registro_online_model->ron_estado = "1";
                     $registro_online_model->ron_estado_logico = "1";
@@ -700,7 +700,7 @@ class MatriculacionController extends \app\components\CController {
     
                         // Send email
                         $report = new ExportFile();
-                        $this->view->title = Academico::t("matriculacion", "Registration"); // Titulo del reporte
+                        $this->view->title = Academico::t("matriculacion", "Online Registration"); // Titulo del reporte
                         $materiasxEstudiante = PlanificacionEstudiante::findOne($pes_id);
                         $data_student = $matriculacion_model->getDataStudenbyRonId($ron_id);
                         $dataPlanificacion = $matriculacion_model->getPlanificationFromRegistroOnline($ron_id);
@@ -714,6 +714,14 @@ class MatriculacionController extends \app\components\CController {
                                 'attributes' => ["Subject"],
                             ],
                         ]);
+                        $model_registroOnline = RegistroOnline::findOne($ron_id);
+                        $arrModel_registroOnlineItem = RegistroOnlineItem::findAll(['ron_id' => $ron_id]);
+                        $model_registroCuota = new RegistroOnlineCuota();
+                        $costoMaterias = 0;
+                        foreach($arrModel_registroOnlineItem as $item){
+                            $costoMaterias += $item->roi_costo;
+                        }
+                        $dataProviderCuotas = $model_registroCuota->getDataCuotasRegistroOnline($ron_id, true);
     
                         $path = "Registro_" . date("Ymdhis") . ".pdf";
                         $report->orientation = "P"; // tipo de orientacion L => Horizontal, P => Vertical
@@ -721,7 +729,12 @@ class MatriculacionController extends \app\components\CController {
                                 $this->render('exportpdf', [
                                     "planificacion" => $dataProvider,
                                     "data_student" => $data_student,
+                                    "ron_id" => $ron_id,
                                     "materiasxEstudiante" => $materiasxEstudiante,
+                                    "model_registroOnline" => $model_registroOnline,
+                                    "costoMaterias" => $costoMaterias,
+                                    "cuotas" => $dataProviderCuotas,
+                                    "orden" => $numOrden,
                                 ])
                         );
     
@@ -736,16 +749,14 @@ class MatriculacionController extends \app\components\CController {
                         $files = array(
                             "0" => $tmp_path,
                         );
-                        $asunto = "Registro en línea";
+                        $asunto = Academico::t("matriculacion", "Online Registration");
                         $base = Yii::$app->basePath;
                         $lang = Yii::$app->language;
                         $body = Utilities::getMailMessage("registro", array("[[user]]" => $modelPersona->per_pri_nombre . " " . $modelPersona->per_pri_apellido, "[[periodo]]" => $data_student["pla_periodo_academico"], "[[modalidad]]" => $data_student["mod_nombre"]), Yii::$app->language, Yii::$app->basePath . "/modules/academico");
                         $titulo_mensaje = "Registro de Matriculación en línea";
 
                         $trans->commit();
-    
-                        //Utilities::sendEmail($titulo_mensaje, $from, $to, $asunto, $body, $files);
-    
+                        Utilities::sendEmail($titulo_mensaje, $from, $to, $asunto, $body, $files);
                         Utilities::removeTemporalFile($tmp_path);
     
                         $message = array(
@@ -760,7 +771,7 @@ class MatriculacionController extends \app\components\CController {
             }catch(Exception $e){
                 $trans->rollback();
                 $message = array(
-                    "wtmessage" => Yii::t('notificaciones', 'Your information has not been saved. Please try again.'),
+                    "wtmessage" => Yii::t('notificaciones', 'Your information has not been saved. Please try again.'.$e->getMessage()),
                     "title" => Yii::t('jslang', 'Error'),
                 );
                 return Utilities::ajaxResponse('NOOK', 'alert', Yii::t('jslang', 'Error'), 'true', $message);

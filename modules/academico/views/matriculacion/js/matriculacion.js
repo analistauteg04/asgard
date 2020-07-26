@@ -164,9 +164,10 @@ function registro() {
         /* console.log(arrParams); */
         requestHttpAjax(link, arrParams, function(response) {
             showAlert(response.status, response.label, response.message);
-            setTimeout(function() {
-                parent.window.location.href = $('#txth_base').val() + "/academico/matriculacion/index";
-            }, 2000);
+            if (response.status == 'OK')
+                setTimeout(function() {
+                    parent.window.location.href = $('#txth_base').val() + "/academico/matriculacion/index";
+                }, 2000);
 
         }, true);
     }

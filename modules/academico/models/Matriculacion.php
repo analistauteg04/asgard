@@ -925,12 +925,23 @@ class Matriculacion extends \yii\db\ActiveRecord {
         $con_academico = \Yii::$app->db_academico;
         $estado = 1;
         $sql = "
-            SELECT pla.pla_periodo_academico, pes.pes_nombres, pes.pes_dni, ron.ron_modalidad as mod_nombre, ron.ron_carrera as pes_carrera, per.per_celular, per.per_correo
+            SELECT 
+                pla.pla_periodo_academico, 
+                pes.pes_nombres, 
+                pes.pes_dni, 
+                ron.ron_num_orden,
+                ron.ron_modalidad as mod_nombre, 
+                ron.ron_carrera as pes_carrera, 
+                per.per_celular, 
+                per.per_correo,
+                est.est_matricula
             FROM " . $con_academico->dbname . ".planificacion as pla,
             " . $con_academico->dbname . ".planificacion_estudiante as pes,
             " . $con_asgard->dbname . ".persona as per,
+            " . $con_academico->dbname . ".estudiante as est,
             " . $con_academico->dbname . ".registro_online as ron
             WHERE ron.pes_id = pes.pes_id
+            AND est.per_id = per.per_id
             AND ron.per_id = per.per_id
             AND pes.pla_id = pla.pla_id            
             AND ron.ron_id =:ron_id

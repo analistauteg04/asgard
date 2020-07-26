@@ -1400,7 +1400,7 @@ create table if not exists `registro_online` (
  `ron_id` bigint(20) not null auto_increment primary key,
  `per_id` bigint(20) not null, 
  `pes_id` bigint(20) not null, 
- `pes_num_orden` bigint(20) not null, 
+ `ron_num_orden` bigint(20) not null, 
  `ron_fecha_registro` timestamp not null,
  `ron_anio` varchar(4) null, -- anio actual
  `ron_semestre` varchar(1) null, -- este parametro se debe obtener del numero del semestre en curso
