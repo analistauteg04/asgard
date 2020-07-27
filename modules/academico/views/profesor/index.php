@@ -26,5 +26,5 @@ use yii\helpers\ArrayHelper;
 </div>
 <br />
 <?=
-    $this->render('index-grid', ['model' => $model,]);
+    $this->render('index-grid', ['model' => $model, ]);
 ?>

@@ -226,7 +226,7 @@ class Profesor extends \yii\db\ActiveRecord
         return $this->hasMany(ResultadoEvaluacion::className(), ['pro_id' => 'pro_id']);
     }
     
-    function getAllProfesorGrid($search = NULL){
+    function getAllProfesorGrid($search = NULL, $perfil){
         $con_asgard = \Yii::$app->db_asgard;
         $con_academico = \Yii::$app->db_academico;
         $search_cond = "%" . $search . "%";
@@ -247,7 +247,8 @@ class Profesor extends \yii\db\ActiveRecord
                     pe.per_correo as Correo, 
                     pe.per_cedula as Cedula,
                     pro.pro_cv as Cv,
-                    pro.pro_estado_logico as estado
+                    pro.pro_estado_logico as estado,
+                    $perfil as perfil
                 FROM " . $con_academico->dbname . ".profesor AS pro
                 inner JOIN " . $con_asgard->dbname . ".persona as pe on pro.per_id = pe.per_id
                 -- inner JOIN " . $con_academico->dbname . ".distributivo as di on di.pro_id = pro.pro_id

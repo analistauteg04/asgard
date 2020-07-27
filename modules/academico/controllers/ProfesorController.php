@@ -46,26 +46,30 @@ class ProfesorController extends \app\components\CController {
         $user_perId =  Yii::$app->session->get("PB_perid");
         $grupo_model = new Grupo();
         $search = NULL;
+        $perfil = '0'; // perfil administrador o talento humano
         //$grupPerm = array(1,15);
         $arr_grupos = $grupo_model->getAllGruposByUser($user_usermane);
-        if (!in_array(['id' => '1'], $arr_grupos) && !in_array(['id' => '15'], $arr_grupos))
+        if (!in_array(['id' => '1'], $arr_grupos) && !in_array(['id' => '15'], $arr_grupos)) {
             $search = $user_perId;
-
+            $perfil = '1'; 
+        }
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->get();
             $search = $data["search"];
-            if(!in_array(['id' => '1'], $arr_grupos) && !in_array(['id' => '15'], $arr_grupos))
+            if(!in_array(['id' => '1'], $arr_grupos) && !in_array(['id' => '15'], $arr_grupos)) {
                 $search = $user_perId;
-            $model = $pro_model->getAllProfesorGrid($search, true);
+                $perfil = '1';  // perfil profesor o no administrador ni talento humano
+            }
+            $model = $pro_model->getAllProfesorGrid($search, $perfil);
             if (isset($data["search"])) {
                 return $this->renderPartial('index-grid', [
-                            "model" => $model
+                            "model" => $model,                            
                 ]);
             }
         }
-        $model = $pro_model->getAllProfesorGrid($search, true);
+        $model = $pro_model->getAllProfesorGrid($search, $perfil);
         return $this->render('index', [
-                    'model' => $model
+                    'model' => $model,                    
         ]);
     }
     

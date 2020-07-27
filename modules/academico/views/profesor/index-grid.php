@@ -66,24 +66,30 @@ academico::registerTranslations();
                 'buttons' => [
                     'view' => function ($url, $model) {
                         return Html::a('<span class="'.Utilities::getIcon('view').'"></span>', Url::to(['profesor/view', 'id' => $model['per_id']]), ["data-toggle" => "tooltip", "title" => Yii::t("accion","View")]);
-                    },
+                    },                         
                     'delete' => function ($url, $model) {
-                         if ($model['estado'] == 1) {
-                             return Html::a('<span class="'.Utilities::getIcon('remove').'"></span>', null, ['href' => 'javascript:confirmDelete(\'deleteItem\',[\'' . $model['per_id'] . '\']);', "data-toggle" => "tooltip", "title" => Yii::t("accion","Delete")]);
-                         } else {
-                             return '<span class="'.Utilities::getIcon('remove').'"></span>';
-                             // glyphicon glyphicon-check
-                         }
-                         
-                    },
+                        if ($model['perfil'] == 0) {                            
+                            if ($model['estado'] == 1) {
+                                 return Html::a('<span class="'.Utilities::getIcon('remove').'"></span>', null, ['href' => 'javascript:confirmDelete(\'deleteItem\',[\'' . $model['per_id'] . '\']);', "data-toggle" => "tooltip", "title" => Yii::t("accion","Delete")]);
+                             } else {
+                                 return '<span class="'.Utilities::getIcon('remove').'"></span>';
+                                 // glyphicon glyphicon-check
+                             }  
+                           }
+                        },
                     'download' => function ($url, $model) {
-                        if($model['Cv'] != "")
-                            return Html::a('<span class="'.Utilities::getIcon('download').'"></span>', 'javascript:', ["data-toggle" => "tooltip", "title" => Yii::t("accion","Download"), 'data-href' => Url::to(['profesor/download', 'route' => $model['Cv'], 'type' => 'down']), 'onclick' => 'downloadPdf(this)']);
+                        if ($model['perfil'] == 0) {     
+                            if($model['Cv'] != "")
+                                return Html::a('<span class="'.Utilities::getIcon('download').'"></span>', 'javascript:', ["data-toggle" => "tooltip", "title" => Yii::t("accion","Download"), 'data-href' => Url::to(['profesor/download', 'route' => $model['Cv'], 'type' => 'down']), 'onclick' => 'downloadPdf(this)']);
+                        }
                    },
                    'pdf'=> function ($url, $model) {
-                        if(isset($model['Cv']) && $model['Cv'] != "")
-                            return Html::a('<span class="'.Utilities::getIcon('info').'"></span>', 'javascript:', ["data-toggle" => "tooltip", "title" => Yii::t("accion","View Document"), 'data-href' => Url::to(['profesor/download', 'route' => $model['Cv'], 'type' => 'view']), 'onclick' => 'viewPdf(this)']);
+                       if ($model['perfil'] == 0) { 
+                            if(isset($model['Cv']) && $model['Cv'] != "")
+                                return Html::a('<span class="'.Utilities::getIcon('info').'"></span>', 'javascript:', ["data-toggle" => "tooltip", "title" => Yii::t("accion","View Document"), 'data-href' => Url::to(['profesor/download', 'route' => $model['Cv'], 'type' => 'view']), 'onclick' => 'viewPdf(this)']);
+                       } 
                     },
+                 
                 ],
             ],
         ],
