@@ -16,6 +16,7 @@ use app\modules\academico\models\MatriculacionProgramaInscrito;
 use app\modules\academico\models\Estudiante;
 use app\modules\admision\models\Oportunidad;
 use app\models\Persona;
+use app\models\Usuario;
 use app\modules\admision\models\SolicitudInscripcion;
 use app\modules\academico\Module as academico;
 use app\modules\financiero\Module as financiero;
@@ -36,8 +37,8 @@ class EstudianteController extends \app\components\CController {
             '4' => Yii::t("formulario", "D"),
             '5' => Yii::t("formulario", "E"),
             '6' => Yii::t("formulario", "F"),
-            '7' => Yii::t("formulario", "G"),            
-            '8' => Yii::t("formulario", "H"),            
+            '7' => Yii::t("formulario", "G"),
+            '8' => Yii::t("formulario", "H"),
         ];
     }
 
@@ -203,6 +204,69 @@ class EstudianteController extends \app\components\CController {
                     'arr_carrera' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arr_carrerra1), "id", "name"),
                     'arr_categorias' => $this->categorias(),
         ]);
+    }
+
+    public function actionSave() {
+        $usuario = @Yii::$app->session->get("PB_iduser");
+
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+
+            $per_id = $data["per_id"];
+            $uaca_id = $data["unidad"];
+            $mod_id = $data["modalidad"];
+            $eaca_id = $data["carrera"];
+            $categoria = $data["categoria"];
+            $matricula = $data["matricula"];
+
+            $fecha = date(Yii::$app->params["dateByDefault"]); // solo envia Y-m-d      
+            $con = \Yii::$app->db_academico;
+            $transaction = $con->beginTransaction();
+            $con2 = \Yii::$app->db_asgard;
+            $transaction2 = $con2->beginTransaction();
+            try {
+                $mod_Estudiante = new Estudiante();
+                $mod_Modestuni = new ModuloEstudio();
+                $mod_persona = new Persona();
+                $usuario = new Usuario();
+                // consultar el per_id sino esta en estudiante si esta un else q diga ya existe estudiante getEstudiantexperid($per_id)
+                $resp_estudianteid = $mod_Estudiante->getEstudiantexperid($per_id);
+                if ($resp_estudianteid["est_id"] == "") {
+                    // consultar datos de la person con per_id consultaPersonaId($per_id)
+                    $resp_persona = $mod_persona->consultaPersonaId($per_id);
+                    // actualizar clave de usuario a numero de cedula sino crear en tabla usuario
+                    if ($resp_persona["usu_id"] == "") {
+                        // se crea en la tabla usuario OJO FALTA
+                        // consultar si existe en empresa_persona, sino guardar en empresa_persona 
+                        // se crea en usuario_grol con rol 37
+                        // guardar en tabla estudiante
+                        // if guarda estudiante consultar la tabla modalidad_estudio_unidad con uaca_id, mod_id y eaca_id, si no existe error de que no hay modalidad_estudio_unidad, caso contrario seguir
+                        // guardar en modalidad_estudio_unidad
+                        
+                    } else {
+                        // se actualizar clave a la cedula y estado activo
+                        $usu_sha = $security->generateRandomString();
+                        $usu_pass = base64_encode($security->encryptByPassword($usu_sha, $resp_persona["per_cedula"]));
+                        $respUsu = $usuario->actualizarDataUsuario($usu_sha, $usu_pass, $resp_persona["usu_id"]);
+                        //FALTA DESDE AQUI TRABJAR
+                        // consultar si existe en la tabla empresa_persona con el per_id, sino existe crear                         
+                        // consultar a tabla usuario_grol actualizar a rol de estudiante 37
+                        // guardar en tabla estudiante
+                        // if guarda estudiante consultar la tabla modalidad_estudio_unidad con uaca_id, mod_id y eaca_id, si no existe error de que no hay modalidad_estudio_unidad, caso contrario seguir
+                        // guardar en modalidad_estudio_unidad
+                    }
+                }
+            } catch (Exception $ex) {
+                $transaction->rollback();
+                $transaction2->rollback();
+                $message = array(
+                    "wtmessage" => Yii::t("notificaciones", "Error al grabar."),
+                    "title" => Yii::t('jslang', 'Error'),
+                );
+                return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), true, $message);
+            }
+            return;
+        }
     }
 
 }

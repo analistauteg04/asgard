@@ -1253,7 +1253,7 @@ class SolicitudesController extends \app\components\CController {
             $transaction3 = $con3->beginTransaction();
             try {
                 $mod_Estudiante = new Estudiante();
-                $mod_Modestuni = new ModuloEstudio;
+                $mod_Modestuni = new ModuloEstudio();
                 if ($rsin_id != 2) {
                     $mod_solins = new SolicitudInscripcion();
                     $mod_ordenpago = new OrdenPago();
