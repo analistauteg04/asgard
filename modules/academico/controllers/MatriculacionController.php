@@ -705,9 +705,10 @@ class MatriculacionController extends \app\components\CController {
                             '4' => ['initial' => '25', 'others' => '25'],
                             '3' => ['initial' => '33.34', 'others' => '33.33'],
                         ];
+                        $fechaFinReg = date('Y-m-d');
                         $initialMonth = date('F', strtotime($fechaFinReg));
                         $initialMonNum = date('m', strtotime($fechaFinReg));
-                        $initialDay = date('d', strtotime("$fechaFinReg +1 day"));
+                        $initialDay = '05';//date('d', strtotime("$fechaFinReg +1 day"));
                         $initialYear = date('y', strtotime($fechaFinReg));
                         for($i=0; $i<$cuotas; $i++){
                             $mod_cuotas = new RegistroOnlineCuota();
@@ -718,7 +719,17 @@ class MatriculacionController extends \app\components\CController {
                                 $valorCuota = round((($totalPago * $arrPorcentajes[$cuotas]['initial']) / 100), 2);
                                 $mod_cuotas->roc_costo = $valorCuota;
                                 $subTotal += $valorCuota;
-                                $mod_cuotas->roc_vencimiento = strtoupper(Academico::t('matriculacion', $initialMonth)) . " " . $initialDay . "/" . $initialYear;
+                                if($initialDay >= date('d'))
+                                    $mod_cuotas->roc_vencimiento = strtoupper(Academico::t('matriculacion', $initialMonth)) . " " . $initialDay . "/" . $initialYear;
+                                else{
+                                    $initialMonth = date('F', strtotime("$fechaFinReg +1 months"));
+                                    $initialMonNum += 1;
+                                    if($initialMonNum >= 13){
+                                        $initialMonNum = '01';
+                                        $initialYear += 1;
+                                    }
+                                    $mod_cuotas->roc_vencimiento = strtoupper(Academico::t('matriculacion', $initialMonth)) . " " . $initialDay . "/" . $initialYear;
+                                }
                             }else{
                                 $mod_cuotas->roc_porcentaje = $arrPorcentajes[$cuotas]['others'] . "%";
                                 $valorCuota = round((($totalPago * $arrPorcentajes[$cuotas]['others']) / 100), 2);
@@ -732,7 +743,12 @@ class MatriculacionController extends \app\components\CController {
                                     $initialYear += 1;
                                     $initialMonNum = 1;
                                 }
-                                $initialMonth = date('F', strtotime("$fechaFinReg +$i months"));
+                                if($initialDay >= date('d')){
+                                    $initialMonth = date('F', strtotime("$fechaFinReg +$i months"));
+                                }else{
+                                    $con = $i + 1;
+                                    $initialMonth = date('F', strtotime("$fechaFinReg +$con months"));
+                                }
                                 $mod_cuotas->roc_vencimiento = strtoupper(Academico::t('matriculacion', $initialMonth)) . " " . $initialDay . "/" . $initialYear;
                             }
                             $mod_cuotas->roc_estado = '1';
@@ -1081,14 +1097,6 @@ class MatriculacionController extends \app\components\CController {
             /*             * en caso de que no */
         }
         return;
-    }
-
-    public function actionEstudiantelist(){
-
-    }
-
-    public function actionEstudiantereg(){
-        
     }
 
 }
