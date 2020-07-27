@@ -46,6 +46,16 @@ PbGridView::widget([
             'value' => 'Periodo',
         ],
         [
+            'attribute' => 'Materias',
+            'header' => academico::t("matriculacion", 'Number Subjects'),
+            'value' => 'Materias',
+        ],
+        [
+            'attribute' => 'Creditos',
+            'header' => academico::t("matriculacion", 'Number Credits'),
+            'value' => 'Creditos',
+        ],
+        [
             'attribute' => 'Estado',
             'contentOptions' => ['class' => 'text-center'],
             'headerOptions' => ['class' => 'text-center'],

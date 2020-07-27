@@ -418,7 +418,7 @@ class MatriculacionController extends \app\components\CController {
             }
             $dataProviderCuotas = $model_registroCuota->getDataCuotasRegistroOnline($model->ron_id, true);
             $dataPlanificacion = $matriculacion_model->getPlanificationFromRegistroOnline($model->ron_id);
-            
+
             return $this->render('registry', [
                         "materiasxEstudiante" => $materiasxEstudiante,
                         "materias" => $dataPlanificacion,
@@ -1081,6 +1081,14 @@ class MatriculacionController extends \app\components\CController {
             /*             * en caso de que no */
         }
         return;
+    }
+
+    public function actionEstudiantelist(){
+
+    }
+
+    public function actionEstudiantereg(){
+        
     }
 
 }

@@ -120,4 +120,6 @@ return [
     'There is no planning data' => 'No existen datos de planificiones',
     'Subject Code' => 'Cod. Asignatura',
     'Order' => 'Orden',
+    'Number Subjects' => 'Cant. Materias',
+    'Number Credits' => 'Cant. Creditos',
 ];

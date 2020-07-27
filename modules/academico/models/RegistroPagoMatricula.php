@@ -152,12 +152,15 @@ class RegistroPagoMatricula extends \yii\db\ActiveRecord
                     pe.pes_carrera as Carrera,
                     m.mod_nombre as Modalidad,
                     p.pla_periodo_academico as Periodo,
+                    count(*) as Materias,
+                    sum(ri.roi_creditos) as Creditos,
                     reg.rpm_estado_generado as Estado
                 FROM " . $con_academico->dbname . ".registro_pago_matricula AS reg
                     INNER JOIN " . $con_academico->dbname . ".planificacion_estudiante as pe on reg.per_id = pe.per_id
                     INNER JOIN " . $con_academico->dbname . ".planificacion as p on p.pla_id = pe.pla_id
                     INNER JOIN " . $con_academico->dbname . ".modalidad as m on m.mod_id = p.mod_id
                     INNER JOIN " . $con_academico->dbname . ".registro_online as r on r.pes_id = pe.pes_id
+                    INNER JOIN " . $con_academico->dbname . ".registro_online_item as ri on ri.ron_id = r.ron_id
                 WHERE 
                     $str_search 
                     $condition
@@ -169,7 +172,18 @@ class RegistroPagoMatricula extends \yii\db\ActiveRecord
                     p.pla_estado_logico =1 and
                     r.ron_estado =1 and
                     r.ron_estado_logico =1 and
-                    reg.rpm_estado_aprobacion = 1";
+                    reg.rpm_estado_aprobacion = 1
+                GROUP BY
+                    r.ron_id, 
+                    pe.pes_nombres,
+                    pe.pes_dni,
+                    pe.pes_carrera,
+                    m.mod_nombre,
+                    p.pla_periodo_academico,
+                    reg.rpm_estado_generado
+                ORDER BY
+                    r.ron_id DESC
+                ";
         $comando = $con_academico->createCommand($sql);
         if(isset($search) && $search != "")  $comando->bindParam(":search",$search_cond, \PDO::PARAM_STR);
         if(isset($mod_id) && $mod_id != "")  $comando->bindParam(":mod_id",$mod_id, \PDO::PARAM_INT);

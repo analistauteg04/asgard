@@ -120,4 +120,6 @@ return [
     'There is no planning data' => 'There is no planning data',
     'Subject Code' => 'Subject Code',
     'Order' => 'Order',
+    'Number Subjects' => 'Number Subjects',
+    'Number Credits' => 'Number Credits',
 ];
