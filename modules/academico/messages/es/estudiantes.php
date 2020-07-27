@@ -1,6 +1,6 @@
 <?php
 
-/* 
+/*
  * The PenBlu framework is free software. It is released under the terms of
  * the following BSD License.
  *
@@ -40,5 +40,7 @@
  */
 
 return [
-    
+    "Create Students" => "Crear Estudiantes",
+    "Data General Students" => "Datos General Estudiantes",
+    "Data Career/Program" => "Datos Carrera/Programa",
 ];

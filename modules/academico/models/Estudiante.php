@@ -435,7 +435,13 @@ class Estudiante extends \yii\db\ActiveRecord {
                 $str_search .= " meun.eaca_id  = :carrera AND ";
             }
         }
+        if ($onlyData == false) {
+            $estid = "
+                      pers.per_id as per_id,
+                      IFNULL(estu.est_id, '') as est_id,"; 
+        }
         $sql = "SELECT 
+                      $estid  
 	           -- pers.per_id,
                       concat(pers.per_pri_nombre, ' ', pers.per_pri_apellido) as nombres,
                       pers.per_cedula as dni,
