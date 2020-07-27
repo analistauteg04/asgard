@@ -23,16 +23,8 @@ academico::registerTranslations();
                 <tbody>
                     <?php 
                         foreach($materias as $key => $value){
-                            if(strtoupper($value["Subject"]) == strtoupper($materiasxEstudiante->pes_mat_b1_h1_nombre))
-                                echo "<tr><td>".strtoupper($value["Subject"])."</td><td>1H</td></tr>";
-                            if(strtoupper($value["Subject"]) == strtoupper($materiasxEstudiante->pes_mat_b1_h2_nombre))
-                                echo "<tr><td>".strtoupper($value["Subject"])."</td><td>2H</td></tr>";
-                            if(strtoupper($value["Subject"]) == strtoupper($materiasxEstudiante->pes_mat_b1_h3_nombre))
-                                echo "<tr><td>".strtoupper($value["Subject"])."</td><td>3H</td></tr>";
-                            if(strtoupper($value["Subject"]) == strtoupper($materiasxEstudiante->pes_mat_b1_h4_nombre))
-                                echo "<tr><td>".strtoupper($value["Subject"])."</td><td>4H</td></tr>";
-                            if(strtoupper($value["Subject"]) == strtoupper($materiasxEstudiante->pes_mat_b1_h5_nombre))
-                                echo "<tr><td>".strtoupper($value["Subject"])."</td><td>5H</td></tr>";
+                            if($value["Block"] == "B1")
+                                echo "<tr><td>".strtoupper($value["Subject"])."</td><td>".$value["Hour"]."</td></tr>";
                         }
                     ?>
                 </tbody>
@@ -50,16 +42,8 @@ academico::registerTranslations();
                 <tbody>
                     <?php 
                         foreach($materias as $key => $value){
-                            if(strtoupper($value["Subject"]) == strtoupper($materiasxEstudiante->pes_mat_b2_h1_nombre))
-                                echo "<tr><td>".strtoupper($value["Subject"])."</td><td>1H</td></tr>";
-                            if(strtoupper($value["Subject"]) == strtoupper($materiasxEstudiante->pes_mat_b2_h2_nombre))
-                                echo "<tr><td>".strtoupper($value["Subject"])."</td><td>2H</td></tr>";
-                            if(strtoupper($value["Subject"]) == strtoupper($materiasxEstudiante->pes_mat_b2_h3_nombre))
-                                echo "<tr><td>".strtoupper($value["Subject"])."</td><td>3H</td></tr>";
-                            if(strtoupper($value["Subject"]) == strtoupper($materiasxEstudiante->pes_mat_b2_h4_nombre))
-                                echo "<tr><td>".strtoupper($value["Subject"])."</td><td>4H</td></tr>";
-                            if(strtoupper($value["Subject"]) == strtoupper($materiasxEstudiante->pes_mat_b2_h5_nombre))
-                                echo "<tr><td>".strtoupper($value["Subject"])."</td><td>5H</td></tr>";
+                            if($value["Block"] == "B2")
+                                echo "<tr><td>".strtoupper($value["Subject"])."</td><td>".$value["Hour"]."</td></tr>";
                         }
                     ?>
                 </tbody>

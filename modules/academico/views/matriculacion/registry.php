@@ -11,6 +11,10 @@ use app\modules\academico\Module as academico;
 use app\components\CFileInputAjax;
 academico::registerTranslations();
 
+
+//$total = $model_registroOnline->ron_valor_aso_estudiante + $model_registroOnline->ron_valor_gastos_adm + $model_registroOnline->ron_valor_matricula + $costoMaterias;
+$total = $model_registroOnline->ron_valor_aso_estudiante + $model_registroOnline->ron_valor_gastos_adm + $costoMaterias;
+
 ?>
 
 <form class="form-horizontal">
@@ -65,6 +69,21 @@ academico::registerTranslations();
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 control-label" style="text-align: left;">
                     <?= Academico::t("matriculacion", "Modality") ?> <?= $data_student['mod_nombre'] ?>
                 </div>
+            </div>
+        </div> 
+    </div>
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
+            <div class="form-group">
+                <label class="col-lg-6 col-md-6 col-sm-6 col-xs-6 control-label"><?= academico::t("matriculacion", "Registration Number") ?></label>
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 control-label" style="text-align: left;">
+                    <?= $data_student['est_matricula'] ?>
+                </div>
+            </div>
+        </div> 
+        <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
+            <div class="form-group">
+                
             </div>
         </div> 
     </div>
@@ -144,4 +163,38 @@ academico::registerTranslations();
 
 <?=
     $this->render('registry-grid', ['materias' => $materias, "materiasxEstudiante" => $materiasxEstudiante]);
+?>
+<div class="col-xs-8"></div>
+<div class="col-xs-4">
+    <div class="table-responsive">
+        <table style="text-align: right;" class="table">
+            <tbody>
+                <tr>
+                    <th style="width:50%"><?= academico::t('matriculacion','Cost per Subject') ?></th>
+                    <td id="costMat">$<?= isset($costoMaterias)?(number_format($costoMaterias, 2, '.', ',')):'0.00' ?></td>
+                </tr>
+                <tr style='display: none;'>
+                    <th><?= academico::t('matriculacion','Registration payment') ?></th>
+                    <td id="costMatr">$<?= isset($model_registroOnline->ron_valor_matricula)?(number_format($model_registroOnline->ron_valor_matricula, 2, '.', ',')):'0.00' ?></td>
+                </tr>
+                <tr>
+                    <th><?= academico::t('matriculacion','Administrative Expenses') ?></th>
+                    <td id="costAdmin">$<?= isset($model_registroOnline->ron_valor_gastos_adm)?(number_format($model_registroOnline->ron_valor_gastos_adm, 2, '.', ',')):'0.00' ?></td>
+                </tr>
+                <tr>
+                    <th><?= academico::t('matriculacion','Students Association') ?></th>
+                    <td id="costStud">$<?= isset($model_registroOnline->ron_valor_aso_estudiante)?(number_format($model_registroOnline->ron_valor_aso_estudiante, 2, '.', ',')):'0.00' ?></td>
+                </tr>
+                <tr>
+                    <th style="font-size: 25px;"><?= academico::t('matriculacion', 'Register Cost') ?></th>
+                    <td style="font-size: 25px; font-weight: bold;" id="costTotal">$<?= isset($total)?(number_format($total, 2, '.', ',')):'0.00' ?></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<?=
+    $this->render('exportcuopdf-grid', ['cuotas' => $cuotas,]);
 ?>

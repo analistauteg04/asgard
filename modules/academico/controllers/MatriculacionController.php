@@ -410,6 +410,24 @@ class MatriculacionController extends \app\components\CController {
             $materiasxEstudiante = PlanificacionEstudiante::findOne($model->pes_id);
             $dataModel = $model_registroPago->getRegistroPagoMatriculaByRegistroOnline($id, $model->per_id);
 
+            $arrModel_registroOnlineItem = RegistroOnlineItem::findAll(['ron_id' => $model->ron_id]);
+            $model_registroCuota = new RegistroOnlineCuota();
+            $costoMaterias = 0;
+            foreach($arrModel_registroOnlineItem as $item){
+                $costoMaterias += $item->roi_costo;
+            }
+            $dataProviderCuotas = $model_registroCuota->getDataCuotasRegistroOnline($model->ron_id, true);
+            $dataPlanificacion = $matriculacion_model->getPlanificationFromRegistroOnline($model->ron_id);
+            $dataProvider = new ArrayDataProvider([
+                'key' => 'Ids',
+                'allModels' => $dataPlanificacion,
+                'pagination' => [
+                    'pageSize' => Yii::$app->params["pageSize"],
+                ],
+                'sort' => [
+                    'attributes' => ["Subject"],
+                ],
+            ]);
             return $this->render('registry', [
                         "materiasxEstudiante" => $materiasxEstudiante,
                         "materias" => $dataPlanificacion,
@@ -418,6 +436,9 @@ class MatriculacionController extends \app\components\CController {
                         "rpm_id" => $dataModel["Id"],
                         "est_id" => $model->per_id,
                         "matriculacion_model" => RegistroPagoMatricula::findOne($dataModel["Id"]),
+                        "model_registroOnline" => $model,
+                        "costoMaterias" => $costoMaterias,
+                        "cuotas" =>$dataProviderCuotas,
             ]);
         }
         return $this->redirect('index');
