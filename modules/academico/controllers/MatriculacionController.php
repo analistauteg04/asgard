@@ -418,16 +418,7 @@ class MatriculacionController extends \app\components\CController {
             }
             $dataProviderCuotas = $model_registroCuota->getDataCuotasRegistroOnline($model->ron_id, true);
             $dataPlanificacion = $matriculacion_model->getPlanificationFromRegistroOnline($model->ron_id);
-            $dataProvider = new ArrayDataProvider([
-                'key' => 'Ids',
-                'allModels' => $dataPlanificacion,
-                'pagination' => [
-                    'pageSize' => Yii::$app->params["pageSize"],
-                ],
-                'sort' => [
-                    'attributes' => ["Subject"],
-                ],
-            ]);
+            
             return $this->render('registry', [
                         "materiasxEstudiante" => $materiasxEstudiante,
                         "materias" => $dataPlanificacion,
@@ -435,6 +426,39 @@ class MatriculacionController extends \app\components\CController {
                         "ron_id" => $id,
                         "rpm_id" => $dataModel["Id"],
                         "est_id" => $model->per_id,
+                        "matriculacion_model" => RegistroPagoMatricula::findOne($dataModel["Id"]),
+                        "model_registroOnline" => $model,
+                        "costoMaterias" => $costoMaterias,
+                        "cuotas" =>$dataProviderCuotas,
+            ]);
+        }
+        return $this->redirect('index');
+    }
+
+    public function actionView($id) {
+        $model = RegistroOnline::findOne($id);
+        if ($model) {
+            $matriculacion_model = new Matriculacion();
+            $model_registroPago = new RegistroPagoMatricula();
+            $data_student = $matriculacion_model->getDataStudenFromRegistroOnline($model->per_id, $model->pes_id);
+            $dataPlanificacion = $matriculacion_model->getPlanificationFromRegistroOnline($id);
+            $materiasxEstudiante = PlanificacionEstudiante::findOne($model->pes_id);
+            $dataModel = $model_registroPago->getRegistroPagoMatriculaByRegistroOnline($id, $model->per_id);
+
+            $arrModel_registroOnlineItem = RegistroOnlineItem::findAll(['ron_id' => $model->ron_id]);
+            $model_registroCuota = new RegistroOnlineCuota();
+            $costoMaterias = 0;
+            foreach($arrModel_registroOnlineItem as $item){
+                $costoMaterias += $item->roi_costo;
+            }
+            $dataProviderCuotas = $model_registroCuota->getDataCuotasRegistroOnline($model->ron_id, true);
+            $dataPlanificacion = $matriculacion_model->getPlanificationFromRegistroOnline($model->ron_id);
+            return $this->render('view', [
+                        "materiasxEstudiante" => $materiasxEstudiante,
+                        "materias" => $dataPlanificacion,
+                        "data_student" => $data_student,
+                        "ron_id" => $id,
+                        "rpm_id" => $dataModel["Id"],
                         "matriculacion_model" => RegistroPagoMatricula::findOne($dataModel["Id"]),
                         "model_registroOnline" => $model,
                         "costoMaterias" => $costoMaterias,
@@ -1057,28 +1081,6 @@ class MatriculacionController extends \app\components\CController {
             /*             * en caso de que no */
         }
         return;
-    }
-
-    public function actionView($id) {
-        $model = RegistroOnline::findOne($id);
-        if ($model) {
-            $matriculacion_model = new Matriculacion();
-            $model_registroPago = new RegistroPagoMatricula();
-            $data_student = $matriculacion_model->getDataStudenFromRegistroOnline($model->per_id, $model->pes_id);
-            $dataPlanificacion = $matriculacion_model->getPlanificationFromRegistroOnline($id);
-            $materiasxEstudiante = PlanificacionEstudiante::findOne($model->pes_id);
-            $dataModel = $model_registroPago->getRegistroPagoMatriculaByRegistroOnline($id, $model->per_id);
-
-            return $this->render('view', [
-                        "materiasxEstudiante" => $materiasxEstudiante,
-                        "materias" => $dataPlanificacion,
-                        "data_student" => $data_student,
-                        "ron_id" => $id,
-                        "rpm_id" => $dataModel["Id"],
-                        "matriculacion_model" => RegistroPagoMatricula::findOne($dataModel["Id"]),
-            ]);
-        }
-        return $this->redirect('index');
     }
 
 }
