@@ -258,12 +258,14 @@ function addInstruccion() {
     tb_item[3] = career;
     tb_item[4] = degree;
     tb_item[5] = senescyt;
+    tb_item[6] = "N";
     tb_item2[0] = 0;
     tb_item2[1] = inst_level_name;
     tb_item2[2] = institucion;
     tb_item2[3] = career;
     tb_item2[4] = degree;
     tb_item2[5] = senescyt;
+    tb_item2[6] = "N";
     //tb_acc[0] = {id: "borr", href: "", onclick:"", title: "Ver", class: "", tipo_accion: "view"};
     tb_acc[0] = { id: "deleteN", href: "", onclick: "javascript:removeItemInstitucion(this)", title: objLang.Delete, class: "", tipo_accion: "delete" };
     var arrData = JSON.parse(sessionStorage.grid_instruccion_list);
@@ -340,12 +342,14 @@ function addDocencia() {
     tb_item[3] = to;
     tb_item[4] = denominacion;
     tb_item[5] = materias;
+    tb_item[6] = "N";
     tb_item2[0] = 0;
     tb_item2[1] = inst_name;
     tb_item2[2] = from;
     tb_item2[3] = to;
     tb_item2[4] = denominacion;
     tb_item2[5] = materias;
+    tb_item2[6] = "N";
     //tb_acc[0] = {id: "borr", href: "", onclick:"", title: "Ver", class: "", tipo_accion: "view"};
     tb_acc[0] = { id: "deleteN", href: "", onclick: "javascript:removeItemDocencia(this)", title: objLang.Delete, class: "", tipo_accion: "delete" };
     var arrData = JSON.parse(sessionStorage.grid_docencia_list);
@@ -421,12 +425,14 @@ function addExperiencia() {
     tb_item[3] = to;
     tb_item[4] = denominacion;
     tb_item[5] = funciones;
+    tb_item[6] = "N";
     tb_item2[0] = 0;
     tb_item2[1] = company;
     tb_item2[2] = from;
     tb_item2[3] = to;
     tb_item2[4] = denominacion;
     tb_item2[5] = funciones;
+    tb_item2[6] = "N";
     //tb_acc[0] = {id: "borr", href: "", onclick:"", title: "Ver", class: "", tipo_accion: "view"};
     tb_acc[0] = { id: "deleteN", href: "", onclick: "javascript:removeItemExperiencia(this)", title: objLang.Delete, class: "", tipo_accion: "delete" };
     var arrData = JSON.parse(sessionStorage.grid_experiencia_list);
@@ -487,11 +493,7 @@ function addIdioma() {
     var escrito = $("#cmb_nivel_escrito :selected").text();
     var oral = $("#cmb_nivel_oral :selected").text();
     var certificado = $("#cmb_certificado :selected").text();
-    var institucion = $("#txt_idio_institucion").val();
-
-    //var combo_escrito = document.getElementById("#cmb_nivel_escrito");
-   // var res_escrito = $("#cmb_nivel_escrito").options[$("#cmb_nivel_escrito").selectedIndex].text;
-   // alert(res_escrito);
+    var institucion = $("#txt_idio_institucion").val(); 
 
     if (escrito == "" || oral == "" || certificado == "" || institucion == "") {
         fillDataAlert();
@@ -507,12 +509,14 @@ function addIdioma() {
     tb_item[3] = oral;
     tb_item[4] = certificado;
     tb_item[5] = institucion;
+    tb_item[6] = "N";
     tb_item2[0] = 0;
     tb_item2[1] = idio_name;
     tb_item2[2] = escrito;
     tb_item2[3] = oral;
     tb_item2[4] = certificado;
     tb_item2[5] = institucion;
+    tb_item2[6] = "N";
     //tb_acc[0] = {id: "borr", href: "", onclick:"", title: "Ver", class: "", tipo_accion: "view"};
     tb_acc[0] = { id: "deleteN", href: "", onclick: "javascript:removeItemIdioma(this)", title: objLang.Delete, class: "", tipo_accion: "delete" };
     var arrData = JSON.parse(sessionStorage.grid_idioma_list);
@@ -590,6 +594,7 @@ function addInvestigacion() {
     tb_item[4] = entidad;
     tb_item[5] = anio;
     tb_item[6] = duracion;
+    tb_item[7] = "N";
     tb_item2[0] = 0;
     tb_item2[1] = denominancion;
     tb_item2[2] = ambito;
@@ -597,6 +602,7 @@ function addInvestigacion() {
     tb_item2[4] = entidad;
     tb_item2[5] = anio;
     tb_item2[6] = duracion;
+    tb_item2[7] = "N";
     //tb_acc[0] = {id: "borr", href: "", onclick:"", title: "Ver", class: "", tipo_accion: "view"};
     tb_acc[0] = { id: "deleteN", href: "", onclick: "javascript:removeItemInvestigacion(this)", title: objLang.Delete, class: "", tipo_accion: "delete" };
     var arrData = JSON.parse(sessionStorage.grid_investigacion_list);
@@ -674,12 +680,14 @@ function addEvento() {
     tb_item[3] = anio;
     tb_item[4] = tipo_id;
     tb_item[5] = duracion;
+    tb_item[6] = "N";
     tb_item2[0] = 0;
     tb_item2[1] = nombre;
     tb_item2[2] = instiucion;
     tb_item2[3] = anio;
     tb_item2[4] = tipo_name;
     tb_item2[5] = duracion;
+    tb_item2[6] = "N";
     //tb_acc[0] = {id: "borr", href: "", onclick:"", title: "Ver", class: "", tipo_accion: "view"};
     tb_acc[0] = { id: "deleteN", href: "", onclick: "javascript:removeItemEvento(this)", title: objLang.Delete, class: "", tipo_accion: "delete" };
     var arrData = JSON.parse(sessionStorage.grid_evento_list);
@@ -753,11 +761,13 @@ function addConferencia() {
     tb_item[2] = instiucion;
     tb_item[3] = anio;
     tb_item[4] = ponencia;
+    tb_item[5] = "N";
     tb_item2[0] = 0;
     tb_item2[1] = evento;
     tb_item2[2] = instiucion;
     tb_item2[3] = anio;
     tb_item2[4] = ponencia;
+    tb_item2[5] = "N";
     //tb_acc[0] = {id: "borr", href: "", onclick:"", title: "Ver", class: "", tipo_accion: "view"};
     tb_acc[0] = { id: "deleteN", href: "", onclick: "javascript:removeItemConferencia(this)", title: objLang.Delete, class: "", tipo_accion: "delete" };
     var arrData = JSON.parse(sessionStorage.grid_conferencia_list);
@@ -833,12 +843,14 @@ function addPublicacion() {
     tb_item[3] = editorial;
     tb_item[4] = isbn;
     tb_item[5] = autoria;
+    tb_item[6] = "N";  // para identificar que es registro nuevo
     tb_item2[0] = 0;
     tb_item2[1] = des_produccion;
     tb_item2[2] = titulo;
     tb_item2[3] = editorial;
     tb_item2[4] = isbn;
     tb_item2[5] = autoria;
+    tb_item2[6] = "N"; // para identificar que es registro nuevo
     //tb_acc[0] = {id: "borr", href: "", onclick:"", title: "Ver", class: "", tipo_accion: "view"};
     tb_acc[0] = { id: "deleteN", href: "", onclick: "javascript:removeItemPublicacion(this)", title: objLang.Delete, class: "", tipo_accion: "delete" };
     var arrData = JSON.parse(sessionStorage.grid_publicacion_list);
@@ -915,12 +927,14 @@ function addCoordinacion() {
     tb_item[3] = academico;
     tb_item[4] = inst_id;
     tb_item[5] = anio;
+    tb_item[6] = "N";
     tb_item2[0] = 0;
     tb_item2[1] = alumno;
     tb_item2[2] = programa;
     tb_item2[3] = academico;
     tb_item2[4] = inst_name;
     tb_item2[5] = anio;
+    tb_item2[6] = "N";
     //tb_acc[0] = {id: "borr", href: "", onclick:"", title: "Ver", class: "", tipo_accion: "view"};
     tb_acc[0] = { id: "deleteN", href: "", onclick: "javascript:removeItemCoordinacion(this)", title: objLang.Delete, class: "", tipo_accion: "delete" };
     var arrData = JSON.parse(sessionStorage.grid_coordinacion_list);
@@ -991,10 +1005,12 @@ function addEvaluacion() {
     tb_item[1] = periodo;
     tb_item[2] = institucion;
     tb_item[3] = evaluacion;
+    tb_item[4] = "N";
     tb_item2[0] = 0;
     tb_item2[1] = periodo;
     tb_item2[2] = institucion;
     tb_item2[3] = evaluacion;
+    tb_item2[4] = "N";
     //tb_acc[0] = {id: "borr", href: "", onclick:"", title: "Ver", class: "", tipo_accion: "view"};
     tb_acc[0] = { id: "deleteN", href: "", onclick: "javascript:removeItemEvaluacion(this)", title: objLang.Delete, class: "", tipo_accion: "delete" };
     var arrData = JSON.parse(sessionStorage.grid_evaluacion_list);
@@ -1065,11 +1081,13 @@ function addReferencia() {
     tb_item[2] = cargo;
     tb_item[3] = company;
     tb_item[4] = numero;
+    tb_item[5] = "N";
     tb_item2[0] = 0;
     tb_item2[1] = nombre;
     tb_item2[2] = cargo;
     tb_item2[3] = company;
     tb_item2[4] = numero;
+    tb_item2[5] = "N";
     //tb_acc[0] = {id: "borr", href: "", onclick:"", title: "Ver", class: "", tipo_accion: "view"};
     tb_acc[0] = { id: "deleteN", href: "", onclick: "javascript:removeItemReferencia(this)", title: objLang.Delete, class: "", tipo_accion: "delete" };
     var arrData = JSON.parse(sessionStorage.grid_referencia_list);
