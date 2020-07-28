@@ -5,6 +5,9 @@ $(document).ready(function () {
     $('#btn_guardarestudiante').click(function () {
         save();
     });
+    $('#btn_modificarestudiante').click(function () {
+        update();
+    });
     $('#cmb_unidadbus').change(function () {
         var link = $('#txth_base').val() + "/academico/estudiante/index";
         document.getElementById("cmb_carrerabus").options.item(0).selected = 'selected';
@@ -43,7 +46,7 @@ $(document).ready(function () {
             }
         }, true);
     });
-
+    // COMOBO PARA NEW ESTUDIANTE
     $('#cmb_unidad').change(function () {
         var link = $('#txth_base').val() + "/academico/estudiante/new";
         document.getElementById("cmb_carrera").options.item(0).selected = 'selected';
@@ -79,6 +82,45 @@ $(document).ready(function () {
             if (response.status == "OK") {
                 data = response.message;
                 setComboDataselect(data.carrera, "cmb_carrera", "Seleccionar");
+            }
+        }, true);
+    });
+    //COMBOS PARA MODIFICAR ESTUDIANTES
+    $('#cmb_unidades').change(function () {
+        var link = $('#txth_base').val() + "/academico/estudiante/edit";
+        document.getElementById("cmb_carreras").options.item(0).selected = 'selected';
+        var arrParams = new Object();
+        arrParams.nint_id = $(this).val();
+        arrParams.getmodalidad = true;
+        requestHttpAjax(link, arrParams, function (response) {
+            if (response.status == "OK") {
+                data = response.message;
+                setComboDataselect(data.modalidad, "cmb_modalidades", "Seleccionar");
+                var arrParams = new Object();
+                if (data.modalidad.length > 0) {
+                    arrParams.unidada = $('#cmb_unidades').val();
+                    arrParams.moda_id = data.modalidad[0].id;
+                    arrParams.getcarrera = true;
+                    requestHttpAjax(link, arrParams, function (response) {
+                        if (response.status == "OK") {
+                            data = response.message;
+                            setComboDataselect(data.carrera, "cmb_carreras", "Seleccionar");
+                        }
+                    }, true);
+                }
+            }
+        }, true);
+    });
+    $('#cmb_modalidades').change(function () {
+        var link = $('#txth_base').val() + "/academico/estudiante/edit";
+        var arrParams = new Object();
+        arrParams.unidada = $('#cmb_unidades').val();
+        arrParams.moda_id = $(this).val();
+        arrParams.getcarrera = true;
+        requestHttpAjax(link, arrParams, function (response) {
+            if (response.status == "OK") {
+                data = response.message;
+                setComboDataselect(data.carrera, "cmb_carreras", "Seleccionar");
             }
         }, true);
     });
@@ -138,6 +180,48 @@ function save() {
     arrParams.unidad = $('#cmb_unidad').val();
     arrParams.modalidad = $('#cmb_modalidad').val();
     arrParams.carrera = $('#cmb_carrera').val();
+    arrParams.categoria = $('#cmb_categoria option:selected').text();
+    arrParams.matricula = $('#txt_matricula').val();
+    if (arrParams.unidad == '0') {
+        var mensaje = {wtmessage: "Unidad : El campo no debe estar vacío.", title: "Error"};
+        showAlert("NO_OK", "error", mensaje);
+
+    } else {
+        if (arrParams.modalidad == '0') {
+            var mensaje = {wtmessage: "Modalidad : El campo no debe estar vacío.", title: "Error"};
+            showAlert("NO_OK", "error", mensaje);
+        } else {
+            if (arrParams.carrera == '0') {
+                var mensaje = {wtmessage: "Carrera : El campo no debe estar vacío.", title: "Error"};
+                showAlert("NO_OK", "error", mensaje);
+            } else {
+                if ($('#cmb_categoria').val() == '0') {
+                    var mensaje = {wtmessage: "Categoría : El campo no debe estar vacío.", title: "Error"};
+                    showAlert("NO_OK", "error", mensaje);
+                } else {
+                    if (!validateForm()) {
+                        requestHttpAjax(link, arrParams, function (response) {
+                            showAlert(response.status, response.label, response.message);
+                            if (!response.error) {
+                                setTimeout(function () {
+                                    window.location.href = $('#txth_base').val() + "/academico/estudiante/index";
+                                }, 5000);
+                            }
+                        }, true);
+                    }
+                }
+            }
+        }
+    }
+}
+function update() {
+    var link = $('#txth_base').val() + "/academico/estudiante/update";
+    var arrParams = new Object();
+    arrParams.per_id = $('#txth_pids').val();
+    arrParams.est_id = $('#txth_eids').val();
+    arrParams.unidad = $('#cmb_unidades').val();
+    arrParams.modalidad = $('#cmb_modalidades').val();
+    arrParams.carrera = $('#cmb_carreras').val();
     arrParams.categoria = $('#cmb_categoria option:selected').text();
     arrParams.matricula = $('#txt_matricula').val();
     if (arrParams.unidad == '0') {

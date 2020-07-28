@@ -609,4 +609,90 @@ class Estudiante extends \yii\db\ActiveRecord {
         return $resultData;
     }
 
+    /**
+     * Function modifica datosde la tabla estudiante.
+     * @author Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;
+     * @param
+     * @return
+     */
+    public function updateEstudiante($est_id, $est_matricula, $est_categoria, $est_usu_modifica, $est_fecha_modificacion) {
+
+        $con = \Yii::$app->db_academico;
+        $estado = 1;
+        if ($trans !== null) {
+            $trans = null; // si existe la transacción entonces no se crea una
+        } else {
+            $trans = $con->beginTransaction(); // si no existe la transacción entonces se crea una
+        }
+        try {
+            $comando = $con->createCommand
+                    ("UPDATE " . $con->dbname . ".estudiante		       
+                      SET est_matricula = :est_matricula,
+                          est_categoria = :est_categoria,
+                          est_usu_modifica = :est_usu_modifica,
+                          est_fecha_modificacion = :est_fecha_modificacion                          
+                      WHERE 
+                        est_id = :est_id AND                        
+                        est_estado = :estado AND
+                        est_estado_logico = :estado");
+            $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+            $comando->bindParam(":est_id", $est_id, \PDO::PARAM_INT);
+            $comando->bindParam(":est_matricula", $est_matricula, \PDO::PARAM_STR);
+            $comando->bindParam(":est_categoria", $est_categoria, \PDO::PARAM_STR);
+            $comando->bindParam(":est_usu_modifica", $est_usu_modifica, \PDO::PARAM_INT);
+            $comando->bindParam(":est_fecha_modificacion", $est_fecha_modificacion, \PDO::PARAM_STR);
+
+            $response = $comando->execute();
+            if ($trans !== null)
+                $trans->commit();
+            return $response;
+        } catch (Exception $ex) {
+            if ($trans !== null)
+                $trans->rollback();
+            return FALSE;
+        }
+    }
+
+    /**
+     * Function modifica datosde la tabla estudiante_carrera_programa.
+     * @author Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;
+     * @param
+     * @return
+     */
+    public function updateEstudiantecarreraprogr($est_id, $meun_id, $ecpr_usuario_modifica, $ecpr_fecha_modificacion) {
+
+        $con = \Yii::$app->db_academico;
+        $estado = 1;
+        if ($trans !== null) {
+            $trans = null; // si existe la transacción entonces no se crea una
+        } else {
+            $trans = $con->beginTransaction(); // si no existe la transacción entonces se crea una
+        }
+        try {
+            $comando = $con->createCommand
+                    ("UPDATE " . $con->dbname . ".estudiante_carrera_programa		       
+                      SET est_matricula = :est_matricula,
+                          est_categoria = :est_categoria,
+                          est_usu_modifica = :est_usu_modifica,
+                          est_fecha_modificacion = :est_fecha_modificacion                          
+                      WHERE 
+                        est_id = :est_id AND                        
+                        est_estado = :estado AND
+                        est_estado_logico = :estado");
+            $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+            $comando->bindParam(":meun_id", $meun_id, \PDO::PARAM_INT);        
+            $comando->bindParam(":ecpr_usuario_modifica", $ecpr_usuario_modifica, \PDO::PARAM_INT);
+            $comando->bindParam(":ecpr_fecha_modificacion", $ecpr_fecha_modificacion, \PDO::PARAM_STR);
+
+            $response = $comando->execute();
+            if ($trans !== null)
+                $trans->commit();
+            return $response;
+        } catch (Exception $ex) {
+            if ($trans !== null)
+                $trans->rollback();
+            return FALSE;
+        }
+    }
+
 }
