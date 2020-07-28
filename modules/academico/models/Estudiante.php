@@ -117,7 +117,7 @@ class Estudiante extends \yii\db\ActiveRecord {
             $param_sql .= ", est_matricula";
             $bsol_sql .= ", :est_matricula";
         }
-        
+
         if (isset($est_categoria)) {
             $param_sql .= ", est_categoria";
             $bsol_sql .= ", :est_categoria";
@@ -155,7 +155,7 @@ class Estudiante extends \yii\db\ActiveRecord {
             if (isset($est_matricula)) {
                 $comando->bindParam(':est_matricula', $est_matricula, \PDO::PARAM_STR);
             }
-            
+
             if (isset($est_categoria)) {
                 $comando->bindParam(':est_categoria', $est_categoria, \PDO::PARAM_STR);
             }
@@ -239,6 +239,10 @@ class Estudiante extends \yii\db\ActiveRecord {
         return $resultData;
     }
 
+    /*     * ********************************** */
+
+    /*     * ********************************** */
+
     public function getInfoCarreraEstudiante($est_id, $emp_id) {
         $con = \Yii::$app->db_academico;
         $sql = "
@@ -267,6 +271,10 @@ class Estudiante extends \yii\db\ActiveRecord {
         return $resultData;
     }
 
+    /*     * ********************************** */
+
+    /*     * ********************************** */
+
     public function getCategoryCost() {
         $con = \Yii::$app->db_sea;
         $sql = "SELECT COD_CAT AS Cod, NOM_CAT AS Nombre, VAL_ARA AS Precio FROM " . $con->dbname . ".CAT_ARANCEL WHERE EST_LOG = 1";
@@ -274,6 +282,10 @@ class Estudiante extends \yii\db\ActiveRecord {
         $resultData = $comando->queryAll();
         return $resultData;
     }
+
+    /*     * ********************************** */
+
+    /*     * ********************************** */
 
     public function getGastosMatriculaOtros($codMod) {
         $con = \Yii::$app->db_sea;
@@ -449,14 +461,15 @@ class Estudiante extends \yii\db\ActiveRecord {
         if ($onlyData == false) {
             $estid = "
                       pers.per_id as per_id,
-                      IFNULL(estu.est_id, '') as est_id,"; 
+                      IFNULL(estu.est_id, '') as est_id,";
         }
         $dataCurrentPlanificacion = Planificacion::getCurrentPeriodoAcademico();
         $inlist = "";
         $cont = 0;
-        foreach($dataCurrentPlanificacion as $key => $value){
+        foreach ($dataCurrentPlanificacion as $key => $value) {
             $inlist .= $value['pla_id'];
-            if(count($dataCurrentPlanificacion) > 1 && $cont < (count($dataCurrentPlanificacion) - 1)) $inlist .= ", ";
+            if (count($dataCurrentPlanificacion) > 1 && $cont < (count($dataCurrentPlanificacion) - 1))
+                $inlist .= ", ";
             $cont ++;
         }
         $sql = "SELECT 
@@ -547,6 +560,47 @@ class Estudiante extends \yii\db\ActiveRecord {
                 WHERE   est_id = :est_id                        
                         AND ecpr_estado = :estado
                         AND ecpr_estado_logico = :estado ";
+
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":est_id", $est_id, \PDO::PARAM_INT);
+        $resultData = $comando->queryOne();
+        return $resultData;
+    }
+
+    /**
+     * Function Consultar información del estudinate con el est_id.
+     * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;
+     * @property       
+     * @return  
+     */
+    public function getEstudiantexestid($est_id) {
+        $con = \Yii::$app->db_academico;
+        $estado = 1;
+
+        $sql = "SELECT 	
+                        est.est_matricula as matricula,                        
+                        CASE est.est_categoria  
+                            WHEN 'A' THEN 1  
+                            WHEN 'B' THEN 2  
+                            WHEN 'C' THEN 3 
+                            WHEN 'D' THEN 4  
+                            WHEN 'E' THEN 5  
+                            WHEN 'F' THEN 6 
+                            WHEN 'G' THEN 7  
+                            WHEN 'H' THEN 8 
+                         END as categoria,
+                        meu.uaca_id as unidad,
+                        meu.mod_id as modalidad,
+                        meu.eaca_id as carrera
+                         
+                FROM " . $con->dbname . ".estudiante est  
+                INNER JOIN " . $con->dbname . ".estudiante_carrera_programa ecp ON ecp.est_id = est.est_id
+                INNER JOIN " . $con->dbname . ".modalidad_estudio_unidad meu ON meu.meun_id = ecp.meun_id
+                    
+                WHERE   est.est_id = :est_id                        
+                        AND est.est_estado = :estado
+                        AND est.est_estado_logico = :estado ";
 
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);

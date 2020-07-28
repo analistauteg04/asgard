@@ -43,4 +43,5 @@ return [
     "Create Students" => "Crear Estudiantes",
     "Data General Students" => "Datos General Estudiantes",
     "Data Career/Program" => "Datos Carrera/Programa",
+    "View Students" => "Ver Estudiantes",
 ];

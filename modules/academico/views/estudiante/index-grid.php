@@ -72,13 +72,20 @@ PbGridView::widget([
         [
             'class' => 'yii\grid\ActionColumn',
             'header' => Yii::t("formulario", "Actions"),
-            'template' => '{create} {matriculacion}',
+            'template' => '{create} {view} {matriculacion}',
             'buttons' => [
                 'create' => function ($url, $model) {
                     if ($model['est_id'] < 1) {
                         return Html::a('<span class="glyphicon glyphicon glyphicon-file"></span>', Url::to(['/academico/estudiante/new', 'per_id' => base64_encode($model['per_id'])]), ["data-toggle" => "tooltip", "title" => "Crear Estudiante", "data-pjax" => 0]);
                     } else {
                         return '<span class="glyphicon glyphicon glyphicon-file"></span>';
+                    }
+                },
+                'view' => function ($url, $model) {
+                    if ($model['est_id'] > 1) {
+                        return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', Url::to(['/academico/estudiante/view', 'per_id' => base64_encode($model['per_id']), 'est_id' => base64_encode($model['est_id'])]), ["data-toggle" => "tooltip", "title" => "Ver Estudiante", "data-pjax" => 0]);
+                    } else {
+                        return '<span class="glyphicon glyphicon glyphicon-eye-open"></span>';
                     }
                 },
                 'matriculacion' => function ($url, $model) {

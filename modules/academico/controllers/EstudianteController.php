@@ -267,7 +267,7 @@ class EstudianteController extends \app\components\CController {
                                         }
                                     }
                                 }
-                            }                            
+                            }
                         }
                     } else { // existe usuario
                         // se actualizar clave a la cedula y estado activo
@@ -336,6 +336,30 @@ class EstudianteController extends \app\components\CController {
             }
             return;
         }
+    }
+
+    public function actionView() {
+        $per_id = base64_decode($_GET['per_id']);
+        $est_id = base64_decode($_GET['est_id']);
+        $persona_model = new Persona();
+        $mod_modalidad = new Modalidad();
+        $mod_unidad = new UnidadAcademica();
+        $modcanal = new Oportunidad();
+        $mod_Estudiante = new Estudiante();
+        
+        $dataPersona = $persona_model->consultaPersonaId($per_id);
+        $dataEstudiante = $mod_Estudiante->getEstudiantexestid($est_id);
+        $arr_ninteres = $mod_unidad->consultarUnidadAcademicasEmpresa(1);
+        $arr_modalidad = $mod_modalidad->consultarModalidad($dataEstudiante['unidad'], 1);
+        $arr_carrerra1 = $modcanal->consultarCarreraModalidad($dataEstudiante['unidad'], $dataEstudiante['modalidad']);
+        return $this->render('view', [
+                    'arr_persona' => $dataPersona,
+                    'arr_estudiante' => $dataEstudiante,
+                    'arr_ninteres' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arr_ninteres), "id", "name"),
+                    'arr_modalidad' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arr_modalidad), "id", "name"),
+                    'arr_carrera' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arr_carrerra1), "id", "name"),
+                    'arr_categorias' => $this->categorias(),
+        ]);
     }
 
 }
