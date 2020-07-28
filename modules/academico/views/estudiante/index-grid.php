@@ -72,7 +72,7 @@ PbGridView::widget([
         [
             'class' => 'yii\grid\ActionColumn',
             'header' => Yii::t("formulario", "Actions"),
-            'template' => '{create}',
+            'template' => '{create} {matriculacion}',
             'buttons' => [
                 'create' => function ($url, $model) {
                     if ($model['est_id'] < 1) {
@@ -81,6 +81,12 @@ PbGridView::widget([
                         return '<span class="glyphicon glyphicon glyphicon-file"></span>';
                     }
                 },
+                'matriculacion' => function ($url, $model){
+                    if((!isset($model['registroOnline']) || $model['registroOnline'] == 0) && $model['matricula'] != ""){
+                        return Html::a('<span class="fa fa-user-plus"></span>', Url::to(['/academico/matriculacion/index', 'per_id' => base64_encode($model['per_id'])]), ["data-toggle" => "tooltip", "title" => academico::t('matriculacion','Register Student'), "data-pjax" => 0]);
+                    }
+                    return "";
+                }
             ],
         ],
     ],  

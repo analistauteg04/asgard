@@ -639,7 +639,7 @@ class MatriculacionController extends \app\components\CController {
                     $registro_online_model->ron_valor_aso_estudiante = $dataMat['ASOEST'];
                     $registro_online_model->ron_valor_gastos_adm = $dataMat['VARIOS'];
                     $registro_online_model->ron_valor_matricula = $dataMat['MAT-GRAD']; // se asume que se debio haber pagado antes del registro
-                    $registro_online_model->ron_estado_registro = "0"; // Igual esta tampoco ya no se usa
+                    $registro_online_model->ron_estado_registro = "1"; // Igual esta tampoco ya no se usa
                     $registro_online_model->ron_fecha_registro = date(Yii::$app->params['dateTimeByDefault']);
                     $registro_online_model->ron_fecha_creacion = date(Yii::$app->params['dateTimeByDefault']);
                     $registro_online_model->ron_estado = "1";

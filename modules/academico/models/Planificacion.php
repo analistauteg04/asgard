@@ -2,6 +2,7 @@
 
 namespace app\modules\academico\models;
 
+use app\models\Utilities;
 use Yii;
 use \yii\data\ActiveDataProvider;
 use \yii\data\ArrayDataProvider;
@@ -154,5 +155,31 @@ class Planificacion extends \yii\db\ActiveRecord {
         $resultData = $comando->queryAll();
 
         return $resultData;
+    }
+
+    public static function getCurrentPeriodoAcademico(){
+        $con_academico = \Yii::$app->db_academico;
+        $sql = "SELECT 
+                    pla_id, pla_periodo_academico, pla_fecha_inicio, pla_fecha_fin, mod_id
+                FROM " . $con_academico->dbname.".planificacion 
+                WHERE pla_estado_logico=1 AND pla_estado=1 
+                GROUP BY pla_id, pla_periodo_academico, pla_fecha_inicio, pla_fecha_fin 
+                ORDER BY pla_id DESC";
+        $comando = $con_academico->createCommand($sql);
+        $resultData = $comando->queryAll();
+        $newData = [];
+        $arrIds = [];
+        foreach($resultData as $key => $value){
+            if(count($newData) == 0){
+                $newData[]= $resultData[$key];
+                $arrIds[] = $value['mod_id'];
+            }else{
+                if(!array_search($value['mod_id'], $arrIds, true)){
+                    $arrIds[] = $value['mod_id'];
+                    $newData[] = $resultData[$key];
+                }
+            }
+        }
+        return $newData;
     }
 }

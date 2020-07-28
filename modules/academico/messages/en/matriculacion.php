@@ -86,6 +86,7 @@ return [
     '-- Select Modality --' => '-- Select Modality --',
     '-- Select Status --' => '-- Select Status --',
     'Registered Student' => 'Registered Student',
+    'Register Student' => 'Register Student',
     'Unregistered Student' => 'Unregistered Student',
     'Registered List' => 'Registered List',
     'Detail Student Unregistered' => 'Detail Student Unregistered',

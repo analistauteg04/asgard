@@ -86,6 +86,7 @@ return [
     '-- Select Modality --' => '-- Seleccione una Modalidad --',
     '-- Select Status --' => '-- Seleccione un Estado --',
     'Registered Student' => 'Estudiante Registrado',
+    'Register Student' => 'Matricular Estudiante',
     'Unregistered Student' => 'Estudiante por Registrar',
     'Registered List' => 'Listado de Registrados',
     'Detail Student Unregistered' => 'Detalle de Estudiante por Registrar',

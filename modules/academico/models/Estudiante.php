@@ -2,8 +2,10 @@
 
 namespace app\modules\academico\models;
 
-use yii\data\ArrayDataProvider;
+use app\models\Utilities;
 use Yii;
+use yii\data\ArrayDataProvider;
+use app\modules\academico\models\Planificacion;
 
 /**
  * This is the model class for table "estudiante".
@@ -440,6 +442,14 @@ class Estudiante extends \yii\db\ActiveRecord {
                       pers.per_id as per_id,
                       IFNULL(estu.est_id, '') as est_id,"; 
         }
+        $dataCurrentPlanificacion = Planificacion::getCurrentPeriodoAcademico();
+        $inlist = "";
+        $cont = 0;
+        foreach($dataCurrentPlanificacion as $key => $value){
+            $inlist .= $value['pla_id'];
+            if(count($dataCurrentPlanificacion) > 1 && $cont < (count($dataCurrentPlanificacion) - 1)) $inlist .= ", ";
+            $cont ++;
+        }
         $sql = "SELECT 
                       $estid  
 	           -- pers.per_id,
@@ -450,7 +460,8 @@ class Estudiante extends \yii\db\ActiveRecord {
                       IFNULL(DATE_FORMAT(estu.est_fecha_creacion,'%Y-%m-%d'), '') as fecha_creacion,
                       IFNULL(unid.uaca_nombre, '') as undidad,
                       IFNULL(moda.mod_nombre, '') as modalidad,
-                      IFNULL(esac.eaca_nombre, '') as carrera
+                      IFNULL(esac.eaca_nombre, '') as carrera,
+                      r.ron_id as registroOnline
                 FROM  " . $con->dbname . ".estudiante estu
                 RIGHT JOIN " . $con1->dbname . ".persona pers ON pers.per_id = estu.per_id		
                 LEFT JOIN " . $con->dbname . ".estudiante_carrera_programa ecpr ON ecpr.est_id = estu.est_id
@@ -458,6 +469,8 @@ class Estudiante extends \yii\db\ActiveRecord {
                 LEFT JOIN " . $con->dbname . ".unidad_academica unid ON unid.uaca_id = meun.uaca_id
                 LEFT JOIN " . $con->dbname . ".modalidad moda ON moda.mod_id = meun.mod_id
                 LEFT JOIN " . $con->dbname . ".estudio_academico esac ON esac.eaca_id = meun.eaca_id
+                LEFT JOIN " . $con->dbname . ".registro_online r ON r.per_id = pers.per_id
+                LEFT JOIN " . $con->dbname . ".planificacion_estudiante pes ON pes.pes_id = r.pes_id AND pla_id IN ($inlist)
                 WHERE 
                 $str_search
                 pers.per_id > 1000                
