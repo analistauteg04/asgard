@@ -10,6 +10,7 @@ use yii\helpers\ArrayHelper;
 use app\models\Utilities;
 use app\modules\academico\models\Modalidad;
 use app\modules\academico\models\UnidadAcademica;
+use app\modules\academico\models\ModuloEstudio;
 use app\modules\academico\models\PromocionPrograma;
 use app\modules\academico\models\ParaleloPromocionPrograma;
 use app\modules\academico\models\MatriculacionProgramaInscrito;
@@ -17,6 +18,8 @@ use app\modules\academico\models\Estudiante;
 use app\modules\admision\models\Oportunidad;
 use app\models\Persona;
 use app\models\Usuario;
+use yii\base\Security;
+use yii\base\Exception;
 use app\modules\admision\models\SolicitudInscripcion;
 use app\modules\academico\Module as academico;
 use app\modules\financiero\Module as financiero;
@@ -245,6 +248,7 @@ class EstudianteController extends \app\components\CController {
                         
                     } else {
                         // se actualizar clave a la cedula y estado activo
+                        $security = new Security();
                         $usu_sha = $security->generateRandomString();
                         $usu_pass = base64_encode($security->encryptByPassword($usu_sha, $resp_persona["per_cedula"]));
                         $respUsu = $usuario->actualizarDataUsuario($usu_sha, $usu_pass, $resp_persona["usu_id"]);
