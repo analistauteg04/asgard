@@ -10,7 +10,7 @@ use yii\data\ArrayDataProvider;
  *
  * @property int $ppub_id
  * @property int $pro_id
- * @property string $ppub_produccion
+ * @property int $tpub_id
  * @property string $ppub_titulo
  * @property string $ppub_editorial
  * @property string $ppub_isbn
@@ -48,10 +48,9 @@ class ProfesorPublicacion extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['pro_id', 'ppub_produccion', 'ppub_titulo', 'ppub_editorial', 'ppub_isbn', 'ppub_autoria', 'ppub_usuario_ingreso', 'ppub_estado', 'ppub_estado_logico'], 'required'],
-            [['pro_id', 'ppub_usuario_ingreso', 'ppub_usuario_modifica'], 'integer'],
+            [['pro_id', 'ppub_titulo', 'ppub_editorial', 'ppub_isbn', 'ppub_autoria', 'ppub_usuario_ingreso', 'ppub_estado', 'ppub_estado_logico'], 'required'],
+            [['pro_id', 'tpub_id', 'ppub_usuario_ingreso', 'ppub_usuario_modifica'], 'integer'],
             [['ppub_fecha_creacion', 'ppub_fecha_modificacion'], 'safe'],
-            [['ppub_produccion'], 'string', 'max' => 100],
             [['ppub_titulo', 'ppub_autoria'], 'string', 'max' => 200],
             [['ppub_editorial', 'ppub_isbn'], 'string', 'max' => 50],
             [['ppub_estado', 'ppub_estado_logico'], 'string', 'max' => 1],
@@ -67,7 +66,7 @@ class ProfesorPublicacion extends \yii\db\ActiveRecord
         return [
             'ppub_id' => 'Ppub ID',
             'pro_id' => 'Pro ID',
-            'ppub_produccion' => 'Ppub Produccion',
+            'tpub_id' => 'Tpub ID',
             'ppub_titulo' => 'Ppub Titulo',
             'ppub_editorial' => 'Ppub Editorial',
             'ppub_isbn' => 'Ppub Isbn',
@@ -88,7 +87,7 @@ class ProfesorPublicacion extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Profesor::className(), ['pro_id' => 'pro_id']);
     }
-
+    
     function getAllPublicacionGrid($pro_id, $onlyData=false){
         $con_academico = \Yii::$app->db_academico;
         $con_general = \Yii::$app->db_general;
