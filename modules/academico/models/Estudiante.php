@@ -617,8 +617,9 @@ class Estudiante extends \yii\db\ActiveRecord {
      */
     public function updateEstudiante($est_id, $est_matricula, $est_categoria, $est_usu_modifica, $est_fecha_modificacion) {
 
-        $con = \Yii::$app->db_academico;
         $estado = 1;
+        $con = \Yii::$app->db_academico;
+        $trans = $con->getTransaction(); // se obtiene la transacción actual
         if ($trans !== null) {
             $trans = null; // si existe la transacción entonces no se crea una
         } else {
@@ -679,11 +680,11 @@ class Estudiante extends \yii\db\ActiveRecord {
                         est_id = :est_id AND                        
                         est_estado = :estado AND
                         est_estado_logico = :estado");
-            $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
-            $comando->bindParam(":meun_id", $meun_id, \PDO::PARAM_INT);        
+            $comando->bindParam(":est_id", $est_id, \PDO::PARAM_INT);
+            $comando->bindParam(":meun_id", $meun_id, \PDO::PARAM_INT);
             $comando->bindParam(":ecpr_usuario_modifica", $ecpr_usuario_modifica, \PDO::PARAM_INT);
             $comando->bindParam(":ecpr_fecha_modificacion", $ecpr_fecha_modificacion, \PDO::PARAM_STR);
-
+            $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
             $response = $comando->execute();
             if ($trans !== null)
                 $trans->commit();

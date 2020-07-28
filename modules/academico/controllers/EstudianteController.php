@@ -400,22 +400,21 @@ class EstudianteController extends \app\components\CController {
 
     public function actionUpdate() {
         $usu_autenticado = @Yii::$app->session->get("PB_iduser");
+        $mod_Estudiante = new Estudiante();
+        $mod_Modestuni = new ModuloEstudio();
         if (Yii::$app->request->isAjax) {
-            $data = Yii::$app->request->post();
-            //$per_id = $data["per_id"];
+            $data = Yii::$app->request->post();           
+            $per_id = $data["per_id"];
             $est_id = $data["est_id"];
             $uaca_id = $data["unidad"];
             $mod_id = $data["modalidad"];
             $eaca_id = $data["carrera"];
             $categoria = $data["categoria"];
             $matricula = $data["matricula"];
-
-            $fecha = date(Yii::$app->params["dateTimeByDefault"]);
             $con = \Yii::$app->db_academico;
             $transaction = $con->beginTransaction();
             try {
-                $mod_Estudiante = new Estudiante();
-                $mod_Modestuni = new ModuloEstudio();
+                $fecha = date(Yii::$app->params["dateTimeByDefault"]);
                 // consultar la modalidad_estudio_unidad
                 $resp_mestuni = $mod_Modestuni->consultarModalidadestudiouni($uaca_id, $mod_id, $eaca_id);
                 //$resp_mestuni["meun_id"]
@@ -433,28 +432,25 @@ class EstudianteController extends \app\components\CController {
                 if ($exito) {
                     $transaction->commit();
                     $message = array(
-                        "wtmessage" => Yii::t("notificaciones", "La información ha sido actualizada."),
+                        "wtmessage" => Yii::t("notificaciones", "La infomación ha sido actualizada."),
                         "title" => Yii::t('jslang', 'Success'),
                     );
-                    return \app\models\Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                    return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
                 } else {
                     $transaction->rollback();
-                    if (empty($message)) {
-                        $message = array
-                            (
-                            "wtmessage" => Yii::t("notificaciones", "Error al actualizar1. " . $mensaje),
-                            "title" => Yii::t('jslang', 'Success'),
-                        );
-                    }
-                    return \app\models\Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                    $message = array(
+                        "wtmessage" => Yii::t("notificaciones", "Error al actualizar 1."),
+                        "title" => Yii::t('jslang', 'Error'),
+                    );
+                    return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), false, $message);
                 }
             } catch (Exception $ex) {
                 $transaction->rollback();
                 $message = array(
-                    "wtmessage" => Yii::t("notificaciones", "Error al actualizar2."),
+                    "wtmessage" => Yii::t("notificaciones", "Error al actualizar 2."),
                     "title" => Yii::t('jslang', 'Error'),
                 );
-                return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), true, $message);
+                return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), false, $message);
             }
             return;
         }
