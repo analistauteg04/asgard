@@ -17,8 +17,8 @@ Academico::registerTranslations();
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="form-group">
             <label for="txt_pub_produccion" class="col-lg-3 col-md-3 col-sm-3 col-xs-3 control-label"><?= Academico::t("profesor", "Type Production")?> <span class="text-danger">*</span></label>
-            <div class="col-lg-6 col-md-9 col-sm-9 col-xs-9">
-                <input type="text" class="form-control PBvalidations" id="txt_pub_produccion" data-type="alfa" placeholder="<?= Academico::t("profesor", "Type Production") ?>">
+            <div class="col-lg-6 col-md-9 col-sm-9 col-xs-9">                
+                <?= Html::dropDownList("cmb_tipo_produccion", "", $arr_tipo_publicacion, ["class" => "form-control", "id" => "cmb_tipo_produccion"]) ?>
             </div>
         </div>
         <div class="form-group">

@@ -1778,9 +1778,10 @@ INSERT INTO `nivel_idioma` (`nidi_id`, `nidi_descripcion`, `nidi_estado`, `nidi_
 -- Volcado de datos para la tabla `tipo_publicacion`
 --
 INSERT INTO `tipo_publicacion` (`tpub_id`, `tpub_nombre`, `tpub_descripcion`, `tpub_estado`, `tpub_estado_logico`) VALUES
-(1, 'Articulos Regionales', 'articulos Regionales', '1', '1'),
-(2, 'Articulos Impacto', 'Articulos Impacto', '1', '1'),
-(3, 'Libro', 'Libros', '1', '1');
+(1, 'Artículo', 'Artículo', '1', '1'),
+(2, 'Ponencias', 'Ponencias', '1', '1'),
+(3, 'Libro', 'Libro', '1', '1'),
+(4, 'Capítulo de Libro', 'Capítulo de Libro', '1', '1');
 
 -- --------------------------------------------------------
 --

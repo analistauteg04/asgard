@@ -26,6 +26,7 @@ use app\modules\academico\models\ProfesorInstruccion;
 use app\modules\academico\models\ProfesorInvestigacion;
 use app\modules\academico\models\ProfesorPublicacion;
 use app\modules\academico\models\ProfesorReferencia;
+use app\modules\academico\models\TipoPublicacion;
 use yii\helpers\ArrayHelper;
 use yii\data\ArrayDataProvider;
 use app\models\Utilities;
@@ -446,8 +447,11 @@ class ProfesorController extends \app\components\CController {
             ]);
 
             $proPub = new ProfesorPublicacion();
+            $tipoPub = new TipoPublicacion(); 
+            $respTipoPub = $tipoPub->getTipoPublicacion();
             $EditFormTab11 = $this->renderPartial('EditFormTab11',[
                 'model' => $proPub->getAllPublicacionGrid($profesor_model->pro_id),
+                'arr_tipo_publicacion' => ArrayHelper::map($respTipoPub,"id", "nombre"),
             ]);
 
             $proCoor = new ProfesorCoordinacion();
@@ -919,14 +923,15 @@ class ProfesorController extends \app\components\CController {
                         $empresa_persona_model->save();
                         $eper_id = $empresa_persona_model->getPrimaryKey();
 
-                        $usua_grol_eper_model = new UsuaGrolEper();
+                        /* En caso de que ya existen, no debe modificarse el grol_id
+                         * $usua_grol_eper_model = new UsuaGrolEper();
                         $usua_grol_eper_model->eper_id = $eper_id;
                         $usua_grol_eper_model->usu_id = $usu_id;
                         $usua_grol_eper_model->grol_id = $arr_grupo_rol[0]['grol_id'];
                         $usua_grol_eper_model->ugep_estado = '1';
                         $usua_grol_eper_model->ugep_estado_logico = '1';
                         $usua_grol_eper_model->save();
-
+                        */
                         /** Se agregan Informacion de Expediente **/
                         if(isset($arr_instuccion)){
                             foreach($arr_instuccion as $key0 => $value0){
@@ -1064,7 +1069,7 @@ class ProfesorController extends \app\components\CController {
                         if(isset($arr_publicacion)){
                             foreach($arr_publicacion as $key9 => $value9){
                                 $publicacion_model = new ProfesorPublicacion();
-                                $publicacion_model->ppub_produccion = strtolower($value9[1]);
+                                $publicacion_model->tpub_id = $value9[1];                                
                                 $publicacion_model->ppub_titulo = strtolower($value9[2]);
                                 $publicacion_model->ppub_editorial = strtolower($value9[3]);
                                 $publicacion_model->ppub_isbn = strtolower($value9[4]);
@@ -1315,7 +1320,7 @@ class ProfesorController extends \app\components\CController {
                         if(isset($arr_publicacion)){
                             foreach($arr_publicacion as $key9 => $value9){
                                 $publicacion_model = new ProfesorPublicacion();
-                                $publicacion_model->ppub_produccion = ucwords($value9[1]);
+                                $publicacion_model->tpub_id = $value9[1];                               
                                 $publicacion_model->ppub_titulo = ucwords($value9[2]);
                                 $publicacion_model->ppub_editorial = ucwords($value9[3]);
                                 $publicacion_model->ppub_isbn = strtolower($value9[4]);
@@ -1638,7 +1643,7 @@ class ProfesorController extends \app\components\CController {
                     if(isset($arr_publicacion)){
                         foreach($arr_publicacion as $key9 => $value9){
                             $publicacion_model = new ProfesorPublicacion();
-                            $publicacion_model->ppub_produccion = ucwords($value9[1]);
+                            $publicacion_model->tpub_id = $value9[1];                            
                             $publicacion_model->ppub_titulo = ucwords($value9[2]);
                             $publicacion_model->ppub_editorial = ucwords($value9[3]);
                             $publicacion_model->ppub_isbn = ucwords($value9[4]);

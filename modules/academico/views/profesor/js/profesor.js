@@ -224,7 +224,7 @@ function fillDataAlert() {
     var status = "NO_OK";
     var messagew = {};
     messagew = {
-        "wtmessage": objLang.Must_be_Fill_all_information_in_fields_with_label___,
+        "wtmessage": "Llene todos los campos obligatorios",//objLang.Must_be_Fill_all_information_in_fields_with_label___,
         "title": objLang.Error,
         "acciones": [{
             "id": "btnalert",
@@ -812,7 +812,8 @@ function removeItemConferencia(ref) {
 
 /** PUBLICACION **/
 function addPublicacion() {
-    var produccion = $("#txt_pub_produccion").val();
+    var produccion = $("#cmb_tipo_produccion").val();
+    var des_produccion = $("#cmb_tipo_produccion :selected").text();    
     var titulo = $("#txt_pub_titulo").val();
     var editorial = $("#txt_pub_editorial").val();
     var isbn = $("#txt_pub_isbn").val();
@@ -833,7 +834,7 @@ function addPublicacion() {
     tb_item[4] = isbn;
     tb_item[5] = autoria;
     tb_item2[0] = 0;
-    tb_item2[1] = produccion;
+    tb_item2[1] = des_produccion;
     tb_item2[2] = titulo;
     tb_item2[3] = editorial;
     tb_item2[4] = isbn;
@@ -879,7 +880,7 @@ function addPublicacion() {
     sessionStorage.grid_publicacion_list = JSON.stringify(arrData);
     addItemGridContent("grid_publicacion_list");
 
-    $("#txt_pub_produccion").val('');
+    $("#cmb_tipo_produccion").val('');
     $("#txt_pub_titulo").val('');
     $("#txt_pub_editorial").val('');
     $("#txt_pub_isbn").val('');

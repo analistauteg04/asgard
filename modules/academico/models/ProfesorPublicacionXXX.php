@@ -91,17 +91,19 @@ class ProfesorPublicacion extends \yii\db\ActiveRecord
 
     function getAllPublicacionGrid($pro_id, $onlyData=false){
         $con_academico = \Yii::$app->db_academico;
+        $con_general = \Yii::$app->db_general;
         $sql = "SELECT 
                     p.ppub_id as Ids,
                     pro.pro_id,
                     pro.per_id,
-                    p.ppub_produccion as TipoProduccion,
+                    t.tpub_nombre as TipoProduccion,
                     p.ppub_titulo as Titulo,
                     p.ppub_editorial as Editorial, 
                     p.ppub_isbn as ISBN, 
                     p.ppub_autoria as Autor
                 FROM " . $con_academico->dbname . ".profesor AS pro
                 inner JOIN " . $con_academico->dbname . ".profesor_publicacion as p on pro.pro_id = p.pro_id
+                inner join " . $con_general->dbname . ".tipo_publicacion as t on p.tpub_id = t.tpub_id
                 WHERE pro.pro_estado_logico = 1 and pro.pro_estado = 1 and p.ppub_estado_logico = 1 
                 and p.ppub_estado = 1 and pro.pro_id =:proId";
         $comando = $con_academico->createCommand($sql);
