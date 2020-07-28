@@ -94,7 +94,7 @@ class Estudiante extends \yii\db\ActiveRecord {
      * @param   
      * @return  $resultData (Retornar el código de estudiante).
      */
-    public function insertarEstudiante($per_id, $est_matricula, $est_usuario_ingreso, $est_usuario_modifica, $est_fecha_creacion, $est_fecha_modificacion) {
+    public function insertarEstudiante($per_id, $est_matricula, $est_categoria, $est_usuario_ingreso, $est_usuario_modifica, $est_fecha_creacion, $est_fecha_modificacion) {
 
         $con = \Yii::$app->db_academico;
         $trans = $con->getTransaction(); // se obtiene la transacción actual
@@ -116,6 +116,11 @@ class Estudiante extends \yii\db\ActiveRecord {
         if (isset($est_matricula)) {
             $param_sql .= ", est_matricula";
             $bsol_sql .= ", :est_matricula";
+        }
+        
+        if (isset($est_categoria)) {
+            $param_sql .= ", est_categoria";
+            $bsol_sql .= ", :est_categoria";
         }
 
         if (isset($est_usuario_ingreso)) {
@@ -149,6 +154,10 @@ class Estudiante extends \yii\db\ActiveRecord {
 
             if (isset($est_matricula)) {
                 $comando->bindParam(':est_matricula', $est_matricula, \PDO::PARAM_STR);
+            }
+            
+            if (isset($est_categoria)) {
+                $comando->bindParam(':est_categoria', $est_categoria, \PDO::PARAM_STR);
             }
 
             if (isset($est_usuario_ingreso)) {

@@ -608,7 +608,7 @@ class MatriculacionposgradosController extends \app\components\CController {
                         $resp_estudianteid = $mod_Estudiante->getEstudiantexperid($per_id);
                         if ($resp_estudianteid["est_id"] == "") {
                             // grabar tabla estudiantes
-                            $resp_estudiantes = $mod_Estudiante->insertarEstudiante($per_id, $matricula, $usu_id, null, null, $fecha);
+                            $resp_estudiantes = $mod_Estudiante->insertarEstudiante($per_id, $matricula, null, $usu_id, null, null, $fecha);
                         } else {
                             /*** OJO UNA VEZ QUE SE TENGA EL MODIFICAR ESTUDIANTE ACTUALIZAR EL NUMERO DE MATRICULA ENVIANDO EL EST_ID***/
                             $resp_estudiantes = $resp_estudianteid["est_id"];
@@ -643,7 +643,7 @@ class MatriculacionposgradosController extends \app\components\CController {
                     if (empty($message)) {
                         $message = array
                             (
-                            "wtmessage" => Yii::t("notificaciones", "Error al grabar1. " . $mensaje), "title" =>
+                            "wtmessage" => Yii::t("notificaciones", "Error al grabar. " . $mensaje), "title" =>
                             Yii::t('jslang', 'Success'),
                         );
                     }
@@ -652,7 +652,7 @@ class MatriculacionposgradosController extends \app\components\CController {
             } catch (Exception $ex) {
                 $transaction->rollback();
                 $message = array(
-                    "wtmessage" => Yii::t("notificaciones", "Error al grabar2." . $mensaje),
+                    "wtmessage" => Yii::t("notificaciones", "Error al grabar." . $mensaje),
                     "title" => Yii::t('jslang', 'Success'),
                 );
                 return \app\models\Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);

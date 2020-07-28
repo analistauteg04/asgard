@@ -1310,7 +1310,7 @@ class SolicitudesController extends \app\components\CController {
                                                             // Consultar el estudiante si no ha sido creado
                                                             $resp_estudianteid = $mod_Estudiante->getEstudiantexperid($per_id);
                                                             if ($resp_estudianteid["est_id"] == "") {
-                                                                $resp_estudiante = $mod_Estudiante->insertarEstudiante($per_id, null, $usu_autenticado, null, $fecha, null);
+                                                                $resp_estudiante = $mod_Estudiante->insertarEstudiante($per_id, null, null, $usu_autenticado, null, $fecha, null);
                                                             } else {
                                                                 $resp_estudiante = $resp_estudianteid["est_id"];
                                                             }

@@ -4,23 +4,20 @@ namespace app\modules\academico\controllers;
 
 use Yii;
 use app\models\ExportFile;
-use app\modules\academico\models\Admitido;
 use app\modules\academico\models\EstudioAcademico;
 use yii\helpers\ArrayHelper;
 use app\models\Utilities;
 use app\modules\academico\models\Modalidad;
 use app\modules\academico\models\UnidadAcademica;
 use app\modules\academico\models\ModuloEstudio;
-use app\modules\academico\models\PromocionPrograma;
-use app\modules\academico\models\ParaleloPromocionPrograma;
-use app\modules\academico\models\MatriculacionProgramaInscrito;
 use app\modules\academico\models\Estudiante;
 use app\modules\admision\models\Oportunidad;
 use app\models\Persona;
 use app\models\Usuario;
 use yii\base\Security;
 use yii\base\Exception;
-use app\modules\admision\models\SolicitudInscripcion;
+use app\models\EmpresaPersona;
+use app\models\UsuaGrolEper;
 use app\modules\academico\Module as academico;
 use app\modules\financiero\Module as financiero;
 use app\modules\admision\Module as admision;
@@ -210,8 +207,8 @@ class EstudianteController extends \app\components\CController {
     }
 
     public function actionSave() {
-        $usuario = @Yii::$app->session->get("PB_iduser");
-
+        $usu_autenticado = @Yii::$app->session->get("PB_iduser");
+        $emp_id = 1;
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
 
@@ -222,7 +219,7 @@ class EstudianteController extends \app\components\CController {
             $categoria = $data["categoria"];
             $matricula = $data["matricula"];
 
-            $fecha = date(Yii::$app->params["dateByDefault"]); // solo envia Y-m-d      
+            $fecha = date(Yii::$app->params["dateTimeByDefault"]);
             $con = \Yii::$app->db_academico;
             $transaction = $con->beginTransaction();
             $con2 = \Yii::$app->db_asgard;
@@ -232,32 +229,100 @@ class EstudianteController extends \app\components\CController {
                 $mod_Modestuni = new ModuloEstudio();
                 $mod_persona = new Persona();
                 $usuario = new Usuario();
+                $mod_emp_persona = new EmpresaPersona();
+                $usergrol = new UsuaGrolEper();
                 // consultar el per_id sino esta en estudiante si esta un else q diga ya existe estudiante getEstudiantexperid($per_id)
                 $resp_estudianteid = $mod_Estudiante->getEstudiantexperid($per_id);
                 if ($resp_estudianteid["est_id"] == "") {
                     // consultar datos de la person con per_id consultaPersonaId($per_id)
                     $resp_persona = $mod_persona->consultaPersonaId($per_id);
                     // actualizar clave de usuario a numero de cedula sino crear en tabla usuario
-                    if ($resp_persona["usu_id"] == "") {
+                    if ($resp_persona["usu_id"] == "") { // No existe el usuario
                         // se crea en la tabla usuario OJO FALTA
+                        $usuarioid = $usuario->crearUsuario($resp_persona["per_correo"], $resp_persona["per_cedula"], $per_id);
                         // consultar si existe en empresa_persona, sino guardar en empresa_persona 
-                        // se crea en usuario_grol con rol 37
-                        // guardar en tabla estudiante
-                        // if guarda estudiante consultar la tabla modalidad_estudio_unidad con uaca_id, mod_id y eaca_id, si no existe error de que no hay modalidad_estudio_unidad, caso contrario seguir
-                        // guardar en modalidad_estudio_unidad
-                        
-                    } else {
+                        $emp_per_id = $mod_emp_persona->consultarIdEmpresaPersona($per_id, $emp_id);
+                        if ($emp_per_id == 0) {
+                            $keys = ['emp_id', 'per_id', 'eper_estado', 'eper_estado_logico'];
+                            $parametros = [$emp_id, $per_id, 1, 1];
+                            $emp_per_id = $mod_emp_persona->insertarEmpresaPersona($con2, $parametros, $keys, 'empresa_persona');
+                        }
+                        if ($emp_per_id) {
+                            // se crea en usuario_grol con rol 37
+                            $grol_id = 37;
+                            $keys = ['eper_id', 'usu_id', 'grol_id', 'ugep_estado', 'ugep_estado_logico'];
+                            $parametros = [$emperid, $usuarioid, $grol_id, 1, 1];
+                            $usgrol_id = $usergrol->insertarUsuaGrolEper($con2, $parametros, $keys, 'usua_grol_eper');
+                            // guardar en tabla estudiante
+                            if ($usgrol_id) {
+                                $resp_estudiante = $mod_Estudiante->insertarEstudiante($per_id, $matricula, $categoria, $usu_autenticado, null, $fecha, null);
+                                if ($resp_estudiante) {
+                                    // if guarda estudiante consultar la tabla modalidad_estudio_unidad con uaca_id, mod_id y eaca_id, si no existe error de que no hay modalidad_estudio_unidad, caso contrario seguir
+                                    $resp_mestuni = $mod_Modestuni->consultarModalidadestudiouni($uaca_id, $mod_id, $eaca_id);
+                                    if ($resp_mestuni) {
+                                        // guardar en modalidad_estudio_unidad  
+                                        $resp_estudcarreprog = $mod_Estudiante->insertarEstcarreraprog($resp_estudiante, $resp_mestuni["meun_id"], $fecha, $usu_autenticado, $fecha);
+                                        if ($resp_estudcarreprog) {
+                                            $exito = 1;
+                                        }
+                                    }
+                                }
+                            }                            
+                        }
+                    } else { // existe usuario
                         // se actualizar clave a la cedula y estado activo
                         $security = new Security();
                         $usu_sha = $security->generateRandomString();
                         $usu_pass = base64_encode($security->encryptByPassword($usu_sha, $resp_persona["per_cedula"]));
                         $respUsu = $usuario->actualizarDataUsuario($usu_sha, $usu_pass, $resp_persona["usu_id"]);
-                        //FALTA DESDE AQUI TRABJAR
-                        // consultar si existe en la tabla empresa_persona con el per_id, sino existe crear                         
-                        // consultar a tabla usuario_grol actualizar a rol de estudiante 37
-                        // guardar en tabla estudiante
-                        // if guarda estudiante consultar la tabla modalidad_estudio_unidad con uaca_id, mod_id y eaca_id, si no existe error de que no hay modalidad_estudio_unidad, caso contrario seguir
-                        // guardar en modalidad_estudio_unidad
+
+                        if ($respUsu) {
+                            // consultar si existe en la tabla empresa_persona con el per_id, sino existe crear
+                            $emp_per_id = $mod_emp_persona->consultarIdEmpresaPersona($per_id, $emp_id);
+                            if ($emp_per_id == 0) {
+                                $keys = ['emp_id', 'per_id', 'eper_estado', 'eper_estado_logico'];
+                                $parametros = [$emp_id, $per_id, 1, 1];
+                                $emp_per_id = $mod_emp_persona->insertarEmpresaPersona($con2, $parametros, $keys, 'empresa_persona');
+                            }
+                            // Actualizar a rol de estudiante 37
+                            $respUsugrol = $usergrol->actualizarRolEstudiante($resp_persona["usu_id"]);
+                            if ($respUsugrol) {
+                                $respUsugrol = $usergrol->actualizarRolEstudiante($resp_persona["usu_id"]);
+                                // guardar en tabla estudiante
+                                $resp_estudiante = $mod_Estudiante->insertarEstudiante($per_id, $matricula, $categoria, $usu_autenticado, null, $fecha, null);
+                                if ($resp_estudiante) {
+                                    // if guarda estudiante consultar la tabla modalidad_estudio_unidad con uaca_id, mod_id y eaca_id, si no existe error de que no hay modalidad_estudio_unidad, caso contrario seguir
+                                    $resp_mestuni = $mod_Modestuni->consultarModalidadestudiouni($uaca_id, $mod_id, $eaca_id);
+                                    if ($resp_mestuni) {
+                                        // guardar en modalidad_estudio_unidad  
+                                        $resp_estudcarreprog = $mod_Estudiante->insertarEstcarreraprog($resp_estudiante, $resp_mestuni["meun_id"], $fecha, $usu_autenticado, $fecha);
+                                        if ($resp_estudcarreprog) {
+                                            $exito = 1;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    if ($exito) {
+                        $transaction->commit();
+                        $transaction2->commit();
+                        $message = array(
+                            "wtmessage" => Yii::t("notificaciones", "La información ha sido grabada."),
+                            "title" => Yii::t('jslang', 'Success'),
+                        );
+                        return \app\models\Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                    } else {
+                        $transaction->rollback();
+                        $transaction2->rollback();
+                        if (empty($message)) {
+                            $message = array
+                                (
+                                "wtmessage" => Yii::t("notificaciones", "Error al grabar. " . $mensaje), "title" =>
+                                Yii::t('jslang', 'Success'),
+                            );
+                        }
+                        return \app\models\Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
                     }
                 }
             } catch (Exception $ex) {
