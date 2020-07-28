@@ -116,8 +116,8 @@ Academico::registerTranslations();
                 'headerOptions' => ['width' => '60'],
                 'template' => '{delete}',
                 'buttons' => [
-                    'delete' => function ($url, $model) {
-                         return Html::a('<span class="'.Utilities::getIcon('remove').'"></span>', null, ['href' => 'javascript:', 'onclick' => 'javascript:removeItemInstitucion(this);', "data-toggle" => "tooltip", "title" => Yii::t("accion","Delete")]);
+                    'delete' => function ($url, $model) {                        
+                        return Html::a('<span class="'.Utilities::getIcon('remove').'"></span>', null, ['href' => 'javascript:', 'onclick' => 'javascript:removeItemInstitucion(this);', "data-toggle" => "tooltip", "title" => Yii::t("accion","Delete")]);                         
                     },
                 ],
             ],

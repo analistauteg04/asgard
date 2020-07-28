@@ -315,8 +315,9 @@ function addInstruccion() {
 }
 
 function removeItemInstitucion(ref) {
-    var indice = $(ref).parent().parent().attr("data-key")
+    var indice = $(ref).parent().parent().attr("data-key");
     removeItemGridContent("grid_instruccion_list", indice);
+    removeItemsBase(indice,1);
 }
 
 /**  EXPERIENCIA DOCENTE  **/
@@ -399,8 +400,9 @@ function addDocencia() {
 }
 
 function removeItemDocencia(ref) {
-    var indice = $(ref).parent().parent().attr("data-key")
+    var indice = $(ref).parent().parent().attr("data-key");
     removeItemGridContent("grid_docencia_list", indice);
+    removeItemsBase(indice,2);
 }
 
 /** EXPERIENCIA PROFESIONAL **/
@@ -482,8 +484,9 @@ function addExperiencia() {
 }
 
 function removeItemExperiencia(ref) {
-    var indice = $(ref).parent().parent().attr("data-key")
+    var indice = $(ref).parent().parent().attr("data-key");
     removeItemGridContent("grid_experiencia_list", indice);
+    removeItemsBase(indice,3);
 }
 
 /** IDIOMAS **/
@@ -566,8 +569,9 @@ function addIdioma() {
 }
 
 function removeItemIdioma(ref) {
-    var indice = $(ref).parent().parent().attr("data-key")
+    var indice = $(ref).parent().parent().attr("data-key");
     removeItemGridContent("grid_idioma_list", indice);
+    removeItemsBase(indice,4);
 }
 
 /** INVESTIGACION **/
@@ -653,8 +657,9 @@ function addInvestigacion() {
 }
 
 function removeItemInvestigacion(ref) {
-    var indice = $(ref).parent().parent().attr("data-key")
+    var indice = $(ref).parent().parent().attr("data-key");
     removeItemGridContent("grid_investigacion_list", indice);
+    removeItemsBase(indice,5);
 }
 
 /** EVENTO **/
@@ -737,8 +742,9 @@ function addEvento() {
 }
 
 function removeItemEvento(ref) {
-    var indice = $(ref).parent().parent().attr("data-key")
+    var indice = $(ref).parent().parent().attr("data-key");
     removeItemGridContent("grid_evento_list", indice);
+    removeItemsBase(indice,6);
 }
 
 /** CONFERENCIA **/
@@ -816,8 +822,9 @@ function addConferencia() {
 }
 
 function removeItemConferencia(ref) {
-    var indice = $(ref).parent().parent().attr("data-key")
+    var indice = $(ref).parent().parent().attr("data-key");
     removeItemGridContent("grid_conferencia_list", indice);
+    removeItemsBase(indice,7);
 }
 
 /** PUBLICACION **/
@@ -900,8 +907,9 @@ function addPublicacion() {
 }
 
 function removeItemPublicacion(ref) {
-    var indice = $(ref).parent().parent().attr("data-key")
+    var indice = $(ref).parent().parent().attr("data-key");
     removeItemGridContent("grid_publicacion_list", indice);
+    removeItemsBase(indice,8);
 }
 
 /** COORDINACION **/
@@ -985,6 +993,7 @@ function addCoordinacion() {
 function removeItemCoordinacion(ref) {
     var indice = $(ref).parent().parent().attr("data-key");
     removeItemGridContent("grid_coordinacion_list", indice);
+    removeItemsBase(indice,9);
 }
 
 /** EVALUACION **/
@@ -1057,8 +1066,9 @@ function addEvaluacion() {
 }
 
 function removeItemEvaluacion(ref) {
-    var indice = $(ref).parent().parent().attr("data-key")
+    var indice = $(ref).parent().parent().attr("data-key");
     removeItemGridContent("grid_evaluacion_list", indice);
+    removeItemsBase(indice,10);
 }
 
 /** REFERENCIA **/
@@ -1136,8 +1146,9 @@ function addReferencia() {
 }
 
 function removeItemReferencia(ref) {
-    var indice = $(ref).parent().parent().attr("data-key")
+    var indice = $(ref).parent().parent().attr("data-key");
     removeItemGridContent("grid_referencia_list", indice);
+    removeItemsBase(indice,11);
 }
 
 function downloadPdf(ref) {
@@ -1160,4 +1171,19 @@ function viewPdf(ref) {
     message.acciones = null;
     message.closeaction = null;
     showAlert(status, label, message);
+}
+
+function removeItemsBase(Id, tabla){
+    var link = $('#txth_base').val() + "/academico/profesor/eliminaritems";
+    var arrParams = new Object();
+    arrParams.codigo_id = Id;    
+    arrParams.tabla_id = tabla;    
+    if (!validateForm()) {
+        //console.log(arrParams);
+        requestHttpAjax(link, arrParams, function(response) {
+            console.log(response.message);
+            showAlert(response.status, response.label, response.message);
+        }, true);
+    }
+    
 }

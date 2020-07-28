@@ -122,32 +122,7 @@ class ProfesorController extends \app\components\CController {
 
             /**
              * Inf. Cuenta
-             */
-            
-            /*$gru_id = 13;   //Docente
-            $rol_id = 17;   //Docente
-
-            $arr_grupos = Grupo::findAll(["gru_estado" => 1, "gru_estado_logico" => 1]);
-
-            $arr_roles  = GrupRol::find()
-                ->select(["rol.rol_id", "rol.rol_nombre"])
-                ->innerJoinWith('rol', 'rol.rol_id = grup_rol.rol_id')
-                ->andWhere(["rol.rol_estado" => 1, "rol.rol_estado_logico" => 1,
-                "grup_rol.grol_estado" => 1, "grup_rol.grol_estado_logico" => 1, 
-                "grup_rol.gru_id" => $gru_id])->asArray()->all();
-                                                
-            $arr_empresa = Empresa::findAll(["emp_estado" => 1, "emp_estado_logico" => 1]);
-            
-            $ViewFormTab3 = $this->renderPartial('ViewFormTab3', [
-                'arr_roles' => (empty(ArrayHelper::map($arr_roles, "rol_id", "rol_nombre"))) ? array(Yii::t("rol", "-- Select Role --")) : (ArrayHelper::map($arr_roles, "rol_id", "rol_nombre")),
-                'arr_grupos' => (empty(ArrayHelper::map($arr_grupos, "gru_id", "gru_nombre"))) ? array(Yii::t("grupo", "-- Select Group --")) : (ArrayHelper::map($arr_grupos, "gru_id", "gru_nombre")),
-                'arr_empresa' => (empty(ArrayHelper::map($arr_empresa, "emp_id", "emp_nombre_comercial"))) ? array(Yii::t("empresa", "-- Select Empresa --")) : (ArrayHelper::map($arr_empresa, "emp_id", "emp_nombre_comercial")),
-                'gru_id' => $gru_id,
-                'rol_id' => $rol_id,
-                'usuario_model' => $usuario_model,
-                'empresa_persona_model' => $empresa_persona_model,
-            ]);
-            */
+             */                      
             $profesor_model = Profesor::findOne(['per_id' => $persona_model->per_id]);
             $arr_inst_level = NivelInstruccion::findAll(["nins_estado" => 1, "nins_estado_logico" => 1]);
             $instruccion_model = new ProfesorInstruccion();
@@ -367,36 +342,7 @@ class ProfesorController extends \app\components\CController {
                 'arr_can' => (empty(ArrayHelper::map($arr_can, "can_id", "can_nombre"))) ? array(Yii::t("canton", "-- Select Canton --")) : (ArrayHelper::map($arr_can, "can_id", "can_nombre")),
                 'persona_model' => $persona_model,                
             ]);
-
-            /**
-             * Inf. Cuenta
-             */
-            
-           /* $gru_id = 13;   //Docente
-            $rol_id = 17;   //Docente
-
-            $arr_grupos = Grupo::findAll(["gru_estado" => 1, "gru_estado_logico" => 1]);
-
-            $arr_roles  = GrupRol::find()
-                ->select(["rol.rol_id", "rol.rol_nombre"])
-                ->innerJoinWith('rol', 'rol.rol_id = grup_rol.rol_id')
-                ->andWhere(["rol.rol_estado" => 1, "rol.rol_estado_logico" => 1,
-                "grup_rol.grol_estado" => 1, "grup_rol.grol_estado_logico" => 1, 
-                "grup_rol.gru_id" => $gru_id])->asArray()->all();
-                                                
-            $arr_empresa = Empresa::findAll(["emp_estado" => 1, "emp_estado_logico" => 1]);
-            
-            $EditFormTab3 = $this->renderPartial('EditFormTab3', [
-                'arr_roles' => (empty(ArrayHelper::map($arr_roles, "rol_id", "rol_nombre"))) ? array(Yii::t("rol", "-- Select Role --")) : (ArrayHelper::map($arr_roles, "rol_id", "rol_nombre")),
-                'arr_grupos' => (empty(ArrayHelper::map($arr_grupos, "gru_id", "gru_nombre"))) ? array(Yii::t("grupo", "-- Select Group --")) : (ArrayHelper::map($arr_grupos, "gru_id", "gru_nombre")),
-                'arr_empresa' => (empty(ArrayHelper::map($arr_empresa, "emp_id", "emp_nombre_comercial"))) ? array(Yii::t("empresa", "-- Select Empresa --")) : (ArrayHelper::map($arr_empresa, "emp_id", "emp_nombre_comercial")),
-                'gru_id' => $gru_id,
-                'rol_id' => $rol_id,
-                'usuario_model' => $usuario_model,
-                'empresa_persona_model' => $empresa_persona_model,
-                'email' => $email,
-                ]);
-                */
+           
             $profesor_model = Profesor::findOne(['per_id' => $persona_model->per_id]);
             $arr_inst_level = NivelInstruccion::findAll(["nins_estado" => 1, "nins_estado_logico" => 1]);
             $instruccion_model = new ProfesorInstruccion();
@@ -469,7 +415,6 @@ class ProfesorController extends \app\components\CController {
             $EditFormTab14 = $this->renderPartial('EditFormTab14',[
                 'model' => $proRef->getAllReferenciaGrid($profesor_model->pro_id),
             ]);
-
 
             $items = [
                 [
@@ -1773,12 +1718,110 @@ class ProfesorController extends \app\components\CController {
                         header('Content-Length: ' . filesize($url_image));
                         readfile($url_image);
                         //return file_get_contents($url_image);
-                    }
-                    
+                    }                    
                 }
             }
         }
         exit();
     }
-
+        
+    public function actionEliminaritems(){
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+            $user = Yii::$app->session->get("PB_iduser");
+            $id = $data["codigo_id"];
+            $tabla = $data["tabla_id"];
+            try {                 
+                if ($tabla==1) {
+                    $instruccion_model = ProfesorInstruccion::findOne(["pins_id" => $id]);
+                    $instruccion_model->pins_estado_logico = '0';
+                    $instruccion_model->pins_fecha_modificacion = date(Yii::$app->params["dateTimeByDefault"]);
+                    $instruccion_model->pins_usuario_modifica = $user;
+                    $instruccion_model->update();        
+                }
+                if ($tabla==2) {
+                    $docencia_model = ProfesorExpDoc::findOne(["pedo_id" => $id]);
+                    $docencia_model->pedo_estado_logico = '0';
+                    $docencia_model->pedo_fecha_modificacion = date(Yii::$app->params["dateTimeByDefault"]);
+                    $docencia_model->pedo_usuario_modifica = $user;
+                    $docencia_model->update();   
+                }
+                if ($tabla==3) {
+                    $experiencia_model = ProfesorExpProf::findOne(["pepr_id" => $id]);
+                    $experiencia_model->pepr_estado_logico = '0';
+                    $experiencia_model->pepr_fecha_modificacion = date(Yii::$app->params["dateTimeByDefault"]);
+                    $experiencia_model->pepr_usuario_modifica = $user;
+                    $experiencia_model->update();    
+                }
+                if ($tabla==4) {
+                    $idiomas_model = ProfesorIdiomas::findOne(["pidi_id" => $id]);
+                    $idiomas_model->pidi_estado_logico = '0';
+                    $idiomas_model->pidi_fecha_modificacion = date(Yii::$app->params["dateTimeByDefault"]);
+                    $idiomas_model->pidi_usuario_modifica = $user;
+                    $idiomas_model->update();    
+                }
+                if ($tabla==5) {                    
+                    $investigacion_model = ProfesorInvestigacion::findOne(["pinv_id" => $id]);
+                    $investigacion_model->pinv_estado_logico = '0';
+                    $investigacion_model->pinv_fecha_modificacion = date(Yii::$app->params["dateTimeByDefault"]);
+                    $investigacion_model->pinv_usuario_modifica = $user;
+                    $investigacion_model->update();    
+                }
+                if ($tabla==6) {                             
+                    $capacitacion_model = ProfesorCapacitacion::findOne(["pcap_id" => $id]);
+                    $capacitacion_model->pcap_estado_logico = '0';
+                    $capacitacion_model->pcap_fecha_modificacion = date(Yii::$app->params["dateTimeByDefault"]);
+                    $capacitacion_model->pcap_usuario_modifica = $user;
+                    $capacitacion_model->update();    
+                }
+                if ($tabla==7) {                                                 
+                    $conferencia_model = ProfesorConferencia::findOne(["pcon_id" => $id]);
+                    $conferencia_model->pcon_estado_logico = '0';
+                    $conferencia_model->pcon_fecha_modificacion = date(Yii::$app->params["dateTimeByDefault"]);
+                    $conferencia_model->pcon_usuario_modifica = $user;
+                    $conferencia_model->update();
+                }
+                if ($tabla==8) {                                 
+                    $publicacion_model = ProfesorPublicacion::findOne(["ppub_id" => $id]);
+                    $publicacion_model->ppub_estado_logico = '0';
+                    $publicacion_model->ppub_fecha_modificacion = date(Yii::$app->params["dateTimeByDefault"]);
+                    $publicacion_model->ppub_usuario_modifica = $user;
+                    $publicacion_model->update();
+                }
+                if ($tabla==9) {                                       
+                    $coordinacion_model = ProfesorCoordinacion::findOne(["pcoo_id" => $id]);
+                    $coordinacion_model->pcoo_estado_logico = '0';
+                    $coordinacion_model->pcoo_fecha_modificacion = date(Yii::$app->params["dateTimeByDefault"]);
+                    $coordinacion_model->pcoo_usuario_modifica = $user;
+                    $coordinacion_model->update();
+                }
+                if ($tabla==10) {                            
+                    $evaluacion_model = ProfesorEvaluacion::findOne(["peva_id" => $id]);
+                    $evaluacion_model->peva_estado_logico = '0';
+                    $evaluacion_model->peva_fecha_modificacion = date(Yii::$app->params["dateTimeByDefault"]);
+                    $evaluacion_model->peva_usuario_modifica = $user;
+                    $evaluacion_model->update();
+                }
+                if ($tabla==11) {                                       
+                    $referencia_model = ProfesorReferencia::findOne(["pref_id" => $id]);
+                    $referencia_model->pref_estado_logico = '0';
+                    $referencia_model->pref_fecha_modificacion = date(Yii::$app->params["dateTimeByDefault"]);
+                    $referencia_model->pref_usuario_modifica = $user;
+                    $referencia_model->update();
+                }
+                $message = array(
+                    "wtmessage" => Yii::t("notificaciones", "Your information was successfully saved."),
+                    "title" => Yii::t('jslang', 'Success'),
+                );
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);               
+            } catch (Exception $ex) {
+                $message = array(
+                    "wtmessage" => Yii::t('notificaciones', 'Your information has not been saved. Please try again.'),
+                    "title" => Yii::t('jslang', 'Error'),
+                );
+                return Utilities::ajaxResponse('NOOK', 'alert', Yii::t('jslang', 'Error'), 'true', $message);
+            }
+        }
+    }
+    
 }
