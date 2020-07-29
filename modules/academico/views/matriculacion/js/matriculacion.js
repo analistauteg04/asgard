@@ -151,6 +151,7 @@ function registro() {
         showAlert("NO_OK", "Error", message);
     } else {
         arrParams.pes_id = $('#frm_pes_id').val();
+        arrParams.per_id = $('#frm_per_id').val();
         arrParams.modalidad = $('#frm_modalidad').val();
         arrParams.carrera = $('#frm_carrera').val();
         arrParams.arancel = $('#frm_cat_price').val();
@@ -166,7 +167,8 @@ function registro() {
             showAlert(response.status, response.label, response.message);
             if (response.status == 'OK')
                 setTimeout(function() {
-                    parent.window.location.href = $('#txth_base').val() + "/academico/matriculacion/index";
+                    var params = (arrParams.per_id == 0) ? "" : "?per_id=" + base64_encode(arrParams.per_id)
+                    parent.window.location.href = $('#txth_base').val() + "/academico/matriculacion/index" + params;
                 }, 2000);
 
         }, true);
@@ -200,6 +202,7 @@ function cargarDocumento() {
     arrParams.archivo = $('#txth_pago_documento2').val() + "." + $('#txth_pago_documento').val().split('.').pop();
     arrParams.pla_id = $('#frm_pla_id').val();
     arrParams.pes_id = $('#frm_pes_id').val();
+    arrParams.per_id = $('#frm_per_id').val();
     /* console.log(arrParams); */
     if (!validateForm()) {
         requestHttpAjax(link, arrParams, function(response) {
@@ -207,7 +210,8 @@ function cargarDocumento() {
             showAlert(response.status, response.label, response.message);
             if (!response.error) {
                 setTimeout(function() {
-                    window.location.href = $('#txth_base').val() + "/academico/matriculacion/index";
+                    var params = (arrParams.per_id == 0) ? "" : "?per_id=" + base64_encode(arrParams.per_id)
+                    parent.window.location.href = $('#txth_base').val() + "/academico/matriculacion/index" + params;
                 }, 3000);
             }
         }, true);

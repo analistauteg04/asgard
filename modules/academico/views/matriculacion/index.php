@@ -3,6 +3,10 @@
 use yii\helpers\Html;
 use app\modules\academico\Module as academico;
 
+$style = "display: none;";
+if($loginPer < 1000){
+    $style = "";
+}
 ?>
 
 <div>
@@ -91,12 +95,12 @@ $this->render('index-grid', ['planificacion' => $planificacion,]);
         <table style="text-align: right;" class="table">
             <tbody>
                 <tr>
-                    <th style="width:50%"><?= academico::t('matriculacion','Cost per Subject') ?></th>
+                    <th style="width:70%"><?= academico::t('matriculacion','Cost per Subject') ?></th>
                     <td id="costMat">$0.00</td>
                 </tr>
-                <tr style='display: none;'>
-                    <th><?= academico::t('matriculacion','Registration payment') ?></th>
-                    <td id="costMatr">$<?= isset($dataMat['MAT-GRAD'])?(number_format($dataMat['MAT-GRAD'], 2, '.', ',')):'0.00' ?></td>
+                <tr style='<?= $style ?>'>
+                    <th><?= academico::t('matriculacion','Registration payment') ?> <small class="text-light-blue">(<?= academico::t('matriculacion', 'Previously Canceled') ?>)</small></th>
+                    <td id="costMatr" style="text-decoration:line-through;">$<?= isset($dataMat['MAT-GRAD'])?(number_format($dataMat['MAT-GRAD'], 2, '.', ',')):'0.00' ?></td>
                 </tr>
                 <tr>
                     <th><?= academico::t('matriculacion','Administrative Expenses') ?></th>
@@ -118,6 +122,7 @@ $this->render('index-grid', ['planificacion' => $planificacion,]);
 
 
 <input type="hidden" id="frm_pes_id" value="<?= $pes_id ?>">
+<input type="hidden" id="frm_per_id" value="<?= $per_id ?>">
 <input type="hidden" id="frm_num_min" value="<?= $num_min ?>">
 <input type="hidden" id="frm_num_max" value="<?= $num_max ?>">
 <input type="hidden" id="frm_modalidad" value="<?= $data_student['mod_nombre'] ?>">

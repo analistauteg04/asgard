@@ -415,18 +415,26 @@ class Matriculacion extends \yii\db\ActiveRecord {
         $estado = 1;
 
         $sql = "
-            SELECT pla.pla_periodo_academico, pes.pes_nombres, pes.pes_dni, moda.mod_nombre, pes.pes_carrera, per.per_celular, e.est_matricula, e.est_categoria
-            FROM " . $con_academico->dbname . ".planificacion as pla,
-            " . $con_academico->dbname . ".planificacion_estudiante as pes,
-            " . $con_academico->dbname . ".modalidad as moda,
-            " . $con_academico->dbname . ".estudiante as e,
-            " . $con_asgard->dbname . ".persona as per
-            WHERE pla.mod_id = moda.mod_id
-            AND pes.per_id = per.per_id            
-            AND per.per_id =:per_id
-            AND pla.pla_id =:pla_id
-            AND pes.pes_id =:pes_id;
-        ";
+            SELECT 
+                pla.pla_periodo_academico, 
+                pes.pes_nombres, 
+                pes.pes_dni, 
+                moda.mod_nombre, 
+                pes.pes_carrera, 
+                per.per_celular, 
+                e.est_matricula, 
+                e.est_categoria
+            FROM " . $con_academico->dbname . ".planificacion as pla
+                INNER JOIN " . $con_academico->dbname . ".planificacion_estudiante as pes ON pes.pla_id = pla.pla_id
+                INNER JOIN " . $con_academico->dbname . ".modalidad as moda ON moda.mod_id = pla.mod_id
+                INNER JOIN " . $con_academico->dbname . ".estudiante as e ON pes.per_id = e.per_id
+                INNER JOIN " . $con_asgard->dbname . ".persona as per ON per.per_id = e.per_id
+            WHERE           
+                per.per_id =:per_id
+                AND pla.pla_id =:pla_id
+                AND pes.pes_id =:pes_id
+            ORDER BY
+                pes.pes_id DESC;";
 
         $comando = $con_academico->createCommand($sql);
         $comando->bindParam(":per_id", $per_id, \PDO::PARAM_INT);

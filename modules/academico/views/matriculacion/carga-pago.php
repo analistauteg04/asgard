@@ -60,12 +60,12 @@ $tipodoc = "CED";
                                 'uploadUrl' => Url::to(['matriculacion/registropago']),
                                 // 'maxFileSize' => Yii::$app->params["MaxFileSize"],
                                 'uploadExtraData' => 'javascript:function (previewId,index) {
-                                return {"upload_file": true, "name_file": "pago-' . @Yii::$app->session->get("PB_perid") . '-' . time() . '"};
+                                return {"upload_file": true, "name_file": "pago-' . $per_id . '-' . time() . '"};
                             }',
                             ],
                             'pluginEvents' => [
                                 "filebatchselected" => "function (event) {
-                                $('#txth_pago_documento2').val('pago-" . @Yii::$app->session->get("PB_perid") . '-' . time() . "');
+                                $('#txth_pago_documento2').val('pago-" . $per_id . '-' . time() . "');
                                 $('#txth_pago_documento').val($('#txt_pago_documento').val());
                                 $('#txt_pago_documento').fileinput('upload');
                             }",
@@ -97,5 +97,6 @@ $tipodoc = "CED";
     </div>
 </form>
 <input type="hidden" id="frm_pla_id" value="<?= $pla_id ?>">
+<input type="hidden" id="frm_per_id" value="<?= $per_id ?>">
 <input type="hidden" id="frm_pes_id" value="<?= $data_planificacion_pago['pes_id'] ?>">
 <br />

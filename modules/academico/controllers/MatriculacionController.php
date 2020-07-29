@@ -169,6 +169,15 @@ class MatriculacionController extends \app\components\CController {
     public function actionIndex() {
         $per_id = Yii::$app->session->get("PB_perid");
 
+        if ($per_id < 1000) {
+            $per_id = base64_decode(Yii::$app->request->get('per_id', 0));
+            if($per_id == 0){
+                return $this->render('index-out', [
+                    "message" => Academico::t("matriculacion", "There is no planning information (Registration time)"),
+                ]);
+            }
+        }
+
         $mod_est = new Estudiante();
         $modModalidad = new Modalidad();
         
@@ -179,6 +188,9 @@ class MatriculacionController extends \app\components\CController {
         $usu_id = Yii::$app->session->get("PB_iduser");
         $mod_usuario = Usuario::findIdentity($usu_id);
         if ($mod_usuario->usu_upreg == 0) {
+            if (Yii::$app->session->get("PB_perid") < 1000) {
+                return $this->redirect(['perfil/index', 'per_id' => base64_encode($per_id)]);
+            }
             return $this->redirect(['perfil/index']);
         }
 
@@ -202,7 +214,7 @@ class MatriculacionController extends \app\components\CController {
                     $modelPla = Planificacion::findOne($modelPlaEst->pla_id);
                     if (count($resultRegistroOnline) > 0) {
                         //Cuando existe un registro en registro_online
-                        return $this->redirect('registro');
+                        return $this->redirect(['matriculacion/registro', 'per_id' => Yii::$app->request->get('per_id', base64_encode(Yii::$app->session->get("PB_perid")))]);
                     } else {
                         //Cuando no existe registro en registro_online, eso quiere decir que no ha seleccionado las materias aun y registrado
 
@@ -246,6 +258,8 @@ class MatriculacionController extends \app\components\CController {
                                     "CatPrecio" => $CatPrecio,
                                     "dataMat" => $dataMat,
                                     "leyenda" => $this->leyenda,
+                                    "per_id" => $per_id,
+                                    "loginPer" => Yii::$app->session->get("PB_perid"),
                         ]);
                     }
                 } else {
@@ -254,21 +268,35 @@ class MatriculacionController extends \app\components\CController {
                     ]);
                 }
             } else {
-                return $this->redirect('registropago');
+                return $this->redirect(['matriculacion/registropago', 'per_id' => Yii::$app->request->get('per_id', base64_encode(Yii::$app->session->get("PB_perid")))]);
             }
         } else {
-            return $this->redirect('registro');
+            return $this->redirect(['matriculacion/registro', 'per_id' => Yii::$app->request->get('per_id', base64_encode(Yii::$app->session->get("PB_perid")))]);
         }
     }
 
     public function actionRegistropago() { // SUBE PAGA DE MATRICULA
         $usu_id = Yii::$app->session->get("PB_iduser");
         $mod_usuario = Usuario::findIdentity($usu_id);
+        $per_id = Yii::$app->session->get("PB_perid");
+        if ($per_id < 1000) {
+            $per_id = base64_decode(Yii::$app->request->get('per_id', 0));
+            if($per_id != 0){
+                $mod_usuario = Usuario::findOne(['per_id' => $per_id]);
+                $usu_id = $mod_usuario->usu_id;
+            }else{
+                $per_id = Yii::$app->session->get("PB_perid");
+            }
+        }
         if ($mod_usuario->usu_upreg == 0) {
+            if (Yii::$app->session->get("PB_perid") < 1000) {
+                return $this->redirect(['perfil/index', 'per_id' => base64_encode($per_id)]);
+            }
             return $this->redirect(['perfil/index']);
         }
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
+            $per_id = $data['per_id'];
             if ($data["upload_file"]) {
                 if (empty($_FILES)) {
                     return json_encode(['error' => Yii::t("notificaciones", "Error to process File. Try again.")]);
@@ -288,7 +316,6 @@ class MatriculacionController extends \app\components\CController {
 
             if ($data["procesar_file"]) {
                 ini_set('memory_limit', '256M');
-                $per_id = Yii::$app->session->get("PB_perid");
                 try {
                     $result_pago = RegistroPagoMatricula::checkPagoEstudiante($per_id, $data['pla_id']);
                     if (count($result_pago) > 0) {
@@ -342,9 +369,7 @@ class MatriculacionController extends \app\components\CController {
                 }
             }
         }
-        /*         * Else */ else {
-
-            $per_id = Yii::$app->session->get("PB_perid");            
+        else {          
             $matriculacion_model = new Matriculacion();
             $today = date("Y-m-d H:i:s");
             $result_process = $matriculacion_model->checkToday($today, $per_id);
@@ -360,6 +385,7 @@ class MatriculacionController extends \app\components\CController {
                 return $this->render('carga-pago', [
                             "data_planificacion_pago" => $data_planificacion_pago,
                             "pla_id" => $data_planificacion_pago['pla_id'],
+                            "per_id" => $per_id,
                 ]);
             } else {
                 //Render index-out
@@ -570,9 +596,17 @@ class MatriculacionController extends \app\components\CController {
      */
     public function actionRegistro() {
         $per_id = Yii::$app->session->get("PB_perid");
-
+        if ($per_id < 1000) {
+            $per_id = base64_decode(Yii::$app->request->get('per_id', 0));
+            if($per_id == 0){
+                $per_id = Yii::$app->session->get("PB_perid");
+            }
+        }
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
+            if (Yii::$app->session->get("PB_perid") < 1000) {
+                $per_id = $data['per_id'];
+            }
             $con = Yii::$app->db_academico;
             $trans = $con->beginTransaction();
             try{
@@ -900,6 +934,7 @@ class MatriculacionController extends \app\components\CController {
             }
         } else {
             $resultData = $matriculacion_model->getLastIdRegistroOnline();
+            exit($per_id);
             if (count($resultData) > 0) {
                 $last_ron_id = $resultData[0]['ron_id'];
                 $last_pes_id = $resultData[0]['pes_id'];

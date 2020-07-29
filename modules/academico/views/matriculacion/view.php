@@ -11,6 +11,9 @@ use app\modules\academico\Module as academico;
 use app\components\CFileInputAjax;
 academico::registerTranslations();
 
+
+//$total = $model_registroOnline->ron_valor_aso_estudiante + $model_registroOnline->ron_valor_gastos_adm + $model_registroOnline->ron_valor_matricula + $costoMaterias;
+$total = $model_registroOnline->ron_valor_aso_estudiante + $model_registroOnline->ron_valor_gastos_adm + $costoMaterias;
 ?>
 
 <form class="form-horizontal">

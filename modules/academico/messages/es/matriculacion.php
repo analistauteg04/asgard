@@ -105,6 +105,7 @@ return [
     'Registration Number' => 'Número de Matricula',
     'Payment state' => 'Estado del pago',
     'Percentage' => 'Porcentaje',
+    'Previously Canceled' => 'Previamente Cancelado',
     'Not reviewed' => 'No revisado',
     'Approved' => 'Aprobado',
     'Rejected' => 'Rechazado',

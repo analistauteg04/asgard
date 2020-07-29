@@ -102,6 +102,7 @@ return [
     'Payment' => 'Payment',
     'Payment Quote' => 'Payment Quote',
     'Percentage' => 'Percentage',
+    'Previously Canceled' => 'Previously Canceled',
     'Registration payment' => 'Registration payment',
     'Registration Number' => 'Registration Number',
     'Payment state' => 'Payment state',
