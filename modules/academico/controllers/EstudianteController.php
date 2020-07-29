@@ -413,36 +413,22 @@ class EstudianteController extends \app\components\CController {
 
             $fecha = date(Yii::$app->params["dateTimeByDefault"]);
             $con = \Yii::$app->db_academico;
-            $transaction = $con->beginTransaction();
-            \app\models\Utilities::putMessageLogFile('------------------- ');
-            \app\models\Utilities::putMessageLogFile('uaca: ' . $uaca_id);
-            \app\models\Utilities::putMessageLogFile('mod: ' . $mod_id);
-            \app\models\Utilities::putMessageLogFile('eaca: ' . $eaca_id);
-            \app\models\Utilities::putMessageLogFile('cate: ' . $categoria);
-            \app\models\Utilities::putMessageLogFile('mat: ' . $matricula);
-            \app\models\Utilities::putMessageLogFile('est: ' . $est_id);
-            \app\models\Utilities::putMessageLogFile('usu: ' . $usu_autenticado);
-            \app\models\Utilities::putMessageLogFile('fec: ' . $fecha);
+            $transaction = $con->beginTransaction();     
                         
             try {
                 \app\models\Utilities::putMessageLogFile('entro: ');
                 $mod_Estudiante = new Estudiante();
                 $mod_Modestuni = new ModuloEstudio();
                 // consultar la modalidad_estudio_unidad
-                $resp_mestuni = $mod_Modestuni->consultarModalidadestudiouni($uaca_id, $mod_id, $eaca_id);
-                //$resp_mestuni["meun_id"]
-                \app\models\Utilities::putMessageLogFile('sss: ' . $resp_mestuni["meun_id"]);
+                $resp_mestuni = $mod_Modestuni->consultarModalidadestudiouni($uaca_id, $mod_id, $eaca_id);                          
                 if ($resp_mestuni["meun_id"] > 0) {
-                    \app\models\Utilities::putMessageLogFile('entro1: ');
                     // modifica la tabla estudiante
                     $resp_estudiante = $mod_Estudiante->updateEstudiante($est_id, $matricula, $categoria, $usu_autenticado, $fecha);
                     if ($resp_estudiante) {
-                        \app\models\Utilities::putMessageLogFile('entro2: ');
                         // modifica la tabla estudiante_carrera_programa   
                         $resp_estudiantecarrera = $mod_Estudiante->updateEstudiantecarreraprogr($est_id, $resp_mestuni["meun_id"], $usu_autenticado, $fecha);
                         if ($resp_estudiantecarrera) {
-                            \app\models\Utilities::putMessageLogFile('entro3: ');
-                            $exito = 1;
+                             $exito = 1;
                         }
                     }
                 }
