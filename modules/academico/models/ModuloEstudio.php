@@ -252,8 +252,7 @@ class ModuloEstudio extends \app\modules\academico\components\CActiveRecord {
                       and mod_id = :mod_id
                       and eaca_id = :eaca_id
                       and meun_estado_logico = :estado
-                      and meun_estado = :estado;
-                ORDER BY name asc";
+                      and meun_estado = :estado ";
 
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);

@@ -198,7 +198,7 @@ class EstudianteController extends \app\components\CController {
         $arr_modalidad = $mod_modalidad->consultarModalidad($arr_ninteres[0]["id"], 1);
         $arr_carrerra1 = $modcanal->consultarCarreraModalidad($arr_ninteres[0]["id"], $arr_modalidad[0]["id"]);
         return $this->render('new', [
-                    "arr_persona" => $dataPersona,
+                    'arr_persona' => $dataPersona,
                     'arr_ninteres' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arr_ninteres), "id", "name"),
                     'arr_modalidad' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arr_modalidad), "id", "name"),
                     'arr_carrera' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arr_carrerra1), "id", "name"),
@@ -346,7 +346,7 @@ class EstudianteController extends \app\components\CController {
         $mod_unidad = new UnidadAcademica();
         $modcanal = new Oportunidad();
         $mod_Estudiante = new Estudiante();
-        
+
         $dataPersona = $persona_model->consultaPersonaId($per_id);
         $dataEstudiante = $mod_Estudiante->getEstudiantexestid($est_id);
         $arr_ninteres = $mod_unidad->consultarUnidadAcademicasEmpresa(1);
@@ -360,6 +360,100 @@ class EstudianteController extends \app\components\CController {
                     'arr_carrera' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arr_carrerra1), "id", "name"),
                     'arr_categorias' => $this->categorias(),
         ]);
+    }
+
+    public function actionEdit() {
+        $per_id = base64_decode($_GET['per_id']);
+        $est_id = base64_decode($_GET['est_id']);
+        $persona_model = new Persona();
+        $mod_modalidad = new Modalidad();
+        $mod_unidad = new UnidadAcademica();
+        $modcanal = new Oportunidad();
+        $mod_Estudiante = new Estudiante();
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+            if (isset($data["getmodalidad"])) {
+                $modalidad = $mod_modalidad->consultarModalidad($data["nint_id"], 1);
+                $message = array("modalidad" => $modalidad);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+            }
+            if (isset($data["getcarrera"])) {
+                $carrera = $modcanal->consultarCarreraModalidad($data["unidada"], $data["moda_id"]);
+                $message = array("carrera" => $carrera);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+            }
+        }
+        $dataPersona = $persona_model->consultaPersonaId($per_id);
+        $dataEstudiante = $mod_Estudiante->getEstudiantexestid($est_id);
+        $arr_ninteres = $mod_unidad->consultarUnidadAcademicasEmpresa(1);
+        $arr_modalidad = $mod_modalidad->consultarModalidad($dataEstudiante['unidad'], 1);
+        $arr_carrerra1 = $modcanal->consultarCarreraModalidad($dataEstudiante['unidad'], $dataEstudiante['modalidad']);
+        return $this->render('edit', [
+                    'arr_persona' => $dataPersona,
+                    'arr_estudiante' => $dataEstudiante,
+                    'arr_ninteres' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arr_ninteres), "id", "name"),
+                    'arr_modalidad' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arr_modalidad), "id", "name"),
+                    'arr_carrera' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arr_carrerra1), "id", "name"),
+                    'arr_categorias' => $this->categorias(),
+        ]);
+    }
+
+    public function actionUpdate() {
+        $usu_autenticado = @Yii::$app->session->get("PB_iduser");
+        $mod_Estudiante = new Estudiante();
+        $mod_Modestuni = new ModuloEstudio();
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();           
+            $per_id = $data["per_id"];
+            $est_id = $data["est_id"];
+            $uaca_id = $data["unidad"];
+            $mod_id = $data["modalidad"];
+            $eaca_id = $data["carrera"];
+            $categoria = $data["categoria"];
+            $matricula = $data["matricula"];
+            $con = \Yii::$app->db_academico;
+            $transaction = $con->beginTransaction();
+            try {
+                $fecha = date(Yii::$app->params["dateTimeByDefault"]);
+                // consultar la modalidad_estudio_unidad
+                $resp_mestuni = $mod_Modestuni->consultarModalidadestudiouni($uaca_id, $mod_id, $eaca_id);
+                //$resp_mestuni["meun_id"]
+                if ($resp_mestuni) {
+                    // modifica la tabla estudiante
+                    $resp_estudiante = $mod_Estudiante->updateEstudiante($est_id, $matricula, $categoria, $usu_autenticado, $fecha);
+                    if ($resp_estudiante) {
+                        // modifica la tabla estudiante_carrera_programa   
+                        $resp_estudiantecarrera = $mod_Estudiante->updateEstudiantecarreraprogr($est_id, $resp_mestuni["meun_id"], $usu_autenticado, $fecha);
+                        if ($resp_estudiantecarrera) {
+                            $exito = 1;
+                        }
+                    }
+                }
+                if ($exito) {
+                    $transaction->commit();
+                    $message = array(
+                        "wtmessage" => Yii::t("notificaciones", "La infomación ha sido actualizada."),
+                        "title" => Yii::t('jslang', 'Success'),
+                    );
+                    return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                } else {
+                    $transaction->rollback();
+                    $message = array(
+                        "wtmessage" => Yii::t("notificaciones", "Error al actualizar 1."),
+                        "title" => Yii::t('jslang', 'Error'),
+                    );
+                    return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), false, $message);
+                }
+            } catch (Exception $ex) {
+                $transaction->rollback();
+                $message = array(
+                    "wtmessage" => Yii::t("notificaciones", "Error al actualizar 2."),
+                    "title" => Yii::t('jslang', 'Error'),
+                );
+                return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), false, $message);
+            }
+            return;
+        }
     }
 
 }
