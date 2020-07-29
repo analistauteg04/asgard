@@ -838,15 +838,7 @@ class ProfesorController extends \app\components\CController {
                         $profesor_model->per_id = $per_id_existente;
                         $profesor_model->pro_estado = '1';
                         $profesor_model->pro_estado_logico = '1';
-                        $profesor_model->pro_usuario_ingreso = $user_ingresa;
-                        /*$arr_file = explode($foto, '.jpg');
-                        if(isset($arr_file[0]) && $arr_file[0] != ""){
-                            $oldFile = $this->folder_cv.'/' . $foto;
-                            $profesor_model->pro_cv = $this->folder_cv.'/'. $per_id_existente . "_" . $foto;
-                            $urlBase = Yii::$app->basePath . Yii::$app->params["documentFolder"];
-                            rename($urlBase . $oldFile, $urlBase . $profesor_model->pro_cv);
-                        }*/
-
+                        $profesor_model->pro_usuario_ingreso = $user_ingresa;                 
                         $profesor_model->save();
 
                         $usuario_model = new Usuario();
@@ -867,16 +859,7 @@ class ProfesorController extends \app\components\CController {
                         $empresa_persona_model->eper_estado_logico = '1';
                         $empresa_persona_model->save();
                         $eper_id = $empresa_persona_model->getPrimaryKey();
-
-                        /* En caso de que ya existen, no debe modificarse el grol_id
-                         * $usua_grol_eper_model = new UsuaGrolEper();
-                        $usua_grol_eper_model->eper_id = $eper_id;
-                        $usua_grol_eper_model->usu_id = $usu_id;
-                        $usua_grol_eper_model->grol_id = $arr_grupo_rol[0]['grol_id'];
-                        $usua_grol_eper_model->ugep_estado = '1';
-                        $usua_grol_eper_model->ugep_estado_logico = '1';
-                        $usua_grol_eper_model->save();
-                        */
+                     
                         /** Se agregan Informacion de Expediente **/
                         if(isset($arr_instuccion)){
                             foreach($arr_instuccion as $key0 => $value0){
@@ -1076,29 +1059,26 @@ class ProfesorController extends \app\components\CController {
                     $persona_model->per_domicilio_num = $numeracion;
                     $persona_model->per_domicilio_ref = $referencia;
                     $persona_model->per_estado = '1';
-                    $persona_model->per_estado_logico = '1';
-                    $arr_file = explode($foto, '.jpg');
-                    if(isset($arr_file[0]) && $arr_file[0] != ""){
-                            $oldFile = $this->folder_cv.'/' . $foto;
-                            $persona_model->per_foto = $this->folder_cv.'/'. $per_id_existente . "_" . $foto;
-                            $urlBase = Yii::$app->basePath . Yii::$app->params["documentFolder"];
-                            rename($urlBase . $oldFile, $urlBase . $persona_model->per_foto);
-                    }
+                    $persona_model->per_estado_logico = '1';                    
                                         
                     if ($persona_model->save()) {
                         $per_id = $persona_model->getPrimaryKey();
+                        
+                        $arr_file = explode($foto, '.jpg');                    
+                        if(isset($arr_file[0]) && $arr_file[0] != ""){
+                            $oldFile = $this->folder_cv.'/' . $foto;
+                            $persona_model = Persona::findOne(["per_id" => $per_id]);                            
+                            $persona_model->per_foto = $this->folder_cv.'/'. $per_id . "_" . $foto;                            
+                            $urlBase = Yii::$app->basePath . Yii::$app->params["documentFolder"];
+                            rename($urlBase . $oldFile, $urlBase . $persona_model->per_foto);
+                            $persona_model->update();
+                        }                        
+                    
                         $profesor_model = new Profesor();
                         $profesor_model->per_id = $per_id;
                         $profesor_model->pro_estado = '1';
                         $profesor_model->pro_estado_logico = '1';
-                        $profesor_model->pro_usuario_ingreso = $user_ingresa;
-                        /*$arr_file = explode($cv, '.pdf');
-                        if(isset($arr_file[0]) && $arr_file[0] != ""){
-                            $oldFile = $this->folder_cv.'/' . $cv;
-                            $profesor_model->pro_cv = $this->folder_cv.'/'. $persona_model->per_id . "_" . $cv;
-                            $urlBase = Yii::$app->basePath . Yii::$app->params["documentFolder"];
-                            rename($urlBase . $oldFile, $urlBase . $profesor_model->pro_cv);
-                        }*/
+                        $profesor_model->pro_usuario_ingreso = $user_ingresa;                        
                         $profesor_model->save();
 
                         $usuario_model = new Usuario();
