@@ -616,21 +616,20 @@ class Estudiante extends \yii\db\ActiveRecord {
      * @return
      */
     public function updateEstudiante($est_id, $est_matricula, $est_categoria, $est_usu_modifica, $est_fecha_modificacion) {
-
-        $estado = 1;
         $con = \Yii::$app->db_academico;
-        $trans = $con->getTransaction(); // se obtiene la transacción actual
+        $estado = 1;
         if ($trans !== null) {
             $trans = null; // si existe la transacción entonces no se crea una
         } else {
             $trans = $con->beginTransaction(); // si no existe la transacción entonces se crea una
         }
+
         try {
             $comando = $con->createCommand
-                    ("UPDATE " . $con->dbname . ".estudiante		       
+                    ("UPDATE " . $con->dbname . ".estudiante             
                       SET est_matricula = :est_matricula,
                           est_categoria = :est_categoria,
-                          est_usu_modifica = :est_usu_modifica,
+                          est_usuario_modifica = :est_usu_modifica,
                           est_fecha_modificacion = :est_fecha_modificacion                          
                       WHERE 
                         est_id = :est_id AND                        
@@ -642,7 +641,6 @@ class Estudiante extends \yii\db\ActiveRecord {
             $comando->bindParam(":est_categoria", $est_categoria, \PDO::PARAM_STR);
             $comando->bindParam(":est_usu_modifica", $est_usu_modifica, \PDO::PARAM_INT);
             $comando->bindParam(":est_fecha_modificacion", $est_fecha_modificacion, \PDO::PARAM_STR);
-
             $response = $comando->execute();
             if ($trans !== null)
                 $trans->commit();
@@ -672,14 +670,13 @@ class Estudiante extends \yii\db\ActiveRecord {
         try {
             $comando = $con->createCommand
                     ("UPDATE " . $con->dbname . ".estudiante_carrera_programa		       
-                      SET est_matricula = :est_matricula,
-                          est_categoria = :est_categoria,
-                          est_usu_modifica = :est_usu_modifica,
-                          est_fecha_modificacion = :est_fecha_modificacion                          
+                      SET meun_id = :meun_id,
+                          ecpr_usuario_modifica = :ecpr_usuario_modifica,
+                          ecpr_fecha_modificacion = :ecpr_fecha_modificacion                          
                       WHERE 
                         est_id = :est_id AND                        
-                        est_estado = :estado AND
-                        est_estado_logico = :estado");
+                        ecpr_estado = :estado AND
+                        ecpr_estado_logico = :estado");
             $comando->bindParam(":est_id", $est_id, \PDO::PARAM_INT);
             $comando->bindParam(":meun_id", $meun_id, \PDO::PARAM_INT);
             $comando->bindParam(":ecpr_usuario_modifica", $ecpr_usuario_modifica, \PDO::PARAM_INT);

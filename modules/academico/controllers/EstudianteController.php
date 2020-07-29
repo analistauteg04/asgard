@@ -400,10 +400,9 @@ class EstudianteController extends \app\components\CController {
 
     public function actionUpdate() {
         $usu_autenticado = @Yii::$app->session->get("PB_iduser");
-        $mod_Estudiante = new Estudiante();
-        $mod_Modestuni = new ModuloEstudio();
         if (Yii::$app->request->isAjax) {
-            $data = Yii::$app->request->post();           
+            $data = Yii::$app->request->post();
+
             $per_id = $data["per_id"];
             $est_id = $data["est_id"];
             $uaca_id = $data["unidad"];
@@ -411,20 +410,38 @@ class EstudianteController extends \app\components\CController {
             $eaca_id = $data["carrera"];
             $categoria = $data["categoria"];
             $matricula = $data["matricula"];
+
+            $fecha = date(Yii::$app->params["dateTimeByDefault"]);
             $con = \Yii::$app->db_academico;
             $transaction = $con->beginTransaction();
+            \app\models\Utilities::putMessageLogFile('------------------- ');
+            \app\models\Utilities::putMessageLogFile('uaca: ' . $uaca_id);
+            \app\models\Utilities::putMessageLogFile('mod: ' . $mod_id);
+            \app\models\Utilities::putMessageLogFile('eaca: ' . $eaca_id);
+            \app\models\Utilities::putMessageLogFile('cate: ' . $categoria);
+            \app\models\Utilities::putMessageLogFile('mat: ' . $matricula);
+            \app\models\Utilities::putMessageLogFile('est: ' . $est_id);
+            \app\models\Utilities::putMessageLogFile('usu: ' . $usu_autenticado);
+            \app\models\Utilities::putMessageLogFile('fec: ' . $fecha);
+                        
             try {
-                $fecha = date(Yii::$app->params["dateTimeByDefault"]);
+                \app\models\Utilities::putMessageLogFile('entro: ');
+                $mod_Estudiante = new Estudiante();
+                $mod_Modestuni = new ModuloEstudio();
                 // consultar la modalidad_estudio_unidad
                 $resp_mestuni = $mod_Modestuni->consultarModalidadestudiouni($uaca_id, $mod_id, $eaca_id);
                 //$resp_mestuni["meun_id"]
-                if ($resp_mestuni) {
+                \app\models\Utilities::putMessageLogFile('sss: ' . $resp_mestuni["meun_id"]);
+                if ($resp_mestuni["meun_id"] > 0) {
+                    \app\models\Utilities::putMessageLogFile('entro1: ');
                     // modifica la tabla estudiante
                     $resp_estudiante = $mod_Estudiante->updateEstudiante($est_id, $matricula, $categoria, $usu_autenticado, $fecha);
                     if ($resp_estudiante) {
+                        \app\models\Utilities::putMessageLogFile('entro2: ');
                         // modifica la tabla estudiante_carrera_programa   
                         $resp_estudiantecarrera = $mod_Estudiante->updateEstudiantecarreraprogr($est_id, $resp_mestuni["meun_id"], $usu_autenticado, $fecha);
                         if ($resp_estudiantecarrera) {
+                            \app\models\Utilities::putMessageLogFile('entro3: ');
                             $exito = 1;
                         }
                     }
@@ -450,7 +467,7 @@ class EstudianteController extends \app\components\CController {
                     "wtmessage" => Yii::t("notificaciones", "Error al actualizar 2."),
                     "title" => Yii::t('jslang', 'Error'),
                 );
-                return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), false, $message);
+                return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), true, $message);
             }
             return;
         }

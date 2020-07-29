@@ -247,7 +247,7 @@ function update() {
                             if (!response.error) {
                                 setTimeout(function () {
                                     window.location.href = $('#txth_base').val() + "/academico/estudiante/index";
-                                }, 5000);
+                                }, 3000);
                             }
                         }, true);
                     }
