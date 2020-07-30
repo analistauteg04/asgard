@@ -20,12 +20,22 @@ use yii\console\Controller;
  */
 class HelloController extends Controller {
 
-    /**
-     * This command echoes what you have entered as the message.
-     * @param string $message the message to be echoed.
-     */
-    public function actionIndex($message = 'hello world') {
-        echo $message . "\n";
+    public $message;
+    public $test;
+    
+    public function options($actionID)
+    {
+        return ['message'];
+    }
+    
+    public function optionAliases()
+    {
+        return ['m' => 'message'];
+    }
+    
+    public function actionIndex()
+    {
+        echo $this->message . "\n";
     }
 
 }

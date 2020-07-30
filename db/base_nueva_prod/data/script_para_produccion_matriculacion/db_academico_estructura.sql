@@ -111,6 +111,9 @@ create table if not exists db_academico.`registro_online` (
  `ron_carrera` varchar(500) null, -- carrera se debe obtener de la tabla planificacion_estudiante
  `ron_categoria_est` varchar(2) null, -- categoria del estudiante que se debe obtener de la base de datos utegsiga
  `ron_valor_arancel` decimal(10,2) DEFAULT NULL, -- valor que se obtiene por la categoria del estudiante
+ `ron_valor_matricula` decimal(10,2) DEFAULT NULL,
+ `ron_valor_gastos_adm` decimal(10,2) DEFAULT NULL,
+ `ron_valor_aso_estudiante` decimal(10,2) DEFAULT NULL,
  `ron_estado_registro` varchar(1) not null, -- 1 registrado, 0 aun no registrado
  `ron_estado` varchar(1) not null, 
  `ron_fecha_creacion` timestamp not null default current_timestamp,
@@ -131,6 +134,8 @@ create table if not exists db_academico.`registro_online_item` (
  `roi_materia_nombre` varchar(100) null,
  `roi_creditos` varchar(4) null, 
  `roi_costo` decimal(10,2) DEFAULT NULL, 
+ `roi_bloque` varchar(4) DEFAULT null, 
+ `roi_hora` varchar(4) DEFAULT null, 
  `roi_estado` varchar(1) not null, 
  `roi_fecha_creacion` timestamp not null default current_timestamp,
  `roi_usuario_modifica` bigint(20) null,
@@ -148,7 +153,7 @@ create table if not exists db_academico.`registro_online_cuota` (
  `ron_id` bigint(20) not null, 
  `roc_num_cuota` varchar(50) null, 
  `roc_vencimiento` varchar(100) null,
- `roc_porcentaje` varchar(4) null, 
+ `roc_porcentaje` varchar(10) null, 
  `roc_costo` decimal(10,2) DEFAULT NULL, 
  `roc_estado` varchar(1) not null, 
  `roc_fecha_creacion` timestamp not null default current_timestamp,
@@ -158,6 +163,21 @@ create table if not exists db_academico.`registro_online_cuota` (
  foreign key (ron_id) references `registro_online`(ron_id)
 );
 
+-- --------------------------------------------------------
+-- 
+-- Estructura de tabla para la tabla `modalidad_centro_costo`
+-- --------------------------------------------------------
+create table if not exists db_academico.`modalidad_centro_costo` (
+ `mcco_id` bigint(20) not null auto_increment primary key,
+ `mod_id` bigint(20) not null, 
+ `mcco_code` varchar(50) null, 
+ `mcco_estado` varchar(1) not null, 
+ `mcco_fecha_creacion` timestamp not null default current_timestamp,
+ `mcco_usuario_modifica` bigint(20) null,
+ `mcco_fecha_modificacion` timestamp null default null,
+ `mcco_estado_logico` varchar(1) not null,
+ foreign key (mod_id) references `modalidad`(mod_id)
+);
 
 alter table db_academico.estudiante add `est_matricula` varchar(20) null after per_id;
 alter table db_academico.estudiante add `est_categoria` varchar(2) null after est_matricula;
