@@ -863,164 +863,186 @@ class ProfesorController extends \app\components\CController {
                         /** Se agregan Informacion de Expediente **/
                         if(isset($arr_instuccion)){
                             foreach($arr_instuccion as $key0 => $value0){
-                                $instruccion_model = new ProfesorInstruccion();
-                                $instruccion_model->nins_id = $value0[1];
-                                $instruccion_model->pins_institucion = strtolower($value0[2]);
-                                $instruccion_model->pins_especializacion = strtolower($value0[3]);
-                                $instruccion_model->pins_titulo = strtolower($value0[4]);
-                                $instruccion_model->pins_senescyt = strtolower($value0[5]);
-                                $instruccion_model->pro_id = $profesor_model->pro_id;
-                                $instruccion_model->pins_estado = '1';
-                                $instruccion_model->pins_estado_logico = '1';
-                                $instruccion_model->pins_usuario_ingreso = $user_ingresa;
-                                $instruccion_model->save();
+                                if ($value0[6]=="N") {
+                                    $instruccion_model = new ProfesorInstruccion();
+                                    $instruccion_model->nins_id = $value0[1];
+                                    $instruccion_model->pins_institucion = strtolower($value0[2]);
+                                    $instruccion_model->pins_especializacion = strtolower($value0[3]);
+                                    $instruccion_model->pins_titulo = strtolower($value0[4]);
+                                    $instruccion_model->pins_senescyt = strtolower($value0[5]);
+                                    $instruccion_model->pro_id = $profesor_model->pro_id;
+                                    $instruccion_model->pins_estado = '1';
+                                    $instruccion_model->pins_estado_logico = '1';
+                                    $instruccion_model->pins_usuario_ingreso = $user_ingresa;
+                                    $instruccion_model->save();
+                                }
                             }
                         }
                         if(isset($arr_docencia)){
                             foreach($arr_docencia as $key1 => $value1){
-                                $docencia_model = new ProfesorExpDoc();
-                                $docencia_model->ins_id = $value1[1];
-                                $docencia_model->pedo_fecha_inicio = $value1[2];
-                                $docencia_model->pedo_fecha_fin = $value1[3];
-                                $docencia_model->pedo_denominacion = strtolower($value1[4]);
-                                $docencia_model->pedo_asignaturas = strtolower($value1[5]);
-                                $docencia_model->pro_id = $profesor_model->pro_id;
-                                $docencia_model->pedo_estado = '1';
-                                $docencia_model->pedo_estado_logico = '1';
-                                $docencia_model->pedo_usuario_ingreso = $user_ingresa;
-                                $docencia_model->save();
+                                if ($value1[6]=="N") {
+                                    $docencia_model = new ProfesorExpDoc();
+                                    $docencia_model->ins_id = $value1[1];
+                                    $docencia_model->pedo_fecha_inicio = $value1[2];
+                                    $docencia_model->pedo_fecha_fin = $value1[3];
+                                    $docencia_model->pedo_denominacion = strtolower($value1[4]);
+                                    $docencia_model->pedo_asignaturas = strtolower($value1[5]);
+                                    $docencia_model->pro_id = $profesor_model->pro_id;
+                                    $docencia_model->pedo_estado = '1';
+                                    $docencia_model->pedo_estado_logico = '1';
+                                    $docencia_model->pedo_usuario_ingreso = $user_ingresa;
+                                    $docencia_model->save();
+                                }
                             }
                         }
                         if(isset($arr_experiencia)){
                             foreach($arr_experiencia as $key2 => $value2){
-                                $experiencia_model = new ProfesorExpProf();
-                                $experiencia_model->pepr_organizacion = strtolower($value2[1]);
-                                $experiencia_model->pepr_fecha_inicio = $value2[2];
-                                $experiencia_model->pepr_fecha_fin = $value2[3];
-                                $experiencia_model->pepr_denominacion = strtolower($value2[4]);
-                                $experiencia_model->pepr_funciones = strtolower($value2[5]);
-                                $experiencia_model->pro_id = $profesor_model->pro_id;
-                                $experiencia_model->pepr_estado = '1';
-                                $experiencia_model->pepr_estado_logico = '1';
-                                $experiencia_model->pepr_usuario_ingreso = $user_ingresa;
-                                $experiencia_model->save();
+                                if ($value2[6]=="N") {
+                                    $experiencia_model = new ProfesorExpProf();
+                                    $experiencia_model->pepr_organizacion = strtolower($value2[1]);
+                                    $experiencia_model->pepr_fecha_inicio = $value2[2];
+                                    $experiencia_model->pepr_fecha_fin = $value2[3];
+                                    $experiencia_model->pepr_denominacion = strtolower($value2[4]);
+                                    $experiencia_model->pepr_funciones = strtolower($value2[5]);
+                                    $experiencia_model->pro_id = $profesor_model->pro_id;
+                                    $experiencia_model->pepr_estado = '1';
+                                    $experiencia_model->pepr_estado_logico = '1';
+                                    $experiencia_model->pepr_usuario_ingreso = $user_ingresa;
+                                    $experiencia_model->save();
+                                }
                             }
                         }
                         if(isset($arr_idioma)){
                             foreach($arr_idioma as $key3 => $value3){
-                                $idiomas_model = new ProfesorIdiomas();
-                                $idiomas_model->idi_id = $value3[1];
-                                $idiomas_model->pidi_nivel_escrito = ucfirst($value3[2]);
-                                $idiomas_model->pidi_nivel_oral = ucfirst($value3[3]);
-                                $idiomas_model->pidi_certificado = ucfirst($value3[4]);
-                                $idiomas_model->pidi_institucion = ucwords($value3[5]);
-                                $idiomas_model->pro_id = $profesor_model->pro_id;
-                                $idiomas_model->pidi_estado = '1';
-                                $idiomas_model->pidi_estado_logico = '1';
-                                $idiomas_model->pidi_usuario_ingreso = $user_ingresa;
-                                $idiomas_model->save();
+                                if ($value3[6]=="N") {
+                                    $idiomas_model = new ProfesorIdiomas();
+                                    $idiomas_model->idi_id = $value3[1];
+                                    $idiomas_model->pidi_nivel_escrito = ucfirst($value3[2]);
+                                    $idiomas_model->pidi_nivel_oral = ucfirst($value3[3]);
+                                    $idiomas_model->pidi_certificado = ucfirst($value3[4]);
+                                    $idiomas_model->pidi_institucion = ucwords($value3[5]);
+                                    $idiomas_model->pro_id = $profesor_model->pro_id;
+                                    $idiomas_model->pidi_estado = '1';
+                                    $idiomas_model->pidi_estado_logico = '1';
+                                    $idiomas_model->pidi_usuario_ingreso = $user_ingresa;
+                                    $idiomas_model->save();
+                                }
                             }
                         }
                         if(isset($arr_investigacion)){
                             foreach($arr_investigacion as $key4 => $value4){
-                                $investigacion_model = new ProfesorInvestigacion();
-                                $investigacion_model->pinv_proyecto = strtolower($value4[1]);
-                                $investigacion_model->pinv_ambito = strtolower($value4[2]);
-                                $investigacion_model->pinv_responsabilidad = strtolower($value4[3]);
-                                $investigacion_model->pinv_entidad = strtolower($value4[4]);
-                                $investigacion_model->pinv_anio = strtolower($value4[5]);
-                                $investigacion_model->pinv_duracion = strtolower($value4[6]);
-                                $investigacion_model->pro_id = $profesor_model->pro_id;
-                                $investigacion_model->pinv_estado = '1';
-                                $investigacion_model->pinv_estado_logico = '1';
-                                $investigacion_model->pinv_usuario_ingreso = $user_ingresa;
-                                $investigacion_model->save();
+                                if ($value4[7]=="N") {
+                                    $investigacion_model = new ProfesorInvestigacion();
+                                    $investigacion_model->pinv_proyecto = strtolower($value4[1]);
+                                    $investigacion_model->pinv_ambito = strtolower($value4[2]);
+                                    $investigacion_model->pinv_responsabilidad = strtolower($value4[3]);
+                                    $investigacion_model->pinv_entidad = strtolower($value4[4]);
+                                    $investigacion_model->pinv_anio = strtolower($value4[5]);
+                                    $investigacion_model->pinv_duracion = strtolower($value4[6]);
+                                    $investigacion_model->pro_id = $profesor_model->pro_id;
+                                    $investigacion_model->pinv_estado = '1';
+                                    $investigacion_model->pinv_estado_logico = '1';
+                                    $investigacion_model->pinv_usuario_ingreso = $user_ingresa;
+                                    $investigacion_model->save();
+                                }
                             }
                         }
                         if(isset($arr_evento)){
                             foreach($arr_evento as $key5 => $value5){
-                                $capacitacion_model = new ProfesorCapacitacion();
-                                $capacitacion_model->pcap_tipo = strtolower($value5[4]);
-                                $capacitacion_model->pcap_evento = strtolower($value5[1]);
-                                $capacitacion_model->pcap_institucion = strtolower($value5[2]);
-                                $capacitacion_model->pcap_anio = strtolower($value5[3]);
-                                $capacitacion_model->pcap_duracion = strtolower($value5[5]);
-                                $capacitacion_model->pro_id = $profesor_model->pro_id;
-                                $capacitacion_model->pcap_estado = '1';
-                                $capacitacion_model->pcap_estado_logico = '1';
-                                $capacitacion_model->pcap_usuario_ingreso = $user_ingresa;
-                                $capacitacion_model->save();
+                                if ($value5[6]=="N") {
+                                    $capacitacion_model = new ProfesorCapacitacion();
+                                    $capacitacion_model->pcap_tipo = strtolower($value5[4]);
+                                    $capacitacion_model->pcap_evento = strtolower($value5[1]);
+                                    $capacitacion_model->pcap_institucion = strtolower($value5[2]);
+                                    $capacitacion_model->pcap_anio = strtolower($value5[3]);
+                                    $capacitacion_model->pcap_duracion = strtolower($value5[5]);
+                                    $capacitacion_model->pro_id = $profesor_model->pro_id;
+                                    $capacitacion_model->pcap_estado = '1';
+                                    $capacitacion_model->pcap_estado_logico = '1';
+                                    $capacitacion_model->pcap_usuario_ingreso = $user_ingresa;
+                                    $capacitacion_model->save();
+                                }
                             }
                         }
                         if(isset($arr_conferencia)){
                             foreach($arr_conferencia as $key6 => $value6){
-                                $capacitacion_model = new ProfesorConferencia();
-                                $capacitacion_model->pcon_evento = strtolower($value6[1]);
-                                $capacitacion_model->pcon_institucion = strtolower($value6[2]);
-                                $capacitacion_model->pcon_anio = strtolower($value6[3]);
-                                $capacitacion_model->pcon_ponencia = strtolower($value6[4]);
-                                $capacitacion_model->pro_id = $profesor_model->pro_id;
-                                $capacitacion_model->pcon_estado = '1';
-                                $capacitacion_model->pcon_estado_logico = '1';
-                                $capacitacion_model->pcon_usuario_ingreso = $user_ingresa;
-                                $capacitacion_model->save();
+                                if ($value6[5]=="N") {
+                                    $capacitacion_model = new ProfesorConferencia();
+                                    $capacitacion_model->pcon_evento = strtolower($value6[1]);
+                                    $capacitacion_model->pcon_institucion = strtolower($value6[2]);
+                                    $capacitacion_model->pcon_anio = strtolower($value6[3]);
+                                    $capacitacion_model->pcon_ponencia = strtolower($value6[4]);
+                                    $capacitacion_model->pro_id = $profesor_model->pro_id;
+                                    $capacitacion_model->pcon_estado = '1';
+                                    $capacitacion_model->pcon_estado_logico = '1';
+                                    $capacitacion_model->pcon_usuario_ingreso = $user_ingresa;
+                                    $capacitacion_model->save();
+                                }
                             }
                         }
                         if(isset($arr_coordinacion)){
                             foreach($arr_coordinacion as $key7 => $value7){
-                                $coordinacion_model = new ProfesorCoordinacion();
-                                $coordinacion_model->pcoo_alumno = ucwords($value7[1]);
-                                $coordinacion_model->pcoo_programa = ucfirst($value7[2]);
-                                $coordinacion_model->pcoo_academico = ucfirst($value7[3]);
-                                $coordinacion_model->ins_id = ucwords($value7[4]);
-                                $coordinacion_model->pcoo_anio = strtolower($value7[5]);
-                                $coordinacion_model->pro_id = $profesor_model->pro_id;
-                                $coordinacion_model->pcoo_estado = '1';
-                                $coordinacion_model->pcoo_estado_logico = '1';
-                                $coordinacion_model->pcoo_usuario_ingreso = $user_ingresa;
-                                $coordinacion_model->save();
+                                if ($value7[6]=="N") {
+                                    $coordinacion_model = new ProfesorCoordinacion();
+                                    $coordinacion_model->pcoo_alumno = ucwords($value7[1]);
+                                    $coordinacion_model->pcoo_programa = ucfirst($value7[2]);
+                                    $coordinacion_model->pcoo_academico = ucfirst($value7[3]);
+                                    $coordinacion_model->ins_id = ucwords($value7[4]);
+                                    $coordinacion_model->pcoo_anio = strtolower($value7[5]);
+                                    $coordinacion_model->pro_id = $profesor_model->pro_id;
+                                    $coordinacion_model->pcoo_estado = '1';
+                                    $coordinacion_model->pcoo_estado_logico = '1';
+                                    $coordinacion_model->pcoo_usuario_ingreso = $user_ingresa;
+                                    $coordinacion_model->save();
+                                }
                             }
                         }
                         if(isset($arr_evaluacion)){
                             foreach($arr_evaluacion as $key8 => $value8){
-                                $evaluacion_model = new ProfesorEvaluacion();
-                                $evaluacion_model->peva_periodo = strtolower($value8[1]);
-                                $evaluacion_model->peva_institucion = strtolower($value8[2]);
-                                $evaluacion_model->peva_evaluacion = strtolower($value8[3]);
-                                $evaluacion_model->pro_id = $profesor_model->pro_id;
-                                $evaluacion_model->peva_estado = '1';
-                                $evaluacion_model->peva_estado_logico = '1';
-                                $evaluacion_model->peva_usuario_ingreso = $user_ingresa;
-                                $evaluacion_model->save();
+                                if ($value8[4]=="N") {
+                                    $evaluacion_model = new ProfesorEvaluacion();
+                                    $evaluacion_model->peva_periodo = strtolower($value8[1]);
+                                    $evaluacion_model->peva_institucion = strtolower($value8[2]);
+                                    $evaluacion_model->peva_evaluacion = strtolower($value8[3]);
+                                    $evaluacion_model->pro_id = $profesor_model->pro_id;
+                                    $evaluacion_model->peva_estado = '1';
+                                    $evaluacion_model->peva_estado_logico = '1';
+                                    $evaluacion_model->peva_usuario_ingreso = $user_ingresa;
+                                    $evaluacion_model->save();
+                                }
                             }
                         }
                         if(isset($arr_publicacion)){
                             foreach($arr_publicacion as $key9 => $value9){
-                                $publicacion_model = new ProfesorPublicacion();
-                                $publicacion_model->tpub_id = $value9[1];                                
-                                $publicacion_model->ppub_titulo = strtolower($value9[2]);
-                                $publicacion_model->ppub_editorial = strtolower($value9[3]);
-                                $publicacion_model->ppub_isbn = strtolower($value9[4]);
-                                $publicacion_model->ppub_autoria = strtolower($value9[5]);
-                                $publicacion_model->pro_id = $profesor_model->pro_id;
-                                $publicacion_model->ppub_estado = '1';
-                                $publicacion_model->ppub_estado_logico = '1';
-                                $publicacion_model->ppub_usuario_ingreso = $user_ingresa;
-                                $publicacion_model->save();
+                                if ($value9[6]=="N") {
+                                    $publicacion_model = new ProfesorPublicacion();
+                                    $publicacion_model->tpub_id = $value9[1];                                
+                                    $publicacion_model->ppub_titulo = strtolower($value9[2]);
+                                    $publicacion_model->ppub_editorial = strtolower($value9[3]);
+                                    $publicacion_model->ppub_isbn = strtolower($value9[4]);
+                                    $publicacion_model->ppub_autoria = strtolower($value9[5]);
+                                    $publicacion_model->pro_id = $profesor_model->pro_id;
+                                    $publicacion_model->ppub_estado = '1';
+                                    $publicacion_model->ppub_estado_logico = '1';
+                                    $publicacion_model->ppub_usuario_ingreso = $user_ingresa;
+                                    $publicacion_model->save();
+                                }
                             }
                         }
                         if(isset($arr_referencia)){
                             foreach($arr_referencia as $key10 => $value10){
-                                $referencia_model = new ProfesorReferencia();
-                                $referencia_model->pref_contacto = strtolower($value10[1]);
-                                $referencia_model->pref_relacion_cargo = strtolower($value10[2]);
-                                $referencia_model->pref_organizacion = strtolower($value10[3]);
-                                $referencia_model->pref_numero = strtolower($value10[4]);
-                                $referencia_model->pro_id = $profesor_model->pro_id;
-                                $referencia_model->pref_estado = '1';
-                                $referencia_model->pref_estado_logico = '1';
-                                $referencia_model->pref_usuario_ingreso = $user_ingresa;
-                                $referencia_model->save();
+                                if ($value10[5]=="N") {
+                                    $referencia_model = new ProfesorReferencia();
+                                    $referencia_model->pref_contacto = strtolower($value10[1]);
+                                    $referencia_model->pref_relacion_cargo = strtolower($value10[2]);
+                                    $referencia_model->pref_organizacion = strtolower($value10[3]);
+                                    $referencia_model->pref_numero = strtolower($value10[4]);
+                                    $referencia_model->pro_id = $profesor_model->pro_id;
+                                    $referencia_model->pref_estado = '1';
+                                    $referencia_model->pref_estado_logico = '1';
+                                    $referencia_model->pref_usuario_ingreso = $user_ingresa;
+                                    $referencia_model->save();
+                                }
                             }
                         }
                         return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
@@ -1067,13 +1089,14 @@ class ProfesorController extends \app\components\CController {
                         $arr_file = explode($foto, '.jpg');                    
                         if(isset($arr_file[0]) && $arr_file[0] != ""){
                             $oldFile = $this->folder_cv.'/' . $foto;
-                            $persona_model = Persona::findOne(["per_id" => $per_id]);                            
+                            $persona_model = Persona::findOne(["per_id" => $per_id]);                 
+                            //Utilities::putMessageLogFile('ruta foto:' . $this->folder_cv.'/'. $per_id . "_" . $foto);
                             $persona_model->per_foto = $this->folder_cv.'/'. $per_id . "_" . $foto;                            
                             $urlBase = Yii::$app->basePath . Yii::$app->params["documentFolder"];
                             rename($urlBase . $oldFile, $urlBase . $persona_model->per_foto);
-                            $persona_model->update();
+                            $persona_model->update();                            
                         }                        
-                    
+                        
                         $profesor_model = new Profesor();
                         $profesor_model->per_id = $per_id;
                         $profesor_model->pro_estado = '1';
@@ -1111,164 +1134,186 @@ class ProfesorController extends \app\components\CController {
                         
                         if(isset($arr_instuccion)){
                             foreach($arr_instuccion as $key0 => $value0){
-                                $instruccion_model = new ProfesorInstruccion();
-                                $instruccion_model->nins_id = $value0[1];
-                                $instruccion_model->pins_institucion = ucwords($value0[2]);
-                                $instruccion_model->pins_especializacion = ucwords($value0[3]);
-                                $instruccion_model->pins_titulo = ucwords($value0[4]);
-                                $instruccion_model->pins_senescyt = strtolower($value0[5]);
-                                $instruccion_model->pro_id = $profesor_model->pro_id;
-                                $instruccion_model->pins_estado = '1';
-                                $instruccion_model->pins_estado_logico = '1';
-                                $instruccion_model->pins_usuario_ingreso = $user_ingresa;
-                                $instruccion_model->save();
+                                if ($value0[6]=="N") {
+                                    $instruccion_model = new ProfesorInstruccion();
+                                    $instruccion_model->nins_id = $value0[1];
+                                    $instruccion_model->pins_institucion = ucwords($value0[2]);
+                                    $instruccion_model->pins_especializacion = ucwords($value0[3]);
+                                    $instruccion_model->pins_titulo = ucwords($value0[4]);
+                                    $instruccion_model->pins_senescyt = strtolower($value0[5]);
+                                    $instruccion_model->pro_id = $profesor_model->pro_id;
+                                    $instruccion_model->pins_estado = '1';
+                                    $instruccion_model->pins_estado_logico = '1';
+                                    $instruccion_model->pins_usuario_ingreso = $user_ingresa;
+                                    $instruccion_model->save();
+                                }
                             }
                         }
                         if(isset($arr_docencia)){
                             foreach($arr_docencia as $key1 => $value1){
-                                $docencia_model = new ProfesorExpDoc();
-                                $docencia_model->ins_id = $value1[1];
-                                $docencia_model->pedo_fecha_inicio = $value1[2];
-                                $docencia_model->pedo_fecha_fin = $value1[3];
-                                $docencia_model->pedo_denominacion = ucwords($value1[4]);
-                                $docencia_model->pedo_asignaturas = ucwords($value1[5]);
-                                $docencia_model->pro_id = $profesor_model->pro_id;
-                                $docencia_model->pedo_estado = '1';
-                                $docencia_model->pedo_estado_logico = '1';
-                                $docencia_model->pedo_usuario_ingreso = $user_ingresa;
-                                $docencia_model->save();
+                                if ($value1[6]=="N") {
+                                    $docencia_model = new ProfesorExpDoc();
+                                    $docencia_model->ins_id = $value1[1];
+                                    $docencia_model->pedo_fecha_inicio = $value1[2];
+                                    $docencia_model->pedo_fecha_fin = $value1[3];
+                                    $docencia_model->pedo_denominacion = ucwords($value1[4]);
+                                    $docencia_model->pedo_asignaturas = ucwords($value1[5]);
+                                    $docencia_model->pro_id = $profesor_model->pro_id;
+                                    $docencia_model->pedo_estado = '1';
+                                    $docencia_model->pedo_estado_logico = '1';
+                                    $docencia_model->pedo_usuario_ingreso = $user_ingresa;
+                                    $docencia_model->save();
+                                }
                             }
                         }
                         if(isset($arr_experiencia)){
                             foreach($arr_experiencia as $key2 => $value2){
-                                $experiencia_model = new ProfesorExpProf();
-                                $experiencia_model->pepr_organizacion = strtolower($value2[1]);
-                                $experiencia_model->pepr_fecha_inicio = $value2[2];
-                                $experiencia_model->pepr_fecha_fin = $value2[3];
-                                $experiencia_model->pepr_denominacion = ucwords($value2[4]);
-                                $experiencia_model->pepr_funciones = ucwords($value2[5]);
-                                $experiencia_model->pro_id = $profesor_model->pro_id;
-                                $experiencia_model->pepr_estado = '1';
-                                $experiencia_model->pepr_estado_logico = '1';
-                                $experiencia_model->pepr_usuario_ingreso = $user_ingresa;
-                                $experiencia_model->save();
+                                if ($value2[6]=="N") {
+                                    $experiencia_model = new ProfesorExpProf();
+                                    $experiencia_model->pepr_organizacion = strtolower($value2[1]);
+                                    $experiencia_model->pepr_fecha_inicio = $value2[2];
+                                    $experiencia_model->pepr_fecha_fin = $value2[3];
+                                    $experiencia_model->pepr_denominacion = ucwords($value2[4]);
+                                    $experiencia_model->pepr_funciones = ucwords($value2[5]);
+                                    $experiencia_model->pro_id = $profesor_model->pro_id;
+                                    $experiencia_model->pepr_estado = '1';
+                                    $experiencia_model->pepr_estado_logico = '1';
+                                    $experiencia_model->pepr_usuario_ingreso = $user_ingresa;
+                                    $experiencia_model->save();
+                                }
                             }
                         }
                         if(isset($arr_idioma)){
                             foreach($arr_idioma as $key3 => $value3){
-                                $idiomas_model = new ProfesorIdiomas();
-                                $idiomas_model->idi_id = $value3[1];
-                                $idiomas_model->pidi_nivel_escrito = ucfirst($value3[2]);
-                                $idiomas_model->pidi_nivel_oral = ucfirst($value3[3]);
-                                $idiomas_model->pidi_certificado = ucfirst($value3[4]);
-                                $idiomas_model->pidi_institucion = ucwords($value3[5]);
-                                $idiomas_model->pro_id = $profesor_model->pro_id;
-                                $idiomas_model->pidi_estado = '1';
-                                $idiomas_model->pidi_estado_logico = '1';
-                                $idiomas_model->pidi_usuario_ingreso = $user_ingresa;
-                                $idiomas_model->save();
+                                if ($value3[6]=="N") {
+                                    $idiomas_model = new ProfesorIdiomas();
+                                    $idiomas_model->idi_id = $value3[1];
+                                    $idiomas_model->pidi_nivel_escrito = ucfirst($value3[2]);
+                                    $idiomas_model->pidi_nivel_oral = ucfirst($value3[3]);
+                                    $idiomas_model->pidi_certificado = ucfirst($value3[4]);
+                                    $idiomas_model->pidi_institucion = ucwords($value3[5]);
+                                    $idiomas_model->pro_id = $profesor_model->pro_id;
+                                    $idiomas_model->pidi_estado = '1';
+                                    $idiomas_model->pidi_estado_logico = '1';
+                                    $idiomas_model->pidi_usuario_ingreso = $user_ingresa;
+                                    $idiomas_model->save();
+                                }
                             }
                         }
                         if(isset($arr_investigacion)){
                             foreach($arr_investigacion as $key4 => $value4){
-                                $investigacion_model = new ProfesorInvestigacion();
-                                $investigacion_model->pinv_proyecto = ucwords($value4[1]);
-                                $investigacion_model->pinv_ambito = ucwords($value4[2]);
-                                $investigacion_model->pinv_responsabilidad = ucwords($value4[3]);
-                                $investigacion_model->pinv_entidad = ucwords($value4[4]);
-                                $investigacion_model->pinv_anio = strtolower($value4[5]);
-                                $investigacion_model->pinv_duracion = strtolower($value4[6]);
-                                $investigacion_model->pro_id = $profesor_model->pro_id;
-                                $investigacion_model->pinv_estado = '1';
-                                $investigacion_model->pinv_estado_logico = '1';
-                                $investigacion_model->pinv_usuario_ingreso = $user_ingresa;
-                                $investigacion_model->save();
+                                if ($value4[7]=="N") {
+                                    $investigacion_model = new ProfesorInvestigacion();
+                                    $investigacion_model->pinv_proyecto = ucwords($value4[1]);
+                                    $investigacion_model->pinv_ambito = ucwords($value4[2]);
+                                    $investigacion_model->pinv_responsabilidad = ucwords($value4[3]);
+                                    $investigacion_model->pinv_entidad = ucwords($value4[4]);
+                                    $investigacion_model->pinv_anio = strtolower($value4[5]);
+                                    $investigacion_model->pinv_duracion = strtolower($value4[6]);
+                                    $investigacion_model->pro_id = $profesor_model->pro_id;
+                                    $investigacion_model->pinv_estado = '1';
+                                    $investigacion_model->pinv_estado_logico = '1';
+                                    $investigacion_model->pinv_usuario_ingreso = $user_ingresa;
+                                    $investigacion_model->save();
+                                }
                             }
                         }
                         if(isset($arr_evento)){
                             foreach($arr_evento as $key5 => $value5){
-                                $capacitacion_model = new ProfesorCapacitacion();
-                                $capacitacion_model->pcap_tipo = strtolower($value5[4]);
-                                $capacitacion_model->pcap_evento = ucwords($value5[1]);
-                                $capacitacion_model->pcap_institucion = ucwords($value5[2]);
-                                $capacitacion_model->pcap_anio = strtolower($value5[3]);
-                                $capacitacion_model->pcap_duracion = strtolower($value5[5]);
-                                $capacitacion_model->pro_id = $profesor_model->pro_id;
-                                $capacitacion_model->pcap_estado = '1';
-                                $capacitacion_model->pcap_estado_logico = '1';
-                                $capacitacion_model->pcap_usuario_ingreso = $user_ingresa;
-                                $capacitacion_model->save();
+                                if ($value5[6]=="N") {
+                                    $capacitacion_model = new ProfesorCapacitacion();
+                                    $capacitacion_model->pcap_tipo = strtolower($value5[4]);
+                                    $capacitacion_model->pcap_evento = ucwords($value5[1]);
+                                    $capacitacion_model->pcap_institucion = ucwords($value5[2]);
+                                    $capacitacion_model->pcap_anio = strtolower($value5[3]);
+                                    $capacitacion_model->pcap_duracion = strtolower($value5[5]);
+                                    $capacitacion_model->pro_id = $profesor_model->pro_id;
+                                    $capacitacion_model->pcap_estado = '1';
+                                    $capacitacion_model->pcap_estado_logico = '1';
+                                    $capacitacion_model->pcap_usuario_ingreso = $user_ingresa;
+                                    $capacitacion_model->save();
+                                }
                             }
                         }
                         if(isset($arr_conferencia)){
                             foreach($arr_conferencia as $key6 => $value6){
-                                $capacitacion_model = new ProfesorConferencia();
-                                $capacitacion_model->pcon_evento = ucwords($value6[1]);
-                                $capacitacion_model->pcon_institucion = ucwords($value6[2]);
-                                $capacitacion_model->pcon_anio = strtolower($value6[3]);
-                                $capacitacion_model->pcon_ponencia = ucwords($value6[4]);
-                                $capacitacion_model->pro_id = $profesor_model->pro_id;
-                                $capacitacion_model->pcon_estado = '1';
-                                $capacitacion_model->pcon_estado_logico = '1';
-                                $capacitacion_model->pcon_usuario_ingreso = $user_ingresa;
-                                $capacitacion_model->save();
+                                if ($value6[5]=="N") {
+                                    $capacitacion_model = new ProfesorConferencia();
+                                    $capacitacion_model->pcon_evento = ucwords($value6[1]);
+                                    $capacitacion_model->pcon_institucion = ucwords($value6[2]);
+                                    $capacitacion_model->pcon_anio = strtolower($value6[3]);
+                                    $capacitacion_model->pcon_ponencia = ucwords($value6[4]);
+                                    $capacitacion_model->pro_id = $profesor_model->pro_id;
+                                    $capacitacion_model->pcon_estado = '1';
+                                    $capacitacion_model->pcon_estado_logico = '1';
+                                    $capacitacion_model->pcon_usuario_ingreso = $user_ingresa;
+                                    $capacitacion_model->save();
+                                }
                             }
                         }
                         if(isset($arr_coordinacion)){
                             foreach($arr_coordinacion as $key7 => $value7){
-                                $coordinacion_model = new ProfesorCoordinacion();
-                                $coordinacion_model->pcoo_alumno = ucwords($value7[1]);
-                                $coordinacion_model->pcoo_programa = ucwords($value7[2]);
-                                $coordinacion_model->pcoo_academico = ucwords($value7[3]);
-                                $coordinacion_model->ins_id = ($value7[4]);
-                                $coordinacion_model->pcoo_anio = strtolower($value7[5]);
-                                $coordinacion_model->pro_id = $profesor_model->pro_id;
-                                $coordinacion_model->pcoo_estado = '1';
-                                $coordinacion_model->pcoo_estado_logico = '1';
-                                $coordinacion_model->pcoo_usuario_ingreso = $user_ingresa;
-                                $coordinacion_model->save();
+                                if ($value7[6]=="N") {
+                                    $coordinacion_model = new ProfesorCoordinacion();
+                                    $coordinacion_model->pcoo_alumno = ucwords($value7[1]);
+                                    $coordinacion_model->pcoo_programa = ucwords($value7[2]);
+                                    $coordinacion_model->pcoo_academico = ucwords($value7[3]);
+                                    $coordinacion_model->ins_id = ($value7[4]);
+                                    $coordinacion_model->pcoo_anio = strtolower($value7[5]);
+                                    $coordinacion_model->pro_id = $profesor_model->pro_id;
+                                    $coordinacion_model->pcoo_estado = '1';
+                                    $coordinacion_model->pcoo_estado_logico = '1';
+                                    $coordinacion_model->pcoo_usuario_ingreso = $user_ingresa;
+                                    $coordinacion_model->save();
+                                }
                             }
                         }
                         if(isset($arr_evaluacion)){
                             foreach($arr_evaluacion as $key8 => $value8){
-                                $evaluacion_model = new ProfesorEvaluacion();
-                                $evaluacion_model->peva_periodo = strtolower($value8[1]);
-                                $evaluacion_model->peva_institucion = ucwords($value8[2]);
-                                $evaluacion_model->peva_evaluacion = ucwords($value8[3]);
-                                $evaluacion_model->pro_id = $profesor_model->pro_id;
-                                $evaluacion_model->peva_estado = '1';
-                                $evaluacion_model->peva_estado_logico = '1';
-                                $evaluacion_model->peva_usuario_ingreso = $user_ingresa;
-                                $evaluacion_model->save();
+                                if ($value8[4]=="N") {
+                                    $evaluacion_model = new ProfesorEvaluacion();
+                                    $evaluacion_model->peva_periodo = strtolower($value8[1]);
+                                    $evaluacion_model->peva_institucion = ucwords($value8[2]);
+                                    $evaluacion_model->peva_evaluacion = ucwords($value8[3]);
+                                    $evaluacion_model->pro_id = $profesor_model->pro_id;
+                                    $evaluacion_model->peva_estado = '1';
+                                    $evaluacion_model->peva_estado_logico = '1';
+                                    $evaluacion_model->peva_usuario_ingreso = $user_ingresa;
+                                    $evaluacion_model->save();
+                                }
                             }
                         }
                         if(isset($arr_publicacion)){
                             foreach($arr_publicacion as $key9 => $value9){
-                                $publicacion_model = new ProfesorPublicacion();
-                                $publicacion_model->tpub_id = $value9[1];                               
-                                $publicacion_model->ppub_titulo = ucwords($value9[2]);
-                                $publicacion_model->ppub_editorial = ucwords($value9[3]);
-                                $publicacion_model->ppub_isbn = strtolower($value9[4]);
-                                $publicacion_model->ppub_autoria = ucwords($value9[5]);
-                                $publicacion_model->pro_id = $profesor_model->pro_id;
-                                $publicacion_model->ppub_estado = '1';
-                                $publicacion_model->ppub_estado_logico = '1';
-                                $publicacion_model->ppub_usuario_ingreso = $user_ingresa;
-                                $publicacion_model->save();
+                                if ($value9[6]=="N") {
+                                    $publicacion_model = new ProfesorPublicacion();
+                                    $publicacion_model->tpub_id = $value9[1];                               
+                                    $publicacion_model->ppub_titulo = ucwords($value9[2]);
+                                    $publicacion_model->ppub_editorial = ucwords($value9[3]);
+                                    $publicacion_model->ppub_isbn = strtolower($value9[4]);
+                                    $publicacion_model->ppub_autoria = ucwords($value9[5]);
+                                    $publicacion_model->pro_id = $profesor_model->pro_id;
+                                    $publicacion_model->ppub_estado = '1';
+                                    $publicacion_model->ppub_estado_logico = '1';
+                                    $publicacion_model->ppub_usuario_ingreso = $user_ingresa;
+                                    $publicacion_model->save();
+                                }
                             }
                         }
                         if(isset($arr_referencia)){
                             foreach($arr_referencia as $key10 => $value10){
-                                $referencia_model = new ProfesorReferencia();
-                                $referencia_model->pref_contacto = ucwords($value10[1]);
-                                $referencia_model->pref_relacion_cargo = ucwords($value10[2]);
-                                $referencia_model->pref_organizacion = ucwords($value10[3]);
-                                $referencia_model->pref_numero = strtolower($value10[4]);
-                                $referencia_model->pro_id = $profesor_model->pro_id;
-                                $referencia_model->pref_estado = '1';
-                                $referencia_model->pref_estado_logico = '1';
-                                $referencia_model->pref_usuario_ingreso = $user_ingresa;
-                                $referencia_model->save();
+                                if ($value10[5]=="N") {
+                                    $referencia_model = new ProfesorReferencia();
+                                    $referencia_model->pref_contacto = ucwords($value10[1]);
+                                    $referencia_model->pref_relacion_cargo = ucwords($value10[2]);
+                                    $referencia_model->pref_organizacion = ucwords($value10[3]);
+                                    $referencia_model->pref_numero = strtolower($value10[4]);
+                                    $referencia_model->pro_id = $profesor_model->pro_id;
+                                    $referencia_model->pref_estado = '1';
+                                    $referencia_model->pref_estado_logico = '1';
+                                    $referencia_model->pref_usuario_ingreso = $user_ingresa;
+                                    $referencia_model->save();
+                                }
                             }
                         }
 
