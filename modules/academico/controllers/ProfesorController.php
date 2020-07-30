@@ -563,36 +563,7 @@ class ProfesorController extends \app\components\CController {
             'arr_pro' => (empty(ArrayHelper::map($arr_pro, "pro_id", "pro_nombre"))) ? array(Yii::t("provincia", "-- Select Provincia --")) : (ArrayHelper::map($arr_pro, "pro_id", "pro_nombre")),
             'arr_can' => (empty(ArrayHelper::map($arr_can, "can_id", "can_nombre"))) ? array(Yii::t("canton", "-- Select Canton --")) : (ArrayHelper::map($arr_can, "can_id", "can_nombre")),
         ]);
-            
-         //gru_id=13 -> Docente
-        /*$gru_id = 13;
-        $rol_id = 17;
-
-         $arr_grupos = Grupo::findAll(["gru_id"=>13, "gru_estado" => 1, "gru_estado_logico" => 1]);
-         //$arr_roles  = Rol::findAll(["rol_estado" => 1, "rol_estado_logico" => 1]);
-         list($firstgrupo) = $arr_grupos;
-         $arr_roles  = GrupRol::find()
-             ->select(["rol.rol_id", "rol.rol_nombre"])
-             ->innerJoinWith('rol', 'rol.rol_id = grup_rol.rol_id')
-             ->andWhere(["rol.rol_estado" => 1, "rol.rol_estado_logico" => 1,
-              "grup_rol.grol_estado" => 1, "grup_rol.grol_estado_logico" => 1, 
-              "grup_rol.gru_id" => $firstgrupo->gru_id])->asArray()->all();
-         $arr_empresa = Empresa::findAll(["emp_estado" => 1, "emp_estado_logico" => 1]);
-         if (Yii::$app->request->isAjax) {
-             $data = Yii::$app->request->post();
-             if (isset($data["gru_id"])) {
-                 $model = new GrupRol();
-                 $arr_roles = $model->getRolesByGroup($data["gru_id"]);
-                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $arr_roles);
-             }
-         }
-         $NewFormTab3 = $this->renderPartial('NewFormTab3', [
-             'arr_roles' => (empty(ArrayHelper::map($arr_roles, "rol_id", "rol_nombre"))) ? array(Yii::t("rol", "-- Select Role --")) : (ArrayHelper::map($arr_roles, "rol_id", "rol_nombre")),
-             'arr_grupos' => (empty(ArrayHelper::map($arr_grupos, "gru_id", "gru_nombre"))) ? array(Yii::t("grupo", "-- Select Group --")) : (ArrayHelper::map($arr_grupos, "gru_id", "gru_nombre")),
-             'arr_empresa' => (empty(ArrayHelper::map($arr_empresa, "emp_id", "emp_nombre_comercial"))) ? array(Yii::t("empresa", "-- Select Empresa --")) : (ArrayHelper::map($arr_empresa, "emp_id", "emp_nombre_comercial")),
-             'grup_id' => $gru_id,
-             'rol_id' => $rol_id
-             ]);*/
+                    
 
         $arr_inst_level = NivelInstruccion::findAll(["nins_estado" => 1, "nins_estado_logico" => 1]);;
         $NewFormTab4 = $this->renderPartial('NewFormTab4',[
@@ -633,9 +604,12 @@ class ProfesorController extends \app\components\CController {
             'model' => new ArrayDataProvider(array()),
         ]);
 
+        $tipoPub = new TipoPublicacion(); 
+        $respTipoPub = $tipoPub->getTipoPublicacion();
         $NewFormTab11 = $this->renderPartial('NewFormTab11',[
             'model' => new ArrayDataProvider(array()),
-        ]);
+            'arr_tipo_publicacion' => ArrayHelper::map($respTipoPub,"id", "nombre"),
+        ]);        
 
         $NewFormTab12 = $this->renderPartial('NewFormTab12',[
             'model' => new ArrayDataProvider(array()),

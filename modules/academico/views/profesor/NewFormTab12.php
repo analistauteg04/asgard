@@ -21,9 +21,9 @@ Academico::registerTranslations();
             </div>
         </div>
         <div class="form-group">
-            <label for="txt_cor_programa" class="col-lg-3 col-md-3 col-sm-3 col-xs-3 control-label"><?= Academico::t("profesor", "Academic Program")?> <span class="text-danger">*</span></label>
+            <label for="txt_cor_programa" class="col-lg-3 col-md-3 col-sm-3 col-xs-3 control-label"><?= Academico::t("profesor", "Thesis topic")?> <span class="text-danger">*</span></label>
             <div class="col-lg-6 col-md-9 col-sm-9 col-xs-9">
-                <input type="text" class="form-control PBvalidations" id="txt_cor_programa" data-type="alfa" placeholder="<?= Academico::t("profesor", "Academic Program") ?>">
+                <input type="text" class="form-control PBvalidations" id="txt_cor_programa" data-type="alfa" placeholder="<?= Academico::t("profesor", "Thesis topic") ?>">
             </div>
         </div>
         <div class="form-group">
