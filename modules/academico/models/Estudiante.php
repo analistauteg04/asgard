@@ -457,7 +457,7 @@ class Estudiante extends \yii\db\ActiveRecord {
             if ($arrFiltro['carrera'] != "" && $arrFiltro['carrera'] > 0) {
                 $str_search .= " meun.eaca_id  = :carrera AND ";
             }
-            if ($arrFiltro['estado'] != -1) {         
+            if ($arrFiltro['estado'] != -1) {
                 if ($arrFiltro['estado'] == "null") {
                     $str_search .= " estu.est_estado  IS NULL AND ";
                 } else {
@@ -510,7 +510,7 @@ class Estudiante extends \yii\db\ActiveRecord {
                 pers.per_id > 1000                
                 ORDER BY estu.est_fecha_creacion DESC";
 
-        $comando = $con->createCommand($sql);        
+        $comando = $con->createCommand($sql);
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
             if ($arrFiltro['search'] != "") {
                 $search_cond = "%" . $arrFiltro["search"] . "%";
@@ -699,6 +699,44 @@ class Estudiante extends \yii\db\ActiveRecord {
             $comando->bindParam(":ecpr_usuario_modifica", $ecpr_usuario_modifica, \PDO::PARAM_INT);
             $comando->bindParam(":ecpr_fecha_modificacion", $ecpr_fecha_modificacion, \PDO::PARAM_STR);
             $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+            $response = $comando->execute();
+            if ($trans !== null)
+                $trans->commit();
+            return $response;
+        } catch (Exception $ex) {
+            if ($trans !== null)
+                $trans->rollback();
+            return FALSE;
+        }
+    }
+
+    /**
+     * Function modifica datosde la tabla estudiante_carrera_programa.
+     * @author Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;
+     * @param
+     * @return
+     */
+    public function modificarEstadoest($est_id, $est_usuario_modifica, $est_estado, $est_fecha_modificacion) {
+
+        $con = \Yii::$app->db_academico;
+        
+        if ($trans !== null) {
+            $trans = null; // si existe la transacción entonces no se crea una
+        } else {
+            $trans = $con->beginTransaction(); // si no existe la transacción entonces se crea una
+        }
+        try {
+            $comando = $con->createCommand
+                    ("UPDATE " . $con->dbname . ".estudiante		       
+                      SET est_estado = :est_estado,
+                          est_usuario_modifica = :est_usuario_modifica,
+                          est_fecha_modificacion = :est_fecha_modificacion                          
+                      WHERE 
+                        est_id = :est_id ");
+            $comando->bindParam(":est_id", $est_id, \PDO::PARAM_INT);          
+            $comando->bindParam(":est_usuario_modifica", $est_usuario_modifica, \PDO::PARAM_INT);
+            $comando->bindParam(":est_fecha_modificacion", $est_fecha_modificacion, \PDO::PARAM_STR);
+            $comando->bindParam(":est_estado", $est_estado, \PDO::PARAM_STR);
             $response = $comando->execute();
             if ($trans !== null)
                 $trans->commit();

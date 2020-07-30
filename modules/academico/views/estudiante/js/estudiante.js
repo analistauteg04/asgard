@@ -174,7 +174,7 @@ function exportPdf() {
     var modalidad = $('#cmb_modalidadbus option:selected').val();
     var carrera = $('#cmb_carrerabus option:selected').val();
     var estado = $('#cmb_estadobus option:selected').val();
-    window.location.href = $('#txth_base').val() + "/academico/estudiante/exppdf?pdf=1&search=" + search + "&f_ini=" + f_ini + "&f_fin=" + f_fin + "&unidad=" + unidad + "&modalidad=" + modalidad + "&carrera=" + carrera+ "&estado=" + estado;
+    window.location.href = $('#txth_base').val() + "/academico/estudiante/exppdf?pdf=1&search=" + search + "&f_ini=" + f_ini + "&f_fin=" + f_fin + "&unidad=" + unidad + "&modalidad=" + modalidad + "&carrera=" + carrera + "&estado=" + estado;
 }
 function save() {
     var link = $('#txth_base').val() + "/academico/estudiante/save";
@@ -258,4 +258,44 @@ function update() {
             }
         }
     }
+}
+
+function accion(id, estado) {
+    var link = $('#txth_base').val() + "/academico/estudiante/estadoestudiante";
+    var arrParams = new Object();
+    arrParams.est_id = id;
+    arrParams.estado = estado;
+    if (!validateForm()) {
+        requestHttpAjax(link, arrParams, function (response) {
+            showAlert(response.status, response.label, response.message);
+            if (!response.error) {
+                setTimeout(function () {
+                    window.location.href = $('#txth_base').val() + "/academico/estudiante/index";
+                }, 3000);
+            }
+        }, true);
+    }
+}
+
+function estadoestudiante(id, estado) {
+    var texto = '';
+    if (estado == '0') {
+        texto = 'inactivar';
+    } else {
+        texto = 'activar';
+    }
+    var mensj = "¿Seguro desea " + texto + " el estudiante?";
+    var messagePB = new Object();
+    messagePB.wtmessage = mensj;
+    messagePB.title = texto;//"Eliminar";
+    var objAccept = new Object();
+    objAccept.id = "btnid2del";
+    objAccept.class = "btn-primary";
+    objAccept.value = "Aceptar";
+    objAccept.callback = 'accion';
+    var params = new Array(id, estado);
+    objAccept.paramCallback = params;
+    messagePB.acciones = new Array();
+    messagePB.acciones[0] = objAccept;
+    showAlert("warning", "warning", messagePB);
 }

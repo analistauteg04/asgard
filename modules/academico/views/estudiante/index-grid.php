@@ -71,7 +71,7 @@ PbGridView::widget([
         ],
         [
             'attribute' => 'estado',
-            'header' =>  Yii::t("formulario", 'Status'),
+            'header' => Yii::t("formulario", 'Status'),
             'contentOptions' => ['class' => 'text-center'],
             'headerOptions' => ['class' => 'text-center'],
             'format' => 'html',
@@ -87,7 +87,7 @@ PbGridView::widget([
         [
             'class' => 'yii\grid\ActionColumn',
             'header' => Yii::t("formulario", "Actions"),
-            'template' => '{create} {view} {matriculacion}',
+            'template' => '{create} {view} {matriculacion} {activar} {inactivar} ',
             'buttons' => [
                 'create' => function ($url, $model) {
                     if ($model['est_id'] < 1) {
@@ -109,7 +109,20 @@ PbGridView::widget([
                     } else {
                         return '<span class="fa fa-user-plus"></span>';
                     }
-                    //return "";
+                },
+                'activar' => function ($url, $model) {
+                    if ($model['est_id'] > 1 && $model["estado"] == 'Inactivo') {
+                        return Html::a('<span class="glyphicon glyphicon-ok"></span>', "#", ['onclick' => "estadoestudiante(" . $model['est_id'] . ", '1');", "data-toggle" => "tooltip", "title" => "Activar Estudiante", "data-pjax" => 0]);
+                    } else {
+                        return '<span class="glyphicon glyphicon glyphicon-ok"></span>';
+                    }
+                },
+                'inactivar' => function ($url, $model) {
+                    if ($model['est_id'] > 1 && $model["estado"] == 'Activo') {
+                        return Html::a('<span class="glyphicon glyphicon-remove"></span>', "#", ['onclick' => "estadoestudiante(" . $model['est_id'] . ", '0');", "data-toggle" => "tooltip", "title" => "Inactivar Estudiante", "data-pjax" => 0]);
+                    } else {
+                        return '<span class="glyphicon glyphicon glyphicon-remove"></span>';
+                    }
                 }
             ],
         ],

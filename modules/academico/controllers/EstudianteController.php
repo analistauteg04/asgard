@@ -41,12 +41,11 @@ class EstudianteController extends \app\components\CController {
             '8' => Yii::t("formulario", "H"),
         ];
     }
-    
+
     private function estados() {
         return [
-            
             '-1' => Yii::t("formulario", "All"),
-            'null' => Yii::t("formulario", "No estudiante"),     
+            'null' => Yii::t("formulario", "No estudiante"),
             '0' => Yii::t("formulario", "Inactivo"),
             '1' => Yii::t("formulario", "Activo"),
         ];
@@ -429,14 +428,14 @@ class EstudianteController extends \app\components\CController {
 
             $fecha = date(Yii::$app->params["dateTimeByDefault"]);
             $con = \Yii::$app->db_academico;
-            $transaction = $con->beginTransaction();     
-                        
+            $transaction = $con->beginTransaction();
+
             try {
                 \app\models\Utilities::putMessageLogFile('entro: ');
                 $mod_Estudiante = new Estudiante();
                 $mod_Modestuni = new ModuloEstudio();
                 // consultar la modalidad_estudio_unidad
-                $resp_mestuni = $mod_Modestuni->consultarModalidadestudiouni($uaca_id, $mod_id, $eaca_id);                          
+                $resp_mestuni = $mod_Modestuni->consultarModalidadestudiouni($uaca_id, $mod_id, $eaca_id);
                 if ($resp_mestuni["meun_id"] > 0) {
                     // modifica la tabla estudiante
                     $resp_estudiante = $mod_Estudiante->updateEstudiante($est_id, $matricula, $categoria, $usu_autenticado, $fecha);
@@ -444,7 +443,7 @@ class EstudianteController extends \app\components\CController {
                         // modifica la tabla estudiante_carrera_programa   
                         $resp_estudiantecarrera = $mod_Estudiante->updateEstudiantecarreraprogr($est_id, $resp_mestuni["meun_id"], $usu_autenticado, $fecha);
                         if ($resp_estudiantecarrera) {
-                             $exito = 1;
+                            $exito = 1;
                         }
                     }
                 }
@@ -458,7 +457,7 @@ class EstudianteController extends \app\components\CController {
                 } else {
                     $transaction->rollback();
                     $message = array(
-                        "wtmessage" => Yii::t("notificaciones", "Error al actualizar 1."),
+                        "wtmessage" => Yii::t("notificaciones", "Error al actualizar."),
                         "title" => Yii::t('jslang', 'Error'),
                     );
                     return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), false, $message);
@@ -466,12 +465,63 @@ class EstudianteController extends \app\components\CController {
             } catch (Exception $ex) {
                 $transaction->rollback();
                 $message = array(
-                    "wtmessage" => Yii::t("notificaciones", "Error al actualizar 2."),
+                    "wtmessage" => Yii::t("notificaciones", "Error al actualizar."),
                     "title" => Yii::t('jslang', 'Error'),
                 );
                 return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), true, $message);
             }
             return;
+        }
+    }
+
+    public function actionEstadoestudiante() {
+        $mod_estudiante = new Estudiante();  
+        $usu_autenticado = @Yii::$app->session->get("PB_iduser");
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+            $est_id = $data["est_id"];
+            $estado = $data["estado"];
+            $fecha = date(Yii::$app->params["dateTimeByDefault"]);
+            $con = \Yii::$app->db_academico;
+            $transaction = $con->beginTransaction();
+            try {
+                \app\models\Utilities::putMessageLogFile('estuuu: ' . $est_id);
+                \app\models\Utilities::putMessageLogFile('estaaaa: ' . $estado);
+                $resp_estado = $mod_estudiante->modificarEstadoest($est_id, $usu_autenticado, $estado, $fecha);
+                if ($resp_estado) {
+                    $exito = '1';
+                }
+                if ($exito) {
+                    //Realizar accion
+                    if ($estado == 0) {
+                        $texto = "inactivado";
+                        $texto1 = "inactivar";
+                    } else {
+                        $texto = "activado";
+                        $texto1 = "activar";
+                    }
+                    $transaction->commit();
+                    $message = array(
+                        "wtmessage" => Yii::t("notificaciones", "Se ha " . $texto . " el estudiante."),
+                        "title" => Yii::t('jslang', 'Success'),
+                    );
+                    return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                } else {
+                    $transaction->rollback();
+                    $message = array(
+                        "wtmessage" => Yii::t("notificaciones", "Error al " . $texto1 . ". "),
+                        "title" => Yii::t('jslang', 'Error'),
+                    );
+                    return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), false, $message);
+                }
+            } catch (Exception $ex) {
+                $transaction->rollback();
+                $message = array(
+                    "wtmessage" => Yii::t("notificaciones", "Error al realizar la acción. "),
+                    "title" => Yii::t('jslang', 'Success'),
+                );
+                return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), false, $message);
+            }
         }
     }
 
