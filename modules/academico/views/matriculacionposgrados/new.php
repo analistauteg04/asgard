@@ -7,7 +7,6 @@ use app\modules\admision\Module as admision;
 
 admision::registerTranslations();
 academico::registerTranslations();
-
 $tipodoc = 'Cédula';
 ?>
 <?= Html::hiddenInput('txth_sins_id', base64_encode($personalData["sins_id"]), ['id' => 'txth_sins_id']); ?>
@@ -125,7 +124,7 @@ $tipodoc = 'Cédula';
                 <div class="form-group">
                     <label for="txt_matricula" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_dni"><?= academico::t("Academico", "Enrollment Number") ?> <span class="text-danger">*</span></label>
                     <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                        <input type="text" class="form-control PBvalidation keyupmce" value="" id="txt_matricula" data-type="number">
+                        <input type="text" class="form-control PBvalidation keyupmce" value="<?php echo $arr_alumno["matricula"] ?>" id="txt_matricula" data-type="number">
                     </div>
                 </div>
             </div> 

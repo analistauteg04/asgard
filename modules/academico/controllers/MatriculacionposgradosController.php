@@ -79,7 +79,7 @@ class MatriculacionposgradosController extends \app\components\CController {
         $mod_solins = new SolicitudInscripcion();
         $mod_promocion = new PromocionPrograma();
         $mod_paralelo = new ParaleloPromocionPrograma();
-
+        $mod_estudiante = new Estudiante();
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
             if (isset($data["getparalelos"])) {
@@ -96,10 +96,13 @@ class MatriculacionposgradosController extends \app\components\CController {
         $personaData = $mod_solins->consultarInteresadoPorSol_id($sins_id);
         $resp_programas = $mod_promocion->consultarPromocionxPrograma($personaData["eaca_id"]);
         $arr_Paralelos = $mod_paralelo->consultarParalelosxPrograma(0);
+        $arr_estudiante = $mod_estudiante->getEstudiantexperid($personaData["per_id"]);
+        $arr_alumno = $mod_estudiante->getEstudiantexestid($arr_estudiante["est_id"]);
         return $this->render('new', [
                     'personalData' => $personaData,
                     'arr_promocion' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Seleccionar"]], $resp_programas), "id", "name"),
                     'arr_paralelo' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Seleccionar"]], $arr_Paralelos), "id", "name"),
+                    'arr_alumno' => $arr_alumno
         ]);
     }
 
@@ -610,7 +613,7 @@ class MatriculacionposgradosController extends \app\components\CController {
                             // grabar tabla estudiantes
                             $resp_estudiantes = $mod_Estudiante->insertarEstudiante($per_id, $matricula, null, $usu_id, null, null, $fecha);
                         } else {
-                            /*** OJO UNA VEZ QUE SE TENGA EL MODIFICAR ESTUDIANTE ACTUALIZAR EL NUMERO DE MATRICULA ENVIANDO EL EST_ID***/
+                            /*                             * * OJO UNA VEZ QUE SE TENGA EL MODIFICAR ESTUDIANTE ACTUALIZAR EL NUMERO DE MATRICULA ENVIANDO EL EST_ID** */
                             $resp_estudiantes = $resp_estudianteid["est_id"];
                         }
                         //\app\models\Utilities::putMessageLogFile('resp_estudiante... ' . $resp_estudiantes);
