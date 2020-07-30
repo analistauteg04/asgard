@@ -15,7 +15,8 @@ academico::registerTranslations();
         $this->render('_formIndex', [
             'arr_ninteres' => $arr_ninteres,   
             'arr_modalidad' => $arr_modalidad,
-            'arr_carrerra1' => $arr_carrerra1,            
+            'arr_carrerra1' => $arr_carrerra1,  
+            'arr_estados' => $arr_estados,
         ]);
         ?>
     </form>

@@ -457,6 +457,13 @@ class Estudiante extends \yii\db\ActiveRecord {
             if ($arrFiltro['carrera'] != "" && $arrFiltro['carrera'] > 0) {
                 $str_search .= " meun.eaca_id  = :carrera AND ";
             }
+            if ($arrFiltro['estado'] != -1) {         
+                if ($arrFiltro['estado'] == "null") {
+                    $str_search .= " estu.est_estado  IS NULL AND ";
+                } else {
+                    $str_search .= " estu.est_estado  = :estado AND ";
+                }
+            }
         }
         if ($onlyData == false) {
             $estid = "
@@ -483,7 +490,12 @@ class Estudiante extends \yii\db\ActiveRecord {
                       IFNULL(unid.uaca_nombre, '') as undidad,
                       IFNULL(moda.mod_nombre, '') as modalidad,
                       IFNULL(esac.eaca_nombre, '') as carrera,
-                      r.ron_id as registroOnline
+                      CASE estu.est_estado                             
+                            WHEN '0' THEN 'Inactivo'  
+                            WHEN '1' THEN 'Activo'   
+                            ELSE 'No estudiante'
+                      END as estado,
+                      r.ron_id as registroOnline                      
                 FROM  " . $con->dbname . ".estudiante estu
                 RIGHT JOIN " . $con1->dbname . ".persona pers ON pers.per_id = estu.per_id		
                 LEFT JOIN " . $con->dbname . ".estudiante_carrera_programa ecpr ON ecpr.est_id = estu.est_id
@@ -498,8 +510,7 @@ class Estudiante extends \yii\db\ActiveRecord {
                 pers.per_id > 1000                
                 ORDER BY estu.est_fecha_creacion DESC";
 
-        $comando = $con->createCommand($sql);
-        //$comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando = $con->createCommand($sql);        
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
             if ($arrFiltro['search'] != "") {
                 $search_cond = "%" . $arrFiltro["search"] . "%";
@@ -522,6 +533,12 @@ class Estudiante extends \yii\db\ActiveRecord {
             if ($arrFiltro['carrera'] != "" && $arrFiltro['carrera'] > 0) {
                 $carrera = $arrFiltro["carrera"];
                 $comando->bindParam(":carrera", $carrera, \PDO::PARAM_INT);
+            }
+            if ($arrFiltro['estado'] != -1) {
+                $estado = $arrFiltro["estado"];
+                if ($arrFiltro['estado'] != "null") {
+                    $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+                }
             }
         }
         $resultData = $comando->queryAll();

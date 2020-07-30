@@ -145,11 +145,12 @@ function actualizarGrid() {
     var unidad = $('#cmb_unidadbus option:selected').val();
     var modalidad = $('#cmb_modalidadbus option:selected').val();
     var carrera = $('#cmb_carrerabus option:selected').val();
+    var estado = $('#cmb_estadobus option:selected').val();
 
     //Buscar almenos una clase con el nombre para ejecutar
     if (!$(".blockUI").length) {
         showLoadingPopup();
-        $('#Tbg_Estudiantes').PbGridView('applyFilterData', {'search': search, 'f_ini': f_ini, 'f_fin': f_fin, 'unidad': unidad, 'modalidad': modalidad, 'carrera': carrera});
+        $('#Tbg_Estudiantes').PbGridView('applyFilterData', {'search': search, 'f_ini': f_ini, 'f_fin': f_fin, 'unidad': unidad, 'modalidad': modalidad, 'carrera': carrera, 'estado': estado});
         setTimeout(hideLoadingPopup, 2000);
     }
 }
@@ -161,7 +162,8 @@ function exportExcel() {
     var unidad = $('#cmb_unidadbus option:selected').val();
     var modalidad = $('#cmb_modalidadbus option:selected').val();
     var carrera = $('#cmb_carrerabus option:selected').val();
-    window.location.href = $('#txth_base').val() + "/academico/estudiante/expexcel?search=" + search + "&f_ini=" + f_ini + "&f_fin=" + f_fin + "&unidad=" + unidad + "&modalidad=" + modalidad + "&carrera=" + carrera;
+    var estado = $('#cmb_estadobus option:selected').val();
+    window.location.href = $('#txth_base').val() + "/academico/estudiante/expexcel?search=" + search + "&f_ini=" + f_ini + "&f_fin=" + f_fin + "&unidad=" + unidad + "&modalidad=" + modalidad + "&carrera=" + carrera + "&estado=" + estado;
 }
 
 function exportPdf() {
@@ -171,7 +173,8 @@ function exportPdf() {
     var unidad = $('#cmb_unidadbus option:selected').val();
     var modalidad = $('#cmb_modalidadbus option:selected').val();
     var carrera = $('#cmb_carrerabus option:selected').val();
-    window.location.href = $('#txth_base').val() + "/academico/estudiante/exppdf?pdf=1&search=" + search + "&f_ini=" + f_ini + "&f_fin=" + f_fin + "&unidad=" + unidad + "&modalidad=" + modalidad + "&carrera=" + carrera;
+    var estado = $('#cmb_estadobus option:selected').val();
+    window.location.href = $('#txth_base').val() + "/academico/estudiante/exppdf?pdf=1&search=" + search + "&f_ini=" + f_ini + "&f_fin=" + f_fin + "&unidad=" + unidad + "&modalidad=" + modalidad + "&carrera=" + carrera+ "&estado=" + estado;
 }
 function save() {
     var link = $('#txth_base').val() + "/academico/estudiante/save";

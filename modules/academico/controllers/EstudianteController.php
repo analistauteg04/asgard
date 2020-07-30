@@ -41,6 +41,16 @@ class EstudianteController extends \app\components\CController {
             '8' => Yii::t("formulario", "H"),
         ];
     }
+    
+    private function estados() {
+        return [
+            
+            '-1' => Yii::t("formulario", "All"),
+            'null' => Yii::t("formulario", "No estudiante"),     
+            '0' => Yii::t("formulario", "Inactivo"),
+            '1' => Yii::t("formulario", "Activo"),
+        ];
+    }
 
     public function actionIndex() {
         $mod_estudiante = new Estudiante();
@@ -56,6 +66,7 @@ class EstudianteController extends \app\components\CController {
             $arrSearch["unidad"] = $data['unidad'];
             $arrSearch["modalidad"] = $data['modalidad'];
             $arrSearch["carrera"] = $data['carrera'];
+            $arrSearch["estado"] = $data['estado'];
             $arr_estudiante = $mod_estudiante->consultarEstudiante($arrSearch);
             return $this->renderPartial('index-grid', [
                         "model" => $arr_estudiante,
@@ -84,6 +95,7 @@ class EstudianteController extends \app\components\CController {
                     'arr_ninteres' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_ninteres), "id", "name"),
                     'arr_modalidad' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_modalidad), "id", "name"),
                     'arr_carrerra1' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_carrerra1), "id", "name"),
+                    'arr_estados' => $this->estados(),
         ]);
     }
 
@@ -94,7 +106,7 @@ class EstudianteController extends \app\components\CController {
         header("Content-Type: $content_type");
         header("Content-Disposition: attachment;filename=" . $nombarch);
         header('Cache-Control: max-age=0');
-        $colPosition = array("C", "D", "E", "F", "G", "H", "I", "J", "K", "L");
+        $colPosition = array("C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M");
 
         $arrHeader = array(
             Yii::t("formulario", "First Names"),
@@ -104,7 +116,8 @@ class EstudianteController extends \app\components\CController {
             Yii::t("formulario", 'Date Create'),
             academico::t("Academico", "Academic unit"),
             academico::t("matriculacion", "Modality"),
-            academico::t("Academico", "Career/Program")
+            academico::t("Academico", "Career/Program"),
+            Yii::t("formulario", "Status")
         );
 
         $mod_estudiante = new Estudiante();
@@ -117,6 +130,7 @@ class EstudianteController extends \app\components\CController {
         $arrSearch["unidad"] = $data['unidad'];
         $arrSearch["modalidad"] = $data['modalidad'];
         $arrSearch["carrera"] = $data['carrera'];
+        $arrSearch["estado"] = $data['estado'];
 
         $arrData = array();
         if (empty($arrSearch)) {
@@ -145,6 +159,7 @@ class EstudianteController extends \app\components\CController {
         $arrSearch["unidad"] = $data['unidad'];
         $arrSearch["modalidad"] = $data['modalidad'];
         $arrSearch["carrera"] = $data['carrera'];
+        $arrSearch["estado"] = $data['estado'];
 
         $arr_head = array(
             Yii::t("formulario", "First Names"),
@@ -154,7 +169,8 @@ class EstudianteController extends \app\components\CController {
             Yii::t("formulario", 'Date Create'),
             academico::t("Academico", "Academic unit"),
             academico::t("matriculacion", "Modality"),
-            academico::t("Academico", "Career/Program")
+            academico::t("Academico", "Career/Program"),
+            Yii::t("formulario", "Status")
         );
 
         if (empty($arrSearch)) {

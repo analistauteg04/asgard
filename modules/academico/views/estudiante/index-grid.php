@@ -70,6 +70,21 @@ PbGridView::widget([
             'value' => 'fecha_creacion',
         ],
         [
+            'attribute' => 'estado',
+            'header' =>  Yii::t("formulario", 'Status'),
+            'contentOptions' => ['class' => 'text-center'],
+            'headerOptions' => ['class' => 'text-center'],
+            'format' => 'html',
+            'value' => function ($model) {
+                if ($model["estado"] == 'Inactivo')
+                    return '<small class="label label-danger">Inactivo</small>';
+                else if ($model["estado"] == 'Activo')
+                    return '<small class="label label-success">Activo</small>';
+                else
+                    return '<small class="label label-warning">No Estudiante</small>';
+            },
+        ],
+        [
             'class' => 'yii\grid\ActionColumn',
             'header' => Yii::t("formulario", "Actions"),
             'template' => '{create} {view} {matriculacion}',
@@ -82,7 +97,7 @@ PbGridView::widget([
                     }
                 },
                 'view' => function ($url, $model) {
-                    if ($model['est_id'] > 1) {
+                    if ($model['est_id'] > 1 && $model["estado"] == 'Activo') {
                         return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', Url::to(['/academico/estudiante/view', 'per_id' => base64_encode($model['per_id']), 'est_id' => base64_encode($model['est_id'])]), ["data-toggle" => "tooltip", "title" => "Ver Estudiante", "data-pjax" => 0]);
                     } else {
                         return '<span class="glyphicon glyphicon glyphicon-eye-open"></span>';

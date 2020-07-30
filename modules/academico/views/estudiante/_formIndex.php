@@ -74,6 +74,10 @@ use yii\helpers\ArrayHelper;
             <div class="col-sm-3 col-xs-3 col-md-3 col-lg-3">
                 <?= Html::dropDownList("cmb_carrerabus", 0, $arr_carrerra1, ["class" => "form-control", "id" => "cmb_carrerabus"]) ?>
             </div>
+            <label for="cmb_estadobus" class="col-sm-2 col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= Yii::t("formulario", "Status") ?></label>
+            <div class="col-sm-3 col-xs-3 col-md-3 col-lg-3">
+                <?= Html::dropDownList("cmb_estadobus", -1, $arr_estados, ["class" => "form-control", "id" => "cmb_estadobus"]) ?>
+            </div>
         </div>
     </div>
     <div class="col-md-12 col-xs-12 col-lg-12 col-sm-12">
