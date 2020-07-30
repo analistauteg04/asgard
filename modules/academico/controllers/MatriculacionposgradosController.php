@@ -235,7 +235,6 @@ class MatriculacionposgradosController extends \app\components\CController {
             $con = \Yii::$app->db_academico;
             $transaction = $con->beginTransaction();
             try {
-                //$promocion = new PromocionPrograma();
                 //Verificar que no tenga una matrícula.
                 $mod_Matriculacion = new PromocionPrograma();
                 $resp_consPromocion = $mod_Matriculacion->consultarPromocion($anio, $mes, $unidad, $modalidad, $programa);
@@ -382,7 +381,6 @@ class MatriculacionposgradosController extends \app\components\CController {
             if ($mes > 0 && $mes < 10) {
                 $meses = '0' . $mes;
             }
-            //$codigo = strtoupper(substr($data["nombreprograma"], 0, 3)) . $anio . $meses;
             $con = \Yii::$app->db_academico;
             $transaction = $con->beginTransaction();
             try {
@@ -601,10 +599,8 @@ class MatriculacionposgradosController extends \app\components\CController {
                 $mod_matricula = new MatriculacionProgramaInscrito();
                 // consultar si el estudiante ya ha sido creado y si esta registrado en alguna materia
                 $resp_estudiante = $mod_Estudiante->getEstudiantexid($per_id);
-                //\app\models\Utilities::putMessageLogFile('resp_estudiante... ' . $resp_estudiante["idestudiante"]);
                 if ($resp_estudiante["idestudiante"] == "") {
                     $resp_cupoparalelo = $mod_paralelo->getParalelosxids($paralelo, $promocion);
-                    // \app\models\Utilities::putMessageLogFile('cupo disponible' . $resp_cupoparalelo["pppr_cupo_actual"]);
                     if ($resp_cupoparalelo["pppr_cupo_actual"] > 0) {
                         $fecha = date(Yii::$app->params["dateTimeByDefault"]);
                         // consultar si existe el estudiante creado, sino crearlo
@@ -613,7 +609,6 @@ class MatriculacionposgradosController extends \app\components\CController {
                             // grabar tabla estudiantes
                             $resp_estudiantes = $mod_Estudiante->insertarEstudiante($per_id, $matricula, null, $usu_id, null, null, $fecha);
                         } else {
-                            /*                             * * OJO UNA VEZ QUE SE TENGA EL MODIFICAR ESTUDIANTE ACTUALIZAR EL NUMERO DE MATRICULA ENVIANDO EL EST_ID** */
                             $resp_estudiantes = $resp_estudianteid["est_id"];
                         }
                         //\app\models\Utilities::putMessageLogFile('resp_estudiante... ' . $resp_estudiantes);
@@ -673,7 +668,6 @@ class MatriculacionposgradosController extends \app\components\CController {
 
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
-            //$adm_id = $data["adm_id"];
             if (isset($data["getparalelos"])) {
                 $resp_Paralelos = $mod_paralelo->consultarParalelosxPrograma($data["promocion_id"]);
                 $message = array("paralelos" => $resp_Paralelos);
