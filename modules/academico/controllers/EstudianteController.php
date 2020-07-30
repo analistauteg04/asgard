@@ -485,8 +485,6 @@ class EstudianteController extends \app\components\CController {
             $con = \Yii::$app->db_academico;
             $transaction = $con->beginTransaction();
             try {
-                \app\models\Utilities::putMessageLogFile('estuuu: ' . $est_id);
-                \app\models\Utilities::putMessageLogFile('estaaaa: ' . $estado);
                 $resp_estado = $mod_estudiante->modificarEstadoest($est_id, $usu_autenticado, $estado, $fecha);
                 if ($resp_estado) {
                     $exito = '1';
