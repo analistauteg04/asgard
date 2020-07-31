@@ -1043,7 +1043,7 @@ class Interesado extends \app\modules\admision\components\CActiveRecord {
             }
         }
         $sql = "
-                select 
+                select
                     inte.int_id as id,
                     concat(ifnull(per.per_pri_nombre,''),' ',ifnull(per.per_seg_nombre,'')) as nombres,
                     concat(ifnull(per.per_pri_apellido,''),' ',ifnull(per.per_seg_apellido,'')) as apellidos,

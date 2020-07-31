@@ -203,7 +203,7 @@ function save() {
 function deleteItem(per_id) {
     var link = $('#txth_base').val() + "/academico/profesor/delete";
     var arrParams = new Object();
-    arrParams.per_id = per_id;
+    arrParams.per_id = per_id;    
     requestHttpAjax(link, arrParams, function(response) {
         if (response.status == "OK") {
             var arrParams2 = new Object();

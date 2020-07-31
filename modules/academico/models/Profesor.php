@@ -4,6 +4,7 @@ namespace app\modules\academico\models;
 
 use Yii;
 use yii\data\ArrayDataProvider;
+use app\models\Utilities;
 
 /**
  * This is the model class for table "profesor".

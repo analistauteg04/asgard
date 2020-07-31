@@ -41,14 +41,15 @@ class ProfesorController extends \app\components\CController {
 
     public function actionIndex() {
         $pro_model = new profesor();
+        Utilities::putMessageLogFile('saludos1');
         /* Validacion de acceso a vistas por usuario */
         $user_ingresa = Yii::$app->session->get("PB_iduser");
         $user_usermane =  Yii::$app->session->get("PB_username");
         $user_perId =  Yii::$app->session->get("PB_perid");
         $grupo_model = new Grupo();
         $search = NULL;
-        $perfil = '0'; // perfil administrador o talento humano
-        //$grupPerm = array(1,15);
+        $perfil = '0'; // perfil administrador o talento humano        
+        
         $arr_grupos = $grupo_model->getAllGruposByUser($user_usermane);
         if (!in_array(['id' => '1'], $arr_grupos) && !in_array(['id' => '15'], $arr_grupos)) {
             $search = $user_perId;
@@ -56,7 +57,7 @@ class ProfesorController extends \app\components\CController {
         }
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->get();
-            $search = $data["search"];
+            $search = $data["search"];            
             if(!in_array(['id' => '1'], $arr_grupos) && !in_array(['id' => '15'], $arr_grupos)) {
                 $search = $user_perId;
                 $perfil = '1';  // perfil profesor o no administrador ni talento humano
@@ -68,6 +69,7 @@ class ProfesorController extends \app\components\CController {
                 ]);
             }
         }
+        Utilities::putMessageLogFile('search:' . $search);
         $model = $pro_model->getAllProfesorGrid($search, $perfil);
         return $this->render('index', [
                     'model' => $model,                    
@@ -1632,20 +1634,22 @@ class ProfesorController extends \app\components\CController {
         }
     }
 
-    public function actionDelete(){
+    public function actionDelete(){        
+        \app\models\Utilities::putMessageLogFile('saludos-1');
         if (Yii::$app->request->isAjax) {
-            $data = Yii::$app->request->post();
-            try {
-                $per_id = $data["per_id"];
+            $data = Yii::$app->request->post();            
+            try {                
+                $per_id = $data["per_id"];                
                 $persona_model = Persona::findOne($per_id);
                 $persona_model->per_estado_logico = '0';
+                $persona_model->per_fecha_modificacion = date(Yii::$app->params["dateTimeByDefault"]);
 
                 /* Validacion de acceso a vistas por usuario */
                 $user_ingresa = Yii::$app->session->get("PB_iduser");
                 $user_usermane =  Yii::$app->session->get("PB_username");
                 $user_perId =  Yii::$app->session->get("PB_perid");
                 $grupo_model = new Grupo();
-                $arr_grupos = $grupo_model->getAllGruposByUser($user_usermane);
+                $arr_grupos = $grupo_model->getAllGruposByUser($user_usermane);                
                 if(!in_array(['id' => '1'], $arr_grupos) && !in_array(['id' => '15'], $arr_grupos))
                     return $this->redirect(['profesor/index']);
 
@@ -1653,7 +1657,7 @@ class ProfesorController extends \app\components\CController {
                     "wtmessage" => Yii::t("notificaciones", "Your information was successfully saved."),
                     "title" => Yii::t('jslang', 'Success'),
                 );
-                if ($persona_model->update() !== false) {
+                if ($persona_model->update() !== false) {                    
                     $profesor_model = Profesor::findOne(["per_id" => $per_id]);
                     $profesor_model->pro_estado_logico = '0';
                     $profesor_model->pro_usuario_modifica = $user_ingresa;
@@ -1662,22 +1666,20 @@ class ProfesorController extends \app\components\CController {
 
                     $usuario_model = Usuario::findOne(["per_id" => $per_id]);
                     $usu_id = $usuario_model->usu_id;
-                    $usuario_model->usu_estado_logico = '0';
-                    $usuario_model->usu_usuario_modifica = $user_ingresa;
+                    $usuario_model->usu_estado_logico = '0';                    
                     $usuario_model->usu_fecha_modificacion = date(Yii::$app->params["dateTimeByDefault"]);
-                    $usuario_model->update();
+                    $usuario_model->update();                    
 
                     $empresa_persona_model = EmpresaPersona::findOne(["per_id" => $per_id]);
-                    $empresa_persona_model->eper_estado_logico = '0';
-                    $empresa_persona_model->eper_usuario_modifica = $user_ingresa;
+                    $empresa_persona_model->eper_estado_logico = '0';                    
                     $empresa_persona_model->eper_fecha_modificacion = date(Yii::$app->params["dateTimeByDefault"]);
-                    $empresa_persona_model->update();
+                    $empresa_persona_model->update();                    
 
                     $usua_grol_eper_model = UsuaGrolEper::findOne(["usu_id" => $usu_id]);
-                    $usua_grol_eper_model->ugep_estado_logico = '0';
-                    $usua_grol_eper_model->ugep_usuario_modifica = $user_ingresa;
+                    $usua_grol_eper_model->ugep_estado_logico = '0';                    
                     $usua_grol_eper_model->ugep_fecha_modificacion= date(Yii::$app->params["dateTimeByDefault"]);
                     $usua_grol_eper_model->update();
+                    //\app\models\Utilities::putMessageLogFile('despues de actualizar Usuario Grupo Rol');
 
                     return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
                 } else {
