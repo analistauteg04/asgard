@@ -27,6 +27,8 @@ if (!empty($personalData['per_cedula'])) {
 ?>
 <?= Html::hiddenInput('txth_pids', base64_decode($_GET['per_id']), ['id' => 'txth_pids']); ?>
 <?= Html::hiddenInput('txth_eids', base64_decode($_GET['est_id']), ['id' => 'txth_eids']); ?>
+<?= Html::hiddenInput('txth_perids', $_GET['per_id'], ['id' => 'txth_perids']); ?>
+<?= Html::hiddenInput('txth_estids', $_GET['est_id'], ['id' => 'txth_estids']); ?>
 <form class="form-horizontal" enctype="multipart/form-data" id="formsolicitud">    
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
         <h3><span id="lbl_solicitud"><?= academico::t("estudiantes", "View Students") ?></span></h3>
@@ -124,10 +126,10 @@ if (!empty($personalData['per_cedula'])) {
             </div>
         </div>             
     </div> 
-    <div class="row"> 
+    <!-- <div class="row"> 
         <div class="col-lg-11 col-md-11 col-sm-11 col-xs-11"></div>
         <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">&nbsp;&nbsp;  
-            <a id="btn_modificarestudiante" href="javascript:" class="btn btn-primary btn-block"> <?= Yii::t("formulario", "Update") ?> </a>
+            <a id="btn_modificarestudiante" href="javascript:" class="btn btn-primary btn-block"> <? Yii::t("formulario", "Update") ?> </a>
         </div>
-    </div>   
+    </div> -->  
 </form>

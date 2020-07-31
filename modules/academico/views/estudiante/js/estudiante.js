@@ -299,3 +299,8 @@ function estadoestudiante(id, estado) {
     messagePB.acciones[0] = objAccept;
     showAlert("warning", "warning", messagePB);
 }
+function edit() {
+    var per_id = $('#txth_perids').val();
+    var est_id = $('#txth_estids').val();    
+    window.location.href = $('#txth_base').val() + "/academico/estudiante/edit?per_id=" + per_id + "&est_id=" + est_id;
+}

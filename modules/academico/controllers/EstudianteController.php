@@ -431,7 +431,7 @@ class EstudianteController extends \app\components\CController {
             $transaction = $con->beginTransaction();
 
             try {
-                \app\models\Utilities::putMessageLogFile('entro: ');
+                //\app\models\Utilities::putMessageLogFile('entro: ');
                 $mod_Estudiante = new Estudiante();
                 $mod_Modestuni = new ModuloEstudio();
                 // consultar la modalidad_estudio_unidad
@@ -440,10 +440,20 @@ class EstudianteController extends \app\components\CController {
                     // modifica la tabla estudiante
                     $resp_estudiante = $mod_Estudiante->updateEstudiante($est_id, $matricula, $categoria, $usu_autenticado, $fecha);
                     if ($resp_estudiante) {
-                        // modifica la tabla estudiante_carrera_programa   
-                        $resp_estudiantecarrera = $mod_Estudiante->updateEstudiantecarreraprogr($est_id, $resp_mestuni["meun_id"], $usu_autenticado, $fecha);
-                        if ($resp_estudiantecarrera) {
-                            $exito = 1;
+                        // consultar si existe el id de estudiante_carrera_programa no existe insertar, si existe modificar
+                        $resp_estucarrera = $mod_Estudiante->consultarEstcarreraprogrma($est_id);
+                        // no existe usar esa funcion
+                        if ($resp_estucarrera["ecpr_id"] == "") {
+                            $resp_estudiantecarrera = $mod_Estudiante->insertarEstcarreraprog($est_id, $resp_mestuni["meun_id"], $fecha, $usu_autenticado, $fecha);
+                            if ($resp_estudiantecarrera) {
+                                $exito = 1;
+                            }
+                        } else {
+                            // modifica la tabla estudiante_carrera_programa   
+                            $resp_estudiantecarrera = $mod_Estudiante->updateEstudiantecarreraprogr($est_id, $resp_mestuni["meun_id"], $usu_autenticado, $fecha);
+                            if ($resp_estudiantecarrera) {
+                                $exito = 1;
+                            }
                         }
                     }
                 }
@@ -475,7 +485,7 @@ class EstudianteController extends \app\components\CController {
     }
 
     public function actionEstadoestudiante() {
-        $mod_estudiante = new Estudiante();  
+        $mod_estudiante = new Estudiante();
         $usu_autenticado = @Yii::$app->session->get("PB_iduser");
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();

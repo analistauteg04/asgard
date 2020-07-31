@@ -479,7 +479,7 @@ class Estudiante extends \yii\db\ActiveRecord {
                 $inlist .= ", ";
             $cont ++;
         }
-        $sql = "SELECT 
+        $sql = "SELECT distinct
                       $estid  
 	           -- pers.per_id,
                       concat(pers.per_pri_nombre, ' ', pers.per_pri_apellido) as nombres,
@@ -612,8 +612,8 @@ class Estudiante extends \yii\db\ActiveRecord {
                         meu.eaca_id as carrera
                          
                 FROM " . $con->dbname . ".estudiante est  
-                INNER JOIN " . $con->dbname . ".estudiante_carrera_programa ecp ON ecp.est_id = est.est_id
-                INNER JOIN " . $con->dbname . ".modalidad_estudio_unidad meu ON meu.meun_id = ecp.meun_id
+                LEFT JOIN " . $con->dbname . ".estudiante_carrera_programa ecp ON ecp.est_id = est.est_id
+                LEFT JOIN " . $con->dbname . ".modalidad_estudio_unidad meu ON meu.meun_id = ecp.meun_id
                     
                 WHERE   est.est_id = :est_id                        
                         AND est.est_estado = :estado
@@ -711,7 +711,7 @@ class Estudiante extends \yii\db\ActiveRecord {
     }
 
     /**
-     * Function modifica datosde la tabla estudiante_carrera_programa.
+     * Function modifica estado de estudiante.
      * @author Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;
      * @param
      * @return
