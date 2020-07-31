@@ -715,11 +715,11 @@ class ProfesorController extends \app\components\CController {
                 $pai_id_domicilio = $data["pai_id"];
                 $pro_id_domicilio = $data["pro_id"];
                 $can_id_domicilio = $data["can_id"];
-                $sector = strtolower($data["sector"]);
-                $calle_pri = strtolower($data["calle_pri"]);
-                $calle_sec = strtolower($data["calle_sec"]);
-                $numeracion = strtolower($data["numeracion"]);
-                $referencia = strtolower($data["referencia"]);
+                $sector = ucwords($data["sector"]);
+                $calle_pri = ucwords($data["calle_pri"]);
+                $calle_sec = ucwords($data["calle_sec"]);
+                $numeracion = ucwords($data["numeracion"]);
+                $referencia = ucwords($data["referencia"]);
 
                 /**
                  * Inf. Cuenta
@@ -1350,11 +1350,11 @@ class ProfesorController extends \app\components\CController {
                 $pai_id_domicilio = $data["pai_id"];
                 $pro_id_domicilio = $data["pro_id"];
                 $can_id_domicilio = $data["can_id"];
-                $sector = strtolower($data["sector"]);
-                $calle_pri = strtolower($data["calle_pri"]);
-                $calle_sec = strtolower($data["calle_sec"]);
-                $numeracion = strtolower($data["numeracion"]);
-                $referencia = strtolower($data["referencia"]);
+                $sector = ucwords($data["sector"]);
+                $calle_pri = ucwords($data["calle_pri"]);
+                $calle_sec = ucwords($data["calle_sec"]);
+                $numeracion = ucwords($data["numeracion"]);
+                $referencia = ucwords($data["referencia"]);
 
                 /**
                  * Inf. Cuenta
