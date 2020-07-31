@@ -7,6 +7,7 @@ use app\models\ExportFile;
 use app\components\CController;
 use app\modules\academico\models\Planificacion;
 use app\modules\academico\models\Modalidad;
+use app\modules\academico\models\RegistroConfiguracion;
 use app\models\Persona;
 use yii\helpers\ArrayHelper;
 use yii\data\ArrayDataProvider;
@@ -202,6 +203,169 @@ class PlanificacionController extends \app\components\CController {
                     return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
                 } else {
                     throw new Exception('Error SubModulo no creado.');
+                }
+            } catch (Exception $ex) {
+                $message = array(
+                    "wtmessage" => Yii::t('notificaciones', 'Your information has not been saved. Please try again.'),
+                    "title" => Yii::t('jslang', 'Error'),
+                );
+                return Utilities::ajaxResponse('NOOK', 'alert', Yii::t('jslang', 'Error'), 'true', $message);
+            }
+        }
+    }
+
+    public function actionRegisterprocess(){
+        $modelReg = new RegistroConfiguracion();
+        $data = Yii::$app->request->get();
+        if ($data['PBgetFilter']) {
+            $pla_periodo_academico = $data["periodo"];
+            $mod_id = $data["mod_id"];
+            $model = $modelReg->getRegistroConfList($pla_periodo_academico, $mod_id);
+            return $this->renderPartial('register-index-grid', [
+                "model" => $model,
+            ]);
+        }
+        
+        $arr_pla = Planificacion::getPeriodosAcademico();
+        $arr_modalidad = Modalidad::findAll(["mod_estado" => 1, "mod_estado_logico" => 1]);
+        $model = $modelReg->getRegistroConfList(null, 0);
+        return $this->render('register-index', [
+            'arr_pla' => ArrayHelper::map(array_merge([["pla_id" => "0", "pla_periodo_academico" => Yii::t("formulario", "Grid")]], $arr_pla), "pla_id", "pla_periodo_academico"),
+            'arr_modalidad' => ArrayHelper::map(array_merge([["mod_id" => "0", "mod_nombre" => Yii::t("formulario", "Grid")]], $arr_modalidad), "mod_id", "mod_nombre"),
+            'model' => $model,
+        ]);
+    }
+
+    public function actionNewreg(){
+        //$arr_pla = ArrayHelper::map(Planificacion::getPeriodosAcademico(), "pla_id", "pla_periodo_academico");
+        $_SESSION['JSLANG']['The initial date of registry cannot be greater than end date.'] = academico::t('matriculacion', 'The initial date of registry cannot be greater than end date.');
+        $arr_pla = ArrayHelper::map(Planificacion::findAll(['pla_estado' => 1, 'pla_estado_logico' => 1]), "pla_id", "pla_periodo_academico");
+        return $this->render('newreg',[
+            'arr_pla' => $arr_pla,
+        ]);
+    }
+
+    public function actionViewreg(){
+        $data = Yii::$app->request->get();
+        if (isset($data['id'])) {
+            $id = $data['id'];
+            $model = RegistroConfiguracion::findOne($id);
+            $arr_pla = ArrayHelper::map(Planificacion::findAll(['pla_estado' => 1, 'pla_estado_logico' => 1]), "pla_id", "pla_periodo_academico");
+            return $this->render('viewreg', [
+                'model' => $model,
+                'arr_pla' => $arr_pla,
+                'pla_id' => $model->pla_id,
+                'rco_id' => $model->rco_id,
+                'bloque' => ($model->rco_num_bloques == 1)?0:1,
+            ]);
+        }
+        return $this->redirect('registerprocess');
+    }
+
+    public function actionEditreg(){
+        $data = Yii::$app->request->get();
+        if (isset($data['id'])) {
+            $id = $data['id'];
+            $model = RegistroConfiguracion::findOne($id);
+            $arr_pla = ArrayHelper::map(Planificacion::findAll(['pla_estado' => 1, 'pla_estado_logico' => 1]), "pla_id", "pla_periodo_academico");
+            return $this->render('editreg', [
+                'model' => $model,
+                'arr_pla' => $arr_pla,
+                'pla_id' => $model->pla_id,
+                'rco_id' => $model->rco_id,
+                'bloque' => ($model->rco_num_bloques == 1)?0:1,
+            ]);
+        }
+        return $this->redirect('registerprocess');
+    }
+
+    public function actionUpdatereg(){
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+            try {
+                $id = $data["id"];
+                $pla_id = $data["pla_id"];
+                $finicio = $data["finicio"];
+                $ffin = $data["ffin"];
+                $bloque = $data["bloque"];
+                $model = RegistroConfiguracion::findOne($id);
+                $model->pla_id = $pla_id;
+                $model->rco_fecha_inicio = $finicio . " 00:00:00";
+                $model->rco_fecha_fin = $ffin . " 23:59:59";
+                $model->rco_num_bloques = ($bloque == 0)?1:2;
+                $model->rco_fecha_modificacion = date(Yii::$app->params['dateTimeByDefault']);
+                $model->rco_usuario_modifica = Yii::$app->session->get("PB_iduser");
+                $message = array(
+                    "wtmessage" => Yii::t("notificaciones", "Your information was successfully saved."),
+                    "title" => Yii::t('jslang', 'Success'),
+                );
+                if ($model->update() !== false) {
+                    return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+                } else {
+                    throw new Exception('Error registro no actualizado.');
+                }
+            } catch (Exception $ex) {
+                $message = array(
+                    "wtmessage" => Yii::t('notificaciones', 'Your information has not been saved. Please try again.'),
+                    "title" => Yii::t('jslang', 'Error'),
+                );
+                return Utilities::ajaxResponse('NOOK', 'alert', Yii::t('jslang', 'Error'), 'true', $message);
+            }
+        }
+    }
+
+    public function actionSavereg(){
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+            try {
+                $pla_id = $data["pla_id"];
+                $finicio = $data["finicio"];
+                $ffin = $data["ffin"];
+                $bloque = $data["bloque"];
+                $model = new RegistroConfiguracion();
+                $model->pla_id = $pla_id;
+                $model->rco_fecha_inicio = $finicio . " 00:00:00";
+                $model->rco_fecha_fin = $ffin . " 23:59:59";
+                $model->rco_num_bloques = ($bloque == 0)?1:2;
+                $model->rco_estado = "1";
+                $model->rco_estado_logico = "1";
+                $message = array(
+                    "wtmessage" => Yii::t("notificaciones", "Your information was successfully saved."),
+                    "title" => Yii::t('jslang', 'Success'),
+                );
+                if ($model->save()) {
+                    return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+                } else {
+                    throw new Exception('Error registro no creado.');
+                }
+            } catch (Exception $ex) {
+                $message = array(
+                    "wtmessage" => Yii::t('notificaciones', 'Your information has not been saved. Please try again.'),
+                    "title" => Yii::t('jslang', 'Error'),
+                );
+                return Utilities::ajaxResponse('NOOK', 'alert', Yii::t('jslang', 'Error'), 'true', $message);
+            }
+        }
+    }
+
+    public function actionDeletereg(){
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+            try {
+                $id = $data["id"];
+                $model = RegistroConfiguracion::findOne($id);
+                $model->rco_estado = '0';
+                $model->rco_estado_logico = '0';
+                $model->rco_usuario_modifica = Yii::$app->session->get("PB_iduser");
+                $model->rco_fecha_modificacion = date(Yii::$app->params['dateTimeByDefault']);
+                $message = array(
+                    "wtmessage" => Yii::t("notificaciones", "Your information was successfully saved."),
+                    "title" => Yii::t('jslang', 'Success'),
+                );
+                if ($model->update() !== false) {
+                    return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+                } else {
+                    throw new Exception('Error registro no ha sido eliminado.');
                 }
             } catch (Exception $ex) {
                 $message = array(

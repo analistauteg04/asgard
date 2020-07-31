@@ -1,10 +1,3 @@
-function searchModules(idbox, idgrid) {
-    var arrParams = new Object();
-    arrParams.PBgetFilter = true;
-    arrParams.search = $("#" + idbox).val();
-    $("#" + idgrid).PbGridView("applyFilterData", arrParams);
-}
-
 $(document).ready(function() {
     $('#btn_buscarMarcacion').click(function() {
         actualizarGridMarcacion();
@@ -12,6 +5,10 @@ $(document).ready(function() {
 
     $('#btn_cargarDocumento').click(function() {
         cargarDocumento();
+    });
+
+    $('#btn_buscarRegConf').click(function() {
+        actualizarGridRegistroConf();
     });
 
     $('#cmb_unidad').change(function() {
@@ -61,6 +58,13 @@ $(document).ready(function() {
         $("#grid_planificaciones_list").PbGridView("applyFilterData", arrParams2);
     });
 });
+
+function searchModules(idbox, idgrid) {
+    var arrParams = new Object();
+    arrParams.PBgetFilter = true;
+    arrParams.search = $("#" + idbox).val();
+    $("#" + idgrid).PbGridView("applyFilterData", arrParams);
+}
 
 function setComboDataselect(arr_data, element_id, texto) {
     var option_arr = "";
@@ -136,10 +140,8 @@ function cargarDocumento() {
     arrParams.fechaInicio = $('#dtp_pla_fecha_ini').val();
     arrParams.fechaFin = $('#dtp_pla_fecha_fin').val();
     arrParams.modalidad = $('#cmb_moda').val();
-    console.log(arrParams);
     if (!validateForm()) {
         requestHttpAjax(link, arrParams, function(response) {
-            console.log(response);
             showAlert(response.status, response.label, response.message);
             /* if (!response.error) {
                 setTimeout(function () {
@@ -241,4 +243,80 @@ function exportPdfNoMarcadas() {
     var tipo = $('#cmb_tipo option:selected').val();
 
     window.location.href = $('#txth_base').val() + "/academico/marcacion/exppdfnomarcadas?pdf=1&profesor=" + profesor + "&materia=" + materia + "&unidad=" + unidad + '&modalidad=' + modalidad + "&f_ini=" + f_ini + "&f_fin=" + f_fin + "&periodo=" + periodo + "&tipo=" + tipo;
+}
+
+function actualizarGridRegistroConf() {
+    var arrParams2 = new Object();
+    arrParams2.PBgetFilter = true;
+    arrParams2.periodo = ($("#cmb_per_acad").val() != 0) ? ($("#cmb_per_acad option:selected").text()) : "";
+    arrParams2.mod_id = $("#cmb_mod").val();
+    $("#grid_regconf_list").PbGridView("applyFilterData", arrParams2);
+}
+
+function editRegConf() {
+    var link = $('#txth_base').val() + "/academico/planificacion/editreg" + "?id=" + $("#frm_rco_id").val();
+    window.location = link;
+}
+
+function updateRegConf() {
+    var link = $('#txth_base').val() + "/academico/planificacion/updatereg";
+    var arrParams = new Object();
+    arrParams.id = $('#frm_rco_id').val();
+    arrParams.pla_id = $('#cmb_per_acad').val();
+    arrParams.finicio = $('#frm_fecha_ini').val();
+    arrParams.ffin = $('#frm_fecha_fin').val();
+    arrParams.bloque = $('#cmb_bloque').val();
+    if ($('#frm_fecha_ini').val() > $('#frm_fecha_fin').val()) {
+        var msg = objLang.The_initial_date_of_registry_cannot_be_greater_than_end_date_;
+        shortModal(msg, objLang.Error, "error");
+        return;
+    }
+    if (!validateForm()) {
+        requestHttpAjax(link, arrParams, function(response) {
+            showAlert(response.status, response.label, response.message);
+            if (response.status == "OK") {
+                setTimeout(function() {
+                    window.location.href = $('#txth_base').val() + "/academico/planificacion/registerprocess";
+                }, 3000);
+            }
+        }, true);
+    }
+}
+
+function saveRegConf() {
+    var link = $('#txth_base').val() + "/academico/planificacion/savereg";
+    var arrParams = new Object();
+    arrParams.pla_id = $('#cmb_per_acad').val();
+    arrParams.finicio = $('#frm_fecha_ini').val();
+    arrParams.ffin = $('#frm_fecha_fin').val();
+    arrParams.bloque = $('#cmb_bloque').val();
+    if ($('#frm_fecha_ini').val() > $('#frm_fecha_fin').val()) {
+        var msg = objLang.The_initial_date_of_registry_cannot_be_greater_than_end_date_;
+        shortModal(msg, objLang.Error, "error");
+        return;
+    }
+    if (!validateForm()) {
+        requestHttpAjax(link, arrParams, function(response) {
+            showAlert(response.status, response.label, response.message);
+            if (response.status == "OK") {
+                setTimeout(function() {
+                    window.location.href = $('#txth_base').val() + "/academico/planificacion/registerprocess";
+                }, 3000);
+            }
+        }, true);
+    }
+}
+
+function deleteItem(id) {
+    var link = $('#txth_base').val() + "/academico/planificacion/deletereg";
+    var arrParams = new Object();
+    arrParams.id = id;
+    requestHttpAjax(link, arrParams, function(response) {
+        if (response.status == "OK") {
+            actualizarGridRegistroConf();
+        }
+        setTimeout(function() {
+            showAlert(response.status, response.label, response.message);
+        }, 1000);
+    }, true);
 }
