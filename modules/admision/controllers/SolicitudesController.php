@@ -236,10 +236,16 @@ class SolicitudesController extends \app\components\CController {
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }
             if (isset($data["getdescuento"])) {
-                $resItems = $modItemMetNivel->consultarXitemMetniv($data["unidada"], $data["moda_id"], $data["metodo"], $data["empresa_id"], $data["carrera_id"]);
-                $descuentos = $modDescuento->consultarDesctoxitem($resItems["ite_id"]);
+                if (($data["unidada"] == 1) or ($data["unidada"] == 2)) {
+                    $resItems = $modItemMetNivel->consultarXitemMetniv($data["unidada"], $data["moda_id"], $data["metodo"], $data["empresa_id"], $data["carrera_id"]);
+                    $descuentos = $modDescuento->consultarDesctoxitem($resItems["ite_id"]);
+                } else {                    
+                    //\app\models\Utilities::putMessageLogFile('item:'. $data["ite_id"]);
+                    $descuentos = $modDescuento->consultarDescuentoXitemUnidad($data["unidada"], $data["moda_id"], $data["ite_id"]);                    
+                }
                 $message = array("descuento" => $descuentos);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+                
             }
             if (isset($data["getitem"])) {
                 if ($data["empresa_id"] != 1) {
@@ -280,8 +286,7 @@ class SolicitudesController extends \app\components\CController {
                 $message = array("preciodescuento" => $precioDescuento);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }
-            if (isset($data["gethabilita"])) {
-                //\app\models\Utilities::putMessageLogFile('item:'.$data["ite_id"]);   
+            if (isset($data["gethabilita"])) {                
                 if ($data["ite_id"] == 155 or $data["ite_id"] == 156 or $data["ite_id"] == 157 or $data["ite_id"] == 10) {
                     $habilita = '1';
                 } else {

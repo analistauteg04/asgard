@@ -96,14 +96,14 @@ class ItemMetodoUnidad extends \yii\db\ActiveRecord
     public function consultarXitemMetniv($nint_id, $mod_id, $ming_id, $empresa_id, $carrera_id) {        
         $con = \Yii::$app->db_facturacion;        
         $estado = 1;
-        if ($empresa_id == 1) {
+        if ($empresa_id == 1) {            
             $sql = "SELECT ite_id 
                     FROM  " . $con->dbname . ".item_metodo_unidad
                     WHERE uaca_id = :nint_id
                           and mod_id = :mod_id
                           and ming_id = :ming_id
                           and imni_estado = :estado
-                          and imni_estado_logico = :estado"; 
+                          and imni_estado_logico = :estado";            
         } else {
             $sql = "SELECT ite_id 
                     FROM  " . $con->dbname . ".item_metodo_unidad
@@ -167,5 +167,5 @@ class ItemMetodoUnidad extends \yii\db\ActiveRecord
         $comando->bindParam(":mod_id", $mod_id, \PDO::PARAM_INT);        
         $resultData = $comando->queryAll();
         return $resultData;                
-    }
+    }         
 }

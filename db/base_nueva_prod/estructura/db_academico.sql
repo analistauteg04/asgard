@@ -1658,6 +1658,7 @@ create table if not exists `distributivo_academico_estudiante` (
 create table if not exists `estudiante_periodo_pago` (
   `eppa_id` bigint(20) not null auto_increment primary key,   
   `paca_id` bigint(20) not null,
+  `ppro_id` bigint(20) null,
   `est_id` bigint(20) not null,    
   `eppa_estado_pago` varchar(1) not null,
   `eppa_fecha_registro` timestamp null default null,
@@ -1670,7 +1671,7 @@ create table if not exists `estudiante_periodo_pago` (
   foreign key (paca_id) REFERENCES `periodo_academico`(paca_id),
   foreign key (est_id) REFERENCES `estudiante`(est_id)
 );
-
+alter table db_academico.estudiante_periodo_pago add ppro_id bigint null after paca_id;
 -- --------------------------------------------------------
 -- 
 -- Estructura de tabla para la tabla `certificados_generadas` 
