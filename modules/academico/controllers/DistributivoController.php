@@ -526,10 +526,9 @@ class DistributivoController extends \app\components\CController {
             $arrSearch["promocion"] = $data['promocion'];
             $arrSearch["asignatura"] = $data['asignatura'];
             $arrSearch["estado_pago"] = $data['estado'];
-            $arrSearch["paralelo"] = $data['paralelo'];
-            //CONSULTAR LOS ESTUDIANTES DE POSGRADO DESDE distributivo_academico CUANDO ppro_id SEA DIFERENTE DE VACIO
+            $arrSearch["paralelo"] = $data['paralelo'];           
             $model = $distributivo_model->consultarDistributivoxEstudiantepos($arrSearch, 1);
-            return $this->render('_listarestudiantespagogrid', [
+            return $this->render('_listarestudiantespagoposgrid', [
                         "model" => $model,
             ]);
         } else {

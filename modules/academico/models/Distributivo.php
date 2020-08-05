@@ -917,9 +917,7 @@ class Distributivo extends \yii\db\ActiveRecord {
                     inner join " . $con->dbname . ".promocion_programa pp on pp.ppro_id = a.ppro_id
                     inner join " . $con->dbname . ".distributivo_academico_estudiante g on g.daca_id = a.daca_id
                     inner join " . $con->dbname . ".estudiante h on h.est_id = g.est_id
-                    inner join " . $con1->dbname . ".persona p on p.per_id = h.per_id
-                   /* inner join " . $con->dbname . ".semestre_academico s on s.saca_id = f.saca_id
-                    inner join " . $con->dbname . ".bloque_academico t on t.baca_id = f.baca_id */
+                    inner join " . $con1->dbname . ".persona p on p.per_id = h.per_id                  
                     inner join " . $con->dbname . ".asignatura z on a.asi_id = z.asi_id
                     left join " . $con->dbname . ".estudiante_periodo_pago m on (m.est_id = g.est_id)
                 WHERE $str_search  a.uaca_id = 2                 

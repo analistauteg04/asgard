@@ -11,6 +11,9 @@ $(document).ready(function () {
     $('#btn_buscarData_distpago').click(function () {
         actualizarGridDistPago();
     });
+    $('#btn_buscarData_distpagopos').click(function () {
+        actualizarGridDistPagopos();
+    });
     $('#cmb_unidad_dis').change(function () {
         var link = $('#txth_base').val() + "/academico/distributivo/listarestudiantes";
         var arrParams = new Object();
@@ -277,4 +280,21 @@ function exportPdfDispago() {
     var estado = $('#cmb_estadoes option:selected').val();
     var jornada = $('#cmb_jornadaes option:selected').val();
     window.location.href = $('#txth_base').val() + "/academico/distributivo/exppdfestpago?pdf=1&search=" + search + "&unidad=" + unidad + "&modalidad=" + modalidad + "&periodo=" + periodo + "&asignatura=" + asignatura + "&estado=" + estado+ "&jornada=" + jornada;
+}
+
+function actualizarGridDistPagopos() {
+    var search = $('#txt_buscarDatapagopos').val();
+    var profesor = $('#txt_buscarprofesorpos').val();
+    var unidad = $('#cmb_unidad_disespos option:selected').val();
+    var modalidad = $('#cmb_modalidadespos option:selected').val();
+    var promocion = $('#cmb_promocion option:selected').val();
+    var asignatura = $('#cmb_asignaturaespos option:selected').val();
+    var estado = $('#cmb_estadoespos option:selected').val();
+    var paralelo = $('#cmb_paralelopos option:selected').val();
+    //Buscar almenos una clase con el nombre para ejecutar
+    if (!$(".blockUI").length) {
+        showLoadingPopup();
+        $('#Tbg_Distributivo_listadopagopos').PbGridView('applyFilterData', {'search': search, 'profesor': profesor, 'unidad': unidad, 'modalidad': modalidad, 'promocion': promocion, 'asignatura': asignatura, 'estado': estado, 'paralelo': paralelo});
+        setTimeout(hideLoadingPopup, 2000);
+    }
 }
