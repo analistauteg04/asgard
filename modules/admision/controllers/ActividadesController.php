@@ -97,6 +97,7 @@ class ActividadesController extends \app\components\CController {
         $opor_id = base64_decode($_GET["opid"]);
         $act_id = base64_decode($_GET["acid"]);
         $pges_id = base64_decode($_GET["pgid"]);
+        $_SESSION['JSLANG']['Enter a Type Contact.'] = admision::t('crm', 'Enter a Type Contact.');
         $persges_mod = new PersonaGestion();
         $uni_aca_model = new UnidadAcademica();
         $modestudio = new ModuloEstudio();
@@ -150,6 +151,7 @@ class ActividadesController extends \app\components\CController {
         $emp_id = @Yii::$app->session->get("PB_idempresa");
         $_SESSION['JSLANG']['Please enter a valid dni.'] = admision::t("crm",'Please enter a valid dni.');
         $_SESSION['JSLANG']['Please enter a valid Email.'] = admision::t("crm",'Please enter a valid Email.');
+        $_SESSION['JSLANG']['Enter a Type Contact.'] = admision::t('crm', 'Enter a Type Contact.');
         $persges_mod = new PersonaGestion();
         $uni_aca_model = new UnidadAcademica();
         $modestudio = new ModuloEstudio();

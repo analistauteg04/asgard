@@ -96,6 +96,7 @@ class ContactosController extends \app\components\CController {
         $canalconta = $modcanal->consultarConocimientoCanal('1');
         $unidad_acad_data = $uni_aca_model->consultarUnidadAcademicas();        
         $modalidad_data = $modalidad_model->consultarModalidad($unidad_acad_data[0]["id"], $emp_id);
+        $_SESSION['JSLANG']['Enter a Type Contact.'] = admision::t('crm', 'Enter a Type Contact.');
         
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();

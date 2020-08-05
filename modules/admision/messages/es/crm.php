@@ -63,6 +63,7 @@ return [
     "Dni already Exists in System" => "Cédula ya existe en Sistema",
     "Email already Exists in System" => "Email ya existe en Sistema",
     "Enrollment" => "Matrícula",
+    "Enter a Type Contact." => "Ingrese un Medio de Contacto.",
     "Generate Oportunity" => "Generar Oportunidad",
     "Institution" => "Institución",
     "Interest Carreer" => "Carrera Interés",  
