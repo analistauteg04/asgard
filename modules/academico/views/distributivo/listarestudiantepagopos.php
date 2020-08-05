@@ -10,10 +10,10 @@ use app\modules\academico\Module as academico;
         $this->render('listarestudiantespagopos_search', [ 
             'arr_unidad' => $mod_unidad,
             'arr_modalidad' => $mod_modalidad,
-            'arr_periodo' => $mod_periodo,
+            'arr_promocion' => $mod_promocion,
             'arr_asignatura' => $mod_asignatura,
             'arr_estado' => $mod_estado,
-            'arr_jornada' => $mod_jornada,
+            'arr_paralelo' => $mod_paralelo,
             ]);
         ?>
     </form>

@@ -630,5 +630,27 @@ class PromocionPrograma extends \yii\db\ActiveRecord {
         $resultData = $comando->queryOne();
         return $resultData;
     }
+    
+    /**
+     * Function consulta las promociones por programa. 
+     * @author Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;
+     * @param
+     * @return
+     */
+    public function consultarPromocionxProgramagen() {
+        $con = \Yii::$app->db_academico;
+        $estado = 1;
+        $sql = "SELECT ppro_id id, ppro_codigo name                 
+                FROM 
+                " . $con->dbname . ".promocion_programa  pp 
+                WHERE 
+                   pp.ppro_estado = :estado AND
+                   pp.ppro_estado_logico = :estado";
+
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);        
+        $resultData = $comando->queryAll();
+        return $resultData;
+    }
 
 }

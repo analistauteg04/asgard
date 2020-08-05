@@ -31,11 +31,11 @@ use app\modules\academico\Module as academico;
         <div class="form-group">            
             <label for="cmb_promocion" class="col-sm-2 col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= academico::t("Academico", "Promotion") ?></label>
             <div class="col-sm-3 col-xs-3 col-md-3 col-lg-3">
-                <?= Html::dropDownList("cmb_periodoes", 0, $arr_periodo, ["class" => "form-control", "id" => "cmb_promocion"]) ?>
+                <?= Html::dropDownList("cmb_promocion", 0, $arr_promocion, ["class" => "form-control", "id" => "cmb_promocion"]) ?>
             </div> 
             <label for="cmb_paralelopos" class="col-sm-2 col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= academico::t("Academico", "Parallel") ?></label>
             <div class="col-sm-3 col-xs-3 col-md-3 col-lg-3">
-                <?= Html::dropDownList("cmb_paralelopos", " ", $arr_jornada, ["class" => "form-control", "id" => "cmb_paralelopos"]) ?>
+                <?= Html::dropDownList("cmb_paralelopos", " ", $arr_paralelo, ["class" => "form-control", "id" => "cmb_paralelopos"]) ?>
             </div>   
         </div>
     </div> 

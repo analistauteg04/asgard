@@ -64,6 +64,63 @@ $(document).ready(function () {
     $('#btnGuardarpago').click(function () {
         guardarPagosEstudiante();
     });
+    
+    /************ COMMBOS LISTADO PAGOS ESTUDIANTES POSGRADOS***********/
+    
+    $('#cmb_unidad_disespos').change(function () {
+        var link = $('#txth_base').val() + "/academico/distributivo/listarestudiantespagopos";
+        var arrParams = new Object();
+        arrParams.uaca_id = $(this).val();
+        arrParams.getmodalidad = true;
+        requestHttpAjax(link, arrParams, function (response) {
+            if (response.status == "OK") {
+                data = response.message;
+                setComboDataselect(data.modalidad, "cmb_modalidadespos", "Todos");
+                var arrParams = new Object();
+                if (data.modalidad.length > 0) {
+                    arrParams.uaca_id = $('#cmb_unidad_disespos').val();
+                    arrParams.moda_id = data.modalidad[0].id;
+                    arrParams.getasignatura = true;
+                    requestHttpAjax(link, arrParams, function (response) {
+                        if (response.status == "OK") {
+                            data = response.message;
+                            setComboDataselect(data.asignatura, "cmb_asignaturaespos", "Todos");
+                        }
+                    }, true);
+                }
+            }
+        }, true);
+    });
+    
+    $('#cmb_modalidadespos').change(function () {
+        var link = $('#txth_base').val() + "/academico/distributivo/listarestudiantespagopos";
+        var arrParams = new Object();
+        arrParams.uaca_id = $('#cmb_unidad_disespos').val();
+        arrParams.moda_id = $(this).val();
+        arrParams.getasignatura = true;
+        requestHttpAjax(link, arrParams, function (response) {
+            if (response.status == "OK") {
+                data = response.message;
+                setComboDataselect(data.asignatura, "cmb_asignaturaespos", "Todos");
+            }
+        }, true);
+    });
+    
+    /*******************************************************************/
+    
+    $('#cmb_promocion').change(function () {
+        var link = $('#txth_base').val() + "/academico/distributivo/listarestudiantespagopos";
+        var arrParams = new Object();
+        arrParams.promo_id = $('#cmb_promocion').val();
+        //arrParams.moda_id = $(this).val();
+        arrParams.getparalelo = true;
+        requestHttpAjax(link, arrParams, function (response) {
+            if (response.status == "OK") {
+                data = response.message;
+                setComboDataselect(data.paralelo, "cmb_paralelopos", "Todos");
+            }
+        }, true);
+    });
 });
 
 function actualizarGrid() {

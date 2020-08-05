@@ -8,6 +8,8 @@ use app\modules\academico\models\Distributivo;
 use app\modules\academico\models\SemestreAcademico;
 use app\modules\academico\models\UnidadAcademica;
 use app\modules\academico\models\TipoDistributivo;
+use app\modules\academico\models\PromocionPrograma;
+use app\modules\academico\models\ParaleloPromocionPrograma;
 use app\modules\academico\models\Modalidad;
 use app\modules\academico\models\PeriodoAcademicoMetIngreso;
 use yii\helpers\ArrayHelper;
@@ -214,7 +216,7 @@ class DistributivoController extends \app\components\CController {
                     'mod_periodo' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_periodo), "id", "name"),
                     'mod_estado' => ArrayHelper::map(array_merge([["id" => "2", "name" => Yii::t("formulario", "Grid")]], [["id" => "0", "name" => Yii::t("formulario", "No Autorizado")]], [["id" => "1", "name" => Yii::t("formulario", "Autorizado")]]), "id", "name"),
                     'model' => $model,
-                    'mod_jornada' => array("0" => "Todos", "1" => "(M) Matutino", "2" => "(N) Nocturno", "3" => "(S) Semipresencial" , "4" => "(D) Distancia"),    
+                    'mod_jornada' => array("0" => "Todos", "1" => "(M) Matutino", "2" => "(N) Nocturno", "3" => "(S) Semipresencial", "4" => "(D) Distancia"),
         ]);
     }
 
@@ -343,7 +345,7 @@ class DistributivoController extends \app\components\CController {
                     'model' => $model,
                     //'mod_estado' => array("-1" => "Todos", "null" => "Pendiente", "0" => "Deuda", "1" => "Pagado"),
                     'mod_estado' => array("-1" => "Todos", "0" => "No Autorizado", "1" => "Autorizado"),
-                    'mod_jornada' => array("0" => "Todos", "1" => "(M) Matutino", "2" => "(N) Nocturno", "3" => "(S) Semipresencial" , "4" => "(D) Distancia"),    
+                    'mod_jornada' => array("0" => "Todos", "1" => "(M) Matutino", "2" => "(N) Nocturno", "3" => "(S) Semipresencial", "4" => "(D) Distancia"),
         ]);
     }
 
@@ -422,7 +424,8 @@ class DistributivoController extends \app\components\CController {
             return;
         }
     }
-       public function actionExpexcelestpago() {
+
+    public function actionExpexcelestpago() {
         $per_id = @Yii::$app->session->get("PB_perid");
 
         ini_set('memory_limit', '256M');
@@ -433,17 +436,15 @@ class DistributivoController extends \app\components\CController {
         header('Cache-Control: max-age=0');
         $colPosition = array("C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N");
         $arrHeader = array(
-            
             Yii::t("formulario", " "),
             Yii::t("formulario", "Academic unit"),
             Yii::t("formulario", "Mode"),
-            Yii::t("formulario", "DNI"),             
-            Yii::t("formulario", "Complete Names"),         
+            Yii::t("formulario", "DNI"),
+            Yii::t("formulario", "Complete Names"),
             Yii::t("formulario", "Period"),
             Yii::t("formulario", "Subject"),
             Yii::t("formulario", "Payment Status"),
             Yii::t("formulario", "Date"),
-            
         );
         \app\models\Utilities::putMessageLogFile('perid:' . $per_id);
         $distributivo_model = new Distributivo();
@@ -466,12 +467,13 @@ class DistributivoController extends \app\components\CController {
         Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
         exit;
     }
+
     public function actionExppdfestpago() {
         //$per_id = @Yii::$app->session->get("PB_perid");
         $report = new ExportFile();
         $this->view->title = academico::t("Academico", "Listado de estudiantes pago"); // Titulo del reporte
         $arrHeader = array(
-             Yii::t("formulario", " "),
+            Yii::t("formulario", " "),
             Yii::t("formulario", "Academic unit"),
             Yii::t("formulario", "Mode"),
             Yii::t("formulario", "DNI"),
@@ -506,13 +508,14 @@ class DistributivoController extends \app\components\CController {
         );
         $report->mpdf->Output('Reporte_' . date("Ymdhis") . ".pdf", ExportFile::OUTPUT_TO_DOWNLOAD);
     }
-    
+
     public function actionListarestudiantespagopos() {
-        $per_id = @Yii::$app->session->get("PB_perid");
+        //$per_id = @Yii::$app->session->get("PB_perid");
         $distributivo_model = new Distributivo();
         $mod_modalidad = new Modalidad();
         $mod_unidad = new UnidadAcademica();
-        $mod_periodo = new PeriodoAcademicoMetIngreso();
+        $mod_promocion = new PromocionPrograma();
+        $mod_paralelo = new ParaleloPromocionPrograma();
         $data = Yii::$app->request->get();
 
         if ($data['PBgetFilter']) {
@@ -524,13 +527,13 @@ class DistributivoController extends \app\components\CController {
             $arrSearch["asignatura"] = $data['asignatura'];
             $arrSearch["estado_pago"] = $data['estado'];
             $arrSearch["paralelo"] = $data['paralelo'];
-            //CONSULTAR LOS ESTUDIANTES DE POSGRADO DESDE distributivo_academico CUANDO ppRO_id SEA DIFERENTE DE VACIO
-            $model = $distributivo_model->consultarDistributivoxEstudiante($arrSearch, 1);
+            //CONSULTAR LOS ESTUDIANTES DE POSGRADO DESDE distributivo_academico CUANDO ppro_id SEA DIFERENTE DE VACIO
+            $model = $distributivo_model->consultarDistributivoxEstudiantepos($arrSearch, 1);
             return $this->render('_listarestudiantespagogrid', [
                         "model" => $model,
             ]);
         } else {
-            $model = $distributivo_model->consultarDistributivoxEstudiante(null, 1);
+            $model = $distributivo_model->consultarDistributivoxEstudiantepos(null, 1);
         }
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
@@ -544,24 +547,25 @@ class DistributivoController extends \app\components\CController {
                 $message = array("asignatura" => $asignatura);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }
-            // OJO FILTRAR PARALELO SEGUN LA PROMOCION
+            if (isset($data["getparalelo"])) {
+                $paralelo = $mod_paralelo->consultarParalelosxPrograma($data["promo_id"]);
+                $message = array("paralelo" => $paralelo);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+            }
         }
         $arr_unidad = $mod_unidad->consultarUnidadAcademicasEmpresa(1);
         $arr_modalidad = $mod_modalidad->consultarModalidad($arr_unidad[1]["id"], 1);
-        /*******  OJO CAMBIAR PERIODO PARA QUE LISTEN PROMOCIONES ******/
-        $arr_periodo = $mod_periodo->consultarPeriodoAcademico();
-        // INGRESAS DATA DE DISTRIBUTIVO CON MATERIAS DE POSGRADO
+        $arr_promocion = $mod_promocion->consultarPromocionxProgramagen();
+        $arr_Paralelos = $mod_paralelo->consultarParalelosxPrograma($arr_promocion[0]["id"]);
         $arr_asignatura = $distributivo_model->consultarAsiganturaxuniymoda(0, 0);
         return $this->render('listarestudiantepagopos', [
                     'mod_unidad' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_unidad), "id", "name"),
                     'mod_modalidad' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_modalidad), "id", "name"),
-                    "mod_periodo" => ArrayHelper::map($arr_periodo, "id", "name"),
+                    "mod_promocion" => ArrayHelper::map($arr_promocion, "id", "name"),
                     'mod_asignatura' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_asignatura), "id", "name"),
-                    'model' => $model,                  
+                    'model' => $model,
                     'mod_estado' => array("-1" => "Todos", "0" => "No Autorizado", "1" => "Autorizado"),
-                    // OJO LAS JORNADAS DEBEN LISTAR PARALELOS DE POSGRADO DESDE LA BASE, SEGUN LA PROMOCION LISTAR PARALELOS
-                    'mod_jornada' => array("0" => "Todos", "1" => "(M) Matutino", "2" => "(N) Nocturno", "3" => "(S) Semipresencial" , "4" => "(D) Distancia"),    
-        ]);
+                    'mod_paralelo' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_Paralelos), "id", "name"),]);
     }
 
 }

@@ -568,18 +568,12 @@ class Distributivo extends \yii\db\ActiveRecord {
             if ($arrFiltro['asignatura'] != "" && $arrFiltro['asignatura'] > 0) {
                 $str_search .= "a.asi_id = :asignatura AND ";
             }
-            /* if ($arrFiltro['estado_pago'] != '-1' && $arrFiltro['estado_pago'] != 'null') {
-              $str_search .= " m.eppa_estado_pago = :estado_pago AND ";
-              }
-              if ($arrFiltro['estado_pago'] == 'null') {
-              $str_search .= " (m.eppa_estado_pago IS NULL) AND ";
-              } */
             if ($arrFiltro['estado_pago'] != '-1') {
                 if ($arrFiltro['estado_pago'] == '0') {
                     $str_search .= " (m.eppa_estado_pago = :estado_pago OR m.eppa_estado_pago IS NULL) AND ";
-                }else{
+                } else {
                     $str_search .= " m.eppa_estado_pago = :estado_pago AND ";
-                }                
+                }
             }
             if ($arrFiltro['jornada'] != "" && $arrFiltro['jornada'] > 0) {
                 $str_search .= "a.daca_jornada = :jornada AND ";
@@ -851,6 +845,138 @@ class Distributivo extends \yii\db\ActiveRecord {
             if ($trans !== null)
                 $trans->rollback();
             return FALSE;
+        }
+    }
+
+    /**
+     * Function Obtiene información de distributivo todos los estudiantes de posgrado.
+     * @author Giovanni Vergara <analistadesarrollo01@uteg.edu.ec>;
+     * @param
+     * @return
+     */
+    public function consultarDistributivoxEstudiantepos($arrFiltro = array(), $reporte) {
+        $con = \Yii::$app->db_academico;
+        $con1 = \Yii::$app->db_asgard;
+        $estado = 1;
+
+        if (isset($arrFiltro) && count($arrFiltro) > 0) {
+            $str_search .= "(p.per_pri_nombre like :search OR ";
+            $str_search .= "p.per_seg_nombre like :search OR ";
+            $str_search .= "p.per_pri_apellido like :search OR ";
+            $str_search .= "p.per_seg_apellido like :search OR ";
+            $str_search .= "p.per_cedula like :search) AND ";
+
+            if (!empty($arrFiltro['profesor'])) {
+                $str_search .= "(pe.per_pri_nombre like :profesor OR ";
+                $str_search .= "pe.per_seg_nombre like :profesor OR ";
+                $str_search .= "pe.per_pri_apellido like :profesor OR ";
+                $str_search .= "pe.per_seg_apellido like :profesor) AND ";
+            }
+            if ($arrFiltro['unidad'] != "" && $arrFiltro['unidad'] > 0) {
+                $str_search .= "a.uaca_id = :unidad AND ";
+            }
+            if ($arrFiltro['modalidad'] != "" && $arrFiltro['modalidad'] > 0) {
+                $str_search .= "a.mod_id = :modalidad AND ";
+            }
+            if ($arrFiltro['promocion'] != "" && $arrFiltro['promocion'] > 0) {
+                $str_search .= "a.ppro_id = :promocion AND ";
+            }
+            if ($arrFiltro['asignatura'] != "" && $arrFiltro['asignatura'] > 0) {
+                $str_search .= "a.asi_id = :asignatura AND ";
+            }
+            if ($arrFiltro['estado_pago'] != '-1') {
+                if ($arrFiltro['estado_pago'] == '0') {
+                    $str_search .= " (m.eppa_estado_pago = :estado_pago OR m.eppa_estado_pago IS NULL) AND ";
+                } else {
+                    $str_search .= " m.eppa_estado_pago = :estado_pago AND ";
+                }
+            }
+            if ($arrFiltro['paralelo'] != "" && $arrFiltro['paralelo'] > 0) {
+                $str_search .= "a.daca_jornada = :paralelo AND ";
+            }
+        }
+        $sql = "SELECT  h.est_id, 
+                        d.uaca_nombre as unidad, 
+                        e.mod_nombre as modalidad,
+                        p.per_cedula as identificacion, 
+                        concat(p.per_pri_nombre, ' ', p.per_pri_apellido, ' ', ifnull(p.per_seg_apellido,'')) as estudiante,
+                        pp.ppro_codigo as promocion,                        
+                        z.asi_nombre as asignatura,
+                        case 
+                             when m.eppa_estado_pago = '0' then 'No Autorizado' 
+                             when m.eppa_estado_pago = '1' then 'Autorizado'
+                             else 'No Autorizado'
+                             end as 'pago',                           
+                        ifnull(DATE_FORMAT(m.eppa_fecha_registro, '%Y-%m-%d'), ' ') as fecha_pago 
+                FROM " . $con->dbname . ".distributivo_academico a inner join " . $con->dbname . ".profesor b
+                    on b.pro_id = a.pro_id 
+                    inner join " . $con1->dbname . ".persona c on c.per_id = b.per_id
+                    inner join " . $con1->dbname . ".persona pe on pe.per_id = b.per_id
+                    inner join " . $con->dbname . ".unidad_academica d on d.uaca_id = a.uaca_id
+                    inner join " . $con->dbname . ".modalidad e on e.mod_id = a.mod_id
+                    inner join " . $con->dbname . ".promocion_programa pp on pp.ppro_id = a.ppro_id
+                    inner join " . $con->dbname . ".distributivo_academico_estudiante g on g.daca_id = a.daca_id
+                    inner join " . $con->dbname . ".estudiante h on h.est_id = g.est_id
+                    inner join " . $con1->dbname . ".persona p on p.per_id = h.per_id
+                   /* inner join " . $con->dbname . ".semestre_academico s on s.saca_id = f.saca_id
+                    inner join " . $con->dbname . ".bloque_academico t on t.baca_id = f.baca_id */
+                    inner join " . $con->dbname . ".asignatura z on a.asi_id = z.asi_id
+                    left join " . $con->dbname . ".estudiante_periodo_pago m on (m.est_id = g.est_id)
+                WHERE $str_search  a.uaca_id = 2                 
+                    and a.daca_estado = :estado
+                    and a.daca_estado_logico = :estado
+                    and g.daes_estado = :estado
+                    and g.daes_estado_logico = :estado";
+
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        if (isset($arrFiltro) && count($arrFiltro) > 0) {
+            $search_cond = "%" . $arrFiltro["search"] . "%";
+            $comando->bindParam(":search", $search_cond, \PDO::PARAM_STR);
+
+            if (!empty($arrFiltro['profesor'])) {
+                $search_profe = "%" . $arrFiltro["profesor"] . "%";
+                $comando->bindParam(":profesor", $search_profe, \PDO::PARAM_STR);
+            }
+            if ($arrFiltro['unidad'] != "" && $arrFiltro['unidad'] > 0) {
+                $search_uni = $arrFiltro["unidad"];
+                $comando->bindParam(":unidad", $search_uni, \PDO::PARAM_INT);
+            }
+            if ($arrFiltro['modalidad'] != "" && $arrFiltro['modalidad'] > 0) {
+                $search_mod = $arrFiltro["modalidad"];
+                $comando->bindParam(":modalidad", $search_mod, \PDO::PARAM_INT);
+            }
+            if ($arrFiltro['promocion'] != "" && $arrFiltro['promocion'] > 0) {
+                $search_per = $arrFiltro["promocion"];
+                $comando->bindParam(":promocion", $search_per, \PDO::PARAM_INT);
+            }
+            if ($arrFiltro['asignatura'] != "" && $arrFiltro['asignatura'] > 0) {
+                $search_asi = $arrFiltro["asignatura"];
+                $comando->bindParam(":asignatura", $search_asi, \PDO::PARAM_INT);
+            }
+            if ($arrFiltro['estado_pago'] != '-1') {
+                $comando->bindParam(":estado_pago", $arrFiltro['estado_pago'], \PDO::PARAM_STR);
+            }
+            if ($arrFiltro['paralelo'] != "" && $arrFiltro['paralelo'] > 0) {
+                $search_jor = $arrFiltro["paralelo"];
+                $comando->bindParam(":paralelo", $search_jor, \PDO::PARAM_INT);
+            }
+        }
+        $resultData = $comando->queryAll();
+        $dataProvider = new ArrayDataProvider([
+            'key' => 'id',
+            'allModels' => $resultData,
+            'pagination' => [
+                'pageSize' => Yii::$app->params["pageSize"],
+            ],
+            'sort' => [
+                'attributes' => [],
+            ],
+        ]);
+        if ($reporte == 1) {
+            return $dataProvider;
+        } else {
+            return $resultData;
         }
     }
 

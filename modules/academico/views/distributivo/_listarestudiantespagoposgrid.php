@@ -13,18 +13,18 @@ academico::registerTranslations();
 <div>
     <?=
     PbGridView::widget([
-        'id' => 'Tbg_Distributivo_listadopago',
-        'showExport' => true,
-        'fnExportEXCEL' => "exportExcelDistpago",
-        'fnExportPDF' => "exportPdfDispago",
+        'id' => 'Tbg_Distributivo_listadopagopos',
+        //'showExport' => true,
+        'fnExportEXCEL' => "exportExcelDistpagopos",
+        'fnExportPDF' => "exportPdfDispagopos",
         'dataProvider' => $model,
         //'pajax' => false,
         'columns' =>
         [
             [
-                'attribute' => 'Periodo',
-                'header' => Yii::t("formulario", "Period"),
-                'value' => 'periodo',
+                'attribute' => 'Promocion',
+                'header' => academico::t("Academico", "Promotion"),
+                'value' => 'promocion',
             ],
             [
                 'attribute' => 'unidad_academico',
@@ -36,11 +36,6 @@ academico::registerTranslations();
                 'header' => Yii::t("formulario", "Mode"),
                 'value' => 'modalidad',
             ],
-            /* [
-              'attribute' => 'asignatura',
-              'header' => Yii::t("formulario", "Subject"),
-              'value' => 'asignatura',
-              ], */
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => Yii::t("formulario", "Subject"),
@@ -73,10 +68,7 @@ academico::registerTranslations();
                 'attribute' => 'Fecha',
                 'header' => Yii::t("formulario", "Date"),
                 'value' => 'fecha_pago',
-            ],
-            /* [   
-              'class' => 'app\widgets\PbGridView\PbCheckboxColumn',
-              ], */
+            ],   
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => Academico::t("matriculacion", "Select"),
