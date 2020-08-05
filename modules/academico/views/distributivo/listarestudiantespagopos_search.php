@@ -62,11 +62,16 @@ use app\modules\academico\Module as academico;
                 <?= Html::dropDownList("cmb_estadoespos", " ", $arr_estado, ["class" => "form-control", "id" => "cmb_estadoespos"]) ?>
             </div>             
         </div>
-    </div>   
+    </div>  
+    
+    
     <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
         <div class="col-sm-8"></div>
-        <div class="col-sm-2 col-md-2 col-xs-4 col-lg-2">                
+        <div class="col-sm-2 col-md-2 col-xs-2 col-lg-2">                
             <a id="btn_buscarData_distpagopos" href="javascript:" class="btn btn-primary btn-block"> <?= Yii::t("formulario", "Search") ?></a>
+        </div>
+        <div class="col-sm-2 col-md-2 col-xs-2 col-lg-2">                
+            <a id="btn_savedistpagopos" href="javascript:" class="btn btn-primary btn-block"> <?= Yii::t("formulario", "Save") ?></a>
         </div>
     </div>
 

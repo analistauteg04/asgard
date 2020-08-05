@@ -262,24 +262,26 @@ function guardarPagosEstudiante() {
 
 function exportExcelDistpago() {
     var search = $('#txt_buscarDatapago').val();
+    var profesor = $('#txt_buscarprofesor').val();
     var unidad = $('#cmb_unidad_dises option:selected').val();
     var modalidad = $('#cmb_modalidades option:selected').val();
     var periodo = $('#cmb_periodoes option:selected').val();
     var asignatura = $('#cmb_asignaturaes option:selected').val();
     var estado = $('#cmb_estadoes option:selected').val();
     var jornada = $('#cmb_jornadaes option:selected').val();
-    window.location.href = $('#txth_base').val() + "/academico/distributivo/expexcelestpago?search=" + search + "&unidad=" + unidad + "&modalidad=" + modalidad + "&periodo=" + periodo + "&asignatura=" + asignatura + "&estado=" + estado + "&jornada=" + jornada;
+    window.location.href = $('#txth_base').val() + "/academico/distributivo/expexcelestpago?search=" + search + "&profesor=" + profesor + "&unidad=" + unidad + "&modalidad=" + modalidad + "&periodo=" + periodo + "&asignatura=" + asignatura + "&estado=" + estado + "&jornada=" + jornada;
 }
 
 function exportPdfDispago() {
     var search = $('#txt_buscarDatapago').val();
+    var profesor = $('#txt_buscarprofesor').val();
     var unidad = $('#cmb_unidad_dises option:selected').val();
     var modalidad = $('#cmb_modalidades option:selected').val();
     var periodo = $('#cmb_periodoes option:selected').val();
     var asignatura = $('#cmb_asignaturaes option:selected').val();
     var estado = $('#cmb_estadoes option:selected').val();
     var jornada = $('#cmb_jornadaes option:selected').val();
-    window.location.href = $('#txth_base').val() + "/academico/distributivo/exppdfestpago?pdf=1&search=" + search + "&unidad=" + unidad + "&modalidad=" + modalidad + "&periodo=" + periodo + "&asignatura=" + asignatura + "&estado=" + estado+ "&jornada=" + jornada;
+    window.location.href = $('#txth_base').val() + "/academico/distributivo/exppdfestpago?pdf=1&search=" + search + "&profesor=" + profesor + "&unidad=" + unidad + "&modalidad=" + modalidad + "&periodo=" + periodo + "&asignatura=" + asignatura + "&estado=" + estado+ "&jornada=" + jornada;
 }
 
 function actualizarGridDistPagopos() {
@@ -297,4 +299,28 @@ function actualizarGridDistPagopos() {
         $('#Tbg_Distributivo_listadopagopos').PbGridView('applyFilterData', {'search': search, 'profesor': profesor, 'unidad': unidad, 'modalidad': modalidad, 'promocion': promocion, 'asignatura': asignatura, 'estado': estado, 'paralelo': paralelo});
         setTimeout(hideLoadingPopup, 2000);
     }
+}
+
+function exportExcelDistpagopos() {
+    var search = $('#txt_buscarDatapagopos').val();
+    var profesor = $('#txt_buscarprofesorpos').val();
+    var unidad = $('#cmb_unidad_disespos option:selected').val();
+    var modalidad = $('#cmb_modalidadespos option:selected').val();
+    var promocion = $('#cmb_promocion option:selected').val();
+    var asignatura = $('#cmb_asignaturaespos option:selected').val();
+    var estado = $('#cmb_estadoespos option:selected').val();
+    var paralelo = $('#cmb_paralelopos option:selected').val();
+    window.location.href = $('#txth_base').val() + "/academico/distributivo/expexcelestpagopos?search=" + search + "&profesor=" + profesor + "&unidad=" + unidad + "&modalidad=" + modalidad + "&promocion=" + promocion + "&asignatura=" + asignatura + "&estado=" + estado + "&paralelo=" + paralelo;
+}
+
+function exportPdfDispagopos() {
+    var search = $('#txt_buscarDatapagopos').val();
+    var profesor = $('#txt_buscarprofesorpos').val();
+    var unidad = $('#cmb_unidad_disespos option:selected').val();
+    var modalidad = $('#cmb_modalidadespos option:selected').val();
+    var promocion = $('#cmb_promocion option:selected').val();
+    var asignatura = $('#cmb_asignaturaespos option:selected').val();
+    var estado = $('#cmb_estadoespos option:selected').val();
+    var paralelo = $('#cmb_paralelopos option:selected').val();
+    window.location.href = $('#txth_base').val() + "/academico/distributivo/exppdfestpagopos?pdf=1&search=" + search + "&profesor=" + profesor + "&unidad=" + unidad + "&modalidad=" + modalidad + "&promocion=" + promocion + "&asignatura=" + asignatura + "&estado=" + estado+ "&paralelo=" + paralelo;
 }

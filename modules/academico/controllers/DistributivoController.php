@@ -426,7 +426,7 @@ class DistributivoController extends \app\components\CController {
     }
 
     public function actionExpexcelestpago() {
-        $per_id = @Yii::$app->session->get("PB_perid");
+        //$per_id = @Yii::$app->session->get("PB_perid");
 
         ini_set('memory_limit', '256M');
         $content_type = Utilities::mimeContentType("xls");
@@ -446,7 +446,7 @@ class DistributivoController extends \app\components\CController {
             Yii::t("formulario", "Payment Status"),
             Yii::t("formulario", "Date"),
         );
-        \app\models\Utilities::putMessageLogFile('perid:' . $per_id);
+        //\app\models\Utilities::putMessageLogFile('perid:' . $per_id);
         $distributivo_model = new Distributivo();
         $data = Yii::$app->request->get();
         $arrSearch["search"] = $data['search'];
@@ -565,6 +565,86 @@ class DistributivoController extends \app\components\CController {
                     'model' => $model,
                     'mod_estado' => array("-1" => "Todos", "0" => "No Autorizado", "1" => "Autorizado"),
                     'mod_paralelo' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_Paralelos), "id", "name"),]);
+    }
+    
+    public function actionExpexcelestpagopos() {        
+        ini_set('memory_limit', '256M');
+        $content_type = Utilities::mimeContentType("xls");
+        $nombarch = "Report-" . date("YmdHis") . ".xls";
+        header("Content-Type: $content_type");
+        header("Content-Disposition: attachment;filename=" . $nombarch);
+        header('Cache-Control: max-age=0');
+        $colPosition = array("C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N");
+        $arrHeader = array(
+            Yii::t("formulario", " "),
+            Yii::t("formulario", "Academic unit"),
+            Yii::t("formulario", "Mode"),
+            Yii::t("formulario", "DNI"),
+            Yii::t("formulario", "Complete Names"),
+            academico::t("Academico", "Promotion"),
+            Yii::t("formulario", "Subject"),
+            Yii::t("formulario", "Payment Status"),
+            Yii::t("formulario", "Date"),
+        );
+        $distributivo_model = new Distributivo();
+        $data = Yii::$app->request->get();
+        $arrSearch["search"] = $data['search'];
+        $arrSearch["profesor"] = $data['profesor'];
+        $arrSearch["unidad"] = $data['unidad'];
+        $arrSearch["modalidad"] = $data['modalidad'];
+        $arrSearch["promocion"] = $data['promocion'];
+        $arrSearch["asignatura"] = $data['asignatura'];
+        $arrSearch["estado_pago"] = $data['estado'];
+        $arrSearch["paralelo"] = $data['paralelo'];
+        $arrData = array();
+        if (empty($arrSearch)) {
+            $arrData = $distributivo_model->consultarDistributivoxEstudiantepos(array(), 0);
+        } else {
+            $arrData = $distributivo_model->consultarDistributivoxEstudiantepos($arrSearch, 0);
+        }
+        $nameReport = academico::t("Academico", "Listado de estudiantes pago posgrado");
+        Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
+        exit;
+    }
+
+    public function actionExppdfestpagopos() {
+        $report = new ExportFile();
+        $this->view->title = academico::t("Academico", "Listado de estudiantes pago posgrado"); // Titulo del reporte
+        $arrHeader = array(
+            Yii::t("formulario", " "),
+            Yii::t("formulario", "Academic unit"),
+            Yii::t("formulario", "Mode"),
+            Yii::t("formulario", "DNI"),
+            Yii::t("formulario", "Complete Names"),
+            academico::t("Academico", "Promotion"),
+            Yii::t("formulario", "Subject"),
+            Yii::t("formulario", "Payment Status"),
+            Yii::t("formulario", "Date"),
+        );
+        $distributivo_model = new Distributivo();
+        $data = Yii::$app->request->get();
+        $arrSearch["search"] = $data['search'];
+        $arrSearch["profesor"] = $data['profesor'];
+        $arrSearch["unidad"] = $data['unidad'];
+        $arrSearch["modalidad"] = $data['modalidad'];
+        $arrSearch["promocion"] = $data['promocion'];
+        $arrSearch["asignatura"] = $data['asignatura'];
+        $arrSearch["estado_pago"] = $data['estado'];
+        $arrSearch["paralelo"] = $data['paralelo'];
+        $arrData = array();
+        if (empty($arrSearch)) {
+            $arrData = $distributivo_model->consultarDistributivoxEstudiantepos(array(), 0);
+        } else {
+            $arrData = $distributivo_model->consultarDistributivoxEstudiantepos($arrSearch, 0);
+        }
+        $report->orientation = "L"; // tipo de orientacion L => Horizontal, P => Vertical                                
+        $report->createReportPdf(
+                $this->render('exportpdf', [
+                    'arr_head' => $arrHeader,
+                    'arr_body' => $arrData,
+                ])
+        );
+        $report->mpdf->Output('Reporte_' . date("Ymdhis") . ".pdf", ExportFile::OUTPUT_TO_DOWNLOAD);
     }
 
 }
