@@ -67,7 +67,9 @@ $(document).ready(function () {
     $('#btnGuardarpago').click(function () {
         guardarPagosEstudiante();
     });
-    
+    $('#btnGuardarpagopos').click(function () {
+        guardarPagosEstudiantepos();
+    });
     /************ COMMBOS LISTADO PAGOS ESTUDIANTES POSGRADOS***********/
     
     $('#cmb_unidad_disespos').change(function () {
@@ -323,4 +325,30 @@ function exportPdfDispagopos() {
     var estado = $('#cmb_estadoespos option:selected').val();
     var paralelo = $('#cmb_paralelopos option:selected').val();
     window.location.href = $('#txth_base').val() + "/academico/distributivo/exppdfestpagopos?pdf=1&search=" + search + "&profesor=" + profesor + "&unidad=" + unidad + "&modalidad=" + modalidad + "&promocion=" + promocion + "&asignatura=" + asignatura + "&estado=" + estado+ "&paralelo=" + paralelo;
+}
+
+function guardarPagosEstudiantepos() {
+        var link = $('#txth_base').val() + "/academico/distributivo/savestudiantespagopos";
+        var arrParams = new Object();
+        arrParams.promocion = $('#cmb_promocion').val();
+        var selected = '';
+        var unselected = '';
+        $('#Tbg_Distributivo_listadopago input[type=checkbox]').each(function () {
+            if (this.checked) {
+                selected += $(this).val() + ',';
+            }else{
+                unselected += $(this).val() + ',';
+            }
+                
+        });
+            arrParams.pagado = selected.slice(0,-1);
+            arrParams.nopagado = unselected.slice(0,-1);
+        if (!validateForm()) {
+            requestHttpAjax(link, arrParams, function (response) {
+                showAlert(response.status, response.label, response.message);
+                setTimeout(function () {
+                    window.location.href = $('#txth_base').val() + "/academico/distributivo/listarestudiantespagopos";
+                }, 3000);
+            }, true);
+        }
 }
