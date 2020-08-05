@@ -368,9 +368,9 @@ $fecha_actual = date("Y-m-d");
             </div>   
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                 <div class="form-group">
-                    <label for="txt_cedula" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label"><?= "Cédula/Pasaporte" ?></label> 
+                    <label for="txt_cedula" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label"><?= "Cédula/Pasaporte" ?> <span class="text-danger">*</span></label> 
                     <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                    <input type="text" class="form-control PBvalidation" value="" id="txt_cedula" data-type="all" data-keydown="true"> 
+                    <input type="text" class="form-control" value="" id="txt_cedula" data-type="all" data-keydown="true"> 
                     </div>
                 </div>
             </div>        
@@ -440,7 +440,7 @@ $fecha_actual = date("Y-m-d");
                 <div class="form-group">
                     <label for="cmb_medio_contacto" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_descripcion"><?= Yii::t("formulario", "Half Contact") ?> </label>
                     <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">                  
-                        <?= Html::dropDownList("cmb_medio_contacto", 0, $arr_seguimiento, ["class" => "multiSelects form-control", "id" => "cmb_medio_contacto", "name" => "cmb_medio_contacto[]", "multiple"=>"multiple"]) ?>                
+                        <?= Html::dropDownList("cmb_medio_contacto", 0, $arr_seguimiento, ["class" => "multiSelects form-control", "id" => "cmb_medio_contacto", "name" => "cmb_medio_contacto[]", "multiple"=>"multiple",]) ?>                
                     </div>
                 </div>
             </div>

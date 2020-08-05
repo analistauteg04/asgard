@@ -404,10 +404,10 @@ class ContactosController extends \app\components\CController {
                         } else {
                             $exito = 1;
                         }
-                        if($data["genAspirante"]){
+                        if($data["genAspirante"] == "true"){
                             $pges_id = $resp_persona;
                             $modelPges = PersonaGestion::findOne($pges_id);
-                            if(isset($data["cedula"]) && $data["cedula"] != "" && $data["id_estado_oportunidad"] == 3){
+                            if(isset($data["cedula"]) && $data["cedula"] != ""){
                                 $modelPges->pges_cedula = $data["cedula"];
                                 $modelPges->save();
                             }

@@ -544,3 +544,8 @@ Yii Software LLC (http://www.yiisoft.com) Copyright © 2008
 .select2-container--default.select2-container--focus .select2-selection--multiple {
     border-color: #d2d6de;
 }
+
+.select2-search__field {
+    width: auto !important;
+    margin-left: 8px;
+}

@@ -476,6 +476,7 @@ function save() {
     }
     arrParams.genAspirante = $('#genAspirante').prop('checked');
     if ($('#genAspirante').prop('checked')) {
+        $('#txt_cedula').addClass("PBvalidation");
         var sub_carrera = ($('#cmb_subcarrera').val() != 0 && $('#cmb_subcarrera').val() != '') ? $('#cmb_subcarrera').val() : 0;
         $('#txt_correo').addClass("PBvalidation");
         arrParams.id_tipo_oportunidad = null;

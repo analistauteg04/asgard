@@ -52,7 +52,9 @@ $(document).ready(function() {
         type: 'iframe',
         preloader: true,
     });
-    $('.multiSelects').select2();
+    $('.multiSelects').select2({
+        placeholder: 'Escoja una o varias opciones',
+    });
 });
 var pageValues = [];
 var my_skins = [
