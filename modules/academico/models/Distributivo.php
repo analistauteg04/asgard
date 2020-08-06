@@ -699,22 +699,34 @@ class Distributivo extends \yii\db\ActiveRecord {
      * @param   
      * @return  estudiante_periodo_pago_id eppa_id
      */
-    public function consultarPeriodopago($paca_id, $est_id) {
+    public function consultarPeriodopago($paca_id, $ppro_id, $est_id) {
         $con = \Yii::$app->db_academico;
         $estado = 1;
+        if ($paca_id > 0) {
+            $busqueda = "paca_id= :idbusqueda AND";
+        }
+        if ($ppro_id > 0) {
+            $busqueda = "ppro_id= :idbusqueda AND";
+        }
         $sql = "
                     SELECT eppa_id as eppa_id
                     FROM 
                         " . $con->dbname . ".estudiante_periodo_pago                   
                     WHERE
-                        paca_id= :paca_id AND
+                        -- paca_id= :idbusqueda AND
+                        $busqueda
                         est_id= :est_id AND                                               
                         eppa_estado = :estado AND
                         eppa_estado_logico = :estado";
 
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
-        $comando->bindParam(":paca_id", $paca_id, \PDO::PARAM_INT);
+        if ($paca_id > 0) {
+            $comando->bindParam(":idbusqueda", $paca_id, \PDO::PARAM_INT);
+        }
+        if ($ppro_id > 0) {
+            $comando->bindParam(":idbusqueda", $ppro_id, \PDO::PARAM_INT);
+        }
         $comando->bindParam(":est_id", $est_id, \PDO::PARAM_INT);
         $resultData = $comando->queryOne();
         return $resultData;
@@ -726,7 +738,7 @@ class Distributivo extends \yii\db\ActiveRecord {
      * @param
      * @return
      */
-    public function insertarPagoestudiante($paca_id, $est_id, $eppa_estado_pago, $usu_id) {
+    public function insertarPagoestudiante($paca_id, $ppro_id, $est_id, $eppa_estado_pago, $usu_id) {
         $con = \Yii::$app->db_academico;
         $fecha = date(Yii::$app->params["dateTimeByDefault"]);
         $trans = $con->getTransaction(); // se obtiene la transacción actual
@@ -742,12 +754,13 @@ class Distributivo extends \yii\db\ActiveRecord {
         $param_sql .= ", eppa_estado_logico";
         $bdet_sql .= ", 1";
 
-        /* $param_sql .= ", eppa_estado_pago";
-          $bdet_sql .= ", 1"; */
-
         if (isset($paca_id)) {
             $param_sql .= ", paca_id";
             $bdet_sql .= ", :paca_id";
+        }
+        if (isset($ppro_id)) {
+            $param_sql .= ", ppro_id";
+            $bdet_sql .= ", :ppro_id";
         }
         if (isset($est_id)) {
             $param_sql .= ", est_id";
@@ -775,6 +788,9 @@ class Distributivo extends \yii\db\ActiveRecord {
 
             if (isset($paca_id)) {
                 $comando->bindParam(':paca_id', $paca_id, \PDO::PARAM_INT);
+            }
+            if (isset($ppro_id)) {
+                $comando->bindParam(':ppro_id', $ppro_id, \PDO::PARAM_INT);
             }
             if (isset($est_id)) {
                 $comando->bindParam(':est_id', $est_id, \PDO::PARAM_INT);
@@ -808,7 +824,7 @@ class Distributivo extends \yii\db\ActiveRecord {
      * @param
      * @return
      */
-    public function modificarPagoestudiante($paca_id, $est_id, $eppa_estado_pago, $usu_id) {
+    public function modificarPagoestudiante($paca_id, $ppro_id, $est_id, $eppa_estado_pago, $usu_id) {
         $con = \Yii::$app->db_academico;
         $estado = 1;
         $fecha = date(Yii::$app->params["dateTimeByDefault"]);
@@ -818,7 +834,12 @@ class Distributivo extends \yii\db\ActiveRecord {
         } else {
             $trans = $con->beginTransaction(); // si no existe la transacción entonces se crea una
         }
-
+        if ($paca_id > 0) {
+            $modifica = "paca_id= :modifica AND";
+        }
+        if ($ppro_id > 0) {
+            $modifica = "ppro_id= :modifica AND";
+        }
         try {
             $comando = $con->createCommand
                     ("UPDATE " . $con->dbname . ".estudiante_periodo_pago		       
@@ -827,11 +848,17 @@ class Distributivo extends \yii\db\ActiveRecord {
                           eppa_fecha_registro = :fecha,
                           eppa_fecha_modificacion = :fecha
                       WHERE                     
-                        paca_id = :paca_id AND
+                        $modifica
                         est_id =  :est_id AND
                         eppa_estado = :estado AND
                         eppa_estado_logico = :estado");
-            $comando->bindParam(':paca_id', $paca_id, \PDO::PARAM_INT);
+
+            if ($paca_id > 0) {
+                $comando->bindParam(':modifica', $paca_id, \PDO::PARAM_INT);
+            }
+            if ($ppro_id > 0) {
+                $comando->bindParam(':modifica', $ppro_id, \PDO::PARAM_INT);
+            }
             $comando->bindParam(':est_id', $est_id, \PDO::PARAM_INT);
             $comando->bindParam(':eppa_estado_pago', $eppa_estado_pago, \PDO::PARAM_STR);
             $comando->bindParam(':eppa_usuario_modifica', $usu_id, \PDO::PARAM_INT);

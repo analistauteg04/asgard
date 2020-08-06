@@ -333,7 +333,7 @@ function guardarPagosEstudiantepos() {
         arrParams.promocion = $('#cmb_promocion').val();
         var selected = '';
         var unselected = '';
-        $('#Tbg_Distributivo_listadopago input[type=checkbox]').each(function () {
+        $('#Tbg_Distributivo_listadopagopos input[type=checkbox]').each(function () {
             if (this.checked) {
                 selected += $(this).val() + ',';
             }else{

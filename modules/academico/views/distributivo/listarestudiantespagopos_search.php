@@ -70,9 +70,9 @@ use app\modules\academico\Module as academico;
         <div class="col-sm-2 col-md-2 col-xs-2 col-lg-2">                
             <a id="btn_buscarData_distpagopos" href="javascript:" class="btn btn-primary btn-block"> <?= Yii::t("formulario", "Search") ?></a>
         </div>
-        <div class="col-sm-2 col-md-2 col-xs-2 col-lg-2">                
-            <a id="btnGuardarpagopos" href="javascript:" class="btn btn-primary btn-block"> <?= Yii::t("formulario", "Save") ?></a>
-        </div>
+        <!--<div class="col-sm-2 col-md-2 col-xs-2 col-lg-2">                
+            <a id="btnGuardarpagopos" href="javascript:" class="btn btn-primary btn-block"> <? Yii::t("formulario", "Save") ?></a>
+        </div>-->
     </div>
 
 </div>

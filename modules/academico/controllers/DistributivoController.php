@@ -348,7 +348,7 @@ class DistributivoController extends \app\components\CController {
                     'mod_jornada' => array("0" => "Todos", "1" => "(M) Matutino", "2" => "(N) Nocturno", "3" => "(S) Semipresencial", "4" => "(D) Distancia"),
         ]);
     }
-    // OJO REPLICAR LA MISMA FUNCION LUEGO DE MODIIFCAR LAS FUNCIONES PARA POSGRADO NOMGRE DE FUNCION ==>savestudiantespagopos
+
     public function actionSavestudiantespago() {
         $usu_id = @Yii::$app->session->get("PB_iduser");
         if (Yii::$app->request->isAjax) {
@@ -366,17 +366,14 @@ class DistributivoController extends \app\components\CController {
                         //Verificar que no haya guardado el estudiante en el periodo y est_id para insert, si guardo es update PAGADOS.
                         // en un ciclo primero los pagados, luego los no pagado
                         $distributivo_model = new Distributivo();
-                        // OJO MODIFICAR Y PROBAR EN POSGRADO Y GRADO QUE CONSULTE SEGUN PERIODO O PROMOCION
-                        $resp_consPeriodopago = $distributivo_model->consultarPeriodopago($periodo, $est_id);
+                        $resp_consPeriodopago = $distributivo_model->consultarPeriodopago($periodo, null, $est_id);
                         if (!empty($resp_consPeriodopago["eppa_id"])) {
-                            // update update pagados   
-                            // OJO MODIFICAR Y PROBAR EN POSGRADO Y GRADO QUE MODIFIQUE SEGUN PERIODO O PROMOCION
-                            $resp_guardapago = $distributivo_model->modificarPagoestudiante($periodo, $est_id, 1, $usu_id);
+                            // update pagados   
+                            $resp_guardapago = $distributivo_model->modificarPagoestudiante($periodo, null, $est_id, 1, $usu_id);
                             $exito = 1;
                         } else {
                             // es un insert pagados
-                            // OJO MODIFICAR Y PROBAR EN POSGRADO Y GRADO QUE INGRESE SEGUN PERIODO O PROMOCION
-                            $resp_modificarpago = $distributivo_model->insertarPagoestudiante($periodo, $est_id, 1, $usu_id);
+                            $resp_modificarpago = $distributivo_model->insertarPagoestudiante($periodo, null, $est_id, 1, $usu_id);
                             $exito = 1;
                         }
                     } // cierra foreach 
@@ -386,17 +383,14 @@ class DistributivoController extends \app\components\CController {
                     foreach ($nopagados as $est_id) {  // empieza foreach para guardar los no pagados
                         //Verificar que no haya guardado el estudiante en el periodo y est_id para insert, si guardo es update NO PAGADOS.                    
                         $distributivo_model = new Distributivo();
-                        // OJO MODIFICAR Y PROBAR EN POSGRADO Y GRADO QUE CONSULTE SEGUN PERIODO O PROMOCION
-                        $resp_consPeriodonopago = $distributivo_model->consultarPeriodopago($periodo, $est_id);
+                        $resp_consPeriodonopago = $distributivo_model->consultarPeriodopago($periodo, null, $est_id);
                         if (!empty($resp_consPeriodonopago["eppa_id"])) {
-                            // update update NO pagados 
-                            // OJO MODIFICAR Y PROBAR EN POSGRADO Y GRADO QUE MODIFIQUE SEGUN PERIODO O PROMOCION
-                            $resp_guardanopago = $distributivo_model->modificarPagoestudiante($periodo, $est_id, 0, $usu_id);
+                            // update NO pagados 
+                            $resp_guardanopago = $distributivo_model->modificarPagoestudiante($periodo, null, $est_id, 0, $usu_id);
                             $exito = 1;
                         } else {
                             // es un insert NO pagados
-                            // OJO MODIFICAR Y PROBAR EN POSGRADO Y GRADO QUE INGRESE SEGUN PERIODO O PROMOCION
-                            $resp_modificarnopago = $distributivo_model->insertarPagoestudiante($periodo, $est_id, 0, $usu_id);
+                            $resp_modificarnopago = $distributivo_model->insertarPagoestudiante($periodo, null, $est_id, 0, $usu_id);
                             $exito = 1;
                         }
                     } // cierra foreach 
@@ -532,7 +526,7 @@ class DistributivoController extends \app\components\CController {
             $arrSearch["promocion"] = $data['promocion'];
             $arrSearch["asignatura"] = $data['asignatura'];
             $arrSearch["estado_pago"] = $data['estado'];
-            $arrSearch["paralelo"] = $data['paralelo'];           
+            $arrSearch["paralelo"] = $data['paralelo'];
             $model = $distributivo_model->consultarDistributivoxEstudiantepos($arrSearch, 1);
             return $this->render('_listarestudiantespagoposgrid', [
                         "model" => $model,
@@ -572,8 +566,8 @@ class DistributivoController extends \app\components\CController {
                     'mod_estado' => array("-1" => "Todos", "0" => "No Autorizado", "1" => "Autorizado"),
                     'mod_paralelo' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_Paralelos), "id", "name"),]);
     }
-    
-    public function actionExpexcelestpagopos() {        
+
+    public function actionExpexcelestpagopos() {
         ini_set('memory_limit', '256M');
         $content_type = Utilities::mimeContentType("xls");
         $nombarch = "Report-" . date("YmdHis") . ".xls";
@@ -651,6 +645,89 @@ class DistributivoController extends \app\components\CController {
                 ])
         );
         $report->mpdf->Output('Reporte_' . date("Ymdhis") . ".pdf", ExportFile::OUTPUT_TO_DOWNLOAD);
+    }
+
+// OJO REPLICAR LA MISMA FUNCION LUEGO DE MODIIFCAR LAS FUNCIONES PARA POSGRADO NOMGRE DE FUNCION ==>Savestudiantespagopos
+    public function actionSavestudiantespagopos() {
+        $usu_id = @Yii::$app->session->get("PB_iduser");
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+            $promocion = $data["promocion"];
+            $pagado = $data["pagado"];
+            $nopagado = $data["nopagado"];
+
+            $con = \Yii::$app->db_academico;
+            $transaction = $con->beginTransaction();
+            try {
+                if (!empty($pagado)) {
+                    $pagados = explode(",", $pagado); //PAGADOS
+                    foreach ($pagados as $est_id) {  // empieza foreach para guardar los pagados
+                        //Verificar que no haya guardado el estudiante en el periodo y est_id para insert, si guardo es update PAGADOS.
+                        // en un ciclo primero los pagados, luego los no pagado
+                        $distributivo_model = new Distributivo();
+                        // OJO MODIFICAR Y PROBAR EN POSGRADO Y GRADO QUE CONSULTE SEGUN PERIODO O PROMOCION
+                        $resp_consPeriodopago = $distributivo_model->consultarPeriodopago(null, $promocion, $est_id);
+                        if (!empty($resp_consPeriodopago["eppa_id"])) {
+                            // update update pagados   
+                            // OJO MODIFICAR Y PROBAR EN POSGRADO Y GRADO QUE MODIFIQUE SEGUN PERIODO O PROMOCION
+                            $resp_guardapago = $distributivo_model->modificarPagoestudiante(null, $promocion, $est_id, 1, $usu_id);
+                            $exito = 1;
+                        } else {
+                            // es un insert pagados
+                            // OJO MODIFICAR Y PROBAR EN POSGRADO Y GRADO QUE INGRESE SEGUN PERIODO O PROMOCION
+                            $resp_modificarpago = $distributivo_model->insertarPagoestudiante(null, $promocion, $est_id, 1, $usu_id);
+                            $exito = 1;
+                        }
+                    } // cierra foreach 
+                }
+                if (!empty($nopagado)) {
+                    $nopagados = explode(",", $nopagado); //NO PAGADOS
+                    foreach ($nopagados as $est_id) {  // empieza foreach para guardar los no pagados
+                        //Verificar que no haya guardado el estudiante en el periodo y est_id para insert, si guardo es update NO PAGADOS.                    
+                        $distributivo_model = new Distributivo();
+                        // OJO MODIFICAR Y PROBAR EN POSGRADO Y GRADO QUE CONSULTE SEGUN PERIODO O PROMOCION
+                        $resp_consPeriodonopago = $distributivo_model->consultarPeriodopago(null, $promocion, $est_id);
+                        if (!empty($resp_consPeriodonopago["eppa_id"])) {
+                            // update update NO pagados 
+                            // OJO MODIFICAR Y PROBAR EN POSGRADO Y GRADO QUE MODIFIQUE SEGUN PERIODO O PROMOCION
+                            $resp_guardanopago = $distributivo_model->modificarPagoestudiante(null, $promocion, $est_id, 0, $usu_id);
+                            $exito = 1;
+                        } else {
+                            // es un insert NO pagados
+                            // OJO MODIFICAR Y PROBAR EN POSGRADO Y GRADO QUE INGRESE SEGUN PERIODO O PROMOCION
+                            $resp_modificarnopago = $distributivo_model->insertarPagoestudiante(null, $promocion, $est_id, 0, $usu_id);
+                            $exito = 1;
+                        }
+                    } // cierra foreach 
+                }
+                if ($exito) {
+                    $transaction->commit();
+                    $message = array(
+                        "wtmessage" => Yii::t("notificaciones", "La información ha sido grabada."),
+                        "title" => Yii::t('jslang', 'Success'),
+                    );
+                    return \app\models\Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                } else {
+                    $transaction->rollback();
+                    if (empty($message)) {
+                        $message = array
+                            (
+                            "wtmessage" => Yii::t("notificaciones", "Error al grabar. " . $mensaje), "title" =>
+                            Yii::t('jslang', 'Success'),
+                        );
+                    }
+                    return \app\models\Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                }
+            } catch (Exception $ex) {
+                $transaction->rollback();
+                $message = array(
+                    "wtmessage" => Yii::t("notificaciones", "Error al grabar." . $mensaje),
+                    "title" => Yii::t('jslang', 'Success'),
+                );
+                return \app\models\Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+            }
+            return;
+        }
     }
 
 }
