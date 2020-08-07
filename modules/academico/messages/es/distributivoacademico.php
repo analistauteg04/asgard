@@ -40,5 +40,7 @@
  */
 
 return [
+    "Add Student" => "Agregar Estudiante",
     "Register already exists in System." => "Registro ya existe en el Sistema.",
+    "Profesor Lists by Subject" => "Listado de Profesores por Asignatura",
 ];

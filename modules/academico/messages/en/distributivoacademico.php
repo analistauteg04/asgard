@@ -40,5 +40,7 @@
  */
 
 return [
+    "Add Student" => "Add Student",
     "Register already exists in System." => "Register already exists in System.",
+    "Profesor Lists by Subject" => "Profesor Lists by Subjects",
 ];

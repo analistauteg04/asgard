@@ -5,6 +5,7 @@ namespace app\modules\academico\controllers;
 use Yii;
 use app\modules\academico\models\Asignatura;
 use app\modules\academico\models\DistributivoAcademico;
+use app\modules\academico\models\DistributivoAcademicoHorario;
 use app\modules\academico\models\SemestreAcademico;
 use app\modules\academico\models\UnidadAcademica;
 use app\modules\academico\models\TipoDistributivo;
@@ -174,6 +175,8 @@ class DistributivoacademicoController extends \app\components\CController {
         $mod_profesor = new Profesor();
         $arr_profesor = $mod_profesor->getProfesores();
         $arr_horario = $distributivo_model->getHorariosByUnidadAcad($distributivo_model->uaca_id, $distributivo_model->mod_id, $arr_jornada[0]["id"]);
+        $mod_horario = DistributivoAcademicoHorario::findOne($distributivo_model->daho_id);
+        $horario_values = ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_horario), "id", "name");
         return $this->render('view', [
             'arr_profesor' => ArrayHelper::map(array_merge([["Id" => "0", "Nombres" => Yii::t("formulario", "Grid")]], $arr_profesor), "Id", "Nombres"),
             'arr_unidad' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_unidad), "id", "name"),
@@ -181,90 +184,202 @@ class DistributivoacademicoController extends \app\components\CController {
             'arr_periodo' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_periodo), "id", "name"),
             'arr_materias' => ArrayHelper::map(array_merge([["asi_id" => "0", "asi_nombre" => Yii::t("formulario", "Grid")]], $mod_asignatura), "asi_id", "asi_nombre"),
             'arr_jornada' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_jornada), "id", "name"),
-            'arr_horario' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_horario), "id", "name"),
+            'arr_horario' => $horario_values,
+            'pro_id'  => $distributivo_model->pro_id,
             'uaca_id' => $distributivo_model->uaca_id,
-            'mod_id' => $distributivo_model->mod_id,
+            'mod_id'  => $distributivo_model->mod_id,
             'paca_id' => $distributivo_model->paca_id,
-            'horario' => '',
-            'jornada' => '',
+            'asi_id'  => $distributivo_model->asi_id,
+            'horario' => array_search($mod_horario->daho_horario, $horario_values),
+            'jornada' => $mod_horario->daho_jornada,
+            'daca_id' => $id,
         ]);
     }
 
-    public function actionEdit() {
-        
+    public function actionEdit($id) {
+        $emp_id = @Yii::$app->session->get("PB_idempresa");
+        $mod_modalidad = new Modalidad();
+        $mod_unidad = new UnidadAcademica();
+        $mod_periodo = new PeriodoAcademicoMetIngreso();
+        $distributivo_model = DistributivoAcademico::findOne($id);
+        $arr_unidad = $mod_unidad->consultarUnidadAcademicasEmpresa($emp_id);
+        $arr_modalidad = $mod_modalidad->consultarModalidad($distributivo_model->uaca_id, $emp_id);
+        $arr_periodo = $mod_periodo->consultarPeriodoAcademico();
+        $mod_asignatura = Asignatura::findAll(['asi_estado' => 1, 'asi_estado_logico' => 1]);
+        $arr_jornada = $distributivo_model->getJornadasByUnidadAcad($distributivo_model->uaca_id, $distributivo_model->mod_id);
+        $mod_profesor = new Profesor();
+        $arr_profesor = $mod_profesor->getProfesores();
+        $arr_horario = $distributivo_model->getHorariosByUnidadAcad($distributivo_model->uaca_id, $distributivo_model->mod_id, $arr_jornada[0]["id"]);
+        $mod_horario = DistributivoAcademicoHorario::findOne($distributivo_model->daho_id);
+        $horario_values = ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_horario), "id", "name");
+        return $this->render('edit', [
+            'arr_profesor' => ArrayHelper::map(array_merge([["Id" => "0", "Nombres" => Yii::t("formulario", "Grid")]], $arr_profesor), "Id", "Nombres"),
+            'arr_unidad' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_unidad), "id", "name"),
+            'arr_modalidad' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_modalidad), "id", "name"),
+            'arr_periodo' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_periodo), "id", "name"),
+            'arr_materias' => ArrayHelper::map(array_merge([["asi_id" => "0", "asi_nombre" => Yii::t("formulario", "Grid")]], $mod_asignatura), "asi_id", "asi_nombre"),
+            'arr_jornada' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_jornada), "id", "name"),
+            'arr_horario' => $horario_values,
+            'pro_id'  => $distributivo_model->pro_id,
+            'uaca_id' => $distributivo_model->uaca_id,
+            'mod_id'  => $distributivo_model->mod_id,
+            'paca_id' => $distributivo_model->paca_id,
+            'asi_id'  => $distributivo_model->asi_id,
+            'horario' => array_search($mod_horario->daho_horario, $horario_values),
+            'jornada' => $mod_horario->daho_jornada,
+            'daca_id' => $id,
+        ]);
     }
 
     public function actionUpdate() {
+        $usu_id = @Yii::$app->session->get("PB_iduser");
+        $fecha_transaccion = date(Yii::$app->params["dateTimeByDefault"]);
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+            try {
+                $daca_id = $data['id'];
+                $pro_id = $data['profesor'];
+                $uaca_id = $data['unidad'];
+                $mod_id = $data['modalidad'];
+                $paca_id = $data['periodo'];
+                $jornada_id = $data['jornada'];
+                $horario = $data['horario'];
+                $materia = $data['materia'];
+                $distributivo_model = DistributivoAcademico::findOne($daca_id);
+                $dataExists = $distributivo_model->existsDistribucionAcademico($pro_id, $materia, $uaca_id, $mod_id, $paca_id, $jornada_id, $horario);
+                if(isset($dataExists) && $dataExists != "" && count($dataExists) > 0){
+                    if($dataExists['id'] == $daca_id){
+                        $message = array(
+                            "wtmessage" => Yii::t("notificaciones", "Your information was successfully saved."),
+                            "title" => Yii::t('jslang', 'Success'),
+                        );
+                        return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+                    }
+                    $message = array(
+                        "wtmessage" => academico::t('distributivoacademico', 'Register already exists in System.'),
+                        "title" => Yii::t('jslang', 'Error'),
+                    );
+                    return Utilities::ajaxResponse('NOOK', 'alert', Yii::t('jslang', 'Error'), 'true', $message);
+                }
+                $dataHorario = $distributivo_model->getDistribucionAcademicoHorario($uaca_id, $mod_id, $jornada_id, $horario);
 
+                $distributivo_model->pro_id = $pro_id;
+                $distributivo_model->mod_id = $mod_id;
+                $distributivo_model->asi_id = $materia;
+                $distributivo_model->paca_id = $paca_id;
+                $distributivo_model->daho_id = $dataHorario['daho_id'];    
+                $distributivo_model->daca_fecha_modificacion = $fecha_transaccion;
+                $distributivo_model->daca_usuario_modifica = $usu_id;
+                if ($distributivo_model->update() !== false) {
+                    $message = array(
+                        "wtmessage" => Yii::t("notificaciones", "Your information was successfully saved."),
+                        "title" => Yii::t('jslang', 'Success'),
+                    );
+                    return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+                } else {
+                    throw new Exception('Error en Guardar registro.');
+                }
+            }catch(Exception $e){
+                $message = array(
+                    "wtmessage" => Yii::t('notificaciones', 'Your information has not been saved. Please try again.'),
+                    "title" => Yii::t('jslang', 'Error'),
+                );
+                return Utilities::ajaxResponse('NOOK', 'alert', Yii::t('jslang', 'Error'), 'true', $message);
+            }
+        }
     }
 
-    public function actionExpexcel() {
-        $per_id = @Yii::$app->session->get("PB_perid");
+    public function actionDelete(){
+        if (Yii::$app->request->isAjax) {
+            $usu_id = @Yii::$app->session->get("PB_iduser");
+            $data = Yii::$app->request->post();
+            $fecha_transaccion = date(Yii::$app->params["dateTimeByDefault"]);
+            try {
+                $id = $data["id"];
+                $model = DistributivoAcademico::findOne($id);
+                $model->daca_fecha_modificacion = $fecha_transaccion;
+                $model->daca_usuario_modifica = $usu_id;
+                $model->daca_estado = '0';
+                $model->daca_estado_logico = '0';
+                $message = array(
+                    "wtmessage" => Yii::t("notificaciones", "Your information was successfully saved."),
+                    "title" => Yii::t('jslang', 'Success'),
+                );
+                if ($model->update() !== false) {
+                    return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+                } else {
+                    throw new Exception('Error SubModulo no ha sido eliminado.');
+                }
+            } catch (Exception $ex) {
+                $message = array(
+                    "wtmessage" => Yii::t('notificaciones', 'Your information has not been saved. Please try again.'),
+                    "title" => Yii::t('jslang', 'Error'),
+                );
+                return Utilities::ajaxResponse('NOOK', 'alert', Yii::t('jslang', 'Error'), 'true', $message);
+            }
+        }
+    }
 
+    public function actionExportexcel() {
+        $per_id = @Yii::$app->session->get("PB_perid");
         ini_set('memory_limit', '256M');
         $content_type = Utilities::mimeContentType("xls");
         $nombarch = "Report-" . date("YmdHis") . ".xls";
         header("Content-Type: $content_type");
         header("Content-Disposition: attachment;filename=" . $nombarch);
         header('Cache-Control: max-age=0');
-        $colPosition = array("C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N");
+        $colPosition = array("C", "D", "E", "F", "G", "H", "I");
         $arrHeader = array(
+            academico::t("Academico", "Teacher"),
+            Yii::t("formulario", "DNI 1"),
             Yii::t("formulario", "Academic unit"),
             Yii::t("formulario", "Mode"),
-            Yii::t("formulario", "DNI"),
-            Yii::t("formulario", "Complete Names"),
             Yii::t("formulario", "Period"),
             Yii::t("formulario", "Subject"),
-            Yii::t("formulario", "Payment Status"),
+            academico::t("Academico", "Working day"),
         );
-        \app\models\Utilities::putMessageLogFile('perid:' . $per_id);
-        $distributivo_model = new Distributivo();
+        $distributivo_model = new DistributivoAcademico();
         $data = Yii::$app->request->get();
-        $arrSearch["search"] = $data['search'];
-        $arrSearch["unidad"] = $data['unidad'];
-        $arrSearch["modalidad"] = $data['modalidad'];
-        $arrSearch["periodo"] = $data['periodo'];
-        $arrSearch["estado"] = $data['estado'];
+        $arrSearch["search"] = ($data['search'] != "")?$data['search']:NULL;
+        $arrSearch["unidad"] = ($data['unidad'] > 0)?$data['unidad']:NULL;
+        $arrSearch["modalidad"] = ($data['modalidad'] > 0)?$data['modalidad']:NULL;
+        $arrSearch["periodo"] = ($data['periodo'] > 0)?$data['periodo']:NULL;
+        $arrSearch["asignatura"] = ($data['asignatura'] > 0)?$data['asignatura']:NULL;
+        $arrSearch["jornada"] = ($data['jornada'] > 0)?$data['jornada']:NULL;
 
-        $arrData = array();
-        if ($arrSearch["unidad"] == 0 and $arrSearch["modalidad"] == 0 and $arrSearch["periodo"] == 0 and $arrSearch["estado"] == 2 and ( empty($arrSearch["search"]))) {
-            $arrData = $distributivo_model->consultarDistributivoxProfesor(array(), $per_id, 0);
-        } else {
-            $arrData = $distributivo_model->consultarDistributivoxProfesor($arrSearch, $per_id, 0);
+        $arrData = $distributivo_model->getListadoDistributivo($arrSearch["search"], $arrSearch["modalidad"], $arrSearch["asignatura"], $arrSearch["jornada"], $arrSearch["unidad"], $arrSearch["periodo"], true);
+        foreach($arrData as $key => $value){
+            unset($arrData[$key]["Id"]);
         }
-        $nameReport = academico::t("Academico", "Listado de estudiantes");
+        $nameReport = academico::t("distributivoacademico", "Profesor Lists by Subject");
         Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
         exit;
     }
 
-    public function actionExppdf() {
+    public function actionExportpdf() {
         $per_id = @Yii::$app->session->get("PB_perid");
         $report = new ExportFile();
-        $this->view->title = academico::t("Academico", "Listado de estudiantes"); // Titulo del reporte
+        $this->view->title = academico::t("distributivoacademico", "Profesor Lists by Subject"); // Titulo del reporte
         $arrHeader = array(
+            academico::t("Academico", "Teacher"),
+            Yii::t("formulario", "DNI 1"),
             Yii::t("formulario", "Academic unit"),
             Yii::t("formulario", "Mode"),
-            Yii::t("formulario", "DNI"),
-            Yii::t("formulario", "Complete Names"),
             Yii::t("formulario", "Period"),
             Yii::t("formulario", "Subject"),
-            Yii::t("formulario", "Payment Status"),
+            academico::t("Academico", "Working day"),
         );
-        $distributivo_model = new Distributivo();
+        $distributivo_model = new DistributivoAcademico();
         $data = Yii::$app->request->get();
-        $arrSearch["search"] = $data['search'];
-        $arrSearch["unidad"] = $data['unidad'];
-        $arrSearch["modalidad"] = $data['modalidad'];
-        $arrSearch["periodo"] = $data['periodo'];
-        $arrSearch["estado"] = $data['estado'];
+        $arrSearch["search"] = ($data['search'] != "")?$data['search']:NULL;
+        $arrSearch["unidad"] = ($data['unidad'] > 0)?$data['unidad']:NULL;
+        $arrSearch["modalidad"] = ($data['modalidad'] > 0)?$data['modalidad']:NULL;
+        $arrSearch["periodo"] = ($data['periodo'] > 0)?$data['periodo']:NULL;
+        $arrSearch["asignatura"] = ($data['asignatura'] > 0)?$data['asignatura']:NULL;
+        $arrSearch["jornada"] = ($data['jornada'] > 0)?$data['jornada']:NULL;
 
-        $arrData = array();
-        if ($arrSearch["unidad"] == 0 and $arrSearch["modalidad"] == 0 and $arrSearch["periodo"] == 0 and $arrSearch["estado"] == 2 and ( empty($arrSearch["search"]))) {
-            $arrData = $distributivo_model->consultarDistributivoxProfesor(array(), $per_id, 0);
-        } else {
-            $arrData = $distributivo_model->consultarDistributivoxProfesor($arrSearch, $per_id, 0);
-        }
-        $report->orientation = "L"; // tipo de orientacion L => Horizontal, P => Vertical                                
+        $arrData = $distributivo_model->getListadoDistributivo($arrSearch["search"], $arrSearch["modalidad"], $arrSearch["asignatura"], $arrSearch["jornada"], $arrSearch["unidad"], $arrSearch["periodo"], true);
+        $report->orientation = "P"; // tipo de orientacion L => Horizontal, P => Vertical                                
         $report->createReportPdf(
                 $this->render('exportpdf', [
                     'arr_head' => $arrHeader,

@@ -14,11 +14,11 @@ academico::registerTranslations();
             <div class="form-group">            
                 <label for="cmb_profesor" class="col-sm-2 col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= academico::t("Academico", "Teacher") ?></label>
                 <div class="col-sm-3 col-xs-3 col-md-3 col-lg-3">
-                    <?= Html::dropDownList("cmb_profesor", 0,  $arr_profesor , ["class" => "form-control", "id" => "cmb_profesor"]) ?>
+                    <?= Html::dropDownList("cmb_profesor", $pro_id,  $arr_profesor , ["class" => "form-control", "id" => "cmb_profesor", "disabled" => "disabled"]) ?>
                 </div>
                 <label for="cmb_unidad_dis" class="col-sm-2 col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= Yii::t("formulario", "Academic unit") ?></label>
                 <div class="col-sm-3 col-xs-3 col-md-3 col-lg-3">
-                    <?= Html::dropDownList("cmb_unidad_dis", 0, $arr_unidad, ["class" => "form-control", "id" => "cmb_unidad_dis"]) ?>
+                    <?= Html::dropDownList("cmb_unidad_dis", $uaca_id, $arr_unidad, ["class" => "form-control", "id" => "cmb_unidad_dis", "disabled" => "disabled"]) ?>
                 </div> 
             </div>
         </div>    
@@ -26,11 +26,11 @@ academico::registerTranslations();
             <div class="form-group">    
                 <label for="cmb_modalidad" class="col-sm-2 col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= Yii::t("formulario", "Mode") ?></label>
                 <div class="col-sm-3 col-xs-3 col-md-3 col-lg-3">
-                    <?= Html::dropDownList("cmb_modalidad", 0, $arr_modalidad, ["class" => "form-control", "id" => "cmb_modalidad"]) ?>
+                    <?= Html::dropDownList("cmb_modalidad", $mod_id, $arr_modalidad, ["class" => "form-control", "id" => "cmb_modalidad", "disabled" => "disabled"]) ?>
                 </div>         
                 <label for="cmb_periodo" class="col-sm-2 col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= Yii::t("formulario", "Period") ?></label>
                 <div class="col-sm-3 col-xs-3 col-md-3 col-lg-3">
-                    <?= Html::dropDownList("cmb_periodo", 0,  $arr_periodo , ["class" => "form-control", "id" => "cmb_periodo"]) ?>
+                    <?= Html::dropDownList("cmb_periodo", $paca_id,  $arr_periodo , ["class" => "form-control", "id" => "cmb_periodo", "disabled" => "disabled"]) ?>
                 </div>       
             </div>                                            
         </div>    
@@ -38,11 +38,11 @@ academico::registerTranslations();
             <div class="form-group">                        
                 <label for="cmb_jornada" class="col-sm-2 col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= academico::t("Academico", "Working day") ?></label>
                 <div class="col-sm-3 col-xs-3 col-md-3 col-lg-3">
-                    <?= Html::dropDownList("cmb_jornada", 0, $arr_jornada, ["class" => "form-control", "id" => "cmb_jornada"]) ?>
+                    <?= Html::dropDownList("cmb_jornada", $jornada, $arr_jornada, ["class" => "form-control", "id" => "cmb_jornada", "disabled" => "disabled"]) ?>
                 </div>   
                 <label for="cmb_materia" class="col-sm-2 col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= Yii::t("formulario", "Subject") ?></label>
                 <div class="col-sm-3 col-xs-3 col-md-3 col-lg-3">
-                    <?= Html::dropDownList("cmb_materia", 0,  $arr_materias, ["class" => "form-control", "id" => "cmb_materia"]) ?>
+                    <?= Html::dropDownList("cmb_materia", $asi_id,  $arr_materias, ["class" => "form-control", "id" => "cmb_materia", "disabled" => "disabled"]) ?>
                 </div> 
             </div>
         </div> 
@@ -50,9 +50,11 @@ academico::registerTranslations();
             <div class="form-group">                        
                 <label for="cmb_horario" class="col-sm-2 col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= Yii::t("formulario", "Schedule") ?></label>
                 <div class="col-sm-3 col-xs-3 col-md-3 col-lg-3">
-                    <?= Html::dropDownList("cmb_horario", 0, $arr_horario, ["class" => "form-control", "id" => "cmb_horario"]) ?>
+                    <?= Html::dropDownList("cmb_horario", $horario, $arr_horario, ["class" => "form-control", "id" => "cmb_horario", "disabled" => "disabled"]) ?>
                 </div>   
             </div>
         </div>
     </div>
 </form>
+
+<?= Html::hiddenInput('txth_ids', $daca_id, ['id' => 'txth_ids']); ?>
