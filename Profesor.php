@@ -4,7 +4,6 @@ namespace app\modules\academico\models;
 
 use Yii;
 use yii\data\ArrayDataProvider;
-use app\models\Utilities;
 
 /**
  * This is the model class for table "profesor".
@@ -272,27 +271,5 @@ class Profesor extends \yii\db\ActiveRecord
         ]);
 
         return $dataProvider;
-    }
-
-    public function getProfesores(){
-        $con_asgard = \Yii::$app->db_asgard;
-        $con_academico = \Yii::$app->db_academico;
-
-        $sql = "SELECT 
-                    pro.pro_id AS Id,
-                    CONCAT(pe.per_pri_apellido, ' ', pe.per_pri_nombre) AS Nombres
-                FROM 
-                    " . $con_academico->dbname . ".profesor AS pro
-                    INNER JOIN " . $con_asgard->dbname . ".persona AS pe ON pro.per_id = pe.per_id
-                WHERE 
-                    pro.pro_estado = 1 AND 
-                    pro.pro_estado_logico = 1 AND 
-                    pe.per_estado = 1 AND
-                    pe.per_estado_logico = 1
-                ORDER BY 
-                    pe.per_pri_apellido ASC";
-        $comando = $con_academico->createCommand($sql);
-        $res = $comando->queryAll();
-        return $res;
     }
 }
