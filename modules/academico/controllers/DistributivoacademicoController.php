@@ -18,6 +18,7 @@ use app\modules\academico\Module as academico;
 use app\modules\admision\Module as admision;
 use app\models\ExportFile;
 use app\modules\academico\models\Profesor;
+use Exception;
 
 academico::registerTranslations();
 admision::registerTranslations();
@@ -26,7 +27,7 @@ class DistributivoacademicoController extends \app\components\CController {
 
     public function actionIndex() {
         $per_id = @Yii::$app->session->get("PB_perid");
-        $emp_id = @Yii::$app->session->get("PB_empid");
+        $emp_id = @Yii::$app->session->get("PB_idempresa");
         $model = NULL;
         $distributivo_model = new DistributivoAcademico();
         $mod_modalidad = new Modalidad();
@@ -55,10 +56,21 @@ class DistributivoacademicoController extends \app\components\CController {
                 $message = array("modalidad" => $modalidad);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }
+            if(isset($data["getjornada"])){
+                $jornada = $distributivo_model->getJornadasByUnidadAcad($data["uaca_id"], $data["mod_id"]);
+                $message = array("jornada" => $jornada);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+            }
+            if(isset($data["gethorario"])){
+                $horario = $distributivo_model->getHorariosByUnidadAcad($data["uaca_id"], $data["mod_id"], $data['jornada_id']);
+                $message = array("horario" => $horario);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+            }
         }
         $mod_asignatura = Asignatura::findAll(['asi_estado' => 1, 'asi_estado_logico' => 1]);
         $arr_unidad = $mod_unidad->consultarUnidadAcademicasEmpresa($emp_id);
         $arr_modalidad = $mod_modalidad->consultarModalidad($arr_unidad[0]["id"], 1);
+        $arr_jornada = $distributivo_model->getJornadasByUnidadAcad($arr_unidad[0]["id"], $arr_modalidad[0]["id"]);
         $arr_periodo = $mod_periodo->consultarPeriodoAcademico();
         return $this->render('index', [
                     'mod_unidad' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_unidad), "id", "name"),
@@ -66,40 +78,120 @@ class DistributivoacademicoController extends \app\components\CController {
                     'mod_periodo' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_periodo), "id", "name"),
                     'mod_materias' => ArrayHelper::map(array_merge([["asi_id" => "0", "asi_nombre" => Yii::t("formulario", "Grid")]], $mod_asignatura), "asi_id", "asi_nombre"),
                     'model' => $model,
-                    'mod_jornada' => array("0" => "Todos", "1" => "(M) Matutino", "2" => "(N) Nocturno", "3" => "(S) Semipresencial", "4" => "(D) Distancia"),
+                    'mod_jornada' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_jornada), "id", "name"),
         ]);
     }
 
     public function actionNew() {
-        $emp_id = @Yii::$app->session->get("PB_empid");
+        $emp_id = @Yii::$app->session->get("PB_idempresa");
         $mod_modalidad = new Modalidad();
         $mod_unidad = new UnidadAcademica();
         $mod_periodo = new PeriodoAcademicoMetIngreso();
+        $distributivo_model = new DistributivoAcademico();
         $arr_unidad = $mod_unidad->consultarUnidadAcademicasEmpresa($emp_id);
-        $arr_modalidad = $mod_modalidad->consultarModalidad($arr_unidad[0]["id"], 1);
+        $arr_modalidad = $mod_modalidad->consultarModalidad($arr_unidad[0]["id"], $emp_id);
         $arr_periodo = $mod_periodo->consultarPeriodoAcademico();
         $mod_asignatura = Asignatura::findAll(['asi_estado' => 1, 'asi_estado_logico' => 1]);
-        $mod_profesor = Profesor::findAll([]);
-        $arr_horario = array();
+        $arr_jornada = $distributivo_model->getJornadasByUnidadAcad($arr_unidad[0]["id"], $arr_modalidad[0]["id"]);
+        $mod_profesor = new Profesor();
+        $arr_profesor = $mod_profesor->getProfesores();
+        $arr_horario = $distributivo_model->getHorariosByUnidadAcad($arr_unidad[0]["id"], $arr_modalidad[0]["id"], $arr_jornada[0]["id"]);
         return $this->render('new', [
-            'arr_profesor' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $mod_profesor), "id", "name"),
+            'arr_profesor' => ArrayHelper::map(array_merge([["Id" => "0", "Nombres" => Yii::t("formulario", "Grid")]], $arr_profesor), "Id", "Nombres"),
             'arr_unidad' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_unidad), "id", "name"),
             'arr_modalidad' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_modalidad), "id", "name"),
             'arr_periodo' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_periodo), "id", "name"),
             'arr_materias' => ArrayHelper::map(array_merge([["asi_id" => "0", "asi_nombre" => Yii::t("formulario", "Grid")]], $mod_asignatura), "asi_id", "asi_nombre"),
-            'arr_jornada' => array("0" => "Todos", "1" => "(M) Matutino", "2" => "(N) Nocturno", "3" => "(S) Semipresencial", "4" => "(D) Distancia"),
-            'arr_horario' => $arr_horario,
+            'arr_jornada' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_jornada), "id", "name"),
+            'arr_horario' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_horario), "id", "name"),
         ]);
     }
 
     public function actionSave() {
+        $usu_id = @Yii::$app->session->get("PB_iduser");
+        $fecha_transaccion = date(Yii::$app->params["dateTimeByDefault"]);
+        $distributivo_model = new DistributivoAcademico();
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+            try {
+                $pro_id = $data['profesor'];
+                $uaca_id = $data['unidad'];
+                $mod_id = $data['modalidad'];
+                $paca_id = $data['periodo'];
+                $jornada_id = $data['jornada'];
+                $horario = $data['horario'];
+                $materia = $data['materia'];
+                $dataExists = $distributivo_model->existsDistribucionAcademico($pro_id, $materia, $uaca_id, $mod_id, $paca_id, $jornada_id, $horario);
+                if(isset($dataExists) && $dataExists != "" && count($dataExists) > 0){
+                    $message = array(
+                        "wtmessage" => academico::t('distributivoacademico', 'Register already exists in System.'),
+                        "title" => Yii::t('jslang', 'Error'),
+                    );
+                    return Utilities::ajaxResponse('NOOK', 'alert', Yii::t('jslang', 'Error'), 'true', $message);
+                }
+                $dataHorario = $distributivo_model->getDistribucionAcademicoHorario($uaca_id, $mod_id, $jornada_id, $horario);
 
+                $distributivo_model->uaca_id = $uaca_id;
+                $distributivo_model->pro_id = $pro_id;
+                $distributivo_model->mod_id = $mod_id;
+                $distributivo_model->asi_id = $materia;
+                $distributivo_model->paca_id = $paca_id;
+                $distributivo_model->daho_id = $dataHorario['daho_id'];    
+                $distributivo_model->daca_fecha_registro = $fecha_transaccion;       
+                $distributivo_model->daca_estado_logico = '1';
+                $distributivo_model->daca_estado = '1';
+                $distributivo_model->daca_usuario_ingreso = $usu_id;
+                if ($distributivo_model->save()) {
+                    $message = array(
+                        "wtmessage" => Yii::t("notificaciones", "Your information was successfully saved."),
+                        "title" => Yii::t('jslang', 'Success'),
+                    );
+                    return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+                } else {
+                    throw new Exception('Error en Guardar registro.');
+                }
+            }catch(Exception $e){
+                $message = array(
+                    "wtmessage" => Yii::t('notificaciones', 'Your information has not been saved. Please try again.'),
+                    "title" => Yii::t('jslang', 'Error'),
+                );
+                return Utilities::ajaxResponse('NOOK', 'alert', Yii::t('jslang', 'Error'), 'true', $message);
+            }
+        }
+    }
+
+    public function actionView($id) {
+        $emp_id = @Yii::$app->session->get("PB_idempresa");
+        $mod_modalidad = new Modalidad();
+        $mod_unidad = new UnidadAcademica();
+        $mod_periodo = new PeriodoAcademicoMetIngreso();
+        $distributivo_model = DistributivoAcademico::findOne($id);
+        $arr_unidad = $mod_unidad->consultarUnidadAcademicasEmpresa($emp_id);
+        $arr_modalidad = $mod_modalidad->consultarModalidad($distributivo_model->uaca_id, $emp_id);
+        $arr_periodo = $mod_periodo->consultarPeriodoAcademico();
+        $mod_asignatura = Asignatura::findAll(['asi_estado' => 1, 'asi_estado_logico' => 1]);
+        $arr_jornada = $distributivo_model->getJornadasByUnidadAcad($distributivo_model->uaca_id, $distributivo_model->mod_id);
+        $mod_profesor = new Profesor();
+        $arr_profesor = $mod_profesor->getProfesores();
+        $arr_horario = $distributivo_model->getHorariosByUnidadAcad($distributivo_model->uaca_id, $distributivo_model->mod_id, $arr_jornada[0]["id"]);
+        return $this->render('view', [
+            'arr_profesor' => ArrayHelper::map(array_merge([["Id" => "0", "Nombres" => Yii::t("formulario", "Grid")]], $arr_profesor), "Id", "Nombres"),
+            'arr_unidad' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_unidad), "id", "name"),
+            'arr_modalidad' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_modalidad), "id", "name"),
+            'arr_periodo' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_periodo), "id", "name"),
+            'arr_materias' => ArrayHelper::map(array_merge([["asi_id" => "0", "asi_nombre" => Yii::t("formulario", "Grid")]], $mod_asignatura), "asi_id", "asi_nombre"),
+            'arr_jornada' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_jornada), "id", "name"),
+            'arr_horario' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_horario), "id", "name"),
+            'uaca_id' => $distributivo_model->uaca_id,
+            'mod_id' => $distributivo_model->mod_id,
+            'paca_id' => $distributivo_model->paca_id,
+            'horario' => '',
+            'jornada' => '',
+        ]);
     }
 
     public function actionEdit() {
-        return $this->render('edit', [
-            
-        ]);
+        
     }
 
     public function actionUpdate() {

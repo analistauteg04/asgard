@@ -62,10 +62,10 @@ academico::registerTranslations();
                 'template' => '{view}{delete}{add}',
                 'buttons' => [
                     'view' => function ($url, $model) {
-                        return Html::a('<span>' . substr($model['carrera'], 0,10)  . '..</span>', Url::to(['#']), ["data-toggle" => "tooltip", "title" => $model['carrera']]);
+                        return Html::a('<span class="'.Utilities::getIcon('view').'"></span>', Url::to(['academico/distributivoacademico/view', 'id' => $model['Id']]), ["data-toggle" => "tooltip", "title" => Yii::t("accion","View")]);
                     },
                     'delete' => function ($url, $model) {
-                        return Html::a('<span class="'.Utilities::getIcon('remove').'"></span>', null, ['href' => 'javascript:confirmDelete(\'deleteItem\',[\'' . $model['id'] . '\']);', "data-toggle" => "tooltip", "title" => Yii::t("accion","Delete")]);
+                        return Html::a('<span class="'.Utilities::getIcon('remove').'"></span>', null, ['href' => 'javascript:confirmDelete(\'deleteItem\',[\'' . $model['Id'] . '\']);', "data-toggle" => "tooltip", "title" => Yii::t("accion","Delete")]);
                     },
                     'add' => function ($url, $model){
                         return '';
