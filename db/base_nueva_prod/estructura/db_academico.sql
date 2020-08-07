@@ -768,6 +768,7 @@ create table if not exists `paralelo_planificacion` (
 create table if not exists `distributivo_academico` (
   `daca_id` bigint(20) not null auto_increment primary key, 
   `paca_id` bigint(20) null,
+  `daho_id` bigint(20) null,
   `ppro_id` bigint(20) null,
   `asi_id` bigint(20) not null,
   `pro_id` bigint(20) not null,  
@@ -787,7 +788,8 @@ create table if not exists `distributivo_academico` (
   foreign key (asi_id) references `asignatura`(asi_id),  
   foreign key (uaca_id) references `unidad_academica`(uaca_id), 
   foreign key (mod_id) references `modalidad`(mod_id),
-  foreign key (ppro_id) references `promocion_programa`(ppro_id)
+  foreign key (ppro_id) references `promocion_programa`(ppro_id),
+  foreign key (daho_id) references `distributivo_academico_horario`(daho_id)
 );
 
 -- --------------------------------------------------------
