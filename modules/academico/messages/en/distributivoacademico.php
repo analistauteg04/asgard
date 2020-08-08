@@ -42,5 +42,6 @@
 return [
     "Add Student" => "Add Student",
     "Register already exists in System." => "Register already exists in System.",
-    "Profesor Lists by Subject" => "Profesor Lists by Subjects",
+    "Profesor Lists by Subject" => "Profesor's Lists by Subjects",
+    "Student Lists by Subject" => "Student Lists by Subjects",
 ];

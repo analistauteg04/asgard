@@ -135,4 +135,58 @@ class DistributivoAcademicoEstudiante extends \yii\db\ActiveRecord {
         return $dataProvider;
     }
 
+    public function getEstudiantesXUnidadAcademica($uaca_id, $search){
+        $con_academico = \Yii::$app->db_academico;
+        $con_db = \Yii::$app->db;
+        $search_cond = "%" . $search . "%";
+        $estado = "1";
+        $str_search = "";
+
+        if (isset($search) && $search != "") {
+            $str_search = "(pe.per_pri_nombre like :search OR ";
+            $str_search .= "pe.per_pri_apellido like :search OR ";
+            $str_search .= "pe.per_cedula like :search) AND ";
+        }
+
+        $sql = "SELECT 
+                    e.est_id AS id,
+                    CONCAT(pe.per_pri_nombre, ' ', pe.per_pri_apellido, ' - ', pe.per_cedula) AS value,
+                    CONCAT(pe.per_pri_nombre, ' ', pe.per_pri_apellido, ' - ', pe.per_cedula) AS label
+                FROM 
+                    " . $con_academico->dbname . ".estudiante AS e 
+                    INNER JOIN " . $con_academico->dbname . ".estudiante_carrera_programa AS ec ON ec.est_id = e.est_id
+                    INNER JOIN " . $con_academico->dbname . ".modalidad_estudio_unidad AS mu ON mu.meun_id = ec.meun_id
+                    INNER JOIN " . $con_academico->dbname . ".estudio_academico AS ea ON ea.eaca_id = mu.eaca_id
+                    INNER JOIN " . $con_academico->dbname . ".promocion_programa AS pp ON pp.eaca_id = ea.eaca_id
+                    INNER JOIN " . $con_academico->dbname . ".unidad_academica AS ua ON ua.uaca_id = pp.uaca_id
+                    INNER JOIN " . $con_db->dbname . ".persona AS pe ON e.per_id = pe.per_id
+                WHERE 
+                    $str_search 
+                    ua.uaca_id =:uaca_id AND 
+                    e.est_estado = :estado AND
+                    e.est_estado_logico = :estado AND
+                    ec.ecpr_estado = :estado AND
+                    ec.ecpr_estado_logico = :estado AND
+                    mu.meun_estado = :estado AND
+                    mu.meun_estado_logico = :estado AND
+                    ea.eaca_estado = :estado AND
+                    ea.eaca_estado_logico = :estado AND
+                    pp.ppro_estado = :estado AND
+                    pp.ppro_estado_logico = :estado AND
+                    ua.uaca_estado = :estado AND
+                    ua.uaca_estado_logico = :estado AND
+                    pe.per_estado = :estado AND
+                    pe.per_estado_logico = :estado ";
+
+        $comando = $con_academico->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":uaca_id", $uaca_id, \PDO::PARAM_INT);
+        if (isset($search) && $search != "") {
+            $comando->bindParam(":search", $search_cond, \PDO::PARAM_STR);
+        }
+
+        $res = $comando->queryAll();
+        return $res;
+    }
+
 }

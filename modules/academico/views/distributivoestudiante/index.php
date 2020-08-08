@@ -13,6 +13,7 @@ use app\modules\academico\Module as academico;
             'materia' => $materia,
             'jornada' => $jornada,
             'horario' => $horario,
+            'profesor' => $profesor,
             ]);
         ?>
     </form>
@@ -24,3 +25,4 @@ use app\modules\academico\Module as academico;
         ]);
     ?>
 </div>
+<?= Html::hiddenInput('txth_ids', $daca_id, ['id' => 'txth_ids']); ?>
