@@ -64,4 +64,75 @@ class DistributivoAcademicoEstudiante extends \yii\db\ActiveRecord {
         return $this->hasOne(DistributivoAcademico::className(), ['daca_id' => 'daca_id']);
     }
 
+    public function getListadoDistributivoEstudiante($daca_id, $search = null, $onlyData = false){
+        $con_academico = \Yii::$app->db_academico;
+        $con_db = \Yii::$app->db;
+        $search_cond = "%" . $search . "%";
+        $estado = "1";
+        $str_search = "";
+
+        if (isset($search) && $search != "") {
+            $str_search = "(pe.per_pri_nombre like :search OR ";
+            $str_search .= "pe.per_pri_apellido like :search OR ";
+            $str_search .= "pe.per_cedula like :search) AND ";
+        }
+
+        $sql = "SELECT 
+                    de.daes_id AS Id,
+                    CONCAT(pe.per_pri_nombre, ' ', pe.per_pri_apellido) AS Nombres,
+                    pe.per_cedula AS Cedula,
+                    pe.per_correo AS Correo,
+                    ifnull(pe.per_celular, '') AS Telefono,
+                    e.est_matricula AS Matricula,
+                    ea.eaca_nombre AS Carrera
+                FROM 
+                    " . $con_academico->dbname . ".distributivo_academico AS da 
+                    INNER JOIN " . $con_academico->dbname . ".distributivo_academico_estudiante AS de ON da.daca_id = de.daca_id
+                    INNER JOIN " . $con_academico->dbname . ".estudiante AS e ON e.est_id = de.est_id
+                    INNER JOIN " . $con_academico->dbname . ".estudiante_carrera_programa AS ec ON ec.est_id = e.est_id
+                    INNER JOIN " . $con_academico->dbname . ".modalidad_estudio_unidad AS mu ON mu.meun_id = ec.meun_id
+                    INNER JOIN " . $con_academico->dbname . ".estudio_academico AS ea ON ea.eaca_id = mu.eaca_id
+                    INNER JOIN " . $con_db->dbname . ".persona AS pe ON e.per_id = pe.per_id
+                WHERE 
+                    $str_search 
+                    da.daca_id =:daca_id AND 
+                    da.daca_estado = :estado AND
+                    da.daca_estado_logico = :estado AND 
+                    de.daes_estado = :estado AND
+                    de.daes_estado_logico = :estado AND 
+                    e.est_estado = :estado AND
+                    e.est_estado_logico = :estado AND
+                    ec.ecpr_estado = :estado AND
+                    ec.ecpr_estado_logico = :estado AND
+                    mu.meun_estado = :estado AND
+                    mu.meun_estado_logico = :estado AND
+                    ea.eaca_estado = :estado AND
+                    ea.eaca_estado_logico = :estado AND
+                    pe.per_estado = :estado AND
+                    pe.per_estado_logico = :estado ";
+
+        $comando = $con_academico->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":daca_id", $daca_id, \PDO::PARAM_INT);
+        if (isset($search) && $search != "") {
+            $comando->bindParam(":search", $search_cond, \PDO::PARAM_STR);
+        }
+
+        $res = $comando->queryAll();
+        if ($onlyData)
+            return $res;
+        $dataProvider = new ArrayDataProvider([
+            'key' => 'Id',
+            'allModels' => $res,
+            'pagination' => [
+                'pageSize' => Yii::$app->params["pageSize"],
+            ],
+            'sort' => [
+                'attributes' => ['Nombres', "Cedula", "Cedula", "Correo", "Carrera"],
+            ],
+        ]);
+
+        return $dataProvider;
+    }
+
 }
