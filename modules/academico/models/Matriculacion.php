@@ -389,7 +389,7 @@ class Matriculacion extends \yii\db\ActiveRecord {
             ORDER BY 
                 reg_conf.rco_fecha_inicio DESC
         ";
-
+        
         $comando = $con->createCommand($sql);
         $comando->bindParam(":date", $date, \PDO::PARAM_STR);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
@@ -451,7 +451,7 @@ class Matriculacion extends \yii\db\ActiveRecord {
      * @param $per_id, $pla_id, $rco_num_bloques
      * @return $dataPlanificacion
      */
-    public function getAllDataPlanificacionEstudiante($per_id, $pla_id)
+    public function getAllDataPlanificacionEstudiante($per_id, $pla_id, $rco_num_bloques)
     {
         $con_academico = \Yii::$app->db_academico;
         $estado = 1;
@@ -505,8 +505,8 @@ class Matriculacion extends \yii\db\ActiveRecord {
             INNER JOIN modalidad_centro_costo AS mcc ON mcc.mod_id = mo.mod_id
             INNER JOIN estudio_academico AS ea ON ea.eaca_id = me.eaca_id
             INNER JOIN tipo_estudio_academico AS tp ON tp.teac_id = ea.teac_id
-            INNER JOIN malla_academica AS ma ON ma.meun_id = me.meun_id
-            INNER JOIN malla_academica_detalle AS mad ON mad.maca_id = ma.maca_id AND mad.asi_id = a.asi_id
+            INNER JOIN malla_academica_detalle AS mad ON mad.asi_id = a.asi_id
+            INNER JOIN malla_academica AS ma ON mad.maca_id = ma.maca_id 
             INNER JOIN estudiante_carrera_programa AS ec ON ec.meun_id = me.meun_id
             INNER JOIN estudiante AS e ON e.est_id = ec.est_id
             INNER JOIN ".Yii::$app->db_asgard->dbname.".persona AS p ON p.per_id = e.per_id
@@ -532,7 +532,7 @@ class Matriculacion extends \yii\db\ActiveRecord {
 
         $comando = $con_academico->createCommand($sql);
         $comando->bindParam(":per_id", $per_id, \PDO::PARAM_INT);
-        $dataCredits = $comando->queryAll();
+        $dataCredits = $comando->queryAll();Utilities::putMessageLogFile($comando->getRawSql());
         return $dataCredits;
     }
 
@@ -1030,19 +1030,24 @@ class Matriculacion extends \yii\db\ActiveRecord {
      * @param
      * @return $resultData
      */
-    public function getLastIdRegistroOnline()
+    public function getLastIdRegistroOnline($per_id)
     {
         $con_academico = \Yii::$app->db_academico;
         $estado = 1;
         $sql = "
             SELECT ron.ron_id, ron.pes_id
-            FROM " . $con_academico->dbname . ".registro_online as ron
-            WHERE ron.ron_estado_registro =:estado
+            FROM " . $con_academico->dbname . ".registro_online AS ron 
+            INNER JOIN " . $con_academico->dbname . ".planificacion_estudiante AS pes ON pes.pes_id = ron.pes_id
+            WHERE 
+            pes.per_id =:per_id AND 
+            ron.ron_estado_registro =:estado AND ron.ron_estado =:estado AND ron.ron_estado_logico =:estado
+            AND pes.pes_estado =:estado AND pes.pes_estado_logico =:estado
             ORDER BY ron.ron_fecha_registro DESC;
         ";
 
         $comando = $con_academico->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":per_id", $per_id, \PDO::PARAM_INT);
         $resultData = $comando->queryAll();
 
         return $resultData;

@@ -107,6 +107,11 @@ function searchModules() {
     $("#Tbg_Distributivo_Aca").PbGridView("applyFilterData", arrParams);
 }
 
+function showListStudents(id) {
+    var link = $('#txth_base').val() + "/academico/distributivoestudiante/index/" + id;
+    window.location = link;
+}
+
 function edit() {
     var link = $('#txth_base').val() + "/academico/distributivoacademico/edit" + "?id=" + $("#txth_ids").val();
     window.location = link;

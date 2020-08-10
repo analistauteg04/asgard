@@ -933,14 +933,21 @@ class MatriculacionController extends \app\components\CController {
                 ]);
             }
         } else {
-            $resultData = $matriculacion_model->getLastIdRegistroOnline();
-            exit($per_id);
+            $resultData = $matriculacion_model->getLastIdRegistroOnline($per_id);
             if (count($resultData) > 0) {
                 $last_ron_id = $resultData[0]['ron_id'];
                 $last_pes_id = $resultData[0]['pes_id'];
                 $data_student = $matriculacion_model->getDataStudenFromRegistroOnline($per_id, $last_pes_id);
                 $dataPlanificacion = $matriculacion_model->getPlanificationFromRegistroOnline($last_ron_id);
                 $materiasxEstudiante = PlanificacionEstudiante::findOne($last_pes_id);
+                $model_registroOnline = RegistroOnline::findOne($last_ron_id);
+                $arrModel_registroOnlineItem = RegistroOnlineItem::findAll(['ron_id' => $last_ron_id]);
+                $model_registroCuota = new RegistroOnlineCuota();
+                    $costoMaterias = 0;
+                    foreach($arrModel_registroOnlineItem as $item){
+                        $costoMaterias += $item->roi_costo;
+                    }
+                $dataProviderCuotas = $model_registroCuota->getDataCuotasRegistroOnline($last_ron_id, true);
                 $dataProvider = new ArrayDataProvider([
                     'key' => 'Ids',
                     'allModels' => $dataPlanificacion,
@@ -956,8 +963,11 @@ class MatriculacionController extends \app\components\CController {
                             "planificacion" => $dataProvider,
                             "data_student" => $data_student,
                             "title" => Academico::t("matriculacion", "Last register saved (Non-registration time)"),
-                            "ron_id" => $ron_id,
+                            "ron_id" => $last_ron_id,
                             "materiasxEstudiante" => $materiasxEstudiante,
+                            "model_registroOnline" => $model_registroOnline,
+                            "costoMaterias" => $costoMaterias,
+                            "cuotas" => $dataProviderCuotas,
                 ]);
             } else {
                 /*                 * If not exist a minimal one register in registro_online */
