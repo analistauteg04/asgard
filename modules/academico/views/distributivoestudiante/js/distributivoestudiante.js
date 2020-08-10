@@ -2,6 +2,9 @@ $(document).ready(function() {
     $('#btn_buscarData_dist').click(function() {
         searchModules();
     });
+    $('#btn_saveData_dist').click(function() {
+        save();
+    })
 });
 
 function searchModules() {
@@ -11,7 +14,7 @@ function searchModules() {
     $("#Tbg_Distributivo_Aca").PbGridView("applyFilterData", arrParams);
 }
 
-function getListStudent(search, response) {
+function getListStudent(search, response) { // function utilizada para el SearchboxList en evento getSource
     var link = $('#txth_base').val() + "/academico/distributivoestudiante/edit" + "?id=" + $("#txth_ids").val();
     var arrParams = new Object();
     arrParams.search = search;
@@ -22,7 +25,7 @@ function getListStudent(search, response) {
     }, false, false, "json", "POST", null, false);
 }
 
-function showDataStudent(id, value) {
+function showDataStudent(id, value) { // function utilizada para el SearchboxList en evento select
     var link = $('#txth_base').val() + "/academico/distributivoestudiante/edit" + "?id=" + $("#txth_ids").val();
     var arrParams = new Object();
     arrParams.est_id = id;
@@ -52,6 +55,9 @@ function save() {
     requestHttpAjax(link, arrParams, function(response) {
         if (response.status == "OK") {
             searchModules();
+            clearDataSearch();
+        } else {
+            showAlert(response.status, response.label, response.message);
         }
     }, true);
 }
@@ -62,11 +68,21 @@ function deleteItem(id) {
     arrParams.id = id;
     requestHttpAjax(link, arrParams, function(response) {
         if (response.status == "OK") {
+            searchModules();
             setTimeout(function() {
                 showAlert(response.status, response.label, response.message);
             }, 1000);
         }
     }, true);
+}
+
+function clearDataSearch() {
+    $('#txt_buscarData').val("");
+    $('#txt_nombres').val("");
+    $('#txt_apellidos').val("");
+    $('#txt_carrera').val("");
+    $('#txt_matricula').val("");
+    $("#txth_esid").val('');
 }
 
 function exportExcel() {

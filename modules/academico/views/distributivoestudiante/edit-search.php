@@ -102,7 +102,7 @@ use app\modules\academico\Module as academico;
     <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
         <div class="col-sm-8"></div>
         <div class="col-sm-2 col-md-2 col-xs-4 col-lg-2">                
-            <a id="btn_buscarData_dist" href="javascript:" class="btn btn-primary btn-block"> <?= academico::t("distributivoacademico","Add Student") ?></a>
+            <a id="btn_saveData_dist" href="javascript:" class="btn btn-primary btn-block"> <?= academico::t("distributivoacademico","Add Student") ?></a>
         </div>
     </div>
 </div>

@@ -85,7 +85,7 @@ class DistributivoestudianteController extends \app\components\CController {
             $search = $data['search'];
             $id = $data['id'];
             $model = $distributivoEst_model->getListadoDistributivoEstudiante($id, $search);
-            return $this->render('index-grid', [
+            return $this->render('edit-grid', [
                         "model" => $model,
             ]);
         }
@@ -139,7 +139,44 @@ class DistributivoestudianteController extends \app\components\CController {
     }
 
     public function actionSave(){
-
+        $emp_id = @Yii::$app->session->get("PB_idempresa");
+        $fecha_transaccion = date(Yii::$app->params["dateTimeByDefault"]);
+        $distributivoEst_model = new DistributivoAcademicoEstudiante();
+        try{
+            if (Yii::$app->request->isAjax) {
+                $data = Yii::$app->request->post();
+                $daca_id = $data['id'];
+                $est_id = $data['est_id'];
+                $dataExists = DistributivoAcademicoEstudiante::findOne(['daca_id' => $daca_id, 'est_id' => $est_id, 'daes_estado' => '1', 'daes_estado_logico' => '1']);
+                if(isset($dataExists) && $dataExists != ""){
+                    $message = array(
+                        "wtmessage" => academico::t('distributivoacademico', 'Register already exists in System.'),
+                        "title" => Yii::t('jslang', 'Error'),
+                    );
+                    return Utilities::ajaxResponse('NOOK', 'alert', Yii::t('jslang', 'Error'), 'true', $message);
+                }
+                $distributivoEst_model->daca_id = $daca_id;
+                $distributivoEst_model->est_id = $est_id;
+                $distributivoEst_model->daes_fecha_registro = $fecha_transaccion;
+                $distributivoEst_model->daes_estado = '1';
+                $distributivoEst_model->daes_estado_logico = '1';
+                if ($distributivoEst_model->save()) {
+                    $message = array(
+                        "wtmessage" => Yii::t("notificaciones", "Your information was successfully saved."),
+                        "title" => Yii::t('jslang', 'Success'),
+                    );
+                    return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+                } else {
+                    throw new Exception('Error en Guardar registro.');
+                }
+            }
+        }catch(Exception $e){
+            $message = array(
+                "wtmessage" => Yii::t('notificaciones', 'Your information has not been saved. Please try again.'),
+                "title" => Yii::t('jslang', 'Error'),
+            );
+            return Utilities::ajaxResponse('NOOK', 'alert', Yii::t('jslang', 'Error'), 'true', $message);
+        }
     }
 
     public function actionDelete(){
@@ -151,7 +188,6 @@ class DistributivoestudianteController extends \app\components\CController {
                 $id = $data["id"];
                 $model = DistributivoAcademicoEstudiante::findOne($id);
                 $model->daes_fecha_modificacion = $fecha_transaccion;
-                $model->daes_usuario_modifica = $usu_id;
                 $model->daes_estado = '0';
                 $model->daes_estado_logico = '0';
                 $message = array(
