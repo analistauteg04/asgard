@@ -498,20 +498,22 @@ class Matriculacion extends \yii\db\ActiveRecord {
             mad.made_credito AS AsigCreditos,
             mcc.mcco_code AS ModCode
         FROM 
-            asignatura AS a
-            INNER JOIN unidad_academica AS ua ON ua.uaca_id = a.uaca_id
-            INNER JOIN modalidad_estudio_unidad AS me ON me.uaca_id = ua.uaca_id
+            estudiante AS e
+            INNER JOIN estudiante_carrera_programa AS ec ON e.est_id = ec.est_id
+            INNER JOIN modalidad_estudio_unidad AS me ON ec.meun_id = me.meun_id
+            INNER JOIN estudio_academico AS ea ON ea.eaca_id = me.eaca_id
+            INNER JOIN unidad_academica AS ua ON me.uaca_id = ua.uaca_id
             INNER JOIN modalidad AS mo ON mo.mod_id = me.mod_id
             INNER JOIN modalidad_centro_costo AS mcc ON mcc.mod_id = mo.mod_id
-            INNER JOIN estudio_academico AS ea ON ea.eaca_id = me.eaca_id
+            INNER JOIN asignatura AS a ON ua.uaca_id = a.uaca_id
             INNER JOIN tipo_estudio_academico AS tp ON tp.teac_id = ea.teac_id
-            INNER JOIN malla_academica_detalle AS mad ON mad.asi_id = a.asi_id
-            INNER JOIN malla_academica AS ma ON mad.maca_id = ma.maca_id 
-            INNER JOIN estudiante_carrera_programa AS ec ON ec.meun_id = me.meun_id
-            INNER JOIN estudiante AS e ON e.est_id = ec.est_id
             INNER JOIN ".Yii::$app->db_asgard->dbname.".persona AS p ON p.per_id = e.per_id
             INNER JOIN ".Yii::$app->db_asgard->dbname.".empresa AS em ON em.emp_id = me.emp_id
             INNER JOIN planificacion_estudiante AS pes ON pes.pes_dni = p.per_cedula
+            INNER JOIN planificacion AS pla ON pla.pla_id = pes.pla_id
+            INNER JOIN malla_academica_detalle AS mad ON mad.asi_id = a.asi_id
+            INNER JOIN malla_academica AS ma ON mad.maca_id = ma.maca_id 
+            INNER JOIN malla_unidad_modalidad AS mu ON mu.maca_id = ma.maca_id AND mu.meun_id = me.meun_id
         WHERE
             pes.per_id =:per_id AND
             a.asi_estado = 1 AND a.asi_estado_logico = 1 AND 
@@ -527,12 +529,13 @@ class Matriculacion extends \yii\db\ActiveRecord {
             e.est_estado = 1 AND e.est_estado_logico = 1 AND
             p.per_estado = 1 AND p.per_estado_logico = 1 AND 
             em.emp_estado = 1 AND em.emp_estado_logico = 1 AND
+            mu.mumo_estado =1 AND mu.mumo_estado_logico =1 AND
             pes.pes_estado = 1 AND pes.pes_estado_logico = 1 
         ";
 
         $comando = $con_academico->createCommand($sql);
         $comando->bindParam(":per_id", $per_id, \PDO::PARAM_INT);
-        $dataCredits = $comando->queryAll();Utilities::putMessageLogFile($comando->getRawSql());
+        $dataCredits = $comando->queryAll();
         return $dataCredits;
     }
 
