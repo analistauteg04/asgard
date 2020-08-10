@@ -157,8 +157,8 @@ class DistributivoAcademicoEstudiante extends \yii\db\ActiveRecord {
                     INNER JOIN " . $con_academico->dbname . ".estudiante_carrera_programa AS ec ON ec.est_id = e.est_id
                     INNER JOIN " . $con_academico->dbname . ".modalidad_estudio_unidad AS mu ON mu.meun_id = ec.meun_id
                     INNER JOIN " . $con_academico->dbname . ".estudio_academico AS ea ON ea.eaca_id = mu.eaca_id
-                    INNER JOIN " . $con_academico->dbname . ".promocion_programa AS pp ON pp.eaca_id = ea.eaca_id
-                    INNER JOIN " . $con_academico->dbname . ".unidad_academica AS ua ON ua.uaca_id = pp.uaca_id
+                    -- INNER JOIN " . $con_academico->dbname . ".promocion_programa AS pp ON pp.eaca_id = ea.eaca_id
+                    INNER JOIN " . $con_academico->dbname . ".unidad_academica AS ua ON ua.uaca_id = mu.uaca_id
                     INNER JOIN " . $con_db->dbname . ".persona AS pe ON e.per_id = pe.per_id
                 WHERE 
                     $str_search 
@@ -171,8 +171,8 @@ class DistributivoAcademicoEstudiante extends \yii\db\ActiveRecord {
                     mu.meun_estado_logico = :estado AND
                     ea.eaca_estado = :estado AND
                     ea.eaca_estado_logico = :estado AND
-                    pp.ppro_estado = :estado AND
-                    pp.ppro_estado_logico = :estado AND
+                    -- pp.ppro_estado = :estado AND
+                    -- pp.ppro_estado_logico = :estado AND
                     ua.uaca_estado = :estado AND
                     ua.uaca_estado_logico = :estado AND
                     pe.per_estado = :estado AND

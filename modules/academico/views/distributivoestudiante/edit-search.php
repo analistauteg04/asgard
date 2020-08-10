@@ -33,9 +33,9 @@ use app\modules\academico\Module as academico;
     </div>    
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="form-group">            
-            <label for="txt_nombre" class="col-sm-2 col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= Yii::t("formulario", "First Names") ?></label>
+            <label for="txt_nombres" class="col-sm-2 col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= Yii::t("formulario", "First Names") ?></label>
             <div class="col-sm-3 col-xs-3 col-md-3 col-lg-3">
-                <?= Html::input("text", "txt_nombre", '' , ["class" => "form-control", "id" => "txt_nombre", "disabled" => "disabled"]) ?>
+                <?= Html::input("text", "txt_nombres", '' , ["class" => "form-control", "id" => "txt_nombres", "disabled" => "disabled"]) ?>
             </div>
             <label for="txt_apellidos" class="col-sm-2 col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= Yii::t("formulario", "Last Names") ?></label>
             <div class="col-sm-3 col-xs-3 col-md-3 col-lg-3">
@@ -54,19 +54,51 @@ use app\modules\academico\Module as academico;
                 <?= Html::input("text", "txt_matricula", '', ["class" => "form-control", "id" => "txt_matricula", "disabled" => "disabled"]) ?>
             </div> 
         </div>                                            
+    </div>
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="form-group">            
+            <label for="txt_unidad_dis" class="col-sm-2 col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= Yii::t("formulario", "Academic unit") ?></label>
+            <div class="col-sm-3 col-xs-3 col-md-3 col-lg-3">
+                <?= Html::input("text", "txt_unidad_dis",  $unidad , ["class" => "form-control", "id" => "txt_unidad_dis", "disabled" => "disabled"]) ?>
+            </div>
+            <label for="txt_modalidad" class="col-sm-2 col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= Yii::t("formulario", "Mode") ?></label>
+            <div class="col-sm-3 col-xs-3 col-md-3 col-lg-3">
+                <?= Html::input("text", "txt_modalidad", $modalidad, ["class" => "form-control", "id" => "txt_modalidad", "disabled" => "disabled"]) ?>
+            </div>      
+        </div>
+    </div>    
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="form-group">            
+            <label for="txt_periodo" class="col-sm-2 col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= Yii::t("formulario", "Period") ?></label>
+            <div class="col-sm-3 col-xs-3 col-md-3 col-lg-3">
+                <?= Html::input("text", "txt_periodo",  $periodo , ["class" => "form-control", "id" => "txt_periodo", "disabled" => "disabled"]) ?>
+            </div>       
+            <label for="txt_materia" class="col-sm-2 col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= Yii::t("formulario", "Subject") ?></label>
+            <div class="col-sm-3 col-xs-3 col-md-3 col-lg-3">
+                <?= Html::input("text", "txt_materia",  $materia, ["class" => "form-control", "id" => "txt_materia", "disabled" => "disabled"]) ?>
+            </div> 
+        </div>                                            
     </div>    
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="form-group">                        
-            <label for="txt_periodo" class="col-sm-2 col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= Yii::t("formulario", "Period") ?></label>
+            <label for="txt_jornada" class="col-sm-2 col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= academico::t("Academico", "Working day") ?></label>
             <div class="col-sm-3 col-xs-3 col-md-3 col-lg-3">
-                <?= Html::input("text", "txt_periodo", '', ["class" => "form-control", "id" => "txt_periodo", "disabled" => "disabled"]) ?>
+                <?= Html::input("text", "txt_jornada", $jornada, ["class" => "form-control", "id" => "txt_jornada", "disabled" => "disabled"]) ?>
             </div>   
-            <label for="txt_materia" class="col-sm-2 col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= Yii::t("formulario", "Subject") ?></label>
+            <label for="txt_horario" class="col-sm-2 col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= Yii::t("formulario", "Schedule") ?></label>
             <div class="col-sm-3 col-xs-3 col-md-3 col-lg-3">
-                <?= Html::input("text", "txt_materia", '', ["class" => "form-control", "id" => "txt_materia", "disabled" => "disabled"]) ?>
+                <?= Html::input("text", "txt_horario", $horario, ["class" => "form-control", "id" => "txt_horario", "disabled" => "disabled"]) ?>
             </div> 
         </div>
     </div> 
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="form-group">                        
+            <label for="txt_profesor" class="col-sm-2 col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= academico::t("Academico", "Teacher") ?></label>
+            <div class="col-sm-3 col-xs-3 col-md-3 col-lg-3">
+                <?= Html::input("text", "txt_profesor", $profesor, ["class" => "form-control", "id" => "txt_profesor", "disabled" => "disabled"]) ?>
+            </div>  
+        </div>
+    </div>   
     <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
         <div class="col-sm-8"></div>
         <div class="col-sm-2 col-md-2 col-xs-4 col-lg-2">                

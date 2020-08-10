@@ -7,13 +7,12 @@ $(document).ready(function() {
 function searchModules() {
     var arrParams = new Object();
     arrParams.PBgetFilter = true;
-    arrParams.search = $("#txt_buscarData").val();
     arrParams.id = $("#txth_ids").val();
     $("#Tbg_Distributivo_Aca").PbGridView("applyFilterData", arrParams);
 }
 
 function getListStudent(search, response) {
-    var link = $('#txth_base').val() + "/academico/distributivoestudiante/edit" + "?id=" + $("#txth_ids").val();;
+    var link = $('#txth_base').val() + "/academico/distributivoestudiante/edit" + "?id=" + $("#txth_ids").val();
     var arrParams = new Object();
     arrParams.search = search;
     arrParams.unidad = $('#txth_uids').val();
@@ -24,12 +23,18 @@ function getListStudent(search, response) {
 }
 
 function showDataStudent(id, value) {
-    var link = $('#txth_base').val() + "/academico/distributivoestudiante/delete";
+    var link = $('#txth_base').val() + "/academico/distributivoestudiante/edit" + "?id=" + $("#txth_ids").val();
     var arrParams = new Object();
-    arrParams.id = id;
+    arrParams.est_id = id;
+    arrParams.PBgetDataEstudiante = true;
+    $("#txth_esid").val(id);
     requestHttpAjax(link, arrParams, function(response) {
         if (response.status == "OK") {
-
+            $('#txt_buscarData').val("");
+            $('#txt_nombres').val(response.data.nombres);
+            $('#txt_apellidos').val(response.data.apellidos);
+            $('#txt_carrera').val(response.data.carrera);
+            $('#txt_matricula').val(response.data.matricula);
         }
     }, true);
 }
@@ -37,6 +42,18 @@ function showDataStudent(id, value) {
 function edit() {
     var link = $('#txth_base').val() + "/academico/distributivoestudiante/edit" + "?id=" + $("#txth_ids").val();
     window.location = link;
+}
+
+function save() {
+    var link = $('#txth_base').val() + "/academico/distributivoestudiante/save";
+    var arrParams = new Object();
+    arrParams.id = $("#txth_ids").val();
+    arrParams.est_id = $("#txth_esid").val();
+    requestHttpAjax(link, arrParams, function(response) {
+        if (response.status == "OK") {
+            searchModules();
+        }
+    }, true);
 }
 
 function deleteItem(id) {

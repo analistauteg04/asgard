@@ -4,6 +4,7 @@ namespace app\modules\academico\controllers;
 
 use Yii;
 use app\modules\academico\models\Asignatura;
+use app\modules\academico\models\Estudiante;
 use app\modules\academico\models\DistributivoAcademico;
 use app\modules\academico\models\DistributivoAcademicoEstudiante;
 use app\modules\academico\models\DistributivoAcademicoHorario;
@@ -74,6 +75,7 @@ class DistributivoestudianteController extends \app\components\CController {
     }
 
     public function actionEdit($id) {
+        $emp_id = @Yii::$app->session->get("PB_idempresa");
         $distributivoEst_model = new DistributivoAcademicoEstudiante();
         if(!isset($id) && $id <= 0){
             return $this->redirect('distributivoacademico/index');
@@ -93,9 +95,21 @@ class DistributivoestudianteController extends \app\components\CController {
             if ($data['PBgetAutoComplete']) {
                 $search = $data['search'];
                 $unidad = $data['unidad'];
-                
                 $response = $distributivoEst_model->getEstudiantesXUnidadAcademica($unidad, $search);
                 return json_encode($response);
+            }
+            if($data['PBgetDataEstudiante']){
+                $est_id = $data['est_id'];
+                $mod_est = Estudiante::findOne($est_id);
+                $mod_per = Persona::findOne($mod_est->per_id);
+                $arr_carrera = $mod_est->getInfoCarreraEstudiante($est_id, $emp_id);
+                $data = [
+                    "nombres" => $mod_per->per_pri_nombre . " " . $mod_per->per_seg_nombre,
+                    "apellidos" => $mod_per->per_pri_apellido . " " . $mod_per->per_seg_apellido,
+                    "matricula" => $mod_est->est_matricula,
+                    "carrera" => $arr_carrera['Carrera'],
+                ];
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', [], $data);
             }
         }
         $distributivo_model = DistributivoAcademico::findOne($id);

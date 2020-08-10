@@ -29,3 +29,4 @@ use app\modules\academico\Module as academico;
 
 <?= Html::hiddenInput('txth_ids', $daca_id, ['id' => 'txth_ids']); ?>
 <?= Html::hiddenInput('txth_uids', $uaca_id, ['id' => 'txth_uids']); ?>
+<?= Html::hiddenInput('txth_esid', '', ['id' => 'txth_esid']); ?>
