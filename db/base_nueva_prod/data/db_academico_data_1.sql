@@ -69,7 +69,7 @@ INSERT INTO `modalidad` (`mod_id`, `mod_nombre`,`mod_descripcion`, `mod_usuario_
 
 -- --------------------------------------------------------
 --
--- Volcado de datos para la tabla `modalidad`
+-- Volcado de datos para la tabla `modalidad_centro_costo`
 -- 
 INSERT INTO `modalidad_centro_costo` (`mcco_id`, `mod_id`, `mcco_code`,`mcco_estado`, `mcco_fecha_creacion`, `mcco_usuario_modifica`, `mcco_estado_logico`) VALUES
 (1, 1, 'G-004', 1, '2017-02-01 16:25:00', '1', '1'),
