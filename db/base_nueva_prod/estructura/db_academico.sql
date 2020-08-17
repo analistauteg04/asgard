@@ -768,13 +768,14 @@ create table if not exists `paralelo_planificacion` (
 create table if not exists `distributivo_academico` (
   `daca_id` bigint(20) not null auto_increment primary key, 
   `paca_id` bigint(20) null,
+  `daho_id` bigint(20) null,
   `ppro_id` bigint(20) null,
   `asi_id` bigint(20) not null,
   `pro_id` bigint(20) not null,  
   `uaca_id` bigint(20) not null,  
   `mod_id` bigint(20) not null,  
-  `daca_jornada` varchar(1) not null,  
-  `daca_horario` varchar(10) not null,  
+  `daca_jornada` varchar(1) null,  
+  `daca_horario` varchar(10) null,  
   `daca_fecha_registro` timestamp null default null,
   `daca_usuario_ingreso` bigint(20) not null,
   `daca_usuario_modifica` bigint(20)  null,
@@ -787,7 +788,8 @@ create table if not exists `distributivo_academico` (
   foreign key (asi_id) references `asignatura`(asi_id),  
   foreign key (uaca_id) references `unidad_academica`(uaca_id), 
   foreign key (mod_id) references `modalidad`(mod_id),
-  foreign key (ppro_id) references `promocion_programa`(ppro_id)
+  foreign key (ppro_id) references `promocion_programa`(ppro_id),
+  foreign key (daho_id) references `distributivo_academico_horario`(daho_id)
 );
 
 -- --------------------------------------------------------
@@ -1656,7 +1658,7 @@ create table if not exists `distributivo_academico_estudiante` (
 -- --------------------------------------------------------
 create table if not exists `estudiante_periodo_pago` (
   `eppa_id` bigint(20) not null auto_increment primary key,   
-  `paca_id` bigint(20) not null,
+  `paca_id` bigint(20) null,
   `ppro_id` bigint(20) null,
   `est_id` bigint(20) not null,    
   `eppa_estado_pago` varchar(1) not null,
@@ -1667,7 +1669,6 @@ create table if not exists `estudiante_periodo_pago` (
   `eppa_fecha_creacion` timestamp not null default current_timestamp,
   `eppa_fecha_modificacion` timestamp null default null,
   `eppa_estado_logico` varchar(1) not null,  
-  foreign key (paca_id) REFERENCES `periodo_academico`(paca_id),
   foreign key (est_id) REFERENCES `estudiante`(est_id)
 );
 -- alter table db_academico.estudiante_periodo_pago add ppro_id bigint null after paca_id;

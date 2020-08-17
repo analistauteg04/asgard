@@ -63,11 +63,19 @@ academico::registerTranslations();
                 'attribute' => 'Estudiante',
                 'header' => Yii::t("formulario", "Complete Names"),
                 'value' => 'estudiante',
-            ],
+            ],           
             [
                 'attribute' => 'Estado',
-                'header' => Yii::t("formulario", "Status"),
-                'value' => 'pago',
+                'header' => Yii::t("formulario", 'Status'),
+                'contentOptions' => ['class' => 'text-center'],
+                'headerOptions' => ['class' => 'text-center'],
+                'format' => 'html',
+                'value' => function ($model) {
+                    if ($model["pago"] == 'No Autorizado')
+                        return '<small class="label label-danger">No Autorizado</small>';                   
+                    else
+                        return '<small class="label label-success">Autorizado</small>';
+                },
             ],
             [
                 'attribute' => 'Fecha',

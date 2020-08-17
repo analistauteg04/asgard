@@ -58,7 +58,7 @@ if (!empty($personalData['pges_cedula'])) {
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
             <div class="form-group">
-                <label for="txt_cedula" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label"><?= $tipodoc ?></label> 
+                <label for="txt_cedula" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label"><?= $tipodoc ?> <span class="text-danger">*</span></label> 
                 <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
                     <input type="text" class="form-control keyupmce" value="<?= $dni ?>" id="txt_cedula" <?php if(trim($dni) != ""): ?>disabled = "true"<?php endif;?> data-type="alfa" data-keydown="true"> 
                 </div>

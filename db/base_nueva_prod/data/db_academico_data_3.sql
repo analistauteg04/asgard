@@ -254,3 +254,10 @@ INSERT INTO `distributivo_academico_horario` (`daho_id`, `uaca_id`, `mod_id`, `d
 (40, 1, 1, '2', 'VI3H', '21:00', '22:00', '0', '0', '0', '0', '1', '0', '0', '1', '1'),
 (41, 1, 1, '2', 'VI4H', '19:00', '20:30', '0', '0', '0', '0', '1', '0', '0', '1', '1'),
 (42, 1, 1, '2', 'VI5H', '20:00', '21:30', '0', '0', '0', '0', '1', '0', '0', '1', '1');	
+
+
+INSERT INTO `modalidad_centro_costo` (`mcco_id`, `mod_id`, `mcco_code`, `mcco_estado`, `mcco_fecha_creacion`, `mcco_usuario_modifica`, `mcco_fecha_modificacion`, `mcco_estado_logico`) VALUES
+(1, 1, 'G-004', '1', '2020-08-13 21:25:00', 1, NULL, '1'),
+(2, 2, 'G-001', '1', '2020-08-13 21:25:00', 1, NULL, '1'),
+(3, 3, 'G-002', '1', '2020-08-13 21:25:00', 1, NULL, '1'),
+(4, 4, 'G-003', '1', '2020-08-13 21:25:00', 1, NULL, '1');

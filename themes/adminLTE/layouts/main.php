@@ -148,7 +148,7 @@ if (Yii::$app->controller->action->id === 'login' && $isUser) {
             <?= $this->render('footer.php', ['directoryAsset' => $directoryAsset, 'footerClass' => 'main-footer']) ?>
 
             <!-- SideBar Content -->
-            <?= $this->render('sidebar.php', ['directoryAsset' => $directoryAsset]); ?>
+            <?php // $this->render('sidebar.php', ['directoryAsset' => $directoryAsset]); ?>
         </div>
         <!-- Modal -->
         <?= $this->render('modal.php', ['directoryAsset' => $directoryAsset]); ?>

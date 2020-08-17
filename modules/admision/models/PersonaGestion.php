@@ -1016,7 +1016,8 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
                         pg.pges_trabajo_telefono,
                         emp.emp_id,
                         uaca.uaca_id,                        
-                        case when (select ifnull(count(ba.bact_id),0)
+                        case when opo.eopo_id >= 3 then 2
+                            when (select ifnull(count(ba.bact_id),0)
                             from db_crm.oportunidad o 
                             inner join db_crm.bitacora_actividades ba on ba.opo_id = o.opo_id
                             inner join db_asgard.usua_grol_eper uge on uge.usu_id = ba.usu_id
