@@ -801,6 +801,10 @@ INSERT INTO db_academico.asignatura (`asi_id`,`scon_id`,`uaca_id`,`asi_nombre`,`
 INSERT INTO db_academico.asignatura (`asi_id`,`scon_id`,`uaca_id`,`asi_nombre`,`asi_descripcion`,`asi_usuario_ingreso`,`asi_usuario_modifica`,`asi_estado`,`asi_fecha_creacion`,`asi_fecha_modificacion`,`asi_estado_logico`) VALUES (478,1,1,'Modelación de los Escenarios Económicos','Modelación de los Escenarios Económicos',1,NULL,'1','2020-07-07 10:25:39',NULL,'1');
 INSERT INTO db_academico.asignatura (`asi_id`,`scon_id`,`uaca_id`,`asi_nombre`,`asi_descripcion`,`asi_usuario_ingreso`,`asi_usuario_modifica`,`asi_estado`,`asi_fecha_creacion`,`asi_fecha_modificacion`,`asi_estado_logico`) VALUES (479,1,1,'Contabilidad de Costo','Contabilidad de Costo',1,NULL,'1','2020-07-07 16:55:00',NULL,'1');
 
+INSERT INTO db_academico.asignatura (`asi_id`,`scon_id`,`uaca_id`,`asi_nombre`,`asi_descripcion`,`asi_usuario_ingreso`,`asi_usuario_modifica`,`asi_estado`,`asi_fecha_creacion`,`asi_fecha_modificacion`,`asi_estado_logico`) VALUES (480,1,1,'Comercio Electrónico','Comercio Electrónico',1,NULL,'1','2020-08-17 14:15:00',NULL,'1');
+INSERT INTO db_academico.asignatura (`asi_id`,`scon_id`,`uaca_id`,`asi_nombre`,`asi_descripcion`,`asi_usuario_ingreso`,`asi_usuario_modifica`,`asi_estado`,`asi_fecha_creacion`,`asi_fecha_modificacion`,`asi_estado_logico`) VALUES (481,1,1,'Marketing Internacional','Marketing Internacional',1,NULL,'1','2020-08-17 14:15:00',NULL,'1');
+INSERT INTO db_academico.asignatura (`asi_id`,`scon_id`,`uaca_id`,`asi_nombre`,`asi_descripcion`,`asi_usuario_ingreso`,`asi_usuario_modifica`,`asi_estado`,`asi_fecha_creacion`,`asi_fecha_modificacion`,`asi_estado_logico`) VALUES (482,1,1,'Gerencia de Marketing','Gerencia de Marketing',1,NULL,'1','2020-08-17 14:15:00',NULL,'1');
+
 
 
 INSERT INTO `estudio_acad_area_con` (`eaac_id`, `eaca_id`, `mest_id`, `acon_id`, `eaac_estado`, `eaac_fecha_creacion`, `eaac_fecha_modificacion`, `eaac_estado_logico`) VALUES
