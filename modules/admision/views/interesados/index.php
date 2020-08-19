@@ -14,7 +14,8 @@ aspirante::registerTranslations();
     <form class="form-horizontal">
         <?=
         $this->render('index-search', [    
-            'arr_empresa' => $arr_empresa]);
+            'arr_empresa' => $arr_empresa,
+            'arr_unidad' => $arr_unidad]);
         ?>
     </form>
 </div>
