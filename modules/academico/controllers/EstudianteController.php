@@ -443,7 +443,7 @@ class EstudianteController extends \app\components\CController {
                         // consultar si existe el id de estudiante_carrera_programa no existe insertar, si existe modificar
                         $resp_estucarrera = $mod_Estudiante->consultarEstcarreraprogrma($est_id);
                         // no existe usar esa funcion
-                        if ($resp_estucarrera["ecpr_id"] == "") {
+                        if ($resp_estucarrera["idestcarrera"] == "") {
                             $resp_estudiantecarrera = $mod_Estudiante->insertarEstcarreraprog($est_id, $resp_mestuni["meun_id"], $fecha, $usu_autenticado, $fecha);
                             if ($resp_estudiantecarrera) {
                                 $exito = 1;
