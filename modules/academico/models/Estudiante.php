@@ -508,7 +508,7 @@ class Estudiante extends \yii\db\ActiveRecord {
                 WHERE 
                 $str_search
                 pers.per_id > 1000                
-                ORDER BY estu.est_fecha_creacion DESC";
+                /*ORDER BY estu.est_fecha_creacion DESC*/";
 
         $comando = $con->createCommand($sql);
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
