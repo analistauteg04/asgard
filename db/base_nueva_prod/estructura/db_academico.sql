@@ -1744,6 +1744,7 @@ create table if not exists `diploma` (
   `dip_fecha_inicio` timestamp null DEFAULT NULL,
   `dip_fecha_fin` timestamp null DEFAULT NULL,
   `dip_horas` varchar(100) null,
+  `dip_descargado` varchar(1) null,
   `dip_estado` varchar(1) not null,
   `dip_fecha_creacion` timestamp not null default current_timestamp,
   `dip_fecha_modificacion` timestamp null default null,

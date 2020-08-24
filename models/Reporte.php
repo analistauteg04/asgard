@@ -100,7 +100,8 @@ class Reporte extends \yii\db\ActiveRecord {
                 INNER JOIN " . $con2->dbname . ".unidad_academica uac ON uac.uaca_id=op.uaca_id
                 INNER JOIN " . $con->dbname . ".estado_oportunidad eop ON eop.eopo_id=op.eopo_id
                 INNER JOIN " . $con->dbname . ".bitacora_actividades bact ON bact.opo_id=op.opo_id
-                INNER JOIN " . $con1->dbname . ".persona per on per.per_id = bact.bact_usuario
+                INNER JOIN " . $con1->dbname . ".usuario usu on usu.usu_id = bact.bact_usuario
+                INNER JOIN " . $con1->dbname . ".persona per on per.per_id = usu.per_id
                 INNER JOIN " . $con->dbname . ".observacion_actividades as oact on oact.oact_id=bact.oact_id
                 INNER JOIN " . $con2->dbname . ".estudio_academico ea on ea.eaca_id = op.eaca_id                    
                 INNER JOIN " . $con2->dbname . ".modalidad mo on mo.mod_id = op.mod_id
