@@ -85,7 +85,7 @@ class Reporte extends \yii\db\ActiveRecord {
                         date_format(bact.bact_fecha_proxima_atencion, '%Y-%m-%d %H:%i') F_Prox_At,
                         emp.emp_razon_social,
                         pg.pges_cedula,
-                        CONCAT(pg.pges_pri_nombre, ' ', ifnull(pg.pges_seg_nombre,' '), ' ', pg.pges_pri_apellido, ' ', ifnull(pg.pges_seg_apellido,' ')) Nombres_Completos,                        	
+                        CONCAT(ifnull(pg.pges_pri_nombre,''), ' ', ifnull(pg.pges_seg_nombre,''), ' ', ifnull(pg.pges_pri_apellido,''), ' ', ifnull(pg.pges_seg_apellido,'')) Nombres_Completos,                        	
                         ccan.ccan_nombre canal_contacto,
                         eop.eopo_nombre as Estado,
                         oact.oact_nombre,
