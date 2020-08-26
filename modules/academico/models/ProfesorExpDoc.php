@@ -51,7 +51,7 @@ class ProfesorExpDoc extends \yii\db\ActiveRecord
             [['pro_id', 'ins_id', 'pedo_denominacion', 'pedo_asignaturas', 'pedo_usuario_ingreso', 'pedo_estado', 'pedo_estado_logico'], 'required'],
             [['pro_id', 'pedo_usuario_ingreso', 'pedo_usuario_modifica'], 'integer'],
             [['pedo_fecha_inicio', 'pedo_fecha_fin', 'pedo_fecha_creacion', 'pedo_fecha_modificacion'], 'safe'],
-            [['pedo_asignaturas'], 'string', 'max' => 200],
+            [['pedo_asignaturas'], 'string', 'max' => 5000],
             [['pedo_denominacion'], 'string', 'max' => 100],
             [['pedo_estado', 'pedo_estado_logico'], 'string', 'max' => 1],
             [['pro_id'], 'exist', 'skipOnError' => true, 'targetClass' => Profesor::className(), 'targetAttribute' => ['pro_id' => 'pro_id']],
