@@ -874,5 +874,23 @@ class Usuario extends \yii\db\ActiveRecord implements IdentityInterface {
             $con->close();            
             return false;
         }
-    }    
+    }  
+    
+    /**
+     * Function consultarUsuarioNuevo.
+     * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
+     * @param      
+     * @return  
+     */    
+    public function consultarUsuarioNuevo() {
+        $con = \Yii::$app->db;          
+        $sql = "SELECT p.per_id, p.per_cedula, u.usu_id, u.usu_user, ue.ugep_id, ue.grol_id
+                FROM db_academico.estudiante e inner join db_asgard.persona p on p.per_id = e.per_id
+                    inner join db_asgard.usuario u on u.per_id = p.per_id
+                    inner join db_asgard.usua_grol_eper ue on ue.usu_id = u.usu_id
+                WHERE ue.grol_id in (30,31)
+                    and p.per_estado = '1' and p.per_estado_logico = '1'";
+        $command = $con->createCommand($sql);        
+        return $command->queryAll();        
+    }
 }
