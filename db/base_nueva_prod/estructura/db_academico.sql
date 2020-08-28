@@ -553,6 +553,7 @@ create table if not exists `profesor_conferencia` (
 create table if not exists `profesor_publicacion` (
   `ppub_id` bigint(20) not null auto_increment primary key,
   `pro_id` bigint(20) not null,
+  `tpub_id` bigint(20) null,
   `ppub_produccion` varchar(100) not null,
   `ppub_titulo` varchar(200) not null,
   `ppub_editorial` varchar(50) not null,
@@ -577,6 +578,7 @@ create table if not exists `profesor_coordinacion` (
   `pcoo_programa` varchar(1000) not null,
   `pcoo_academico` varchar(1000) not null,
   `pcoo_institucion` varchar(200) not null,
+  `ins_id` bigint(20)  null,
   `pcoo_anio` varchar(4) not null,
   `pcoo_usuario_ingreso` bigint(20) not null,
   `pcoo_usuario_modifica` bigint(20)  null,
