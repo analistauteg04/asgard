@@ -45,7 +45,7 @@ class ReportesController extends CController {
             case '2'://POSGRADO
                 $arrData=$objDat->consultarOportunidadProximaAten($data);
                 $arrHeader = array(
-                            "N° Oport","Fecha Atención","F.Próx.At","Empresa","Cédula",
+                            "N° Oport","Fecha Atención","Hora Atención","F.Próx.At","Hora Próx.At","Empresa","Cédula",
                             "Nombres Completos", "Canal Contacto",
                             "Estado Oport.", "Observación", "Unidad Academica", "Modalidad", "Carrera", "Agente"
                 );

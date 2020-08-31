@@ -81,11 +81,13 @@ class Reporte extends \yii\db\ActiveRecord {
         }
         $sql = "
                 SELECT  LPAD(op.opo_codigo,9,'0') Codigo,
-                        date_format(bact.bact_fecha_registro, '%Y-%m-%d %H:%i') F_Atencion,
-                        date_format(bact.bact_fecha_proxima_atencion, '%Y-%m-%d %H:%i') F_Prox_At,
+                        date_format(bact.bact_fecha_registro, '%Y-%m-%d') F_Atencion,
+                        date_format(bact.bact_fecha_registro, '%H:%i') H_Atencion,
+                        date_format(bact.bact_fecha_proxima_atencion, '%Y-%m-%d') F_Prox_At,
+                        date_format(bact.bact_fecha_proxima_atencion, '%H:%i') H_Prox_At,
                         emp.emp_razon_social,
                         pg.pges_cedula,
-                        CONCAT(pg.pges_pri_nombre, ' ', ifnull(pg.pges_seg_nombre,' '), ' ', pg.pges_pri_apellido, ' ', ifnull(pg.pges_seg_apellido,' ')) Nombres_Completos,                        	
+                        CONCAT(ifnull(pg.pges_pri_nombre,''), ' ', ifnull(pg.pges_seg_nombre,''), ' ', ifnull(pg.pges_pri_apellido,''), ' ', ifnull(pg.pges_seg_apellido,'')) Nombres_Completos,                        	
                         ccan.ccan_nombre canal_contacto,
                         eop.eopo_nombre as Estado,
                         oact.oact_nombre,
@@ -100,7 +102,8 @@ class Reporte extends \yii\db\ActiveRecord {
                 INNER JOIN " . $con2->dbname . ".unidad_academica uac ON uac.uaca_id=op.uaca_id
                 INNER JOIN " . $con->dbname . ".estado_oportunidad eop ON eop.eopo_id=op.eopo_id
                 INNER JOIN " . $con->dbname . ".bitacora_actividades bact ON bact.opo_id=op.opo_id
-                INNER JOIN " . $con1->dbname . ".persona per on per.per_id = bact.bact_usuario
+                INNER JOIN " . $con1->dbname . ".usuario usu on usu.usu_id = bact.bact_usuario
+                INNER JOIN " . $con1->dbname . ".persona per on per.per_id = usu.per_id
                 INNER JOIN " . $con->dbname . ".observacion_actividades as oact on oact.oact_id=bact.oact_id
                 INNER JOIN " . $con2->dbname . ".estudio_academico ea on ea.eaca_id = op.eaca_id                    
                 INNER JOIN " . $con2->dbname . ".modalidad mo on mo.mod_id = op.mod_id
@@ -141,6 +144,7 @@ class Reporte extends \yii\db\ActiveRecord {
     /**
      * Function consulta el nombre de modalidad
      * @author  Kleber Loayza <analistadesarrollo03@uteg.edu.ec>;
+     * @modificado por Grace Viteri <analistadesarrollo01@uteg.edu.ec>;
      * @property       
      * @return  
      */
@@ -158,7 +162,7 @@ class Reporte extends \yii\db\ActiveRecord {
             }
         }
         $sql = "
-                    select 
+                    select
                         ifnull(per.per_cedula,per.per_pasaporte) as DNI,                    
                         DATE(sins.sins_fecha_solicitud) as fecha_solicitud,
                         sins.num_solicitud as num_solicitud,
@@ -166,11 +170,8 @@ class Reporte extends \yii\db\ActiveRecord {
                         concat(ifnull(per.per_pri_apellido,''),' ',ifnull(per.per_seg_apellido,'')) as apellidos,                    
                         emp.emp_nombre_comercial as empresa,                                         
                         IFNULL(uaca.uaca_nombre,'') uaca_nombre,
-                        case emp.emp_id
-                            when 1 then (select eaca.eaca_nombre from db_academico.estudio_academico eaca inner join db_captacion.solicitud_inscripcion sins on sins.eaca_id = eaca.eaca_id  WHERE int_id = inte.int_id ORDER BY sins_fecha_solicitud desc LIMIT 1)
-                            when 2 then (select mes.mest_nombre from db_academico.modulo_estudio mes inner join db_captacion.solicitud_inscripcion sins on sins.mest_id = mes.mest_id WHERE int_id = inte.int_id ORDER BY sins_fecha_solicitud desc LIMIT 1)
-                            when 3 then (select mes.mest_nombre from db_academico.modulo_estudio mes inner join db_captacion.solicitud_inscripcion sins on sins.mest_id = mes.mest_id WHERE int_id = inte.int_id ORDER BY sins_fecha_solicitud desc LIMIT 1)
-                             else null
+                        case when sins.uaca_id<3 then (select eaca.eaca_nombre from db_academico.estudio_academico eaca inner join db_captacion.solicitud_inscripcion sins on sins.eaca_id = eaca.eaca_id WHERE int_id = inte.int_id ORDER BY sins_fecha_solicitud desc LIMIT 1)
+                            else (select mes.mest_nombre from db_academico.modulo_estudio mes inner join db_captacion.solicitud_inscripcion sins on sins.mest_id = mes.mest_id WHERE int_id = inte.int_id ORDER BY sins_fecha_solicitud desc LIMIT 1)				
                         end carrera,
                         ifnull(moda.mod_nombre,'') mod_nombre,
                         CONCAT(ifnull(pag.per_pri_nombre,' '), ' ', ifnull(pag.per_pri_apellido,' ')) Agente,
@@ -196,10 +197,10 @@ class Reporte extends \yii\db\ActiveRecord {
                             else
                                 'Pendiente'
                         end Estado_Documentos,
-                        case 
-                            WHEN ifnull((SELECT opag_estado_pago FROM db_facturacion.orden_pago op WHERE op.sins_id = sins.sins_id),'N') = 'N' THEN 'No generado'
-                            WHEN (SELECT opag_estado_pago FROM db_facturacion.orden_pago op WHERE op.sins_id = sins.sins_id) = 'P' THEN 'Pendiente' 
-                            ELSE 'Pagado' 
+                        case
+                            WHEN ifnull((SELECT opag_estado_pago FROM db_facturacion.orden_pago op WHERE op.sins_id = sins.sins_id and op.opag_estado = '1'),'N') = 'N' THEN 'No generado'
+                            WHEN (SELECT opag_estado_pago FROM db_facturacion.orden_pago op WHERE op.sins_id = sins.sins_id and op.opag_estado = '1') = 'P' THEN 'Pendiente'
+                            ELSE 'Pagado'
                         end Estado_Pago
                     from 
                         db_captacion.interesado inte                        
@@ -210,7 +211,7 @@ class Reporte extends \yii\db\ActiveRecord {
                         join db_academico.unidad_academica as uaca on uaca.uaca_id=sins.uaca_id
                         join db_academico.modalidad as moda on moda.mod_id=sins.mod_id
                         join db_asgard.empresa as emp on emp.emp_id=iemp.emp_id
-                        join db_captacion.admitido admit on admit.int_id=inte.int_id        
+                        left join db_captacion.admitido admit on admit.int_id=inte.int_id        
                     where
                         $str_search
                         inte.int_estado_logico=:estado AND

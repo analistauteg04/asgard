@@ -5,6 +5,7 @@ namespace app\modules\academico\models;
 use Yii;
 use yii\data\ArrayDataProvider;
 
+
 /**
  * This is the model class for table "profesor_exp_prof".
  *
@@ -48,11 +49,12 @@ class ProfesorExpProf extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['pro_id', 'pepr_organizacion', 'pepr_denominacion', 'pepr_funciones', 'pepr_usuario_ingreso', 'pepr_estado', 'pepr_estado_logico'], 'required'],
+            [['pro_id', 'pepr_organizacion', 'pepr_denominacion', 'pepr_usuario_ingreso', 'pepr_estado', 'pepr_estado_logico'], 'required'],
             [['pro_id', 'pepr_usuario_ingreso', 'pepr_usuario_modifica'], 'integer'],
             [['pepr_fecha_inicio', 'pepr_fecha_fin', 'pepr_fecha_creacion', 'pepr_fecha_modificacion'], 'safe'],
-            [['pepr_organizacion', 'pepr_funciones'], 'string', 'max' => 200],
+            [['pepr_organizacion'], 'string', 'max' => 200],
             [['pepr_denominacion'], 'string', 'max' => 100],
+            [['pepr_funciones'], 'string', 'max' => 5000],
             [['pepr_estado', 'pepr_estado_logico'], 'string', 'max' => 1],
             [['pro_id'], 'exist', 'skipOnError' => true, 'targetClass' => Profesor::className(), 'targetAttribute' => ['pro_id' => 'pro_id']],
         ];
@@ -87,8 +89,7 @@ class ProfesorExpProf extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Profesor::className(), ['pro_id' => 'pro_id']);
     }
-
-
+    
     function getAllExperienciaGrid($pro_id, $onlyData=false){
         $con_academico = \Yii::$app->db_academico;
         $sql = "SELECT 
@@ -183,5 +184,4 @@ class ProfesorExpProf extends \yii\db\ActiveRecord
             return false;
         }
     }
-
 }
