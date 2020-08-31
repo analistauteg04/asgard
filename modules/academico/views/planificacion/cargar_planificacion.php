@@ -12,7 +12,7 @@ academico::registerTranslations();
 
 ?>
 <form class="form-horizontal" enctype="multipart/form-data" >
-    <h3><span id="lbl_titulo"><?= academico::t("planificacion", "Carga de Planificacion") ?></span></h3>
+    <h3><span id="lbl_titulo"><?= academico::t("planificacion", "Carga de Planificación") ?></span></h3>
     <br></br>
     <div class='row'>
         <div class='col-lg-12 col-md-12 col-sm-12 col-xs-12'> 

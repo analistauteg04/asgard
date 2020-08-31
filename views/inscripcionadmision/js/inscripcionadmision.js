@@ -448,7 +448,8 @@ $(document).ready(function () {
                     //Taller introductorio            
                     if ($('#cmb_metodo_solicitud').val() == 4) {
                         //Taller introductorio
-                        $('#divRequisitosPRP').css('display', 'block');
+                        //$('#divRequisitosPRP').css('display', 'block');
+                        $('#divRequisitosPRP').css('display', 'none');
                         $('#divRequisitosCANO').css('display', 'none');
                         $('#divRequisitosCANP').css('display', 'none');
                         $('#divRequisitosCANSP').css('display', 'none');

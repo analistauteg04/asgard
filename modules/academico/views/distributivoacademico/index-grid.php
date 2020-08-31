@@ -59,7 +59,7 @@ academico::registerTranslations();
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => '',
-                'template' => '{view}{delete}{add}',
+                'template' => '{view}{delete}{add}{edit}',
                 'contentOptions' => ['class' => 'text-center'],
                 'buttons' => [
                     'view' => function ($url, $model) {
