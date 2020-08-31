@@ -55,6 +55,8 @@ use app\models\Utilities;
 use yii\data\ArrayDataProvider;
 use yii\helpers\ArrayHelper;
 use yii\base\Security;
+use app\models\UsuaGrolEper;
+
 class UsuarioController extends CController
 {
     public function actions()
@@ -209,8 +211,8 @@ class UsuarioController extends CController
     public function actionGeneraclaves() {
         $usuario = new Usuario();     
         $security = new Security();
-        $dataInicial = 5296;
-        $dataFinal = 5297;
+        $dataInicial = 5497;
+        $dataFinal = 5506;
         $resul = $usuario->consultarDataUsuario($dataInicial, $dataFinal);
         if (count($resul)>0) {            
             for ($i=0; $i<count($resul); $i++) {                
@@ -225,5 +227,29 @@ class UsuarioController extends CController
                     ]);
     }
 
+    /* Grace Viteri */
+    public function actionActualizarolpassestado() {
+        $usuario = new Usuario();     
+        $security = new Security();
+        
+        $resul = $usuario->consultarUsuarioNuevo();
+        if (count($resul)>0) {            
+            for ($i=0; $i<count($resul); $i++) {                
+                $usu_sha = $security->generateRandomString();
+                $usu_pass= base64_encode($security->encryptByPassword($usu_sha, $resul[$i]["per_cedula"]));                                
+                /*\app\models\Utilities::putMessageLogFile('usu_sha:' . $usu_sha);
+                \app\models\Utilities::putMessageLogFile('usu_pass:' . $usu_pass);                */
+                $respUsu = $usuario->actualizarDataUsuario($usu_sha, $usu_pass, $resul[$i]["usu_id"]);              
+                if ($respUsu) {
+                    // modificar e grupo y rol
+                    $usugrol_model = UsuaGrolEper::findOne(["ugep_id" => $resul[$i]["ugep_id"]]);    
+                    $usugrol_model->grol_id = 37;
+                    $usugrol_model->save();
+                }                
+            }
+        }
+        return $this->render('generaclaves', [
+                    ]);
+    }
 }
 

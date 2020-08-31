@@ -437,7 +437,7 @@ create table if not exists `profesor_exp_doc` (
   `pedo_fecha_inicio` timestamp null default null,
   `pedo_fecha_fin` timestamp null default null,
   `pedo_denominacion` varchar(100) not null,
-  `pedo_asignaturas` varchar(200) not null,
+  `pedo_asignaturas` varchar(5000) not null,
   `pedo_usuario_ingreso` bigint(20) not null,
   `pedo_usuario_modifica` bigint(20)  null,
   `pedo_estado` varchar(1) not null,
@@ -457,7 +457,7 @@ create table if not exists `profesor_exp_prof` (
   `pepr_fecha_fin` timestamp null default null,
   `pepr_organizacion` varchar(200) not null,
   `pepr_denominacion` varchar(100) not null,
-  `pepr_funciones` varchar(200) not null,
+  `pepr_funciones` varchar(5000) not null,
   `pepr_usuario_ingreso` bigint(20) not null,
   `pepr_usuario_modifica` bigint(20)  null,
   `pepr_estado` varchar(1) not null,
@@ -553,6 +553,7 @@ create table if not exists `profesor_conferencia` (
 create table if not exists `profesor_publicacion` (
   `ppub_id` bigint(20) not null auto_increment primary key,
   `pro_id` bigint(20) not null,
+  `tpub_id` bigint(20) null,
   `ppub_produccion` varchar(100) not null,
   `ppub_titulo` varchar(200) not null,
   `ppub_editorial` varchar(50) not null,
@@ -574,9 +575,10 @@ create table if not exists `profesor_coordinacion` (
   `pcoo_id` bigint(20) not null auto_increment primary key,
   `pro_id` bigint(20) not null,
   `pcoo_alumno` varchar(100) not null,
-  `pcoo_programa` varchar(100) not null,
-  `pcoo_academico` varchar(100) not null,
+  `pcoo_programa` varchar(1000) not null,
+  `pcoo_academico` varchar(1000) not null,
   `pcoo_institucion` varchar(200) not null,
+  `ins_id` bigint(20)  null,
   `pcoo_anio` varchar(4) not null,
   `pcoo_usuario_ingreso` bigint(20) not null,
   `pcoo_usuario_modifica` bigint(20)  null,
@@ -605,25 +607,6 @@ create table if not exists `profesor_evaluacion` (
   foreign key (pro_id) references `profesor`(pro_id)
 );
 
--- --------------------------------------------------------
--- Estructura de tabla para la tabla `profesor_coordinacion`
--- 
-create table if not exists `profesor_coordinacion` (
-  `pcoo_id` bigint(20) not null auto_increment primary key,
-  `pro_id` bigint(20) not null,
-  `pcoo_alumno` varchar(100) not null,
-  `pcoo_programa` varchar(100) not null,
-  `pcoo_academico` varchar(100) not null,
-  `pcoo_institucion` varchar(200) not null,
-  `pcoo_anio` varchar(4) not null,
-  `pcoo_usuario_ingreso` bigint(20) not null,
-  `pcoo_usuario_modifica` bigint(20)  null,
-  `pcoo_estado` varchar(1) not null,
-  `pcoo_fecha_creacion` timestamp not null default current_timestamp,
-  `pcoo_fecha_modificacion` timestamp null default null,
-  `pcoo_estado_logico` varchar(1) not null,
-  foreign key (pro_id) references `profesor`(pro_id)
-);
 
 -- --------------------------------------------------------
 -- Estructura de tabla para la tabla `profesor_referencia`
@@ -1744,6 +1727,7 @@ create table if not exists `diploma` (
   `dip_fecha_inicio` timestamp null DEFAULT NULL,
   `dip_fecha_fin` timestamp null DEFAULT NULL,
   `dip_horas` varchar(100) null,
+  `dip_descargado` varchar(1) null,
   `dip_estado` varchar(1) not null,
   `dip_fecha_creacion` timestamp not null default current_timestamp,
   `dip_fecha_modificacion` timestamp null default null,

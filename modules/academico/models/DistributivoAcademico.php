@@ -141,7 +141,7 @@ class DistributivoAcademico extends \yii\db\ActiveRecord {
             $str_unidad = "ua.uaca_id = :unidad AND ";
         }
         if (isset($periodoAcademico) && $periodoAcademico > 0) {
-            $str_periodo = "pa.paca_id = :period AND ";
+            $str_periodo = "pa.paca_id = :periodo AND ";
         }
         if (isset($jornada) && $jornada > 0) {
             $str_jornada = "dh.daho_jornada = :jornada AND ";
@@ -164,7 +164,7 @@ class DistributivoAcademico extends \yii\db\ActiveRecord {
                     END AS Jornada
                 FROM 
                     " . $con_academico->dbname . ".distributivo_academico AS da 
-                    INNER JOIN " . $con_academico->dbname . ".distributivo_academico_horario AS dh ON da.daho_id = dh.daho_id
+                    LEFT JOIN " . $con_academico->dbname . ".distributivo_academico_horario AS dh ON da.daho_id = dh.daho_id
                     INNER JOIN " . $con_academico->dbname . ".profesor AS p ON da.pro_id = p.pro_id
                     INNER JOIN " . $con_academico->dbname . ".modalidad AS m ON da.mod_id = m.mod_id
                     INNER JOIN " . $con_academico->dbname . ".unidad_academica AS ua ON da.uaca_id = ua.uaca_id

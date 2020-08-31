@@ -1066,7 +1066,7 @@ class Oportunidad extends \app\modules\admision\components\CActiveRecord {
             $tove_id = $this->consultarOportVentas($uaca_id); //se puede obtener a partir d ela unidad academica
         }
         $mod_id = $data['pgest_modalidad'];
-        $ccan_id = 3; //Redes sociales (Facebook) o ->$data['pgest_contacto'];       
+        $ccan_id = 2; //Redes sociales (Facebook) o ->$data['pgest_contacto'];       
         $eopo_id = 1; //estado oportunidad => En Curso
         $hora_atiende = explode("_", $data['pgest_horario']); //Obtiene 3 Arreglos
         $opo_hora_ini_contacto = $hora_atiende[0]; //date('h:i',strtotime($hora_atiende[0]));
