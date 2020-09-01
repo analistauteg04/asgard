@@ -103,7 +103,7 @@
     .blue{
         color:#002060 !important;
     }
-    .tabla{       
+    .tabla {       
         color:#002060 !important;
         width: 100%;
         text-align: center;
@@ -166,7 +166,7 @@
         echo '<table class="tabla"><tbody>';
         echo '<tr style="background: #AED6F1;"><th>TIEMPO DE LABOR DESDE</th><th>HASTA</th><th>UNIVERSIDAD</th><th>ASIGNATURAS</th></tr>';
         for ($i = 0; $i < count($experienciadoc); $i++) {
-            echo '<tr style="border: 1px solid #002060;"r><td>' . substr($experienciadoc[$i]['Desde'], 0, -9) . '</td><td>' . substr($experienciadoc[$i]['Hasta'], 0, -9) . '</td><td>' . $experienciadoc[$i]['Institucion'] . '</td><td>' . $experienciadoc[$i]['Materias'] . '</td></tr>';
+            echo '<tr style="border: 1px solid #002060;"><td>' . substr($experienciadoc[$i]['Desde'], 0, -9) . '</td><td>' . substr($experienciadoc[$i]['Hasta'], 0, -9) . '</td><td>' . $experienciadoc[$i]['Institucion'] . '</td><td>' . $experienciadoc[$i]['Materias'] . '</td></tr>';
         }
         if (empty(count($experienciadoc))) {
            echo '<tr style="border: 1px solid #002060;"><td><br></td><td></td><td></td><td></td></tr>'; 
@@ -180,7 +180,7 @@
         echo '<table class="tabla"><tbody>';
         echo '<tr style="background: #AED6F1;"><th>TIEMPO DE LABOR DESDE</th><th>HASTA</th><th>EMPRESA</th><th>DENOMINACIÓN DEL PUESTO</th></tr>';
         for ($i = 0; $i < count($experienciapro); $i++) {
-            echo '<tr><td>' . substr($experienciapro[$i]['Desde'], 0, -9) . '</td><td>' . substr($experienciapro[$i]['Hasta'], 0, -9) . '</td><td>' . $experienciapro[$i]['Institucion'] . '</td><td>' . $experienciapro[$i]['Denominacion'] . '</td></tr>';
+            echo '<tr style="border: 1px solid #002060;"><td>' . substr($experienciapro[$i]['Desde'], 0, -9) . '</td><td>' . substr($experienciapro[$i]['Hasta'], 0, -9) . '</td><td>' . $experienciapro[$i]['Institucion'] . '</td><td>' . $experienciapro[$i]['Denominacion'] . '</td></tr>';
         }
         if (empty(count($experienciapro))) {
            echo '<tr style="border: 1px solid #002060;"><td><br></td><td></td><td></td><td></td></tr>'; 
@@ -192,9 +192,9 @@
         <p><u><b><?php echo "5.- SUFICIENCIA DE IDIOMA" ?></b><br></u></p><br><br>
         <?php
         echo '<table class="tabla"><tbody>';
-        echo '<tr style="background: #AED6F1;"><th>NIVEL DE INSTRUCCIÓN</th><th>IDIOMA</th><th>NIVEL</th><th>TÍTULO</th><th>INSTITUCIÓN</th></tr>';
+        echo '<tr style="background: #AED6F1;"><th>IDIOMA</th><th>NIVEL</th><th>INSTITUCIÓN</th></tr>';
         for ($i = 0; $i < count($idioma); $i++) {
-            echo '<tr><td>' . $idioma[$i]['NivelOral'] . '</td><td>' . $idioma[$i]['Languages'] . '</td><td> ' . $idioma[$i]['Institucion'] . ' </td></tr>';
+            echo '<tr style="border: 1px solid #002060;"><td>' . $idioma[$i]['Languages'] . '</td><td>' . $idioma[$i]['NivelOral'] . '</td><td> ' . $idioma[$i]['Institucion'] . ' </td></tr>';
         }
         if (empty(count($idioma))) {
            echo '<tr style="border: 1px solid #002060;"><td><br></td><td></td><td></td><td></td><td></td></tr>'; 
@@ -208,7 +208,7 @@
         echo '<table class="tabla"><tbody>';
         echo '<tr style="background: #AED6F1;"><th>DENOMINACIÓN DEL PROYECTO</th><th>AÑO</th></tr>';
         for ($i = 0; $i < count($investigacion); $i++) {
-            echo '<tr><td>' . $investigacion[$i]['Denominancion'] . '</td><td> ' . $investigacion[$i]['Anio'] . ' </td></tr>';
+            echo '<tr style="border: 1px solid #002060;"><td>' . $investigacion[$i]['Denominancion'] . '</td><td> ' . $investigacion[$i]['Anio'] . ' </td></tr>';
         }
         if (empty(count($investigacion))) {
            echo '<tr style="border: 1px solid #002060;"><td><br></td><td></td><</tr>'; 
@@ -222,7 +222,7 @@
         echo '<table class="tabla"><tbody>';
         echo '<tr style="background: #AED6F1;"><th>NOMBRE DEL EVENTO</th><th>INSTITUCIÓN</th><th>AÑO</th><th>TIPO</th><th>DURACIÓN EN HORAS</th></tr>';
         for ($i = 0; $i < count($capacitacion); $i++) {
-            echo '<tr><td>' . $capacitacion[$i]['Evento'] . '</td><td>' . $capacitacion[$i]['Institucion'] . '</td><td>' . $capacitacion[$i]['Anio'] . '</td><td>' . $capacitacion[$i]['Tipo'] . '</td><td> ' . $capacitacion[$i]['Duracion'] . ' </td></tr>';
+            echo '<tr style="border: 1px solid #002060;"><td>' . $capacitacion[$i]['Evento'] . '</td><td>' . $capacitacion[$i]['Institucion'] . '</td><td>' . $capacitacion[$i]['Anio'] . '</td><td>' . $capacitacion[$i]['Tipo'] . '</td><td> ' . $capacitacion[$i]['Duracion'] . ' </td></tr>';
         }
         if (empty(count($capacitacion))) {
            echo '<tr style="border: 1px solid #002060;"><td><br></td><td></td><td></td><td></td><td></td></tr>'; 
@@ -236,7 +236,7 @@
         echo '<table class="tabla"><tbody>';
         echo '<tr style="background: #AED6F1;"><th>NOMBRE DEL EVENTO</th><th>INSTITUCIÓN</th><th>AÑO</th><th>PONENCIA</th></tr>';
         for ($i = 0; $i < count($conferencia); $i++) {
-            echo '<tr><td>' . $conferencia[$i]['Evento'] . '</td><td>' . $conferencia[$i]['Institucion'] . '</td><td>' . $conferencia[$i]['Anio'] . '</td><td> ' . $conferencia[$i]['Ponencia'] . ' </td></tr>';
+            echo '<tr style="border: 1px solid #002060;"><td>' . $conferencia[$i]['Evento'] . '</td><td>' . $conferencia[$i]['Institucion'] . '</td><td>' . $conferencia[$i]['Anio'] . '</td><td> ' . $conferencia[$i]['Ponencia'] . ' </td></tr>';
         }
         if (empty(count($conferencia))) {
            echo '<tr style="border: 1px solid #002060;"><td><br></td><td></td><td></td><td></td></tr>'; 
@@ -250,7 +250,7 @@
         echo '<table class="tabla"><tbody>';
         echo '<tr style="background: #AED6F1;"><th>TIPO DE PUBLICACIÓN</th><th>TÍTULO</th><th>EDITORIAL</th><th>ISBN/ISSN</th><th>AUDITORIA</th></tr>';
         for ($i = 0; $i < count($publicacion); $i++) {
-            echo '<tr><td>' . $publicacion[$i]['Instruccion'] . '</td><td>' . $publicacion[$i]['NombreInstitucion'] . '</td><td>' . $publicacion[$i]['Especializacion'] . '</td><td>' . $publicacion[$i]['Titulo'] . '</td><td> ' . $publicacion[$i]['Registro'] . ' </td></tr>';
+            echo '<tr style="border: 1px solid #002060;"><td>' . $publicacion[$i]['Instruccion'] . '</td><td>' . $publicacion[$i]['NombreInstitucion'] . '</td><td>' . $publicacion[$i]['Especializacion'] . '</td><td>' . $publicacion[$i]['Titulo'] . '</td><td> ' . $publicacion[$i]['Registro'] . ' </td></tr>';
         }
         if (empty(count($publicacion))) {
             echo '<tr style="border: 1px solid #002060;"><td><br></td><td></td><td></td><td></td><td></td></tr>';
@@ -264,7 +264,7 @@
         echo '<table class="tabla"><tbody>';
         echo '<tr style="background: #AED6F1;"><th>AUTOR</th><th>TEMA DE TESIS</th><th>AÑO</th><th>CARRERA / PROGRAMA</th></tr>';
         for ($i = 0; $i < count($coodirecion); $i++) {
-            echo '<tr><td>' . $coodirecion[$i]['Estudiante'] . '</td><td>' . $coodirecion[$i]['Academico'] . '</td><td>' . $coodirecion[$i]['Anio'] . '</td><td> ' . $coodirecion[$i]['Programa'] . ' </td></tr>';
+            echo '<tr style="border: 1px solid #002060;"><td>' . $coodirecion[$i]['Estudiante'] . '</td><td>' . $coodirecion[$i]['Academico'] . '</td><td>' . $coodirecion[$i]['Anio'] . '</td><td> ' . $coodirecion[$i]['Programa'] . ' </td></tr>';
         }
         if (empty(count($coodirecion))) {
            echo '<tr style="border: 1px solid #002060;"><td><br></td><td></td><td></td><td></td></tr>'; 
@@ -278,7 +278,7 @@
         echo '<table class="tabla"><tbody>';
         echo '<tr style="background: #AED6F1;"><th>PERSONA DE CONTACTO</th><th>TIPO DE RELACIÓN / CARGO</th><th>ORGANIZACIÓN / EMPRESA </th><th>NÚMERO DE CONTACTO</th></tr>';
         for ($i = 0; $i < count($referencia); $i++) {
-            echo '<tr><td>' . $referencia[$i]['Nombre'] . '</td><td>' . $referencia[$i]['Cargo'] . '</td><td>' . $referencia[$i]['Organizacion'] . '</td><td> ' . $referencia[$i]['Numero'] . ' </td></tr>';
+            echo '<tr style="border: 1px solid #002060;"><td>' . $referencia[$i]['Nombre'] . '</td><td>' . $referencia[$i]['Cargo'] . '</td><td>' . $referencia[$i]['Organizacion'] . '</td><td> ' . $referencia[$i]['Numero'] . ' </td></tr>';
         }
         if (empty(count($referencia))) {
            echo '<tr style="border: 1px solid #002060;"><td><br></td><td></td><td></td><td></td><td>'; 
