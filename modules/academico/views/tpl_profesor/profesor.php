@@ -95,7 +95,7 @@
         font-weight: bold;
     }
     .blue{
-        color:#000080 !important;
+        color:#002060 !important;
     }
 </style>
 <div>

@@ -1822,7 +1822,17 @@ class ProfesorController extends \app\components\CController {
             $ciudad = new Canton();
             $canton = $ciudad->NombrecantonXid($persona_model['can_id_domicilio']);
             $instruccion_model = new ProfesorInstruccion();
-            $profesor_model = Profesor::findOne(['per_id' => $persona_model->per_id]);
+            $profesor_model = Profesor::findOne(['per_id' => $persona_model->per_id]);      
+            $proExpDoc = new ProfesorExpDoc();
+            $proExpPro = new ProfesorExpProf();
+            $proIdiomas = new ProfesorIdiomas();
+            $proInvestigacion = new ProfesorInvestigacion();
+            $proCap = new ProfesorCapacitacion();
+            $proConf = new ProfesorConferencia();
+            $proPub = new ProfesorPublicacion();
+            $proCoor = new ProfesorCoordinacion();
+            $proRef = new ProfesorReferencia();
+            
             $rep = new ExportFile();
             //$this->layout = false;
             $this->layout = '@modules/academico/views/tpl_profesor/main';
@@ -1835,8 +1845,16 @@ class ProfesorController extends \app\components\CController {
                     $this->render('@modules/academico/views/tpl_profesor/profesor', [                      
                         'canton' => $canton,
                         'persona_model' => $persona_model, // 1
-                        'instruccion' => $instruccion_model->getAllInstruccionGrid($profesor_model->pro_id), //2
-                        
+                        'instruccion' => $instruccion_model->getAllInstruccionGrid($profesor_model->pro_id, true), //2
+                        'experienciadoc' => $proExpPro->getAllExperienciaGrid($profesor_model->pro_id, true),//3
+                        'experienciapro' => $proExpDoc->getAllExperienciaGrid($profesor_model->pro_id, true),//4
+                        'idioma' => $proIdiomas->getAllIdiomasGrid($profesor_model->pro_id, true), //5
+                        'investigacion' => $proInvestigacion->getAllInvestigacionGrid($profesor_model->pro_id, true), //6
+                        'capacitacion' => $proCap->getAllCapacitacionGrid($profesor_model->pro_id, true),//7
+                        'conferencia' => $proConf->getAllConferenciaGrid($profesor_model->pro_id, true),//8
+                        'publicacion' => $proPub->getAllPublicacionGrid($profesor_model->pro_id, true),//9
+                        'coodirecion' => $proCoor->getAllCoordinacionGrid($profesor_model->pro_id, true),//10
+                        'referencia' => $proRef->getAllReferenciaGrid($profesor_model->pro_id, true),//11
                     ])
             );
             $rep->mpdf->Output('PROFESOR_' . $ids . ".pdf", ExportFile::OUTPUT_TO_DOWNLOAD);
