@@ -64,6 +64,7 @@ function save() {
     arrParams.descripcion = $('#frm_asi_desc').val();
     arrParams.scon_id = $('#cmb_scon').val();
     arrParams.acon_id = $('#cmb_acon').val();
+    arrParams.uaca_id = $('#cmb_unidad').val();
     arrParams.estado = $('#frm_asi_status').val();
     if (!validateForm()) {
         requestHttpAjax(link, arrParams, function(response) {

@@ -39,12 +39,13 @@
  *
  */
 
-return [
-    'Name' => 'Nombre',
-    'Description' => 'Descripción',
-    'Subarea of knowledge' => 'Subárea de Conocimiento',
-    'Knowledge area' => 'Área de Conocimiento',
-    'Status' => 'Estado',
+return [    
+    'Description' => 'Descripción',    
     'Disabled' => 'Inactivo',
     'Enabled' => 'Activo',
+    'Knowledge area' => 'Área de Conocimiento',
+    'Name' => 'Nombre',
+    'Search by subject name' => 'Buscar por nombre de asignatura',
+    'Status' => 'Estado',
+    'Subarea of knowledge' => 'Subárea de Conocimiento',
 ];

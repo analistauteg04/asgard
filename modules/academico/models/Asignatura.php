@@ -134,6 +134,7 @@ class Asignatura extends \yii\db\ActiveRecord
         }
         $sql = "SELECT
                     asi.asi_id AS id,
+                    a.uaca_nombre AS unidad,
                     asi.asi_nombre AS Nombre,
                     scon.scon_nombre AS SubAreaConocimiento,
                     acon.acon_nombre AS AreaConocimiento,
@@ -142,11 +143,13 @@ class Asignatura extends \yii\db\ActiveRecord
                     asignatura as asi
                     INNER JOIN subarea_conocimiento as scon on scon.scon_id=asi.scon_id
                     INNER JOIN area_conocimiento as acon on acon.acon_id=scon.acon_id
+                    INNER JOIN unidad_academica as a on a.uaca_id = asi.uaca_id
                 WHERE
                     $str_search
                     asi.asi_estado_logico = 1
                     AND scon.scon_estado_logico = 1
                     AND acon.acon_estado_logico = 1
+                    AND a.uaca_estado_logico = 1                    
                 ORDER BY asi.asi_id;";
         $comando = Yii::$app->db_academico->createCommand($sql);
         if(isset($search)){

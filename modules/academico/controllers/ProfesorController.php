@@ -1846,8 +1846,8 @@ class ProfesorController extends \app\components\CController {
                         'canton' => $canton,
                         'persona_model' => $persona_model, // 1
                         'instruccion' => $instruccion_model->getAllInstruccionGrid($profesor_model->pro_id, true), //2
-                        'experienciadoc' => $proExpPro->getAllExperienciaGrid($profesor_model->pro_id, true),//3
-                        'experienciapro' => $proExpDoc->getAllExperienciaGrid($profesor_model->pro_id, true),//4
+                        'experienciadoc' => $proExpDoc->getAllExperienciaGrid($profesor_model->pro_id, true),//3
+                        'experienciapro' => $proExpPro->getAllExperienciaGrid($profesor_model->pro_id, true),//4
                         'idioma' => $proIdiomas->getAllIdiomasGrid($profesor_model->pro_id, true), //5
                         'investigacion' => $proInvestigacion->getAllInvestigacionGrid($profesor_model->pro_id, true), //6
                         'capacitacion' => $proCap->getAllCapacitacionGrid($profesor_model->pro_id, true),//7

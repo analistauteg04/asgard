@@ -25,6 +25,11 @@ academico::registerTranslations();
                 'value' => 'Nombre',
             ],
             [
+                'attribute' => 'Unidad',
+                'header' => academico::t("Academico", "Academic unit"),
+                'value' => 'unidad',
+            ],
+            [
                 'attribute' => 'SubAreaConocimiento',
                 'header' => academico::t("asignatura", 'Subarea of knowledge'),
                 'value' => 'SubAreaConocimiento',

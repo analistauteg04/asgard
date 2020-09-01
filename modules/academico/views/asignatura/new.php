@@ -20,6 +20,12 @@ academico::registerTranslations();
         </div>
     </div>
     <div class="form-group">
+        <label for="cmb_unidad" class="col-sm-3 control-label"><?= academico::t("Academico", "Academic unit") ?></label>
+        <div class="col-sm-9">
+            <?= Html::dropDownList("cmb_unidad", "", $arr_unidad, ["class" => "form-control", "id" => "cmb_unidad"]) ?>
+        </div>
+    </div>
+    <div class="form-group">
         <label for="cmb_scon" class="col-sm-3 control-label"><?= academico::t("asignatura", "Subarea of knowledge") ?></label>
         <div class="col-sm-9">
             <?= Html::dropDownList("cmb_scon", "", $arr_scon, ["class" => "form-control", "id" => "cmb_scon"]) ?>
