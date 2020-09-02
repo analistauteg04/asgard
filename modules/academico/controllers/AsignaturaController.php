@@ -6,6 +6,7 @@ use Yii;
 use app\modules\academico\models\Asignatura;
 use app\modules\academico\models\SubareaConocimiento;
 use app\modules\academico\models\AreaConocimiento;
+use app\modules\academico\models\UnidadAcademica;
 use yii\helpers\ArrayHelper;
 use yii\base\Exception;
 use app\models\Utilities;
@@ -89,10 +90,12 @@ class AsignaturaController extends \app\components\CController {
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $arr_acon);
             }
         }
-
+        $mod_unidad = new UnidadAcademica();
+        $arr_unidad = $mod_unidad->consultarUnidadAcademicas();
         return $this->render('new', [
             'arr_acon' => (empty(ArrayHelper::map($arr_acon, "acon_id", "acon_nombre"))) ? array(Yii::t("areaconocimiento", "-- Select Area --")) : (ArrayHelper::map($arr_acon, "acon_id", "acon_nombre")),
             'arr_scon' => (empty(ArrayHelper::map($arr_scon, "scon_id", "scon_nombre"))) ? array(Yii::t("subareaconocimiento", "-- Select Area --")) : (ArrayHelper::map($arr_scon, "scon_id", "scon_nombre")),
+            'arr_unidad' => ArrayHelper::map($arr_unidad, "id", "name"),
         ]);
     }
 
@@ -105,12 +108,14 @@ class AsignaturaController extends \app\components\CController {
                 $scon_id = $data["scon_id"];
                 $acon_id = $data["acon_id"];
                 $estado = $data["estado"];
+                $unidad = $data["uaca_id"];
                 
                 $asignatura_model = new Asignatura();
                 $asignatura_model->asi_nombre = $nombre;
                 $asignatura_model->asi_descripcion = $descripcion;
                 $asignatura_model->scon_id = $scon_id;
                 $asignatura_model->asi_estado = $estado;
+                $asignatura_model->uaca_id = $unidad;
                 $asignatura_model->asi_estado_logico = "1";
                 
                 $message = array(
