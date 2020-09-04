@@ -114,8 +114,7 @@ class MallaAcademica extends \yii\db\ActiveRecord
         
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
             if ($arrFiltro['search'] != "") {
-                $str_search .= "(m.maca_nombre like :malla OR ";
-                $str_search .= "m.maca_codigo like :malla) AND ";
+                $str_search .= "m.maca_nombre like :malla AND ";                
             }            
         }
             

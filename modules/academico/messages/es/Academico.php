@@ -69,6 +69,7 @@ return [
     "Registered" => "Matriculado",
     "Registration by Homologation" => "Matriculación por Homologación",
     "Search DNI" => "Buscar DNI",
+    "Search by Description" => "Buscar por Descripción",
     "Search by Matter" => "Buscar por Materia",
     "Search by Teacher Name" => "Buscar por Npmbres Profesor",
     "Securities to develop" => "Valores a desarrollar",

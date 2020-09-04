@@ -20,7 +20,7 @@ academico::registerTranslations();
         <div class="form-group">
             <label for="txt_buscarData" class="col-sm-2 col-md-2 col-xs-2 col-lg-2 control-label"><?= Yii::t("formulario", "Search") ?></label>
             <div class="col-sm-8 col-md-8 col-xs-8 col-lg-8">
-                <input type="text" class="form-control" value="" id="txt_buscarData" placeholder="<?= academico::t("asignatura", "Search by subject name") ?>">
+                <input type="text" class="form-control" value="" id="txt_buscarDataDetmalla" placeholder="<?= academico::t("asignatura", "Search by subject name") ?>">
             </div>
         </div>
     </div>
@@ -28,7 +28,7 @@ academico::registerTranslations();
     <div class="col-md-12 col-xs-12 col-lg-12 col-sm-12">
         <div class="col-sm-8 col-md-8 col-xs-8 col-lg-8 "></div>
         <div class="col-sm-2 col-md-2 col-xs-4 col-lg-2">                
-            <a id="btn_buscarDataest" href="javascript:" class="btn btn-primary btn-block"> <?= Yii::t("formulario", "Search") ?></a>
+            <a id="btn_buscarDataDetmalla" href="javascript:" class="btn btn-primary btn-block"> <?= Yii::t("formulario", "Search") ?></a>
         </div>
     </div>
 </div>

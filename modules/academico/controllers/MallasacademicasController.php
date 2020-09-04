@@ -24,10 +24,7 @@ financiero::registerTranslations();
 
 class MallasacademicasController extends \app\components\CController {
     
-    public function actionIndex() {    
-        $mod_programa = new EstudioAcademico();
-        $mod_modalidad = new Modalidad();
-        $mod_unidad = new UnidadAcademica();
+    public function actionIndex() {            
         $mod_malla = new MallaAcademica();
         
         $data = Yii::$app->request->get();
