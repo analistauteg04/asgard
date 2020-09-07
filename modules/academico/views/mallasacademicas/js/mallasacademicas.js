@@ -37,3 +37,15 @@ function actualizarGridDetmallas() {
         setTimeout(hideLoadingPopup, 2000);
     }
 }
+
+function exportExcel() {     
+    var malla_id = $('#txth_malla_id').val();
+    var search = $('#txt_buscarDataDetmalla').val();    
+    window.location.href = $('#txth_base').val() + "/academico/mallasacademicas/expexcel?search=" + search + "&malla_id=" + malla_id;
+}
+
+function exportPdf() {
+    var malla_id = $('#txth_malla_id').val();
+    var search = $('#txt_buscarDataDetmalla').val();    
+    window.location.href = $('#txth_base').val() + "/academico/mallasacademicas/exppdf?pdf=1&search=" + search + "&malla_id=" + malla_id;
+}

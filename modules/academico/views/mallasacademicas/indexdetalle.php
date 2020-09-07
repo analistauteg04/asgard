@@ -10,7 +10,7 @@ academico::registerTranslations();
     <form class="form-horizontal">
         <?=
         $this->render('_formIndexdetalle', [
-            
+            'arr_cabecera' => $cabecera,            
         ]);
         ?>
     </form>
@@ -19,6 +19,7 @@ academico::registerTranslations();
     <?=
     $this->render('indexdetalle-grid', [
         'model' => $model,
+        'malla' => $malla,
     ]);
     ?>
 </div>

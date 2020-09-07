@@ -15,30 +15,30 @@ academico::registerTranslations();
 PbGridView::widget([
     'id' => 'Tbg_Mallas',
     'showExport' => true,
-    'fnExportEXCEL' => "exportExcel",
-    'fnExportPDF' => "exportPdf",
+    //'fnExportEXCEL' => "exportExcel",
+    //'fnExportPDF' => "exportPdf",
     'dataProvider' => $model,
     'pajax' => true,
     'columns' => [
         ['class' => 'yii\grid\SerialColumn', 'options' => ['width' => '10']],
         [
             'attribute' => 'Código',
-            'header' => Yii::t("formulario", "Código"),
+            'header' => academico::t("Academico", "Mesh Code"),
             'value' => 'maca_codigo',
         ],
         [
             'attribute' => 'Nombre',
-            'header' => academico::t("diploma", "Malla"),
+            'header' => academico::t("Academico", "Academic Mesh"),
             'value' => 'maca_nombre',
         ],
         [
             'attribute' => 'Fecha inicial vigencia',
-            'header' => academico::t("Academico", "Fecha inicial vigencia"),
+            'header' => academico::t("Academico", "Initial effective date"),
             'value' => 'fechainicial',
         ],
         [
             'attribute' => 'Fecha final vigencia',
-            'header' => academico::t("matriculacion", "Fecha final vigencia"),
+            'header' => academico::t("Academico", "End date effective"),
             'value' => 'fechafin',
         ],        
         [

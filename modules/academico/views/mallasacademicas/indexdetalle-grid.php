@@ -9,7 +9,7 @@ use app\modules\academico\Module as academico;
 //print_r($model);
 academico::registerTranslations();
 ?>
-
+<?= Html::hiddenInput('txth_malla_id', $malla, ['id' => 'txth_malla_id']); ?>
 <?=
 
 PbGridView::widget([
@@ -23,37 +23,37 @@ PbGridView::widget([
         ['class' => 'yii\grid\SerialColumn', 'options' => ['width' => '10']],
         [
             'attribute' => 'Código',
-            'header' => Yii::t("formulario", "Código Asignatura"),
+            'header' => academico::t("Academico", "Subject Code"),
             'value' => 'made_codigo_asignatura',
         ],
         [
-            'attribute' => 'Nombre',
-            'header' => academico::t("diploma", "Asignatura"),
+            'attribute' => 'Asignatura',
+            'header' => academico::t("Academico", "Subject"),
             'value' => 'asi_nombre',
         ],
         [
             'attribute' => 'Semestre',
-            'header' => academico::t("Academico", "Semestre"),
+            'header' => academico::t("Academico", "Semester"),
             'value' => 'made_semestre',
         ],
         [
             'attribute' => 'Créditos',
-            'header' => academico::t("matriculacion", "Créditos"),
+            'header' => academico::t("Academico", "Credits"),
             'value' => 'made_credito',
         ],        
         [
             'attribute' => 'Unidad Estudio',
-            'header' => academico::t("matriculacion", "Unidad Estudio"),
+            'header' => academico::t("Academico", "Unidad Estudio"),
             'value' => 'uest_nombre',
         ],   
         [
             'attribute' => 'Formación',
-            'header' => academico::t("matriculacion", "Formación"),
+            'header' => academico::t("Academico", "Training"),
             'value' => 'fmac_nombre',
         ],   
         [
             'attribute' => 'Materia requisito',
-            'header' => academico::t("matriculacion", "Materia Requisito"),
+            'header' => academico::t("Academico", "Subject Requirement"),
             'value' => 'materia_requisito',
         ],   
        /*[

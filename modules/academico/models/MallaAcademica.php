@@ -2,6 +2,7 @@
 
 namespace app\modules\academico\models;
 use yii\data\ArrayDataProvider;
+use app\models\Utilities;
 use Yii;
 
 /**
@@ -160,13 +161,12 @@ class MallaAcademica extends \yii\db\ActiveRecord
      */
     public function consultarDetallemallaXid($maca_id, $arrFiltro = array(), $onlyData = false) {
         $con = \Yii::$app->db_academico;
-        
+                     
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
             if ($arrFiltro['search'] != "") {
                 $str_search .= "(a.asi_nombre like :asignatura) AND ";                
             }            
         }
-            
         $sql = "SELECT  d.made_codigo_asignatura,    
                         a.asi_nombre, 
                         d.made_semestre,
@@ -174,12 +174,12 @@ class MallaAcademica extends \yii\db\ActiveRecord
                         u.uest_nombre,       
                         f.fmac_nombre,
                         ifnull(asi.asi_nombre,'') as materia_requisito
-                FROM db_academico.malla_academica m inner join db_academico.malla_academica_detalle d on d.maca_id = m.maca_id
-                    inner join db_academico.asignatura a on a.asi_id = d.asi_id
-                    inner join db_academico.unidad_estudio u on u.uest_id = d.uest_id
-                    inner join db_academico.nivel_estudio n on n.nest_id = d.nest_id
-                    inner join db_academico.formacion_malla_academica f on f.fmac_id = d.fmac_id
-                    left join db_academico.asignatura asi on asi.asi_id = d.made_asi_requisito
+                FROM " . $con->dbname . ".malla_academica m inner join " . $con->dbname . ".malla_academica_detalle d on d.maca_id = m.maca_id
+                    inner join " . $con->dbname . ".asignatura a on a.asi_id = d.asi_id
+                    inner join " . $con->dbname . ".unidad_estudio u on u.uest_id = d.uest_id
+                    inner join " . $con->dbname . ".nivel_estudio n on n.nest_id = d.nest_id
+                    inner join " . $con->dbname . ".formacion_malla_academica f on f.fmac_id = d.fmac_id
+                    left join " . $con->dbname . ".asignatura asi on asi.asi_id = d.made_asi_requisito
                 WHERE $str_search
                     m.maca_id = :malla
                     and m.maca_estado = '1'
@@ -213,4 +213,42 @@ class MallaAcademica extends \yii\db\ActiveRecord
             return $dataProvider;
         }
     }
+    
+    /**
+     * Function consultar cabecera de mallas académicas
+     * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>         
+     * @property  
+     * @return  
+     */
+    public function consultarCabeceraMalla($maca_id) {
+        $con = \Yii::$app->db_academico;
+        $estado = '1';                 
+        $sql = "SELECT m.maca_id, m.maca_nombre malla, ua.uaca_descripcion unidad, mo.mod_descripcion modalidad, e.eaca_descripcion carrera_programa
+                FROM " . $con->dbname . ".malla_academica m inner join " . $con->dbname . ".malla_unidad_modalidad u on u.maca_id = m.maca_id
+                    inner join " . $con->dbname . ".modalidad_estudio_unidad mu on mu.meun_id = u.meun_id
+                    inner join " . $con->dbname . ".estudio_academico e on e.eaca_id = mu.eaca_id
+                    inner join " . $con->dbname . ".unidad_academica ua on ua.uaca_id = mu.uaca_id
+                    inner join " . $con->dbname . ".modalidad mo on mo.mod_id = mu.mod_id
+                WHERE u.maca_id = :maca_id
+                    and m.maca_estado = :estado
+                    and m.maca_estado_logico = :estado
+                    and u.mumo_estado = :estado
+                    and u.mumo_estado_logico = :estado
+                    and mu.meun_estado = :estado
+                    and mu.meun_estado_logico = :estado
+                    and e.eaca_estado = :estado
+                    and e.eaca_estado_logico = :estado
+                    and ua.uaca_estado = :estado
+                    and ua.uaca_estado_logico = :estado
+                    and mo.mod_estado = :estado
+                    and mo.mod_estado_logico = :estado";
+
+        $comando = $con->createCommand($sql);        
+        $comando->bindParam(":maca_id", $maca_id, \PDO::PARAM_INT);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+       
+        $resultData = $comando->queryAll();               
+        return $resultData;        
+    }    
+    
 }
