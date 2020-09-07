@@ -237,11 +237,15 @@ class PlanificacionController extends \app\components\CController {
     }
 
     public function actionNewreg(){
+        $modplanificacion = new Planificacion();
         //$arr_pla = ArrayHelper::map(Planificacion::getPeriodosAcademico(), "pla_id", "pla_periodo_academico");
         $_SESSION['JSLANG']['The initial date of registry cannot be greater than end date.'] = academico::t('matriculacion', 'The initial date of registry cannot be greater than end date.');
-        $arr_pla = ArrayHelper::map(Planificacion::findAll(['pla_estado' => 1, 'pla_estado_logico' => 1]), "pla_id", "pla_periodo_academico");
+        //$arr_pla = ArrayHelper::map(Planificacion::findAll(['pla_estado' => 1, 'pla_estado_logico' => 1]), "pla_id", "pla_periodo_academico");
+        $arr_pla = $modplanificacion->getPeriodosmodalidad();
         return $this->render('newreg',[
-            'arr_pla' => $arr_pla,
+            //'arr_pla' => $arr_pla,
+            //'arr_pla' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Seleccionar"]],$arr_pla),"id","name"),
+            "arr_pla" => ArrayHelper::map($arr_pla, "id", "name"),
         ]);
     }
 
