@@ -14,7 +14,7 @@ academico::registerTranslations();
 
 PbGridView::widget([
     'id' => 'Tbg_Mallas',
-    'showExport' => true,
+    //'showExport' => true,
     //'fnExportEXCEL' => "exportExcel",
     //'fnExportPDF' => "exportPdf",
     'dataProvider' => $model,
