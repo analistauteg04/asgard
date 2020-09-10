@@ -121,9 +121,17 @@
         <br><br>
         <p><strong><?php echo "HOJA DE VIDA"; ?></strong></p><br><br><br><br>
     </div>
-    <div style="text-align: right">
-        <br>
-        <p></strong></p><br><br>
+    <div style="text-align: center">
+        <div>                            
+            <div> 
+                <?php
+                if (!empty($persona_model['per_foto'])) {
+                    echo yii\helpers\Html::img(
+                            Yii::$app->basePath . "/uploads/" . $persona_model['per_foto'], array('style' => ['width' => '150px', 'height' => '150px'], "alt" => Yii::$app->params["copyright"],));
+                }
+                ?>
+            </div>
+        </div><br><br>
     </div>
 
     <!--<div style="text-align: right">
@@ -155,7 +163,7 @@
             echo '<tr style="border: 1px solid #002060;"><td>' . $instruccion[$i]['Instruccion'] . '</td><td>' . $instruccion[$i]['NombreInstitucion'] . '</td><td>' . $instruccion[$i]['Especializacion'] . '</td><td>' . $instruccion[$i]['Titulo'] . '</td><td> ' . $instruccion[$i]['Registro'] . ' </td></tr>';
         }
         if (empty(count($instruccion))) {
-           echo '<tr style="border: 1px solid #002060;"><td><br></td><td></td><td></td><td></td><td></td></tr>'; 
+            echo '<tr style="border: 1px solid #002060;"><td><br></td><td></td><td></td><td></td><td></td></tr>';
         }
         echo '</tbody> </table>';
         ?><br><br>
@@ -169,7 +177,7 @@
             echo '<tr style="border: 1px solid #002060;"><td>' . substr($experienciadoc[$i]['Desde'], 0, -9) . '</td><td>' . substr($experienciadoc[$i]['Hasta'], 0, -9) . '</td><td>' . $experienciadoc[$i]['Institucion'] . '</td><td>' . $experienciadoc[$i]['Materias'] . '</td></tr>';
         }
         if (empty(count($experienciadoc))) {
-           echo '<tr style="border: 1px solid #002060;"><td><br></td><td></td><td></td><td></td></tr>'; 
+            echo '<tr style="border: 1px solid #002060;"><td><br></td><td></td><td></td><td></td></tr>';
         }
         echo '</tbody> </table>';
         ?><br><br>
@@ -183,7 +191,7 @@
             echo '<tr style="border: 1px solid #002060;"><td>' . substr($experienciapro[$i]['Desde'], 0, -9) . '</td><td>' . substr($experienciapro[$i]['Hasta'], 0, -9) . '</td><td>' . $experienciapro[$i]['Institucion'] . '</td><td>' . $experienciapro[$i]['Denominacion'] . '</td></tr>';
         }
         if (empty(count($experienciapro))) {
-           echo '<tr style="border: 1px solid #002060;"><td><br></td><td></td><td></td><td></td></tr>'; 
+            echo '<tr style="border: 1px solid #002060;"><td><br></td><td></td><td></td><td></td></tr>';
         }
         echo '</tbody> </table>';
         ?><br><br>
@@ -197,7 +205,7 @@
             echo '<tr style="border: 1px solid #002060;"><td>' . $idioma[$i]['Languages'] . '</td><td>' . $idioma[$i]['NivelOral'] . '</td><td> ' . $idioma[$i]['Institucion'] . ' </td></tr>';
         }
         if (empty(count($idioma))) {
-           echo '<tr style="border: 1px solid #002060;"><td><br></td><td></td><td></td><td></td><td></td></tr>'; 
+            echo '<tr style="border: 1px solid #002060;"><td><br></td><td></td><td></td><td></td><td></td></tr>';
         }
         echo '</tbody> </table>';
         ?><br><br>
@@ -211,7 +219,7 @@
             echo '<tr style="border: 1px solid #002060;"><td>' . $investigacion[$i]['Denominancion'] . '</td><td> ' . $investigacion[$i]['Anio'] . ' </td></tr>';
         }
         if (empty(count($investigacion))) {
-           echo '<tr style="border: 1px solid #002060;"><td><br></td><td></td><</tr>'; 
+            echo '<tr style="border: 1px solid #002060;"><td><br></td><td></td><</tr>';
         }
         echo '</tbody> </table>';
         ?><br><br>
@@ -225,7 +233,7 @@
             echo '<tr style="border: 1px solid #002060;"><td>' . $capacitacion[$i]['Evento'] . '</td><td>' . $capacitacion[$i]['Institucion'] . '</td><td>' . $capacitacion[$i]['Anio'] . '</td><td>' . $capacitacion[$i]['Tipo'] . '</td><td> ' . $capacitacion[$i]['Duracion'] . ' </td></tr>';
         }
         if (empty(count($capacitacion))) {
-           echo '<tr style="border: 1px solid #002060;"><td><br></td><td></td><td></td><td></td><td></td></tr>'; 
+            echo '<tr style="border: 1px solid #002060;"><td><br></td><td></td><td></td><td></td><td></td></tr>';
         }
         echo '</tbody> </table>';
         ?><br><br>
@@ -239,7 +247,7 @@
             echo '<tr style="border: 1px solid #002060;"><td>' . $conferencia[$i]['Evento'] . '</td><td>' . $conferencia[$i]['Institucion'] . '</td><td>' . $conferencia[$i]['Anio'] . '</td><td> ' . $conferencia[$i]['Ponencia'] . ' </td></tr>';
         }
         if (empty(count($conferencia))) {
-           echo '<tr style="border: 1px solid #002060;"><td><br></td><td></td><td></td><td></td></tr>'; 
+            echo '<tr style="border: 1px solid #002060;"><td><br></td><td></td><td></td><td></td></tr>';
         }
         echo '</tbody> </table>';
         ?><br><br>
@@ -267,7 +275,7 @@
             echo '<tr style="border: 1px solid #002060;"><td>' . $coodirecion[$i]['Estudiante'] . '</td><td>' . $coodirecion[$i]['Academico'] . '</td><td>' . $coodirecion[$i]['Anio'] . '</td><td> ' . $coodirecion[$i]['Programa'] . ' </td></tr>';
         }
         if (empty(count($coodirecion))) {
-           echo '<tr style="border: 1px solid #002060;"><td><br></td><td></td><td></td><td></td></tr>'; 
+            echo '<tr style="border: 1px solid #002060;"><td><br></td><td></td><td></td><td></td></tr>';
         }
         echo '</tbody> </table>';
         ?><br><br>
@@ -281,13 +289,13 @@
             echo '<tr style="border: 1px solid #002060;"><td>' . $referencia[$i]['Nombre'] . '</td><td>' . $referencia[$i]['Cargo'] . '</td><td>' . $referencia[$i]['Organizacion'] . '</td><td> ' . $referencia[$i]['Numero'] . ' </td></tr>';
         }
         if (empty(count($referencia))) {
-           echo '<tr style="border: 1px solid #002060;"><td><br></td><td></td><td></td><td></td><td>'; 
+            echo '<tr style="border: 1px solid #002060;"><td><br></td><td></td><td></td><td></td><td>';
         }
         echo '</tbody> </table>';
         ?><br><br>
     </div>
     <!--<div class="blue">
-        <p><u><b><?php //echo "12.- OTROS"   ?></b><br></u></p><br><br>
+        <p><u><b><?php //echo "12.- OTROS"    ?></b><br></u></p><br><br>
     <?php
     /* echo '<table class="tabla"><tbody>';
       echo '<tr style="background: #AED6F1;"><th>Nivel de Instrucción</th><th>Nombre de la Institución</th><th>Especialización</th><th>Titulo</th><th>Registro Senescyt</th></tr>';
