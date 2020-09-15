@@ -416,7 +416,7 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord {
         $model_planificacion_estudiante->pes_mat_b2_h6_nombre = $val[17];
         
         $model_planificacion_estudiante->pes_estado = "1";
-        $model_planificacion_estudiante->pes_estado_logico = "1";xº
+        $model_planificacion_estudiante->pes_estado_logico = "1";
         /* if($val[4] == "0925029605") {
           var_dump($model_planificacion_estudiante);
           }

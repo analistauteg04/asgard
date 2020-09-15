@@ -136,7 +136,7 @@ class PlanificacionController extends \app\components\CController {
                             /* $modelo_planificacion_saved = Planificacion::findOne($pla_id);
                             $modelo_planificacion_saved->delete(); */
                             $message = array(
-                                "wtmessage" => Yii::t("notificaciones", "Error al procesar el archivo. " . $carga_archivo['message']),
+                                "wtmessage" => Yii::t("notificaciones", "Error al procesar el archivo1. " . $carga_archivo['message']),
                                 "title" => Yii::t('jslang', 'Error'),                               
                             );
                             
@@ -147,7 +147,7 @@ class PlanificacionController extends \app\components\CController {
                     /* $modelo_planificacion_saved = Planificacion::findOne($pla_id);
                     $modelo_planificacion_saved->delete(); */
                     $message = array(
-                        "wtmessage" => Yii::t("notificaciones", "Error al procesar el archivo."),
+                        "wtmessage" => Yii::t("notificaciones", "Error al procesar el archivo2."),
                         "title" => Yii::t('jslang', 'Error'),                        
                     );
                     return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), true, $message);
