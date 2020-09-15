@@ -12,9 +12,9 @@ use app\models\Persona;
 /**
  * This is the model class for table "planificacion_estudiante".
  *
- * @property integer $pes_id
- * @property integer $pla_id
- * @property integer $per_id
+ * @property int $pes_id
+ * @property int $pla_id
+ * @property int $per_id
  * @property string $pes_jornada
  * @property string $pes_cod_carrera
  * @property string $pes_carrera
@@ -33,6 +33,8 @@ use app\models\Persona;
  * @property string $pes_mat_b1_h4_cod
  * @property string $pes_mat_b1_h5_nombre
  * @property string $pes_mat_b1_h5_cod
+ * @property string $pes_mat_b1_h6_nombre
+ * @property string $pes_mat_b1_h6_cod
  * @property string $pes_mat_b2_h1_nombre
  * @property string $pes_mat_b2_h1_cod
  * @property string $pes_mat_b2_h2_nombre
@@ -43,64 +45,117 @@ use app\models\Persona;
  * @property string $pes_mat_b2_h4_cod
  * @property string $pes_mat_b2_h5_nombre
  * @property string $pes_mat_b2_h5_cod
+ * @property string $pes_mat_b2_h6_nombre
+ * @property string $pes_mat_b2_h6_cod
  * @property string $pes_estado
  * @property string $pes_fecha_creacion
- * @property string $pes_usuario_modifica
+ * @property int $pes_usuario_modifica
  * @property string $pes_fecha_modificacion
  * @property string $pes_estado_logico
  *
+ * @property Planificacion $pla
+ * @property RegistroOnline[] $registroOnlines
  */
-class PlanificacionEstudiante extends \yii\db\ActiveRecord
-{
+class PlanificacionEstudiante extends \yii\db\ActiveRecord {
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return 'planificacion_estudiante';
     }
 
     /**
      * @return \yii\db\Connection the database connection used by this AR class.
      */
-    public static function getDb()
-    {
+    public static function getDb() {
         return Yii::$app->get('db_academico');
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
-    public function rules()
-    {
+    public function rules() {
         return [
-            [['pes_estado_logico', 'pes_estado', 'pla_id', 'per_id'], 'required'],
+            [['pla_id', 'per_id', 'pes_estado', 'pes_estado_logico'], 'required'],
+            [['pla_id', 'per_id', 'pes_usuario_modifica'], 'integer'],
             [['pes_fecha_creacion', 'pes_fecha_modificacion'], 'safe'],
             [['pes_jornada'], 'string', 'max' => 3],
+            [['pes_cod_carrera', 'pes_tutoria_cod', 'pes_mat_b1_h1_cod', 'pes_mat_b1_h2_cod', 'pes_mat_b1_h3_cod', 'pes_mat_b1_h4_cod', 'pes_mat_b1_h5_cod', 'pes_mat_b1_h6_cod', 'pes_mat_b2_h1_cod', 'pes_mat_b2_h2_cod', 'pes_mat_b2_h3_cod', 'pes_mat_b2_h4_cod', 'pes_mat_b2_h5_cod', 'pes_mat_b2_h6_cod'], 'string', 'max' => 20],
+            [['pes_carrera', 'pes_tutoria_nombre', 'pes_mat_b1_h1_nombre', 'pes_mat_b1_h2_nombre', 'pes_mat_b1_h3_nombre', 'pes_mat_b1_h4_nombre', 'pes_mat_b1_h5_nombre', 'pes_mat_b1_h6_nombre', 'pes_mat_b2_h1_nombre', 'pes_mat_b2_h2_nombre', 'pes_mat_b2_h3_nombre', 'pes_mat_b2_h4_nombre', 'pes_mat_b2_h5_nombre', 'pes_mat_b2_h6_nombre'], 'string', 'max' => 100],
             [['pes_dni'], 'string', 'max' => 15],
-            [[
-                'pes_cod_carrera', 'pes_tutoria_cod', 'pes_mat_b1_h1_cod', 'pes_mat_b1_h2_cod', 'pes_mat_b1_h3_cod',
-                'pes_mat_b1_h4_cod', 'pes_mat_b1_h5_cod', 'pes_mat_b2_h1_cod', 'pes_mat_b2_h2_cod', 'pes_mat_b2_h3_cod',
-                'pes_mat_b2_h4_cod', 'pes_mat_b2_h5_cod'
-            ], 'string', 'max' => 20],
-            [[
-                'pes_carrera', 'pes_tutoria_nombre', 'pes_mat_b1_h1_nombre', 'pes_mat_b1_h2_nombre', 'pes_mat_b1_h3_nombre',
-                'pes_mat_b1_h4_nombre', 'pes_mat_b1_h5_nombre', 'pes_mat_b2_h1_nombre', 'pes_mat_b2_h2_nombre',
-                'pes_mat_b2_h3_nombre', 'pes_mat_b2_h4_nombre', 'pes_mat_b2_h5_nombre'
-            ], 'string', 'max' => 100],
             [['pes_nombres'], 'string', 'max' => 200],
-            [['pes_estado_logico', 'pes_egresado', 'pes_estado'], 'string', 'max' => 1],
+            [['pes_egresado', 'pes_estado', 'pes_estado_logico'], 'string', 'max' => 1],
+            [['pla_id'], 'exist', 'skipOnError' => true, 'targetClass' => Planificacion::className(), 'targetAttribute' => ['pla_id' => 'pla_id']],
         ];
     }
 
-
+    /**
+     * {@inheritdoc}
+     */
+    public function attributeLabels() {
+        return [
+            'pes_id' => 'Pes ID',
+            'pla_id' => 'Pla ID',
+            'per_id' => 'Per ID',
+            'pes_jornada' => 'Pes Jornada',
+            'pes_cod_carrera' => 'Pes Cod Carrera',
+            'pes_carrera' => 'Pes Carrera',
+            'pes_dni' => 'Pes Dni',
+            'pes_nombres' => 'Pes Nombres',
+            'pes_egresado' => 'Pes Egresado',
+            'pes_tutoria_nombre' => 'Pes Tutoria Nombre',
+            'pes_tutoria_cod' => 'Pes Tutoria Cod',
+            'pes_mat_b1_h1_nombre' => 'Pes Mat B1 H1 Nombre',
+            'pes_mat_b1_h1_cod' => 'Pes Mat B1 H1 Cod',
+            'pes_mat_b1_h2_nombre' => 'Pes Mat B1 H2 Nombre',
+            'pes_mat_b1_h2_cod' => 'Pes Mat B1 H2 Cod',
+            'pes_mat_b1_h3_nombre' => 'Pes Mat B1 H3 Nombre',
+            'pes_mat_b1_h3_cod' => 'Pes Mat B1 H3 Cod',
+            'pes_mat_b1_h4_nombre' => 'Pes Mat B1 H4 Nombre',
+            'pes_mat_b1_h4_cod' => 'Pes Mat B1 H4 Cod',
+            'pes_mat_b1_h5_nombre' => 'Pes Mat B1 H5 Nombre',
+            'pes_mat_b1_h5_cod' => 'Pes Mat B1 H5 Cod',
+            'pes_mat_b1_h6_nombre' => 'Pes Mat B1 H6 Nombre',
+            'pes_mat_b1_h6_cod' => 'Pes Mat B1 H6 Cod',
+            'pes_mat_b2_h1_nombre' => 'Pes Mat B2 H1 Nombre',
+            'pes_mat_b2_h1_cod' => 'Pes Mat B2 H1 Cod',
+            'pes_mat_b2_h2_nombre' => 'Pes Mat B2 H2 Nombre',
+            'pes_mat_b2_h2_cod' => 'Pes Mat B2 H2 Cod',
+            'pes_mat_b2_h3_nombre' => 'Pes Mat B2 H3 Nombre',
+            'pes_mat_b2_h3_cod' => 'Pes Mat B2 H3 Cod',
+            'pes_mat_b2_h4_nombre' => 'Pes Mat B2 H4 Nombre',
+            'pes_mat_b2_h4_cod' => 'Pes Mat B2 H4 Cod',
+            'pes_mat_b2_h5_nombre' => 'Pes Mat B2 H5 Nombre',
+            'pes_mat_b2_h5_cod' => 'Pes Mat B2 H5 Cod',
+            'pes_mat_b2_h6_nombre' => 'Pes Mat B2 H6 Nombre',
+            'pes_mat_b2_h6_cod' => 'Pes Mat B2 H6 Cod',
+            'pes_estado' => 'Pes Estado',
+            'pes_fecha_creacion' => 'Pes Fecha Creacion',
+            'pes_usuario_modifica' => 'Pes Usuario Modifica',
+            'pes_fecha_modificacion' => 'Pes Fecha Modificacion',
+            'pes_estado_logico' => 'Pes Estado Logico',
+        ];
+    }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getAllPlanificacionesGrid($search = NULL, $dataProvider = false)
-    {
+    public function getPla() {
+        return $this->hasOne(Planificacion::className(), ['pla_id' => 'pla_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getRegistroOnlines() {
+        return $this->hasMany(RegistroOnline::className(), ['pes_id' => 'pes_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAllPlanificacionesGrid($search = NULL, $dataProvider = false) {
         $iduser = Yii::$app->session->get('PB_iduser', FALSE);
         $search_cond = "%" . $search . "%";
         $str_search = "";
@@ -160,8 +215,7 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord
         return $res;
     }
 
-    public function processFile($fname, $pla_id)
-    {
+    public function processFile($fname, $pla_id) {
         $file = Yii::$app->basePath . Yii::$app->params['documentFolder'] . "planificacion/" . $fname;
         $fila = 0;
         $chk_ext = explode(".", $file);
@@ -215,14 +269,14 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord
                 $fila = 0;
                 foreach ($dataArr as $val) {
                     /* print("#");
-                        print(gettype($val[1]));
-                        print("#"); */
+                      print(gettype($val[1]));
+                      print("#"); */
                     if (!is_null($val[4]) || $val[4]) {
                         $val[4] = strval($val[4]);
                         $per_id_estudiante = Persona::ObtenerPersonabyCedulaPasaporteRuc($val[4], $val[4], $val[4]);
                         $fila++;
                         /* print(strlen($val[5]));
-                                print($ser_cod_str); */
+                          print($ser_cod_str); */
                         /* print(gettype($ser_cod_str)); */
                         /* print("AntesGuardar"); */
 
@@ -261,9 +315,7 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord
         }
     }
 
-
-    public function saveDocumentoDB($val, $pla_id, $per_id_estudiante)
-    {
+    public function saveDocumentoDB($val, $pla_id, $per_id_estudiante) {
         // try {
         /* print_r($val); */
         /* print("$$");
@@ -271,7 +323,7 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord
           print(gettype($val[10]));
           print("$$"); */
         /* print($pla_id);
-        print($per_id); */
+          print($per_id); */
         $model_planificacion_estudiante = new PlanificacionEstudiante();
         $model_planificacion_estudiante->pla_id = $pla_id;
 
@@ -283,104 +335,108 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord
         $model_planificacion_estudiante->pes_dni = strval($val[4]);
         $model_planificacion_estudiante->pes_nombres = $val[5];
         /* $es_egresado = "";
-        if($val[6] == "egresado"){
-            $es_egresado = $val[6];
-        }
-        $model_planificacion_estudiante->pes_egresado = $es_egresado;
-        if(!is_null($val[7]) || $val[7] != ""){
-            $array_tutoria = explode(" {", $val[7]);
-            $nombre_tutoria = $array_tutoria[0];
-            $codigo_tutoria = substr($array_tutoria[1], 0 , -1);
-            $model_planificacion_estudiante->pes_tutoria_nombre = $nombre_tutoria;
-            $model_planificacion_estudiante->pes_tutoria_cod = $codigo_tutoria;
-        } else {
-            $model_planificacion_estudiante->pes_tutoria_nombre = null;
-            $model_planificacion_estudiante->pes_tutoria_cod = null;
-        } */
+          if($val[6] == "egresado"){
+          $es_egresado = $val[6];
+          }
+          $model_planificacion_estudiante->pes_egresado = $es_egresado;
+          if(!is_null($val[7]) || $val[7] != ""){
+          $array_tutoria = explode(" {", $val[7]);
+          $nombre_tutoria = $array_tutoria[0];
+          $codigo_tutoria = substr($array_tutoria[1], 0 , -1);
+          $model_planificacion_estudiante->pes_tutoria_nombre = $nombre_tutoria;
+          $model_planificacion_estudiante->pes_tutoria_cod = $codigo_tutoria;
+          } else {
+          $model_planificacion_estudiante->pes_tutoria_nombre = null;
+          $model_planificacion_estudiante->pes_tutoria_cod = null;
+          } */
 
 
         /*  $array_mat_b1h1_nom = explode(" {", $val[8]);
-        $nombre__mat_b1h1 = $array_mat_b1h1_nom[0];
-        $codigo_mat_b1h1 = substr($array_mat_b1h1_nom[1], 0 , -1); */
+          $nombre__mat_b1h1 = $array_mat_b1h1_nom[0];
+          $codigo_mat_b1h1 = substr($array_mat_b1h1_nom[1], 0 , -1); */
         $model_planificacion_estudiante->pes_mat_b1_h1_nombre = $val[6];
         /*  $model_planificacion_estudiante->pes_mat_b1_h1_cod = $codigo_mat_b1h1; */
 
         /*  $array_mat_b1h2_nom = explode(" {", $val[9]);
-        $nombre__mat_b1h2 = $array_mat_b1h2_nom[0];
-        $codigo_mat_b1h2 = substr($array_mat_b1h2_nom[1], 0 , -1); */
+          $nombre__mat_b1h2 = $array_mat_b1h2_nom[0];
+          $codigo_mat_b1h2 = substr($array_mat_b1h2_nom[1], 0 , -1); */
         $model_planificacion_estudiante->pes_mat_b1_h2_nombre = $val[7];
         /*   $model_planificacion_estudiante->pes_mat_b1_h2_cod = $codigo_mat_b1h2; */
 
         /*  $array_mat_b1h3_nom = explode(" {", $val[10]);
-        $nombre__mat_b1h3 = $array_mat_b1h3_nom[0];
-        $codigo_mat_b1h3 = substr($array_mat_b1h3_nom[1], 0 , -1); */
+          $nombre__mat_b1h3 = $array_mat_b1h3_nom[0];
+          $codigo_mat_b1h3 = substr($array_mat_b1h3_nom[1], 0 , -1); */
         $model_planificacion_estudiante->pes_mat_b1_h3_nombre = $val[8];
         /*   $model_planificacion_estudiante->pes_mat_b1_h3_cod = $codigo_mat_b1h3; */
 
         /*  $array_mat_b1h4_nom = explode(" {", $val[11]);
-        $nombre__mat_b1h4 = $array_mat_b1h4_nom[0];
-        $codigo_mat_b1h4 = substr($array_mat_b1h4_nom[1], 0 , -1); */
+          $nombre__mat_b1h4 = $array_mat_b1h4_nom[0];
+          $codigo_mat_b1h4 = substr($array_mat_b1h4_nom[1], 0 , -1); */
         $model_planificacion_estudiante->pes_mat_b1_h4_nombre = $val[9];
         /*  $model_planificacion_estudiante->pes_mat_b1_h4_cod = $codigo_mat_b1h4; */
 
         /*  $array_mat_b1h5_nom = explode(" {", $val[12]);
-        $nombre__mat_b1h5 = $array_mat_b1h5_nom[0];
-        $codigo_mat_b1h5 = substr($array_mat_b1h5_nom[1], 0 , -1); */
+          $nombre__mat_b1h5 = $array_mat_b1h5_nom[0];
+          $codigo_mat_b1h5 = substr($array_mat_b1h5_nom[1], 0 , -1); */
         $model_planificacion_estudiante->pes_mat_b1_h5_nombre = $val[10];
         /*  $model_planificacion_estudiante->pes_mat_b1_h5_cod = $codigo_mat_b1h5; */
-
+        
+        $model_planificacion_estudiante->pes_mat_b1_h6_nombre = $val[11];
+        
         /*  $array_mat_b2h1_nom = explode(" {", $val[13]);
-        $nombre__mat_b2h1 = $array_mat_b2h1_nom[0];
-        $codigo_mat_b2h1 = substr($array_mat_b2h1_nom[1], 0 , -1); */
-        $model_planificacion_estudiante->pes_mat_b2_h1_nombre = $val[11];
+          $nombre__mat_b2h1 = $array_mat_b2h1_nom[0];
+          $codigo_mat_b2h1 = substr($array_mat_b2h1_nom[1], 0 , -1); */
+        $model_planificacion_estudiante->pes_mat_b2_h1_nombre = $val[12];
         /* $model_planificacion_estudiante->pes_mat_b2_h1_cod = $codigo_mat_b2h1; */
 
         /*  $array_mat_b2h2_nom = explode(" {", $val[14]);
-        $nombre__mat_b2h2 = $array_mat_b2h2_nom[0];
-        $codigo_mat_b2h2 = substr($array_mat_b2h2_nom[1], 0 , -1); */
-        $model_planificacion_estudiante->pes_mat_b2_h2_nombre = $val[12];
+          $nombre__mat_b2h2 = $array_mat_b2h2_nom[0];
+          $codigo_mat_b2h2 = substr($array_mat_b2h2_nom[1], 0 , -1); */
+        $model_planificacion_estudiante->pes_mat_b2_h2_nombre = $val[13];
         /*   $model_planificacion_estudiante->pes_mat_b2_h2_cod = $codigo_mat_b2h2; */
 
         /*   $array_mat_b2h3_nom = explode(" {", $val[15]);
-        $nombre__mat_b2h3 = $array_mat_b2h3_nom[0];
-        $codigo_mat_b2h3 = substr($array_mat_b2h3_nom[1], 0 , -1); */
-        $model_planificacion_estudiante->pes_mat_b2_h3_nombre = $val[13];
+          $nombre__mat_b2h3 = $array_mat_b2h3_nom[0];
+          $codigo_mat_b2h3 = substr($array_mat_b2h3_nom[1], 0 , -1); */
+        $model_planificacion_estudiante->pes_mat_b2_h3_nombre = $val[14];
         /*  $model_planificacion_estudiante->pes_mat_b2_h3_cod = $codigo_mat_b2h3; */
 
         /*   $array_mat_b2h4_nom = explode(" {", $val[16]);
-        $nombre__mat_b2h4 = $array_mat_b2h4_nom[0];
-        $codigo_mat_b2h4 = substr($array_mat_b2h4_nom[1], 0 , -1); */
-        $model_planificacion_estudiante->pes_mat_b2_h4_nombre = $val[14];
+          $nombre__mat_b2h4 = $array_mat_b2h4_nom[0];
+          $codigo_mat_b2h4 = substr($array_mat_b2h4_nom[1], 0 , -1); */
+        $model_planificacion_estudiante->pes_mat_b2_h4_nombre = $val[15];
         /*  $model_planificacion_estudiante->pes_mat_b2_h4_cod = $codigo_mat_b2h4;
- */
+         */
         /*  $array_mat_b2h5_nom = explode(" {", $val[17]);
-        $nombre__mat_b2h5 = $array_mat_b2h5_nom[0];
-        $codigo_mat_b2h5 = substr($array_mat_b2h5_nom[1], 0 , -1); */
-        $model_planificacion_estudiante->pes_mat_b2_h5_nombre = $val[15];
+          $nombre__mat_b2h5 = $array_mat_b2h5_nom[0];
+          $codigo_mat_b2h5 = substr($array_mat_b2h5_nom[1], 0 , -1); */
+        $model_planificacion_estudiante->pes_mat_b2_h5_nombre = $val[16];
         /*  $model_planificacion_estudiante->pes_mat_b2_h5_cod = $codigo_mat_b2h5; */
-
+        
+        $model_planificacion_estudiante->pes_mat_b2_h6_nombre = $val[17];
+        
         $model_planificacion_estudiante->pes_estado = "1";
-        $model_planificacion_estudiante->pes_estado_logico = "1";
+        $model_planificacion_estudiante->pes_estado_logico = "1";xº
         /* if($val[4] == "0925029605") {
-            var_dump($model_planificacion_estudiante);
-        }        
-        print("AntesReturn"); */
+          var_dump($model_planificacion_estudiante);
+          }
+          print("AntesReturn"); */
         /* print($model_planificacion_estudiante); */
 
         return $model_planificacion_estudiante->save();
     }
 
-    public static function getCarreras()
-    {
+    public static function getCarreras() {
         $con_academico = \Yii::$app->db_academico;
         $sql = "SELECT @row_number:=@row_number+1 as pes_id, pes_carrera " .
-            "FROM " . Yii::$app->db_academico->dbname . ".planificacion_estudiante, (SELECT @row_number:=0) AS t " .
-            "WHERE pes_estado=1 AND pes_estado_logico=1 " .
-            "GROUP BY pes_carrera";
+                "FROM " . Yii::$app->db_academico->dbname . ".planificacion_estudiante, (SELECT @row_number:=0) AS t " .
+                "WHERE pes_estado=1 AND pes_estado_logico=1 " .
+                "GROUP BY pes_carrera";
 
         $comando = $con_academico->createCommand($sql);
         $resultData = $comando->queryAll();
 
         return $resultData;
     }
+
 }
