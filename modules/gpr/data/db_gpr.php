@@ -8,5 +8,6 @@ return [
     'charset' => 'utf8',
     'dbname' => 'db_gpr',
     'dbserver' => 'localhost',
+    //'attributes' => [PDO::ATTR_CASE => PDO::CASE_LOWER],
 ];
 
