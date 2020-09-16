@@ -66,7 +66,7 @@ PbGridView::widget([
                     return Html::a('<span class="glyphicon glyphicon-download"></span>', Url::to(['/academico/especies/generarespeciespdf', 'ids' => base64_encode($model['egen_id'])]), ["data-toggle" => "tooltip", "title" => "Descargar Especie", "data-pjax" => "0"]);
                 },  
                 'download' => function ($url, $model) {
-                    if ($model['cgen_estado_certificado']==2) {
+                    if ($model['cgen_estado_certificado']==3) {
                         return Html::a('<span class="glyphicon glyphicon-download-alt"></span>', Url::to(['/site/getimage', 'route' => '/uploads/certificados/' . $model['imagen']]), ["download" => $model['imagen'], "data-toggle" => "tooltip", "title" => "Descargar Certificado PDF", "data-pjax" => 0]);   
                     }                    
                 },                         

@@ -77,7 +77,7 @@ Financiero::registerTranslations();
             </div>
             <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
                 <div class="form-group">
-                    <label for="txth_doc_pago" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Especies::t("Especies", "Payment") ?></label>
+                    <label for="txth_doc_pago" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Especies::t("Especies", "Certificado") ?></label>
                     <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7 ">                
                         <?php
                         echo "<a href='" . Url::to(['/site/getimage', 'route' => "/uploads/certificados/" . $model[0]['imagen']]) . "' download='" . $model[0]['imagen'] . "' ><span class='glyphicon glyphicon-download-alt'></span>Descargar Certificado</a>"
