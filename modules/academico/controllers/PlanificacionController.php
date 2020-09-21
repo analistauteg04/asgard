@@ -9,6 +9,9 @@ use app\modules\academico\models\Planificacion;
 use app\modules\academico\models\Modalidad;
 use app\modules\academico\models\RegistroConfiguracion;
 use app\modules\academico\models\PeriodoAcademicoMetIngreso;
+use app\modules\academico\models\UnidadAcademica;
+use app\modules\admision\models\Oportunidad;
+
 use app\models\Persona;
 use yii\helpers\ArrayHelper;
 use yii\data\ArrayDataProvider;
@@ -380,14 +383,23 @@ class PlanificacionController extends \app\components\CController {
     }
 
     public function actionPlanificacionestudiante() {
+        $emp_id = @Yii::$app->session->get("PB_idempresa");
         $mod_periodo = new PeriodoAcademicoMetIngreso();
         $periodo = $mod_periodo->consultarPeriodoAcademico();
+        $uni_aca_model = new UnidadAcademica();
+        $modalidad_model = new Modalidad();
+        $modcanal = new Oportunidad();
+        $unidad_acad_data = $uni_aca_model->consultarUnidadAcademicas();        
+        $modalidad_data = $modalidad_model->consultarModalidad($unidad_acad_data[0]["id"], $emp_id);
+        $academic_study_data = $modcanal->consultarCarreraModalidad($unidad_acad_data[0]["id"], $modalidad_data[0]["id"]);
         $data = Yii::$app->request->get();
         if ($data['PBgetFilter']) {
             
         }
         return $this->render('planificacionestudiante', [
-                   // 'model' => $arr_materia
+                   'arr_unidad' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Todas"]],$unidad_acad_data), "id", "name"),
+                   'arr_modalidad' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Todas"]],$modalidad_data), "id", "name"),
+                   'arr_carrera' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Todas"]],$academic_study_data), "id", "name"),
                    'arr_periodo' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Todas"]], $periodo), "id", "name"), 
         ]);
     }

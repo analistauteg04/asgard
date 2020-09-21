@@ -9,6 +9,9 @@ use yii\helpers\Html;
         <?=
         $this->render('_formplanificacionestudiante', [
             'arr_periodo' => $arr_periodo,
+            'arr_unidad' => $arr_unidad,
+            'arr_modalidad' => $arr_modalidad,
+            'arr_carrera' => $arr_carrera,
         ]);
         ?>
     </form>
