@@ -8,6 +8,7 @@ use app\components\CController;
 use app\modules\academico\models\Planificacion;
 use app\modules\academico\models\Modalidad;
 use app\modules\academico\models\RegistroConfiguracion;
+use app\modules\academico\models\PeriodoAcademicoMetIngreso;
 use app\models\Persona;
 use yii\helpers\ArrayHelper;
 use yii\data\ArrayDataProvider;
@@ -21,44 +22,13 @@ academico::registerTranslations();
 
 class PlanificacionController extends \app\components\CController {
 
-
-    public function actionIndex()
-    {
+    public function actionIndex() {
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->get();
-               /* if (isset($data["search"])) { */
-                $pla_periodo_academico = $data["pla_periodo_academico"];
-                $mod_id = $data["mod_id"];
-                $dataPlanificaciones = Planificacion::getAllPlanificacionesGrid($search, $pla_periodo_academico, $mod_id);
-                $dataProvider = new ArrayDataProvider([
-                    'key' => 'pla_id',
-                    'allModels' => $dataPlanificaciones,
-                    'pagination' => [
-                        'pageSize' => Yii::$app->params["pageSize"],
-                    ],
-                    'sort' => [
-                        'attributes' => ["PeriodoAcademico"],
-                    ],
-                ]);
-                return $this->renderPartial('index-grid', [
-                    "model" => $dataProvider,
-                ]);
-          /*   } */
-        }
-        /*
-        $arr_pla = Planificacion::find()
-            ->select(['ROW_NUMBER() OVER (ORDER BY pla_periodo_academico) pla_id', 'pla_periodo_academico'])
-            ->where('pla_estado_logico = 1 and pla_estado = 1')
-            ->groupBy(['pla_periodo_academico'])
-            ->all();
-        */
-        $arr_pla = Planificacion::getPeriodosAcademico();
-        /* print_r($arr_pla); */
-        //if (count($arr_pla) > 0) {
-            $arr_modalidad = Modalidad::findAll(["mod_estado" => 1, "mod_estado_logico" => 1]);
-            $pla_periodo_academico = $arr_pla[0]->pla_periodo_academico;
-            $mod_id = $arr_modalidad[0]->mod_id;
-            $dataPlanificaciones = Planificacion::getAllPlanificacionesGrid(null, $pla_periodo_academico, $mod_id);
+            /* if (isset($data["search"])) { */
+            $pla_periodo_academico = $data["pla_periodo_academico"];
+            $mod_id = $data["mod_id"];
+            $dataPlanificaciones = Planificacion::getAllPlanificacionesGrid($search, $pla_periodo_academico, $mod_id);
             $dataProvider = new ArrayDataProvider([
                 'key' => 'pla_id',
                 'allModels' => $dataPlanificaciones,
@@ -66,16 +36,45 @@ class PlanificacionController extends \app\components\CController {
                     'pageSize' => Yii::$app->params["pageSize"],
                 ],
                 'sort' => [
-                    'attributes' => ["Modalidad"],
+                    'attributes' => ["PeriodoAcademico"],
                 ],
             ]);
-            return $this->render('index', [
-                'arr_pla' => (empty(ArrayHelper::map($arr_pla, "pla_periodo_academico", "pla_periodo_academico"))) ? array(Yii::t("planificacion", "-- Select periodo --")) : (ArrayHelper::map($arr_pla, "pla_periodo_academico", "pla_periodo_academico")),
-                'arr_modalidad' => (empty(ArrayHelper::map($arr_modalidad, "mod_id", "mod_nombre"))) ? array(Yii::t("planificacion", "-- Select Modality --")) : (ArrayHelper::map($arr_modalidad, "mod_id", "mod_nombre")),
-                'model' => $dataProvider,
-                'pla_periodo_academico' => $pla_periodo_academico,
-                'mod_id' => $mod_id,
+            return $this->renderPartial('index-grid', [
+                        "model" => $dataProvider,
             ]);
+            /*   } */
+        }
+        /*
+          $arr_pla = Planificacion::find()
+          ->select(['ROW_NUMBER() OVER (ORDER BY pla_periodo_academico) pla_id', 'pla_periodo_academico'])
+          ->where('pla_estado_logico = 1 and pla_estado = 1')
+          ->groupBy(['pla_periodo_academico'])
+          ->all();
+         */
+        $arr_pla = Planificacion::getPeriodosAcademico();
+        /* print_r($arr_pla); */
+        //if (count($arr_pla) > 0) {
+        $arr_modalidad = Modalidad::findAll(["mod_estado" => 1, "mod_estado_logico" => 1]);
+        $pla_periodo_academico = $arr_pla[0]->pla_periodo_academico;
+        $mod_id = $arr_modalidad[0]->mod_id;
+        $dataPlanificaciones = Planificacion::getAllPlanificacionesGrid(null, $pla_periodo_academico, $mod_id);
+        $dataProvider = new ArrayDataProvider([
+            'key' => 'pla_id',
+            'allModels' => $dataPlanificaciones,
+            'pagination' => [
+                'pageSize' => Yii::$app->params["pageSize"],
+            ],
+            'sort' => [
+                'attributes' => ["Modalidad"],
+            ],
+        ]);
+        return $this->render('index', [
+                    'arr_pla' => (empty(ArrayHelper::map($arr_pla, "pla_periodo_academico", "pla_periodo_academico"))) ? array(Yii::t("planificacion", "-- Select periodo --")) : (ArrayHelper::map($arr_pla, "pla_periodo_academico", "pla_periodo_academico")),
+                    'arr_modalidad' => (empty(ArrayHelper::map($arr_modalidad, "mod_id", "mod_nombre"))) ? array(Yii::t("planificacion", "-- Select Modality --")) : (ArrayHelper::map($arr_modalidad, "mod_id", "mod_nombre")),
+                    'model' => $dataProvider,
+                    'pla_periodo_academico' => $pla_periodo_academico,
+                    'mod_id' => $mod_id,
+        ]);
         //} 
     }
 
@@ -85,23 +84,23 @@ class PlanificacionController extends \app\components\CController {
             $data = Yii::$app->request->post();
             if ($data["upload_file"]) {
                 if (empty($_FILES)) {
-                    return json_encode(['error' => Yii::t("notificaciones", "Error to process File ". basename($files['name']) .". Try again.")]);
+                    return json_encode(['error' => Yii::t("notificaciones", "Error to process File " . basename($files['name']) . ". Try again.")]);
                 }
                 //Recibe Parámetros
                 $files = $_FILES[key($_FILES)];
                 $arrIm = explode(".", basename($files['name']));
-                $namefile= substr_replace($data["name_file"], $data["mod_id"], 14, 0);
+                $namefile = substr_replace($data["name_file"], $data["mod_id"], 14, 0);
                 $typeFile = strtolower($arrIm[count($arrIm) - 1]);
                 if ($typeFile == 'xlsx' || $typeFile == 'csv' || $typeFile == 'xls') {
                     $dirFileEnd = Yii::$app->params["documentFolder"] . "planificacion/" . $namefile . "." . $typeFile;
                     $status = Utilities::moveUploadFile($files['tmp_name'], $dirFileEnd);
                     if ($status) {
-                        return true;                        
+                        return true;
                     } else {
-                        return json_encode(['error' => Yii::t("notificaciones", "Error to process File ". basename($files['name']) .". Try again.")]);
+                        return json_encode(['error' => Yii::t("notificaciones", "Error to process File " . basename($files['name']) . ". Try again.")]);
                     }
-                } else {                    
-                    return json_encode(['error' => Yii::t("notificaciones", "Error to process File ". basename($files['name']) .". Try again.")]);
+                } else {
+                    return json_encode(['error' => Yii::t("notificaciones", "Error to process File " . basename($files['name']) . ". Try again.")]);
                 }
             }
 
@@ -110,7 +109,7 @@ class PlanificacionController extends \app\components\CController {
                 $per_id = Yii::$app->session->get("PB_perid");
                 $model_planificacionEstudiante = new PlanificacionEstudiante();
                 try {
-                    $namefile= substr_replace($data["archivo"], $data["modalidad"], 14, 0);
+                    $namefile = substr_replace($data["archivo"], $data["modalidad"], 14, 0);
                     $path = "planificacion/" . $namefile;
                     $modelo_planificacion = new Planificacion();
                     $modelo_planificacion->mod_id = $data["modalidad"];
@@ -121,48 +120,47 @@ class PlanificacionController extends \app\components\CController {
                     $modelo_planificacion->pla_path = $path;
                     $modelo_planificacion->pla_estado = "1";
                     $modelo_planificacion->pla_estado_logico = "1";
-                    if($modelo_planificacion->save()){
-                       /*  return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), true, "guardado"); */
+                    if ($modelo_planificacion->save()) {
+                        /*  return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), true, "guardado"); */
                         $pla_id = $modelo_planificacion->getPrimaryKey();
-                        $carga_archivo = $model_planificacionEstudiante->processFile($namefile,$pla_id);
-                       /*  return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), true, $carga_archivo); */
+                        $carga_archivo = $model_planificacionEstudiante->processFile($namefile, $pla_id);
+                        /*  return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), true, $carga_archivo); */
                         if ($carga_archivo['status']) {
                             $message = array(
                                 "wtmessage" => Yii::t("notificaciones", "Archivo procesado correctamente. " . $carga_archivo['message']),
-                                "title" => Yii::t('jslang', 'Success'),                            
+                                "title" => Yii::t('jslang', 'Success'),
                             );
                             return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Success"), false, $message);
                         } else {
                             /* $modelo_planificacion_saved = Planificacion::findOne($pla_id);
-                            $modelo_planificacion_saved->delete(); */
+                              $modelo_planificacion_saved->delete(); */
                             $message = array(
                                 "wtmessage" => Yii::t("notificaciones", "Error al procesar el archivo1. " . $carga_archivo['message']),
-                                "title" => Yii::t('jslang', 'Error'),                               
+                                "title" => Yii::t('jslang', 'Error'),
                             );
-                            
-                            return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), true, $message);                            
+
+                            return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), true, $message);
                         }
                     }
                 } catch (Exception $ex) {
                     /* $modelo_planificacion_saved = Planificacion::findOne($pla_id);
-                    $modelo_planificacion_saved->delete(); */
+                      $modelo_planificacion_saved->delete(); */
                     $message = array(
                         "wtmessage" => Yii::t("notificaciones", "Error al procesar el archivo2."),
-                        "title" => Yii::t('jslang', 'Error'),                        
+                        "title" => Yii::t('jslang', 'Error'),
                     );
                     return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), true, $message);
-                }                                
+                }
             };
         } else {
             $arr_modalidad = Modalidad::findAll(["mod_estado" => 1, "mod_estado_logico" => 1]);
-            return $this->render('cargar_planificacion',[
-                'arr_modalidad' => (empty(ArrayHelper::map($arr_modalidad, "mod_id", "mod_nombre"))) ? array(Yii::t("planificacion", "-- Select planificacion --")) : (ArrayHelper::map($arr_modalidad, "mod_id", "mod_nombre"))
+            return $this->render('cargar_planificacion', [
+                        'arr_modalidad' => (empty(ArrayHelper::map($arr_modalidad, "mod_id", "mod_nombre"))) ? array(Yii::t("planificacion", "-- Select planificacion --")) : (ArrayHelper::map($arr_modalidad, "mod_id", "mod_nombre"))
             ]);
-        }        
+        }
     }
 
-    public function actionDescargarplanificacion()
-    {
+    public function actionDescargarplanificacion() {
         $report = new ExportFile();
 
         $data = Yii::$app->request->get();
@@ -173,7 +171,7 @@ class PlanificacionController extends \app\components\CController {
         if (file_exists($file)) {
             Yii::$app->response->sendFile($file);
         } else {
-            /**en caso de que no */
+            /*             * en caso de que no */
         }
         return;
     }
@@ -187,10 +185,10 @@ class PlanificacionController extends \app\components\CController {
                 $periodo_academico = $data["pla_periodo_academico"];
                 $estado = $data["estado"];
                 $mod_id = $data["mod_id"];
-                
+
                 $planificacion_model = new Planificacion();
-                $planificacion_model->pla_fecha_inicio = $fecha_inicio; 
-                $planificacion_model->pla_fecha_fin = $fecha_fin;               
+                $planificacion_model->pla_fecha_inicio = $fecha_inicio;
+                $planificacion_model->pla_fecha_fin = $fecha_fin;
                 $planificacion_model->pla_periodo_academico = $periodo_academico;
                 $planificacion_model->mod_id = $mod_id;
                 $planificacion_model->pla_estado = $estado;
@@ -214,7 +212,7 @@ class PlanificacionController extends \app\components\CController {
         }
     }
 
-    public function actionRegisterprocess(){
+    public function actionRegisterprocess() {
         $modelReg = new RegistroConfiguracion();
         $data = Yii::$app->request->get();
         if ($data['PBgetFilter']) {
@@ -222,68 +220,68 @@ class PlanificacionController extends \app\components\CController {
             $mod_id = $data["mod_id"];
             $model = $modelReg->getRegistroConfList($pla_periodo_academico, $mod_id);
             return $this->renderPartial('register-index-grid', [
-                "model" => $model,
+                        "model" => $model,
             ]);
         }
-        
+
         $arr_pla = Planificacion::getPeriodosAcademico();
         $arr_modalidad = Modalidad::findAll(["mod_estado" => 1, "mod_estado_logico" => 1]);
         $model = $modelReg->getRegistroConfList(null, 0);
         return $this->render('register-index', [
-            'arr_pla' => ArrayHelper::map(array_merge([["pla_id" => "0", "pla_periodo_academico" => Yii::t("formulario", "Grid")]], $arr_pla), "pla_id", "pla_periodo_academico"),
-            'arr_modalidad' => ArrayHelper::map(array_merge([["mod_id" => "0", "mod_nombre" => Yii::t("formulario", "Grid")]], $arr_modalidad), "mod_id", "mod_nombre"),
-            'model' => $model,
+                    'arr_pla' => ArrayHelper::map(array_merge([["pla_id" => "0", "pla_periodo_academico" => Yii::t("formulario", "Grid")]], $arr_pla), "pla_id", "pla_periodo_academico"),
+                    'arr_modalidad' => ArrayHelper::map(array_merge([["mod_id" => "0", "mod_nombre" => Yii::t("formulario", "Grid")]], $arr_modalidad), "mod_id", "mod_nombre"),
+                    'model' => $model,
         ]);
     }
 
-    public function actionNewreg(){
+    public function actionNewreg() {
         $modplanificacion = new Planificacion();
         //$arr_pla = ArrayHelper::map(Planificacion::getPeriodosAcademico(), "pla_id", "pla_periodo_academico");
         $_SESSION['JSLANG']['The initial date of registry cannot be greater than end date.'] = academico::t('matriculacion', 'The initial date of registry cannot be greater than end date.');
         //$arr_pla = ArrayHelper::map(Planificacion::findAll(['pla_estado' => 1, 'pla_estado_logico' => 1]), "pla_id", "pla_periodo_academico");
         $arr_pla = $modplanificacion->getPeriodosmodalidad();
-        return $this->render('newreg',[
-            //'arr_pla' => $arr_pla,
-            //'arr_pla' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Seleccionar"]],$arr_pla),"id","name"),
-            "arr_pla" => ArrayHelper::map($arr_pla, "id", "name"),
+        return $this->render('newreg', [
+                    //'arr_pla' => $arr_pla,
+                    //'arr_pla' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Seleccionar"]],$arr_pla),"id","name"),
+                    "arr_pla" => ArrayHelper::map($arr_pla, "id", "name"),
         ]);
     }
 
-    public function actionViewreg(){
+    public function actionViewreg() {
         $data = Yii::$app->request->get();
         if (isset($data['id'])) {
             $id = $data['id'];
             $model = RegistroConfiguracion::findOne($id);
             $arr_pla = ArrayHelper::map(Planificacion::findAll(['pla_estado' => 1, 'pla_estado_logico' => 1]), "pla_id", "pla_periodo_academico");
             return $this->render('viewreg', [
-                'model' => $model,
-                'arr_pla' => $arr_pla,
-                'pla_id' => $model->pla_id,
-                'rco_id' => $model->rco_id,
-                'bloque' => ($model->rco_num_bloques == 1)?0:1,
+                        'model' => $model,
+                        'arr_pla' => $arr_pla,
+                        'pla_id' => $model->pla_id,
+                        'rco_id' => $model->rco_id,
+                        'bloque' => ($model->rco_num_bloques == 1) ? 0 : 1,
             ]);
         }
         return $this->redirect('registerprocess');
     }
 
-    public function actionEditreg(){
+    public function actionEditreg() {
         $data = Yii::$app->request->get();
         if (isset($data['id'])) {
             $id = $data['id'];
             $model = RegistroConfiguracion::findOne($id);
             $arr_pla = ArrayHelper::map(Planificacion::findAll(['pla_estado' => 1, 'pla_estado_logico' => 1]), "pla_id", "pla_periodo_academico");
             return $this->render('editreg', [
-                'model' => $model,
-                'arr_pla' => $arr_pla,
-                'pla_id' => $model->pla_id,
-                'rco_id' => $model->rco_id,
-                'bloque' => ($model->rco_num_bloques == 1)?0:1,
+                        'model' => $model,
+                        'arr_pla' => $arr_pla,
+                        'pla_id' => $model->pla_id,
+                        'rco_id' => $model->rco_id,
+                        'bloque' => ($model->rco_num_bloques == 1) ? 0 : 1,
             ]);
         }
         return $this->redirect('registerprocess');
     }
 
-    public function actionUpdatereg(){
+    public function actionUpdatereg() {
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
             try {
@@ -296,7 +294,7 @@ class PlanificacionController extends \app\components\CController {
                 $model->pla_id = $pla_id;
                 $model->rco_fecha_inicio = $finicio . " 00:00:00";
                 $model->rco_fecha_fin = $ffin . " 23:59:59";
-                $model->rco_num_bloques = ($bloque == 0)?1:2;
+                $model->rco_num_bloques = ($bloque == 0) ? 1 : 2;
                 $model->rco_fecha_modificacion = date(Yii::$app->params['dateTimeByDefault']);
                 $model->rco_usuario_modifica = Yii::$app->session->get("PB_iduser");
                 $message = array(
@@ -318,7 +316,7 @@ class PlanificacionController extends \app\components\CController {
         }
     }
 
-    public function actionSavereg(){
+    public function actionSavereg() {
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
             try {
@@ -330,7 +328,7 @@ class PlanificacionController extends \app\components\CController {
                 $model->pla_id = $pla_id;
                 $model->rco_fecha_inicio = $finicio . " 00:00:00";
                 $model->rco_fecha_fin = $ffin . " 23:59:59";
-                $model->rco_num_bloques = ($bloque == 0)?1:2;
+                $model->rco_num_bloques = ($bloque == 0) ? 1 : 2;
                 $model->rco_estado = "1";
                 $model->rco_estado_logico = "1";
                 $message = array(
@@ -352,7 +350,7 @@ class PlanificacionController extends \app\components\CController {
         }
     }
 
-    public function actionDeletereg(){
+    public function actionDeletereg() {
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
             try {
@@ -381,8 +379,17 @@ class PlanificacionController extends \app\components\CController {
         }
     }
 
+    public function actionPlanificacionestudiante() {
+        $mod_periodo = new PeriodoAcademicoMetIngreso();
+        $periodo = $mod_periodo->consultarPeriodoAcademico();
+        $data = Yii::$app->request->get();
+        if ($data['PBgetFilter']) {
+            
+        }
+        return $this->render('planificacionestudiante', [
+                   // 'model' => $arr_materia
+                   'arr_periodo' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Todas"]], $periodo), "id", "name"), 
+        ]);
+    }
+
 }
-
-
-
-
