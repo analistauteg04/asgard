@@ -379,3 +379,21 @@ function actualizarGridPlanest() {
         setTimeout(hideLoadingPopup, 2000);
     }
 }
+
+function exportExcelplanifica() {
+    var estudiante = $('#txt_buscarDataPlanifica').val();    
+    /*var unidad = $('#cmb_unidades option:selected').val();
+    var modalidad = $('#cmb_modalidades option:selected').val();
+    var carrera = $('#cmb_carreras option:selected').val();*/
+    var periodo = $('#cmb_periodo option:selected').val();
+    window.location.href = $('#txth_base').val() + "/academico/planificacion/expexcelplanifica?estudiante=" + estudiante + /*"&unidad="+ unidad + '&modalidad='+ modalidad + "&carrera=" +*/ "&periodo=" + periodo;
+}
+
+function exportPdfplanifica() {
+    var estudiante = $('#txt_buscarDataPlanifica').val();    
+    /*var unidad = $('#cmb_unidades option:selected').val();
+    var modalidad = $('#cmb_modalidades option:selected').val();
+    var carrera = $('#cmb_carreras option:selected').val();*/
+    var periodo = $('#cmb_periodo option:selected').val();
+    window.location.href = $('#txth_base').val() + "/academico/planificacion/exppdfplanifica?pdf=1&estudiante=" + estudiante + /*"&unidad="+ unidad + '&modalidad='+ modalidad + "&carrera=" + carrera + */ "&periodo=" + periodo;
+}

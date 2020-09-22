@@ -521,10 +521,11 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord {
         }
         if ($onlyData == false) {
             $idplanifica = 'plae.pla_id, ';
+            $idper = 'plae.per_id, ';
         }
         $sql = "SELECT 
                     $idplanifica
-                    plae.per_id,
+                    $idper
                     pers.per_cedula,
                     plae.pes_nombres,
                     plae.pes_carrera,

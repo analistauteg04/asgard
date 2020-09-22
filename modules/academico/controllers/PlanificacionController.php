@@ -397,10 +397,10 @@ class PlanificacionController extends \app\components\CController {
         $data = Yii::$app->request->get();
         if ($data['PBgetFilter']) {
             $arrSearch["estudiante"] = $data['estudiante'];
-            /*$arrSearch["unidad"] = $data['unidad'];
-            $arrSearch["modalidad"] = $data['modalidad'];
-            $arrSearch["carrera"] = $data['carrera'];*/
-            $arrSearch["periodo"] = $data['periodo'];            
+            /* $arrSearch["unidad"] = $data['unidad'];
+              $arrSearch["modalidad"] = $data['modalidad'];
+              $arrSearch["carrera"] = $data['carrera']; */
+            $arrSearch["periodo"] = $data['periodo'];
             $model_plan = $mod_periodo->consultarEstudianteplanifica($arrSearch);
             return $this->render('planificacionestudiante-grid', [
                         'model' => $model_plan,
@@ -434,6 +434,72 @@ class PlanificacionController extends \app\components\CController {
                     'arr_periodo' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Todas"]], $periodo), "id", "name"),
                     'model' => $model_plan,
         ]);
+    }
+
+    public function actionExpexcelplanifica() {
+        ini_set('memory_limit', '256M');
+        $content_type = Utilities::mimeContentType("xls");
+        $nombarch = "Report-" . date("YmdHis") . ".xls";
+        header("Content-Type: $content_type");
+        header("Content-Disposition: attachment;filename=" . $nombarch);
+        header('Cache-Control: max-age=0');
+        $colPosition = array("C", "D", "E", "F", "G", "H");
+        $arrHeader = array(
+            Yii::t("formulario", "DNI 1"),
+            Yii::t("formulario", "Student"),
+            Yii::t("crm", "Carrera"),
+            Yii::t("formulario", "Period"),
+        );
+        $mod_periodo = new PlanificacionEstudiante();
+        $data = Yii::$app->request->get();
+        $arrSearch["estudiante"] = $data['estudiante'];
+        /* $arrSearch["unidad"] = $data['unidad'];
+          $arrSearch["modalidad"] = $data['modalidad'];
+          $arrSearch["carrera"] = $data['carrera']; */
+        $arrSearch["periodo"] = $data['periodo'];
+        $arrData = array();
+        if (empty($arrSearch)) {
+            $arrData = $mod_periodo->consultarEstudianteplanifica(array(), true);
+        } else {
+            $arrData = $mod_periodo->consultarEstudianteplanifica($arrSearch, true);
+        }
+        $nameReport = academico::t("Academico", "Lista de Planificación por Estudiante");
+        Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
+        exit;
+    }
+
+    public function actionExppdfplanifica() {
+        $report = new ExportFile();
+        $this->view->title = academico::t("Academico", "Lista de Planificación por Estudiante"); // Titulo del reporte                
+        $arrHeader = array(
+            Yii::t("formulario", "DNI 1"),
+            Yii::t("formulario", "Student"),
+            Yii::t("crm", "Carrera"),
+            Yii::t("formulario", "Period"),
+        );
+        $mod_periodo = new PlanificacionEstudiante();
+        $data = Yii::$app->request->get();
+        $arrSearch["estudiante"] = $data['estudiante'];
+        /* $arrSearch["unidad"] = $data['unidad'];
+          $arrSearch["modalidad"] = $data['modalidad'];
+          $arrSearch["carrera"] = $data['carrera']; */
+        $arrSearch["periodo"] = $data['periodo'];
+        $arrData = array();
+        if (empty($arrSearch)) {
+            //$arrData = $mod_marcacion->consultarHorarioMarcacion(array(), true);
+            $arrData = $mod_periodo->consultarEstudianteplanifica(array(), true);
+        } else {
+            $arrData = $mod_periodo->consultarEstudianteplanifica($arrSearch, true);
+        }
+        $report->orientation = "L"; // tipo de orientacion L => Horizontal, P => Vertical
+        $report->createReportPdf(
+                $this->render('exportpdf', [
+                    'arr_head' => $arrHeader,
+                    'arr_body' => $arrData
+                ])
+        );
+        $report->mpdf->Output('Reporte_' . date("Ymdhis") . ".pdf", ExportFile::OUTPUT_TO_DOWNLOAD);
+        return;
     }
 
 }

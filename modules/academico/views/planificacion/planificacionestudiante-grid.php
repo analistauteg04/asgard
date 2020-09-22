@@ -15,8 +15,8 @@ admision::registerTranslations();
     PbGridView::widget([
         'id' => 'PbPlanificaestudiante',
         'showExport' => true,
-        //'fnExportEXCEL' => "exportExcel",
-        //'fnExportPDF' => "exportPdf",
+        'fnExportEXCEL' => "exportExcelplanifica",
+        'fnExportPDF' => "exportPdfplanifica",
         'dataProvider' => $model,
         'columns' => [
             [
