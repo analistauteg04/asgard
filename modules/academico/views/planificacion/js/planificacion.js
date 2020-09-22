@@ -10,7 +10,9 @@ $(document).ready(function () {
     $('#btn_buscarRegConf').click(function () {
         actualizarGridRegistroConf();
     });
-
+    $('#btn_buscarPlanestudiante').click(function () {
+        actualizarGridPlanest();
+    });
     /************ planificacion x estudiante **********************************/
     $('#cmb_unidades').change(function () {
         var link = $('#txth_base').val() + "/academico/planificacion/planificacionestudiante";
@@ -27,7 +29,7 @@ $(document).ready(function () {
                     arrParams.unidada = $('#cmb_unidades').val();
                     arrParams.moda_id = data.modalidad[0].id;
                     arrParams.empresa_id = 1;
-                    arrParams.getcarrera = true;                    
+                    arrParams.getcarrera = true;
                     requestHttpAjax(link, arrParams, function (response) {
                         if (response.status == "OK") {
                             data = response.message;
@@ -38,14 +40,14 @@ $(document).ready(function () {
             }
         }, true);
     });
-    $('#cmb_modalidades').change(function() {
+    $('#cmb_modalidades').change(function () {
         var link = $('#txth_base').val() + "/academico/planificacion/planificacionestudiante";
         var arrParams = new Object();
         arrParams.unidada = $('#cmb_unidades').val();
         arrParams.moda_id = $(this).val();
         arrParams.empresa_id = 1;
         arrParams.getcarrera = true;
-        requestHttpAjax(link, arrParams, function(response) {
+        requestHttpAjax(link, arrParams, function (response) {
             if (response.status == "OK") {
                 data = response.message;
                 setComboDataselect(data.carrera, "cmb_carreras", "Todos");
@@ -362,4 +364,18 @@ function deleteItem(id) {
             showAlert(response.status, response.label, response.message);
         }, 1000);
     }, true);
+}
+
+function actualizarGridPlanest() {
+    var estudiante = $('#txt_buscarDataPlanifica').val();    
+    /*var unidad = $('#cmb_unidades option:selected').val();
+    var modalidad = $('#cmb_modalidades option:selected').val();
+    var carrera = $('#cmb_carreras option:selected').val();*/
+    var periodo = $('#cmb_periodo option:selected').val();
+    //Buscar almenos una clase con el nombre para ejecutar
+    if (!$(".blockUI").length) {
+        showLoadingPopup();
+        $('#PbPlanificaestudiante').PbGridView('applyFilterData', {'estudiante': estudiante, /*'unidad': unidad, 'modalidad': modalidad, 'carrera': carrera,*/ 'periodo': periodo});
+        setTimeout(hideLoadingPopup, 2000);
+    }
 }

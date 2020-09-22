@@ -395,6 +395,17 @@ class PlanificacionController extends \app\components\CController {
         $academic_study_data = $modcanal->consultarCarreraModalidad($unidad_acad_data[0]["id"], $modalidad_data[0]["id"]);
         $model_plan = $mod_periodo->consultarEstudianteplanifica();
         $data = Yii::$app->request->get();
+        if ($data['PBgetFilter']) {
+            $arrSearch["estudiante"] = $data['estudiante'];
+            /*$arrSearch["unidad"] = $data['unidad'];
+            $arrSearch["modalidad"] = $data['modalidad'];
+            $arrSearch["carrera"] = $data['carrera'];*/
+            $arrSearch["periodo"] = $data['periodo'];            
+            $model_plan = $mod_periodo->consultarEstudianteplanifica($arrSearch);
+            return $this->render('planificacionestudiante-grid', [
+                        'model' => $model_plan,
+            ]);
+        }
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
             if (isset($data["getmodalidad"])) {

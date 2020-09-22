@@ -509,30 +509,21 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord {
         $con = \Yii::$app->db_academico;
         $con1 = \Yii::$app->db_asgard;
         $estado = 1;
-        /* if (isset($arrFiltro) && count($arrFiltro) > 0) {
-          $str_search .= "(per.per_pri_nombre like :profesor OR ";
-          $str_search .= "per.per_seg_nombre like :profesor OR ";
-          $str_search .= "per.per_pri_apellido like :profesor OR ";
-          $str_search .= "per.per_seg_nombre like :profesor )  AND ";
-          $str_search .= "asig.asi_nombre like :materia  AND ";
+        if (isset($arrFiltro) && count($arrFiltro) > 0) {
+            $str_search .= "(pers.per_pri_nombre like :estudiante OR ";
+            $str_search .= "pers.per_seg_nombre like :estudiante OR ";
+            $str_search .= "pers.per_pri_apellido like :estudiante OR ";
+            $str_search .= "pers.per_seg_nombre like :estudiante )  AND ";
 
-          if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
-          $str_search .= "r.rmtm_fecha_transaccion >= :fec_ini AND ";
-          $str_search .= "r.rmtm_fecha_transaccion <= :fec_fin AND ";
-          }
-          if ($arrFiltro['periodo'] != "" && $arrFiltro['periodo'] > 0) {
-          $str_search .= " h.paca_id = :periodo AND ";
-          }
-          if ($arrFiltro['estado'] != "0") {
-          $str_search .= " ifnull(m.rmar_tipo,'N') = :estadoM AND ";
-          }
-          }
-          if ($onlyData == false) {
-          $periodoacademico = 'h.paca_id as periodo, ';
-          $grupoperi = ',periodo';
-          } */
+            if ($arrFiltro['periodo'] != '0') {
+                $str_search .= " plan.pla_periodo_academico = :periodo AND ";
+            }
+        }
+        if ($onlyData == false) {
+            $idplanifica = 'plae.pla_id, ';
+        }
         $sql = "SELECT 
-                    plae.pla_id,
+                    $idplanifica
                     plae.per_id,
                     pers.per_cedula,
                     plae.pes_nombres,
@@ -541,7 +532,9 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord {
                 FROM " . $con->dbname . ".planificacion_estudiante plae
                 INNER JOIN " . $con->dbname . ".planificacion plan ON plan.pla_id = plae.pla_id
                 INNER JOIN " . $con1->dbname . ".persona pers ON pers.per_id = plae.per_id
-                WHERE plae.pes_estado = :estado AND
+                WHERE 
+                    $str_search
+                    plae.pes_estado = :estado AND
                     plae.pes_estado_logico = :estado AND
                     plan.pla_estado = :estado AND
                     plan.pla_estado_logico = :estado AND
@@ -550,27 +543,15 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord {
 
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
-        /* if (isset($arrFiltro) && count($arrFiltro) > 0) {
-          $search_cond = "%" . $arrFiltro["profesor"] . "%";
-          $comando->bindParam(":profesor", $search_cond, \PDO::PARAM_STR);
-          $fecha_ini = $arrFiltro["f_ini"] . " 00:00:00";
-          $fecha_fin = $arrFiltro["f_fin"] . " 23:59:59";
-          $materia = "%" . $arrFiltro["materia"] . "%";
-          $comando->bindParam(":materia", $materia, \PDO::PARAM_STR);
+        if (isset($arrFiltro) && count($arrFiltro) > 0) {
+            $search_cond = "%" . $arrFiltro["estudiante"] . "%";
+            $comando->bindParam(":estudiante", $search_cond, \PDO::PARAM_STR);
 
-          if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
-          $comando->bindParam(":fec_ini", $fecha_ini, \PDO::PARAM_STR);
-          $comando->bindParam(":fec_fin", $fecha_fin, \PDO::PARAM_STR);
-          }
-          if ($arrFiltro['periodo'] != "" && $arrFiltro['periodo'] > 0) {
-          $periodo = $arrFiltro["periodo"];
-          $comando->bindParam(":periodo", $periodo, \PDO::PARAM_INT);
-          }
-          if ($arrFiltro['estado'] != "0") {
-          $estadoM = $arrFiltro["estado"];
-          $comando->bindParam(":estadoM", $estadoM, \PDO::PARAM_STR);
-          }
-          } */
+            if ($arrFiltro['periodo'] != '0') {
+                $periodo = $arrFiltro["periodo"];
+                $comando->bindParam(":periodo", $periodo, \PDO::PARAM_STR);
+            }
+        }
         $resultData = $comando->queryAll();
         $dataProvider = new ArrayDataProvider([
             'key' => 'id',
