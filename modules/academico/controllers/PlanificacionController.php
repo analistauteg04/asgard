@@ -11,8 +11,8 @@ use app\modules\academico\models\RegistroConfiguracion;
 use app\modules\academico\models\PeriodoAcademicoMetIngreso;
 use app\modules\academico\models\UnidadAcademica;
 use app\modules\admision\models\Oportunidad;
-
 use app\models\Persona;
+use app\modules\academico\models\ModuloEstudio;
 use yii\helpers\ArrayHelper;
 use yii\data\ArrayDataProvider;
 use yii\base\Exception;
@@ -384,23 +384,44 @@ class PlanificacionController extends \app\components\CController {
 
     public function actionPlanificacionestudiante() {
         $emp_id = @Yii::$app->session->get("PB_idempresa");
-        $mod_periodo = new PeriodoAcademicoMetIngreso();
-        $periodo = $mod_periodo->consultarPeriodoAcademico();
+        $mod_periodo = new PlanificacionEstudiante();
+        $periodo = $mod_periodo->consultarPeriodoplanifica();
         $uni_aca_model = new UnidadAcademica();
+        $modestudio = new ModuloEstudio();
         $modalidad_model = new Modalidad();
         $modcanal = new Oportunidad();
-        $unidad_acad_data = $uni_aca_model->consultarUnidadAcademicas();        
+        $unidad_acad_data = $uni_aca_model->consultarUnidadAcademicas();
         $modalidad_data = $modalidad_model->consultarModalidad($unidad_acad_data[0]["id"], $emp_id);
         $academic_study_data = $modcanal->consultarCarreraModalidad($unidad_acad_data[0]["id"], $modalidad_data[0]["id"]);
+        $model_plan = $mod_periodo->consultarEstudianteplanifica();
         $data = Yii::$app->request->get();
-        if ($data['PBgetFilter']) {
-            
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+            if (isset($data["getmodalidad"])) {
+                if (($data["nint_id"] == 1) or ( $data["nint_id"] == 2)) {
+                    $modalidad = $modalidad_model->consultarModalidad($data["nint_id"], $data["empresa_id"]);
+                } else {
+                    $modalidad = $modestudio->consultarModalidadModestudio();
+                }
+                $message = array("modalidad" => $modalidad);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+            }
+            if (isset($data["getcarrera"])) {
+                if (($data["unidada"] == 1) or ( $data["unidada"] == 2)) {
+                    $carrera = $modcanal->consultarCarreraModalidad($data["unidada"], $data["moda_id"]);
+                } else {
+                    $carrera = $modestudio->consultarCursoModalidad($data["unidada"], $data["moda_id"]); // tomar id de impresa
+                }
+                $message = array("carrera" => $carrera);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+            }
         }
         return $this->render('planificacionestudiante', [
-                   'arr_unidad' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Todas"]],$unidad_acad_data), "id", "name"),
-                   'arr_modalidad' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Todas"]],$modalidad_data), "id", "name"),
-                   'arr_carrera' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Todas"]],$academic_study_data), "id", "name"),
-                   'arr_periodo' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Todas"]], $periodo), "id", "name"), 
+                    'arr_unidad' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Todas"]], $unidad_acad_data), "id", "name"),
+                    'arr_modalidad' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Todas"]], $modalidad_data), "id", "name"),
+                    'arr_carrera' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Todas"]], $academic_study_data), "id", "name"),
+                    'arr_periodo' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Todas"]], $periodo), "id", "name"),
+                    'model' => $model_plan,
         ]);
     }
 

@@ -22,36 +22,31 @@ admision::registerTranslations();
             [
                 'attribute' => 'DNI',
                 'header' => Yii::t("formulario", "DNI 1"),
-                'value' => 'nombres',
-            ],  
+                'value' => 'per_cedula',
+            ],              
             [
-                'class' => 'yii\grid\ActionColumn',
+                'attribute' => 'Estudiante',
                 'header' => Yii::t("formulario", "Student"),
+                'value' => 'pes_nombres',
+            ],  
+                            [
+                'class' => 'yii\grid\ActionColumn',
+                'header' => Yii::t("crm", "Carrera"),
                 'template' => '{view}',
                 'buttons' => [
                     'view' => function ($url, $model) {
-                        if (strlen($model['materia']) > 30) {
+                        if (strlen($model['pes_carrera']) > 30) {
                             $texto = '...';
                         }
-                        return Html::a('<span>' . substr($model['materia'], 0, 30) . $texto . '</span>', "javascript:", ["data-toggle" => "tooltip", "title" => $model['materia']]);
+                        return Html::a('<span>' . substr($model['pes_carrera'], 0, 30) . $texto . '</span>', "javascript:", ["data-toggle" => "tooltip", "title" => $model['pes_carrera']]);
                     },
                 ],
             ],
             [
-                'attribute' => 'Carrera',
-                'header' => Yii::t("formulario", "Date"),
-                'value' => 'fecha',
-            ],                       
-            [
                 'attribute' => 'periodo',
                 'header' => Yii::t("formulario", "Period"),
-                'value' => 'ip',
-            ],
-            [
-                'attribute' => 'ips',
-                'header' => academico::t("Academico", "End IP"),
-                'value' => 'ip_salida',
-            ],
+                'value' => 'pla_periodo_academico',
+            ],            
         ],
     ])
     ?>

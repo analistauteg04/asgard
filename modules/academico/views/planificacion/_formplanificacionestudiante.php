@@ -18,11 +18,11 @@ use app\modules\admision\Module;
         <div class="form-group">
             <label for="lbl_unidad" class="col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= Yii::t("crm", "Academic Unit"); ?></label>
             <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
-                <?= Html::dropDownList("cmb_unidad", 0, $arr_unidad, ["class" => "form-control", "id" => "cmb_unidad"]) ?>
+                <?= Html::dropDownList("cmb_unidades", 0, $arr_unidad, ["class" => "form-control", "id" => "cmb_unidades"]) ?>
             </div>   
             <label for="lbl_modalidad" class="col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= Yii::t("formulario", "Mode"); ?></label>
             <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
-                <?= Html::dropDownList("cmb_modalidad", 0, $arr_modalidad, ["class" => "form-control", "id" => "cmb_modalidad"]) ?>
+                <?= Html::dropDownList("cmb_modalidades", 0, $arr_modalidad, ["class" => "form-control", "id" => "cmb_modalidades"]) ?>
             </div>  
         </div>        
     </div>  
@@ -30,7 +30,7 @@ use app\modules\admision\Module;
         <div class="form-group">
             <label for="lbl_carrera" class="col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= Yii::t("crm", "Carrera"); ?></label>
             <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
-                <?= Html::dropDownList("cmb_carrera", 0, $arr_carrera, ["class" => "form-control", "id" => "cmb_carrera"]) ?>
+                <?= Html::dropDownList("cmb_carreras", 0, $arr_carrera, ["class" => "form-control", "id" => "cmb_carreras"]) ?>
             </div>  
             <label for="lbl_periodo" class="col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= Yii::t("formulario", "Period"); ?></label>
             <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
@@ -41,7 +41,7 @@ use app\modules\admision\Module;
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">  
         <div class="col-sm-8"></div>
         <div class="col-sm-2">                
-            <a id="btn_buscarMarcacion" href="javascript:" class="btn btn-primary btn-block"> <?= Yii::t("formulario", "Search") ?></a>
+            <a id="btn_buscarPlanesrudiante" href="javascript:" class="btn btn-primary btn-block"> <?= Yii::t("formulario", "Search") ?></a>
         </div>
     </div>
 </div></br>
