@@ -44,6 +44,7 @@
 
 return [
     "Actions" => "Acciones",
+    "Approbe" => "Aprobar",
     "Back" => "Regresar",
     "Clear" => "Limpiar",
     "Create" => "Crear",

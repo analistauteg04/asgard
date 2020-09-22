@@ -112,8 +112,8 @@ class DistributivoAcademico extends \yii\db\ActiveRecord {
      */
     public function getMod() {
         return $this->hasOne(Modalidad::className(), ['mod_id' => 'mod_id']);
-    }
-
+    }    
+    
     public function getListadoDistributivo($search = NULL, $modalidad = NULL, $asignatura = NULL, $jornada = NULL, $unidadAcademico = NULL, $periodoAcademico = NULL, $onlyData = false){
         $con_academico = \Yii::$app->db_academico;
         $con_db = \Yii::$app->db;
