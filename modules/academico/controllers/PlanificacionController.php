@@ -502,4 +502,10 @@ class PlanificacionController extends \app\components\CController {
         return;
     }
 
+    public function actionView() {
+        return $this->render('view', [
+            
+        ]);
+    }
+
 }
