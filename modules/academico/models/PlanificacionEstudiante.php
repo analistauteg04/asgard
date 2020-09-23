@@ -514,7 +514,12 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord {
             $str_search .= "pers.per_seg_nombre like :estudiante OR ";
             $str_search .= "pers.per_pri_apellido like :estudiante OR ";
             $str_search .= "pers.per_seg_nombre like :estudiante )  AND ";
-
+            
+                     
+            if ($arrFiltro['modalidad'] > 0) {
+                $str_search .= " plan.mod_id = :mod_id AND ";
+            }
+            
             if ($arrFiltro['periodo'] != '0') {
                 $str_search .= " plan.pla_periodo_academico = :periodo AND ";
             }
@@ -551,6 +556,10 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord {
             if ($arrFiltro['periodo'] != '0') {
                 $periodo = $arrFiltro["periodo"];
                 $comando->bindParam(":periodo", $periodo, \PDO::PARAM_STR);
+            }
+            if ($arrFiltro['modalidad'] > 0) {
+                $modalidad = $arrFiltro["modalidad"];
+                $comando->bindParam(":mod_id", $modalidad, \PDO::PARAM_INT);
             }
         }
         $resultData = $comando->queryAll();

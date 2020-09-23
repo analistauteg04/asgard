@@ -397,9 +397,9 @@ class PlanificacionController extends \app\components\CController {
         $data = Yii::$app->request->get();
         if ($data['PBgetFilter']) {
             $arrSearch["estudiante"] = $data['estudiante'];
-            /* $arrSearch["unidad"] = $data['unidad'];
-              $arrSearch["modalidad"] = $data['modalidad'];
-              $arrSearch["carrera"] = $data['carrera']; */
+            $arrSearch["unidad"] = $data['unidad'];
+            $arrSearch["modalidad"] = $data['modalidad'];
+            /* $arrSearch["carrera"] = $data['carrera']; */
             $arrSearch["periodo"] = $data['periodo'];
             $model_plan = $mod_periodo->consultarEstudianteplanifica($arrSearch);
             return $this->render('planificacionestudiante-grid', [
@@ -453,9 +453,9 @@ class PlanificacionController extends \app\components\CController {
         $mod_periodo = new PlanificacionEstudiante();
         $data = Yii::$app->request->get();
         $arrSearch["estudiante"] = $data['estudiante'];
-        /* $arrSearch["unidad"] = $data['unidad'];
-          $arrSearch["modalidad"] = $data['modalidad'];
-          $arrSearch["carrera"] = $data['carrera']; */
+        $arrSearch["unidad"] = $data['unidad'];
+        $arrSearch["modalidad"] = $data['modalidad'];
+        /*$arrSearch["carrera"] = $data['carrera']; */
         $arrSearch["periodo"] = $data['periodo'];
         $arrData = array();
         if (empty($arrSearch)) {
@@ -480,13 +480,12 @@ class PlanificacionController extends \app\components\CController {
         $mod_periodo = new PlanificacionEstudiante();
         $data = Yii::$app->request->get();
         $arrSearch["estudiante"] = $data['estudiante'];
-        /* $arrSearch["unidad"] = $data['unidad'];
-          $arrSearch["modalidad"] = $data['modalidad'];
-          $arrSearch["carrera"] = $data['carrera']; */
+        $arrSearch["unidad"] = $data['unidad'];
+        $arrSearch["modalidad"] = $data['modalidad'];
+        /* $arrSearch["carrera"] = $data['carrera']; */
         $arrSearch["periodo"] = $data['periodo'];
         $arrData = array();
         if (empty($arrSearch)) {
-            //$arrData = $mod_marcacion->consultarHorarioMarcacion(array(), true);
             $arrData = $mod_periodo->consultarEstudianteplanifica(array(), true);
         } else {
             $arrData = $mod_periodo->consultarEstudianteplanifica($arrSearch, true);
@@ -504,11 +503,10 @@ class PlanificacionController extends \app\components\CController {
 
     public function actionView() {
         return $this->render('view', [
-            
         ]);
     }
-    
-     public function actionDeleteplanest() {
+
+    public function actionDeleteplanest() {
         $mod_planestudiante = new PlanificacionEstudiante();
         $usu_autenticado = @Yii::$app->session->get("PB_iduser");
         $estado = 0;
