@@ -507,5 +507,48 @@ class PlanificacionController extends \app\components\CController {
             
         ]);
     }
+    
+     public function actionDeleteplanest() {
+        $mod_planestudiante = new PlanificacionEstudiante();
+        $usu_autenticado = @Yii::$app->session->get("PB_iduser");
+        $estado = 0;
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+            $pla_id = $data["pla_id"];
+            $per_id = $data["per_id"];
+            $fecha = date(Yii::$app->params["dateTimeByDefault"]);
+            $con = \Yii::$app->db_academico;
+            $transaction = $con->beginTransaction();
+            try {
+                $resp_estado = $mod_planestudiante->eliminarPlanificacionest($pla_id, $per_id, $usu_autenticado, $estado, $fecha);
+                if ($resp_estado) {
+                    $exito = '1';
+                }
+                if ($exito) {
+                    //Realizar accion
+                    $transaction->commit();
+                    $message = array(
+                        "wtmessage" => Yii::t("notificaciones", "Se ha eliminado la planificación del estudiante."),
+                        "title" => Yii::t('jslang', 'Success'),
+                    );
+                    return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                } else {
+                    $transaction->rollback();
+                    $message = array(
+                        "wtmessage" => Yii::t("notificaciones", "Error al eliminar planificación del estudiante. "),
+                        "title" => Yii::t('jslang', 'Error'),
+                    );
+                    return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), false, $message);
+                }
+            } catch (Exception $ex) {
+                $transaction->rollback();
+                $message = array(
+                    "wtmessage" => Yii::t("notificaciones", "Error al realizar la acción. "),
+                    "title" => Yii::t('jslang', 'Success'),
+                );
+                return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), false, $message);
+            }
+        }
+    }
 
 }

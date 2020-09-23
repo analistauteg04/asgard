@@ -367,10 +367,10 @@ function deleteItem(id) {
 }
 
 function actualizarGridPlanest() {
-    var estudiante = $('#txt_buscarDataPlanifica').val();    
+    var estudiante = $('#txt_buscarDataPlanifica').val();
     /*var unidad = $('#cmb_unidades option:selected').val();
-    var modalidad = $('#cmb_modalidades option:selected').val();
-    var carrera = $('#cmb_carreras option:selected').val();*/
+     var modalidad = $('#cmb_modalidades option:selected').val();
+     var carrera = $('#cmb_carreras option:selected').val();*/
     var periodo = $('#cmb_periodo option:selected').val();
     //Buscar almenos una clase con el nombre para ejecutar
     if (!$(".blockUI").length) {
@@ -381,19 +381,52 @@ function actualizarGridPlanest() {
 }
 
 function exportExcelplanifica() {
-    var estudiante = $('#txt_buscarDataPlanifica').val();    
+    var estudiante = $('#txt_buscarDataPlanifica').val();
     /*var unidad = $('#cmb_unidades option:selected').val();
-    var modalidad = $('#cmb_modalidades option:selected').val();
-    var carrera = $('#cmb_carreras option:selected').val();*/
+     var modalidad = $('#cmb_modalidades option:selected').val();
+     var carrera = $('#cmb_carreras option:selected').val();*/
     var periodo = $('#cmb_periodo option:selected').val();
     window.location.href = $('#txth_base').val() + "/academico/planificacion/expexcelplanifica?estudiante=" + estudiante + /*"&unidad="+ unidad + '&modalidad='+ modalidad + "&carrera=" +*/ "&periodo=" + periodo;
 }
 
 function exportPdfplanifica() {
-    var estudiante = $('#txt_buscarDataPlanifica').val();    
+    var estudiante = $('#txt_buscarDataPlanifica').val();
     /*var unidad = $('#cmb_unidades option:selected').val();
-    var modalidad = $('#cmb_modalidades option:selected').val();
-    var carrera = $('#cmb_carreras option:selected').val();*/
+     var modalidad = $('#cmb_modalidades option:selected').val();
+     var carrera = $('#cmb_carreras option:selected').val();*/
     var periodo = $('#cmb_periodo option:selected').val();
     window.location.href = $('#txth_base').val() + "/academico/planificacion/exppdfplanifica?pdf=1&estudiante=" + estudiante + /*"&unidad="+ unidad + '&modalidad='+ modalidad + "&carrera=" + carrera + */ "&periodo=" + periodo;
+}
+function accion(plaid, perid) {
+    var link = $('#txth_base').val() + "/academico/planificacion/deleteplanest";
+    var arrParams = new Object();
+    arrParams.pla_id = plaid;
+    arrParams.per_id = perid;
+    if (!validateForm()) {
+        requestHttpAjax(link, arrParams, function (response) {
+            showAlert(response.status, response.label, response.message);
+            if (!response.error) {
+                setTimeout(function () {
+                    window.location.href = $('#txth_base').val() + "/academico/planificacion/planificacionestudiante";
+                }, 3000);
+            }
+        }, true);
+    }
+}
+
+function deleteplanestudiante(plaid, perid) {
+    var mensj = "¿Seguro desea eliminar la planificación?";
+    var messagePB = new Object();
+    messagePB.wtmessage = mensj;
+    messagePB.title = "Eliminar";
+    var objAccept = new Object();
+    objAccept.id = "btnid2del";
+    objAccept.class = "btn-primary";
+    objAccept.value = "Aceptar";
+    objAccept.callback = 'accion';
+    var params = new Array(plaid, perid);
+    objAccept.paramCallback = params;
+    messagePB.acciones = new Array();
+    messagePB.acciones[0] = objAccept;
+    showAlert("warning", "warning", messagePB);
 }
