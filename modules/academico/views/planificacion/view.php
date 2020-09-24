@@ -24,7 +24,7 @@ academico::registerTranslations();
                 </div>   
                 <label for="lbl_modalidad" class="col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= Yii::t("formulario", "Mode"); ?></label>
                 <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
-                    <?= Html::dropDownList("cmb_modalidades", 0, $arr_modalidad, ["class" => "form-control", "id" => "cmb_modalidades",  "Disabled" => "disabled"]) ?>
+                    <?= Html::dropDownList("cmb_modalidades", $arr_cabecera["mod_id"], $arr_modalidad, ["class" => "form-control", "id" => "cmb_modalidades",  "Disabled" => "disabled"]) ?>
                 </div>  
             </div>        
         </div>  
@@ -32,11 +32,11 @@ academico::registerTranslations();
             <div class="form-group">
                 <label for="lbl_carrera" class="col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= Yii::t("crm", "Carrera"); ?></label>
                 <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
-                    <?= Html::dropDownList("cmb_carreras", 0, $arr_carrera, ["class" => "form-control", "id" => "cmb_carreras", "Disabled" => "disabled"]) ?>
+                    <?= Html::dropDownList("cmb_carreras", 1, $arr_carrera, ["class" => "form-control", "id" => "cmb_carreras", "Disabled" => "disabled"]) ?>
                 </div>  
                 <label for="lbl_periodo" class="col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= Yii::t("formulario", "Period"); ?></label>
                 <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
-                    <?= Html::dropDownList("cmb_periodo", 0, $arr_periodo, ["class" => "form-control", "id" => "cmb_periodo",  "Disabled" => "disabled"]) ?>
+                    <?= Html::dropDownList("cmb_periodo", $arr_cabecera["pla_periodo_academico"], $arr_periodo, ["class" => "form-control", "id" => "cmb_periodo",  "Disabled" => "disabled"]) ?>
                 </div>                  
             </div>        
         </div>    

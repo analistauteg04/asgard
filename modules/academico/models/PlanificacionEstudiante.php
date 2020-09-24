@@ -695,7 +695,7 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord {
         //$comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":pla_id", $pla_id, \PDO::PARAM_INT);
         $comando->bindParam(":per_id", $per_id, \PDO::PARAM_INT);
-        
+
         $resultData = $comando->queryall();
         \app\models\Utilities::putMessageLogFile($resultData);
         $dataProvider = new ArrayDataProvider([
@@ -709,6 +709,31 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord {
             ],
         ]);
         return $dataProvider;
+    }
+
+    /**
+     * Function Consultar datos de cabecera para palnificacion.
+     * @author  Giovanni Vergara <analistadesarrollo01@uteg.edu.ec>;
+     * @property       
+     * @return  
+     */
+    public function consultarCabeceraplanifica($pla_id, $per_id) {
+        $con = \Yii::$app->db_academico;
+        //$estado = 1;
+
+        $sql = "SELECT plan.mod_id, 
+                       plan.pla_periodo_academico,
+                       plae.pes_carrera
+                FROM " . $con->dbname . ".planificacion plan
+                INNER JOIN " . $con->dbname . ".planificacion_estudiante plae ON plae.pla_id = plan.pla_id
+                WHERE plan.pla_id = :pla_id and plae.per_id = :per_id";
+
+        $comando = $con->createCommand($sql);
+        //$comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":pla_id", $pla_id, \PDO::PARAM_INT);
+        $comando->bindParam(":per_id", $per_id, \PDO::PARAM_INT);
+        $resultData = $comando->queryOne();
+        return $resultData;
     }
 
 }

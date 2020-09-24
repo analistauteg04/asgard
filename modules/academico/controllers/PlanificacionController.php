@@ -508,16 +508,16 @@ class PlanificacionController extends \app\components\CController {
         $mod_periodo = new PlanificacionEstudiante();
         $periodo = $mod_periodo->consultarPeriodoplanifica();
         $uni_aca_model = new UnidadAcademica();
-        $modestudio = new ModuloEstudio();
+        //$modestudio = new ModuloEstudio();
         $modalidad_model = new Modalidad();
         $modcanal = new Oportunidad();
+        $mod_cabecera = $mod_periodo->consultarCabeceraplanifica($pla_id, $per_id);
         $unidad_acad_data = $uni_aca_model->consultarUnidadAcademicas();
         $modalidad_data = $modalidad_model->consultarModalidad($unidad_acad_data[0]["id"], $emp_id);
-        $academic_study_data = $modcanal->consultarCarreraModalidad($unidad_acad_data[0]["id"], $modalidad_data[0]["id"]);
-        //$mod_cabecera = $mod_periodo->consultarCabeceraplanifica($pla_id,$per_id);
+        $academic_study_data = $modcanal->consultarCarreraModalidad($unidad_acad_data[0]["id"], $mod_cabecera["mod_id"]);
         $mod_detalle = $mod_periodo->consultarDetalleplanifica($pla_id, $per_id);
         return $this->render('view', [
-                    //'arr_cabecera' => $mod_cabecera,
+                    'arr_cabecera' => $mod_cabecera,
                     'model_detalle' => $mod_detalle,
                     'arr_unidad' => ArrayHelper::map($unidad_acad_data, "id", "name"),
                     'arr_modalidad' => ArrayHelper::map($modalidad_data, "id", "name"),
