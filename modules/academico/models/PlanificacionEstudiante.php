@@ -514,12 +514,12 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord {
             $str_search .= "pers.per_seg_nombre like :estudiante OR ";
             $str_search .= "pers.per_pri_apellido like :estudiante OR ";
             $str_search .= "pers.per_seg_nombre like :estudiante )  AND ";
-            
-                     
+
+
             if ($arrFiltro['modalidad'] > 0) {
                 $str_search .= " plan.mod_id = :mod_id AND ";
             }
-            
+
             if ($arrFiltro['periodo'] != '0') {
                 $str_search .= " plan.pla_periodo_academico = :periodo AND ";
             }
@@ -618,6 +618,97 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord {
                 $trans->rollback();
             return FALSE;
         }
+    }
+
+    /**
+     * Function consultarDetalleplanifica
+     * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>
+     * @param   
+     * @return  $resultData (información de los paralelos por período.)
+     */
+    public function consultarDetalleplanifica($pla_id, $per_id) {
+        $con = \Yii::$app->db_academico;
+        //$estado = 1;
+        //TRATAR DE OPTIMIZAR ESTA CONSULTA AL FINAL
+        $sql = "SELECT pes_mat_b1_h1_cod as asignatura, pes_jornada, 'Bloque 1', moda.mod_nombre as modalidad, 'Hora 1' 
+                    FROM " . $con->dbname . ".planificacion_estudiante ples
+                    INNER JOIN " . $con->dbname . ".modalidad moda ON  moda.mod_id = ples.pes_mod_b1_h1
+                    where pla_id = :pla_id and per_id = :per_id
+                    UNION
+                    SELECT pes_mat_b1_h2_cod as asignatura, pes_jornada, 'Bloque 1', moda.mod_nombre as modalidad,'Hora 2' 
+                    FROM " . $con->dbname . ".planificacion_estudiante ples
+                    INNER JOIN " . $con->dbname . ".modalidad moda ON  moda.mod_id = ples.pes_mod_b1_h2
+                    where pla_id = :pla_id and per_id = :per_id
+                    UNION
+                    SELECT pes_mat_b1_h3_cod as asignatura, pes_jornada, 'Bloque 1', moda.mod_nombre as modalidad,'Hora 3' 
+                    FROM " . $con->dbname . ".planificacion_estudiante ples
+                    INNER JOIN " . $con->dbname . ".modalidad moda ON  moda.mod_id = ples.pes_mod_b1_h3
+                    where pla_id = :pla_id and per_id = :per_id
+                    UNION
+                    SELECT pes_mat_b1_h4_cod as asignatura, pes_jornada, 'Bloque 1', moda.mod_nombre as modalidad,'Hora 4' 
+                    FROM " . $con->dbname . ".planificacion_estudiante ples
+                    INNER JOIN " . $con->dbname . ".modalidad moda ON  moda.mod_id = ples.pes_mod_b1_h4
+                    where pla_id = :pla_id and per_id = :per_id
+                    UNION
+                    SELECT pes_mat_b1_h5_cod as asignatura, pes_jornada, 'Bloque 1', moda.mod_nombre as modalidad,'Hora 5' 
+                    FROM " . $con->dbname . ".planificacion_estudiante ples
+                    INNER JOIN " . $con->dbname . ".modalidad moda ON  moda.mod_id = ples.pes_mod_b1_h5
+                    where pla_id = :pla_id and per_id = :per_id
+                    UNION
+                    SELECT pes_mat_b1_h6_cod as asignatura, pes_jornada, 'Bloque 1', moda.mod_nombre as modalidad,'Hora 6' 
+                    FROM " . $con->dbname . ".planificacion_estudiante ples
+                    INNER JOIN " . $con->dbname . ".modalidad moda ON  moda.mod_id = ples.pes_mod_b1_h6
+                    where pla_id = :pla_id and per_id = :per_id
+                    --  bloque 2
+                    UNION
+                    SELECT pes_mat_b2_h1_cod as asignatura, pes_jornada, 'Bloque 2', moda.mod_nombre as modalidad, 'Hora 1' 
+                    FROM " . $con->dbname . ".planificacion_estudiante ples
+                    INNER JOIN " . $con->dbname . ".modalidad moda ON  moda.mod_id = ples.pes_mod_b2_h1
+                    where pla_id = :pla_id and per_id = :per_id
+                    UNION
+                    SELECT pes_mat_b2_h2_cod as asignatura, pes_jornada, 'Bloque 2', moda.mod_nombre as modalidad,'Hora 2' 
+                    FROM " . $con->dbname . ".planificacion_estudiante ples
+                    INNER JOIN " . $con->dbname . ".modalidad moda ON  moda.mod_id = ples.pes_mod_b2_h2
+                    where pla_id = :pla_id and per_id = :per_id
+                    UNION
+                    SELECT pes_mat_b2_h3_cod as asignatura, pes_jornada, 'Bloque 2', moda.mod_nombre as modalidad,'Hora 3' 
+                    FROM " . $con->dbname . ".planificacion_estudiante ples
+                    INNER JOIN " . $con->dbname . ".modalidad moda ON  moda.mod_id = ples.pes_mod_b2_h3
+                    where pla_id = :pla_id and per_id = :per_id
+                    UNION
+                    SELECT pes_mat_b2_h4_cod as asignatura, pes_jornada, 'Bloque 1', moda.mod_nombre as modalidad,'Hora 4' 
+                    FROM " . $con->dbname . ".planificacion_estudiante ples
+                    INNER JOIN " . $con->dbname . ".modalidad moda ON  moda.mod_id = ples.pes_mod_b2_h4
+                    where pla_id = :pla_id and per_id = :per_id
+                    UNION
+                    SELECT pes_mat_b2_h5_cod as asignatura, pes_jornada, 'Bloque 2', moda.mod_nombre as modalidad,'Hora 5' 
+                    FROM " . $con->dbname . ".planificacion_estudiante ples
+                    INNER JOIN " . $con->dbname . ".modalidad moda ON  moda.mod_id = ples.pes_mod_b2_h5
+                    where pla_id = :pla_id and per_id = :per_id
+                    UNION
+                    SELECT pes_mat_b2_h6_cod as asignatura, pes_jornada, 'Bloque 2', moda.mod_nombre as modalidad,'Hora 6' 
+                    FROM " . $con->dbname . ".planificacion_estudiante ples
+                    INNER JOIN " . $con->dbname . ".modalidad moda ON  moda.mod_id = ples.pes_mod_b2_h6
+                    where pla_id = :pla_id and per_id = :per_id";
+
+        $comando = $con->createCommand($sql);
+        //$comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":pla_id", $pla_id, \PDO::PARAM_INT);
+        $comando->bindParam(":per_id", $per_id, \PDO::PARAM_INT);
+        
+        $resultData = $comando->queryall();
+        \app\models\Utilities::putMessageLogFile($resultData);
+        $dataProvider = new ArrayDataProvider([
+            'key' => 'id',
+            'allModels' => $resultData,
+            'pagination' => [
+                'pageSize' => Yii::$app->params["pageSize"],
+            ],
+            'sort' => [
+                'attributes' => [],
+            ],
+        ]);
+        return $dataProvider;
     }
 
 }
