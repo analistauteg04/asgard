@@ -227,8 +227,8 @@ class ModuloEstudio extends \app\modules\academico\components\CActiveRecord {
                 WHERE me.mest_estado = :estado
                       and me.mest_estado_logico = :estado
                       and m.mod_estado = :estado
-                      and m.mod_estado_logico = :estado;
-                ORDER BY name asc";
+                      and m.mod_estado_logico = :estado
+                ORDER BY name asc;";
 
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);

@@ -35,7 +35,12 @@ academico::registerTranslations();
                 'attribute' => 'Nombres',
                 'header' => academico::t("Academico", "Teacher"),
                 'value' => 'Nombres',
-            ],                             
+            ],  
+            [
+                'attribute' => 'Estado',
+                'header' => Yii::t("formulario", "Status"),
+                'value' => 'estado',
+            ],    
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => '',

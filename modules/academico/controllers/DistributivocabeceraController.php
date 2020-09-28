@@ -24,7 +24,15 @@ academico::registerTranslations();
 admision::registerTranslations();
 
 class DistributivocabeceraController extends \app\components\CController {
-
+    private function estados() {
+        return [
+            '0' => Yii::t("formulario", "Todos"),
+            '1' => Yii::t("formulario", "Por aprobar"),
+            '2' => Yii::t("formulario", "Aprobado"),
+            '3' => Yii::t("formulario", "No aprobado"),            
+        ];
+    }
+    
     public function actionIndex() {
         $per_id = @Yii::$app->session->get("PB_perid");        
         $model = NULL;
@@ -47,7 +55,8 @@ class DistributivocabeceraController extends \app\components\CController {
         }        
         $arr_periodo = $mod_periodo->consultarPeriodoAcademico();
         return $this->render('index', [                    
-                    'mod_periodo' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_periodo), "id", "name"),                    
+                    'mod_periodo' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_periodo), "id", "name"),  
+                    'arrEstados' => $this->estados(),
                     'model' => $model,                    
         ]);
     }

@@ -44,6 +44,7 @@ return [
     "Failed" => "Reprobadas",  
     "Freelance practical work" => "Trabajo práctivo independiente",
     "He enrolled in the same career that applied the income" => "Se matriculó en la misma carrera que aplicó el ingreso",
+    "Hour" => "Hora",
     "Hour start date" => "Hora inicio",
     "Hour end date" => "Hora fin",
     "Hour enter" => "Hora Entrada",

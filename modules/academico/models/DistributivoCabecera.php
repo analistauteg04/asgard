@@ -120,7 +120,12 @@ class DistributivoCabecera extends \yii\db\ActiveRecord
                     da.dcab_id AS Id, 
                     CONCAT(pe.per_pri_nombre, ' ', pe.per_pri_apellido) AS Nombres,
                     pe.per_cedula AS Cedula,                    
-                    ifnull(CONCAT(blq.baca_anio,' (',blq.baca_nombre,'-',sem.saca_nombre,')'),blq.baca_anio) AS Periodo
+                    ifnull(CONCAT(blq.baca_anio,' (',blq.baca_nombre,'-',sem.saca_nombre,')'),blq.baca_anio) AS Periodo,                    
+                    CASE
+                        WHEN da.dcab_estado_aprobacion = 1 THEN 'Por aprobar'
+                        WHEN da.dcab_estado_aprobacion = 2 THEN 'Aprobado'
+                        ELSE 'No Aprobado'
+                    END AS estado
                    
                 FROM 
                     " . $con_academico->dbname . ".distributivo_cabecera AS da                     

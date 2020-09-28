@@ -1,22 +1,67 @@
-$(document).ready(function() {
-    $('#btn_buscarMarcacion').click(function() {
+$(document).ready(function () {
+    $('#btn_buscarMarcacion').click(function () {
         actualizarGridMarcacion();
     });
 
-    $('#btn_cargarDocumento').click(function() {
+    $('#btn_cargarDocumento').click(function () {
         cargarDocumento();
     });
 
-    $('#btn_buscarRegConf').click(function() {
+    $('#btn_buscarRegConf').click(function () {
         actualizarGridRegistroConf();
     });
+    $('#btn_buscarPlanestudiante').click(function () {
+        actualizarGridPlanest();
+    });
+    /************ planificacion x estudiante **********************************/
+    $('#cmb_unidades').change(function () {
+        var link = $('#txth_base').val() + "/academico/planificacion/planificacionestudiante";
+        var arrParams = new Object();
+        arrParams.nint_id = $(this).val();
+        arrParams.getmodalidad = true;
+        arrParams.empresa_id = 1;
+        requestHttpAjax(link, arrParams, function (response) {
+            if (response.status == "OK") {
+                data = response.message;
+                setComboDataselect(data.modalidad, "cmb_modalidades", "Todos");
+                var arrParams = new Object();
+                if (data.modalidad.length > 0) {
+                    arrParams.unidada = $('#cmb_unidades').val();
+                    arrParams.moda_id = data.modalidad[0].id;
+                    arrParams.empresa_id = 1;
+                    arrParams.getcarrera = true;
+                    requestHttpAjax(link, arrParams, function (response) {
+                        if (response.status == "OK") {
+                            data = response.message;
+                            setComboDataselect(data.carrera, "cmb_carreras", "Todos");
+                        }
+                    }, true);
+                }
+            }
+        }, true);
+    });
+    $('#cmb_modalidades').change(function () {
+        var link = $('#txth_base').val() + "/academico/planificacion/planificacionestudiante";
+        var arrParams = new Object();
+        arrParams.unidada = $('#cmb_unidades').val();
+        arrParams.moda_id = $(this).val();
+        arrParams.empresa_id = 1;
+        arrParams.getcarrera = true;
+        requestHttpAjax(link, arrParams, function (response) {
+            if (response.status == "OK") {
+                data = response.message;
+                setComboDataselect(data.carrera, "cmb_carreras", "Todos");
+            }
+        }, true);
+    });
+    /*************************************************************************/
 
-    $('#cmb_unidad').change(function() {
+    $('#cmb_unidad').change(function () {
         var link = $('#txth_base').val() + "/academico/marcacion/listarhorario";
         var arrParams = new Object();
         arrParams.uaca_id = $(this).val();
         arrParams.getmodalidad = true;
-        requestHttpAjax(link, arrParams, function(response) {
+        requestHttpAjax(link, arrParams, function (response) {
             if (response.status == "OK") {
                 data = response.message;
                 setComboDataselect(data.modalidad, "cmb_modalidad", "Todos");
@@ -24,7 +69,7 @@ $(document).ready(function() {
         }, true);
     });
 
-    $('#cmb_modalidad').change(function() {
+    $('#cmb_modalidad').change(function () {
         if ($(this).val() == 4 || $(this).val() == 1) {
             $('#divFechasDistancia').css('display', 'block');
         } else {
@@ -32,15 +77,15 @@ $(document).ready(function() {
         }
     });
 
-    $('#btn_buscarHorario').click(function() {
+    $('#btn_buscarHorario').click(function () {
         actualizarGridHorario();
     });
 
-    $('#btn_buscarNoMarcacion').click(function() {
+    $('#btn_buscarNoMarcacion').click(function () {
         cargarNoMarcadas();
     });
 
-    $('#cmb_per_academico').change(function() {
+    $('#cmb_per_academico').change(function () {
         var arrParams2 = new Object();
         arrParams2.PBgetFilter = true;
         arrParams2.pla_periodo_academico = $("#cmb_per_academico").val();
@@ -49,7 +94,7 @@ $(document).ready(function() {
         $("#grid_planificaciones_list").PbGridView("applyFilterData", arrParams2);
     });
 
-    $('#cmb_modalidad').change(function() {
+    $('#cmb_modalidad').change(function () {
         var arrParams2 = new Object();
         arrParams2.PBgetFilter = true;
         arrParams2.pla_periodo_academico = $("#cmb_per_academico").val();
@@ -87,10 +132,10 @@ function Marcacion(hape_id, horario, accion, dia, prof_id) {
     arrParams.dia = dia;
     arrParams.profesor = prof_id;
     if (!validateForm()) {
-        requestHttpAjax(link, arrParams, function(response) {
+        requestHttpAjax(link, arrParams, function (response) {
             showAlert(response.status, response.label, response.message);
             if (!response.error) {
-                setTimeout(function() {
+                setTimeout(function () {
                     window.location.href = $('#txth_base').val() + "/academico/marcacion/marcacion";
                 }, 5000);
             }
@@ -108,7 +153,7 @@ function actualizarGridMarcacion() {
     //Buscar almenos una clase con el nombre para ejecutar
     if (!$(".blockUI").length) {
         showLoadingPopup();
-        $('#PbMarcacion').PbGridView('applyFilterData', { 'profesor': profesor, 'materia': materia, 'f_ini': f_ini, 'f_fin': f_fin, 'periodo': periodo });
+        $('#PbMarcacion').PbGridView('applyFilterData', {'profesor': profesor, 'materia': materia, 'f_ini': f_ini, 'f_fin': f_fin, 'periodo': periodo});
         setTimeout(hideLoadingPopup, 2000);
     }
 }
@@ -141,13 +186,13 @@ function cargarDocumento() {
     arrParams.fechaFin = $('#dtp_pla_fecha_fin').val();
     arrParams.modalidad = $('#cmb_moda').val();
     if (!validateForm()) {
-        requestHttpAjax(link, arrParams, function(response) {
+        requestHttpAjax(link, arrParams, function (response) {
             showAlert(response.status, response.label, response.message);
             /* if (!response.error) {
-                setTimeout(function () {
-                    window.location.href = $('#txth_base').val() + "/academico/planificacion/index";
-                }, 3000);
-            } */
+             setTimeout(function () {
+             window.location.href = $('#txth_base').val() + "/academico/planificacion/index";
+             }, 3000);
+             } */
         }, true);
     }
 }
@@ -177,7 +222,7 @@ function actualizarGridHorario() {
     //Buscar almenos una clase con el nombre para ejecutar
     if (!$(".blockUI").length) {
         showLoadingPopup();
-        $('#PbHorario').PbGridView('applyFilterData', { 'profesor': profesor, 'unidad': unidad, 'modalidad': modalidad, 'f_ini': f_ini, 'f_fin': f_fin, 'periodo': periodo });
+        $('#PbHorario').PbGridView('applyFilterData', {'profesor': profesor, 'unidad': unidad, 'modalidad': modalidad, 'f_ini': f_ini, 'f_fin': f_fin, 'periodo': periodo});
         setTimeout(hideLoadingPopup, 2000);
     }
 }
@@ -214,7 +259,7 @@ function cargarNoMarcadas() {
 
     if (!$(".blockUI").length) {
         showLoadingPopup();
-        $('#PbNomarcacion').PbGridView('applyFilterData', { 'profesor': profesor, 'materia': materia, 'unidad': unidad, 'modalidad': modalidad, 'f_ini': f_ini, 'f_fin': f_fin, 'periodo': periodo, 'tipo': tipo });
+        $('#PbNomarcacion').PbGridView('applyFilterData', {'profesor': profesor, 'materia': materia, 'unidad': unidad, 'modalidad': modalidad, 'f_ini': f_ini, 'f_fin': f_fin, 'periodo': periodo, 'tipo': tipo});
         setTimeout(hideLoadingPopup, 2000);
     }
 }
@@ -272,10 +317,10 @@ function updateRegConf() {
         return;
     }
     if (!validateForm()) {
-        requestHttpAjax(link, arrParams, function(response) {
+        requestHttpAjax(link, arrParams, function (response) {
             showAlert(response.status, response.label, response.message);
             if (response.status == "OK") {
-                setTimeout(function() {
+                setTimeout(function () {
                     window.location.href = $('#txth_base').val() + "/academico/planificacion/registerprocess";
                 }, 3000);
             }
@@ -296,10 +341,10 @@ function saveRegConf() {
         return;
     }
     if (!validateForm()) {
-        requestHttpAjax(link, arrParams, function(response) {
+        requestHttpAjax(link, arrParams, function (response) {
             showAlert(response.status, response.label, response.message);
             if (response.status == "OK") {
-                setTimeout(function() {
+                setTimeout(function () {
                     window.location.href = $('#txth_base').val() + "/academico/planificacion/registerprocess";
                 }, 3000);
             }
@@ -311,12 +356,113 @@ function deleteItem(id) {
     var link = $('#txth_base').val() + "/academico/planificacion/deletereg";
     var arrParams = new Object();
     arrParams.id = id;
-    requestHttpAjax(link, arrParams, function(response) {
+    requestHttpAjax(link, arrParams, function (response) {
         if (response.status == "OK") {
             actualizarGridRegistroConf();
         }
-        setTimeout(function() {
+        setTimeout(function () {
             showAlert(response.status, response.label, response.message);
         }, 1000);
     }, true);
+}
+
+function actualizarGridPlanest() {
+    var estudiante = $('#txt_buscarDataPlanifica').val();
+    var unidad = $('#cmb_unidades option:selected').val();
+    var modalidad = $('#cmb_modalidades option:selected').val();
+    /* var carrera = $('#cmb_carreras option:selected').val();*/
+    var periodo = $('#cmb_periodo option:selected').val();
+    //Buscar almenos una clase con el nombre para ejecutar
+    if (!$(".blockUI").length) {
+        showLoadingPopup();
+        $('#PbPlanificaestudiante').PbGridView('applyFilterData', {'estudiante': estudiante, 'unidad': unidad, 'modalidad': modalidad, /* 'carrera': carrera,*/ 'periodo': periodo});
+        setTimeout(hideLoadingPopup, 2000);
+    }
+}
+
+function exportExcelplanifica() {
+    var estudiante = $('#txt_buscarDataPlanifica').val();
+    var unidad = $('#cmb_unidades option:selected').val();
+    var modalidad = $('#cmb_modalidades option:selected').val();
+    /*var carrera = $('#cmb_carreras option:selected').val();*/
+    var periodo = $('#cmb_periodo option:selected').val();
+    window.location.href = $('#txth_base').val() + "/academico/planificacion/expexcelplanifica?estudiante=" + estudiante + "&unidad="+ unidad + '&modalidad='+ modalidad + /*"&carrera=" +*/ "&periodo=" + periodo;
+}
+
+function exportPdfplanifica() {
+    var estudiante = $('#txt_buscarDataPlanifica').val();
+    var unidad = $('#cmb_unidades option:selected').val();
+    var modalidad = $('#cmb_modalidades option:selected').val();
+    /*var carrera = $('#cmb_carreras option:selected').val();*/
+    var periodo = $('#cmb_periodo option:selected').val();
+    window.location.href = $('#txth_base').val() + "/academico/planificacion/exppdfplanifica?pdf=1&estudiante=" + estudiante + "&unidad="+ unidad + '&modalidad='+ modalidad + /*"&carrera=" + carrera + */ "&periodo=" + periodo;
+}
+function accion(plaid, perid) {
+    var link = $('#txth_base').val() + "/academico/planificacion/deleteplanest";
+    var arrParams = new Object();
+    arrParams.pla_id = plaid;
+    arrParams.per_id = perid;
+    if (!validateForm()) {
+        requestHttpAjax(link, arrParams, function (response) {
+            showAlert(response.status, response.label, response.message);
+            if (!response.error) {
+                setTimeout(function () {
+                    window.location.href = $('#txth_base').val() + "/academico/planificacion/planificacionestudiante";
+                }, 3000);
+            }
+        }, true);
+    }
+}
+
+function deleteplanestudiante(plaid, perid) {
+    var mensj = "¿Seguro desea eliminar la planificación?";
+    var messagePB = new Object();
+    messagePB.wtmessage = mensj;
+    messagePB.title = "Eliminar";
+    var objAccept = new Object();
+    objAccept.id = "btnid2del";
+    objAccept.class = "btn-primary";
+    objAccept.value = "Aceptar";
+    objAccept.callback = 'accion';
+    var params = new Array(plaid, perid);
+    objAccept.paramCallback = params;
+    messagePB.acciones = new Array();
+    messagePB.acciones[0] = objAccept;
+    showAlert("warning", "warning", messagePB);
+}
+
+function accionmat(plaid, perid, bloque, hora) {
+    var link = $('#txth_base').val() + "/academico/planificacion/deletematest";
+    var arrParams = new Object();
+    arrParams.pla_id = plaid;
+    arrParams.per_id = perid;
+    arrParams.bloque = bloque;
+    arrParams.hora = hora;
+    if (!validateForm()) {
+        requestHttpAjax(link, arrParams, function (response) {
+            showAlert(response.status, response.label, response.message);
+            if (!response.error) {
+                setTimeout(function () {
+                    window.location.href = $('#txth_base').val() + "/academico/planificacion/edit?pla_id=" + arrParams.pla_id + "&per_id=" + arrParams.per_id;
+                }, 1000);
+            }
+        }, true);
+    }
+}
+
+function deletematestudiante(plaid, perid, bloque, hora) {
+    var mensj = "¿Seguro desea eliminar la materia?";
+    var messagePB = new Object();
+    messagePB.wtmessage = mensj;
+    messagePB.title = "Eliminar";
+    var objAccept = new Object();
+    objAccept.id = "btnid2del";
+    objAccept.class = "btn-primary";
+    objAccept.value = "Aceptar";
+    objAccept.callback = 'accionmat';
+    var params = new Array(plaid, perid, bloque, hora);
+    objAccept.paramCallback = params;
+    messagePB.acciones = new Array();
+    messagePB.acciones[0] = objAccept;
+    showAlert("warning", "warning", messagePB);
 }

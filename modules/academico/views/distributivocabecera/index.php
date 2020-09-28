@@ -7,7 +7,8 @@ use app\modules\academico\Module as academico;
     <form class="form-horizontal">
         <?=
         $this->render('index-search', [                
-            'arr_periodo' => $mod_periodo,            
+            'arr_periodo' => $mod_periodo,      
+            'arrEstados' => $arrEstados,
             ]);
         ?>
     </form>
