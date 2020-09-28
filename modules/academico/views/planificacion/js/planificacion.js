@@ -430,3 +430,39 @@ function deleteplanestudiante(plaid, perid) {
     messagePB.acciones[0] = objAccept;
     showAlert("warning", "warning", messagePB);
 }
+
+function accionmat(plaid, perid, bloque, hora) {
+    var link = $('#txth_base').val() + "/academico/planificacion/deletematest";
+    var arrParams = new Object();
+    arrParams.pla_id = plaid;
+    arrParams.per_id = perid;
+    arrParams.bloque = bloque;
+    arrParams.hora = hora;
+    if (!validateForm()) {
+        requestHttpAjax(link, arrParams, function (response) {
+            showAlert(response.status, response.label, response.message);
+            if (!response.error) {
+                setTimeout(function () {
+                    window.location.href = $('#txth_base').val() + "/academico/planificacion/edit?pla_id=" + arrParams.pla_id + "&per_id=" + arrParams.per_id;
+                }, 1000);
+            }
+        }, true);
+    }
+}
+
+function deletematestudiante(plaid, perid, bloque, hora) {
+    var mensj = "¿Seguro desea eliminar la materia?";
+    var messagePB = new Object();
+    messagePB.wtmessage = mensj;
+    messagePB.title = "Eliminar";
+    var objAccept = new Object();
+    objAccept.id = "btnid2del";
+    objAccept.class = "btn-primary";
+    objAccept.value = "Aceptar";
+    objAccept.callback = 'accionmat';
+    var params = new Array(plaid, perid, bloque, hora);
+    objAccept.paramCallback = params;
+    messagePB.acciones = new Array();
+    messagePB.acciones[0] = objAccept;
+    showAlert("warning", "warning", messagePB);
+}

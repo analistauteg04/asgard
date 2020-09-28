@@ -582,7 +582,7 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord {
     }
 
     /**
-     * Function modifica estado de estudiante.
+     * Function elimina planificacion de estudiante.
      * @author Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;
      * @param
      * @return
@@ -734,6 +734,57 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord {
         $comando->bindParam(":per_id", $per_id, \PDO::PARAM_INT);
         $resultData = $comando->queryOne();
         return $resultData;
+    }
+
+    /**
+     * Function elimina materia de la planifiacion.
+     * @author Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;
+     * @param
+     * @return
+     */
+    public function eliminarPlanmatest($pla_id, $per_id, $bloque, $hora, $pes_usuario_modifica, $pes_estado, $pes_fecha_modificacion) {
+
+        $con = \Yii::$app->db_academico;
+
+        if ($trans !== null) {
+            $trans = null; // si existe la transacción entonces no se crea una
+        } else {
+            $trans = $con->beginTransaction(); // si no existe la transacción entonces se crea una
+        }
+        \app\models\Utilities::putMessageLogFile('bloque ' .  $bloque);
+        \app\models\Utilities::putMessageLogFile('hora ' .  $hora);
+        if (!empty($bloque) && !empty($hora)) {
+            $modificar = "pes_mat_b" . $bloque . "_h" . $hora . "_cod = null,
+                      pes_mod_b" . $bloque . "_h" . $hora . " = null,
+                      pes_mat_b" . $bloque . "_h" . $hora . "_nombre = null,
+        ";
+        }
+        \app\models\Utilities::putMessageLogFile('asdasfdg ' .  $modificar);
+        try {
+            $comando = $con->createCommand
+                    ("UPDATE " . $con->dbname . ".planificacion_estudiante		       
+                      SET
+                          $modificar
+                          pes_usuario_modifica = :pes_usuario_modifica,
+                          pes_fecha_modificacion = :pes_fecha_modificacion                          
+                      WHERE 
+                        pes_estado= :pes_estado AND pla_id = :pla_id AND per_id = :per_id");
+            $comando->bindParam(":pla_id", $pla_id, \PDO::PARAM_INT);
+            $comando->bindParam(":per_id", $per_id, \PDO::PARAM_INT);
+            //$comando->bindParam(":bloque", $bloque, \PDO::PARAM_STR);
+            //$comando->bindParam(":hora", $hora, \PDO::PARAM_STR);
+            $comando->bindParam(":pes_usuario_modifica", $pes_usuario_modifica, \PDO::PARAM_INT);
+            $comando->bindParam(":pes_fecha_modificacion", $pes_fecha_modificacion, \PDO::PARAM_STR);
+            $comando->bindParam(":pes_estado", $pes_estado, \PDO::PARAM_STR);
+            $response = $comando->execute();
+            if ($trans !== null)
+                $trans->commit();
+            return $response;
+        } catch (Exception $ex) {
+            if ($trans !== null)
+                $trans->rollback();
+            return FALSE;
+        }
     }
 
 }

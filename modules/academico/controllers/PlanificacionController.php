@@ -25,6 +25,26 @@ academico::registerTranslations();
 
 class PlanificacionController extends \app\components\CController {
 
+    private function Bloques() {
+        return [
+            '0' => Yii::t("formulario", "Seleccionar"),
+            '1' => Yii::t("formulario", "Bloque 1"),
+            '2' => Yii::t("formulario", "Bloque 2"),
+        ];
+    }
+
+    private function Horas() {
+        return [
+            '0' => Yii::t("formulario", "Seleccionar"),
+            '1' => Yii::t("formulario", "Hora 1"),
+            '2' => Yii::t("formulario", "Hora 2"),
+            '3' => Yii::t("formulario", "Hora 3"),
+            '4' => Yii::t("formulario", "Hora 4"),
+            '5' => Yii::t("formulario", "Hora 5"),
+            '6' => Yii::t("formulario", "Hora 6"),
+        ];
+    }
+
     public function actionIndex() {
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->get();
@@ -554,6 +574,79 @@ class PlanificacionController extends \app\components\CController {
                     $transaction->rollback();
                     $message = array(
                         "wtmessage" => Yii::t("notificaciones", "Error al eliminar planificación del estudiante. "),
+                        "title" => Yii::t('jslang', 'Error'),
+                    );
+                    return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), false, $message);
+                }
+            } catch (Exception $ex) {
+                $transaction->rollback();
+                $message = array(
+                    "wtmessage" => Yii::t("notificaciones", "Error al realizar la acción. "),
+                    "title" => Yii::t('jslang', 'Success'),
+                );
+                return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), false, $message);
+            }
+        }
+    }
+
+    public function actionEdit() {
+        $pla_id = $_GET["pla_id"];
+        $per_id = $_GET["per_id"];
+        $emp_id = 1;
+        $mod_periodo = new PlanificacionEstudiante();
+        $periodo = $mod_periodo->consultarPeriodoplanifica();
+        $uni_aca_model = new UnidadAcademica();
+        //$modestudio = new ModuloEstudio();
+        $modalidad_model = new Modalidad();
+        $modcanal = new Oportunidad();
+        $mod_cabecera = $mod_periodo->consultarCabeceraplanifica($pla_id, $per_id);
+        $unidad_acad_data = $uni_aca_model->consultarUnidadAcademicas();
+        $modalidad_data = $modalidad_model->consultarModalidad($unidad_acad_data[0]["id"], $emp_id);
+        $academic_study_data = $modcanal->consultarCarreraModalidad($unidad_acad_data[0]["id"], $mod_cabecera["mod_id"]);
+        $mod_detalle = $mod_periodo->consultarDetalleplanifica($pla_id, $per_id);
+        return $this->render('edit', [
+                    'arr_cabecera' => $mod_cabecera,
+                    'model_detalle' => $mod_detalle,
+                    'arr_unidad' => ArrayHelper::map($unidad_acad_data, "id", "name"),
+                    'arr_modalidad' => ArrayHelper::map($modalidad_data, "id", "name"),
+                    'arr_carrera' => ArrayHelper::map($academic_study_data, "id", "name"),
+                    'arr_periodo' => ArrayHelper::map($periodo, "id", "name"),
+                    'arr_bloque' => $this->Bloques(),
+                    'arr_hora' => $this->Horas(),
+                    'arr_modalidadh' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Seleccionar"]], $modalidad_data), "id", "name"),
+        ]);
+    }
+
+    public function actionDeletematest() {
+        $mod_planestudiante = new PlanificacionEstudiante();
+        $usu_autenticado = @Yii::$app->session->get("PB_iduser");
+        $estado = 1;
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+            $pla_id = $data["pla_id"];
+            $per_id = $data["per_id"];
+            $bloque = $data["bloque"];
+            $hora = $data["hora"];
+            $fecha = date(Yii::$app->params["dateTimeByDefault"]);
+            $con = \Yii::$app->db_academico;
+            $transaction = $con->beginTransaction();
+            try {
+                $resp_estado = $mod_planestudiante->eliminarPlanmatest($pla_id, $per_id, $bloque, $hora, $usu_autenticado, $estado, $fecha);
+                if ($resp_estado) {
+                    $exito = '1';
+                }
+                if ($exito) {
+                    //Realizar accion
+                    $transaction->commit();
+                    $message = array(
+                        "wtmessage" => Yii::t("notificaciones", "Se ha eliminado la materia del estudiante."),
+                        "title" => Yii::t('jslang', 'Success'),
+                    );
+                    return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                } else {
+                    $transaction->rollback();
+                    $message = array(
+                        "wtmessage" => Yii::t("notificaciones", "Error al eliminar materia del estudiante. "),
                         "title" => Yii::t('jslang', 'Error'),
                     );
                     return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Error"), false, $message);
