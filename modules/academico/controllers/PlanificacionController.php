@@ -4,22 +4,19 @@ namespace app\modules\academico\controllers;
 
 use Yii;
 use app\models\ExportFile;
-use app\components\CController;
 use app\modules\academico\models\Planificacion;
 use app\modules\academico\models\Modalidad;
 use app\modules\academico\models\RegistroConfiguracion;
-use app\modules\academico\models\PeriodoAcademicoMetIngreso;
 use app\modules\academico\models\UnidadAcademica;
 use app\modules\admision\models\Oportunidad;
-use app\models\Persona;
 use app\modules\academico\models\ModuloEstudio;
 use yii\helpers\ArrayHelper;
 use yii\data\ArrayDataProvider;
 use yii\base\Exception;
 use app\models\Utilities;
-use yii\helpers\VarDumper;
 use app\modules\academico\Module as academico;
 use app\modules\academico\models\PlanificacionEstudiante;
+use app\modules\academico\models\DistributivoAcademicoHorario;
 
 academico::registerTranslations();
 
@@ -594,6 +591,7 @@ class PlanificacionController extends \app\components\CController {
         $per_id = $_GET["per_id"];
         $emp_id = 1;
         $mod_periodo = new PlanificacionEstudiante();
+        $mod_jornada = new DistributivoAcademicoHorario();
         $periodo = $mod_periodo->consultarPeriodoplanifica();
         $uni_aca_model = new UnidadAcademica();
         //$modestudio = new ModuloEstudio();
@@ -604,6 +602,7 @@ class PlanificacionController extends \app\components\CController {
         $modalidad_data = $modalidad_model->consultarModalidad($unidad_acad_data[0]["id"], $emp_id);
         $academic_study_data = $modcanal->consultarCarreraModalidad($unidad_acad_data[0]["id"], $mod_cabecera["mod_id"]);
         $mod_detalle = $mod_periodo->consultarDetalleplanifica($pla_id, $per_id);
+        $jornada = $mod_jornada->consultarJornadahorario();
         return $this->render('edit', [
                     'arr_cabecera' => $mod_cabecera,
                     'model_detalle' => $mod_detalle,
@@ -614,6 +613,7 @@ class PlanificacionController extends \app\components\CController {
                     'arr_bloque' => $this->Bloques(),
                     'arr_hora' => $this->Horas(),
                     'arr_modalidadh' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Seleccionar"]], $modalidad_data), "id", "name"),
+                    'arr_jornada' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Seleccionar"]], $jornada), "id", "name"),
         ]);
     }
 

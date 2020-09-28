@@ -489,7 +489,7 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord {
 
         $sql = "SELECT distinct pla_periodo_academico as id,
                 pla_periodo_academico as name
-                  FROM db_academico.planificacion
+                  FROM " . $con->dbname . ".planificacion
                   WHERE pla_estado = :estado AND
                   pla_estado_logico = :estado;";
 
@@ -627,75 +627,38 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord {
      * @return  $resultData (información de los paralelos por período.)
      */
     public function consultarDetalleplanifica($pla_id, $per_id) {
-        $con = \Yii::$app->db_academico;
-        //$estado = 1;
+        $con = \Yii::$app->db_academico;  
         //TRATAR DE OPTIMIZAR ESTA CONSULTA AL FINAL
-        $sql = "SELECT pes_mat_b1_h1_cod as asignatura, pes_jornada, 'Bloque 1', moda.mod_nombre as modalidad, 'Hora 1' 
+        // Bloque 1
+        for ($i = 1; $i < 7; $i++) {
+            $sql .= "SELECT pes_mat_b1_h" . $i . "_cod as asignatura, CASE pes_jornada  
+                            WHEN 1 THEN 'Matutino'  
+                            WHEN 2 THEN 'Nocturno'  
+                            WHEN 3 THEN 'Semipresencial'
+                            WHEN 4 THEN 'Distancia'
+		    END AS pes_jornada, 'Bloque 1', moda.mod_nombre as modalidad, 'Hora " . $i . "' 
                     FROM " . $con->dbname . ".planificacion_estudiante ples
-                    INNER JOIN " . $con->dbname . ".modalidad moda ON  moda.mod_id = ples.pes_mod_b1_h1
-                    where pla_id = :pla_id and per_id = :per_id
-                    UNION
-                    SELECT pes_mat_b1_h2_cod as asignatura, pes_jornada, 'Bloque 1', moda.mod_nombre as modalidad,'Hora 2' 
+                    INNER JOIN " . $con->dbname . ".modalidad moda ON  moda.mod_id = ples.pes_mod_b1_h" . $i . "
+                    where pla_id = " . $pla_id . " and per_id = " . $per_id . "
+                    UNION ";
+        }
+        // Bloque 2
+        for ($j = 1; $j < 7; $j++) {
+            $sql .= "SELECT pes_mat_b2_h" . $j . "_cod as asignatura, CASE pes_jornada  
+                            WHEN 1 THEN 'Matutino'  
+                            WHEN 2 THEN 'Nocturno'  
+                            WHEN 3 THEN 'Semipresencial'
+                            WHEN 4 THEN 'Distancia'
+		    END AS pes_jornada, 'Bloque 1', moda.mod_nombre as modalidad, 'Hora " . $j . "' 
                     FROM " . $con->dbname . ".planificacion_estudiante ples
-                    INNER JOIN " . $con->dbname . ".modalidad moda ON  moda.mod_id = ples.pes_mod_b1_h2
-                    where pla_id = :pla_id and per_id = :per_id
-                    UNION
-                    SELECT pes_mat_b1_h3_cod as asignatura, pes_jornada, 'Bloque 1', moda.mod_nombre as modalidad,'Hora 3' 
-                    FROM " . $con->dbname . ".planificacion_estudiante ples
-                    INNER JOIN " . $con->dbname . ".modalidad moda ON  moda.mod_id = ples.pes_mod_b1_h3
-                    where pla_id = :pla_id and per_id = :per_id
-                    UNION
-                    SELECT pes_mat_b1_h4_cod as asignatura, pes_jornada, 'Bloque 1', moda.mod_nombre as modalidad,'Hora 4' 
-                    FROM " . $con->dbname . ".planificacion_estudiante ples
-                    INNER JOIN " . $con->dbname . ".modalidad moda ON  moda.mod_id = ples.pes_mod_b1_h4
-                    where pla_id = :pla_id and per_id = :per_id
-                    UNION
-                    SELECT pes_mat_b1_h5_cod as asignatura, pes_jornada, 'Bloque 1', moda.mod_nombre as modalidad,'Hora 5' 
-                    FROM " . $con->dbname . ".planificacion_estudiante ples
-                    INNER JOIN " . $con->dbname . ".modalidad moda ON  moda.mod_id = ples.pes_mod_b1_h5
-                    where pla_id = :pla_id and per_id = :per_id
-                    UNION
-                    SELECT pes_mat_b1_h6_cod as asignatura, pes_jornada, 'Bloque 1', moda.mod_nombre as modalidad,'Hora 6' 
-                    FROM " . $con->dbname . ".planificacion_estudiante ples
-                    INNER JOIN " . $con->dbname . ".modalidad moda ON  moda.mod_id = ples.pes_mod_b1_h6
-                    where pla_id = :pla_id and per_id = :per_id
-                    --  bloque 2
-                    UNION
-                    SELECT pes_mat_b2_h1_cod as asignatura, pes_jornada, 'Bloque 2', moda.mod_nombre as modalidad, 'Hora 1' 
-                    FROM " . $con->dbname . ".planificacion_estudiante ples
-                    INNER JOIN " . $con->dbname . ".modalidad moda ON  moda.mod_id = ples.pes_mod_b2_h1
-                    where pla_id = :pla_id and per_id = :per_id
-                    UNION
-                    SELECT pes_mat_b2_h2_cod as asignatura, pes_jornada, 'Bloque 2', moda.mod_nombre as modalidad,'Hora 2' 
-                    FROM " . $con->dbname . ".planificacion_estudiante ples
-                    INNER JOIN " . $con->dbname . ".modalidad moda ON  moda.mod_id = ples.pes_mod_b2_h2
-                    where pla_id = :pla_id and per_id = :per_id
-                    UNION
-                    SELECT pes_mat_b2_h3_cod as asignatura, pes_jornada, 'Bloque 2', moda.mod_nombre as modalidad,'Hora 3' 
-                    FROM " . $con->dbname . ".planificacion_estudiante ples
-                    INNER JOIN " . $con->dbname . ".modalidad moda ON  moda.mod_id = ples.pes_mod_b2_h3
-                    where pla_id = :pla_id and per_id = :per_id
-                    UNION
-                    SELECT pes_mat_b2_h4_cod as asignatura, pes_jornada, 'Bloque 1', moda.mod_nombre as modalidad,'Hora 4' 
-                    FROM " . $con->dbname . ".planificacion_estudiante ples
-                    INNER JOIN " . $con->dbname . ".modalidad moda ON  moda.mod_id = ples.pes_mod_b2_h4
-                    where pla_id = :pla_id and per_id = :per_id
-                    UNION
-                    SELECT pes_mat_b2_h5_cod as asignatura, pes_jornada, 'Bloque 2', moda.mod_nombre as modalidad,'Hora 5' 
-                    FROM " . $con->dbname . ".planificacion_estudiante ples
-                    INNER JOIN " . $con->dbname . ".modalidad moda ON  moda.mod_id = ples.pes_mod_b2_h5
-                    where pla_id = :pla_id and per_id = :per_id
-                    UNION
-                    SELECT pes_mat_b2_h6_cod as asignatura, pes_jornada, 'Bloque 2', moda.mod_nombre as modalidad,'Hora 6' 
-                    FROM " . $con->dbname . ".planificacion_estudiante ples
-                    INNER JOIN " . $con->dbname . ".modalidad moda ON  moda.mod_id = ples.pes_mod_b2_h6
-                    where pla_id = :pla_id and per_id = :per_id";
+                    INNER JOIN " . $con->dbname . ".modalidad moda ON  moda.mod_id = ples.pes_mod_b2_h" . $j . "
+                    where pla_id = " . $pla_id . " and per_id = " . $per_id ." ";
+            if ($j < 6) {
+                $sql .= "UNION ";
+            }
+        }        
 
         $comando = $con->createCommand($sql);
-        //$comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
-        $comando->bindParam(":pla_id", $pla_id, \PDO::PARAM_INT);
-        $comando->bindParam(":per_id", $per_id, \PDO::PARAM_INT);
-
         $resultData = $comando->queryall();
         \app\models\Utilities::putMessageLogFile($resultData);
         $dataProvider = new ArrayDataProvider([
@@ -751,15 +714,13 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord {
         } else {
             $trans = $con->beginTransaction(); // si no existe la transacción entonces se crea una
         }
-        \app\models\Utilities::putMessageLogFile('bloque ' .  $bloque);
-        \app\models\Utilities::putMessageLogFile('hora ' .  $hora);
         if (!empty($bloque) && !empty($hora)) {
             $modificar = "pes_mat_b" . $bloque . "_h" . $hora . "_cod = null,
                       pes_mod_b" . $bloque . "_h" . $hora . " = null,
                       pes_mat_b" . $bloque . "_h" . $hora . "_nombre = null,
         ";
         }
-        \app\models\Utilities::putMessageLogFile('asdasfdg ' .  $modificar);
+        \app\models\Utilities::putMessageLogFile('asdasfdg ' . $modificar);
         try {
             $comando = $con->createCommand
                     ("UPDATE " . $con->dbname . ".planificacion_estudiante		       

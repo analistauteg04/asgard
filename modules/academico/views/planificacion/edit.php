@@ -54,7 +54,7 @@ academico::registerTranslations();
                     </div>   
                     <label for="lbl_jornadaest" class="col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= academico::t("Academico", "Working day") ?></label>
                     <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
-                        <?= Html::dropDownList("cmb_jornadaest", $arr_cabecera["mod_id"], $arr_modalidad, ["class" => "form-control", "id" => "cmb_jornadaest"]) ?>
+                        <?= Html::dropDownList("cmb_jornadaest", 0, $arr_jornada, ["class" => "form-control", "id" => "cmb_jornadaest"]) ?>
                     </div>  
                 </div>        
             </div>
