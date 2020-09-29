@@ -119,4 +119,30 @@ class DistributivoAcademicoHorario extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Modalidad::className(), ['mod_id' => 'mod_id']);
     }
+    /**
+     * Function consulta laws jornadas. 
+     * @author Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;
+     * @param
+     * @return
+     */
+    public function consultarJornadahorario() {
+        $con = \Yii::$app->db_academico;
+        $estado = 1;   
+
+        $sql = "SELECT distinct daho_jornada as id,
+                  CASE daho_jornada  
+                    WHEN 1 THEN 'Matutino'  
+                    WHEN 2 THEN 'Nocturno'  
+                    WHEN 3 THEN 'Semipresencial'
+                    WHEN 4 THEN 'Distancia'
+		  END AS name
+                  FROM " . $con->dbname . ".distributivo_academico_horario
+                  WHERE daho_estado = :estado AND
+                  daho_estado_logico = :estado;";
+
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $resultData = $comando->queryAll();
+        return $resultData;
+    }
 }
