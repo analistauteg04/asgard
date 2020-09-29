@@ -438,7 +438,7 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord {
         /*  $model_planificacion_estudiante->pes_mat_b2_h5_cod = $codigo_mat_b2h5; */
 
         $model_planificacion_estudiante->pes_mod_b1_h6 = $val[17];
-        
+
         $model_planificacion_estudiante->pes_mat_b2_h1_cod = $val[18];
         $model_planificacion_estudiante->pes_mod_b2_h1 = $val[19];
         $model_planificacion_estudiante->pes_mat_b2_h2_cod = $val[20];
@@ -474,6 +474,278 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord {
         $resultData = $comando->queryAll();
 
         return $resultData;
+    }
+
+    /**
+     * Function consulta los periodos academcicos en tablas de planificacion. 
+     * @author Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;
+     * @param
+     * @return
+     */
+    public function consultarPeriodoplanifica() {
+        $con = \Yii::$app->db_academico;
+        $estado = 1;
+        $condition = "";
+
+        $sql = "SELECT distinct pla_periodo_academico as id,
+                pla_periodo_academico as name
+                  FROM " . $con->dbname . ".planificacion
+                  WHERE pla_estado = :estado AND
+                  pla_estado_logico = :estado;";
+
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $resultData = $comando->queryAll();
+        return $resultData;
+    }
+
+    /**
+     * Function consultarEstudianteplanifica
+     * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>  
+     * @property  
+     * @return  
+     */
+    public function consultarEstudianteplanifica($arrFiltro = array(), $onlyData = false) {
+        $con = \Yii::$app->db_academico;
+        $con1 = \Yii::$app->db_asgard;
+        $estado = 1;
+        if (isset($arrFiltro) && count($arrFiltro) > 0) {
+            $str_search .= "(pers.per_pri_nombre like :estudiante OR ";
+            $str_search .= "pers.per_seg_nombre like :estudiante OR ";
+            $str_search .= "pers.per_pri_apellido like :estudiante OR ";
+            $str_search .= "pers.per_seg_nombre like :estudiante )  AND ";
+
+
+            if ($arrFiltro['modalidad'] > 0) {
+                $str_search .= " plan.mod_id = :mod_id AND ";
+            }
+
+            if ($arrFiltro['periodo'] != '0') {
+                $str_search .= " plan.pla_periodo_academico = :periodo AND ";
+            }
+        }
+        if ($onlyData == false) {
+            $idplanifica = 'plae.pla_id, ';
+            $idper = 'plae.per_id, ';
+        }
+        $sql = "SELECT 
+                    $idplanifica
+                    $idper
+                    pers.per_cedula,
+                    plae.pes_nombres,
+                    plae.pes_carrera,
+                    plan.pla_periodo_academico
+                FROM " . $con->dbname . ".planificacion_estudiante plae
+                INNER JOIN " . $con->dbname . ".planificacion plan ON plan.pla_id = plae.pla_id
+                INNER JOIN " . $con1->dbname . ".persona pers ON pers.per_id = plae.per_id
+                WHERE 
+                    $str_search
+                    plae.pes_estado = :estado AND
+                    plae.pes_estado_logico = :estado AND
+                    plan.pla_estado = :estado AND
+                    plan.pla_estado_logico = :estado AND
+                    pers.per_estado = :estado AND
+                    pers.per_estado_logico = :estado";
+
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        if (isset($arrFiltro) && count($arrFiltro) > 0) {
+            $search_cond = "%" . $arrFiltro["estudiante"] . "%";
+            $comando->bindParam(":estudiante", $search_cond, \PDO::PARAM_STR);
+
+            if ($arrFiltro['periodo'] != '0') {
+                $periodo = $arrFiltro["periodo"];
+                $comando->bindParam(":periodo", $periodo, \PDO::PARAM_STR);
+            }
+            if ($arrFiltro['modalidad'] > 0) {
+                $modalidad = $arrFiltro["modalidad"];
+                $comando->bindParam(":mod_id", $modalidad, \PDO::PARAM_INT);
+            }
+        }
+        $resultData = $comando->queryAll();
+        $dataProvider = new ArrayDataProvider([
+            'key' => 'id',
+            'allModels' => $resultData,
+            'pagination' => [
+                'pageSize' => Yii::$app->params["pageSize"],
+            ],
+            'sort' => [
+                'attributes' => [
+                ],
+            ],
+        ]);
+        if ($onlyData) {
+            return $resultData;
+        } else {
+            return $dataProvider;
+        }
+    }
+
+    /**
+     * Function elimina planificacion de estudiante.
+     * @author Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;
+     * @param
+     * @return
+     */
+    public function eliminarPlanificacionest($pla_id, $per_id, $pes_usuario_modifica, $pes_estado, $pes_fecha_modificacion) {
+
+        $con = \Yii::$app->db_academico;
+
+        if ($trans !== null) {
+            $trans = null; // si existe la transacción entonces no se crea una
+        } else {
+            $trans = $con->beginTransaction(); // si no existe la transacción entonces se crea una
+        }
+        try {
+            $comando = $con->createCommand
+                    ("UPDATE " . $con->dbname . ".planificacion_estudiante		       
+                      SET pes_estado = :pes_estado,
+                          pes_usuario_modifica = :pes_usuario_modifica,
+                          pes_fecha_modificacion = :pes_fecha_modificacion                          
+                      WHERE 
+                        pla_id = :pla_id AND per_id = :per_id");
+            $comando->bindParam(":pla_id", $pla_id, \PDO::PARAM_INT);
+            $comando->bindParam(":per_id", $per_id, \PDO::PARAM_INT);
+            $comando->bindParam(":pes_usuario_modifica", $pes_usuario_modifica, \PDO::PARAM_INT);
+            $comando->bindParam(":pes_fecha_modificacion", $pes_fecha_modificacion, \PDO::PARAM_STR);
+            $comando->bindParam(":pes_estado", $pes_estado, \PDO::PARAM_STR);
+            $response = $comando->execute();
+            if ($trans !== null)
+                $trans->commit();
+            return $response;
+        } catch (Exception $ex) {
+            if ($trans !== null)
+                $trans->rollback();
+            return FALSE;
+        }
+    }
+
+    /**
+     * Function consultarDetalleplanifica
+     * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>
+     * @param   
+     * @return  $resultData (información de los paralelos por período.)
+     */
+    public function consultarDetalleplanifica($pla_id, $per_id) {
+        $con = \Yii::$app->db_academico;  
+        //TRATAR DE OPTIMIZAR ESTA CONSULTA AL FINAL
+        // Bloque 1
+        for ($i = 1; $i < 7; $i++) {
+            $sql .= "SELECT pes_mat_b1_h" . $i . "_cod as asignatura, CASE pes_jornada  
+                            WHEN 1 THEN 'Matutino'  
+                            WHEN 2 THEN 'Nocturno'  
+                            WHEN 3 THEN 'Semipresencial'
+                            WHEN 4 THEN 'Distancia'
+		    END AS pes_jornada, 'Bloque 1', moda.mod_nombre as modalidad, 'Hora " . $i . "' 
+                    FROM " . $con->dbname . ".planificacion_estudiante ples
+                    INNER JOIN " . $con->dbname . ".modalidad moda ON  moda.mod_id = ples.pes_mod_b1_h" . $i . "
+                    where pla_id = " . $pla_id . " and per_id = " . $per_id . "
+                    UNION ";
+        }
+        // Bloque 2
+        for ($j = 1; $j < 7; $j++) {
+            $sql .= "SELECT pes_mat_b2_h" . $j . "_cod as asignatura, CASE pes_jornada  
+                            WHEN 1 THEN 'Matutino'  
+                            WHEN 2 THEN 'Nocturno'  
+                            WHEN 3 THEN 'Semipresencial'
+                            WHEN 4 THEN 'Distancia'
+		    END AS pes_jornada, 'Bloque 1', moda.mod_nombre as modalidad, 'Hora " . $j . "' 
+                    FROM " . $con->dbname . ".planificacion_estudiante ples
+                    INNER JOIN " . $con->dbname . ".modalidad moda ON  moda.mod_id = ples.pes_mod_b2_h" . $j . "
+                    where pla_id = " . $pla_id . " and per_id = " . $per_id ." ";
+            if ($j < 6) {
+                $sql .= "UNION ";
+            }
+        }        
+
+        $comando = $con->createCommand($sql);
+        $resultData = $comando->queryall();
+        \app\models\Utilities::putMessageLogFile($resultData);
+        $dataProvider = new ArrayDataProvider([
+            'key' => 'id',
+            'allModels' => $resultData,
+            'pagination' => [
+                'pageSize' => Yii::$app->params["pageSize"],
+            ],
+            'sort' => [
+                'attributes' => [],
+            ],
+        ]);
+        return $dataProvider;
+    }
+
+    /**
+     * Function Consultar datos de cabecera para palnificacion.
+     * @author  Giovanni Vergara <analistadesarrollo01@uteg.edu.ec>;
+     * @property       
+     * @return  
+     */
+    public function consultarCabeceraplanifica($pla_id, $per_id) {
+        $con = \Yii::$app->db_academico;
+        //$estado = 1;
+
+        $sql = "SELECT plan.mod_id, 
+                       plan.pla_periodo_academico,
+                       plae.pes_carrera
+                FROM " . $con->dbname . ".planificacion plan
+                INNER JOIN " . $con->dbname . ".planificacion_estudiante plae ON plae.pla_id = plan.pla_id
+                WHERE plan.pla_id = :pla_id and plae.per_id = :per_id";
+
+        $comando = $con->createCommand($sql);
+        //$comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":pla_id", $pla_id, \PDO::PARAM_INT);
+        $comando->bindParam(":per_id", $per_id, \PDO::PARAM_INT);
+        $resultData = $comando->queryOne();
+        return $resultData;
+    }
+
+    /**
+     * Function elimina materia de la planifiacion.
+     * @author Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;
+     * @param
+     * @return
+     */
+    public function eliminarPlanmatest($pla_id, $per_id, $bloque, $hora, $pes_usuario_modifica, $pes_estado, $pes_fecha_modificacion) {
+
+        $con = \Yii::$app->db_academico;
+
+        if ($trans !== null) {
+            $trans = null; // si existe la transacción entonces no se crea una
+        } else {
+            $trans = $con->beginTransaction(); // si no existe la transacción entonces se crea una
+        }
+        if (!empty($bloque) && !empty($hora)) {
+            $modificar = "pes_mat_b" . $bloque . "_h" . $hora . "_cod = null,
+                      pes_mod_b" . $bloque . "_h" . $hora . " = null,
+                      pes_mat_b" . $bloque . "_h" . $hora . "_nombre = null,
+        ";
+        }
+        \app\models\Utilities::putMessageLogFile('asdasfdg ' . $modificar);
+        try {
+            $comando = $con->createCommand
+                    ("UPDATE " . $con->dbname . ".planificacion_estudiante		       
+                      SET
+                          $modificar
+                          pes_usuario_modifica = :pes_usuario_modifica,
+                          pes_fecha_modificacion = :pes_fecha_modificacion                          
+                      WHERE 
+                        pes_estado= :pes_estado AND pla_id = :pla_id AND per_id = :per_id");
+            $comando->bindParam(":pla_id", $pla_id, \PDO::PARAM_INT);
+            $comando->bindParam(":per_id", $per_id, \PDO::PARAM_INT);
+            //$comando->bindParam(":bloque", $bloque, \PDO::PARAM_STR);
+            //$comando->bindParam(":hora", $hora, \PDO::PARAM_STR);
+            $comando->bindParam(":pes_usuario_modifica", $pes_usuario_modifica, \PDO::PARAM_INT);
+            $comando->bindParam(":pes_fecha_modificacion", $pes_fecha_modificacion, \PDO::PARAM_STR);
+            $comando->bindParam(":pes_estado", $pes_estado, \PDO::PARAM_STR);
+            $response = $comando->execute();
+            if ($trans !== null)
+                $trans->commit();
+            return $response;
+        } catch (Exception $ex) {
+            if ($trans !== null)
+                $trans->rollback();
+            return FALSE;
+        }
     }
 
 }

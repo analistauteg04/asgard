@@ -16,10 +16,10 @@ use yii\helpers\Html;
         ?>
     </form>
 </div>
-<!-- <div>
-    <?
+<div>
+    <?=
     $this->render('planificacionestudiante-grid', [
-       // 'model' => $model,
+        'model' => $model,
     ]);
     ?>
-</div> -->
+</div> 

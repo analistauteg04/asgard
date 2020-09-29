@@ -96,7 +96,7 @@ class DistributivoCabecera extends \yii\db\ActiveRecord
         return $this->hasOne(PeriodoAcademico::className(), ['paca_id' => 'paca_id']);
     }
     
-    public function getListadoDistributivoCab($search = NULL, $periodoAcademico = NULL, $onlyData = false){
+    public function getListadoDistributivoCab($search = NULL, $periodoAcademico = NULL, $estado_aprobacion = NULL, $onlyData = false){
         $con_academico = \Yii::$app->db_academico;
         $con_db = \Yii::$app->db;
         $search_cond = "%" . $search . "%";
@@ -115,7 +115,10 @@ class DistributivoCabecera extends \yii\db\ActiveRecord
         if (isset($periodoAcademico) && $periodoAcademico > 0) {
             $str_periodo = "pa.paca_id = :periodo AND ";
         }        
-
+        if (isset($estado_aprobacion) && $estado_aprobacion > 0) {
+            $str_estado_probacion = "da.dcab_estado_aprobacion = :estado_aprobacion AND ";
+        }   
+        
         $sql = "SELECT 
                     da.dcab_id AS Id, 
                     CONCAT(pe.per_pri_nombre, ' ', pe.per_pri_apellido) AS Nombres,
@@ -136,7 +139,8 @@ class DistributivoCabecera extends \yii\db\ActiveRecord
                     LEFT JOIN " . $con_academico->dbname . ".bloque_academico blq ON blq.baca_id = pa.baca_id
                 WHERE 
                     $str_search                    
-                    $str_periodo                    
+                    $str_periodo    
+                    $str_estado_probacion
                     pa.paca_activo = 'A' AND
                     pa.paca_estado = :estado AND
                     da.dcab_estado_logico = :estado AND 
@@ -152,6 +156,9 @@ class DistributivoCabecera extends \yii\db\ActiveRecord
         }        
         if (isset($periodoAcademico) && $periodoAcademico != "") {
             $comando->bindParam(":periodo", $periodoAcademico, \PDO::PARAM_INT);
+        }
+        if (isset($estado_aprobacion) && $estado_aprobacion != "") {
+            $comando->bindParam(":estado_aprobacion", $estado_aprobacion, \PDO::PARAM_INT);
         }
 
         $res = $comando->queryAll();

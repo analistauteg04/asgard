@@ -42,8 +42,9 @@ class DistributivocabeceraController extends \app\components\CController {
 
         if ($data['PBgetFilter']) {
             $search = $data['search'];            
-            $periodo = (isset($data['periodo']) && $data['periodo'] > 0)?$data['periodo']:NULL;            
-            $model = $distributivocab_model->getListadoDistributivoCab($search, $periodo);
+            $periodo = (isset($data['periodo']) && $data['periodo'] > 0)?$data['periodo']:NULL;   
+            $estado = (isset($data['estado']) && $data['estado'] > 0)?$data['estado']:NULL;   
+            $model = $distributivocab_model->getListadoDistributivoCab($search, $periodo, $estado);
             return $this->render('index-grid', [
                         "model" => $model,
             ]);
