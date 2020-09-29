@@ -627,8 +627,7 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord {
      * @return  $resultData (información de los paralelos por período.)
      */
     public function consultarDetalleplanifica($pla_id, $per_id) {
-        $con = \Yii::$app->db_academico;  
-        //TRATAR DE OPTIMIZAR ESTA CONSULTA AL FINAL
+        $con = \Yii::$app->db_academico;          
         // Bloque 1
         for ($i = 1; $i < 7; $i++) {
             $sql .= "SELECT pes_mat_b1_h" . $i . "_cod as asignatura, CASE pes_jornada  
@@ -732,8 +731,6 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord {
                         pes_estado= :pes_estado AND pla_id = :pla_id AND per_id = :per_id");
             $comando->bindParam(":pla_id", $pla_id, \PDO::PARAM_INT);
             $comando->bindParam(":per_id", $per_id, \PDO::PARAM_INT);
-            //$comando->bindParam(":bloque", $bloque, \PDO::PARAM_STR);
-            //$comando->bindParam(":hora", $hora, \PDO::PARAM_STR);
             $comando->bindParam(":pes_usuario_modifica", $pes_usuario_modifica, \PDO::PARAM_INT);
             $comando->bindParam(":pes_fecha_modificacion", $pes_fecha_modificacion, \PDO::PARAM_STR);
             $comando->bindParam(":pes_estado", $pes_estado, \PDO::PARAM_STR);

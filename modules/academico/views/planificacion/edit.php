@@ -1,7 +1,6 @@
 <?php
 
 use yii\helpers\Html;
-/* use yii\helpers\Url;*/
 use app\models\Utilities;
 use app\widgets\PbGridView\PbGridView;
 use app\modules\academico\Module as academico;
@@ -10,7 +9,7 @@ use app\modules\academico\Module as academico;
 academico::registerTranslations();
 ?>
 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-    <h4><span id="lbl_evaluar"><?= Yii::t("formulario", "Ver Planificación Estudiante") ?></span></h4>
+    <h4><span id="lbl_planear"><?= academico::t("Academico", "See Student Planning") ?></span></h4>
 </div><br><br><br>
 <form class="form-horizontal">
     <div class="row">

@@ -525,7 +525,6 @@ class PlanificacionController extends \app\components\CController {
         $mod_periodo = new PlanificacionEstudiante();
         $periodo = $mod_periodo->consultarPeriodoplanifica();
         $uni_aca_model = new UnidadAcademica();
-        //$modestudio = new ModuloEstudio();
         $modalidad_model = new Modalidad();
         $modcanal = new Oportunidad();
         $mod_cabecera = $mod_periodo->consultarCabeceraplanifica($pla_id, $per_id);
@@ -594,7 +593,6 @@ class PlanificacionController extends \app\components\CController {
         $mod_jornada = new DistributivoAcademicoHorario();
         $periodo = $mod_periodo->consultarPeriodoplanifica();
         $uni_aca_model = new UnidadAcademica();
-        //$modestudio = new ModuloEstudio();
         $modalidad_model = new Modalidad();
         $modcanal = new Oportunidad();
         $mod_cabecera = $mod_periodo->consultarCabeceraplanifica($pla_id, $per_id);

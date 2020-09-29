@@ -1385,7 +1385,7 @@ create table if not exists `planificacion_estudiante` (
  `pes_mod_b2_h3` varchar(2) null, 
  `pes_mat_b2_h4_nombre` varchar(100) null, 
  `pes_mat_b2_h4_cod` varchar(20) null,
- `pes_mod_b2_h4` varchar(2)) null, 
+ `pes_mod_b2_h4` varchar(2) null, 
  `pes_mat_b2_h5_nombre` varchar(100) null, 
  `pes_mat_b2_h5_cod` varchar(20) null,
  `pes_mod_b2_h5` varchar(2) null, 
