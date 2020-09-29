@@ -62,8 +62,7 @@ class DistributivocabeceraController extends \app\components\CController {
         ]);
     }
         
-    public function actionExportexcel() {
-        $per_id = @Yii::$app->session->get("PB_perid");
+    public function actionExportexcel() {        
         ini_set('memory_limit', '256M');
         $content_type = Utilities::mimeContentType("xls");
         $nombarch = "Report-" . date("YmdHis") . ".xls";
@@ -72,55 +71,44 @@ class DistributivocabeceraController extends \app\components\CController {
         header('Cache-Control: max-age=0');
         $colPosition = array("C", "D", "E", "F", "G", "H", "I");
         $arrHeader = array(
-            academico::t("Academico", "Teacher"),
-            Yii::t("formulario", "DNI 1"),
-            Yii::t("formulario", "Academic unit"),
-            Yii::t("formulario", "Mode"),
             Yii::t("formulario", "Period"),
-            Yii::t("formulario", "Subject"),
-            academico::t("Academico", "Working day"),
+            Yii::t("formulario", "DNI 1"),
+            academico::t("Academico", "Teacher"),
+            Yii::t("formulario", "Status"),            
         );
-        $distributivo_model = new DistributivoAcademico();
-        $data = Yii::$app->request->get();
+        $distributivocab_model = new DistributivoCabecera();        
+        $data = Yii::$app->request->get();        
+            
         $arrSearch["search"] = ($data['search'] != "")?$data['search']:NULL;
-        $arrSearch["unidad"] = ($data['unidad'] > 0)?$data['unidad']:NULL;
-        $arrSearch["modalidad"] = ($data['modalidad'] > 0)?$data['modalidad']:NULL;
         $arrSearch["periodo"] = ($data['periodo'] > 0)?$data['periodo']:NULL;
-        $arrSearch["asignatura"] = ($data['asignatura'] > 0)?$data['asignatura']:NULL;
-        $arrSearch["jornada"] = ($data['jornada'] > 0)?$data['jornada']:NULL;
+        $arrSearch["estado"] = ($data['estado'] > 0)?$data['estado']:NULL;        
 
-        $arrData = $distributivo_model->getListadoDistributivo($arrSearch["search"], $arrSearch["modalidad"], $arrSearch["asignatura"], $arrSearch["jornada"], $arrSearch["unidad"], $arrSearch["periodo"], true);
+        $arrData = $distributivocab_model->getListadoDistributivoCab($arrSearch["search"] , $arrSearch["periodo"], $arrSearch["estado"], true);
+                
         foreach($arrData as $key => $value){
             unset($arrData[$key]["Id"]);
         }
-        $nameReport = academico::t("distributivoacademico", "Profesor Lists by Subject");
+        $nameReport = academico::t("distributivoacademico", "List of Distributive Teachers");
         Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
         exit;
     }
 
-    public function actionExportpdf() {
-        $per_id = @Yii::$app->session->get("PB_perid");
+    public function actionExportpdf() {        
         $report = new ExportFile();
-        $this->view->title = academico::t("distributivoacademico", "Profesor Lists by Subject"); // Titulo del reporte
+        $this->view->title = academico::t("distributivoacademico", "List of Distributive Teachers"); // Titulo del reporte
         $arrHeader = array(
-            academico::t("Academico", "Teacher"),
-            Yii::t("formulario", "DNI 1"),
-            Yii::t("formulario", "Academic unit"),
-            Yii::t("formulario", "Mode"),
             Yii::t("formulario", "Period"),
-            Yii::t("formulario", "Subject"),
-            academico::t("Academico", "Working day"),
+            Yii::t("formulario", "DNI 1"),
+            academico::t("Academico", "Teacher"),
+            Yii::t("formulario", "Status"),       
         );
-        $distributivo_model = new DistributivoAcademico();
+        $distributivocab_model = new DistributivoCabecera();     
         $data = Yii::$app->request->get();
         $arrSearch["search"] = ($data['search'] != "")?$data['search']:NULL;
-        $arrSearch["unidad"] = ($data['unidad'] > 0)?$data['unidad']:NULL;
-        $arrSearch["modalidad"] = ($data['modalidad'] > 0)?$data['modalidad']:NULL;
         $arrSearch["periodo"] = ($data['periodo'] > 0)?$data['periodo']:NULL;
-        $arrSearch["asignatura"] = ($data['asignatura'] > 0)?$data['asignatura']:NULL;
-        $arrSearch["jornada"] = ($data['jornada'] > 0)?$data['jornada']:NULL;
+        $arrSearch["estado"] = ($data['estado'] > 0)?$data['estado']:NULL;  
 
-        $arrData = $distributivo_model->getListadoDistributivo($arrSearch["search"], $arrSearch["modalidad"], $arrSearch["asignatura"], $arrSearch["jornada"], $arrSearch["unidad"], $arrSearch["periodo"], true);
+        $arrData = $distributivocab_model->getListadoDistributivoCab($arrSearch["search"] , $arrSearch["periodo"], $arrSearch["estado"], true);
         $report->orientation = "P"; // tipo de orientacion L => Horizontal, P => Vertical                                
         $report->createReportPdf(
                 $this->render('exportpdf', [

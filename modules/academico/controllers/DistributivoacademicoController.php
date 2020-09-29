@@ -25,35 +25,9 @@ academico::registerTranslations();
 admision::registerTranslations();
 
 class DistributivoacademicoController extends \app\components\CController {
-
-    public function actionIndex() {
-        $per_id = @Yii::$app->session->get("PB_perid");        
-        $model = NULL;
-        $distributivo_model = new DistributivoAcademico();        
-        $mod_periodo = new PeriodoAcademicoMetIngreso();
-        $data = Yii::$app->request->get();
-
-        if ($data['PBgetFilter']) {
-            $search = $data['search'];            
-            $periodo = (isset($data['periodo']) && $data['periodo'] > 0)?$data['periodo']:NULL;            
-            $model = $distributivo_model->getListadoDistributivo($search, $periodo);
-            return $this->render('index-grid', [
-                        "model" => $model,
-            ]);
-        } else {
-            $model = $distributivo_model->getListadoDistributivo();
-        }
-        if (Yii::$app->request->isAjax) {
-            $data = Yii::$app->request->post();            
-        }        
-        $arr_periodo = $mod_periodo->consultarPeriodoAcademico();
-        return $this->render('index', [                    
-                    'mod_periodo' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_periodo), "id", "name"),                    
-                    'model' => $model,                    
-        ]);
-    }
     
-    public function actionIndexPROFESOR() {
+    
+    public function actionIndex() {
         $per_id = @Yii::$app->session->get("PB_perid");
         $emp_id = @Yii::$app->session->get("PB_idempresa");
         $model = NULL;

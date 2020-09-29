@@ -118,9 +118,11 @@ class DistributivoCabecera extends \yii\db\ActiveRecord
         if (isset($estado_aprobacion) && $estado_aprobacion > 0) {
             $str_estado_probacion = "da.dcab_estado_aprobacion = :estado_aprobacion AND ";
         }   
-        
+        if (!$onlyData) {
+            $select = " da.dcab_id AS Id,";
+        }
         $sql = "SELECT 
-                    da.dcab_id AS Id, 
+                    $select
                     CONCAT(pe.per_pri_nombre, ' ', pe.per_pri_apellido) AS Nombres,
                     pe.per_cedula AS Cedula,                    
                     ifnull(CONCAT(blq.baca_anio,' (',blq.baca_nombre,'-',sem.saca_nombre,')'),blq.baca_anio) AS Periodo,                    

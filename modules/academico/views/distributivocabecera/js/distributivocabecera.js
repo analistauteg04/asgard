@@ -21,15 +21,19 @@ function searchModules() {
 function exportExcel() {
     var search = $('#txt_buscarData').val();    
     var periodo = $('#cmb_periodo').val();    
-    window.location.href = $('#txth_base').val() + "/academico/distributivoacademico/exportexcel?" +
+    var estado = $("#cmb_estado").val();
+    window.location.href = $('#txth_base').val() + "/academico/distributivocabecera/exportexcel?" +
         "search=" + search +        
-        "&periodo=" + periodo;   
+        "&periodo=" + periodo + 
+        "&estado=" + estado;   
 }
 
 function exportPdf() {
     var search = $('#txt_buscarData').val();    
     var periodo = $('#cmb_periodo').val();    
-    window.location.href = $('#txth_base').val() + "/academico/distributivoacademico/exportpdf?pdf=1" +
+    var estado = $("#cmb_estado").val();
+    window.location.href = $('#txth_base').val() + "/academico/distributivocabecera/exportpdf?pdf=1" +
         "&search=" + search +        
-        "&periodo=" + periodo;
+        "&periodo=" + periodo +
+        "&estado=" + estado;   
 }
