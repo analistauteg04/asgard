@@ -278,7 +278,7 @@ class Profesor extends \yii\db\ActiveRecord
         $con_asgard = \Yii::$app->db_asgard;
         $con_academico = \Yii::$app->db_academico;
 
-        $sql = "SELECT 
+        $sql = "SELECT
                     pro.pro_id AS Id,
                     CONCAT(pe.per_pri_apellido, ' ', pe.per_pri_nombre) AS Nombres
                 FROM 

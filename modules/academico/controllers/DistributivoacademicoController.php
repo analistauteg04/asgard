@@ -13,6 +13,7 @@ use app\modules\academico\models\PromocionPrograma;
 use app\modules\academico\models\ParaleloPromocionPrograma;
 use app\modules\academico\models\Modalidad;
 use app\modules\academico\models\PeriodoAcademicoMetIngreso;
+use app\modules\academico\models\Planificacion;
 use yii\helpers\ArrayHelper;
 use app\models\Utilities;
 use app\modules\academico\Module as academico;
@@ -25,7 +26,25 @@ academico::registerTranslations();
 admision::registerTranslations();
 
 class DistributivoacademicoController extends \app\components\CController {
+    public function tipoAsignacion() {
+        return [
+            '0' => Yii::t("formulario", "Seleccione"),
+            '1' => Yii::t("formulario", "Académico"),
+            '2' => Yii::t("formulario", "Investigación"),
+            '3' => Yii::t("formulario", "Vinculación"),
+            '4' => Yii::t("formulario", "Tutorías"),
+        ];
+    }
     
+    public function paralelo() {
+        return [
+            '0' => Yii::t("formulario", "Seleccione"),
+            '1' => Yii::t("formulario", "Paralelo 1"),
+            '2' => Yii::t("formulario", "Paralelo 2"),
+            '3' => Yii::t("formulario", "Paralelo 3"),            
+            '4' => Yii::t("formulario", "Paralelo 4"),    
+        ];
+    }
     
     public function actionIndex() {
         $per_id = @Yii::$app->session->get("PB_perid");
@@ -88,13 +107,14 @@ class DistributivoacademicoController extends \app\components\CController {
         $emp_id = @Yii::$app->session->get("PB_idempresa");
         $mod_modalidad = new Modalidad();
         $mod_unidad = new UnidadAcademica();
-        $mod_periodo = new PeriodoAcademicoMetIngreso();
+        $mod_periodo = new Planificacion();
+        $mod_asignatura = new Asignatura();
         $distributivo_model = new DistributivoAcademico();
         $arr_unidad = $mod_unidad->consultarUnidadAcademicasEmpresa($emp_id);
         $arr_modalidad = $mod_modalidad->consultarModalidad($arr_unidad[0]["id"], $emp_id);
-        $arr_periodo = $mod_periodo->consultarPeriodoAcademico();
-        $mod_asignatura = Asignatura::findAll(['asi_estado' => 1, 'asi_estado_logico' => 1]);
+        $arr_periodo = $mod_periodo->getPeriodos_x_modalidad($arr_modalidad[0]["id"]);
         $arr_jornada = $distributivo_model->getJornadasByUnidadAcad($arr_unidad[0]["id"], $arr_modalidad[0]["id"]);
+        $arr_asignatura = $mod_asignatura->getAsignatura_x_bloque_x_planif($arr_periodo[0]["id"]);
         $mod_profesor = new Profesor();
         $arr_profesor = $mod_profesor->getProfesores();
         $arr_horario = $distributivo_model->getHorariosByUnidadAcad($arr_unidad[0]["id"], $arr_modalidad[0]["id"], $arr_jornada[0]["id"]);
@@ -103,9 +123,12 @@ class DistributivoacademicoController extends \app\components\CController {
             'arr_unidad' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_unidad), "id", "name"),
             'arr_modalidad' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_modalidad), "id", "name"),
             'arr_periodo' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_periodo), "id", "name"),
-            'arr_materias' => ArrayHelper::map(array_merge([["asi_id" => "0", "asi_nombre" => Yii::t("formulario", "Grid")]], $mod_asignatura), "asi_id", "asi_nombre"),
+            'arr_materias' => ArrayHelper::map(array_merge([["asi_id" => "0", "asi_nombre" => Yii::t("formulario", "Grid")]], $arr_asignatura), "asi_id", "asi_nombre"),
             'arr_jornada' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_jornada), "id", "name"),
             'arr_horario' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_horario), "id", "name"),
+            'arr_tipo_asignacion' => $this->tipoAsignacion(),
+            'arr_paralelo' => $this->paralelo(),
+            'model' => array(),
         ]);
     }
 

@@ -171,4 +171,64 @@ class Asignatura extends \yii\db\ActiveRecord
         }
         return $res;
     }
+    
+    
+    /**
+     * Function getAsignatura_x_bloque_x_planif
+     * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
+     * @param   
+     * @return  $resultData (Retornar las asignaturas por planificación y modalidad).
+     */
+    public function getAsignatura_x_bloque_x_planif($pla_id) {
+        $con = \Yii::$app->db_academico;
+        $estado = 1;
+
+        $sql = "SELECT distinct a.asi_id id, asi_nombre nombre
+                FROM db_academico.planificacion_estudiante pe inner join db_academico.malla_academica_detalle md
+                     on md.made_codigo_asignatura = pe.pes_mat_b1_h1_cod
+                     inner join db_academico.asignatura a on a.asi_id = md.asi_id
+                WHERE pla_id = :pla_id
+                     and pes_estado = 1
+                     and pes_estado_logico = 1
+                UNION
+                SELECT distinct a.asi_id id, asi_nombre nombre
+                FROM db_academico.planificacion_estudiante pe inner join db_academico.malla_academica_detalle md
+                    on md.made_codigo_asignatura = pe.pes_mat_b1_h2_cod
+                    inner join db_academico.asignatura a on a.asi_id = md.asi_id
+                WHERE pla_id = :pla_id
+                    and pes_estado = 1
+                    and pes_estado_logico = 1
+                UNION
+                SELECT distinct a.asi_id id, asi_nombre nombre
+                FROM db_academico.planificacion_estudiante pe inner join db_academico.malla_academica_detalle md
+                    on md.made_codigo_asignatura = pe.pes_mat_b1_h3_cod
+                    inner join db_academico.asignatura a on a.asi_id = md.asi_id
+                WHERE pla_id = :pla_id
+                    and pes_estado = 1
+                    and pes_estado_logico = 1
+                UNION
+                SELECT distinct a.asi_id id, asi_nombre nombre
+                FROM db_academico.planificacion_estudiante pe inner join db_academico.malla_academica_detalle md
+                    on md.made_codigo_asignatura = pe.pes_mat_b1_h4_cod
+                    inner join db_academico.asignatura a on a.asi_id = md.asi_id
+                WHERE pla_id = :pla_id
+                    and pes_estado = 1
+                 and pes_estado_logico = 1
+                UNION
+                SELECT distinct a.asi_id id, asi_nombre nombre
+                FROM db_academico.planificacion_estudiante pe inner join db_academico.malla_academica_detalle md
+                    on md.made_codigo_asignatura = pe.pes_mat_b1_h5_cod
+                    inner join db_academico.asignatura a on a.asi_id = md.asi_id
+                WHERE pla_id = :pla_id
+                    and pes_estado = 1
+                    and pes_estado_logico = 1";
+        
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);  
+        $comando->bindParam(":pla_id", $pla_id, \PDO::PARAM_INT);  
+        $resultData = $comando->queryAll();
+        return $resultData;
+    }   
+    
+    
 }

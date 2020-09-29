@@ -206,5 +206,26 @@ class Planificacion extends \yii\db\ActiveRecord {
         $resultData = $comando->queryAll();
         return $resultData;
     }
+    
+    /**
+     * Function getPeriodos_x_modalidad
+     * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
+     * @param   
+     * @return  $resultData (Retornar los períodos académicos de planificación por modalidad).
+     */
+    public function getPeriodos_x_modalidad($mod_id) {
+        $con = \Yii::$app->db_academico;
+        $estado = 1;
 
+        $sql = "SELECT pla_id id, pla_periodo_academico name
+                FROM " . $con->dbname . ".planificacion p
+                WHERE mod_id = :mod_id and
+                     pla_estado = :estado and pla_estado_logico = :estado";
+        
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);  
+        $comando->bindParam(":mod_id", $mod_id, \PDO::PARAM_INT);  
+        $resultData = $comando->queryAll();
+        return $resultData;
+    }   
 }

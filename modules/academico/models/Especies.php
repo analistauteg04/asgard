@@ -792,7 +792,7 @@ class Especies extends \yii\db\ActiveRecord {
     public function consultarPeriodoactivo() {
         $con = \Yii::$app->db_academico;
         $estado = 1;
-        $sql = "SELECT group_concat(paca_id) as paca_id
+        $sql = "SELECTx group_concat(paca_id) as paca_id
                   FROM " . $con->dbname . ".periodo_academico                       
                   WHERE paca_activo = 'A' AND
                     paca_estado = :estado AND
