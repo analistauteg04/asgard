@@ -627,10 +627,10 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord {
      * @return  $resultData (información de los paralelos por período.)
      */
     public function consultarDetalleplanifica($pla_id, $per_id) {
-        $con = \Yii::$app->db_academico;          
+        $con = \Yii::$app->db_academico;
         // Bloque 1
         for ($i = 1; $i < 7; $i++) {
-            $sql .= "SELECT pes_mat_b1_h" . $i . "_cod as asignatura, CASE pes_jornada  
+            $sql .= "SELECT pes_mat_b1_h" . $i . "_cod as cod_asignatura, asig.asi_nombre as asignatura, CASE pes_jornada  
                             WHEN 1 THEN 'Matutino'  
                             WHEN 2 THEN 'Nocturno'  
                             WHEN 3 THEN 'Semipresencial'
@@ -638,12 +638,14 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord {
 		    END AS pes_jornada, 'Bloque 1', moda.mod_nombre as modalidad, 'Hora " . $i . "' 
                     FROM " . $con->dbname . ".planificacion_estudiante ples
                     INNER JOIN " . $con->dbname . ".modalidad moda ON  moda.mod_id = ples.pes_mod_b1_h" . $i . "
+                    INNER JOIN " . $con->dbname . ".malla_academica_detalle mad ON  mad.made_codigo_asignatura = pes_mat_b1_h" . $i . "_cod
+                    INNER JOIN " . $con->dbname . ".asignatura asig ON  asig.asi_id = mad.asi_id
                     where pla_id = " . $pla_id . " and per_id = " . $per_id . "
                     UNION ";
         }
         // Bloque 2
         for ($j = 1; $j < 7; $j++) {
-            $sql .= "SELECT pes_mat_b2_h" . $j . "_cod as asignatura, CASE pes_jornada  
+            $sql .= "SELECT pes_mat_b2_h" . $j . "_cod as cod_asignatura, asig.asi_nombre as asignatura, CASE pes_jornada  
                             WHEN 1 THEN 'Matutino'  
                             WHEN 2 THEN 'Nocturno'  
                             WHEN 3 THEN 'Semipresencial'
@@ -651,11 +653,13 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord {
 		    END AS pes_jornada, 'Bloque 1', moda.mod_nombre as modalidad, 'Hora " . $j . "' 
                     FROM " . $con->dbname . ".planificacion_estudiante ples
                     INNER JOIN " . $con->dbname . ".modalidad moda ON  moda.mod_id = ples.pes_mod_b2_h" . $j . "
-                    where pla_id = " . $pla_id . " and per_id = " . $per_id ." ";
+                    INNER JOIN " . $con->dbname . ".malla_academica_detalle mad ON  mad.made_codigo_asignatura = pes_mat_b1_h" . $j . "_cod
+                    INNER JOIN " . $con->dbname . ".asignatura asig ON  asig.asi_id = mad.asi_id
+                    where pla_id = " . $pla_id . " and per_id = " . $per_id . " ";
             if ($j < 6) {
                 $sql .= "UNION ";
             }
-        }        
+        }
 
         $comando = $con->createCommand($sql);
         $resultData = $comando->queryall();
@@ -742,6 +746,107 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord {
             if ($trans !== null)
                 $trans->rollback();
             return FALSE;
+        }
+    }
+
+    /**
+     * Function Modificar planificacion x estudiante.
+     * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;
+     * @param
+     * @return
+     */
+    public function modificarPlanestudiante($pla_id, $per_id, $bloque, $hora, $pes_jornada, $pes_egresado, $pes_tutoria_nombre, $pes_tutoria_cod, $materia, $modalidad) {
+        $con = \Yii::$app->db_academico;
+        $pes_usuario_modificacion = date(Yii::$app->params["dateTimeByDefault"]);
+        $estado = 1;
+        $trans = $con->getTransaction(); // se obtiene la transacción actual
+        if ($trans !== null) {
+            $trans = null; // si existe la transacción entonces no se crea una
+        } else {
+            $trans = $con->beginTransaction(); // si no existe la transacción entonces se crea una
+        }
+        $asignatura = "pes_mat_b" . $bloque . "_h" . $hora . "_cod = " . $materia . " , ";
+        $modalidadasig = "pes_mod_b" . $bloque . "_h" . $hora . " = " . $modalidad . " , ";
+        try {
+            $comando = $con->createCommand
+                    ("UPDATE " . $con->dbname . ".planificacion_estudiante      
+                      SET pes_jornada = :pes_jornada,
+                        pes_egresado = :pes_egresado,
+                        pes_egresado = :pes_carrera,
+                        pes_tutoria_nombre = :pes_tutoria_nombre,
+                        pes_tutoria_cod = :pes_tutoria_cod, " .
+                    $asignatura . " " . $modalidadasig . " .
+                        pes_usuario_modificacion = :pes_usuario_modificacion
+                      WHERE
+                        pla_id = :pla_id AND                        
+                        per_id = :per_id AND
+                        pes_estado = :estado AND
+                        pes_estado_logico = :estado");
+
+            if (isset($pla_id)) {
+                $comando->bindParam(':pla_id', $pla_id, \PDO::PARAM_INT);
+            }
+            if (isset($per_id)) {
+                $comando->bindParam(':per_id', $per_id, \PDO::PARAM_INT);
+            }
+            if (isset($pes_jornada)) {
+                $comando->bindParam(':pes_jornada', $pes_jornada, \PDO::PARAM_STR);
+            }
+            if (isset($pes_egresado)) {
+                $comando->bindParam(':pes_egresado', $pes_egresado, \PDO::PARAM_STR);
+            }
+            if (isset($pes_tutoria_nombre)) {
+                $comando->bindParam(':pes_tutoria_nombre', $pes_tutoria_nombre, \PDO::PARAM_STR);
+            }
+            if (isset($pes_tutoria_cod)) {
+                $comando->bindParam(':pes_tutoria_cod', $pes_tutoria_cod, \PDO::PARAM_STR);
+            }
+            if (isset($pes_usuario_modificacion)) {
+                $comando->bindParam(':pes_usuario_modificacion', $pes_usuario_modificacion, \PDO::PARAM_STR);
+            }
+            $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+            $result = $comando->execute();
+            if ($trans !== null)
+                $trans->commit();
+            return $con->getLastInsertID($con->dbname . '.planificacion_estudiante');
+        } catch (Exception $ex) {
+            if ($trans !== null)
+                $trans->rollback();
+            return FALSE;
+        }
+    }
+
+    /**
+     * Function insertarPlanificacionestudiante 
+     * Guiarse de insertarPersona
+     * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>
+     * @property integer $userid
+     * @return  
+     */
+    public function insertarPlanificacionestudiante($con, $parameters, $keys, $name_table) {
+        $trans = $con->getTransaction();
+        $param_sql .= "" . $keys[0];
+        $bdet_sql .= "'" . $parameters[0] . "'";
+        for ($i = 1; $i < count($parameters); $i++) {
+            if (isset($parameters[$i])) {
+                $param_sql .= ", " . $keys[$i];
+                $bdet_sql .= ", '" . $parameters[$i] . "'";
+            }
+        }
+        try {
+            $sql = "INSERT INTO " . $con->dbname . '.' . $name_table . " ($param_sql) VALUES($bdet_sql);";
+            \app\models\Utilities::putMessageLogFile('insert planificacion_estudiante:' . $sql);
+            $comando = $con->createCommand($sql);
+            $result = $comando->execute();
+            $idtable = $con->getLastInsertID($con->dbname . '.' . $name_table);
+            if ($trans !== null)
+                $trans->commit();
+            return $idtable;
+        } catch (Exception $ex) {
+            if ($trans !== null) {
+                $trans->rollback();
+            }
+            return 0;
         }
     }
 
