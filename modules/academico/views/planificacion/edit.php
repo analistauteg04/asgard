@@ -19,11 +19,11 @@ academico::registerTranslations();
             <div class="form-group">
                 <label for="lbl_unidadest" class="col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= Yii::t("crm", "Academic Unit"); ?></label>
                 <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
-                    <?= Html::dropDownList("cmb_unidadest", 1, $arr_unidad, ["class" => "form-control", "id" => "cmb_unidadest", "Disabled"=> "true"]) ?>
+                    <?= Html::dropDownList("cmb_unidadest", 1, $arr_unidad, ["class" => "form-control", "id" => "cmb_unidadest", "Disabled" => "true"]) ?>
                 </div>   
                 <label for="lbl_modalidadest" class="col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= Yii::t("formulario", "Mode"); ?></label>
                 <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
-                    <?= Html::dropDownList("cmb_modalidadest", $arr_cabecera["mod_id"], $arr_modalidad, ["class" => "form-control", "id" => "cmb_modalidadest", "Disabled"=> "true"]) ?>
+                    <?= Html::dropDownList("cmb_modalidadest", $arr_cabecera["mod_id"], $arr_modalidad, ["class" => "form-control", "id" => "cmb_modalidadest", "Disabled" => "true"]) ?>
                 </div>  
             </div>        
         </div>  
@@ -31,11 +31,11 @@ academico::registerTranslations();
             <div class="form-group">
                 <label for="lbl_carreraest" class="col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= Yii::t("crm", "Carrera"); ?></label>
                 <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
-                    <?= Html::dropDownList("cmb_carreraest", 1, $arr_carrera, ["class" => "form-control", "id" => "cmb_carreraest", "Disabled"=> "true"]) ?>
+                    <?= Html::dropDownList("cmb_carreraest", 1, $arr_carrera, ["class" => "form-control", "id" => "cmb_carreraest", "Disabled" => "true"]) ?>
                 </div>  
                 <label for="lbl_periodoest" class="col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= Yii::t("formulario", "Period"); ?></label>
                 <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
-                    <?= Html::dropDownList("cmb_periodoest", $arr_cabecera["pla_periodo_academico"], $arr_periodo, ["class" => "form-control", "id" => "cmb_periodoest", "Disabled"=> "true"]) ?>
+                    <?= Html::dropDownList("cmb_periodoest", $arr_cabecera["pla_periodo_academico"], $arr_periodo, ["class" => "form-control", "id" => "cmb_periodoest", "Disabled" => "true"]) ?>
                 </div>                  
             </div>        
         </div>          
@@ -80,7 +80,10 @@ academico::registerTranslations();
         </div>
         <div class="form-group">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center">
-                <button type="button" class="btn btn-primary" onclick="javascript:addInstruccion()"><?= Academico::t('profesor', 'Add') ?></button>
+                <button id="btn_AgregarItemat" type="button" class="btn btn-primary" ><?= Academico::t('profesor', 'Add') ?></button>
+                <!-- <div class="col-sm-2 col-md-2 col-xs-2 col-lg-2 text-center">
+                    <a id="btn_AgregarItemat" href="javascript:" class="btn btn-primary btn-block"> <? Yii::t("formulario", "Add") ?></a>
+                </div>-->
             </div>
         </div>
         <?=
@@ -116,16 +119,16 @@ academico::registerTranslations();
                     'value' => 'Hora 1',
                 ],
                 [
-                'class' => 'yii\grid\ActionColumn',                
-                'contentOptions' => ['style' => 'text-align: center;'],
-                'headerOptions' => ['width' => '60'],
-                'template' => '{delete}',
-                'buttons' => [
-                    'delete' => function ($url, $model_detalle) {                        
-                        return Html::a('<span class="'.Utilities::getIcon('remove').'"></span>', null, ['href' => 'javascript:', 'onclick' => "deletematestudiante(" . $_GET['pla_id'] . ", " . $_GET['per_id'] . ", " . substr($model_detalle['Bloque 1'],-1) . ", " . substr($model_detalle['Hora 1'],-1) . ");", "data-toggle" => "tooltip", "title" => Yii::t("accion","Delete")]);                         
-                    },
+                    'class' => 'yii\grid\ActionColumn',
+                    'contentOptions' => ['style' => 'text-align: center;'],
+                    'headerOptions' => ['width' => '60'],
+                    'template' => '{delete}',
+                    'buttons' => [
+                        'delete' => function ($url, $model_detalle) {
+                            return Html::a('<span class="' . Utilities::getIcon('remove') . '"></span>', null, ['href' => 'javascript:', 'onclick' => "deletematestudiante(" . $_GET['pla_id'] . ", " . $_GET['per_id'] . ", " . substr($model_detalle['Bloque 1'], -1) . ", " . substr($model_detalle['Hora 1'], -1) . ");", "data-toggle" => "tooltip", "title" => Yii::t("accion", "Delete")]);
+                        },
+                    ],
                 ],
-            ],
             ],
         ])
         ?>
