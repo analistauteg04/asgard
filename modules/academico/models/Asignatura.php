@@ -183,7 +183,7 @@ class Asignatura extends \yii\db\ActiveRecord
         $con = \Yii::$app->db_academico;
         $estado = 1;
 
-        $sql = "SELECT distinct a.asi_id id, asi_nombre nombre
+        $sql = "SELECT distinct a.asi_id id, asi_nombre name
                 FROM db_academico.planificacion_estudiante pe inner join db_academico.malla_academica_detalle md
                      on md.made_codigo_asignatura = pe.pes_mat_b1_h1_cod
                      inner join db_academico.asignatura a on a.asi_id = md.asi_id
@@ -191,7 +191,7 @@ class Asignatura extends \yii\db\ActiveRecord
                      and pes_estado = 1
                      and pes_estado_logico = 1
                 UNION
-                SELECT distinct a.asi_id id, asi_nombre nombre
+                SELECT distinct a.asi_id id, asi_nombre name
                 FROM db_academico.planificacion_estudiante pe inner join db_academico.malla_academica_detalle md
                     on md.made_codigo_asignatura = pe.pes_mat_b1_h2_cod
                     inner join db_academico.asignatura a on a.asi_id = md.asi_id
@@ -199,7 +199,7 @@ class Asignatura extends \yii\db\ActiveRecord
                     and pes_estado = 1
                     and pes_estado_logico = 1
                 UNION
-                SELECT distinct a.asi_id id, asi_nombre nombre
+                SELECT distinct a.asi_id id, asi_nombre name
                 FROM db_academico.planificacion_estudiante pe inner join db_academico.malla_academica_detalle md
                     on md.made_codigo_asignatura = pe.pes_mat_b1_h3_cod
                     inner join db_academico.asignatura a on a.asi_id = md.asi_id
@@ -207,7 +207,7 @@ class Asignatura extends \yii\db\ActiveRecord
                     and pes_estado = 1
                     and pes_estado_logico = 1
                 UNION
-                SELECT distinct a.asi_id id, asi_nombre nombre
+                SELECT distinct a.asi_id id, asi_nombre name
                 FROM db_academico.planificacion_estudiante pe inner join db_academico.malla_academica_detalle md
                     on md.made_codigo_asignatura = pe.pes_mat_b1_h4_cod
                     inner join db_academico.asignatura a on a.asi_id = md.asi_id
@@ -215,7 +215,7 @@ class Asignatura extends \yii\db\ActiveRecord
                     and pes_estado = 1
                  and pes_estado_logico = 1
                 UNION
-                SELECT distinct a.asi_id id, asi_nombre nombre
+                SELECT distinct a.asi_id id, asi_nombre name
                 FROM db_academico.planificacion_estudiante pe inner join db_academico.malla_academica_detalle md
                     on md.made_codigo_asignatura = pe.pes_mat_b1_h5_cod
                     inner join db_academico.asignatura a on a.asi_id = md.asi_id

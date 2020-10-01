@@ -109,26 +109,28 @@ class DistributivoacademicoController extends \app\components\CController {
         $mod_unidad = new UnidadAcademica();
         $mod_periodo = new Planificacion();
         $mod_asignatura = new Asignatura();
+        $mod_profesor = new Profesor();
         $distributivo_model = new DistributivoAcademico();
         $arr_unidad = $mod_unidad->consultarUnidadAcademicasEmpresa($emp_id);
         $arr_modalidad = $mod_modalidad->consultarModalidad($arr_unidad[0]["id"], $emp_id);
         $arr_periodo = $mod_periodo->getPeriodos_x_modalidad($arr_modalidad[0]["id"]);
-        $arr_jornada = $distributivo_model->getJornadasByUnidadAcad($arr_unidad[0]["id"], $arr_modalidad[0]["id"]);
+        $arr_jornada = $distributivo_model->getJornadasByUnidadAcad($arr_unidad[0]["id"], $arr_modalidad[0]["id"]);        
         $arr_asignatura = $mod_asignatura->getAsignatura_x_bloque_x_planif($arr_periodo[0]["id"]);
-        $mod_profesor = new Profesor();
+
         $arr_profesor = $mod_profesor->getProfesores();
         $arr_horario = $distributivo_model->getHorariosByUnidadAcad($arr_unidad[0]["id"], $arr_modalidad[0]["id"], $arr_jornada[0]["id"]);
+        $model = $distributivo_model->getDistribAcadXprofesorXperiodo(0,0);
         return $this->render('new', [
             'arr_profesor' => ArrayHelper::map(array_merge([["Id" => "0", "Nombres" => Yii::t("formulario", "Grid")]], $arr_profesor), "Id", "Nombres"),
             'arr_unidad' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_unidad), "id", "name"),
             'arr_modalidad' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_modalidad), "id", "name"),
             'arr_periodo' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_periodo), "id", "name"),
-            'arr_materias' => ArrayHelper::map(array_merge([["asi_id" => "0", "asi_nombre" => Yii::t("formulario", "Grid")]], $arr_asignatura), "asi_id", "asi_nombre"),
+            'arr_materias' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_asignatura), "id", "name"),
             'arr_jornada' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_jornada), "id", "name"),
             'arr_horario' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_horario), "id", "name"),
             'arr_tipo_asignacion' => $this->tipoAsignacion(),
             'arr_paralelo' => $this->paralelo(),
-            'model' => array(),
+            'model' => $model,
         ]);
     }
 

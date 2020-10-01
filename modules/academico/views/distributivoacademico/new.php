@@ -78,7 +78,53 @@ academico::registerTranslations();
     
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="">
-
+<?=
+    PbGridView::widget([
+        'id' => 'grid_asignacion_list',        
+        'dataProvider' => $model,        
+        'pajax' => true,
+        'summary' => false,
+        'columns' => [          
+            [
+                'attribute' => 'Tipo Asignación',
+                'header' => academico::t("Academico", "Assignment Type"),
+                'value' => 'des_tipo',
+            ],
+            [
+                'attribute' => 'Asignatura',
+                'header' => academico::t("Academico", "Subject"),
+                'value' => 'asi_nombre',
+            ],
+            [
+                'attribute' => 'Unidad Académica',
+                'header' => academico::t("Academico", "Academic unit"),
+                'value' => 'uaca_nombre',
+            ],
+            [
+                'attribute' => 'Modalidad',
+                'header' => academico::t("Academico", "Modality"),
+                'value' => 'mod_nombre',
+            ],
+            [
+                'attribute' => 'Horario',
+                'header' => academico::t("Academico", "Schedule"),
+                'value' => 'daho_horario',
+            ],            
+            [
+                'class' => 'yii\grid\ActionColumn',
+                //'header' => 'Action',
+                'contentOptions' => ['style' => 'text-align: center;'],
+                'headerOptions' => ['width' => '60'],
+                'template' => '{delete}',
+                'buttons' => [
+                    'delete' => function ($url, $model) {
+                         return Html::a('<span class="'.Utilities::getIcon('remove').'"></span>', null, ['href' => 'javascript:confirmDelete(\'deleteItem\',[\'' . $model['per_id'] . '\']);', "data-toggle" => "tooltip", "title" => Yii::t("accion","Delete")]);
+                    },
+                ],
+            ],
+        ],
+    ])
+?>
         </div>
     </div>
 </form>

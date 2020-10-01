@@ -17,6 +17,7 @@ return [
     "Admitted Data" => "Datos Admitido",
     "Application date" => "Fecha Aplicacion",
     "Approved" => "Aprobadas",
+    "Assignment Type" => "Tipo de Asignación",
     "Attach document" => "Adjuntar Documentos",
     "Career" => "Carrera",
     "Career/Program" => "Carrera/Programa",

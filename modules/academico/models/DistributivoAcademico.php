@@ -353,5 +353,48 @@ class DistributivoAcademico extends \yii\db\ActiveRecord {
         $res = $comando->queryOne();
         return $res;
     }
+    
+    public function getDistribAcadXprofesorXperiodo($periodo, $profesor){
+        $con_academico = \Yii::$app->db_academico;
+        $estado = "1";
+        $sql = "SELECT  d.daca_tipo,                         
+                        case when daca_tipo = 1 then 'Académico'
+                             when daca_tipo = 2 then 'Investigación'
+                             when daca_tipo = 2 then 'Vinculación'
+                             else 'Tutorías'
+                        end as des_tipo,
+                        d.asi_id, a.asi_nombre, 
+                        d.mod_id, m.mod_nombre,
+                        d.uaca_id, u.uaca_nombre,
+                        d.daho_id, h.daho_horario
+                FROM " . $con_academico->dbname . ".distributivo_academico d inner join " . $con_academico->dbname . ".asignatura a on a.asi_id = d.asi_id
+                    inner join " . $con_academico->dbname . ".modalidad m on m.mod_id = d.mod_id
+                    inner join " . $con_academico->dbname . ".unidad_academica u on u.uaca_id = d.uaca_id
+                    inner join " . $con_academico->dbname . ".distributivo_academico_horario h on h.daho_id = d.daho_id
+                WHERE d.paca_id = :paca_id
+                    and d.pro_id = :pro_id
+                    and d.daca_estado = :estado
+                    and d.daca_estado_logico = :estado";
+        $comando = $con_academico->createCommand($sql);
+        $comando->bindParam(":paca_id", $periodo, \PDO::PARAM_INT);
+        $comando->bindParam(":pro_id", $profesor, \PDO::PARAM_INT);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);        
+        $res = $comando->queryAll();
+        
+        if ($onlyData)
+            return $res;
+        $dataProvider = new ArrayDataProvider([
+            'key' => 'Id',
+            'allModels' => $res,
+            'pagination' => [
+                'pageSize' => Yii::$app->params["pageSize"],
+            ],
+            'sort' => [
+                'attributes' => ['unidad', "modalidad"],
+            ],
+        ]);
+
+        return $dataProvider;
+    }        
 
 }
