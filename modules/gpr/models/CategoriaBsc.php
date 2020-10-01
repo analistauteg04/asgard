@@ -3,6 +3,9 @@
 namespace app\modules\gpr\models;
 
 use Yii;
+use yii\data\ArrayDataProvider;
+use yii\helpers\ArrayHelper;
+use yii\base\Exception;
 
 /**
  * This is the model class for table "categoria_bsc".
@@ -78,5 +81,45 @@ class CategoriaBsc extends \yii\db\ActiveRecord
     public function getObjetivoEstrategicos()
     {
         return $this->hasMany(ObjetivoEstrategico::className(), ['cbsc_id' => 'cbsc_id']);
+    }
+
+    function getAllCatBscGrid($search = NULL, $dataProvider = false){
+        $search_cond = "%".$search."%";
+        $str_search = "";
+        $con = Yii::$app->db_gpr;
+        if(isset($search)){
+            $str_search  = "(cbsc_nombre like :search OR ";
+            $str_search .= "cbsc_descripcion like :search) AND ";
+        }
+        $sql = "SELECT 
+                    cbsc_id as id,
+                    cbsc_nombre as Nombre,
+                    cbsc_descripcion as Descripcion,
+                    cbsc_estado as Estado
+                FROM 
+                    ".$con->dbname.".categoria_bsc
+                WHERE 
+                    $str_search
+                    cbsc_estado_logico=1 
+                ORDER BY cbsc_id;";
+        $comando = Yii::$app->db->createCommand($sql);
+        if(isset($search)){
+            $comando->bindParam(":search",$search_cond, \PDO::PARAM_STR);
+        }
+        $res = $comando->queryAll();
+        if($dataProvider){
+            $dataProvider = new ArrayDataProvider([
+                'key' => 'id',
+                'allModels' => $res,
+                'pagination' => [
+                    'pageSize' => Yii::$app->params["pageSize"],
+                ],
+                'sort' => [
+                    'attributes' => ['Nombre', 'Estado', 'Descripcion'],
+                ],
+            ]);
+            return $dataProvider;
+        }
+        return $res;
     }
 }

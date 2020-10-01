@@ -3,6 +3,9 @@
 namespace app\modules\gpr\models;
 
 use Yii;
+use yii\data\ArrayDataProvider;
+use yii\helpers\ArrayHelper;
+use yii\base\Exception;
 
 /**
  * This is the model class for table "tipo_configuracion".
@@ -66,5 +69,45 @@ class TipoConfiguracion extends \yii\db\ActiveRecord
             'tcon_fecha_modificacion' => 'Tcon Fecha Modificacion',
             'tcon_estado_logico' => 'Tcon Estado Logico',
         ];
+    }
+
+    function getAllTipConfGrid($search = NULL, $dataProvider = false){
+        $search_cond = "%".$search."%";
+        $str_search = "";
+        $con = Yii::$app->db_gpr;
+        if(isset($search)){
+            $str_search  = "(tcon_nombre like :search OR ";
+            $str_search .= "tcon_descripcion like :search) AND ";
+        }
+        $sql = "SELECT 
+                    tcon_id as id,
+                    tcon_nombre as Nombre,
+                    tcon_descripcion as Descripcion,
+                    tcon_estado as Estado
+                FROM 
+                    ".$con->dbname.".tipo_configuracion
+                WHERE 
+                    $str_search
+                    tcon_estado_logico=1 
+                ORDER BY tcon_id;";
+        $comando = Yii::$app->db->createCommand($sql);
+        if(isset($search)){
+            $comando->bindParam(":search",$search_cond, \PDO::PARAM_STR);
+        }
+        $res = $comando->queryAll();
+        if($dataProvider){
+            $dataProvider = new ArrayDataProvider([
+                'key' => 'id',
+                'allModels' => $res,
+                'pagination' => [
+                    'pageSize' => Yii::$app->params["pageSize"],
+                ],
+                'sort' => [
+                    'attributes' => ['Nombre', 'Estado', 'Descripcion'],
+                ],
+            ]);
+            return $dataProvider;
+        }
+        return $res;
     }
 }

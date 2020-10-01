@@ -3,6 +3,9 @@
 namespace app\modules\gpr\models;
 
 use Yii;
+use yii\data\ArrayDataProvider;
+use yii\helpers\ArrayHelper;
+use yii\base\Exception;
 
 /**
  * This is the model class for table "categoria".
@@ -16,6 +19,8 @@ use Yii;
  * @property string $cat_fecha_creacion
  * @property string|null $cat_fecha_modificacion
  * @property string $cat_estado_logico
+ *
+ * @property Entidad[] $entidads
  */
 class Categoria extends \yii\db\ActiveRecord
 {
@@ -66,5 +71,55 @@ class Categoria extends \yii\db\ActiveRecord
             'cat_fecha_modificacion' => 'Cat Fecha Modificacion',
             'cat_estado_logico' => 'Cat Estado Logico',
         ];
+    }
+
+    /**
+     * Gets query for [[Entidads]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getEntidads()
+    {
+        return $this->hasMany(Entidad::className(), ['cat_id' => 'cat_id']);
+    }
+
+    function getAllCategoriaGrid($search = NULL, $dataProvider = false){
+        $search_cond = "%".$search."%";
+        $str_search = "";
+        $con = Yii::$app->db_gpr;
+        if(isset($search)){
+            $str_search  = "(cat_nombre like :search OR ";
+            $str_search .= "cat_descripcion like :search) AND ";
+        }
+        $sql = "SELECT 
+                    cat_id as id,
+                    cat_nombre as Nombre,
+                    cat_descripcion as Descripcion,
+                    cat_estado as Estado
+                FROM 
+                    ".$con->dbname.".categoria
+                WHERE 
+                    $str_search
+                    cat_estado_logico=1 
+                ORDER BY cat_id;";
+        $comando = Yii::$app->db->createCommand($sql);
+        if(isset($search)){
+            $comando->bindParam(":search",$search_cond, \PDO::PARAM_STR);
+        }
+        $res = $comando->queryAll();
+        if($dataProvider){
+            $dataProvider = new ArrayDataProvider([
+                'key' => 'id',
+                'allModels' => $res,
+                'pagination' => [
+                    'pageSize' => Yii::$app->params["pageSize"],
+                ],
+                'sort' => [
+                    'attributes' => ['Nombre', 'Estado', 'Descripcion'],
+                ],
+            ]);
+            return $dataProvider;
+        }
+        return $res;
     }
 }

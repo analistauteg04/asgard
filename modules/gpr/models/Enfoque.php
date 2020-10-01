@@ -3,6 +3,9 @@
 namespace app\modules\gpr\models;
 
 use Yii;
+use yii\data\ArrayDataProvider;
+use yii\helpers\ArrayHelper;
+use yii\base\Exception;
 
 /**
  * This is the model class for table "enfoque".
@@ -78,5 +81,45 @@ class Enfoque extends \yii\db\ActiveRecord
     public function getObjetivoEstrategicos()
     {
         return $this->hasMany(ObjetivoEstrategico::className(), ['enf_id' => 'enf_id']);
+    }
+
+    public function getAllEnfoqueGrid($search = NULL, $dataProvider = false){
+        $search_cond = "%".$search."%";
+        $str_search = "";
+        $con = Yii::$app->db_gpr;
+        if(isset($search)){
+            $str_search  = "(enf_nombre like :search OR ";
+            $str_search .= "enf_descripcion like :search) AND ";
+        }
+        $sql = "SELECT 
+                    enf_id as id,
+                    enf_nombre as Nombre,
+                    enf_descripcion as Descripcion,
+                    enf_estado as Estado
+                FROM 
+                    ".$con->dbname.".enfoque
+                WHERE 
+                    $str_search
+                    enf_estado_logico=1 
+                ORDER BY enf_id;";
+        $comando = Yii::$app->db->createCommand($sql);
+        if(isset($search)){
+            $comando->bindParam(":search",$search_cond, \PDO::PARAM_STR);
+        }
+        $res = $comando->queryAll();
+        if($dataProvider){
+            $dataProvider = new ArrayDataProvider([
+                'key' => 'id',
+                'allModels' => $res,
+                'pagination' => [
+                    'pageSize' => Yii::$app->params["pageSize"],
+                ],
+                'sort' => [
+                    'attributes' => ['Nombre', 'Estado', 'Descripcion'],
+                ],
+            ]);
+            return $dataProvider;
+        }
+        return $res;
     }
 }
