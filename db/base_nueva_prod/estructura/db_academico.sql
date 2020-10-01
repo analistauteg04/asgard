@@ -777,15 +777,15 @@ create table if not exists `distributivo_academico_horario` (
 -- 
 create table if not exists `distributivo_academico` (
   `daca_id` bigint(20) not null auto_increment primary key, 
-  `paca_id` bigint(20) null,
-  `daho_id` bigint(20) null,
-  `ppro_id` bigint(20) null,
+  `paca_id` bigint(20) null,    
+  `daca_tipo` bigint(20) null,
   `asi_id` bigint(20) not null,
   `pro_id` bigint(20) not null,  
   `uaca_id` bigint(20) not null,  
   `mod_id` bigint(20) not null,  
-  `daca_jornada` varchar(1) null,  
-  `daca_horario` varchar(10) null,  
+  `daho_id` bigint(20) null,
+  `daca_paralelo` bigint(20) null,
+  `pppr_id` bigint(20) null,
   `daca_fecha_registro` timestamp null default null,
   `daca_usuario_ingreso` bigint(20) not null,
   `daca_usuario_modifica` bigint(20)  null,
@@ -797,9 +797,9 @@ create table if not exists `distributivo_academico` (
   foreign key (paca_id) references `periodo_academico`(paca_id),  
   foreign key (asi_id) references `asignatura`(asi_id),  
   foreign key (uaca_id) references `unidad_academica`(uaca_id), 
-  foreign key (mod_id) references `modalidad`(mod_id),
-  foreign key (ppro_id) references `promocion_programa`(ppro_id),
-  foreign key (daho_id) references `distributivo_academico_horario`(daho_id)
+  foreign key (mod_id) references `modalidad`(mod_id),  
+  foreign key (daho_id) references `distributivo_academico_horario`(daho_id),
+  foreign key (pppr_id) references `paralelo_promocion_programa`(pppr_id)
 );
 
 -- --------------------------------------------------------

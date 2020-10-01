@@ -81,6 +81,21 @@ $(document).ready(function() {
     $('#btn_buscarData_dist').click(function() {
         searchModules();
     });
+    
+    $('#cmb_tipo_asignacion').change(function () {
+        tipo = $('#cmb_tipo_asignacion').val();        
+        if (tipo == 1) {
+            $('#bloque1').css('display', 'block');            
+            $('#bloque2').css('display', 'block');
+            $('#bloque3').css('display', 'block');
+            $('#bloque4').css('display', 'block');
+        } else {
+            $('#bloque1').css('display', 'none');            
+            $('#bloque2').css('display', 'none');
+            $('#bloque3').css('display', 'none');
+            $('#bloque4').css('display', 'none');
+        }
+    });
 });
 
 function setComboDataselect(arr_data, element_id, texto) {

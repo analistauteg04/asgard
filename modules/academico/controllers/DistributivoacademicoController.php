@@ -20,6 +20,7 @@ use app\modules\academico\Module as academico;
 use app\modules\admision\Module as admision;
 use app\models\ExportFile;
 use app\modules\academico\models\Profesor;
+use app\modules\academico\models\PeriodoAcademico;
 use Exception;
 
 academico::registerTranslations();
@@ -111,13 +112,15 @@ class DistributivoacademicoController extends \app\components\CController {
         $mod_asignatura = new Asignatura();
         $mod_profesor = new Profesor();
         $distributivo_model = new DistributivoAcademico();
+        $mod_periodoActual = new PeriodoAcademico();
+        
+        $arr_periodoActual = $mod_periodoActual->getPeriodoAcademicoActual();
+        $arr_profesor = $mod_profesor->getProfesores();        
         $arr_unidad = $mod_unidad->consultarUnidadAcademicasEmpresa($emp_id);
         $arr_modalidad = $mod_modalidad->consultarModalidad($arr_unidad[0]["id"], $emp_id);
         $arr_periodo = $mod_periodo->getPeriodos_x_modalidad($arr_modalidad[0]["id"]);
         $arr_jornada = $distributivo_model->getJornadasByUnidadAcad($arr_unidad[0]["id"], $arr_modalidad[0]["id"]);        
         $arr_asignatura = $mod_asignatura->getAsignatura_x_bloque_x_planif($arr_periodo[0]["id"]);
-
-        $arr_profesor = $mod_profesor->getProfesores();
         $arr_horario = $distributivo_model->getHorariosByUnidadAcad($arr_unidad[0]["id"], $arr_modalidad[0]["id"], $arr_jornada[0]["id"]);
         $model = $distributivo_model->getDistribAcadXprofesorXperiodo(0,0);
         return $this->render('new', [
@@ -131,6 +134,7 @@ class DistributivoacademicoController extends \app\components\CController {
             'arr_tipo_asignacion' => $this->tipoAsignacion(),
             'arr_paralelo' => $this->paralelo(),
             'model' => $model,
+            'arr_periodoActual' => $arr_periodoActual,
         ]);
     }
 
@@ -148,7 +152,7 @@ class DistributivoacademicoController extends \app\components\CController {
                 $jornada_id = $data['jornada'];
                 $horario = $data['horario'];
                 $materia = $data['materia'];
-                $dataExists = $distributivo_model->existsDistribucionAcademico($pro_id, $materia, $uaca_id, $mod_id, $paca_id, $jornada_id, $horario);
+                $dataExists = $distributivo_model->existsDistribucionAcademico($pro_id, $materia, $uaca_id, $mod_id, $paca_id, $horario, $paralelo);
                 if(isset($dataExists) && $dataExists != "" && count($dataExists) > 0){
                     $message = array(
                         "wtmessage" => academico::t('distributivoacademico', 'Register already exists in System.'),

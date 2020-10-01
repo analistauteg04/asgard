@@ -612,6 +612,7 @@ class PeriodoAcademicoMetIngreso extends  \app\modules\academico\components\CAct
         $resultData = $comando->queryAll();
         return $resultData;
     }
+    
     /**
      * Function consulta los periodos academcicos. 
      * @author Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;
