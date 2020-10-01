@@ -1,8 +1,6 @@
 <?php
 
 use yii\helpers\Html;
-/* use yii\helpers\Url;
-  use kartik\date\DatePicker; */
 use app\widgets\PbGridView\PbGridView;
 use app\modules\academico\Module as academico;
 
@@ -10,7 +8,7 @@ use app\modules\academico\Module as academico;
 academico::registerTranslations();
 ?>
 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-    <h4><span id="lbl_evaluar"><?= Yii::t("formulario", "Ver Planificación Estudiante") ?></span></h4>
+    <h4><span id="lbl_planear"><?= academico::t("Academico", "See Student Planning") ?></span></h4>
 </div><br><br><br>
 <form class="form-horizontal">
     <div class="row">
@@ -44,7 +42,7 @@ academico::registerTranslations();
 </form>
 <div>      
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-        <h4><span id="lbl_evaluar"><?= Yii::t("formulario", "Detalle Planificación Estudiante") ?></span></h4>
+        <h4><span id="lbl_evaluar"><?= academico::t("Academico", "Student Planning Detail") ?></span></h4>
     </div><br><br>
     <?=
     PbGridView::widget([

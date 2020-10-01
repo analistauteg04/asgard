@@ -893,4 +893,71 @@ class Usuario extends \yii\db\ActiveRecord implements IdentityInterface {
         $command = $con->createCommand($sql);        
         return $command->queryAll();        
     }
+
+    public static function getListUsers($search = NULL, $onlyData = false, $removeSelfUser = false){
+        $iduser    = Yii::$app->session->get('PB_iduser', FALSE);
+        $idempresa = Yii::$app->session->get('PB_idempresa', FALSE);
+        $search_cond = "%".$search."%";
+        $condition = "";
+        $str_search = "";
+        $from = "";
+        if($iduser != 1){
+            $condition .= "eper.emp_id=:emp_id AND ";
+            $condition .= "eper.eper_estado_logico=1 AND ";
+            $condition .= "eper.eper_estado=1 AND ";
+            $condition .= "emp.emp_estado=1 AND ";
+            $condition .= "emp.emp_estado_logico=1 AND ";
+            $condition .= "usu.usu_id <> 1 AND ";
+            if($removeSelfUser){
+                $condition .= "usu.usu_id <> $iduser AND ";
+            }
+            $from .= "INNER JOIN empresa_persona as eper on eper.per_id=per.per_id ";
+            $from .= "INNER JOIN empresa as emp on emp.emp_id=eper.emp_id ";
+        }
+        if(isset($search)){
+            $str_search .= "(per.per_pri_nombre like :search OR ";
+            $str_search .= "per.per_pri_apellido like :search OR ";
+            $str_search .= "usu.usu_user like :search) AND ";
+        }
+        $sql = "SELECT 
+                    usu.usu_id as id,
+                    usu.usu_user as Username,
+                    per.per_pri_nombre as Nombres,
+                    per.per_pri_apellido as Apellidos
+                    -- emp.emp_nombre_comercial as Empresa
+                FROM 
+                    usuario as usu
+                    INNER JOIN persona as per on per.per_id=usu.per_id
+                    $from
+                WHERE 
+                    $condition 
+                    $str_search
+                    usu.usu_estado_logico=1 AND 
+                    usu.usu_estado=1 AND 
+                    per.per_estado_logico=1 AND 
+                    per.per_estado=1 
+                GROUP BY usu.usu_id, usu.usu_user, per.per_pri_nombre, per.per_pri_apellido
+                ORDER BY per.per_pri_apellido;";
+        $comando = Yii::$app->db->createCommand($sql);
+        if($iduser != 1){
+            $comando->bindParam(":emp_id",$idempresa, \PDO::PARAM_INT);
+        }
+        if(isset($search)){
+            $comando->bindParam(":search",$search_cond, \PDO::PARAM_STR);
+        }
+        $res = $comando->queryAll();
+        if($onlyData)   return $res;
+        $dataProvider = new ArrayDataProvider([
+            'key' => 'id',
+            'allModels' => $res,
+            'pagination' => [
+                'pageSize' => Yii::$app->params["pageSize"],
+            ],
+            'sort' => [
+                'attributes' => ['Username', 'Nombres', 'Apellidos', 'Empresa'],
+            ],
+        ]);
+        
+        return $dataProvider;
+    }
 }

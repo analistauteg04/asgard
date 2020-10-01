@@ -28,7 +28,7 @@ use app\modules\admision\Module;
     </div>  
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="form-group">
-            <label for="lbl_carrera" class="col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= Yii::t("crm", "Carrera"); ?></label>
+            <label for="lbl_carrera" class="col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= academico::t("Academico", "Career"); ?></label>
             <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
                 <?= Html::dropDownList("cmb_carreras", 0, $arr_carrera, ["class" => "form-control", "id" => "cmb_carreras"]) ?>
             </div>  
