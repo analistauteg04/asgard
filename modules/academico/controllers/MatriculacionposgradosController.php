@@ -662,6 +662,7 @@ class MatriculacionposgradosController extends \app\components\CController {
     public function actionView() {
         $sins_id = base64_decode($_GET['sids']);
         $adm_id = base64_decode($_GET['adm']);
+        $per_id = base64_decode($_GET['perid']);
         $mod_solins = new SolicitudInscripcion();
         $mod_promocion = new PromocionPrograma();
         $mod_paralelo = new ParaleloPromocionPrograma();
@@ -679,7 +680,7 @@ class MatriculacionposgradosController extends \app\components\CController {
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }
         }
-        $arr_matriculacion = $mod_paralelo->consultarMatriculacionxadmid($adm_id);
+        $arr_matriculacion = $mod_paralelo->consultarMatriculacionxadmid($per_id);
         $personaData = $mod_solins->consultarInteresadoPorSol_id($sins_id);
         $resp_programas = $mod_promocion->consultarPromocionxPrograma($personaData["eaca_id"]);
         $arr_Paralelos = $mod_paralelo->consultarParalelosxPrograma($arr_matriculacion["promocion"]);
@@ -695,6 +696,7 @@ class MatriculacionposgradosController extends \app\components\CController {
     public function actionUpdate() {
         $sins_id = base64_decode($_GET['sids']);
         $adm_id = base64_decode($_GET['adm']);
+        $per_id = base64_decode($_GET['perid']);
         $mod_solins = new SolicitudInscripcion();
         $mod_promocion = new PromocionPrograma();
         $mod_paralelo = new ParaleloPromocionPrograma();
@@ -712,7 +714,7 @@ class MatriculacionposgradosController extends \app\components\CController {
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }
         }
-        $arr_matriculacion = $mod_paralelo->consultarMatriculacionxadmid($adm_id);
+        $arr_matriculacion = $mod_paralelo->consultarMatriculacionxadmid($per_id);
         $personaData = $mod_solins->consultarInteresadoPorSol_id($sins_id);
         $resp_programas = $mod_promocion->consultarPromocionxPrograma($personaData["eaca_id"]);
         $arr_Paralelos = $mod_paralelo->consultarParalelosxPrograma($arr_matriculacion["promocion"]);

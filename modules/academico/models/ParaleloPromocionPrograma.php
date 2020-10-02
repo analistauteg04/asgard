@@ -324,11 +324,11 @@ class ParaleloPromocionPrograma extends \yii\db\ActiveRecord {
      * @property       
      * @return  
      */
-    public function consultarMatriculacionxadmid($adm_id) {
+    public function consultarMatriculacionxadmid($per_id) {
         $con = \Yii::$app->db_academico;
         $estado = 1;
 
-        $sql = "SELECT 
+        $sql = "SELECT
                     mpi.pppr_id as paralelo,
                     ppp.ppro_id as promocion,
                     ppp.pppr_cupo_actual as disponible,
@@ -336,7 +336,7 @@ class ParaleloPromocionPrograma extends \yii\db\ActiveRecord {
                 FROM " . $con->dbname . ".matriculacion_programa_inscrito mpi
                 INNER JOIN " . $con->dbname . ".paralelo_promocion_programa ppp ON ppp.pppr_id =  mpi.pppr_id
                 INNER JOIN " . $con->dbname . ".estudiante est ON est.est_id =  mpi.est_id
-                WHERE adm_id = :adm_id AND
+                WHERE est.per_id = :per_id AND
                       mpi.mpin_estado = :estado AND
                       mpi.mpin_estado_logico =:estado AND
                       ppp.pppr_estado =:estado AND
@@ -346,7 +346,8 @@ class ParaleloPromocionPrograma extends \yii\db\ActiveRecord {
 
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
-        $comando->bindParam(":adm_id", $adm_id, \PDO::PARAM_INT);
+        // $comando->bindParam(":adm_id", $adm_id, \PDO::PARAM_INT);
+        $comando->bindParam(":per_id", $per_id, \PDO::PARAM_INT);
         $resultData = $comando->queryOne();
         return $resultData;
     }
