@@ -87,7 +87,11 @@ academico::registerTranslations();
                 'template' => '{matricula} {ver} {ficha}', //
                 'buttons' => [
                     'matricula' => function ($url, $model) {
-                        return Html::a('<span class="glyphicon glyphicon-list-alt"></span>', Url::to(['/academico/matriculacionposgrados/new', 'sids' => base64_encode($model['sins_id']), 'adm' => base64_encode($model['adm_id']), 'perid' => base64_encode($model['per_id'])]), ["data-toggle" => "tooltip", "title" => "Matriculación", "data-pjax" => 0]);
+                        if ($model['matriculado']== "MAT_NO") {
+                            return Html::a('<span class="glyphicon glyphicon-list-alt"></span>', Url::to(['/academico/matriculacionposgrados/new', 'sids' => base64_encode($model['sins_id']), 'adm' => base64_encode($model['adm_id']), 'perid' => base64_encode($model['per_id'])]), ["data-toggle" => "tooltip", "title" => "Matriculación", "data-pjax" => 0]);
+                        } else {
+                            return '<span class="glyphicon glyphicon-list-alt"></span>';                            
+                        }
                     },
                     'ver' => function ($url, $model) {
                         return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', Url::to(['/academico/matriculacionposgrados/view', 'sids' => base64_encode($model['sins_id']), 'adm' => base64_encode($model['adm_id']), 'perid' => base64_encode($model['per_id'])]), ["data-toggle" => "tooltip", "title" => "Ver Matriculación", "data-pjax" => 0]);

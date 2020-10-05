@@ -361,7 +361,7 @@ class AdmitidosController extends \app\components\CController {
             Yii::t("formulario", "Last Names"),
             academico::t("Academico", "Income Method"), //ingles
             academico::t("Academico", "Career/Program"),
-            admision::t("Solicitudes", "Scholarship")
+            admision::t("Solicitudes", "Scholarship")          
         );
         $data = Yii::$app->request->get();
         $arrSearch = array();

@@ -305,13 +305,13 @@ class Admitido extends \yii\db\ActiveRecord {
                             per.per_cedula,
                             admi.adm_id,                                               
                            (case when sins_beca = 1 then 'ICF' else 'No Aplica' end) as beca,                           
-                            sins.emp_id                      
+                            sins.emp_id
                     FROM " . $con->dbname . ".admitido admi INNER JOIN " . $con->dbname . ".solicitud_inscripcion sins on sins.sins_id = admi.sins_id                 
                          INNER JOIN " . $con->dbname . ".interesado inte on sins.int_id = inte.int_id 
                          INNER JOIN " . $con2->dbname . ".persona per on inte.per_id = per.per_id                     
                          INNER JOIN " . $con3->dbname . ".modalidad moda on moda.mod_id=sins.mod_id
                          INNER JOIN " . $con3->dbname . ".unidad_academica uaca on uaca.uaca_id=sins.uaca_id
-                         INNER JOIN " . $con1->dbname . ".orden_pago opag on opag.sins_id = sins.sins_id    
+                         INNER JOIN " . $con1->dbname . ".orden_pago opag on opag.sins_id = sins.sins_id                                               
                     WHERE                          
                            sins.rsin_id = 2 AND
                            opag.opag_estado_pago = :estado_opago AND
@@ -546,13 +546,16 @@ class Admitido extends \yii\db\ActiveRecord {
                         admi.adm_id,                                               
                        (case when sins_beca = 1 then 'ICF' else 'No Aplica' end) as beca,                       
                         sins.emp_id,
-                        (select count(*) from " . $con1->dbname . ".pagos_contrato_programa pcp where pcp.adm_id = admi.adm_id and pcp.pcpr_estado = :estado and pcp.pcpr_estado_logico = :estado) as documento
+                        (select count(*) from " . $con1->dbname . ".pagos_contrato_programa pcp where pcp.adm_id = admi.adm_id and pcp.pcpr_estado = :estado and pcp.pcpr_estado_logico = :estado) as documento,
+                        (case when ifnull(mpi.mpin_id,0) > 0  then 'MAT_SI' else 'MAT_NO' end) as matriculado
                    FROM " . $con->dbname . ".admitido admi INNER JOIN " . $con->dbname . ".solicitud_inscripcion sins on sins.sins_id = admi.sins_id                 
                      INNER JOIN " . $con->dbname . ".interesado inte on sins.int_id = inte.int_id 
                      INNER JOIN " . $con2->dbname . ".persona per on inte.per_id = per.per_id                     
                      INNER JOIN " . $con3->dbname . ".modalidad moda on moda.mod_id=sins.mod_id
                      INNER JOIN " . $con3->dbname . ".unidad_academica uaca on uaca.uaca_id=sins.uaca_id
                      INNER JOIN " . $con1->dbname . ".orden_pago opag on opag.sins_id = sins.sins_id    
+                     LEFT JOIN " . $con3->dbname . ".estudiante est on est.per_id = per.per_id                     
+                     LEFT JOIN " . $con3->dbname . ".matriculacion_programa_inscrito mpi on (est.est_id = mpi.est_id or mpi.adm_id = admi.adm_id)                           
                 WHERE                          
                        sins.rsin_id = 2 AND
                        opag.opag_estado_pago = :estado_opago AND
