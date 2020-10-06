@@ -1,4 +1,5 @@
 $(document).ready(function () {
+    recargarGridItem();
     $('#btn_buscarMarcacion').click(function () {
         actualizarGridMarcacion();
     });
@@ -106,7 +107,7 @@ $(document).ready(function () {
     $('#btn_AgregarItemat').click(function () {
         //alert('HOLA');
         agregarItems('new')
-        
+
     });
 });
 
@@ -471,4 +472,161 @@ function deletematestudiante(plaid, perid, bloque, hora) {
     messagePB.acciones = new Array();
     messagePB.acciones[0] = objAccept;
     showAlert("warning", "warning", messagePB);
+}
+
+
+
+
+
+/* AGREGAR OPCIONES A GRID */
+function agregarItems(opAccion) {
+    var tGrid = 'PbPlanificaestudiantedit';
+    //var nombre = $('#cmb_estandar_evi option:selected').text();
+    //Verifica que tenga nombre producto y tenga foto
+    if ($('#cmb_asignaest').val() != '0' && $('#cmb_jornadaest').val() != '0' && $('#cmb_bloqueest').val() != '0' && $('#cmb_modalidadesth').val() != '0' && $('#cmb_horaest').val() != '0') {
+        /* var valor = $('#cmb_estandar_evi option:selected').text();*/
+        if (opAccion != "edit") {
+            //*********   AGREGAR ITEMS *********
+            var arr_Grid = new Array();
+            if (sessionStorage.dts_datosItemplan) {
+                /*Agrego a la Sesion*/
+                arr_Grid = JSON.parse(sessionStorage.dts_datosItemplan);
+                var size = arr_Grid.length;
+                if (size > 0) {
+                    //Varios Items
+                    arr_Grid[size] = objProducto(size);
+                    sessionStorage.dts_datosItemplan = JSON.stringify(arr_Grid);
+                    addVariosItem(tGrid, arr_Grid, -1);
+                    limpiarDetalle();
+                } else {
+                    /*Agrego a la Sesion*/
+                    //Primer Items                   
+                    arr_Grid[0] = objProducto(0);
+                    sessionStorage.dts_datosItemplan = JSON.stringify(arr_Grid);
+                    addPrimerItem(tGrid, arr_Grid, 0);
+                    limpiarDetalle();
+                }
+            } else {
+                //No existe la Session
+                //Primer Items
+                arr_Grid[0] = objProducto(0);
+                sessionStorage.dts_datosItemplan = JSON.stringify(arr_Grid);
+                addPrimerItem(tGrid, arr_Grid, 0);
+                limpiarDetalle();
+            }
+        } else {
+            //data edicion
+        }
+    } else {
+        showAlert('NO_OK', 'error', {"wtmessage": "Todos los datos son obligatorios", "title": 'Información'});
+    }
+}
+function objProducto(indice) {
+    var rowGrid = new Object();
+    rowGrid.indice = indice;
+    /*alert('zcxvcx' + $('#txth_pla_id').val());
+     rowGrid.pla_id = $('#txth_pla_id').val();
+     rowGrid.per_id = $('#txth_per_id').val();*/
+    //rowGrid.componente_evi = "";
+
+    rowGrid.asignatura = $('#cmb_asignaest option:selected').text();
+    rowGrid.jornada = $('#cmb_jornadaest option:selected').text();
+    /*if ($('#cmb_componente_evi option:selected').text() != "Seleccionar") {
+     rowGrid.componente_evi = $('#cmb_componente_evi option:selected').text();
+     }*/
+
+    rowGrid.bloque = $('#cmb_bloqueest option:selected').text();
+    rowGrid.modalidad = $('#cmb_modalidadesth option:selected').text();
+    rowGrid.hora = $('#cmb_horaest option:selected').text();
+
+    //rowGrid.pro_otros = ($("#chk_otros").prop("checked")) ? 1 : 0;
+    rowGrid.accion = "new";
+    return rowGrid;
+}
+function addPrimerItem(TbGtable, lista, i) {
+    /*Remuevo la Primera fila*/
+    $('#' + TbGtable + ' >table >tbody').html("");
+    /*Agrego a la Tabla de Detalle*/
+    $('#' + TbGtable + ' tr:last').after(retornaFila(i, lista, TbGtable, true));
+}
+
+function limpiarDetalle() {
+    $('#txt_fecha_documento_evi').val("");
+    /*$('#txt_descripcion').val("");
+     $('#txth_doc_archivo').val('');
+     $('#txth_doc_archivo_ruta').val('');
+     $('#txt_doc_archivo').fileinput('clear');   */
+
+}
+
+function addVariosItem(TbGtable, lista, i) {
+    //i=(i==-1)?($('#'+TbGtable+' tr').length)-1:i;
+    i = ($('#' + TbGtable + ' tr').length) - 1;
+    //$('#'+TbGtable+' >table >tbody').append(retornaFilaProducto(i,lista,TbGtable,true));
+    $('#' + TbGtable + ' tr:last').after(retornaFila(i, lista, TbGtable, true));
+}
+
+function retornaFila(c, Grid, TbGtable, op) {
+    //var RutaImagenAccion='ruta IMG'//$('#txth_rutaImg').val();
+    var pla_id = $('#txth_pla_id').val();
+    var per_id = $('#txth_per_id').val();
+    var strFila = "";
+    strFila += '<td style="display:none; border:none;">' + Grid[c]['indice'] + '</td>';
+    strFila += '<td style=" display:none; border:none;">' + pla_id + '</td>';
+    strFila += '<td style=" display:none;border:none;">' + per_id + '</td>';
+    strFila += '<td>' + Grid[c]['asignatura'] + '</td>';
+    strFila += '<td>' + Grid[c]['jornada'] + '</td>';
+    strFila += '<td>' + Grid[c]['bloque'] + '</td>';
+    strFila += '<td>' + Grid[c]['modalidad'] + '</td>';
+    strFila += '<td>' + Grid[c]['hora'] + '</td>';
+    strFila += '<td>';//¿Está seguro de eliminar este elemento?   
+    strFila += '<a onclick="eliminarItems(\'' + Grid[c]['indice'] + '\',\'' + TbGtable + '\')" ><span class="glyphicon glyphicon-remove"></span></a>';
+    strFila += '</td>';
+
+    if (op) {
+        strFila = '<tr>' + strFila + '</tr>';
+    }
+    return strFila;
+}
+
+function eliminarItems(val, TbGtable) {
+    var ids = "";
+    //var count=0;
+    if (sessionStorage.dts_datosItemplan) {
+        var Grid = JSON.parse(sessionStorage.dts_datosItemplan);
+        if (Grid.length > 0) {
+            $('#' + TbGtable + ' tr').each(function () {
+                ids = $(this).find("td").eq(0).html();
+                if (ids == val) {
+                    var array = findAndRemove(Grid, 'indice', ids);
+                    sessionStorage.dts_datosItemplan = JSON.stringify(array);
+                    //if (count==0){sessionStorage.removeItem('detalleGrid')} 
+                    $(this).remove();
+                }
+            });
+        }
+    }
+}
+
+function findAndRemove(array, property, value) {
+    for (var i = 0; i < array.length; i++) {
+        if (array[i][property] == value) {
+            array.splice(i, 1);
+        }
+    }
+    return array;
+}
+
+// Recarga la Grid de Productos si Existe
+function recargarGridItem() {
+    var tGrid = 'PbPlanificaestudiantedit';
+    if (sessionStorage.dts_datosItemplan) {
+        var arr_Grid = JSON.parse(sessionStorage.dts_datosItemplan);
+        if (arr_Grid.length > 0) {
+            $('#' + tGrid + ' > tbody').html("");
+            for (var i = 0; i < arr_Grid.length; i++) {
+                $('#' + tGrid + ' > tbody:last-child').append(retornaFila(i, arr_Grid, tGrid, true));
+            }
+        }
+    }
 }

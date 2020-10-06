@@ -49,7 +49,7 @@ academico::registerTranslations();
                 <div class="form-group">
                     <label for="lbl_asignaest" class="col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= academico::t("Academico", "Subject"); ?></label>
                     <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
-                        <?= Html::dropDownList("cmb_asignaest", 1, $arr_unidad, ["class" => "form-control", "id" => "cmb_asignaest"]) ?>
+                        <?= Html::dropDownList("cmb_asignaest", 0, $arr_unidad, ["class" => "form-control", "id" => "cmb_asignaest"]) ?>
                     </div>   
                     <label for="lbl_jornadaest" class="col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= academico::t("Academico", "Working day") ?></label>
                     <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
@@ -120,17 +120,55 @@ academico::registerTranslations();
                 ],
                 [
                     'class' => 'yii\grid\ActionColumn',
-                    'contentOptions' => ['style' => 'text-align: center;'],
+                    'contentOptions' => ['style' => 'text-align: left;'],
                     'headerOptions' => ['width' => '60'],
                     'template' => '{delete}',
                     'buttons' => [
                         'delete' => function ($url, $model_detalle) {
                             return Html::a('<span class="' . Utilities::getIcon('remove') . '"></span>', null, ['href' => 'javascript:', 'onclick' => "deletematestudiante(" . $_GET['pla_id'] . ", " . $_GET['per_id'] . ", " . substr($model_detalle['Bloque 1'], -1) . ", " . substr($model_detalle['Hora 1'], -1) . ");", "data-toggle" => "tooltip", "title" => Yii::t("accion", "Delete")]);
+                            //return Html::a('<span class="'.Utilities::getIcon('remove').'"></span>', null, ['href' => 'javascript:', 'onclick' => "javascript:removeItemplanifaciacion(this, " . $_GET['pla_id'] . ", " . $_GET['per_id'] . ", " . substr($model_detalle['Bloque 1'], -1) . ", " . substr($model_detalle['Hora 1'], -1) . ");", "data-toggle" => "tooltip", "title" => Yii::t("accion","Delete")]);                         
                         },
                     ],
                 ],
             ],
         ])
-        ?>
+        ?> 
+        <!--<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="form-group">
+                <div class="box-body table-responsive no-padding">
+                    <table  id="PbPlanificaestudiantedit" class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th style="display:none; border:none;"><?= Yii::t("formulario", "pla_id") ?></th>
+                                <th style="display:none; border:none;"><?= Yii::t("formulario", "per_id") ?></th>
+                                <th><?= academico::t("Academico", "Subject") ?></th>
+                                <th><?= academico::t("Academico", "Working day") ?></th>
+                                <th><?= Yii::t("formulario", "Block") ?></th>                            
+                                <th><?= Yii::t("formulario", "Mode") ?></th>
+                                <th><?= academico::t("Academico", "Hour") ?></th>                            
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            /*for ($i = 0; $i < count($model_detalle); $i++) {
+                                $indice = $i++;
+                                echo '<tr>';
+                                echo '<td>' . $$indice . '</td>';
+                                echo '  <td style="display:none; border:none;">' .$_GET['pla_id'] . '</td>';
+                                echo '<td style="display:none; border:none;">' . $_GET['per_id'] . '</td>';
+                                echo '<td>' . $model_detalle [$i]["asignatura"] . '</td>';
+                                echo '<td>' . $model_detalle [$i]["pes_jornada"] . '</td>';
+                                echo '<td>' . $model_detalle [$i]["Bloque 1"] . '</td>';
+                                echo '<td>' . $model_detalle [$i]["modalidad"] . '</td>';
+                                echo '<td>' . $model_detalle [$i]["Hora 1"] . '</td>';
+                                echo ' </tr>';
+                            }*/
+                            ?>       
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>-->
     </div>
-</form>
+</form> 
