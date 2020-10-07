@@ -143,11 +143,12 @@ $(document).ready(function () {
         }
         arrParams.tipo_dni_fac = tipo_dni_fact;
         arrParams.dni = $('#txt_dni_fac').val();
+        arrParams.empresa = $('#txt_empresa').val();
         arrParams.correo = $('#txt_correo_fac').val();
         if (!validateForm()) {
             requestHttpAjax(link, arrParams, function (response) {
                 var message = response.message;
-                console.log('despues de grabar');
+                //console.log('despues de grabar');
                 if (response.status == "OK") {
                     //showLoadingPopup();
                     setTimeout(function () {
@@ -447,7 +448,8 @@ $(document).ready(function () {
                     //Taller introductorio            
                     if ($('#cmb_metodo_solicitud').val() == 4) {
                         //Taller introductorio
-                        $('#divRequisitosPRP').css('display', 'block');
+                        //$('#divRequisitosPRP').css('display', 'block');
+                        $('#divRequisitosPRP').css('display', 'none');
                         $('#divRequisitosCANO').css('display', 'none');
                         $('#divRequisitosCANP').css('display', 'none');
                         $('#divRequisitosCANSP').css('display', 'none');
@@ -807,6 +809,7 @@ function dataInscripPart1(ID) {
     } else {
         objDat.pges_cedula = $('#txt_pasaporte').val();
     }
+    objDat.pges_empresa = $('#txt_empresa').val();
     objDat.pges_correo = $('#txt_correo').val();
     objDat.pais = $('#cmb_pais_dom option:selected').val();
     objDat.pges_celular = $('#txt_celular').val();

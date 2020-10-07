@@ -90,7 +90,7 @@ class Grupo extends \yii\db\ActiveRecord {
      * @param   string  $username    
      * @return  mixed   $res        New array 
      */
-    public function getMainGrupo($username) {
+    public function getMainGrupo($username, $all_groups=false) {
         $user = Usuario::findByUsername($username);
         $con = Yii::$app->db;
         $trans = $con->getTransaction();
@@ -128,7 +128,52 @@ class Grupo extends \yii\db\ActiveRecord {
                     u.usu_estado_logico=1";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":user", $username, \PDO::PARAM_STR);
+        if($all_groups){
+            $result = $comando->queryAll();
+            return $result;
+        }
         $result = $comando->queryOne();
+        return $result;
+    }
+
+    public function getAllGruposByUser($username) {
+        $user = Usuario::findByUsername($username);
+        $con = Yii::$app->db;
+        $trans = $con->getTransaction();
+        if ($trans !== null) {
+            $trans = null; // si existe la transacción entonces no se crea una
+        } else {
+            $trans = $con->beginTransaction();
+        }
+        $sql = "SELECT 
+                    g.gru_id AS id
+                FROM 
+                    usuario AS u 
+                    INNER JOIN usua_grol_eper AS ug ON u.usu_id = ug.usu_id
+                    INNER JOIN empresa_persona AS ep ON ug.eper_id = ep.eper_id
+                    INNER JOIN empresa AS e ON ep.emp_id = e.emp_id
+                    INNER JOIN grup_rol AS gr ON gr.grol_id = ug.grol_id 
+                    INNER JOIN grupo AS g ON g.gru_id = gr.gru_id 
+                    INNER JOIN persona AS p ON p.per_id = u.per_id 
+                WHERE 
+                    u.usu_user = :user AND 
+                    ug.ugep_estado_logico=1 AND 
+                    ug.ugep_estado=1 AND 
+                    ep.eper_estado_logico=1 AND 
+                    ep.eper_estado=1 AND
+                    e.emp_estado_logico=1 AND 
+                    e.emp_estado=1 AND
+                    gr.grol_estado_logico=1 AND 
+                    gr.grol_estado=1 AND 
+                    p.per_estado_logico=1 AND 
+                    p.per_estado=1 AND 
+                    g.gru_estado = 1 AND 
+                    g.gru_estado_logico=1 AND 
+                    u.usu_estado=1 AND 
+                    u.usu_estado_logico=1";
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":user", $username, \PDO::PARAM_STR);
+        $result = $comando->queryAll();
         return $result;
     }
     

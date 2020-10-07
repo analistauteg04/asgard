@@ -75,12 +75,7 @@ academico::registerTranslations();
                 'attribute' => 'beca',
                 'header' => admision::t("Solicitudes", "Scholarship"),
                 'value' => 'beca',
-            ],
-            [
-                'attribute' => 'periodo',
-                'header' => academico::t("Academico", "Period"),
-                'value' => 'pami_codigo',
-            ],
+            ],            
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => Yii::t("formulario", "Actions"),

@@ -21,7 +21,7 @@ USE `db_edoc`;
 --
 -- Table structure for table `persona`
 --
-create table `persona` (
+create table db_edoc.`persona` (
   `per_id` bigint(20) not null auto_increment,
   `per_tip_cruc` bigint(3) default null,
   `per_ced_ruc` varchar(15) default null,
@@ -37,7 +37,7 @@ create table `persona` (
 --
 -- Table structure for table `usuario`
 --
-create table `usuario` (
+create table db_edoc.`usuario` (
   `usu_id` bigint(20) not null auto_increment,
   `per_id` bigint(20) not null,
   `usu_nombre` varchar(100) default null,
@@ -51,271 +51,13 @@ create table `usuario` (
   key `fk_usuario_persona` (`per_id`),
   constraint `fk_usuario_persona` foreign key (`per_id`) references `persona` (`per_id`) on delete no action on update no action
 ) engine=innodb auto_increment=0 default charset=latin1;
-
---
--- Table structure for table `NubeDatoAdicionalDetalleFactura`
---
-
-DROP TABLE IF EXISTS `NubeDatoAdicionalDetalleFactura`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `NubeDatoAdicionalDetalleFactura` (
-  `IdDatoAdicionalDetalleFactura` bigint(19) NOT NULL AUTO_INCREMENT,
-  `Nombre` varchar(300) DEFAULT NULL,
-  `Descripcion` varchar(300) DEFAULT NULL,
-  `IdDetalleFactura` bigint(19) DEFAULT NULL,
-  PRIMARY KEY (`IdDatoAdicionalDetalleFactura`),
-  KEY `FK_NubeDatoAdicionalDetalleFactura_NubeDetalleFactura` (`IdDetalleFactura`),
-  CONSTRAINT `FK_NubeDatoAdicionalDetalleFactura_NubeDetalleFactura` FOREIGN KEY (`IdDetalleFactura`) REFERENCES `NubeDetalleFactura` (`IdDetalleFactura`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `NubeDatoAdicionalDetalleNotaCredito`
---
-
-DROP TABLE IF EXISTS `NubeDatoAdicionalDetalleNotaCredito`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `NubeDatoAdicionalDetalleNotaCredito` (
-  `IdDatoAdicionalDetalleNotaCredito` bigint(19) NOT NULL AUTO_INCREMENT,
-  `Nombre` varchar(300) DEFAULT NULL,
-  `Descripcion` varchar(300) DEFAULT NULL,
-  `IdDetalleNotaCredito` bigint(19) DEFAULT NULL,
-  PRIMARY KEY (`IdDatoAdicionalDetalleNotaCredito`),
-  KEY `FK_NubeDatoAdicionalDetalleNotaCredito_NubeDetalleNotaCredito` (`IdDetalleNotaCredito`),
-  CONSTRAINT `FK_NubeDatoAdicionalDetalleNotaCredito_NubeDetalleNotaCredito` FOREIGN KEY (`IdDetalleNotaCredito`) REFERENCES `NubeDetalleNotaCredito` (`IdDetalleNotaCredito`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `NubeDatoAdicionalFactura`
---
-
-DROP TABLE IF EXISTS `NubeDatoAdicionalFactura`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `NubeDatoAdicionalFactura` (
-  `IdDatoAdicionalFactura` bigint(19) NOT NULL AUTO_INCREMENT,
-  `Nombre` varchar(300) DEFAULT NULL,
-  `Descripcion` varchar(300) DEFAULT NULL,
-  `IdFactura` bigint(19) DEFAULT NULL,
-  PRIMARY KEY (`IdDatoAdicionalFactura`),
-  KEY `FK_NubeDatoAdicionalFactura_NubeFactura` (`IdFactura`),
-  CONSTRAINT `FK_NubeDatoAdicionalFactura_NubeFactura` FOREIGN KEY (`IdFactura`) REFERENCES `NubeFactura` (`IdFactura`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `NubeDatoAdicionalGuiaRemision`
---
-
-DROP TABLE IF EXISTS `NubeDatoAdicionalGuiaRemision`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `NubeDatoAdicionalGuiaRemision` (
-  `IdDatoAdicionalGuiaRemision` bigint(19) NOT NULL AUTO_INCREMENT,
-  `Nombre` varchar(300) DEFAULT NULL,
-  `Descripcion` varchar(300) DEFAULT NULL,
-  `IdGuiaRemision` bigint(19) DEFAULT NULL,
-  PRIMARY KEY (`IdDatoAdicionalGuiaRemision`),
-  KEY `FK_NubeDatoAdicionalGuiaRemision_NubeGuiaRemision` (`IdGuiaRemision`),
-  CONSTRAINT `FK_NubeDatoAdicionalGuiaRemision_NubeGuiaRemision` FOREIGN KEY (`IdGuiaRemision`) REFERENCES `NubeGuiaRemision` (`IdGuiaRemision`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `NubeDatoAdicionalGuiaRemisionDetalle`
---
-
-DROP TABLE IF EXISTS `NubeDatoAdicionalGuiaRemisionDetalle`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `NubeDatoAdicionalGuiaRemisionDetalle` (
-  `IdDatoAdicionalGuiaRemisionDetalle` bigint(19) NOT NULL AUTO_INCREMENT,
-  `Nombre` varchar(300) DEFAULT NULL,
-  `Descripcion` varchar(300) DEFAULT NULL,
-  `IdGuiaRemisionDetalle` bigint(19) DEFAULT NULL,
-  PRIMARY KEY (`IdDatoAdicionalGuiaRemisionDetalle`),
-  KEY `FK_NubeDatoAdicionalGuiaRemisionDetalle_NubeGuiaRemisionDetalle` (`IdGuiaRemisionDetalle`),
-  CONSTRAINT `FK_NubeDatoAdicionalGuiaRemisionDetalle_NubeGuiaRemisionDetalle` FOREIGN KEY (`IdGuiaRemisionDetalle`) REFERENCES `NubeGuiaRemisionDetalle` (`IdGuiaRemisionDetalle`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `NubeDatoAdicionalNotaCredito`
---
-
-DROP TABLE IF EXISTS `NubeDatoAdicionalNotaCredito`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `NubeDatoAdicionalNotaCredito` (
-  `IdDatoAdicionalNotaCredito` bigint(19) NOT NULL AUTO_INCREMENT,
-  `Nombre` varchar(300) DEFAULT NULL,
-  `Descripcion` varchar(300) DEFAULT NULL,
-  `IdNotaCredito` bigint(19) DEFAULT NULL,
-  PRIMARY KEY (`IdDatoAdicionalNotaCredito`),
-  KEY `FK_NubeDatoAdicionalNotaCredito_NubeNotaCredito` (`IdNotaCredito`),
-  CONSTRAINT `FK_NubeDatoAdicionalNotaCredito_NubeNotaCredito` FOREIGN KEY (`IdNotaCredito`) REFERENCES `NubeNotaCredito` (`IdNotaCredito`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `NubeDatoAdicionalNotaDebito`
---
-
-DROP TABLE IF EXISTS `NubeDatoAdicionalNotaDebito`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `NubeDatoAdicionalNotaDebito` (
-  `IdDatoAdicionalNotaDebito` bigint(19) NOT NULL AUTO_INCREMENT,
-  `Nombre` varchar(300) DEFAULT NULL,
-  `Descripcion` varchar(300) DEFAULT NULL,
-  `IdNotaDebito` bigint(19) DEFAULT NULL,
-  PRIMARY KEY (`IdDatoAdicionalNotaDebito`),
-  KEY `FK_NubeDatoAdicionalNotaDebito_NubeNotaDebito` (`IdNotaDebito`),
-  CONSTRAINT `FK_NubeDatoAdicionalNotaDebito_NubeNotaDebito` FOREIGN KEY (`IdNotaDebito`) REFERENCES `NubeNotaDebito` (`IdNotaDebito`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `NubeDatoAdicionalRetencion`
---
-
-DROP TABLE IF EXISTS `NubeDatoAdicionalRetencion`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `NubeDatoAdicionalRetencion` (
-  `IdDatoAdicionalRetencion` bigint(19) NOT NULL AUTO_INCREMENT,
-  `Nombre` varchar(300) DEFAULT NULL,
-  `Descripcion` varchar(300) DEFAULT NULL,
-  `IdRetencion` bigint(19) DEFAULT NULL,
-  PRIMARY KEY (`IdDatoAdicionalRetencion`),
-  KEY `FK_NubeDatoAdicionalRetencion_NubeRetencion` (`IdRetencion`),
-  CONSTRAINT `FK_NubeDatoAdicionalRetencion_NubeRetencion` FOREIGN KEY (`IdRetencion`) REFERENCES `NubeRetencion` (`IdRetencion`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `NubeDetalleFactura`
---
-
-DROP TABLE IF EXISTS `NubeDetalleFactura`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `NubeDetalleFactura` (
-  `IdDetalleFactura` bigint(19) NOT NULL AUTO_INCREMENT,
-  `CodigoPrincipal` varchar(25) DEFAULT NULL,
-  `CodigoAuxiliar` varchar(25) DEFAULT NULL,
-  `Descripcion` varchar(300) DEFAULT NULL,
-  `Cantidad` decimal(19,4) DEFAULT NULL,
-  `PrecioUnitario` decimal(19,4) DEFAULT NULL,
-  `Descuento` decimal(19,4) DEFAULT NULL,
-  `PrecioTotalSinImpuesto` decimal(19,4) DEFAULT NULL,
-  `IdFactura` bigint(19) DEFAULT NULL,
-  PRIMARY KEY (`IdDetalleFactura`),
-  KEY `FK_NubeDetalleFactura_NubeFactura` (`IdFactura`),
-  CONSTRAINT `FK_NubeDetalleFactura_NubeFactura` FOREIGN KEY (`IdFactura`) REFERENCES `NubeFactura` (`IdFactura`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `NubeDetalleFacturaImpuesto`
---
-
-DROP TABLE IF EXISTS `NubeDetalleFacturaImpuesto`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `NubeDetalleFacturaImpuesto` (
-  `IdDetalleFacturaImpuesto` bigint(19) NOT NULL AUTO_INCREMENT,
-  `Codigo` int(10) DEFAULT NULL,
-  `CodigoPorcentaje` int(10) DEFAULT NULL,
-  `BaseImponible` decimal(19,4) DEFAULT NULL,
-  `Tarifa` decimal(19,4) DEFAULT NULL,
-  `Valor` decimal(19,4) DEFAULT NULL,
-  `IdDetalleFactura` bigint(19) DEFAULT NULL,
-  PRIMARY KEY (`IdDetalleFacturaImpuesto`),
-  KEY `FK_NubeDetalleFacturaImpuesto_NubeDetalleFactura` (`IdDetalleFactura`),
-  CONSTRAINT `FK_NubeDetalleFacturaImpuesto_NubeDetalleFactura` FOREIGN KEY (`IdDetalleFactura`) REFERENCES `NubeDetalleFactura` (`IdDetalleFactura`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `NubeDetalleNotaCredito`
---
-
-DROP TABLE IF EXISTS `NubeDetalleNotaCredito`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `NubeDetalleNotaCredito` (
-  `IdDetalleNotaCredito` bigint(19) NOT NULL AUTO_INCREMENT,
-  `CodigoPrincipal` varchar(25) DEFAULT NULL,
-  `CodigoAuxiliar` varchar(25) DEFAULT NULL,
-  `Descripcion` varchar(300) DEFAULT NULL,
-  `Cantidad` int(10) DEFAULT NULL,
-  `PrecioUnitario` decimal(19,4) DEFAULT NULL,
-  `Descuento` decimal(19,4) DEFAULT NULL,
-  `PrecioTotalSinImpuesto` decimal(19,4) DEFAULT NULL,
-  `IdNotaCredito` bigint(19) DEFAULT NULL,
-  PRIMARY KEY (`IdDetalleNotaCredito`),
-  KEY `FK_NubeDetalleNotaCredito_NubeNotaCredito` (`IdNotaCredito`),
-  CONSTRAINT `FK_NubeDetalleNotaCredito_NubeNotaCredito` FOREIGN KEY (`IdNotaCredito`) REFERENCES `NubeNotaCredito` (`IdNotaCredito`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `NubeDetalleNotaCreditoImpuesto`
---
-
-DROP TABLE IF EXISTS `NubeDetalleNotaCreditoImpuesto`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `NubeDetalleNotaCreditoImpuesto` (
-  `IdDetalleNotaCreditoImpuesto` bigint(19) NOT NULL AUTO_INCREMENT,
-  `Codigo` int(10) DEFAULT NULL,
-  `CodigoPorcentaje` int(10) DEFAULT NULL,
-  `BaseImponible` decimal(19,4) DEFAULT NULL,
-  `Tarifa` decimal(19,4) DEFAULT NULL,
-  `Valor` decimal(19,4) DEFAULT NULL,
-  `IdDetalleNotaCredito` bigint(19) DEFAULT NULL,
-  PRIMARY KEY (`IdDetalleNotaCreditoImpuesto`),
-  KEY `FK_NubeDetalleNotaCreditoImpuesto_NubeDetalleNotaCredito` (`IdDetalleNotaCredito`),
-  CONSTRAINT `FK_NubeDetalleNotaCreditoImpuesto_NubeDetalleNotaCredito` FOREIGN KEY (`IdDetalleNotaCredito`) REFERENCES `NubeDetalleNotaCredito` (`IdDetalleNotaCredito`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `NubeDetalleRetencion`
---
-
-DROP TABLE IF EXISTS `NubeDetalleRetencion`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `NubeDetalleRetencion` (
-  `IdDetalleRetencion` bigint(19) NOT NULL AUTO_INCREMENT,
-  `Codigo` int(10) DEFAULT NULL,
-  `CodigoRetencion` varchar(5) DEFAULT NULL,
-  `BaseImponible` decimal(19,4) DEFAULT NULL,
-  `PorcentajeRetener` decimal(19,4) DEFAULT NULL,
-  `ValorRetenido` decimal(19,4) DEFAULT NULL,
-  `CodDocRetener` varchar(2) DEFAULT NULL,
-  `NumDocRetener` varchar(20) DEFAULT NULL,
-  `FechaEmisionDocRetener` datetime DEFAULT NULL,
-  `IdRetencion` bigint(19) DEFAULT NULL,
-  PRIMARY KEY (`IdDetalleRetencion`),
-  KEY `FK_NubeDetalleRetencion_NubeRetencion` (`IdRetencion`),
-  CONSTRAINT `FK_NubeDetalleRetencion_NubeRetencion` FOREIGN KEY (`IdRetencion`) REFERENCES `NubeRetencion` (`IdRetencion`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
 --
 -- Table structure for table `NubeFactura`
 --
-
-DROP TABLE IF EXISTS `NubeFactura`;
+DROP TABLE IF EXISTS db_edoc.`NubeFactura`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `NubeFactura` (
+CREATE TABLE db_edoc.`NubeFactura` (
   `IdFactura` bigint(19) NOT NULL AUTO_INCREMENT,
   `AutorizacionSRI` varchar(50) DEFAULT NULL,
   `FechaAutorizacion` datetime DEFAULT NULL,
@@ -365,200 +107,51 @@ CREATE TABLE `NubeFactura` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `NubeFacturaFormaPago`
+-- Table structure for table `NubeDetalleFactura`
 --
-
-DROP TABLE IF EXISTS `NubeFacturaFormaPago`;
+DROP TABLE IF EXISTS db_edoc.`NubeDetalleFactura`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `NubeFacturaFormaPago` (
-  `IdFormaPagoFact` bigint(20) NOT NULL AUTO_INCREMENT,
-  `IdForma` bigint(20) NOT NULL,
-  `IdFactura` bigint(19) NOT NULL,
-  `FormaPago` varchar(2) DEFAULT NULL,
-  `Total` decimal(14,4) DEFAULT NULL,
-  `Plazo` int(5) DEFAULT NULL,
-  `UnidadTiempo` varchar(10) DEFAULT NULL,
-  PRIMARY KEY (`IdFormaPagoFact`),
-  KEY `IdFactura` (`IdFactura`),
-  KEY `NubeFacturaFormaPago_ibfk_2` (`IdForma`),
-  CONSTRAINT `NubeFacturaFormaPago_ibfk_1` FOREIGN KEY (`IdFactura`) REFERENCES `NubeFactura` (`IdFactura`),
-  CONSTRAINT `NubeFacturaFormaPago_ibfk_2` FOREIGN KEY (`IdForma`) REFERENCES `VSFormaPago` (`IdForma`)
-) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `NubeFacturaImpuesto`
---
-
-DROP TABLE IF EXISTS `NubeFacturaImpuesto`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `NubeFacturaImpuesto` (
-  `IdFacturaImpuesto` bigint(19) NOT NULL AUTO_INCREMENT,
-  `Codigo` int(10) DEFAULT NULL,
-  `CodigoPorcentaje` int(10) DEFAULT NULL,
-  `BaseImponible` decimal(19,4) DEFAULT NULL,
-  `Tarifa` decimal(19,4) DEFAULT NULL,
-  `Valor` decimal(19,4) DEFAULT NULL,
-  `IdFactura` bigint(19) DEFAULT NULL,
-  PRIMARY KEY (`IdFacturaImpuesto`),
-  KEY `FK_NubeFacturaImpuesto_NubeFactura` (`IdFactura`),
-  CONSTRAINT `FK_NubeFacturaImpuesto_NubeFactura` FOREIGN KEY (`IdFactura`) REFERENCES `NubeFactura` (`IdFactura`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `NubeGuiaRemision`
---
-
-DROP TABLE IF EXISTS `NubeGuiaRemision`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `NubeGuiaRemision` (
-  `IdGuiaRemision` bigint(19) NOT NULL AUTO_INCREMENT,
-  `AutorizacionSRI` varchar(50) DEFAULT NULL,
-  `FechaAutorizacion` datetime DEFAULT NULL,
-  `Ambiente` int(1) DEFAULT NULL,
-  `TipoEmision` int(1) DEFAULT NULL,
-  `RazonSocial` varchar(300) DEFAULT NULL,
-  `NombreComercial` varchar(300) DEFAULT NULL,
-  `Ruc` varchar(20) DEFAULT NULL,
-  `ClaveAcceso` varchar(50) DEFAULT NULL,
-  `CodigoDocumento` varchar(2) DEFAULT NULL,
-  `Establecimiento` varchar(3) DEFAULT NULL,
-  `PuntoEmision` varchar(3) DEFAULT NULL,
-  `Secuencial` varchar(15) DEFAULT NULL,
-  `DireccionMatriz` varchar(300) DEFAULT NULL,
-  `DireccionEstablecimiento` varchar(300) DEFAULT NULL,
-  `DireccionPartida` varchar(300) DEFAULT NULL,
-  `RazonSocialTransportista` varchar(300) DEFAULT NULL,
-  `TipoIdentificacionTransportista` varchar(2) DEFAULT NULL,
-  `IdentificacionTransportista` varchar(20) DEFAULT NULL,
-  `Rise` varchar(40) DEFAULT NULL,
-  `ObligadoContabilidad` varchar(2) DEFAULT NULL,
-  `ContribuyenteEspecial` varchar(10) DEFAULT NULL,
-  `FechaInicioTransporte` datetime DEFAULT NULL,
-  `FechaFinTransporte` datetime DEFAULT NULL,
-  `Placa` varchar(20) DEFAULT NULL,
-  `UsuarioCreador` varchar(50) DEFAULT NULL,
-  `EmailResponsable` varchar(100) DEFAULT NULL,
-  `EstadoDocumento` varchar(25) DEFAULT NULL,
-  `DescripcionError` blob,
-  `CodigoError` varchar(10) DEFAULT NULL,
-  `DirectorioDocumento` varchar(100) DEFAULT NULL,
-  `NombreDocumento` varchar(100) DEFAULT NULL,
-  `GeneradoXls` tinyint(4) DEFAULT NULL,
-  `CodigoTransaccionERP` varchar(3) DEFAULT NULL,
-  `SecuencialERP` varchar(10) DEFAULT NULL,
-  `Estado` int(10) DEFAULT NULL,
-  `EstadoEnv` int(10) DEFAULT '2',
-  `IdLote` varchar(50) DEFAULT NULL,
-  `IdRad` bigint(20) DEFAULT '0',
-  `FechaEmisionErp` datetime DEFAULT NULL,
-  `FechaCarga` datetime DEFAULT NULL,
-  `FechaAnula` datetime DEFAULT NULL,
-  `USU_ID` bigint(20) DEFAULT NULL,
-  PRIMARY KEY (`IdGuiaRemision`)
-) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `NubeGuiaRemisionDestinatario`
---
-
-DROP TABLE IF EXISTS `NubeGuiaRemisionDestinatario`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `NubeGuiaRemisionDestinatario` (
-  `IdGuiaRemisionDestinatario` bigint(19) NOT NULL AUTO_INCREMENT,
-  `IdentificacionDestinatario` varchar(13) DEFAULT NULL,
-  `RazonSocialDestinatario` varchar(300) DEFAULT NULL,
-  `DirDestinatario` varchar(300) DEFAULT NULL,
-  `MotivoTraslado` varchar(300) DEFAULT NULL,
-  `DocAduaneroUnico` varchar(20) DEFAULT NULL,
-  `CodEstabDestino` varchar(3) DEFAULT NULL,
-  `Ruta` varchar(300) DEFAULT NULL,
-  `CodDocSustento` varchar(2) DEFAULT NULL,
-  `NumDocSustento` varchar(20) DEFAULT NULL,
-  `NumAutDocSustento` varchar(50) DEFAULT NULL,
-  `FechaEmisionDocSustento` date DEFAULT NULL,
-  `IdGuiaRemision` bigint(19) DEFAULT NULL,
-  PRIMARY KEY (`IdGuiaRemisionDestinatario`),
-  KEY `FK_NubeGuiaRemisionDestinatario_NubeGuiaRemision` (`IdGuiaRemision`),
-  CONSTRAINT `FK_NubeGuiaRemisionDestinatario_NubeGuiaRemision` FOREIGN KEY (`IdGuiaRemision`) REFERENCES `NubeGuiaRemision` (`IdGuiaRemision`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `NubeGuiaRemisionDetalle`
---
-
-DROP TABLE IF EXISTS `NubeGuiaRemisionDetalle`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `NubeGuiaRemisionDetalle` (
-  `IdGuiaRemisionDetalle` bigint(19) NOT NULL AUTO_INCREMENT,
-  `CodigoInterno` varchar(25) DEFAULT NULL,
-  `CodigoAdicional` varchar(25) DEFAULT NULL,
+CREATE TABLE db_edoc.`NubeDetalleFactura` (
+  `IdDetalleFactura` bigint(19) NOT NULL AUTO_INCREMENT,
+  `CodigoPrincipal` varchar(25) DEFAULT NULL,
+  `CodigoAuxiliar` varchar(25) DEFAULT NULL,
   `Descripcion` varchar(300) DEFAULT NULL,
   `Cantidad` decimal(19,4) DEFAULT NULL,
-  `IdGuiaRemisionDestinatario` bigint(19) DEFAULT NULL,
-  PRIMARY KEY (`IdGuiaRemisionDetalle`),
-  KEY `FK_NubeGuiaRemisionDetalle_NubeGuiaRemisionDestinatario` (`IdGuiaRemisionDestinatario`),
-  CONSTRAINT `FK_NubeGuiaRemisionDetalle_NubeGuiaRemisionDestinatario` FOREIGN KEY (`IdGuiaRemisionDestinatario`) REFERENCES `NubeGuiaRemisionDestinatario` (`IdGuiaRemisionDestinatario`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `NubeLote`
---
-
-DROP TABLE IF EXISTS `NubeLote`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `NubeLote` (
-  `Id` int(10) NOT NULL,
-  `IdLote` varchar(50) NOT NULL,
-  `TipoLote` varchar(50) DEFAULT NULL,
-  `FechaEmision` datetime DEFAULT NULL,
-  `UsuarioCreador` varchar(50) DEFAULT NULL,
-  `ClaveAcceso` varchar(50) DEFAULT NULL,
-  PRIMARY KEY (`IdLote`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `NubeMensajeError`
---
-
-DROP TABLE IF EXISTS `NubeMensajeError`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `NubeMensajeError` (
-  `Id` bigint(19) NOT NULL AUTO_INCREMENT,
+  `PrecioUnitario` decimal(19,4) DEFAULT NULL,
+  `Descuento` decimal(19,4) DEFAULT NULL,
+  `PrecioTotalSinImpuesto` decimal(19,4) DEFAULT NULL,
   `IdFactura` bigint(19) DEFAULT NULL,
-  `IdRetencion` bigint(19) DEFAULT NULL,
-  `IdNotaCredito` bigint(19) DEFAULT NULL,
-  `IdNotaDebito` bigint(19) DEFAULT NULL,
-  `IdGuiaRemision` bigint(19) DEFAULT NULL,
-  `Identificador` varchar(10) CHARACTER SET utf8 DEFAULT NULL,
-  `TipoMensaje` varchar(50) CHARACTER SET utf8 DEFAULT NULL,
-  `Mensaje` varchar(100) CHARACTER SET utf8 DEFAULT NULL,
-  `InformacionAdicional` blob,
-  `FechaError` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`Id`)
+  PRIMARY KEY (`IdDetalleFactura`),
+  KEY `FK_NubeDetalleFactura_NubeFactura` (`IdFactura`),
+  CONSTRAINT `FK_NubeDetalleFactura_NubeFactura` FOREIGN KEY (`IdFactura`) REFERENCES `NubeFactura` (`IdFactura`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `NubeDatoAdicionalDetalleFactura`
+--
+DROP TABLE IF EXISTS db_edoc.`NubeDatoAdicionalDetalleFactura`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE db_edoc.`NubeDatoAdicionalDetalleFactura` (
+  `IdDatoAdicionalDetalleFactura` bigint(19) NOT NULL AUTO_INCREMENT,
+  `Nombre` varchar(300) DEFAULT NULL,
+  `Descripcion` varchar(300) DEFAULT NULL,
+  `IdDetalleFactura` bigint(19) DEFAULT NULL,
+  PRIMARY KEY (`IdDatoAdicionalDetalleFactura`),
+  KEY `FK_NubeDatoAdicionalDetalleFactura_NubeDetalleFactura` (`IdDetalleFactura`),
+  CONSTRAINT `FK_NubeDatoAdicionalDetalleFactura_NubeDetalleFactura` FOREIGN KEY (`IdDetalleFactura`) REFERENCES `NubeDetalleFactura` (`IdDetalleFactura`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `NubeNotaCredito`
 --
-
-DROP TABLE IF EXISTS `NubeNotaCredito`;
+DROP TABLE IF EXISTS db_edoc.`NubeNotaCredito`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `NubeNotaCredito` (
+CREATE TABLE db_edoc.`NubeNotaCredito` (
   `IdNotaCredito` bigint(19) NOT NULL AUTO_INCREMENT,
   `AutorizacionSRI` varchar(50) DEFAULT NULL,
   `FechaAutorizacion` datetime DEFAULT NULL,
@@ -609,34 +202,217 @@ CREATE TABLE `NubeNotaCredito` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `NubeNotaCreditoImpuesto`
+-- Table structure for table `NubeDetalleNotaCredito`
 --
-
-DROP TABLE IF EXISTS `NubeNotaCreditoImpuesto`;
+DROP TABLE IF EXISTS db_edoc.`NubeDetalleNotaCredito`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `NubeNotaCreditoImpuesto` (
-  `IdNotaCreditoImpuesto` bigint(19) NOT NULL AUTO_INCREMENT,
-  `Codigo` int(10) DEFAULT NULL,
-  `CodigoPorcentaje` int(10) DEFAULT NULL,
-  `BaseImponible` decimal(19,4) DEFAULT NULL,
-  `Tarifa` decimal(19,4) DEFAULT NULL,
-  `Valor` decimal(19,4) DEFAULT NULL,
+CREATE TABLE db_edoc.`NubeDetalleNotaCredito` (
+  `IdDetalleNotaCredito` bigint(19) NOT NULL AUTO_INCREMENT,
+  `CodigoPrincipal` varchar(25) DEFAULT NULL,
+  `CodigoAuxiliar` varchar(25) DEFAULT NULL,
+  `Descripcion` varchar(300) DEFAULT NULL,
+  `Cantidad` int(10) DEFAULT NULL,
+  `PrecioUnitario` decimal(19,4) DEFAULT NULL,
+  `Descuento` decimal(19,4) DEFAULT NULL,
+  `PrecioTotalSinImpuesto` decimal(19,4) DEFAULT NULL,
   `IdNotaCredito` bigint(19) DEFAULT NULL,
-  PRIMARY KEY (`IdNotaCreditoImpuesto`),
-  KEY `FK_NubeNotaCreditoImpuesto_NubeNotaCredito` (`IdNotaCredito`),
-  CONSTRAINT `FK_NubeNotaCreditoImpuesto_NubeNotaCredito` FOREIGN KEY (`IdNotaCredito`) REFERENCES `NubeNotaCredito` (`IdNotaCredito`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  PRIMARY KEY (`IdDetalleNotaCredito`),
+  KEY `FK_NubeDetalleNotaCredito_NubeNotaCredito` (`IdNotaCredito`),
+  CONSTRAINT `FK_NubeDetalleNotaCredito_NubeNotaCredito` FOREIGN KEY (`IdNotaCredito`) REFERENCES `NubeNotaCredito` (`IdNotaCredito`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `NubeDatoAdicionalDetalleNotaCredito`
+--
+DROP TABLE IF EXISTS db_edoc.`NubeDatoAdicionalDetalleNotaCredito`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE db_edoc.`NubeDatoAdicionalDetalleNotaCredito` (
+  `IdDatoAdicionalDetalleNotaCredito` bigint(19) NOT NULL AUTO_INCREMENT,
+  `Nombre` varchar(300) DEFAULT NULL,
+  `Descripcion` varchar(300) DEFAULT NULL,
+  `IdDetalleNotaCredito` bigint(19) DEFAULT NULL,
+  PRIMARY KEY (`IdDatoAdicionalDetalleNotaCredito`),
+  KEY `FK_NubeDatoAdicionalDetalleNotaCredito_NubeDetalleNotaCredito` (`IdDetalleNotaCredito`),
+  CONSTRAINT `FK_NubeDatoAdicionalDetalleNotaCredito_NubeDetalleNotaCredito` FOREIGN KEY (`IdDetalleNotaCredito`) REFERENCES `NubeDetalleNotaCredito` (`IdDetalleNotaCredito`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `NubeDatoAdicionalFactura`
+--
+DROP TABLE IF EXISTS db_edoc.`NubeDatoAdicionalFactura`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE db_edoc.`NubeDatoAdicionalFactura` (
+  `IdDatoAdicionalFactura` bigint(19) NOT NULL AUTO_INCREMENT,
+  `Nombre` varchar(300) DEFAULT NULL,
+  `Descripcion` varchar(300) DEFAULT NULL,
+  `IdFactura` bigint(19) DEFAULT NULL,
+  PRIMARY KEY (`IdDatoAdicionalFactura`),
+  KEY `FK_NubeDatoAdicionalFactura_NubeFactura` (`IdFactura`),
+  CONSTRAINT `FK_NubeDatoAdicionalFactura_NubeFactura` FOREIGN KEY (`IdFactura`) REFERENCES `NubeFactura` (`IdFactura`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `NubeGuiaRemision`
+--
+DROP TABLE IF EXISTS db_edoc.`NubeGuiaRemision`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE db_edoc.`NubeGuiaRemision` (
+  `IdGuiaRemision` bigint(19) NOT NULL AUTO_INCREMENT,
+  `AutorizacionSRI` varchar(50) DEFAULT NULL,
+  `FechaAutorizacion` datetime DEFAULT NULL,
+  `Ambiente` int(1) DEFAULT NULL,
+  `TipoEmision` int(1) DEFAULT NULL,
+  `RazonSocial` varchar(300) DEFAULT NULL,
+  `NombreComercial` varchar(300) DEFAULT NULL,
+  `Ruc` varchar(20) DEFAULT NULL,
+  `ClaveAcceso` varchar(50) DEFAULT NULL,
+  `CodigoDocumento` varchar(2) DEFAULT NULL,
+  `Establecimiento` varchar(3) DEFAULT NULL,
+  `PuntoEmision` varchar(3) DEFAULT NULL,
+  `Secuencial` varchar(15) DEFAULT NULL,
+  `DireccionMatriz` varchar(300) DEFAULT NULL,
+  `DireccionEstablecimiento` varchar(300) DEFAULT NULL,
+  `DireccionPartida` varchar(300) DEFAULT NULL,
+  `RazonSocialTransportista` varchar(300) DEFAULT NULL,
+  `TipoIdentificacionTransportista` varchar(2) DEFAULT NULL,
+  `IdentificacionTransportista` varchar(20) DEFAULT NULL,
+  `Rise` varchar(40) DEFAULT NULL,
+  `ObligadoContabilidad` varchar(2) DEFAULT NULL,
+  `ContribuyenteEspecial` varchar(10) DEFAULT NULL,
+  `FechaInicioTransporte` datetime DEFAULT NULL,
+  `FechaFinTransporte` datetime DEFAULT NULL,
+  `Placa` varchar(20) DEFAULT NULL,
+  `UsuarioCreador` varchar(50) DEFAULT NULL,
+  `EmailResponsable` varchar(100) DEFAULT NULL,
+  `EstadoDocumento` varchar(25) DEFAULT NULL,
+  `DescripcionError` blob,
+  `CodigoError` varchar(10) DEFAULT NULL,
+  `DirectorioDocumento` varchar(100) DEFAULT NULL,
+  `NombreDocumento` varchar(100) DEFAULT NULL,
+  `GeneradoXls` tinyint(4) DEFAULT NULL,
+  `CodigoTransaccionERP` varchar(3) DEFAULT NULL,
+  `SecuencialERP` varchar(10) DEFAULT NULL,
+  `Estado` int(10) DEFAULT NULL,
+  `EstadoEnv` int(10) DEFAULT '2',
+  `IdLote` varchar(50) DEFAULT NULL,
+  `IdRad` bigint(20) DEFAULT '0',
+  `FechaEmisionErp` datetime DEFAULT NULL,
+  `FechaCarga` datetime DEFAULT NULL,
+  `FechaAnula` datetime DEFAULT NULL,
+  `USU_ID` bigint(20) DEFAULT NULL,
+  PRIMARY KEY (`IdGuiaRemision`)
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `NubeDatoAdicionalGuiaRemision`
+--
+DROP TABLE IF EXISTS db_edoc.`NubeDatoAdicionalGuiaRemision`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE db_edoc.`NubeDatoAdicionalGuiaRemision` (
+  `IdDatoAdicionalGuiaRemision` bigint(19) NOT NULL AUTO_INCREMENT,
+  `Nombre` varchar(300) DEFAULT NULL,
+  `Descripcion` varchar(300) DEFAULT NULL,
+  `IdGuiaRemision` bigint(19) DEFAULT NULL,
+  PRIMARY KEY (`IdDatoAdicionalGuiaRemision`),
+  KEY `FK_NubeDatoAdicionalGuiaRemision_NubeGuiaRemision` (`IdGuiaRemision`),
+  CONSTRAINT `FK_NubeDatoAdicionalGuiaRemision_NubeGuiaRemision` FOREIGN KEY (`IdGuiaRemision`) REFERENCES `NubeGuiaRemision` (`IdGuiaRemision`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `NubeGuiaRemisionDestinatario`
+--
+DROP TABLE IF EXISTS db_edoc.`NubeGuiaRemisionDestinatario`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE db_edoc.`NubeGuiaRemisionDestinatario` (
+  `IdGuiaRemisionDestinatario` bigint(19) NOT NULL AUTO_INCREMENT,
+  `IdentificacionDestinatario` varchar(13) DEFAULT NULL,
+  `RazonSocialDestinatario` varchar(300) DEFAULT NULL,
+  `DirDestinatario` varchar(300) DEFAULT NULL,
+  `MotivoTraslado` varchar(300) DEFAULT NULL,
+  `DocAduaneroUnico` varchar(20) DEFAULT NULL,
+  `CodEstabDestino` varchar(3) DEFAULT NULL,
+  `Ruta` varchar(300) DEFAULT NULL,
+  `CodDocSustento` varchar(2) DEFAULT NULL,
+  `NumDocSustento` varchar(20) DEFAULT NULL,
+  `NumAutDocSustento` varchar(50) DEFAULT NULL,
+  `FechaEmisionDocSustento` date DEFAULT NULL,
+  `IdGuiaRemision` bigint(19) DEFAULT NULL,
+  PRIMARY KEY (`IdGuiaRemisionDestinatario`),
+  KEY `FK_NubeGuiaRemisionDestinatario_NubeGuiaRemision` (`IdGuiaRemision`),
+  CONSTRAINT `FK_NubeGuiaRemisionDestinatario_NubeGuiaRemision` FOREIGN KEY (`IdGuiaRemision`) REFERENCES `NubeGuiaRemision` (`IdGuiaRemision`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=latin1;
+
+--
+-- Table structure for table `NubeGuiaRemisionDetalle`
+--
+DROP TABLE IF EXISTS db_edoc.`NubeGuiaRemisionDetalle`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE db_edoc.`NubeGuiaRemisionDetalle` (
+  `IdGuiaRemisionDetalle` bigint(19) NOT NULL AUTO_INCREMENT,
+  `CodigoInterno` varchar(25) DEFAULT NULL,
+  `CodigoAdicional` varchar(25) DEFAULT NULL,
+  `Descripcion` varchar(300) DEFAULT NULL,
+  `Cantidad` decimal(19,4) DEFAULT NULL,
+  `IdGuiaRemisionDestinatario` bigint(19) DEFAULT NULL,
+  PRIMARY KEY (`IdGuiaRemisionDetalle`),
+  KEY `FK_NubeGuiaRemisionDetalle_NubeGuiaRemisionDestinatario` (`IdGuiaRemisionDestinatario`),
+  CONSTRAINT `FK_NubeGuiaRemisionDetalle_NubeGuiaRemisionDestinatario` FOREIGN KEY (`IdGuiaRemisionDestinatario`) REFERENCES `NubeGuiaRemisionDestinatario` (`IdGuiaRemisionDestinatario`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `NubeDatoAdicionalGuiaRemisionDetalle`
+--
+DROP TABLE IF EXISTS db_edoc.`NubeDatoAdicionalGuiaRemisionDetalle`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE db_edoc.`NubeDatoAdicionalGuiaRemisionDetalle` (
+  `IdDatoAdicionalGuiaRemisionDetalle` bigint(19) NOT NULL AUTO_INCREMENT,
+  `Nombre` varchar(300) DEFAULT NULL,
+  `Descripcion` varchar(300) DEFAULT NULL,
+  `IdGuiaRemisionDetalle` bigint(19) DEFAULT NULL,
+  PRIMARY KEY (`IdDatoAdicionalGuiaRemisionDetalle`),
+  KEY `FK_NubeDatoAdicionalGuiaRemisionDetalle_NubeGuiaRemisionDetalle` (`IdGuiaRemisionDetalle`),
+  CONSTRAINT `FK_NubeDatoAdicionalGuiaRemisionDetalle_NubeGuiaRemisionDetalle` FOREIGN KEY (`IdGuiaRemisionDetalle`) REFERENCES `NubeGuiaRemisionDetalle` (`IdGuiaRemisionDetalle`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `NubeDatoAdicionalNotaCredito`
+--
+DROP TABLE IF EXISTS db_edoc.`NubeDatoAdicionalNotaCredito`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE db_edoc.`NubeDatoAdicionalNotaCredito` (
+  `IdDatoAdicionalNotaCredito` bigint(19) NOT NULL AUTO_INCREMENT,
+  `Nombre` varchar(300) DEFAULT NULL,
+  `Descripcion` varchar(300) DEFAULT NULL,
+  `IdNotaCredito` bigint(19) DEFAULT NULL,
+  PRIMARY KEY (`IdDatoAdicionalNotaCredito`),
+  KEY `FK_NubeDatoAdicionalNotaCredito_NubeNotaCredito` (`IdNotaCredito`),
+  CONSTRAINT `FK_NubeDatoAdicionalNotaCredito_NubeNotaCredito` FOREIGN KEY (`IdNotaCredito`) REFERENCES `NubeNotaCredito` (`IdNotaCredito`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `NubeNotaDebito`
 --
-
-DROP TABLE IF EXISTS `NubeNotaDebito`;
+DROP TABLE IF EXISTS db_edoc.`NubeNotaDebito`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `NubeNotaDebito` (
+CREATE TABLE db_edoc.`NubeNotaDebito` (
   `IdNotaDebito` bigint(19) NOT NULL AUTO_INCREMENT,
   `AutorizacionSRI` varchar(50) DEFAULT NULL,
   `FechaAutorizacion` datetime DEFAULT NULL,
@@ -684,52 +460,29 @@ CREATE TABLE `NubeNotaDebito` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `NubeNotaDebitoImpuesto`
+-- Table structure for table `NubeDatoAdicionalNotaDebito`
 --
-
-DROP TABLE IF EXISTS `NubeNotaDebitoImpuesto`;
+DROP TABLE IF EXISTS db_edoc.`NubeDatoAdicionalNotaDebito`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `NubeNotaDebitoImpuesto` (
-  `IdNotaDebitoImpuesto` bigint(19) NOT NULL AUTO_INCREMENT,
-  `Codigo` int(10) DEFAULT NULL,
-  `CodigoPorcentaje` int(10) DEFAULT NULL,
-  `BaseImponible` decimal(19,4) DEFAULT NULL,
-  `Tarifa` decimal(19,4) DEFAULT NULL,
-  `Valor` decimal(19,4) DEFAULT NULL,
+CREATE TABLE db_edoc.`NubeDatoAdicionalNotaDebito` (
+  `IdDatoAdicionalNotaDebito` bigint(19) NOT NULL AUTO_INCREMENT,
+  `Nombre` varchar(300) DEFAULT NULL,
+  `Descripcion` varchar(300) DEFAULT NULL,
   `IdNotaDebito` bigint(19) DEFAULT NULL,
-  PRIMARY KEY (`IdNotaDebitoImpuesto`),
-  KEY `FK_NubeNotaDebitoImpuesto_NubeNotaDebito` (`IdNotaDebito`),
-  CONSTRAINT `FK_NubeNotaDebitoImpuesto_NubeNotaDebito` FOREIGN KEY (`IdNotaDebito`) REFERENCES `NubeNotaDebito` (`IdNotaDebito`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `NubeNotaDebitoMotivos`
---
-
-DROP TABLE IF EXISTS `NubeNotaDebitoMotivos`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `NubeNotaDebitoMotivos` (
-  `IdNotaDebitoMotivo` bigint(19) NOT NULL AUTO_INCREMENT,
-  `Razon` varchar(300) CHARACTER SET utf8 DEFAULT NULL,
-  `Valor` decimal(19,4) DEFAULT NULL,
-  `IdNotaDebito` bigint(19) DEFAULT NULL,
-  PRIMARY KEY (`IdNotaDebitoMotivo`),
-  KEY `FK_NubeNotaDebitoMotivos_NubeNotaDebito` (`IdNotaDebito`),
-  CONSTRAINT `FK_NubeNotaDebitoMotivos_NubeNotaDebito` FOREIGN KEY (`IdNotaDebito`) REFERENCES `NubeNotaDebito` (`IdNotaDebito`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  PRIMARY KEY (`IdDatoAdicionalNotaDebito`),
+  KEY `FK_NubeDatoAdicionalNotaDebito_NubeNotaDebito` (`IdNotaDebito`),
+  CONSTRAINT `FK_NubeDatoAdicionalNotaDebito_NubeNotaDebito` FOREIGN KEY (`IdNotaDebito`) REFERENCES `NubeNotaDebito` (`IdNotaDebito`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `NubeRetencion`
 --
-
-DROP TABLE IF EXISTS `NubeRetencion`;
+DROP TABLE IF EXISTS db_edoc.`NubeRetencion`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `NubeRetencion` (
+CREATE TABLE db_edoc.`NubeRetencion` (
   `IdRetencion` bigint(19) NOT NULL AUTO_INCREMENT,
   `AutorizacionSRI` varchar(50) DEFAULT NULL,
   `FechaAutorizacion` datetime DEFAULT NULL,
@@ -776,13 +529,337 @@ CREATE TABLE `NubeRetencion` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `VSDirectorio`
+-- Table structure for table `NubeDatoAdicionalRetencion`
 --
-
-DROP TABLE IF EXISTS `VSDirectorio`;
+DROP TABLE IF EXISTS db_edoc.`NubeDatoAdicionalRetencion`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `VSDirectorio` (
+CREATE TABLE db_edoc.`NubeDatoAdicionalRetencion` (
+  `IdDatoAdicionalRetencion` bigint(19) NOT NULL AUTO_INCREMENT,
+  `Nombre` varchar(300) DEFAULT NULL,
+  `Descripcion` varchar(300) DEFAULT NULL,
+  `IdRetencion` bigint(19) DEFAULT NULL,
+  PRIMARY KEY (`IdDatoAdicionalRetencion`),
+  KEY `FK_NubeDatoAdicionalRetencion_NubeRetencion` (`IdRetencion`),
+  CONSTRAINT `FK_NubeDatoAdicionalRetencion_NubeRetencion` FOREIGN KEY (`IdRetencion`) REFERENCES `NubeRetencion` (`IdRetencion`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `NubeDetalleFacturaImpuesto`
+--
+DROP TABLE IF EXISTS db_edoc.`NubeDetalleFacturaImpuesto`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE db_edoc.`NubeDetalleFacturaImpuesto` (
+  `IdDetalleFacturaImpuesto` bigint(19) NOT NULL AUTO_INCREMENT,
+  `Codigo` int(10) DEFAULT NULL,
+  `CodigoPorcentaje` int(10) DEFAULT NULL,
+  `BaseImponible` decimal(19,4) DEFAULT NULL,
+  `Tarifa` decimal(19,4) DEFAULT NULL,
+  `Valor` decimal(19,4) DEFAULT NULL,
+  `IdDetalleFactura` bigint(19) DEFAULT NULL,
+  PRIMARY KEY (`IdDetalleFacturaImpuesto`),
+  KEY `FK_NubeDetalleFacturaImpuesto_NubeDetalleFactura` (`IdDetalleFactura`),
+  CONSTRAINT `FK_NubeDetalleFacturaImpuesto_NubeDetalleFactura` FOREIGN KEY (`IdDetalleFactura`) REFERENCES `NubeDetalleFactura` (`IdDetalleFactura`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `NubeDetalleNotaCreditoImpuesto`
+--
+DROP TABLE IF EXISTS db_edoc.`NubeDetalleNotaCreditoImpuesto`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE db_edoc.`NubeDetalleNotaCreditoImpuesto` (
+  `IdDetalleNotaCreditoImpuesto` bigint(19) NOT NULL AUTO_INCREMENT,
+  `Codigo` int(10) DEFAULT NULL,
+  `CodigoPorcentaje` int(10) DEFAULT NULL,
+  `BaseImponible` decimal(19,4) DEFAULT NULL,
+  `Tarifa` decimal(19,4) DEFAULT NULL,
+  `Valor` decimal(19,4) DEFAULT NULL,
+  `IdDetalleNotaCredito` bigint(19) DEFAULT NULL,
+  PRIMARY KEY (`IdDetalleNotaCreditoImpuesto`),
+  KEY `FK_NubeDetalleNotaCreditoImpuesto_NubeDetalleNotaCredito` (`IdDetalleNotaCredito`),
+  CONSTRAINT `FK_NubeDetalleNotaCreditoImpuesto_NubeDetalleNotaCredito` FOREIGN KEY (`IdDetalleNotaCredito`) REFERENCES `NubeDetalleNotaCredito` (`IdDetalleNotaCredito`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `NubeDetalleRetencion`
+--
+DROP TABLE IF EXISTS db_edoc.`NubeDetalleRetencion`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE db_edoc.`NubeDetalleRetencion` (
+  `IdDetalleRetencion` bigint(19) NOT NULL AUTO_INCREMENT,
+  `Codigo` int(10) DEFAULT NULL,
+  `CodigoRetencion` varchar(5) DEFAULT NULL,
+  `BaseImponible` decimal(19,4) DEFAULT NULL,
+  `PorcentajeRetener` decimal(19,4) DEFAULT NULL,
+  `ValorRetenido` decimal(19,4) DEFAULT NULL,
+  `CodDocRetener` varchar(2) DEFAULT NULL,
+  `NumDocRetener` varchar(20) DEFAULT NULL,
+  `FechaEmisionDocRetener` datetime DEFAULT NULL,
+  `IdRetencion` bigint(19) DEFAULT NULL,
+  PRIMARY KEY (`IdDetalleRetencion`),
+  KEY `FK_NubeDetalleRetencion_NubeRetencion` (`IdRetencion`),
+  CONSTRAINT `FK_NubeDetalleRetencion_NubeRetencion` FOREIGN KEY (`IdRetencion`) REFERENCES `NubeRetencion` (`IdRetencion`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `VSFormaPago`
+--
+DROP TABLE IF EXISTS db_edoc.`VSFormaPago`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE db_edoc.`VSFormaPago` (
+  `IdForma` bigint(20) NOT NULL AUTO_INCREMENT,
+  `FormaPago` varchar(100) DEFAULT NULL,
+  `Codigo` varchar(2) DEFAULT NULL,
+  `Estado` varchar(1) DEFAULT NULL,
+  `FechaInicio` date DEFAULT NULL,
+  `FechaFin` date DEFAULT NULL,
+  PRIMARY KEY (`IdForma`)
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `NubeFacturaFormaPago`
+--
+DROP TABLE IF EXISTS db_edoc.`NubeFacturaFormaPago`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE db_edoc.`NubeFacturaFormaPago` (
+  `IdFormaPagoFact` bigint(20) NOT NULL AUTO_INCREMENT,
+  `IdForma` bigint(20) NOT NULL,
+  `IdFactura` bigint(19) NOT NULL,
+  `FormaPago` varchar(2) DEFAULT NULL,
+  `Total` decimal(14,4) DEFAULT NULL,
+  `Plazo` int(5) DEFAULT NULL,
+  `UnidadTiempo` varchar(10) DEFAULT NULL,
+  PRIMARY KEY (`IdFormaPagoFact`),
+  KEY `IdFactura` (`IdFactura`),
+  KEY `NubeFacturaFormaPago_ibfk_2` (`IdForma`),
+  CONSTRAINT `NubeFacturaFormaPago_ibfk_1` FOREIGN KEY (`IdFactura`) REFERENCES `NubeFactura` (`IdFactura`),
+  CONSTRAINT `NubeFacturaFormaPago_ibfk_2` FOREIGN KEY (`IdForma`) REFERENCES `VSFormaPago` (`IdForma`)
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `NubeFacturaImpuesto`
+--
+DROP TABLE IF EXISTS db_edoc.`NubeFacturaImpuesto`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE db_edoc.`NubeFacturaImpuesto` (
+  `IdFacturaImpuesto` bigint(19) NOT NULL AUTO_INCREMENT,
+  `Codigo` int(10) DEFAULT NULL,
+  `CodigoPorcentaje` int(10) DEFAULT NULL,
+  `BaseImponible` decimal(19,4) DEFAULT NULL,
+  `Tarifa` decimal(19,4) DEFAULT NULL,
+  `Valor` decimal(19,4) DEFAULT NULL,
+  `IdFactura` bigint(19) DEFAULT NULL,
+  PRIMARY KEY (`IdFacturaImpuesto`),
+  KEY `FK_NubeFacturaImpuesto_NubeFactura` (`IdFactura`),
+  CONSTRAINT `FK_NubeFacturaImpuesto_NubeFactura` FOREIGN KEY (`IdFactura`) REFERENCES `NubeFactura` (`IdFactura`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `NubeLote`
+--
+DROP TABLE IF EXISTS db_edoc.`NubeLote`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE db_edoc.`NubeLote` (
+  `Id` int(10) NOT NULL,
+  `IdLote` varchar(50) NOT NULL,
+  `TipoLote` varchar(50) DEFAULT NULL,
+  `FechaEmision` datetime DEFAULT NULL,
+  `UsuarioCreador` varchar(50) DEFAULT NULL,
+  `ClaveAcceso` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`IdLote`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `NubeMensajeError`
+--
+DROP TABLE IF EXISTS db_edoc.`NubeMensajeError`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE db_edoc.`NubeMensajeError` (
+  `Id` bigint(19) NOT NULL AUTO_INCREMENT,
+  `IdFactura` bigint(19) DEFAULT NULL,
+  `IdRetencion` bigint(19) DEFAULT NULL,
+  `IdNotaCredito` bigint(19) DEFAULT NULL,
+  `IdNotaDebito` bigint(19) DEFAULT NULL,
+  `IdGuiaRemision` bigint(19) DEFAULT NULL,
+  `Identificador` varchar(10) CHARACTER SET utf8 DEFAULT NULL,
+  `TipoMensaje` varchar(50) CHARACTER SET utf8 DEFAULT NULL,
+  `Mensaje` varchar(100) CHARACTER SET utf8 DEFAULT NULL,
+  `InformacionAdicional` blob,
+  `FechaError` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`Id`)
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `NubeNotaCreditoImpuesto`
+--
+DROP TABLE IF EXISTS db_edoc.`NubeNotaCreditoImpuesto`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE db_edoc.`NubeNotaCreditoImpuesto` (
+  `IdNotaCreditoImpuesto` bigint(19) NOT NULL AUTO_INCREMENT,
+  `Codigo` int(10) DEFAULT NULL,
+  `CodigoPorcentaje` int(10) DEFAULT NULL,
+  `BaseImponible` decimal(19,4) DEFAULT NULL,
+  `Tarifa` decimal(19,4) DEFAULT NULL,
+  `Valor` decimal(19,4) DEFAULT NULL,
+  `IdNotaCredito` bigint(19) DEFAULT NULL,
+  PRIMARY KEY (`IdNotaCreditoImpuesto`),
+  KEY `FK_NubeNotaCreditoImpuesto_NubeNotaCredito` (`IdNotaCredito`),
+  CONSTRAINT `FK_NubeNotaCreditoImpuesto_NubeNotaCredito` FOREIGN KEY (`IdNotaCredito`) REFERENCES `NubeNotaCredito` (`IdNotaCredito`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `NubeNotaDebitoImpuesto`
+--
+DROP TABLE IF EXISTS db_edoc.`NubeNotaDebitoImpuesto`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE db_edoc.`NubeNotaDebitoImpuesto` (
+  `IdNotaDebitoImpuesto` bigint(19) NOT NULL AUTO_INCREMENT,
+  `Codigo` int(10) DEFAULT NULL,
+  `CodigoPorcentaje` int(10) DEFAULT NULL,
+  `BaseImponible` decimal(19,4) DEFAULT NULL,
+  `Tarifa` decimal(19,4) DEFAULT NULL,
+  `Valor` decimal(19,4) DEFAULT NULL,
+  `IdNotaDebito` bigint(19) DEFAULT NULL,
+  PRIMARY KEY (`IdNotaDebitoImpuesto`),
+  KEY `FK_NubeNotaDebitoImpuesto_NubeNotaDebito` (`IdNotaDebito`),
+  CONSTRAINT `FK_NubeNotaDebitoImpuesto_NubeNotaDebito` FOREIGN KEY (`IdNotaDebito`) REFERENCES `NubeNotaDebito` (`IdNotaDebito`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `NubeNotaDebitoMotivos`
+--
+DROP TABLE IF EXISTS db_edoc.`NubeNotaDebitoMotivos`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE db_edoc.`NubeNotaDebitoMotivos` (
+  `IdNotaDebitoMotivo` bigint(19) NOT NULL AUTO_INCREMENT,
+  `Razon` varchar(300) CHARACTER SET utf8 DEFAULT NULL,
+  `Valor` decimal(19,4) DEFAULT NULL,
+  `IdNotaDebito` bigint(19) DEFAULT NULL,
+  PRIMARY KEY (`IdNotaDebitoMotivo`),
+  KEY `FK_NubeNotaDebitoMotivos_NubeNotaDebito` (`IdNotaDebito`),
+  CONSTRAINT `FK_NubeNotaDebitoMotivos_NubeNotaDebito` FOREIGN KEY (`IdNotaDebito`) REFERENCES `NubeNotaDebito` (`IdNotaDebito`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `empresa`
+--
+DROP TABLE IF EXISTS db_edoc.`empresa`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE db_edoc.`empresa` (
+  `emp_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `emp_ruc` varchar(15) DEFAULT NULL,
+  `emp_razonsocial` varchar(300) DEFAULT NULL,
+  `emp_nom_comercial` varchar(300) DEFAULT NULL,
+  `emp_ambiente` varchar(1) DEFAULT NULL,
+  `emp_tipo_emision` varchar(1) DEFAULT NULL,
+  `emp_direccion_matriz` varchar(300) DEFAULT NULL,
+  `emp_obliga_contabilidad` varchar(2) DEFAULT NULL,
+  `emp_contri_especial` varchar(5) DEFAULT NULL,
+  `emp_telefono` varchar(20) DEFAULT NULL,
+  `emp_fax` varchar(20) DEFAULT NULL,
+  `emp_email` varchar(45) DEFAULT NULL,
+  `emp_email_digital` varchar(60) DEFAULT NULL,
+  `emp_email_conta` varchar(60) DEFAULT NULL,
+  `emp_moneda` varchar(10) DEFAULT NULL,
+  `emp_website` varchar(45) DEFAULT NULL,
+  `emp_logo` varchar(100) DEFAULT NULL,
+  `usuario` varchar(60) DEFAULT NULL,
+  `emp_est_log` varchar(1) DEFAULT NULL,
+  `emp_fec_cre` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `emp_fec_mod` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`emp_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `establecimiento`
+--
+DROP TABLE IF EXISTS db_edoc.`establecimiento`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE db_edoc.`establecimiento` (
+  `est_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `emp_id` bigint(20) NOT NULL,
+  `est_numero` varchar(3) DEFAULT NULL,
+  `est_nombre` varchar(300) DEFAULT NULL,
+  `est_direccion` varchar(300) DEFAULT NULL,
+  `est_telefono` varchar(45) DEFAULT NULL,
+  `est_log` varchar(1) DEFAULT NULL,
+  `fec_cre` timestamp NULL DEFAULT NULL,
+  `fec_mod` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`est_id`),
+  KEY `fk_establecimiento_empresa1_idx` (`emp_id`),
+  CONSTRAINT `fk_establecimiento_empresa1` FOREIGN KEY (`emp_id`) REFERENCES `empresa` (`emp_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `punto_emision`
+--
+DROP TABLE IF EXISTS db_edoc.`punto_emision`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE db_edoc.`punto_emision` (
+  `pemi_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `est_id` bigint(20) NOT NULL,
+  `pemi_numero` varchar(3) DEFAULT NULL,
+  `pemi_nombre` varchar(300) DEFAULT NULL,
+  `est_log` varchar(1) DEFAULT NULL,
+  `fec_cre` timestamp NULL DEFAULT NULL,
+  `fec_mod` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`pemi_id`),
+  KEY `fk_punto_emision_establecimiento1_idx` (`est_id`),
+  CONSTRAINT `fk_punto_emision_establecimiento1` FOREIGN KEY (`est_id`) REFERENCES `establecimiento` (`est_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `sysdiagrams`
+--
+DROP TABLE IF EXISTS db_edoc.`sysdiagrams`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE db_edoc.`sysdiagrams` (
+  `name` varchar(128) CHARACTER SET utf8 NOT NULL,
+  `principal_id` int(10) NOT NULL,
+  `diagram_id` int(10) NOT NULL AUTO_INCREMENT,
+  `version` int(10) DEFAULT NULL,
+  `definition` varbinary(100) DEFAULT NULL,
+  PRIMARY KEY (`diagram_id`),
+  UNIQUE KEY `UK_principal_name` (`principal_id`,`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Table structure for table `VSDirectorio`
+--
+DROP TABLE IF EXISTS db_edoc.`VSDirectorio`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE db_edoc.`VSDirectorio` (
   `IdDirectorio` int(10) NOT NULL AUTO_INCREMENT,
   `emp_id` bigint(20) NOT NULL,
   `TipoDocumento` varchar(3) DEFAULT NULL,
@@ -800,11 +877,10 @@ CREATE TABLE `VSDirectorio` (
 --
 -- Table structure for table `VSFirmaDigital`
 --
-
-DROP TABLE IF EXISTS `VSFirmaDigital`;
+DROP TABLE IF EXISTS db_edoc.`VSFirmaDigital`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `VSFirmaDigital` (
+CREATE TABLE db_edoc.`VSFirmaDigital` (
   `Id` int(20) NOT NULL AUTO_INCREMENT,
   `emp_id` bigint(20) NOT NULL,
   `Clave` varchar(100) DEFAULT NULL,
@@ -824,31 +900,12 @@ CREATE TABLE `VSFirmaDigital` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `VSFormaPago`
---
-
-DROP TABLE IF EXISTS `VSFormaPago`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `VSFormaPago` (
-  `IdForma` bigint(20) NOT NULL AUTO_INCREMENT,
-  `FormaPago` varchar(100) DEFAULT NULL,
-  `Codigo` varchar(2) DEFAULT NULL,
-  `Estado` varchar(1) DEFAULT NULL,
-  `FechaInicio` date DEFAULT NULL,
-  `FechaFin` date DEFAULT NULL,
-  PRIMARY KEY (`IdForma`)
-) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
 -- Table structure for table `VSImpuesto`
 --
-
-DROP TABLE IF EXISTS `VSImpuesto`;
+DROP TABLE IF EXISTS db_edoc.`VSImpuesto`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `VSImpuesto` (
+CREATE TABLE db_edoc.`VSImpuesto` (
   `Idimpuesto` int(20) NOT NULL AUTO_INCREMENT,
   `Impuesto` varchar(80) DEFAULT NULL,
   `Codigo` varchar(2) DEFAULT NULL,
@@ -860,11 +917,10 @@ CREATE TABLE `VSImpuesto` (
 --
 -- Table structure for table `VSImpuestoRetencion`
 --
-
-DROP TABLE IF EXISTS `VSImpuestoRetencion`;
+DROP TABLE IF EXISTS db_edoc.`VSImpuestoRetencion`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `VSImpuestoRetencion` (
+CREATE TABLE db_edoc.`VSImpuestoRetencion` (
   `Idimpreten` int(20) NOT NULL AUTO_INCREMENT,
   `Idimpuesto` int(20) NOT NULL,
   `Impuesto` varchar(60) DEFAULT NULL,
@@ -879,11 +935,10 @@ CREATE TABLE `VSImpuestoRetencion` (
 --
 -- Table structure for table `VSRetencion`
 --
-
-DROP TABLE IF EXISTS `VSRetencion`;
+DROP TABLE IF EXISTS db_edoc.`VSRetencion`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `VSRetencion` (
+CREATE TABLE db_edoc.`VSRetencion` (
   `Idretencion` int(20) NOT NULL AUTO_INCREMENT,
   `Idimpreten` int(20) NOT NULL,
   `Retencion` text,
@@ -899,11 +954,10 @@ CREATE TABLE `VSRetencion` (
 --
 -- Table structure for table `VSServiciosSRI`
 --
-
-DROP TABLE IF EXISTS `VSServiciosSRI`;
+DROP TABLE IF EXISTS db_edoc.`VSServiciosSRI`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `VSServiciosSRI` (
+CREATE TABLE db_edoc.`VSServiciosSRI` (
   `Id` int(10) NOT NULL AUTO_INCREMENT,
   `emp_id` bigint(20) NOT NULL,
   `Ambiente` varchar(1) DEFAULT NULL,
@@ -925,11 +979,10 @@ CREATE TABLE `VSServiciosSRI` (
 --
 -- Table structure for table `VSServidorCorreo`
 --
-
-DROP TABLE IF EXISTS `VSServidorCorreo`;
+DROP TABLE IF EXISTS db_edoc.`VSServidorCorreo`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `VSServidorCorreo` (
+CREATE TABLE db_edoc.`VSServidorCorreo` (
   `Id` int(10) NOT NULL AUTO_INCREMENT,
   `emp_id` bigint(20) NOT NULL,
   `Mail` varchar(100) DEFAULT NULL,
@@ -959,11 +1012,10 @@ CREATE TABLE `VSServidorCorreo` (
 --
 -- Table structure for table `VSTarifa`
 --
-
-DROP TABLE IF EXISTS `VSTarifa`;
+DROP TABLE IF EXISTS db_edoc.`VSTarifa`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `VSTarifa` (
+CREATE TABLE db_edoc.`VSTarifa` (
   `Idtarifa` int(20) NOT NULL AUTO_INCREMENT,
   `Idimpuesto` int(20) NOT NULL,
   `Codigo` varchar(5) DEFAULT NULL,
@@ -980,11 +1032,10 @@ CREATE TABLE `VSTarifa` (
 --
 -- Table structure for table `VSValidacion`
 --
-
-DROP TABLE IF EXISTS `VSValidacion`;
+DROP TABLE IF EXISTS db_edoc.`VSValidacion`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `VSValidacion` (
+CREATE TABLE db_edoc.`VSValidacion` (
   `Idvalidacion` int(10) NOT NULL AUTO_INCREMENT,
   `Validacion` text,
   `Codigo` varchar(2) DEFAULT NULL,
@@ -996,11 +1047,10 @@ CREATE TABLE `VSValidacion` (
 --
 -- Table structure for table `VSValidacion_Mensajes`
 --
-
-DROP TABLE IF EXISTS `VSValidacion_Mensajes`;
+DROP TABLE IF EXISTS db_edoc.`VSValidacion_Mensajes`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `VSValidacion_Mensajes` (
+CREATE TABLE db_edoc.`VSValidacion_Mensajes` (
   `Idvalmen` int(20) NOT NULL AUTO_INCREMENT,
   `Idvalidacion` int(10) NOT NULL,
   `Codigo` int(3) DEFAULT NULL,
@@ -1011,101 +1061,7 @@ CREATE TABLE `VSValidacion_Mensajes` (
   KEY `fk_VSValidacion_Mensajes_VSValidacion1_idx` (`Idvalidacion`),
   CONSTRAINT `fk_VSValidacion_Mensajes_VSValidacion1` FOREIGN KEY (`Idvalidacion`) REFERENCES `VSValidacion` (`Idvalidacion`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Table structure for table `empresa`
---
-
-DROP TABLE IF EXISTS `empresa`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `empresa` (
-  `emp_id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `emp_ruc` varchar(15) DEFAULT NULL,
-  `emp_razonsocial` varchar(300) DEFAULT NULL,
-  `emp_nom_comercial` varchar(300) DEFAULT NULL,
-  `emp_ambiente` varchar(1) DEFAULT NULL,
-  `emp_tipo_emision` varchar(1) DEFAULT NULL,
-  `emp_direccion_matriz` varchar(300) DEFAULT NULL,
-  `emp_obliga_contabilidad` varchar(2) DEFAULT NULL,
-  `emp_contri_especial` varchar(5) DEFAULT NULL,
-  `emp_telefono` varchar(20) DEFAULT NULL,
-  `emp_fax` varchar(20) DEFAULT NULL,
-  `emp_email` varchar(45) DEFAULT NULL,
-  `emp_email_digital` varchar(60) DEFAULT NULL,
-  `emp_email_conta` varchar(60) DEFAULT NULL,
-  `emp_moneda` varchar(10) DEFAULT NULL,
-  `emp_website` varchar(45) DEFAULT NULL,
-  `emp_logo` varchar(100) DEFAULT NULL,
-  `usuario` varchar(60) DEFAULT NULL,
-  `emp_est_log` varchar(1) DEFAULT NULL,
-  `emp_fec_cre` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `emp_fec_mod` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`emp_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `establecimiento`
---
-
-DROP TABLE IF EXISTS `establecimiento`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `establecimiento` (
-  `est_id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `emp_id` bigint(20) NOT NULL,
-  `est_numero` varchar(3) DEFAULT NULL,
-  `est_nombre` varchar(300) DEFAULT NULL,
-  `est_direccion` varchar(300) DEFAULT NULL,
-  `est_telefono` varchar(45) DEFAULT NULL,
-  `est_log` varchar(1) DEFAULT NULL,
-  `fec_cre` timestamp NULL DEFAULT NULL,
-  `fec_mod` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`est_id`),
-  KEY `fk_establecimiento_empresa1_idx` (`emp_id`),
-  CONSTRAINT `fk_establecimiento_empresa1` FOREIGN KEY (`emp_id`) REFERENCES `empresa` (`emp_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `punto_emision`
---
-
-DROP TABLE IF EXISTS `punto_emision`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `punto_emision` (
-  `pemi_id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `est_id` bigint(20) NOT NULL,
-  `pemi_numero` varchar(3) DEFAULT NULL,
-  `pemi_nombre` varchar(300) DEFAULT NULL,
-  `est_log` varchar(1) DEFAULT NULL,
-  `fec_cre` timestamp NULL DEFAULT NULL,
-  `fec_mod` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`pemi_id`),
-  KEY `fk_punto_emision_establecimiento1_idx` (`est_id`),
-  CONSTRAINT `fk_punto_emision_establecimiento1` FOREIGN KEY (`est_id`) REFERENCES `establecimiento` (`est_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `sysdiagrams`
---
-
-DROP TABLE IF EXISTS `sysdiagrams`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `sysdiagrams` (
-  `name` varchar(128) CHARACTER SET utf8 NOT NULL,
-  `principal_id` int(10) NOT NULL,
-  `diagram_id` int(10) NOT NULL AUTO_INCREMENT,
-  `version` int(10) DEFAULT NULL,
-  `definition` varbinary(100) DEFAULT NULL,
-  PRIMARY KEY (`diagram_id`),
-  UNIQUE KEY `UK_principal_name` (`principal_id`,`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 

@@ -8,6 +8,12 @@ use app\modules\admision\models\PersonaGestion;
 use app\modules\admision\models\Oportunidad;
 use app\modules\admision\models\PersonalAdmision;
 use app\modules\academico\models\UnidadAcademica;
+use app\modules\academico\models\Modalidad;
+use app\modules\academico\models\ModuloEstudio; 
+use app\modules\academico\models\TipoOportunidadVenta;
+use app\modules\admision\models\EstadoOportunidad;
+use app\modules\admision\models\BitacoraSeguimiento;
+use app\modules\admision\models\ActividadSeguimiento;
 use app\models\Empresa;
 use app\models\Pais;
 use app\models\Provincia;
@@ -75,10 +81,23 @@ class ContactosController extends \app\components\CController {
 
     public function actionNew() {
         $per_id = @Yii::$app->session->get("PB_perid");
+        $emp_id = @Yii::$app->session->get("PB_idempresa");
         $modcanal = new Oportunidad();
         $mod_pais = new Pais();
         $pais_id = 1; //Ecuador  
         $con_agente = $modcanal->consultarAgenteAutenticado($per_id);
+        $empresa_mod = new Empresa();
+        $empresa = $empresa_mod->getAllEmpresa();
+        $uni_aca_model = new UnidadAcademica();
+        $modalidad_model = new Modalidad();
+        $modestudio = new ModuloEstudio();
+        $modTipoOportunidad = new TipoOportunidadVenta();
+        $state_oportunidad_model = new EstadoOportunidad(); 
+        $canalconta = $modcanal->consultarConocimientoCanal('1');
+        $unidad_acad_data = $uni_aca_model->consultarUnidadAcademicas();        
+        $modalidad_data = $modalidad_model->consultarModalidad($unidad_acad_data[0]["id"], $emp_id);
+        $_SESSION['JSLANG']['Enter a Type Contact.'] = admision::t('crm', 'Enter a Type Contact.');
+        
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
             if (isset($data["getprovincias"])) {
@@ -96,13 +115,42 @@ class ContactosController extends \app\components\CController {
                 $message = array("area" => $area);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }
+            if (isset($data["getuacademias"])) {                
+                //$data_u_acad = $uni_aca_model->consultarUnidadAcademicasEmpresa($data["empresa_id"]);
+                $data_u_acad = $uni_aca_model->consultarUnidadAcademicas();
+                $message = array("unidad_academica" => $data_u_acad);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);                
+            }
+            if (isset($data["getmodalidad"])) {
+                if (($data["nint_id"]==1) or ($data["nint_id"]==2)){
+                    $modalidad = $modalidad_model->consultarModalidad($data["nint_id"], $data["empresa_id"]);                    
+                } else {
+                    $modalidad = $modestudio->consultarModalidadModestudio();                    
+                }
+                $message = array("modalidad" => $modalidad);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);                                
+            }
+            if (isset($data["getoportunidad"])) {
+                $oportunidad = $modTipoOportunidad->consultarOporxUnidad($data["unidada"]);
+                $message = array("oportunidad" => $oportunidad);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+            }
             if (isset($data["getsubcarrera"])) {
                 $subcarrera = $modcanal->consultarSubCarrera($data["car_id"]);
                 $message = array("subcarrera" => $subcarrera);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }
+            if (isset($data["getmodalidaemp"])) {
+                $modalidaemp = $modestudio->consultarEstudioEmpresa($data["empresa"]);
+                $message = array("modalidaemp" => $modalidaemp);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+            }
             if (isset($data["getcarrera"])) {
-                $carrera = $modcanal->consultarCarreraModalidad($data["unidada"], $data["moda_id"]);
+                if (($data["unidada"] ==1) or ($data["unidada"] ==2)) {
+                    $carrera = $modcanal->consultarCarreraModalidad($data["unidada"], $data["moda_id"]);
+                } else {
+                    $carrera = $modestudio->consultarCursoModalidad($data["unidada"], $data["moda_id"] ); // tomar id de impresa
+                }
                 $message = array("carrera" => $carrera);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }
@@ -111,7 +159,18 @@ class ContactosController extends \app\components\CController {
         $arr_prov = Provincia::provinciaXPais($pais_id);
         $arr_ciu = Canton::cantonXProvincia($arr_prov[0]["id"]);
         $area = $mod_pais->consultarCodigoArea($pais_id);
-        $canalconta = $modcanal->consultarConocimientoCanal('1');
+        
+        $modcanal = new Oportunidad();
+        $tipo_oportunidad_data = $modTipoOportunidad->consultarOporxUnidad($unidad_acad_data[0]["id"]);
+        $state_oportunidad_data = $state_oportunidad_model->consultarEstadOportunidad();
+        $academic_study_data = $modcanal->consultarCarreraModalidad($unidad_acad_data[0]["id"], $modalidad_data[0]["id"]);
+        $knowledge_channel_data = $modcanal->consultarConocimientoCanal(1);
+        $modelSegui = BitacoraSeguimiento::findAll(['bseg_estado' => '1', 'bseg_estado_logico' => '1']);
+        $arrSeg = array('Todos');
+        $arrSeg = array_merge($arrSeg, ArrayHelper::getColumn($modelSegui, "bseg_nombre"));
+        unset($arrSeg[0]);
+        $arr_carrerra2 = $modcanal->consultarTipoCarrera();
+        $arr_subcarrera = $modcanal->consultarSubCarrera(1);
         return $this->render('new', [
                     "arr_pais" => $arr_pais,
                     "arr_prov" => ArrayHelper::map($arr_prov, "id", "value"),
@@ -121,6 +180,18 @@ class ContactosController extends \app\components\CController {
                     //"agente_autentica" => $cargo["car_id"],
                     "agente_cargo" => $con_agente["padm_id"],
                     "persona_autentica" => $per_id,
+                    "emp_id" => $emp_id,
+                    'arr_empresa' => ArrayHelper::map($empresa, "id", "value"),
+                    'arr_linea_servicio' => ArrayHelper::map($unidad_acad_data, "id", "name"),
+                    'unidad_acad_data' => $unidad_acad_data,
+                    'arr_modalidad' => ArrayHelper::map($modalidad_data, "id", "name"),
+                    'arr_tipo_oportunidad' => ArrayHelper::map($tipo_oportunidad_data, "id", "name"),
+                    'arr_state_oportunidad' => ArrayHelper::map($state_oportunidad_data, "id", "name"),
+                    'arr_academic_study' => ArrayHelper::map($academic_study_data, "id", "name"),
+                    "arr_knowledge_channel" => ArrayHelper::map($knowledge_channel_data, "id", "name"),
+                    'arr_seguimiento' => $arrSeg,
+                    "arr_carrerra2" => ArrayHelper::map($arr_carrerra2, "id", "name"),
+                    "arr_subcarrerra" => ArrayHelper::map($arr_subcarrera, "id", "name"),
         ]);
     }
 
@@ -334,6 +405,111 @@ class ContactosController extends \app\components\CController {
                         } else {
                             $exito = 1;
                         }
+                        if($data["genAspirante"] == "true"){
+                            $pges_id = $resp_persona;
+                            $modelPges = PersonaGestion::findOne($pges_id);
+                            if(isset($data["cedula"]) && $data["cedula"] != ""){
+                                $modelPges->pges_cedula = $data["cedula"];
+                                $modelPges->save();
+                            }
+                            $empresa = $data["empresaid"];
+                            // $modulo_estudio = $data["modulo_estudio"];
+                            $unidad_academica = $data["id_unidad_academica"];
+                            $modalidad = $data["id_modalidad"];
+                            $tipo_oportunidad = $data["id_tipo_oportunidad"];
+                            $estado_oportunidad = $data["id_estado_oportunidad"];
+                            if ($unidad_academica < 3) {
+                                if (($unidad_academica == 1 || $unidad_academica == 2 ) && $empresa == 2) {
+                                    $estudio_academico = '';
+                                    $modulo_estudio = $data["id_estudio_academico"];
+                                } else {
+                                    $estudio_academico = $data["id_estudio_academico"];
+                                    $modulo_estudio = '';
+                                }
+                            } else {
+                                $estudio_academico = '';
+                                $modulo_estudio = $data["id_estudio_academico"];
+                            }   
+                            $canal_conocimiento = $data["canal_conocimiento"];
+                            $sub_carrera = ($data["sub_carrera"] != 0) ? $data["sub_carrera"] : null;
+                            $usuario = @Yii::$app->user->identity->usu_id;
+                            $con = \Yii::$app->db_crm;
+                            $agente = $mod_gestion->consultarAgenteAutenticado($per_id); //QUITAR 1 AGENTE ADMIN
+                            //$nombreoportunidad = $mod_gestion->consultarNombreOportunidad($empresa, $modulo_estudio, $estudio_academico, $unidad_academica, $modalidad, $estado_oportunidad);
+                            $nombreoportunidad = $mod_gestion->consultarNombreOportunidad($empresa, $modulo_estudio, $estudio_academico, $unidad_academica, $modalidad, $estado_oportunidad);
+                            $gcrm_codigo = $mod_gestion->consultarUltimoCodcrm();
+
+
+                            //$per_gest = $mod_pergestion->consultarPersonaGestion($pges_id);
+                            $codportunidad = 1 + $gcrm_codigo;
+                            $fecha_registro = date(Yii::$app->params["dateTimeByDefault"]);
+                            if ($agente['padm_id'] > 0) {
+                                //if ($nombreoportunidad["eopo_nombre"] == '' || $nombreoportunidad["eopo_nombre"] == 'Ganada' || $nombreoportunidad["eopo_nombre"] == 'Perdida') {
+                                if ($nombreoportunidad["Ids"] == '' || $nombreoportunidad["Ids"] == '4' || $nombreoportunidad["Ids"] == '5') {
+                                    $res_gestion = $mod_gestion->insertarOportunidad($codportunidad, $empresa, $pges_id, $modulo_estudio, $estudio_academico, $unidad_academica, $modalidad, $tipo_oportunidad, $sub_carrera, $canal_conocimiento, $estado_oportunidad,null, null,  $fecha_registro, $agente['padm_id'], $usuario);
+                                    if ($res_gestion) {
+                                        $opo_id = $res_gestion;
+                                        $padm_id = $agente['padm_id'];
+                                        $eopo_id = $estado_oportunidad; // En curso por defecto
+                                        $bact_fecha_registro = $fecha_registro;
+                                        $bact_fecha_proxima_atencion = $fecha_registro;
+
+                                        //$bact_descripcion = (!$nombreoportunidad["Ids"]) ? 'Inicio de Operaciones' : '';
+                                        $oact_id = 1;
+                                        $bact_descripcion = "";
+                                        $res_actividad = $mod_gestion->insertarActividad($opo_id, $usuario, $padm_id, $eopo_id, $bact_fecha_registro, $oact_id, $bact_descripcion, $bact_fecha_proxima_atencion);
+                                        if ($res_actividad) {
+                                            if(isset($data["seguimiento"])){
+                                                foreach($data["seguimiento"] as $key => $value){
+                                                    $modelSeguimiento = new ActividadSeguimiento();
+                                                    $modelSeguimiento->bseg_id = $value;
+                                                    $modelSeguimiento->bact_id = $res_actividad;
+                                                    $modelSeguimiento->aseg_estado = '1';
+                                                    $modelSeguimiento->aseg_estado_logico = '1';
+                                                    if(!$modelSeguimiento->save()){
+                                                        throw new \Exception("Error al grabar");
+                                                    }
+                                                }
+                                            }
+                                            $transaction->commit();
+                                            $message = array(
+                                                "wtmessage" => Yii::t("notificaciones", "La infomación ha sido grabada. "),
+                                                "title" => Yii::t('jslang', 'Success'),
+                                            );
+                                            return Utilities::ajaxResponse('OK', 'alert', Yii::t("jslang", "Sucess"), false, $message);
+                                        } else {
+                                            $transaction->rollback();
+                                            $message = array(
+                                                "wtmessage" => Yii::t("notificaciones", "Error al grabar"),
+                                                "title" => Yii::t('jslang', 'Bad Request'),
+                                            );
+                                            return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Bad Request"), false, $message);
+                                        }
+                                    } else {
+                                        $transaction->rollback();
+                                        $message = array(
+                                            "wtmessage" => Yii::t("notificaciones", "Error al grabar"),
+                                            "title" => Yii::t('jslang', 'Bad Request'),
+                                        );
+                                        return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Bad Request"), false, $message);
+                                    }
+                                } else {
+                                    $transaction->rollback();
+                                    $message = array(
+                                        "wtmessage" => Yii::t("notificaciones", "Error al grabar, Existe una oportunidad con estos datos."),
+                                        "title" => Yii::t('jslang', 'Bad Request'),
+                                    );
+                                    return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Bad Request"), false, $message);
+                                }
+                            } else {
+                                $transaction->rollback();
+                                $message = array(
+                                    "wtmessage" => Yii::t("notificaciones", "Error al grabar. Usuario no cuenta con permisos"),
+                                    "title" => Yii::t('jslang', 'Bad Request'),
+                                );
+                                return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Bad Request"), false, $message);
+                            }
+                        }
                     }
                     if ($exito) {
                         $transaction->commit();
@@ -411,7 +587,6 @@ class ContactosController extends \app\components\CController {
         } else {
             $arrData = $modPersonaGestion->consultarReportContactos($arrSearch, true);
         }
-        \app\models\Utilities::putMessageLogFile($arrSearch);
         $nameReport = admision::t("crm", "Contacts");
         Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
         exit;

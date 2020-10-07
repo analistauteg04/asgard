@@ -1778,9 +1778,10 @@ INSERT INTO `nivel_idioma` (`nidi_id`, `nidi_descripcion`, `nidi_estado`, `nidi_
 -- Volcado de datos para la tabla `tipo_publicacion`
 --
 INSERT INTO `tipo_publicacion` (`tpub_id`, `tpub_nombre`, `tpub_descripcion`, `tpub_estado`, `tpub_estado_logico`) VALUES
-(1, 'Articulos Regionales', 'articulos Regionales', '1', '1'),
-(2, 'Articulos Impacto', 'Articulos Impacto', '1', '1'),
-(3, 'Libro', 'Libros', '1', '1');
+(1, 'Artículo', 'Artículo', '1', '1'),
+(2, 'Ponencias', 'Ponencias', '1', '1'),
+(3, 'Libro', 'Libro', '1', '1'),
+(4, 'Capítulo de Libro', 'Capítulo de Libro', '1', '1');
 
 -- --------------------------------------------------------
 --
@@ -1831,7 +1832,7 @@ INSERT INTO `dia` (`dia_id`, `dia_nombre`,`dia_descripcion`, `dia_usuario_ingres
 
 -- --------------------------------------------------------
 --
--- Volcado de datos para la tabla `tipo_contacto_general`
+-- Volcado de datos para la tabla `agente_inscrito_maestria`
 -- --------------------------------------------------------
 INSERT INTO `agente_inscrito_maestria` (`aima_id`, `aima_nombre`, `aima_descripcion`, `aima_usuario_ingresa`, `aima_estado`, `aima_estado_logico`) VALUES
 (1, 'Aabad', 'Aabad', 1, '1', '1'),
@@ -1842,3 +1843,64 @@ INSERT INTO `agente_inscrito_maestria` (`aima_id`, `aima_nombre`, `aima_descripc
 (6, 'Sholguin', 'Sholguin', 1, '1', '1');
 
 
+INSERT INTO `edificio` (`edi_id`, `edi_descripcion`, `edi_estado`, `edi_estado_logico`) VALUES
+(1, 'Edificio 610', '1', '1'),
+(2, 'Edificio 520', '1', '1'),
+(3, 'Edificio 501', '1', '1'),
+(4, 'Edificio Posgrado', '1', '1'),
+(5, 'Bloque Rectoral', '1', '1'),
+(6, 'Casa Corporativa', '1', '1');
+
+
+INSERT INTO `departamento` (`dep_id`, `dep_nombre`, `dep_estado`, `dep_usuario_ingreso`, `dep_estado_logico`) VALUES
+(1, 'Auditoria de la Calidad', 1, 1, 1),
+(2, 'Biblioteca', 1, 1, 1),
+(3, 'Centro de Idiomas', 1, 1, 1),
+(4, 'Coordinación de Bienestar Universitario', 1, 1, 1),
+(5, 'Coordinación de Relaciones Internacionales', 1, 1, 1),
+(6, 'Coordinación de Vinculación con la Sociedad', 1, 1, 1),
+(7, 'Dirección Administrativa Financiera', 1, 1, 1),
+(8, 'Dirección de Innovación y Servicios', 1, 1, 1),
+(9, 'Dirección de Interculturalidad y Saberes Ancestrales', 1, 1, 1),
+(10, 'Dirección de Investigaciones', 1, 1, 1),
+(11, 'Dirección de Talento Humano', 1, 1, 1),
+(12, 'Facultad de Estudios de Online', 1, 1, 1),
+(13, 'Facultad de Estudios de Posgrado', 1, 1, 1),
+(14, 'Facultad de Grado', 1, 1, 1),
+(15, 'Producción Audiovisual', 1, 1, 1), 
+(16, 'Rectorado', 1, 1, 1),
+(17, 'Secretaría General', 1, 1, 1),
+(18, 'Vicerrectorado Académico', 1, 1, 1);
+
+
+INSERT INTO `area` (`are_id`, `dep_id`, `edi_id`, `are_descripcion`, `are_estado`, `are_estado_logico`) VALUES
+(1, 1, 5, 'Auditoria de la Calidad', 1, 1),
+(2, 2, 1, 'Biblioteca', 1, 1),
+(3, 3, 2, 'Centro de Idiomas', 1, 1),
+(4, 4, 1, 'Coordinación de Bienestar Universitario', 1, 1),
+(5, 4, 1, 'Departamento Médico', 1, 1),
+(6, 5, 2, 'Coordinación de Relaciones Internacionales', 1, 1),
+(7, 6, 1, 'Coordinación de Vinculación con la Sociedad', 1, 1),
+(8, 7, 1, 'Dirección Administrativa', 1, 1),
+(9, 7, 1, 'Servicios Generales', 1, 1),
+(10, 7, 1, 'Seguridad ', 1, 1),
+(11, 7, 5, 'Dirección Administrativa Financiera', 1, 1),
+(12, 7, 3, 'Tesoreria', 1, 1),
+(13, 7, 3, 'Contabilidad', 1, 1),
+(14, 7, 2, 'Colecturía', 1, 1),
+(15, 8, 2, 'Dirección de Innovación y Servicios', 1, 1),
+(16, 8, 2, 'Admisiones', 1, 1),
+(17, 8, 2, 'Desarrollo', 1, 1),
+(18, 8, 3, 'Gestión Documental', 1, 1),
+(19, 8, 5, 'Procesos', 1, 1),
+(20, 8, 2, 'Sistemas', 1, 1),
+(21, 9, 4, 'Dirección de Interculturalidad y Saberes Ancestrales', 1, 1),
+(22, 10, 4, 'Dirección de Investigación', 1, 1),
+(23, 11, 6, 'Dirección de Talento Humano', 1, 1),
+(24, 12, 3, 'Facultad de Estudios de Online', 1, 1),
+(25, 13, 4, 'Facultad de Estudios de Posgrado', 1, 1),
+(26, 14, 2, 'Facultad de Grado', 1, 1),
+(27, 15, 3, 'Producción Audiovisual ', 1, 1),
+(28, 16, 5, 'Rectorado', 1, 1),
+(29, 17, 2, 'Secretaría General', 1, 1),
+(30, 18, 5, 'Vicerrectorado Académico', 1, 1);

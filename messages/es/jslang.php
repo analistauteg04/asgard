@@ -81,6 +81,7 @@ return array(
     'Method not allowed' => 'Método no permitido.',
     'minute(s)' => 'minuto(s)',
     'Not acceptable' => 'No es aceptable su petición.',
+    'No data found.' => 'No se encontraron resultados.',
     'The requested method is not implemented' => 'La petición del métdo no esta implementada.',
     'Not valid, the format is yyyy-mm-dd, for example 2012-12-24.' => 'No es válido, el formato es aaaa-mm-dd, por ejemplo 2012-12-24.',
     'OK' => 'Correcto',

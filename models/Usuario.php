@@ -22,6 +22,7 @@ use yii\data\ArrayDataProvider;
  * @property string $usu_session
  * @property string $usu_last_login
  * @property string $usu_link_activo
+ * @property string $usu_upreg
  * @property string $usu_estado
  * @property string $usu_fecha_creacion
  * @property string $usu_fecha_modificacion
@@ -52,7 +53,7 @@ class Usuario extends \yii\db\ActiveRecord implements IdentityInterface {
                 [['usu_sha', 'usu_session', 'usu_link_activo'], 'string'],
                 [['usu_user'], 'string', 'max' => 45],
                 [['usu_password'], 'string', 'max' => 255],
-                [['usu_estado', 'usu_estado_logico'], 'string', 'max' => 1],
+                [['usu_upreg','usu_estado', 'usu_estado_logico'], 'string', 'max' => 1],
                 [['per_id'], 'exist', 'skipOnError' => true, 'targetClass' => Persona::className(), 'targetAttribute' => ['per_id' => 'per_id']],
         ];
     }
@@ -321,13 +322,18 @@ class Usuario extends \yii\db\ActiveRecord implements IdentityInterface {
     public function consultarIdUsuario($per_id=null, $usuario=null) {
         $con = \Yii::$app->db_asgard;
         $estado = 1;
+        $qryPer = "";
+        if(isset($per_id)){
+            $qryPer = "per_id=$per_id and ";
+        }
         $sql = "
                 SELECT ifnull(usu_id,0) as usu_id
                 FROM usuario
                 WHERE 
-                per_id=$per_id and usu_user='$usuario' and
-                usu_estado = $estado AND
-                usu_estado_logico=$estado
+                    $qryPer
+                    usu_user='$usuario' and
+                    usu_estado = $estado AND
+                    usu_estado_logico=$estado
               ";
         $comando = $con->createCommand($sql);
         $resultData = $comando->queryOne();
@@ -829,9 +835,10 @@ class Usuario extends \yii\db\ActiveRecord implements IdentityInterface {
      */    
     public function consultarDataUsuario($id_inicio, $id_final) {
         $con = \Yii::$app->db;          
-        $sql = "select usu_id, p.per_cedula from " . $con->dbname . ".usuario u inner join " . $con->dbname . ".persona p on (p.per_id = u.per_id) "
-                . "where usu_id between :id_inicio and :id_final "
-                . "and u.usu_estado = '1' and p.per_estado = '1' ";
+        $sql = "select usu_id, p.per_cedula from " . $con->dbname . ".usuario u inner join " . $con->dbname . ".persona p on (p.per_id = u.per_id) 
+                where usu_id between :id_inicio and :id_final               
+                 and u.usu_estado = '1' and p.per_estado = '1'
+                ";
         $command = $con->createCommand($sql);
         $command->bindParam(":id_inicio", $id_inicio, \PDO::PARAM_INT);
         $command->bindParam(":id_final", $id_final, \PDO::PARAM_INT); 
@@ -851,7 +858,8 @@ class Usuario extends \yii\db\ActiveRecord implements IdentityInterface {
             
             $sql = "UPDATE " . $con->dbname . ".usuario 
                     SET usu_sha = :usu_sha,
-                    usu_password= :usu_password
+                    usu_password= :usu_password,
+                    usu_estado= 1
                     WHERE usu_id=:usu_id; ";
             $command = $con->createCommand($sql);
             $command->bindParam(":usu_id", $usu_id, \PDO::PARAM_INT);
@@ -866,5 +874,90 @@ class Usuario extends \yii\db\ActiveRecord implements IdentityInterface {
             $con->close();            
             return false;
         }
-    }    
+    }  
+    
+    /**
+     * Function consultarUsuarioNuevo.
+     * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
+     * @param      
+     * @return  
+     */    
+    public function consultarUsuarioNuevo() {
+        $con = \Yii::$app->db;          
+        $sql = "SELECT p.per_id, p.per_cedula, u.usu_id, u.usu_user, ue.ugep_id, ue.grol_id
+                FROM db_academico.estudiante e inner join db_asgard.persona p on p.per_id = e.per_id
+                    inner join db_asgard.usuario u on u.per_id = p.per_id
+                    inner join db_asgard.usua_grol_eper ue on ue.usu_id = u.usu_id
+                WHERE ue.grol_id in (30,31)
+                    and p.per_estado = '1' and p.per_estado_logico = '1'";
+        $command = $con->createCommand($sql);        
+        return $command->queryAll();        
+    }
+
+    public static function getListUsers($search = NULL, $onlyData = false, $removeSelfUser = false){
+        $iduser    = Yii::$app->session->get('PB_iduser', FALSE);
+        $idempresa = Yii::$app->session->get('PB_idempresa', FALSE);
+        $search_cond = "%".$search."%";
+        $condition = "";
+        $str_search = "";
+        $from = "";
+        if($iduser != 1){
+            $condition .= "eper.emp_id=:emp_id AND ";
+            $condition .= "eper.eper_estado_logico=1 AND ";
+            $condition .= "eper.eper_estado=1 AND ";
+            $condition .= "emp.emp_estado=1 AND ";
+            $condition .= "emp.emp_estado_logico=1 AND ";
+            $condition .= "usu.usu_id <> 1 AND ";
+            if($removeSelfUser){
+                $condition .= "usu.usu_id <> $iduser AND ";
+            }
+            $from .= "INNER JOIN empresa_persona as eper on eper.per_id=per.per_id ";
+            $from .= "INNER JOIN empresa as emp on emp.emp_id=eper.emp_id ";
+        }
+        if(isset($search)){
+            $str_search .= "(per.per_pri_nombre like :search OR ";
+            $str_search .= "per.per_pri_apellido like :search OR ";
+            $str_search .= "usu.usu_user like :search) AND ";
+        }
+        $sql = "SELECT 
+                    usu.usu_id as id,
+                    usu.usu_user as Username,
+                    per.per_pri_nombre as Nombres,
+                    per.per_pri_apellido as Apellidos
+                    -- emp.emp_nombre_comercial as Empresa
+                FROM 
+                    usuario as usu
+                    INNER JOIN persona as per on per.per_id=usu.per_id
+                    $from
+                WHERE 
+                    $condition 
+                    $str_search
+                    usu.usu_estado_logico=1 AND 
+                    usu.usu_estado=1 AND 
+                    per.per_estado_logico=1 AND 
+                    per.per_estado=1 
+                GROUP BY usu.usu_id, usu.usu_user, per.per_pri_nombre, per.per_pri_apellido
+                ORDER BY per.per_pri_apellido;";
+        $comando = Yii::$app->db->createCommand($sql);
+        if($iduser != 1){
+            $comando->bindParam(":emp_id",$idempresa, \PDO::PARAM_INT);
+        }
+        if(isset($search)){
+            $comando->bindParam(":search",$search_cond, \PDO::PARAM_STR);
+        }
+        $res = $comando->queryAll();
+        if($onlyData)   return $res;
+        $dataProvider = new ArrayDataProvider([
+            'key' => 'id',
+            'allModels' => $res,
+            'pagination' => [
+                'pageSize' => Yii::$app->params["pageSize"],
+            ],
+            'sort' => [
+                'attributes' => ['Username', 'Nombres', 'Apellidos', 'Empresa'],
+            ],
+        ]);
+        
+        return $dataProvider;
+    }
 }

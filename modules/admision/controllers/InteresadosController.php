@@ -8,6 +8,7 @@ use \app\modules\admision\models\Oportunidad;
 use app\modules\admision\models\PersonaGestion;
 use app\models\EmpresaPersona;
 use app\modules\admision\models\InteresadoEmpresa;
+use app\modules\academico\models\UnidadAcademica;
 use app\models\Persona;
 use app\models\Usuario;
 use app\models\Utilities;
@@ -27,21 +28,27 @@ class InteresadosController extends \app\components\CController
     {
         $per_id = @Yii::$app->session->get("PB_perid");
         $interesado_model = new Interesado();
+        $mod_unidad = new UnidadAcademica();
         $data = Yii::$app->request->get();
 
         if ($data['PBgetFilter']) {
             $arrSearch["search"] = $data['search'];
+            $arrSearch["f_ini"] = $data['f_ini'];
+            $arrSearch["f_fin"] = $data['f_fin'];
             $arrSearch["company"] = $data['company'];
+            //$arrSearch["unidad"] = $data['unidad'];
             $model = $interesado_model->consultarInteresados($arrSearch);
         } else {
             $model = $interesado_model->consultarInteresados();
         }
         $empresa_model = new Empresa();
+        $arr_unidad = $mod_unidad->consultarUnidadAcademicasEmpresa(0);
         $arr_empresas = $empresa_model->getAllEmpresa();
-        $arrEmpresa = ArrayHelper::map($arr_empresas, "id", "value");
+        $arrEmpresa = ArrayHelper::map($arr_empresas, "id", "value");        
         return $this->render('index', [
             'model' => $model,
             'arr_empresa' => $arrEmpresa,
+            'arr_unidad' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Todas"]], $arr_unidad), "id", "name"),
         ]);
     }
 
@@ -50,6 +57,7 @@ class InteresadosController extends \app\components\CController
         $per_id = @Yii::$app->session->get("PB_perid");
         $usuario_ingreso = @Yii::$app->session->get("PB_iduser");
         $error = 0;
+        $error_message = "";
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
             $id_opor = $data["id_pgest"];
@@ -95,7 +103,7 @@ class InteresadosController extends \app\components\CController
                         }
                         if ($emp_per_id > 0) {
                             $usuario = new Usuario();
-                            $usuario_id = $usuario->consultarIdUsuario($id_persona, $pgest['pges_correo']);
+                            $usuario_id = $usuario->consultarIdUsuario(null, $pgest['pges_correo']);
                             if ($usuario_id == 0) {
                                 $security = new Security();
                                 $hash = $security->generateRandomString();
@@ -116,7 +124,8 @@ class InteresadosController extends \app\components\CController
                                     $mod_interesado = new Interesado(); // se guarda con estado_interesado 1
                                     $interesado_id = $mod_interesado->consultaInteresadoById($id_persona);
                                     $keys = ['per_id', 'int_estado_interesado', 'int_usuario_ingreso', 'int_estado', 'int_estado_logico'];
-                                    $parametros = [$id_persona, 1, $usuario_id, 1, 1];
+                                    $usuario_ingreso = ((isset($usuario_ingreso))?$usuario_ingreso:$usuario_id);
+                                    $parametros = [$id_persona, 1, $usuario_ingreso, 1, 1];
                                     if ($interesado_id == 0) {
                                         $interesado_id = $mod_interesado->insertarInteresado($concap, $parametros, $keys, 'interesado');
                                     }
@@ -128,7 +137,7 @@ class InteresadosController extends \app\components\CController
                                         }
                                         if ($iemp_id > 0) {
                                             $usuarioNew = Usuario::findIdentity($usuario_id);
-                                            $link = $usuarioNew->generarLinkActivacion();
+                                            $link = $usuarioNew->generarLinkActivacion();                                                                 
                                             $email_info = array(
                                                 "nombres" => $pgest['pges_pri_nombre'] . " " . $pgest['pges_seg_nombre'],
                                                 "apellidos" => $pgest['pges_pri_apellido'] . " " . $pgest['pges_seg_apellido'],
@@ -137,8 +146,8 @@ class InteresadosController extends \app\components\CController
                                                 "identificacion" => isset($pgest['pges_cedula']) ? $pgest['pges_cedula'] : $pgest['pges_pasaporte'],
                                                 "link_asgard" => $link,
                                             );
-                                            /* GVG 27/09/2019 solicitado por Admisiones - Diana Lòpez
-                                            $outemail = $mod_interesado->enviarCorreoBienvenida($email_info);
+                                            // GVG 27/09/2019 solicitado por Admisiones - Diana Lòpez
+                                            /*$outemail = $mod_interesado->enviarCorreoBienvenida($email_info);
                                             if ($outemail == 0) {
                                                 $error_message .= Yii::t("formulario", "The email hasn't been sent");
                                                 $error++;
@@ -186,7 +195,7 @@ class InteresadosController extends \app\components\CController
                     );
                     return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Bad Request"), false, $message);
                 }
-            } catch (Exception $ex) {
+            } catch (\Exception $ex) {
                 $transaction->rollback();
                 $message = array(
                     "wtmessage" => Yii::t("formulario", "Mensaje: " . $error_message),
@@ -237,6 +246,7 @@ class InteresadosController extends \app\components\CController
             Yii::t("formulario", "Date"),
             Yii::t("formulario", "Name"),                        
             Yii::t("formulario", "Last Names"),
+            Yii::t("formulario", "User login"),
             Yii::t("formulario", "Company"),
             Yii::t("formulario", "Academic unit"),
             academico::t("Academico", "Career/Program/Course"));            
@@ -244,7 +254,10 @@ class InteresadosController extends \app\components\CController
         $interesado_model = new Interesado();
         $data = Yii::$app->request->get();
         $arrSearch["search"] = $data['search'];
-        $arrSearch["company"] = $data['empresa'];
+        $arrSearch["f_ini"] = $data['f_ini'];
+        $arrSearch["f_fin"] = $data['f_fin'];
+        $arrSearch["company"] = $data['company'];
+        //$arrSearch["unidad"] = $data['unidad'];
         $arrData = array();
         if (empty($arrSearch)) {
             $arrData = $interesado_model->consultarReportAspirantes(array(), true);
@@ -266,6 +279,7 @@ class InteresadosController extends \app\components\CController
             Yii::t("formulario", "Date"),
             Yii::t("formulario", "Name"),                        
             Yii::t("formulario", "Last Names"),
+            Yii::t("formulario", "User login"),
             Yii::t("formulario", "Company"),
             Yii::t("formulario", "Academic unit"),
             academico::t("Academico", "Career/Program/Course"));            
@@ -273,7 +287,10 @@ class InteresadosController extends \app\components\CController
         $interesado_model = new Interesado();
         $data = Yii::$app->request->get();
         $arrSearch["search"] = $data['search'];
-        $arrSearch["company"] = $data['empresa'];
+        $arrSearch["f_ini"] = $data['f_ini'];
+        $arrSearch["f_fin"] = $data['f_fin'];
+        $arrSearch["company"] = $data['company'];
+        //$arrSearch["unidad"] = $data['unidad'];
         $arrData = array();
         if (empty($arrSearch)) {
             $arrData = $interesado_model->consultarReportAspirantes(array(), true);

@@ -44,10 +44,12 @@
 
 return [
     "Actions" => "Acciones",
+    "Approbe" => "Aprobar",
     "Back" => "Regresar",
     "Clear" => "Limpiar",
     "Create" => "Crear",
     "Delete" => "Eliminar",
+    "Download" => "Descargar",
     "Export" => "Exportar",
     "Import" => "Importat",
     "Next" => "Siguiente",
@@ -73,7 +75,7 @@ return [
     "loadCall" => "Cargar Call Center",
     "loadLeads" => "Cargar Leads",
     "exportStatContact" => "Estado Oportunidad",
-    "exportLostContact" => "Contactos Perdidos",    
+    "exportLostContact" => "Gestión de Actividades",    
     "pendingApplicants" => "Documentos Pendientes Aspirantes",    
     "payApplicants" => "Pagos Pendientes Aspirantes",    
     "To register" => "Registrar",
@@ -81,5 +83,6 @@ return [
     "Inscribed pending" => "Inscritos Pendientes",
     "Schedule shipping"=> "Programacion Envio",
     "Suscribe all"=> "Suscribir Todos",
-    "Upload Mailchimp"=> "Cargar a Mailchimp"    
+    "Upload Mailchimp"=> "Cargar a Mailchimp",
+    "View Document" => "Ver Documento",
 ];

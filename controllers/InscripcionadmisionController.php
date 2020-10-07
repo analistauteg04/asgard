@@ -251,6 +251,7 @@ class InscripcionadmisionController extends \yii\web\Controller {
                         'telefono_fac'  => $data["telefono_fac"], 
                         'tipo_dni_fac'  => $data["tipo_dni_fac"], 
                         'dni'  => $data["dni"],
+                        'empresa' => ucfirst(mb_strtolower($data["empresa"],'UTF-8')), 
                         'correo' => strtolower($data["correo"]),
                         'num_transaccion' => $data["num_transaccion"],
                         'observacion' => strtolower($data["observacion"]),

@@ -133,7 +133,8 @@ class HorarioAsignaturaPeriodoTmp extends \yii\db\ActiveRecord
         } else {
             $trans = $con->beginTransaction(); // si no existe la transacción entonces se crea una
         }        
-        if (strtolower(end($chk_ext)) == "xls" || strtolower(end($chk_ext)) == "xlsx") {            
+        if (strtolower(end($chk_ext)) == "xls" || strtolower(end($chk_ext)) == "xlsx") {      
+            \app\models\Utilities::putMessageLogFile('extension de excel');
             //Create new PHPExcel object
             $objPHPExcel = \PhpOffice\PhpSpreadsheet\IOFactory::load($file);
             $dataArr = array();              
@@ -152,16 +153,19 @@ class HorarioAsignaturaPeriodoTmp extends \yii\db\ActiveRecord
                         }                        
                     }
                     unset($dataArr[1]); // Se elimina la cabecera de titulos del file
-                }                 
+                }     
+                \app\models\Utilities::putMessageLogFile('antes de borrar temporal');
                 $this->deletetablaTemp($con, $usu_id); 
                 $fecha = date(Yii::$app->params["dateTimeByDefault"]);
                 $fila = 1; 
                 $bandera = '1';                
-                foreach ($dataArr as $val) {                     
+                foreach ($dataArr as $val) {                      
                     $fila++;                                                
                     $model = new HorarioAsignaturaPeriodoTmp();
                     //Validación de materia.  
-                    $respMateria = $model->consultarMateriaXnombre($val[1]);                     
+                     \app\models\Utilities::putMessageLogFile('Materia Excel:'.$val[1]);
+                    $respMateria = $model->consultarMateriaXnombre($val[1], $val[5]); 
+                    $mensaje = "";
                     if (!($respMateria)) {                           
                         $bandera= '0';
                         $mensaje = "No se encontró materia con ese nombre o se encuentra inactiva.";                                                     
@@ -196,7 +200,8 @@ class HorarioAsignaturaPeriodoTmp extends \yii\db\ActiveRecord
                         $arroout["data"] = null;
                         throw new Exception('Error en la Fila => N°'.$fila. ' Materia => '. $val[1]);
                     }                                                                
-                    if ($val[6] == 4 or $val[6] == 1) { //modalidad a distancia                        
+                    //if ($val[6] == 4 or $val[6] == 1 or $val[6] == 3) { //modalidad a distancia                        
+                    if (!empty($val[8])) {
                         $fecha_hora_clase = $val[8];
                     }  else {
                         $fecha_hora_clase = null;
@@ -211,8 +216,10 @@ class HorarioAsignaturaPeriodoTmp extends \yii\db\ActiveRecord
                             \app\models\Utilities::putMessageLogFile('error fila '.$fila);
                             throw new Exception('Error, al grabar horario.');
                         }
-                    }                                         
+                    }    
+                    \app\models\Utilities::putMessageLogFile('Fila => '. $fila. 'Materia =>' . $val[1]);
                 } 
+                
                 if ($trans !== null)                    
                     $trans->commit();  
                 $arroout["status"] = TRUE;
@@ -240,17 +247,21 @@ class HorarioAsignaturaPeriodoTmp extends \yii\db\ActiveRecord
     }
     
     
-    public function consultarMateriaXnombre($nombre) {
+    public function consultarMateriaXnombre($nombre, $unidad) {
         $con = \Yii::$app->db_academico;
         $estado = 1;
         $sql = "SELECT asi_id 
                 FROM " . $con->dbname . ".asignatura a
                 WHERE asi_nombre = :nombre
+                and uaca_id = :unidad
                 and asi_estado = :estado
-                and asi_estado_logico = :estado";                    
+                and asi_estado_logico = :estado";      
+        \app\models\Utilities::putMessageLogFile('sql:'.$sql);
+        \app\models\Utilities::putMessageLogFile('nombre:'.$nombre);
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":nombre", $nombre, \PDO::PARAM_STR);        
+        $comando->bindParam(":unidad", $unidad, \PDO::PARAM_INT);        
         $resultData = $comando->queryOne();
         return $resultData;
     }

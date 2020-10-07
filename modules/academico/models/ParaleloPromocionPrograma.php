@@ -1,6 +1,7 @@
 <?php
 
 namespace app\modules\academico\models;
+
 use yii\data\ArrayDataProvider;
 use Yii;
 
@@ -20,29 +21,26 @@ use Yii;
  *
  * @property PromocionPrograma $ppro
  */
-class ParaleloPromocionPrograma extends \yii\db\ActiveRecord
-{
+class ParaleloPromocionPrograma extends \yii\db\ActiveRecord {
+
     /**
      * {@inheritdoc}
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return 'paralelo_promocion_programa';
     }
 
     /**
      * @return \yii\db\Connection the database connection used by this AR class.
      */
-    public static function getDb()
-    {
+    public static function getDb() {
         return Yii::$app->get('db_academico');
     }
 
     /**
      * {@inheritdoc}
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['ppro_id', 'pppr_cupo', 'pppr_estado', 'pppr_estado_logico'], 'required'],
             [['ppro_id', 'pppr_cupo', 'pppr_cupo_actual', 'pppr_usuario_ingresa', 'pppr_usuario_modifica'], 'integer'],
@@ -55,8 +53,7 @@ class ParaleloPromocionPrograma extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'pppr_id' => 'Pppr ID',
             'ppro_id' => 'Ppro ID',
@@ -74,11 +71,10 @@ class ParaleloPromocionPrograma extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getPpro()
-    {
+    public function getPpro() {
         return $this->hasOne(PromocionPrograma::className(), ['ppro_id' => 'ppro_id']);
     }
-    
+
     /**
      * Function consulta los paralelos por programa. 
      * @author Grace Viteri <analistadesarrollo01@uteg.edu.ec>;
@@ -101,8 +97,8 @@ class ParaleloPromocionPrograma extends \yii\db\ActiveRecord
         $resultData = $comando->queryAll();
         return $resultData;
     }
-    
-        /**
+
+    /**
      * Function getPromocion
      * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>
      * @param   
@@ -111,7 +107,7 @@ class ParaleloPromocionPrograma extends \yii\db\ActiveRecord
     public static function getParalelos($ppro_id, $onlyData = false) {
         $con = \Yii::$app->db;
         $con1 = \Yii::$app->db_academico;
-        $estado = 1;        
+        $estado = 1;
 
         $sql = " SELECT        
                     ppp.pppr_id as pppr_id,
@@ -150,7 +146,7 @@ class ParaleloPromocionPrograma extends \yii\db\ActiveRecord
             return $dataProvider;
         }
     }
-    
+
     /**
      * Function eliminar el paralelo de posgrados, cambia el estado a 0
      * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>
@@ -192,7 +188,7 @@ class ParaleloPromocionPrograma extends \yii\db\ActiveRecord
             return FALSE;
         }
     }
-    
+
     /**
      * Function Consultar datos de paralelo promocion segun id de paralelo y id de promocion.
      * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;
@@ -221,4 +217,182 @@ class ParaleloPromocionPrograma extends \yii\db\ActiveRecord
         $resultData = $comando->queryOne();
         return $resultData;
     }
+
+    /**
+     * Function actualizar cupo de paralelos x promocion
+     * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>
+     * @property integer 
+     * @return  
+     */
+    public function actualizarParalelo($con, $ppro_id, $pppr_id, $parameters, $keys, $name_table) {
+        $trans = $con->getTransaction();
+        $params_sql = "";
+        for ($i = 0; $i < (count($parameters) - 1); $i++) {
+            if (isset($parameters[$i])) {
+                $params_sql .= $keys[$i] . " = '" . $parameters[$i] . "',";
+            }
+        }
+        $params_sql .= $keys[count($parameters) - 1] . " = '" . $parameters[count($parameters) - 1] . "'";
+        try {
+            $sql = "UPDATE " . $con->dbname . '.' . $name_table .
+                    " SET $params_sql" .
+                    " WHERE pppr_id=$pppr_id AND ppro_id= $ppro_id";
+            $comando = $con->createCommand($sql);
+            $result = $comando->execute();
+            if ($trans !== null) {
+                return true;
+            } else {
+                $transaction->commit();
+                return true;
+            }
+        } catch (Exception $ex) {
+            if ($trans !== null) {
+                $trans->rollback();
+            }
+            return 0;
+        }
+    }
+
+    /**
+     * Function ObtenerCupodisponible
+     * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>
+     * @param   
+     * @return  $resultData (Cupo disponible paralelo)
+     */
+    public function ObtenerCupodisponible($pppr_id) {
+        $con = \Yii::$app->db_academico;
+        $estado = 1;
+        $sql = "SELECT pppr_cupo_actual cupo 
+                FROM " . $con->dbname . ".paralelo_promocion_programa 
+                WHERE pppr_id = :pppr_id                   
+                    and pppr_estado = :estado
+                    and pppr_estado_logico = :estado";
+
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":pppr_id", $pppr_id, \PDO::PARAM_INT);
+        $resultData = $comando->queryOne();
+        return $resultData;
+    }   
+
+    /**
+     * Function actualiza cupo actual del paralelo.
+     * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;     *          
+     * @param
+     * @return
+     */
+    public function actualizarCupoparalelo($pppr_id, $ppro_id, $pppr_usuario_modifica) {
+        $con = \Yii::$app->db_academico;
+        $estado = 1;
+        $fecha_modificacion = date(Yii::$app->params["dateTimeByDefault"]);
+        if ($trans !== null) {
+            $trans = null; // si existe la transacción entonces no se crea una
+        } else {
+            $trans = $con->beginTransaction(); // si no existe la transacción entonces se crea una
+        }
+
+        try {
+            $comando = $con->createCommand
+                    ("UPDATE " . $con->dbname . ".paralelo_promocion_programa		       
+                      SET pppr_cupo_actual = pppr_cupo_actual - 1,                       
+                          pppr_fecha_modificacion = :pppr_fecha_modificacion,
+                          pppr_usuario_modifica = :pppr_usuario_modifica
+                      WHERE pppr_id = :pppr_id AND
+                            ppro_id = :ppro_id AND
+                            pppr_estado = :estado AND
+                            pppr_estado_logico = :estado");
+
+            $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+            $comando->bindParam(":pppr_fecha_modificacion", $fecha_modificacion, \PDO::PARAM_STR);
+            $comando->bindParam(":pppr_usuario_modifica", $pppr_usuario_modifica, \PDO::PARAM_INT);
+            $comando->bindParam(":pppr_id", $pppr_id, \PDO::PARAM_INT);
+            $comando->bindParam(":ppro_id", $ppro_id, \PDO::PARAM_INT);
+            $response = $comando->execute();
+            if ($trans !== null)
+                $trans->commit();
+            return $response;
+        } catch (Exception $ex) {
+            if ($trans !== null)
+                $trans->rollback();
+            return FALSE;
+        }
+    }
+
+    /**
+     * Function Consultar datos de paralelo promocion segun id de paralelo y id de promocion.
+     * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;
+     * @property       
+     * @return  
+     */
+    public function consultarMatriculacionxadmid($per_id) {
+        $con = \Yii::$app->db_academico;
+        $estado = 1;
+
+        $sql = "SELECT
+                    mpi.pppr_id as paralelo,
+                    ppp.ppro_id as promocion,
+                    ppp.pppr_cupo_actual as disponible,
+                    est.est_matricula as matricula
+                FROM " . $con->dbname . ".matriculacion_programa_inscrito mpi
+                INNER JOIN " . $con->dbname . ".paralelo_promocion_programa ppp ON ppp.pppr_id =  mpi.pppr_id
+                INNER JOIN " . $con->dbname . ".estudiante est ON est.est_id =  mpi.est_id
+                WHERE est.per_id = :per_id AND
+                      mpi.mpin_estado = :estado AND
+                      mpi.mpin_estado_logico =:estado AND
+                      ppp.pppr_estado =:estado AND
+                      ppp.pppr_estado_logico =:estado AND
+                      est.est_estado =:estado AND
+                      est.est_estado_logico =:estado ";
+
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        // $comando->bindParam(":adm_id", $adm_id, \PDO::PARAM_INT);
+        $comando->bindParam(":per_id", $per_id, \PDO::PARAM_INT);
+        $resultData = $comando->queryOne();
+        return $resultData;
+    }
+    
+    /**
+     * Function actualiza cupo actual del paralelo.
+     * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;     *          
+     * @param
+     * @return
+     */
+    public function modificarCupoparalelo($pppr_id, $ppro_id, $pppr_usuario_modifica) {
+        $con = \Yii::$app->db_academico;
+        $estado = 1;
+        $fecha_modificacion = date(Yii::$app->params["dateTimeByDefault"]);
+        if ($trans !== null) {
+            $trans = null; // si existe la transacción entonces no se crea una
+        } else {
+            $trans = $con->beginTransaction(); // si no existe la transacción entonces se crea una
+        }
+
+        try {
+            $comando = $con->createCommand
+                    ("UPDATE " . $con->dbname . ".paralelo_promocion_programa		       
+                      SET pppr_cupo_actual = pppr_cupo_actual + 1,                       
+                          pppr_fecha_modificacion = :pppr_fecha_modificacion,
+                          pppr_usuario_modifica = :pppr_usuario_modifica
+                      WHERE pppr_id = :pppr_id AND
+                            ppro_id = :ppro_id AND
+                            pppr_estado = :estado AND
+                            pppr_estado_logico = :estado");
+
+            $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+            $comando->bindParam(":pppr_fecha_modificacion", $fecha_modificacion, \PDO::PARAM_STR);
+            $comando->bindParam(":pppr_usuario_modifica", $pppr_usuario_modifica, \PDO::PARAM_INT);
+            $comando->bindParam(":pppr_id", $pppr_id, \PDO::PARAM_INT);
+            $comando->bindParam(":ppro_id", $ppro_id, \PDO::PARAM_INT);
+            $response = $comando->execute();
+            if ($trans !== null)
+                $trans->commit();
+            return $response;
+        } catch (Exception $ex) {
+            if ($trans !== null)
+                $trans->rollback();
+            return FALSE;
+        }
+    }
+
 }

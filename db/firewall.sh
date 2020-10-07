@@ -2,6 +2,7 @@
 
 IP_UTEG_EQU="181.39.139.67" # ip publica del equipo
 IP_UTEG_DES="181.39.139.68" # ip publica desde otra red para ingresar al servidor
+IP_UTEG_DES2="181.39.139.69" # ip publica desde otra red para ingresar al servidor
 IP_UTEG_OFI="186.68.143.106" # ip publica desde otra red para ingresar al servidor
 RED_PRIVADA="130.107.1.0/24" # Red privada ligada a la segunda interfaz de red del equipo
 DNS_SERVER="200.93.192.161 200.93.192.148" # DNS de la ip publica entregado por el proveedor
@@ -29,6 +30,8 @@ iptables -A OUTPUT -o lo -j ACCEPT
 ## A nuestras IP le dejamos todo
 iptables -A INPUT  -s $IP_UTEG_DES -j ACCEPT
 iptables -A OUTPUT -d $IP_UTEG_DES -j ACCEPT
+iptables -A INPUT  -s $IP_UTEG_DES2 -j ACCEPT
+iptables -A OUTPUT -d $IP_UTEG_DES2 -j ACCEPT
 iptables -A INPUT  -s $IP_UTEG_OFI -j ACCEPT
 iptables -A OUTPUT -d $IP_UTEG_OFI -j ACCEPT
 

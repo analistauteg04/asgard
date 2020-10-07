@@ -10,9 +10,15 @@ use app\modules\admision\models\EstadoOportunidad;
 use app\modules\academico\models\UnidadAcademica;
 use app\modules\academico\models\Modalidad;
 use app\modules\academico\models\ModuloEstudio;
+use app\modules\admision\models\BitacoraSeguimiento;
+use app\modules\admision\models\ActividadSeguimiento;
 use app\models\Empresa;
+use app\models\Persona;
+use app\models\Usuario;
 use app\models\Utilities;
 use yii\helpers\ArrayHelper;
+use app\modules\admision\Module as admision;
+use Exception;
 
 class ActividadesController extends \app\components\CController {
     public function actionListaractividadxoportunidad() {
@@ -60,6 +66,12 @@ class ActividadesController extends \app\components\CController {
         $state_oportunidad_data = $state_oportunidad_model->consultarEstadOportunidad();
         $knowledge_channel_data = $oport_model->consultarConocimientoCanal(1);
         $observacion = $oport_model->consultarObseractividad();
+        $modelSegui = BitacoraSeguimiento::findAll(['bseg_estado' => '1', 'bseg_estado_logico' => '1']);
+        $arrSeg = array('Todos');
+        $arrSeg = array_merge($arrSeg, ArrayHelper::getColumn($modelSegui, "bseg_nombre"));
+        unset($arrSeg[0]);
+        $arrSegData = ActividadSeguimiento::find()->where(['bact_id' => $act_id, 'aseg_estado' => '1', 'aseg_estado_logico' => '1'])->asArray()->all();
+        $arrSegData = ArrayHelper::getColumn($arrSegData, "bseg_id");
         return $this->render('view', [
                     'personalData' => $contactManage,
                     'oportunidad_contacto' => $oport_contac,
@@ -76,6 +88,8 @@ class ActividadesController extends \app\components\CController {
                     'arr_empresa' => ArrayHelper::map($empresa, "id", "value"),
                     'arr_observacion' => ArrayHelper::map($observacion, "id", "name"),
                     'arr_estudio' => ArrayHelper::map($estudio, "id", "name"),
+                    'arr_seguimiento' => $arrSeg,
+                    'arr_segData' => $arrSegData,
         ]);
     }
 
@@ -83,6 +97,7 @@ class ActividadesController extends \app\components\CController {
         $opor_id = base64_decode($_GET["opid"]);
         $act_id = base64_decode($_GET["acid"]);
         $pges_id = base64_decode($_GET["pgid"]);
+        $_SESSION['JSLANG']['Enter a Type Contact.'] = admision::t('crm', 'Enter a Type Contact.');
         $persges_mod = new PersonaGestion();
         $uni_aca_model = new UnidadAcademica();
         $modestudio = new ModuloEstudio();
@@ -104,6 +119,12 @@ class ActividadesController extends \app\components\CController {
         $state_oportunidad_data = $state_oportunidad_model->consultarEstadOportunidad();
         $knowledge_channel_data = $oport_model->consultarConocimientoCanal(1);
         $observacion = $oport_model->consultarObseractividad();
+        $modelSegui = BitacoraSeguimiento::findAll(['bseg_estado' => '1', 'bseg_estado_logico' => '1']);
+        $arrSeg = array('Todos');
+        $arrSeg = array_merge($arrSeg, ArrayHelper::getColumn($modelSegui, "bseg_nombre"));
+        unset($arrSeg[0]);
+        $arrSegData = ActividadSeguimiento::find()->where(['bact_id' => $act_id, 'aseg_estado' => '1', 'aseg_estado_logico' => '1'])->asArray()->all();
+        $arrSegData = ArrayHelper::getColumn($arrSegData, "bseg_id");
         return $this->render('edit', [
                     'personalData' => $contactManage,
                     'oportunidad_contacto' => $oport_contac,
@@ -119,12 +140,18 @@ class ActividadesController extends \app\components\CController {
                     "tipo_dni" => array("CED" => Yii::t("formulario", "DNI Document"), "PASS" => Yii::t("formulario", "Passport")),
                     'arr_empresa' => ArrayHelper::map($empresa, "id", "value"),
                     'arr_observacion' => ArrayHelper::map($observacion, "id", "name"),
+                    'arr_seguimiento' => $arrSeg,
+                    'arr_segData' => $arrSegData,
         ]);
     }
 
     public function actionNewactividad() {
         $opor_id = base64_decode($_GET["opid"]);
         $pges_id = base64_decode($_GET["pgid"]);
+        $emp_id = @Yii::$app->session->get("PB_idempresa");
+        $_SESSION['JSLANG']['Please enter a valid dni.'] = admision::t("crm",'Please enter a valid dni.');
+        $_SESSION['JSLANG']['Please enter a valid Email.'] = admision::t("crm",'Please enter a valid Email.');
+        $_SESSION['JSLANG']['Enter a Type Contact.'] = admision::t('crm', 'Enter a Type Contact.');
         $persges_mod = new PersonaGestion();
         $uni_aca_model = new UnidadAcademica();
         $modestudio = new ModuloEstudio();
@@ -145,6 +172,10 @@ class ActividadesController extends \app\components\CController {
         $knowledge_channel_data = $oport_model->consultarConocimientoCanal(1);
         $otros_estudios_academicos = $modestudio->consultarOtrosEstudiosAcademicos($oport_contac["uaca_id"],$oport_contac["mod_id"]);
         $observacion = $oport_model->consultarObseractividad();
+        $modelSegui = BitacoraSeguimiento::findAll(['bseg_estado' => '1', 'bseg_estado_logico' => '1']);
+        $arrSeg = array('Todos');
+        $arrSeg = array_merge($arrSeg, ArrayHelper::getColumn($modelSegui, "bseg_nombre"));
+        unset($arrSeg[0]);
         return $this->render('new', [
                     'personalData' => $contactManage,
                     'oportunidad_contacto' => $oport_contac,
@@ -159,6 +190,9 @@ class ActividadesController extends \app\components\CController {
                     "tipo_dni" => array("CED" => Yii::t("formulario", "DNI Document"), "PASS" => Yii::t("formulario", "Passport")),
                     'arr_empresa' => ArrayHelper::map($empresa, "id", "value"),
                     'arr_observacion' => ArrayHelper::map($observacion, "id", "name"),
+                    'arr_seguimiento' => $arrSeg,
+                    'emp_id' => $emp_id,
+                    'arr_empresa' => ArrayHelper::map($empresa, "id", "value"),
         ]);
     }
 
@@ -175,6 +209,32 @@ class ActividadesController extends \app\components\CController {
             if (!empty($data["fecproxima"])) {
                 $fecproxima = $data["fecproxima"] . ' ' . $data["horproxima"];
             }
+            $modOpor = Oportunidad::findOne(base64_decode($data['oportunidad']));
+            $modelPges = PersonaGestion::findOne($modOpor->pges_id);
+            if(isset($data["cedula"]) && $data["cedula"] != "" && $data["estado_oportunidad"] == 3){
+                $modelPges->pges_cedula = $data["cedula"];
+                /*$modelPer = Persona::findOne(['per_cedula' => $data["cedula"], 'per_estado' => '1', 'per_estado_logico' => '1']);
+                if($modelPer){
+                    $message = array(
+                        "wtmessage" => Yii::t("formulario", "Update DNI to generate interested"),
+                        "title" => Yii::t('jslang', 'Error'),
+                    );
+                    return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Bad Request"), false, $message);
+                }*/
+                $modelPges->save();
+            }
+            if(isset($data["correo"]) && $data["correo"] != "" && $data["estado_oportunidad"] == 3){
+                $modelPges->pges_correo = $data["correo"];
+                /*$modelUsu = Usuario::findOne(['usu_user' => $data["correo"], 'usu_estado' => '1', 'usu_estado_logico' => '1']);
+                if($modelUsu){
+                    $message = array(
+                        "wtmessage" => Yii::t("formulario", "Update Email to generate interested"),
+                        "title" => Yii::t('jslang', 'Error'),
+                    );
+                    return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t("jslang", "Bad Request"), false, $message);
+                }*/
+                $modelPges->save();
+            }
             // Datos Generales Contacto            
             $con = \Yii::$app->db_crm;
             $transaction = $con->beginTransaction();
@@ -185,6 +245,7 @@ class ActividadesController extends \app\components\CController {
                     $opo_id = base64_decode($data['oportunidad']);
                     $eopo_id = $data['estado_oportunidad'];
                     $actividad_id = $mod_gestion->insertarActividad($opo_id, $usu_id, $padm_id, $eopo_id, $fecatiende, $observacion, $descripcion, $fecproxima);
+                    
                     if ($actividad_id) {
                         $oporper = null;
                         $otro_estudio=null;
@@ -192,6 +253,19 @@ class ActividadesController extends \app\components\CController {
                             $oporper = $data['oportunidad_perdida'];
                             if($oporper==13){
                                 $otro_estudio = $data['otro_estudio'];
+                            }
+                        }
+                        
+                        if(isset($data["seguimiento"])){
+                            foreach($data["seguimiento"] as $key => $value){
+                                $modelSeguimiento = new ActividadSeguimiento();
+                                $modelSeguimiento->bseg_id = $value;
+                                $modelSeguimiento->bact_id = $actividad_id;
+                                $modelSeguimiento->aseg_estado = '1';
+                                $modelSeguimiento->aseg_estado_logico = '1';
+                                if(!$modelSeguimiento->save()){
+                                    throw new Exception("Error al grabar");
+                                }
                             }
                         }
                         $out = $mod_gestion->modificarOportunixId(null, $opo_id, null, null, null, null, null, null, null, null, null, $eopo_id, $usu_id, $oporper,$otro_estudio);
@@ -260,6 +334,21 @@ class ActividadesController extends \app\components\CController {
                     $actividad_id = $mod_gestion->actualizarActividad($act_id, $usu_id, $padm_id, $fecatiende, $observacion, $descripcion, $fecproxima);
                     if ($actividad_id) {
                         $exito = 1;
+                    }
+                    if(isset($data["seguimiento"])){
+                        if(!ActividadSeguimiento::deleteAllActividadSeguimiento($act_id)){
+                            throw new Exception("Error al grabar");
+                        }
+                        foreach($data["seguimiento"] as $key => $value){
+                            $modelSeguimiento = new ActividadSeguimiento();
+                            $modelSeguimiento->bseg_id = $value;
+                            $modelSeguimiento->bact_id = $act_id;
+                            $modelSeguimiento->aseg_estado = '1';
+                            $modelSeguimiento->aseg_estado_logico = '1';
+                            if(!$modelSeguimiento->save()){
+                                throw new Exception("Error al grabar");
+                            }
+                        }
                     }
                     if ($exito) {
                         $transaction->commit();

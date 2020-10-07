@@ -8,7 +8,8 @@ use yii\helpers\Html;
     <form class="form-horizontal">
         <?=
         $this->render('_formIndex', [
-            'arr_periodo' => $arr_periodo,            
+            'arr_periodo' => $arr_periodo,   
+            'arr_estado' => $arr_estado,
         ]);
         ?>
     </form>

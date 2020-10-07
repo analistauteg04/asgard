@@ -3,11 +3,14 @@
 namespace app\models;
 
 use Yii;
+use \yii\data\ActiveDataProvider;
+use \yii\data\ArrayDataProvider;
 
 /**
  * This is the model class for table "pais".
  *
  * @property integer $pai_id
+ * @property integer $cont_id
  * @property string $pai_nombre
  * @property string $pai_capital
  * @property string $pai_iso2
@@ -123,6 +126,61 @@ class Pais extends \yii\db\ActiveRecord {
 
         $resultData = $comando->queryOne();
         return $resultData;
+    }
+
+    public static function getAllPaises(){
+        $con = Yii::$app->db;
+        $sql = "SELECT
+                    p.pai_id AS id,
+                    p.pai_nombre AS name
+                FROM
+                    " . $con->dbname . ".pais AS p
+                WHERE
+                    p.pai_estado = 1 AND
+                    p.pai_estado_logico = 1";
+        $comando = $con->createCommand($sql);
+        $result = $comando->queryAll();
+        return $result;
+    }
+
+    function getAllPaisesGrid($search = NULL, $dataProvider = false){
+        $iduser = Yii::$app->session->get('PB_iduser', FALSE);
+        $search_cond = "%".$search."%";
+        $str_search = "";
+        if(isset($search)){
+            $str_search = "(p.pai_nombre like :search OR ";
+            $str_search .= "p.pai_descripcion like :search) AND";
+        }
+        $sql = "SELECT
+                    p.pai_id AS id,
+                    p.pai_nombre AS Nombre,
+                    p.pai_descripcion AS Descripcion,
+                    p.pai_estado AS Estado
+                FROM
+                    pais as p
+                WHERE
+                    $str_search
+                    p.pai_estado_logico = 1
+                ORDER BY p.pai_id;";
+        $comando = Yii::$app->db->createCommand($sql);
+        if(isset($search)){
+            $comando->bindParam(":search",$search_cond, \PDO::PARAM_STR);
+        }
+        $res = $comando->queryAll();
+        if($dataProvider){
+            $dataProvider = new ArrayDataProvider([
+                'key' => 'pai_id',
+                'allModels' => $res,
+                'pagination' => [
+                    'pageSize' => Yii::$app->params["pageSize"],
+                ],
+                'sort' => [
+                    'attributes' => ['Nombre', 'Descripcion', 'Estado'],
+                ],                
+            ]);
+            return $dataProvider;            
+        }
+        return $res;
     }
 
 }

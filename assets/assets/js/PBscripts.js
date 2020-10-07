@@ -36,21 +36,24 @@
  * Yii Software LLC (http://www.yiisoft.com) Copyright © 2008
  */
 
-$(document).ready(function () {
-    $("body").on("keyup", ".keyupmce", function (event) {
+$(document).ready(function() {
+    $("body").on("keyup", ".keyupmce", function(event) {
         cadena = $(this).val().toUpperCase();
         $(this).val(cadena);
     });
-    $('.btnAccion').click(function () {
+    $('.btnAccion').click(function() {
         this.blur()
     });
-    $('.skinSet').click(function () {
+    $('.skinSet').click(function() {
         var skin = $(this).attr("data-skin");
         change_skin(skin);
     });
     $('.pbpopup').magnificPopup({
         type: 'iframe',
         preloader: true,
+    });
+    $('.multiSelects').select2({
+        placeholder: 'Escoja una o varias opciones',
     });
 });
 var pageValues = [];
@@ -75,7 +78,7 @@ var my_skins = [
  * @return {bool} false to prevent link's default action
  */
 function change_skin(cls) {
-    $.each(my_skins, function (i) {
+    $.each(my_skins, function(i) {
         $("body").removeClass(my_skins[i]);
     });
     $("body").addClass(cls);
@@ -105,24 +108,23 @@ function change_skin(cls) {
  @param {string} hideMethod         - Default: "fadeOut".
  **/
 function createToastrNotification(
-        title,
-        message,
-        type,
-        closeButton,
-        newestOnTop,
-        progressBar,
-        positionClass,
-        preventDuplicates,
-        onclick,
-        showDuration,
-        hideDuration,
-        timeOut,
-        extendedTimeOut,
-        showEasing,
-        hideEasing,
-        showMethod,
-        hideMethod)
-{
+    title,
+    message,
+    type,
+    closeButton,
+    newestOnTop,
+    progressBar,
+    positionClass,
+    preventDuplicates,
+    onclick,
+    showDuration,
+    hideDuration,
+    timeOut,
+    extendedTimeOut,
+    showEasing,
+    hideEasing,
+    showMethod,
+    hideMethod) {
     type = type || "success";
     closeButton = closeButton || true;
     newestOnTop = newestOnTop || true;
@@ -155,7 +157,7 @@ function createToastrNotification(
         hideMethod: hideMethod
     };
     if (onclick != undefined) {
-        toastr.options.onclick = function () {
+        toastr.options.onclick = function() {
             eval(onclick + '()');
         };
     }
@@ -191,25 +193,25 @@ function showLoadingPopup(str_message, ref) {
     if (!str_message) {
         //str_message = "<div class='growlUI'></div>";
         str_message =
-                "<div>" +
-                "<div id='circularG'>" +
-                "<div id='circularG_1' class='circularG'></div>" +
-                "<div id='circularG_2' class='circularG'></div>" +
-                "<div id='circularG_3' class='circularG'></div>" +
-                "<div id='circularG_4' class='circularG'></div>" +
-                "<div id='circularG_5' class='circularG'></div>" +
-                "<div id='circularG_6' class='circularG'></div>" +
-                "<div id='circularG_7' class='circularG'></div>" +
-                "<div id='circularG_8' class='circularG'></div>" +
-                "</div>" +
-                "</div>";
+            "<div>" +
+            "<div id='circularG'>" +
+            "<div id='circularG_1' class='circularG'></div>" +
+            "<div id='circularG_2' class='circularG'></div>" +
+            "<div id='circularG_3' class='circularG'></div>" +
+            "<div id='circularG_4' class='circularG'></div>" +
+            "<div id='circularG_5' class='circularG'></div>" +
+            "<div id='circularG_6' class='circularG'></div>" +
+            "<div id='circularG_7' class='circularG'></div>" +
+            "<div id='circularG_8' class='circularG'></div>" +
+            "</div>" +
+            "</div>";
         str_message2 = "<div><img src='" + $("#txth_base").val() + "/img/bg/loadingSite.gif'></div>";
         str_message3 =
-                '<div id="circleG">' +
-                '<div id="circleG_1" class="circleG"></div>' +
-                '<div id="circleG_2" class="circleG"></div>' +
-                '<div id="circleG_3" class="circleG"></div>' +
-                '</div>';
+            '<div id="circleG">' +
+            '<div id="circleG_1" class="circleG"></div>' +
+            '<div id="circleG_2" class="circleG"></div>' +
+            '<div id="circleG_3" class="circleG"></div>' +
+            '</div>';
     }
     if (ref) {
         $(ref).block({
@@ -351,8 +353,7 @@ var current_setTimeout = null;
  @param  {string} usernameRxst - Usuario si se utiliza credenciales de autenticacion en el servidor.
  @param  {string} passwordRxst - Password si se utiliza credenciales de autenticacion en el servidor.
  **/
-function requestHttpAjax(link, arrParams, callback, loading, isUploadFile, dataTypeRxst, typeRxst, recursive, asyncRxst, usernameRxst, passwordRxst)
-{
+function requestHttpAjax(link, arrParams, callback, loading, isUploadFile, dataTypeRxst, typeRxst, recursive, asyncRxst, usernameRxst, passwordRxst) {
     callback = callback || null;
     recursive = recursive || null;
     asyncRxst = asyncRxst || true;
@@ -404,7 +405,7 @@ function requestHttpAjax(link, arrParams, callback, loading, isUploadFile, dataT
         username: usernameRxst, //si existe autenticacion de tipo XMLHttpRequest para http
         password: passwordRxst, //si existe autenticacion de tipo XMLHttpRequest para http
         data: arrParams,
-        success: function (dataResponse) {
+        success: function(dataResponse) {
             var stop_recursive = false;
             if (callback) {
                 stop_recursive = callback(dataResponse); // como feature poder agregar parametros a funcion callback -- si se retorna false => se sigue con la recursividad si es true finaliza la recursividad
@@ -415,9 +416,9 @@ function requestHttpAjax(link, arrParams, callback, loading, isUploadFile, dataT
             if (dataResponse) {
                 if (recursive && !stop_recursive) {
                     current_setTimeout = setTimeout(
-                            function () {
-                                requestHttpAjax(link, arrParams, callback, loading, dataTypeRxst, typeRxst, recursive, asyncRxst, usernameRxst, passwordRxst)
-                            }, 200);   //la funcion espera 200ms para ejecutarse,pero la funcion actual si se termina de ejecutar,creando un hilo.
+                        function() {
+                            requestHttpAjax(link, arrParams, callback, loading, dataTypeRxst, typeRxst, recursive, asyncRxst, usernameRxst, passwordRxst)
+                        }, 200); //la funcion espera 200ms para ejecutarse,pero la funcion actual si se termina de ejecutar,creando un hilo.
                 }
             } else {
                 console.log(objLang.Problem_with_objHttpRequest);
@@ -425,120 +426,119 @@ function requestHttpAjax(link, arrParams, callback, loading, isUploadFile, dataT
             if (!recursive)
                 hideLoadingPopup();
         },
-        beforeSend: function () {
-        },
-        error: function (objXMLHttpRequest) {
+        beforeSend: function() {},
+        error: function(objXMLHttpRequest) {
             var msg = objLang.Problem_with_request_or_your_session_has_ended;
             console.log(msg + ': ' + objXMLHttpRequest);
             if (!recursive)
                 hideLoadingPopup();
             if (objXMLHttpRequest.status == 200 && objXMLHttpRequest.readyState == 4)
-                resetSession(msg, objLang.Error, "error", "goHome");
+                shortModal(msg, objLang.Error, "error", "goHome");
         },
         statusCode: {
-            301: function () {
+            301: function() {
                 var msg = objLang.Page_moved_permanently;
                 console.log(msg + ': ' + link);
                 if (!recursive)
                     hideLoadingPopup();
             },
-            302: function () {
+            302: function() {
                 var msg = objLang.Page_moved_temporarily;
                 console.log(msg + ': ' + link);
                 if (!recursive)
                     hideLoadingPopup();
             },
-            400: function () {
+            400: function() {
                 var msg = objLang.Bad_Request;
                 console.log(msg + ': ' + link);
                 if (!recursive)
                     hideLoadingPopup();
             },
-            401: function () {
+            401: function() {
                 var msg = objLang.You_must_be_authorized_to_view_this_page;
                 console.log(msg + ': ' + link);
                 if (!recursive)
                     hideLoadingPopup();
             },
-            402: function () {
+            402: function() {
                 var msg = objLang.Payment_required;
                 console.log(msg + ': ' + link);
                 if (!recursive)
                     hideLoadingPopup();
             },
-            403: function () {
+            403: function() {
                 var msg = objLang.Forbidden;
                 console.log(msg + ': ' + link);
                 if (!recursive)
                     hideLoadingPopup();
             },
-            404: function () {
+            404: function() {
                 var msg = objLang.Page_not_found;
                 console.log(msg + ': ' + link);
                 if (!recursive)
                     hideLoadingPopup();
             },
-            405: function () {
+            405: function() {
                 var msg = objLang.Method_not_allowed;
                 console.log(msg + ': ' + link);
                 if (!recursive)
                     hideLoadingPopup();
             },
-            406: function () {
+            406: function() {
                 var msg = objLang.Not_acceptable;
                 console.log(msg + ': ' + link);
                 if (!recursive)
                     hideLoadingPopup();
             },
-            500: function () {
+            500: function() {
                 var msg = objLang.The_server_encountered_an_error_processing_your_request;
                 console.log(msg + ': ' + link);
                 if (!recursive)
                     hideLoadingPopup();
             },
-            501: function () {
+            501: function() {
                 var msg = objLang.The_requested_method_is_not_implemented;
                 console.log(msg + ': ' + link);
                 if (!recursive)
                     hideLoadingPopup();
             },
-            502: function () {
+            502: function() {
                 var msg = objLang.Bad_Gateway;
                 console.log(msg + ': ' + link);
                 if (!recursive)
                     hideLoadingPopup();
             },
-            503: function () {
+            503: function() {
                 var msg = objLang.Service_not_available;
                 console.log(msg + ': ' + link);
                 if (!recursive)
                     hideLoadingPopup();
             },
-            504: function () {
+            504: function() {
                 var msg = objLang.Timeout_exhausted_gateway;
                 console.log(msg + ': ' + link);
                 if (!recursive)
                     hideLoadingPopup();
             },
-            505: function () {
+            505: function() {
                 var msg = objLang.HTTP_version_unsupported;
                 console.log(msg + ': ' + link);
                 if (!recursive)
                     hideLoadingPopup();
             },
-            506: function () {
+            506: function() {
                 var msg = objLang.Variant_also_negotiates;
                 console.log(msg + ': ' + link);
                 if (!recursive)
                     hideLoadingPopup();
             },
-            507: function () {
+            507: function() {
                 var msg = objLang.Insufficient_Storage;
                 console.log(msg + ': ' + link);
                 if (!recursive)
                     hideLoadingPopup();
             },
-            509: function () {
+            509: function() {
                 var msg = objLang.Bandwidth_Limit_Exceeded;
                 console.log(msg + ': ' + link);
                 if (!recursive)
@@ -548,13 +548,11 @@ function requestHttpAjax(link, arrParams, callback, loading, isUploadFile, dataT
     });
 }
 
-function existsRequestRecursive()
-{
+function existsRequestRecursive() {
     return (current_setTimeout) ? true : false;
 }
 
-function clearResquestRecursive()
-{
+function clearResquestRecursive() {
     clearTimeout(current_setTimeout);
 }
 
@@ -640,7 +638,7 @@ function showAlert(status, label, message) {
         $(idModal + ">div>div>div.modal-footer>button:first-child").attr("onclick", callbackfn);
     }
     // se eliminar los demas botones
-    $(idModal + ">div>div>div.modal-footer>button").each(function () {
+    $(idModal + ">div>div>div.modal-footer>button").each(function() {
         if (cont != 0) {
             $(this).remove();
         }
@@ -706,7 +704,7 @@ function showClockTime() {
     var hours = Digital.getHours();
     var minutes = Digital.getMinutes();
     var seconds = Digital.getSeconds();
-    var month = monthNames[Digital.getMonth()];//objLang[monthNames[Digital.getMonth()]];
+    var month = monthNames[Digital.getMonth()]; //objLang[monthNames[Digital.getMonth()]];
     var day = Digital.getDate();
     var year = Digital.getFullYear();
     var dn = "PM";
@@ -781,13 +779,13 @@ function addItemGridContent(elementId) {
             }
             if (size_btn > 0) {
                 trs += "<td style='text-align: center;'>";
-                for (var j = 0; j < arr_btn[i].length; j++) {//size_btn[i][j]
+                for (var j = 0; j < arr_btn[i].length; j++) { //size_btn[i][j]
                     var onclick = ((arr_btn[i][j].onclick).trim() != "") ? arr_btn[i][j].onclick : "javascript:";
                     var href = ((arr_btn[i][j].href).trim() != "") ? arr_btn[i][j].href : "javascript:";
                     var cclass = getIcon(arr_btn[i][j].tipo_accion) + " " + arr_btn[i][j].class;
                     var title = arr_btn[i][j].title;
                     var id = arr_btn[i][j].id + "_" + j;
-                    trs += "<a id='" + id + "' href='" + href + "' data-toggle='tooltip' data-original-title='" + title + "' ><span class='" + cclass + "'></span></a>";
+                    trs += "<a id='" + id + "' href='" + href + "' onclick='" + onclick + "' data-toggle='tooltip' data-original-title='" + title + "' ><span class='" + cclass + "'></span></a>";
                 }
                 trs += "</td>";
             } else {
@@ -797,19 +795,22 @@ function addItemGridContent(elementId) {
         }
         $('#' + elementId + ' >table >tbody').html(trs);
     } else { // se llena el tbody con la variable sessionStorage trmessage que contiene el mensaje que indica que no hay datos en el grid
-        if (storage.trmessage != "")
-            $('#' + elementId + ' >table >tbody').html(storage.trmessage);
+        if (arr_data.trmessage != "")
+            $('#' + elementId + ' >table >tbody').html(arr_data.trmessage);
         else {
             var trmessage = "<tr>";
-            var colspan = $('#' + elementId + ' >table >thead > tr > td').length;
-            trmessage += "<td colspan='" + colspan + "'>" + objLang.No_data_found + "</td></tr>";
+            var colspan = $('#' + elementId + ' >table >thead > tr > th').length;
+            trmessage += "<td colspan='" + colspan + "'>" + objLang.No_data_found_ + "</td></tr>";
+            $('#' + elementId + ' >table >tbody').html(trmessage);
+            arr_data.trmessage = trmessage;
+            sessionStorage[elementId] = JSON.stringify(arr_data);
         }
     }
 }
 
 function getSizeColumnsGrid(elementId) {
     var size = 0;
-    $('#' + elementId + ' >table >thead >tr >th').each(function () {
+    $('#' + elementId + ' >table >thead >tr >th').each(function() {
         size++;
     });
     return size;
@@ -845,25 +846,35 @@ function removeItemGridContent(elementId, indice, callback) {
     var arr_data = JSON.parse(storage);
     var size_arr = arr_data.data.length;
     var newarr_data = new Array();
+    var newarr_label = new Array();
+    var newarr_btnactions = new Array();
     var j = 0;
     for (var i = 0; i < size_arr; i++) {
         if (arr_data.data[i][0] != indice) {
-            arr_data.data[i][0] = elementId + "_" + j;
+            arr_data.data[i][0] = j; //elementId + "_" + j;
+            arr_data.label[i][0] = j;
+            newarr_label[j] = arr_data.label[i];
             newarr_data[j] = arr_data.data[i];
+            newarr_btnactions[j] = arr_data.btnactions[i];
             j++;
         }
     }
     arr_data.data = newarr_data;
+    arr_data.label = newarr_label;
+    arr_data.btnactions = newarr_btnactions;
     sessionStorage[elementId] = JSON.stringify(arr_data);
     addItemGridContent(elementId);
-    callback();
+    if (callback) callback();
 }
 
-function loadSessionCampos(elementId, data, btnactions) {
+function loadSessionCampos(elementId, data, btnactions, label) {
     sessionStorage.removeItem(elementId);
+    label = label || '';
     var arrData = new Object();
     arrData.data = data;
+    arrData.label = label;
     arrData.btnactions = btnactions;
+    arrData.trmessage = '';
     sessionStorage[elementId] = JSON.stringify(arrData);
     var sizetheadtb = $('#' + elementId + ' >table >thead >tr >th').length;
     var sizetbodytb = $('#' + elementId + ' >table >tbody >tr >td').length;
@@ -876,7 +887,7 @@ function loadSessionCampos(elementId, data, btnactions) {
 
 /**
  Funcion para mostrar un mensaje de alerta cuando hay un error
- @function resetSession
+ @function shortModal
  @author Eduardo Cueva
  @param  {string} message   - Url del sitio a pedir informacion
  @param  {string} label     - Es la etiqueta de la imagen en la alerta. Esta puede ser {error, info, success, warning}
@@ -885,7 +896,7 @@ function loadSessionCampos(elementId, data, btnactions) {
  @param  {string} lblAccept - Nombre del boton que se va a mostrar
  @param  {object} style     - Objecto con las varibles estilo que se desean que esten en el alert. Ejemplo: messageGM.htmloptions.style.width
  */
-function resetSession(message, label, status, callback, lblAccept, style) {
+function shortModal(message, label, status, callback, lblAccept, style) {
     var messagePB = new Object();
     messagePB.wtmessage = message;
     messagePB.title = label;
@@ -931,7 +942,7 @@ function confirmDelete(callback, params, message, title) {
     objAccept.class = "btn-danger clclass praclose";
     objAccept.value = title || objLang.Delete;
     objAccept.callback = callback;
-    if(params){
+    if (params) {
         objAccept.paramCallback = params;
     }
     messagePB.acciones = new Array();

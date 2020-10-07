@@ -12,6 +12,7 @@ $arr_conf = [
     ],
     'params' => [
         // list of parameters
+        'documentFolder' => '/uploads/',
     ],
 ];
 $dir_data = __DIR__ . '/../data/';

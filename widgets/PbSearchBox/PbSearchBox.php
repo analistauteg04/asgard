@@ -28,6 +28,7 @@ class PbSearchBox extends Widget {
     public $placeHolder = ""; //Placeholder in searchBox.
     public $classBox = ""; //Css to apply
     public $controller = ""; //Name of controller/action: Example: Persona/getPersona
+    public $source = array();
     public $callbackListSource = "";
     public $callbackListSourceParams = array();
     public $callbackListSelected = "";
@@ -41,10 +42,13 @@ class PbSearchBox extends Widget {
 
     public function run() {
         //$this->registerClientScript();
-        echo $this->render('index', [
-            "data" => $this->printSearchBox(),
-            "label" => $this->placeHolder,
-        ]);
+        if($this->type == "searchBox")
+            echo $this->render('index', [
+                "data" => $this->printSearchBox(),
+                "label" => $this->placeHolder,
+            ]);
+        else
+            echo $this->printSearchBox();
         //return Html::encode($this->message);
     }
 
@@ -59,6 +63,12 @@ class PbSearchBox extends Widget {
         $actions = [
                 //"Onkeyup" => $this->callbackListSource . "(" . $parSource . ")",
         ];
+        $source = "";
+        if($this->controller != "")   $source = $this->controller;
+        if(count($this->source) > 0 ) $source = $this->source;
+        if($this->callbackListSource != ""){
+            $source = new JsExpression("function(request, response){ " . $this->callbackListSource . "(request.term, response " . $parSource . ");}");
+        }
         switch ($this->type) {
             case "searchBox":
                 return Html::textInput($this->boxId, $this->boxValue, array_merge($htmlOptions, $actions)) .
@@ -66,28 +76,22 @@ class PbSearchBox extends Widget {
                 break;
             case "searchBoxList":
                 return AutoComplete::widget([
-                            'name' => $this->boxId,
-                            'id' => $this->boxId,
-                            'clientOptions' => [
-                                'source' => "js: function(request, response){
-                                          " . $this->callbackListSource . "(request, response " . $parSource . ");
-                                 }",
-                                'source' => \Yii::$container->get('JsExpression', ['function(request, response) {
-                            response( $.ui.autocomplete.filter( window.dataAsArray, extractLast( request.term ) ) );
-                        }']),
-                                'select' => \Yii::$container->get('JsExpression', ['function(event, ui) {
-                            var terms = split( this.value );
-                            terms.pop();
-                            terms.push( ui.item.value );
-                            terms.push( "" );
-                            this.value = terms.join( ", " );
-                            return false;
-                        }']),
-                                'focus' => \Yii::$container->get('JsExpression', ['function() {
-                            return false;
-                        }']),
-                            ],
-                            'options' => $htmlOptions,
+                        'name' => $this->boxId,
+                        'id' => $this->boxId,
+                        'clientOptions' => [
+                            'source' => $source,
+                            /*'source' => new JsExpression("function(request, response) {
+                                response( $.ui.autocomplete.filter( window.dataAsArray, ".$this->callbackListSource . "(request.term, response " . $parSource . " ) ) );
+                            }"),*/
+                            'select' => new JsExpression(
+                                'function(event, ui) {
+                                    '.$this->callbackListSelected.'(ui.item.id, ui.item.value);
+                                }'),
+                            'focus' => new JsExpression('function() { return false; }'),
+                            'minLength'=>'2',
+                            'autoFill'=>true,
+                        ],
+                        'options' => $htmlOptions,
                 ]);
                 break;
         }

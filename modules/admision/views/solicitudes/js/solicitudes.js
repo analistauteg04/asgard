@@ -311,13 +311,13 @@ $(document).ready(function () {
             $('#divAplicaDescuento').css('display', 'block');
 
         } else {
-            if (arrParams.nint_id == 1) {
+            if (arrParams.nint_id == 2) {
+                $('#divMetodo').css('display', 'block');
+                $('#divAplicaDescuento').css('display', 'block');
+            } else {                
                 $('#divMetodo').css('display', 'none');
                 $('#divAplicaDescuento').css('display', 'block');
                 $('#opt_declara_Dctono').val(2);
-            } else {
-                $('#divMetodo').css('display', 'block');
-                $('#divAplicaDescuento').css('display', 'block');
             }
             $('#divDocumento').css('display', 'block');
             $('#lbl_carrera').text('Carrera');
@@ -865,6 +865,20 @@ $(document).ready(function () {
 
     $('#cmb_item').change(function () {
         var link = $('#txth_base').val() + "/admision/solicitudes/new";
+        //Descuentos                
+        var arrParams = new Object();                
+        if ($('#cmb_ninteres').val() > 2) {
+            arrParams.unidada = $('#cmb_ninteres').val();
+            arrParams.moda_id = $('#cmb_modalidad').val();       
+            arrParams.ite_id = $('#cmb_item').val();       
+            arrParams.getdescuento = true;
+            requestHttpAjax(link, arrParams, function (response) {
+                if (response.status == "OK") {
+                    data = response.message;
+                    setComboData(data.descuento, "cmb_descuento");
+                }
+            }, true);
+        }            
         //Precio.
         var arrParams = new Object();
         arrParams.ite_id = $('#cmb_item').val();
@@ -875,6 +889,7 @@ $(document).ready(function () {
                 $('#txt_precio_item').val(data.precio);
             }
         }, true);
+                        
         //Precio con descuento.
         var arrParams = new Object();
         arrParams.descuento_id = $('#cmb_descuento').val();
@@ -1040,6 +1055,7 @@ function save() {
     arrParams.ite_id = $('#cmb_item').val();
     arrParams.precio = $('#txt_precio_item').val();
     arrParams.cemp_id = $('#cmb_convenio').val();
+    arrParams.correo_fac = $('#txt_correo_fac').val();
     if ($('input[name=opt_declara_Dctosi]:checked').val() == 1) {
         arrParams.descuento_id = $('#cmb_descuento').val();
         arrParams.marcadescuento = '1';

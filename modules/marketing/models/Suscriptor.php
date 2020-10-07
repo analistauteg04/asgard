@@ -144,7 +144,7 @@ class Suscriptor extends \yii\db\ActiveRecord {
                         db_mailing.lista lst
                         left JOIN db_academico.estudio_academico AS eaca ON eaca.eaca_id = lst.eaca_id
                         left JOIN db_academico.modulo_estudio AS mest ON mest.mest_id = lst.mest_id                
-                        left JOIN db_academico.estudio_academico_area_conocimiento AS eaac ON eaac.eaca_id = eaca.eaca_id
+                        left JOIN db_academico.estudio_acad_area_con AS eaac ON eaac.eaca_id = eaca.eaca_id
                         JOIN db_academico.area_conocimiento AS acon ON acon.acon_id = eaac.acon_id
                         JOIN db_mailing.lista_suscriptor ls ON ls.lis_id = lst.lis_id
                         JOIN db_mailing.suscriptor AS sus ON sus.sus_id = ls.sus_id
@@ -173,7 +173,7 @@ class Suscriptor extends \yii\db\ActiveRecord {
                         db_mailing.lista lst
                         left JOIN db_academico.estudio_academico AS eaca ON eaca.eaca_id = lst.eaca_id
                         left JOIN db_academico.modulo_estudio AS mest ON mest.mest_id = lst.mest_id                
-                        left JOIN db_academico.estudio_academico_area_conocimiento AS eaac ON eaac.eaca_id = eaca.eaca_id
+                        left JOIN db_academico.estudio_acad_area_con AS eaac ON eaac.eaca_id = eaca.eaca_id
                         JOIN db_academico.area_conocimiento AS acon ON acon.acon_id = eaac.acon_id
                         JOIN db_mailing.lista_suscriptor ls ON ls.lis_id = lst.lis_id
                         JOIN db_mailing.suscriptor AS sus ON sus.sus_id = ls.sus_id
@@ -201,7 +201,7 @@ class Suscriptor extends \yii\db\ActiveRecord {
                         db_mailing.lista lst
                         left JOIN db_academico.estudio_academico AS eaca ON eaca.eaca_id = lst.eaca_id
                         left JOIN db_academico.modulo_estudio AS mest ON mest.mest_id = lst.mest_id                
-                        left JOIN db_academico.estudio_academico_area_conocimiento AS eaac ON eaac.eaca_id = eaca.eaca_id
+                        left JOIN db_academico.estudio_acad_area_con AS eaac ON eaac.eaca_id = eaca.eaca_id
                         JOIN db_academico.area_conocimiento AS acon ON acon.acon_id = eaac.acon_id
                         left join db_captacion.solicitud_inscripcion AS sins ON (sins.eaca_id = eaca.eaca_id OR sins.mest_id = mest.mest_id)
                         LEFT JOIN db_captacion.interesado i ON i.int_id = sins.int_id
@@ -236,7 +236,7 @@ class Suscriptor extends \yii\db\ActiveRecord {
                         db_mailing.lista lst
                         left JOIN db_academico.estudio_academico AS eaca ON eaca.eaca_id = lst.eaca_id
                         left JOIN db_academico.modulo_estudio AS mest ON mest.mest_id = lst.mest_id                
-                        left JOIN db_academico.estudio_academico_area_conocimiento AS eaac ON eaac.eaca_id = eaca.eaca_id
+                        left JOIN db_academico.estudio_acad_area_con AS eaac ON eaac.eaca_id = eaca.eaca_id
                         JOIN db_academico.area_conocimiento AS acon ON acon.acon_id = eaac.acon_id
                         JOIN db_mailing.lista_suscriptor ls ON ls.lis_id = lst.lis_id
                         JOIN db_mailing.suscriptor AS sus ON sus.sus_id = ls.sus_id
@@ -265,7 +265,7 @@ class Suscriptor extends \yii\db\ActiveRecord {
                     db_mailing.lista lst
                     left JOIN db_academico.estudio_academico AS eaca ON eaca.eaca_id = lst.eaca_id
                     left JOIN db_academico.modulo_estudio AS mest ON mest.mest_id = lst.mest_id                
-                    left JOIN db_academico.estudio_academico_area_conocimiento AS eaac ON eaac.eaca_id = eaca.eaca_id
+                    left JOIN db_academico.estudio_acad_area_con AS eaac ON eaac.eaca_id = eaca.eaca_id
                     JOIN db_academico.area_conocimiento AS acon ON acon.acon_id = eaac.acon_id
                     JOIN db_mailing.lista_suscriptor ls ON ls.lis_id = lst.lis_id
                     JOIN db_mailing.suscriptor AS sus ON sus.sus_id = ls.sus_id
@@ -293,7 +293,7 @@ class Suscriptor extends \yii\db\ActiveRecord {
                     db_mailing.lista lst
                     left JOIN db_academico.estudio_academico AS eaca ON eaca.eaca_id = lst.eaca_id
                     left JOIN db_academico.modulo_estudio AS mest ON mest.mest_id = lst.mest_id                
-                    left JOIN db_academico.estudio_academico_area_conocimiento AS eaac ON eaac.eaca_id = eaca.eaca_id
+                    left JOIN db_academico.estudio_acad_area_con AS eaac ON eaac.eaca_id = eaca.eaca_id
                     JOIN db_academico.area_conocimiento AS acon ON acon.acon_id = eaac.acon_id
                     left join db_crm.oportunidad AS opo ON (opo.eaca_id = eaca.eaca_id OR opo.mest_id = mest.mest_id)
                     JOIN db_crm.persona_gestion AS pges ON pges.pges_id = opo.pges_id                                
@@ -335,7 +335,7 @@ class Suscriptor extends \yii\db\ActiveRecord {
                         db_mailing.lista lst
                         left JOIN db_academico.estudio_academico AS eaca ON eaca.eaca_id = lst.eaca_id
                         left JOIN db_academico.modulo_estudio AS mest ON mest.mest_id = lst.mest_id                
-                        left JOIN db_academico.estudio_academico_area_conocimiento AS eaac ON eaac.eaca_id = eaca.eaca_id
+                        left JOIN db_academico.estudio_acad_area_con AS eaac ON eaac.eaca_id = eaca.eaca_id
                         JOIN db_academico.area_conocimiento AS acon ON acon.acon_id = eaac.acon_id
                         JOIN db_mailing.lista_suscriptor ls ON ls.lis_id = lst.lis_id
                         JOIN db_mailing.suscriptor AS sus ON sus.sus_id = ls.sus_id
@@ -364,7 +364,7 @@ class Suscriptor extends \yii\db\ActiveRecord {
                         db_mailing.lista lst
                         left JOIN db_academico.estudio_academico AS eaca ON eaca.eaca_id = lst.eaca_id
                         left JOIN db_academico.modulo_estudio AS mest ON mest.mest_id = lst.mest_id                
-                        left JOIN db_academico.estudio_academico_area_conocimiento AS eaac ON eaac.eaca_id = eaca.eaca_id
+                        left JOIN db_academico.estudio_acad_area_con AS eaac ON eaac.eaca_id = eaca.eaca_id
                         JOIN db_academico.area_conocimiento AS acon ON acon.acon_id = eaac.acon_id
                         JOIN db_mailing.lista_suscriptor ls ON ls.lis_id = lst.lis_id
                         JOIN db_mailing.suscriptor AS sus ON sus.sus_id = ls.sus_id
@@ -395,7 +395,7 @@ class Suscriptor extends \yii\db\ActiveRecord {
                         db_mailing.lista lst
                         left JOIN db_academico.estudio_academico AS eaca ON eaca.eaca_id = lst.eaca_id
                         left JOIN db_academico.modulo_estudio AS mest ON mest.mest_id = lst.mest_id                
-                        left JOIN db_academico.estudio_academico_area_conocimiento AS eaac ON eaac.eaca_id = eaca.eaca_id
+                        left JOIN db_academico.estudio_acad_area_con AS eaac ON eaac.eaca_id = eaca.eaca_id
                         JOIN db_academico.area_conocimiento AS acon ON acon.acon_id = eaac.acon_id
                         left join db_captacion.solicitud_inscripcion AS sins ON (sins.eaca_id = eaca.eaca_id OR sins.mest_id = mest.mest_id)
                         LEFT JOIN db_captacion.interesado i ON i.int_id = sins.int_id
@@ -430,7 +430,7 @@ class Suscriptor extends \yii\db\ActiveRecord {
                         db_mailing.lista lst
                         left JOIN db_academico.estudio_academico AS eaca ON eaca.eaca_id = lst.eaca_id
                         left JOIN db_academico.modulo_estudio AS mest ON mest.mest_id = lst.mest_id                
-                        left JOIN db_academico.estudio_academico_area_conocimiento AS eaac ON eaac.eaca_id = eaca.eaca_id
+                        left JOIN db_academico.estudio_acad_area_con AS eaac ON eaac.eaca_id = eaca.eaca_id
                         JOIN db_academico.area_conocimiento AS acon ON acon.acon_id = eaac.acon_id
                         left join db_crm.oportunidad AS opo ON (opo.eaca_id = eaca.eaca_id OR opo.mest_id = mest.mest_id)
                         JOIN db_crm.persona_gestion AS pges ON pges.pges_id = opo.pges_id                                
@@ -472,7 +472,7 @@ class Suscriptor extends \yii\db\ActiveRecord {
                         db_mailing.lista lst
                         left JOIN db_academico.estudio_academico AS eaca ON eaca.eaca_id = lst.eaca_id
                         left JOIN db_academico.modulo_estudio AS mest ON mest.mest_id = lst.mest_id                
-                        left JOIN db_academico.estudio_academico_area_conocimiento AS eaac ON eaac.eaca_id = eaca.eaca_id
+                        left JOIN db_academico.estudio_acad_area_con AS eaac ON eaac.eaca_id = eaca.eaca_id
                         JOIN db_academico.area_conocimiento AS acon ON acon.acon_id = eaac.acon_id
                         JOIN db_mailing.lista_suscriptor ls ON ls.lis_id = lst.lis_id
                         JOIN db_mailing.suscriptor AS sus ON sus.sus_id = ls.sus_id
@@ -500,7 +500,7 @@ class Suscriptor extends \yii\db\ActiveRecord {
                     db_mailing.lista lst
                     left JOIN db_academico.estudio_academico AS eaca ON eaca.eaca_id = lst.eaca_id
                     left JOIN db_academico.modulo_estudio AS mest ON mest.mest_id = lst.mest_id                
-                    left JOIN db_academico.estudio_academico_area_conocimiento AS eaac ON eaac.eaca_id = eaca.eaca_id
+                    left JOIN db_academico.estudio_acad_area_con AS eaac ON eaac.eaca_id = eaca.eaca_id
                     JOIN db_academico.area_conocimiento AS acon ON acon.acon_id = eaac.acon_id
                     JOIN db_mailing.lista_suscriptor ls ON ls.lis_id = lst.lis_id
                     JOIN db_mailing.suscriptor AS sus ON sus.sus_id = ls.sus_id
@@ -783,7 +783,7 @@ class Suscriptor extends \yii\db\ActiveRecord {
                     LEFT JOIN " . $con4->dbname . ".interesado as inte on inte.per_id = per.per_id 
                     LEFT JOIN " . $con4->dbname . ".solicitud_inscripcion as sins on ((sins.int_id = inte.int_id) and (sins.eaca_id = eaca.eaca_id or sins.mest_id = mest.mest_id))
                     $join_subscrito
-                    LEFT JOIN " . $con2->dbname . ".estudio_academico_area_conocimiento as eaac on eaac.eaca_id=eaca.eaca_id
+                    LEFT JOIN " . $con2->dbname . ".estudio_acad_area_con as eaac on eaac.eaca_id=eaca.eaca_id
                     LEFT JOIN " . $con2->dbname . ".area_conocimiento as acon on acon.acon_id=eaac.acon_id
                     LEFT JOIN " . $con->dbname . ".lista_suscriptor ls on (sus.sus_id = ls.sus_id and ls.lis_id = lst.lis_id)
                 WHERE 
@@ -811,7 +811,7 @@ class Suscriptor extends \yii\db\ActiveRecord {
                     LEFT JOIN " . $con4->dbname . ".interesado i on i.int_id = sins.int_id
                     LEFT JOIN " . $con1->dbname . ".persona per on per.per_id = i.per_id
                     LEFT JOIN " . $con3->dbname . ".persona_gestion as pges on per.per_correo = pges.pges_correo
-                    LEFT JOIN " . $con2->dbname . ".estudio_academico_area_conocimiento as eaac on eaac.eaca_id=eaca.eaca_id
+                    LEFT JOIN " . $con2->dbname . ".estudio_acad_area_con as eaac on eaac.eaca_id=eaca.eaca_id
                     LEFT JOIN " . $con2->dbname . ".area_conocimiento as acon on acon.acon_id=eaac.acon_id
                     $join_subscrito
                     LEFT JOIN " . $con->dbname . ".lista_suscriptor ls on (sus.sus_id = ls.sus_id and ls.lis_id = lst.lis_id)
@@ -892,7 +892,7 @@ class Suscriptor extends \yii\db\ActiveRecord {
                         FROM db_mailing.lista lst 
                         left JOIN db_academico.estudio_academico AS eaca ON eaca.eaca_id = lst.eaca_id
                         left JOIN db_academico.modulo_estudio AS mest ON mest.mest_id = lst.mest_id                
-                        left JOIN db_academico.estudio_academico_area_conocimiento AS eaac ON eaac.eaca_id = eaca.eaca_id
+                        left JOIN db_academico.estudio_acad_area_con AS eaac ON eaac.eaca_id = eaca.eaca_id
                         JOIN db_academico.area_conocimiento AS acon ON acon.acon_id = eaac.acon_id
                         join db_captacion.solicitud_inscripcion AS sins ON (sins.eaca_id = eaca.eaca_id OR sins.mest_id = mest.mest_id)    
                         JOIN db_captacion.interesado i ON i.int_id = sins.int_id
@@ -915,7 +915,7 @@ class Suscriptor extends \yii\db\ActiveRecord {
                         FROM db_mailing.lista lst 
                         left JOIN db_academico.estudio_academico AS eaca ON eaca.eaca_id = lst.eaca_id
                         left JOIN db_academico.modulo_estudio AS mest ON mest.mest_id = lst.mest_id                
-                        left JOIN db_academico.estudio_academico_area_conocimiento AS eaac ON eaac.eaca_id = eaca.eaca_id
+                        left JOIN db_academico.estudio_acad_area_con AS eaac ON eaac.eaca_id = eaca.eaca_id
                         JOIN db_academico.area_conocimiento AS acon ON acon.acon_id = eaac.acon_id
                         join db_crm.oportunidad as opo on (opo.eaca_id=eaca.eaca_id or opo.mest_id=mest.mest_id)
                         JOIN db_crm.persona_gestion AS pges ON pges.pges_id=opo.pges_id                               

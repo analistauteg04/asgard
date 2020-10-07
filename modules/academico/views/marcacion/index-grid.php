@@ -16,7 +16,7 @@ admision::registerTranslations();
         'id' => 'PbMarcacion',
         'showExport' => true,
         'fnExportEXCEL' => "exportExcel",
-        'fnExportPDF' => "exportPdf",
+        //'fnExportPDF' => "exportPdf",
         'dataProvider' => $model,
         'columns' => [
             [

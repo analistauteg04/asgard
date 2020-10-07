@@ -40,15 +40,17 @@ class ReportesController extends CController {
                 $arrData=$objDat->consultarActividadporOportunidad($data);
                 $arrHeader = array("N° Oport","Fecha","Empresa","Nombres","Apellidos","Unidad Academica","Estado","Observacion");
                 $nombarch = "ActividadesOportunidad-" . date("YmdHis").".xls";
+                $nameReport = yii::t("formulario", "Gestión de Contactos");
                 break;
             case '2'://POSGRADO
                 $arrData=$objDat->consultarOportunidadProximaAten($data);
                 $arrHeader = array(
-                            "N° Oport","Fecha Atencion","F.Prox.At","Empresa","Cedula",
-                            "Nombres","Apellidos","Unidad Academica","Canal Contacto",
-                            "Estado Oport.", "Observacion", "Agente"
+                            "N° Oport","Fecha Atención","Hora Atención","F.Próx.At","Hora Próx.At","Empresa","Cédula",
+                            "Nombres Completos", "Canal Contacto",
+                            "Estado Oport.", "Observación", "Unidad Academica", "Modalidad", "Carrera", "Agente"
                 );
                 $nombarch = "EstadoOportunidad-" . date("YmdHis").".xls";
+                $nameReport = yii::t("formulario", "Gestión de Contactos");
                 break;
             case '3'://Aspirantes
                 $arrData=$objDat->consultarAspirantesPendientes($data);
@@ -69,6 +71,7 @@ class ReportesController extends CController {
                             "Estado Pago"
                         );                
                 $nombarch = "Aspirantes-" . date("YmdHis").".xls";
+                $nameReport = yii::t("formulario", "Application Reports");
                 break;
         }
         ini_set('memory_limit', '256M');
@@ -76,7 +79,7 @@ class ReportesController extends CController {
         header("Content-Type: $content_type");
         header("Content-Disposition: attachment;filename=" . $nombarch);
         header('Cache-Control: max-age=0');               
-        $nameReport = yii::t("formulario", "Application Reports");
+        // $nameReport = yii::t("formulario", "Application Reports");
         $colPosition = array("C", "D", "E", "F", "G", "H", "I", "J", "K", "L","M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z");
         Utilities::generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition);
         exit;

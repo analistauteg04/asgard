@@ -9,6 +9,6 @@ return ['financiero' => [
                 'charset' => 'utf8',
                 'dbname' => 'db_facturacion',
                 'dbserver' => 'localhost'
-                ],
+                ],            
             ],
         ];

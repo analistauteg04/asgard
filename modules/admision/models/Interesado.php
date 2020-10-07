@@ -6,6 +6,7 @@ use yii\data\ArrayDataProvider;
 use app\models\Utilities;
 use DateTime;
 use Yii;
+
 /**
  * This is the model class for table "interesado".
  *
@@ -25,7 +26,6 @@ use Yii;
  * @property InformacionFamilia[] $informacionFamilias
  * @property SolicitudInscripcion[] $solicitudInscripcions
  */
-
 class Interesado extends \app\modules\admision\components\CActiveRecord {
 
     /**
@@ -165,6 +165,7 @@ class Interesado extends \app\modules\admision\components\CActiveRecord {
             return FALSE;
         }
     }
+
     public function consultaInteresadoByPerId($per_id) {
         $con = \Yii::$app->db_captacion;
         $estado = 1;
@@ -187,6 +188,7 @@ class Interesado extends \app\modules\admision\components\CActiveRecord {
             return $resultData['int_id'];
         }
     }
+
     public function insertarInteresado($con, $parameters, $keys, $name_table) {
         $trans = $con->getTransaction();
         $param_sql .= "" . $keys[0];
@@ -711,6 +713,7 @@ class Interesado extends \app\modules\admision\components\CActiveRecord {
         ]);
         return $dataProvider;
     }
+
     public function consultaInfofamilia($per_id) {
         $con = \Yii::$app->db_captacion;
         $estado = 1;
@@ -950,13 +953,14 @@ class Interesado extends \app\modules\admision\components\CActiveRecord {
                     per.per_estado_logico=:estado AND 
                     per.per_estado=:estado AND
                     per.per_id =:per_id";
-        \app\models\Utilities::putMessageLogFile('sql:'.$sql);
+        \app\models\Utilities::putMessageLogFile('sql:' . $sql);
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":per_id", $per_id, \PDO::PARAM_INT);
         $resultData = $comando->queryOne();
         return $resultData['int_id'];
     }
+
     public function consultaInteresadoById($per_id) {
         $con = \Yii::$app->db_captacion;
         $estado = 1;
@@ -977,6 +981,7 @@ class Interesado extends \app\modules\admision\components\CActiveRecord {
             return $resultData['int_id'];
         }
     }
+
     public function getPersonaxIdInteresado($int_id) {
         $con = \Yii::$app->db_asgard;
         $con2 = \Yii::$app->db_captacion;
@@ -994,13 +999,13 @@ class Interesado extends \app\modules\admision\components\CActiveRecord {
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":int_id", $int_id, \PDO::PARAM_INT);
         $resultData = $comando->queryOne();
-        if(count($resultData)>0){
+        if (count($resultData) > 0) {
             return $resultData['per_id'];
-        }else{
+        } else {
             return 0;
-        }        
+        }
     }
-    
+
     public function consultarIdinteresado($per_id) {
         $con = \Yii::$app->db_asgard;
         $con2 = \Yii::$app->db_captacion;
@@ -1014,17 +1019,16 @@ class Interesado extends \app\modules\admision\components\CActiveRecord {
                     per.per_estado = :estado AND
                     per.per_estado_logico = :estado AND
                     inte.int_estado_logico=:estado AND 
-                    inte.int_estado=:estado";                    
+                    inte.int_estado=:estado";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":per_id", $per_id, \PDO::PARAM_INT);
         $resultData = $comando->queryOne();
         //if(count($resultData)>0){
-            return $resultData['int_id'];
+        return $resultData['int_id'];
         //}else{
-            //return $resultData;
+        //return $resultData;
         //}
-        
     }
 
     public function consultarInteresados($arrFiltro = array(), $onlyData = false) {
@@ -1038,52 +1042,69 @@ class Interesado extends \app\modules\admision\components\CActiveRecord {
             $str_search .= "per.per_pri_apellido like :search OR ";
             $str_search .= "per.per_pasaporte like :search OR ";
             $str_search .= "per.per_cedula like :search) AND ";
+            if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
+                $str_search .= "inte.int_fecha_creacion >= :fec_ini AND ";
+                $str_search .= "inte.int_fecha_creacion <= :fec_fin AND ";
+            }
             if ($arrFiltro['company'] != "" && $arrFiltro['company'] > 0) {
                 $str_search .= "iemp.emp_id  = :emp_id AND ";
             }
+            /* if ($arrFiltro['unidad'] != "" && $arrFiltro['unidad'] > 0) {
+              $str_search .= "iemp.emp_id  = :emp_id AND ";
+              } */
         }
         $sql = "
-                select 
-                inte.int_id as id,
-                concat(ifnull(per.per_pri_nombre,''),' ',ifnull(per.per_seg_nombre,'')) as nombres,
-                concat(ifnull(per.per_pri_apellido,''),' ',ifnull(per.per_seg_apellido,'')) as apellidos,
-                ifnull(per.per_cedula,per.per_pasaporte) as DNI,
-                emp.emp_nombre_comercial as empresa,                 
-                DATE(inte.int_fecha_creacion) as fecha_interes,
-                per.per_id,
-                ifnull((SELECT uaca.uaca_nombre
-                    FROM " . $con->dbname . ".solicitud_inscripcion sins
-                    INNER JOIN " . $con2->dbname . ".unidad_academica uaca on uaca.uaca_id = sins.uaca_id
-                    WHERE int_id = inte.int_id
-                    and sins.sins_estado = :estado
-                    and sins.sins_estado_logico = :estado
-                    ORDER BY sins_fecha_solicitud desc
-                    LIMIT 1),'') as unidad,
-                    case emp.emp_id
-                    when 1 then (select eaca.eaca_nombre from db_academico.estudio_academico eaca inner join db_captacion.solicitud_inscripcion sins on sins.eaca_id = eaca.eaca_id  WHERE int_id = inte.int_id ORDER BY sins_fecha_solicitud desc LIMIT 1)
-                    when 2 then (select mes.mest_nombre from db_academico.modulo_estudio mes inner join db_captacion.solicitud_inscripcion sins on sins.mest_id = mes.mest_id WHERE int_id = inte.int_id ORDER BY sins_fecha_solicitud desc LIMIT 1)
-                    when 3 then (select mes.mest_nombre from db_academico.modulo_estudio mes inner join db_captacion.solicitud_inscripcion sins on sins.mest_id = mes.mest_id WHERE int_id = inte.int_id ORDER BY sins_fecha_solicitud desc LIMIT 1)
-                    else null
-                    end as 'carrera'
+                select
+                    inte.int_id as id,
+                    concat(ifnull(per.per_pri_nombre,''),' ',ifnull(per.per_seg_nombre,'')) as nombres,
+                    concat(ifnull(per.per_pri_apellido,''),' ',ifnull(per.per_seg_apellido,'')) as apellidos,
+                    ifnull(per.per_cedula,per.per_pasaporte) as DNI,
+                    emp.emp_nombre_comercial as empresa,                 
+                    DATE(inte.int_fecha_creacion) as fecha_interes,
+                    per.per_id,
+                    ifnull((SELECT uaca.uaca_nombre
+                        FROM " . $con->dbname . ".solicitud_inscripcion sins
+                        INNER JOIN " . $con2->dbname . ".unidad_academica uaca on uaca.uaca_id = sins.uaca_id
+                        WHERE int_id = inte.int_id
+                        and sins.sins_estado = :estado
+                        and sins.sins_estado_logico = :estado
+                        ORDER BY sins_fecha_solicitud desc
+                        LIMIT 1),'') as unidad,
+                        case emp.emp_id
+                        when 1 then (select eaca.eaca_nombre from db_academico.estudio_academico eaca inner join db_captacion.solicitud_inscripcion sins on sins.eaca_id = eaca.eaca_id  WHERE int_id = inte.int_id ORDER BY sins_fecha_solicitud desc LIMIT 1)
+                        when 2 then (select mes.mest_nombre from db_academico.modulo_estudio mes inner join db_captacion.solicitud_inscripcion sins on sins.mest_id = mes.mest_id WHERE int_id = inte.int_id ORDER BY sins_fecha_solicitud desc LIMIT 1)
+                        when 3 then (select mes.mest_nombre from db_academico.modulo_estudio mes inner join db_captacion.solicitud_inscripcion sins on sins.mest_id = mes.mest_id WHERE int_id = inte.int_id ORDER BY sins_fecha_solicitud desc LIMIT 1)
+                        else null
+                        end as 'carrera',
+                    concat(pges.per_pri_nombre, ' ', pges.per_pri_apellido) as Agente
                 from " . $con->dbname . ".interesado inte
-                join " . $con1->dbname . ".persona as per on inte.per_id=per.per_id
-                join " . $con->dbname . ".interesado_empresa as iemp on iemp.int_id=inte.int_id
-                join " . $con1->dbname . ".empresa as emp on emp.emp_id=iemp.emp_id
+                    join " . $con1->dbname . ".persona as per on inte.per_id=per.per_id
+                    join " . $con->dbname . ".interesado_empresa as iemp on iemp.int_id=inte.int_id
+                    join " . $con1->dbname . ".empresa as emp on emp.emp_id=iemp.emp_id
+                    left join " . $con1->dbname . ".usuario as uges on inte.int_usuario_ingreso=uges.usu_id
+                    left join " . $con1->dbname . ".persona as pges on pges.per_id=uges.per_id
                 where $str_search
-                inte.int_estado_logico=:estado AND
-                inte.int_estado=:estado AND                    
-                per.per_estado_logico=:estado AND						
-                per.per_estado=:estado AND
-                iemp.iemp_estado_logico=:estado AND						
-                iemp.iemp_estado=:estado AND
-                emp.emp_estado_logico=:estado AND						
-                emp.emp_estado=:estado
-                order by inte.int_fecha_creacion desc
+                    inte.int_estado_logico=:estado AND
+                    inte.int_estado=:estado AND                    
+                    per.per_estado_logico=:estado AND						
+                    per.per_estado=:estado AND
+                    iemp.iemp_estado_logico=:estado AND						
+                    iemp.iemp_estado=:estado AND
+                    emp.emp_estado_logico=:estado AND						
+                    emp.emp_estado=:estado
+                    order by inte.int_fecha_creacion desc
                 ";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
             $search_cond = "%" . $arrFiltro["search"] . "%";
+            $fecha_ini = $arrFiltro["f_ini"] . " 00:00:00";
+            $fecha_fin = $arrFiltro["f_fin"] . " 23:59:59";
+
+            if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
+                $comando->bindParam(":fec_ini", $fecha_ini, \PDO::PARAM_STR);
+                $comando->bindParam(":fec_fin", $fecha_fin, \PDO::PARAM_STR);
+            }
             $empresa = $arrFiltro["company"];
             $comando->bindParam(":search", $search_cond, \PDO::PARAM_STR);
             if ($arrFiltro['company'] != "" && $arrFiltro['company'] > 0) {
@@ -1100,8 +1121,8 @@ class Interesado extends \app\modules\admision\components\CActiveRecord {
             'sort' => [
                 'attributes' => [
                     'DNI',
-                    'nombres',                    
-                    'apellidos',                    
+                    'nombres',
+                    'apellidos',
                     'empresa',
                 ],
             ],
@@ -1142,7 +1163,6 @@ class Interesado extends \app\modules\admision\components\CActiveRecord {
         return $resultData;
     }
 
-    
     /**
      * Function modificaGruporol (modifica el grupo rol id)
      * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
@@ -1183,7 +1203,7 @@ class Interesado extends \app\modules\admision\components\CActiveRecord {
                 $trans->rollback();
             return FALSE;
         }
-    }   
+    }
 
     /**
      * Function modificarInfoAcaInteresado
@@ -1694,21 +1714,18 @@ class Interesado extends \app\modules\admision\components\CActiveRecord {
     public function enviarCorreoBienvenida($email_info) {
         $tituloMensaje = Yii::t("interesado", "UTEG - Registration");
         $asunto = Yii::t("interesado", "UTEG - Registration Online");
-        $body = Utilities::getMailMessage("BienvenidaADContacto",
-            array(
-                "[[nombres]]" => $email_info['nombres'],
-                "[[apellidos]]" => $email_info['apellidos'],
-                "[[correo]]" => $email_info['correo'],
-                "[[telefono]]" => $email_info['telefono'],
-                "[[webmail]]" => Yii::$app->params["adminEmail"],
-                "[[identificacion]]" => $email_info['identificacion'],
-                "[[link_asgard]]" => $email_info["link_asgard"],
-            ), 
-            Yii::$app->language);
-        Utilities::sendEmail($tituloMensaje, 
-            Yii::$app->params["admisiones"], // a quien se envia el correo
-            [$email_info['correo'] => $email_info['nombres'] . " " . $email_info['apellidos']], // quien envia el correo
-            $asunto, $body);
+        $body = Utilities::getMailMessage("BienvenidaADContacto", array(
+                    "[[nombres]]" => $email_info['nombres'],
+                    "[[apellidos]]" => $email_info['apellidos'],
+                    "[[correo]]" => $email_info['correo'],
+                    "[[telefono]]" => $email_info['telefono'],
+                    "[[webmail]]" => Yii::$app->params["adminEmail"],
+                    "[[identificacion]]" => $email_info['identificacion'],
+                    "[[link_asgard]]" => $email_info["link_asgard"],
+                        ), Yii::$app->language);
+        Utilities::sendEmail($tituloMensaje, Yii::$app->params["admisiones"], // a quien se envia el correo
+                [$email_info['correo'] => $email_info['nombres'] . " " . $email_info['apellidos']], // quien envia el correo
+                $asunto, $body);
     }
 
     /**
@@ -1749,7 +1766,7 @@ class Interesado extends \app\modules\admision\components\CActiveRecord {
         $resultData = $comando->queryOne();
         return $resultData;
     }
-    
+
     /**
      * Function consultarReportAspirantes.
      * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
@@ -1766,9 +1783,16 @@ class Interesado extends \app\modules\admision\components\CActiveRecord {
             $str_search .= "per.per_pri_apellido like :search OR ";
             $str_search .= "per.per_pasaporte like :search OR ";
             $str_search .= "per.per_cedula like :search) AND ";
+            if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
+                $str_search .= "inte.int_fecha_creacion >= :fec_ini AND ";
+                $str_search .= "inte.int_fecha_creacion <= :fec_fin AND ";
+            }
             if ($arrFiltro['company'] != "" && $arrFiltro['company'] > 0) {
                 $str_search .= "iemp.emp_id  = :emp_id AND ";
             }
+            /* if ($arrFiltro['unidad'] != "" && $arrFiltro['unidad'] > 0) {
+              $str_search .= "iemp.emp_id  = :emp_id AND ";
+              } */
         }
         $sql = "
                 SELECT          
@@ -1776,6 +1800,7 @@ class Interesado extends \app\modules\admision\components\CActiveRecord {
                     DATE(inte.int_fecha_creacion) as fecha_interes,
                     concat(ifnull(per.per_pri_nombre,''),' ',ifnull(per.per_seg_nombre,'')) as nombres,
                     concat(ifnull(per.per_pri_apellido,''),' ',ifnull(per.per_seg_apellido,'')) as apellidos,
+                    concat(pges.per_pri_nombre, ' ', pges.per_pri_apellido) as agente,
                     emp.emp_nombre_comercial as empresa,
                     ifnull((SELECT uaca.uaca_nombre
                             FROM db_captacion.solicitud_inscripcion sins
@@ -1795,6 +1820,8 @@ class Interesado extends \app\modules\admision\components\CActiveRecord {
                         join " . $con1->dbname . ".persona as per on inte.per_id=per.per_id
                         join " . $con->dbname . ".interesado_empresa as iemp on iemp.int_id=inte.int_id
                         join " . $con1->dbname . ".empresa as emp on emp.emp_id=iemp.emp_id
+                        left join " . $con1->dbname . ".usuario as uges on inte.int_usuario_ingreso=uges.usu_id
+                        left join " . $con1->dbname . ".persona as pges on pges.per_id=uges.per_id
                 WHERE $str_search
                     inte.int_estado_logico=:estado AND
                     inte.int_estado=:estado AND                    
@@ -1812,6 +1839,13 @@ class Interesado extends \app\modules\admision\components\CActiveRecord {
             $search_cond = "%" . $arrFiltro["search"] . "%";
             $empresa = $arrFiltro["company"];
             $comando->bindParam(":search", $search_cond, \PDO::PARAM_STR);
+            $fecha_ini = $arrFiltro["f_ini"] . " 00:00:00";
+            $fecha_fin = $arrFiltro["f_fin"] . " 23:59:59";
+
+            if ($arrFiltro['f_ini'] != "" && $arrFiltro['f_fin'] != "") {
+                $comando->bindParam(":fec_ini", $fecha_ini, \PDO::PARAM_STR);
+                $comando->bindParam(":fec_fin", $fecha_fin, \PDO::PARAM_STR);
+            }            
             if ($arrFiltro['company'] != "" && $arrFiltro['company'] > 0) {
                 $comando->bindParam(":emp_id", $empresa, \PDO::PARAM_STR);
             }
@@ -1826,8 +1860,8 @@ class Interesado extends \app\modules\admision\components\CActiveRecord {
             'sort' => [
                 'attributes' => [
                     'DNI',
-                    'nombres',                    
-                    'apellidos',                    
+                    'nombres',
+                    'apellidos',
                     'empresa',
                 ],
             ],

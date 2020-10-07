@@ -9,6 +9,7 @@
 namespace app\models;
 
 use Yii;
+use yii\base\Exception;
 use yii\helpers\Url;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
@@ -20,6 +21,18 @@ use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Style\Border;
 use Svrnm\ExcelDataTables\ExcelDataTable;
+use PhpOffice\PhpWord\PhpWord;
+use PhpOffice\PhpWord\Style\Font;
+use PhpOffice\PhpWord\IOFactory as IOFactoryWd;
+use PhpOffice\PhpWord\Settings;
+use PhpOffice\PhpWord\SimpleType\VerticalJc;
+use PhpOffice\PhpWord\SimpleType\NumberFormat;
+use PhpOffice\PhpWord\ComplexType\FootnoteProperties;
+use PhpOffice\PhpWord\SimpleType\Jc;
+use PhpOffice\PhpWord\Shared\Html;
+use PhpOffice\PhpWord\SimpleType\DocProtect;
+use PhpOffice\PhpWord\TemplateProcessor;
+use PhpOffice\PhpWord\Shared\Converter;
 
 
 
@@ -57,7 +70,7 @@ class Utilities {
         }
         try {
             $mail->send();
-        } catch (Exception $ex) {
+        } catch (\Exception $ex) {
             self::putMessageLogFile($ex);
         }
     }
@@ -148,7 +161,7 @@ class Utilities {
     }
     
     public static function createTemporalFile($filename) {
-        $nombre_tmp = tempnam(sys_get_temp_dir() . $filename . "_" . date("Ymdhis"), "PB");
+        $nombre_tmp = tempnam(sys_get_temp_dir() . '/' . $filename . "_" . date("Ymdhis"), "PB");
         return $nombre_tmp;
     }
 
@@ -222,6 +235,17 @@ class Utilities {
         }
     }
 
+    public static function getDocumentRoot($http = null){
+        if($http)  return Url::base(true);
+        return Url::base();
+        //Url::base('http');
+        //Url::base('https');
+    }
+
+    public static function getBaseDirRoot(){
+        return Yii::$app->basePath;
+    }
+
     /**
      * Función que cambia la extension de una imagen a jpg
      *
@@ -231,24 +255,35 @@ class Utilities {
      * @param string $ext Extension que se desea cambiar
      * @return bool       Estado del movimiento del archivo
      */
-    public static function changeIMGtoJPG($dirImg) {
+    public static function changeIMGtoJPG($dirImg, $destino = NULL) {
         $dirImg = Yii::$app->basePath . str_replace("../", "", $dirImg);
-        if (is_file($dirImg)) {
-            $arrIm = explode(".", basename($dirImg));
-            $typeImage = $arrIm[count($arrIm) - 1];
-            if (strtolower($typeImage) == "png") {
-                $image = imagecreatefrompng($dirImg);
-                $newFile = preg_replace("/\.(png|Png|PNG)$/", '.jpg', $dirImg);
-                imagejpeg($image, $newFile, "100");
-                imagedestroy($image);
-                unlink($dirImg);
-            } if(strtolower($typeImage) == "gif") {
-                $image = imagecreatefromgif($dirImg);
-                $newFile = preg_replace("/\.(gif|Gif|GIF)$/", '.jpg', $dirImg);
-                imagejpeg($image, $newFile, "100");
-                imagedestroy($image);
-                unlink($dirImg);
+        try{
+            if (is_file($dirImg)) {
+                $arrIm = explode(".", basename($dirImg));
+                $typeImage = $arrIm[count($arrIm) - 1];
+                if (strtolower($typeImage) == "png") {
+                    $image = imagecreatefrompng($dirImg);
+                    $newFile = preg_replace("/\.(png|Png|PNG)$/", '.jpeg', $dirImg);
+                    if(isset($destino))
+                        $newFile = Yii::$app->basePath . str_replace("../", "", $destino);
+                    imagejpeg($image, $newFile, "100");
+                    imagedestroy($image);
+                    unlink($dirImg);
+                    return true;
+                } if(strtolower($typeImage) == "gif") {
+                    $image = imagecreatefromgif($dirImg);
+                    $newFile = preg_replace("/\.(gif|Gif|GIF)$/", '.jpeg', $dirImg);
+                    if(isset($destino))
+                        $newFile = Yii::$app->basePath . str_replace("../", "", $destino);
+                    imagejpeg($image, $newFile, "100");
+                    imagedestroy($image);
+                    unlink($dirImg);
+                    return true;
+                }
             }
+            return false;
+        }catch(Exception $e){
+            return false;
         }
     }
     
@@ -271,6 +306,12 @@ class Utilities {
                 break;
             case 'remove':
                 $cssIcon = "glyphicon glyphicon-remove";
+                break;
+            case 'download':
+                $cssIcon = "glyphicon glyphicon-save";
+                break;
+            case 'info':
+                $cssIcon = "glyphicon glyphicon-info-sign";
                 break;
         }
         return $cssIcon;
@@ -415,6 +456,14 @@ class Utilities {
             }
         }
     }
+
+    public static function base64_url_encode($input) {
+        return strtr(base64_encode($input), '+/=', '._-');
+    }
+    
+    public static function base64_url_decode($input) {
+        return base64_decode(strtr($input, '._-', '+/='));
+    }
     
     public static function generarReporteXLS($nombarch, $nameReport, $arrHeader, $arrData, $colPosition = array(), $typeExp = "Xls", $emp_id = null){
         if (is_null($emp_id)) {
@@ -550,7 +599,7 @@ class Utilities {
             }
             $objWriter = IOFactory::createWriter($objPHPExcel, $typeExp);
             $objWriter->save('php://output');
-        }catch(Exception $e){
+        }catch(\Exception $e){
             echo Yii::t("reporte","Error to export Excel");
         }
 
@@ -580,8 +629,201 @@ class Utilities {
             $dataTable->showHeaders()->addRows($data);
             return $dataTable->fillXLSX($uriFile);//attachToFile($uriFile, $out, false);
             
-        }catch(Exception $e){
+        }catch(\Exception $e){
             echo Yii::t("reporte","Error to export Excel");
+        }
+    }
+
+    /**
+     * Devuelve un Documento en Word en memoria o en archivo
+     *
+     * @access public
+     * 
+     * @author https://github.com/PHPOffice/PHPWord/tree/master
+     * @author https://phpword.readthedocs.io/en/latest/intro.html
+     * 
+     * @param mixed $filename           Nombre del archivo de salida o de entrada en el caso de que sea un plantilla
+     * @param mixed $titulo             Es el titulo o Heading Line que va en el Contenido del Archivo
+     * @param mixed $body               Es el cuerpo o texto que tiene el documento. En el caso de estar activado $isHtml entonces el contenido es HTML
+     * @param mixed $isHtml             Si es verdadero se podra ingresar contenido Html en el parametro $body
+     * @param mixed $loadFile           Si es verdadero se podra cargar el archivo que se recibe en el parametro $filename como archivo template
+     * @param mixed $loadFileValues     Arreglo de variables que se van a reemplazar en el archivo plantilla, Ejemplo: ['CODE' => $code, 'id' => 456]  Eso quiere decir que en el archivo template debe haber conenido con las etiquetas: ${CODE} y ${id}
+     * @param mixed $isDownloaded       Si es verdadero el archivo resultado se cargara en memoria, caso contrario se creara un archivo en la ruta definida en el parametro $filename
+     * @param mixed $landscape          Si es verdadero la orientacion de Word sera landscape caso contratio portrait
+     * @param mixed $emp_id             Se ingresa el Id de la Empresa, si se recibe NULL se carga el Id de la empresa que esta en sesion
+     * @return void                 En memoria el contenido del Doc en Word
+     */
+    public static function generarReportDoc($filename, $titulo, $body = "", $isHtml = false, $loadFile = false, $loadFileValues = array(), $isDownloaded = true, $landscape = false, $emp_id = null){
+
+        try{
+            if (is_null($emp_id)) {
+                $emp_id = Yii::$app->session->get('PB_idempresa');
+            }
+            $imgEmp = Yii::$app->basePath . "/themes/" . Yii::$app->view->theme->themeName . "/assets/img/logos/logo_" . $emp_id . ".png";
+            Settings::loadConfig();
+
+            // Turn output escaping on
+            Settings::setOutputEscapingEnabled(true);
+            
+            if(!$loadFile){
+                // $phpWord = IOFactoryWd::load($source);
+                $phpWord = new PhpWord();
+                $setSection = array(
+                    //'marginLeft'   => 1400,
+                    //'marginRight'  => 1400,
+                    //'marginTop'    => 1800,
+                    //'marginBottom' => 1000,
+                    'headerHeight' => 50,
+                    //'footerHeight' => 50,
+                );
+                if($landscape) {
+                    $setSection['orientation'] = 'landscape';
+                }
+    
+                // IF Doc have a Password
+                //$documentProtection = $phpWord->getSettings()->getDocumentProtection();
+                //$documentProtection->setEditing(DocProtect::READ_ONLY);
+                //$documentProtection->setPassword('myPassword');
+    
+                // ADD Watermark
+                //$section = $phpWord->addSection();
+                //$header = $section->addHeader();
+                //$header->addWatermark('image.jpeg', array('marginTop' => 200, 'marginLeft' => 55));
+                //$section->addText('Matermark Text');
+    
+                
+                // Adding Text element to the Section having font styled by default...
+                $fontStylePbTitle = 'rStylePbTitle';
+                $phpWord->addFontStyle($fontStylePbTitle, array(
+                    'name' => 'Arial',
+                    'bold' => true, 
+                    //'italic' => true, 
+                    'size' => 26, 
+                    'allCaps' => true, 
+                    //'doubleStrikethrough' => true
+                ));
+    
+                $paragraphStylePbTitle = 'pStylePbTitle';
+                $phpWord->addParagraphStyle($paragraphStylePbTitle, array(
+                    'alignment' => Jc::CENTER, 
+                    'spaceAfter' => 100,
+                    'spaceBefore' => 100,
+                    'spacing' => 10,
+                    'lineHeight' => 2,
+                ));
+    
+                $fontStylePbBody = 'rStylePbBody';
+                $phpWord->addFontStyle($fontStylePbBody, array(
+                    'name' => 'Arial',
+                    'size' => 10,
+                ));
+    
+                $paragraphStylePbBody = 'pStylePbBody';
+                $phpWord->addParagraphStyle($paragraphStylePbBody, array(
+                    'alignment' => Jc::START,
+                ));
+    
+                //$phpWord->addTitleStyle(1, array('bold' => true), array('spaceAfter' => 240));
+    
+                // Adding an empty Section to the document...
+                $section = $phpWord->addSection($setSection);
+    
+                // $wrappingStyles = array('inline', 'behind', 'infront', 'square', 'tight');
+                // Setting Header
+                // Add first page header
+                $header = $section->addHeader();
+                //$header->firstPage(); // Only Header first page
+                $table = $header->addTable(array('cellMargin' => 0, 'cellMarginTop' => 500, 'cellMarginRight' => 0, 'cellMarginBottom' => 0, 'cellMarginLeft' => 0));
+                $table->addRow();
+                $table->addCell(2500)->addImage($imgEmp, array(
+                    'width' => 120, 
+                    //'height' => 80, 
+                    'alignment' => Jc::START));
+    
+                // Setting Footer
+                $footer = $section->addFooter();
+                //$footer->addPreserveText('Page {PAGE} of {NUMPAGES}.', null, array('alignment' => Jc::CENTER));
+                $footer->addPreserveText('- {PAGE} -', null, array('alignment' => Jc::CENTER));
+    
+                if(!$isHtml){
+                    // $section->addTitle('Title Heading 1', 1); // Titulo 
+                    $section->addTextBreak(); // enter in text
+                    $section->addText($titulo, $fontStylePbTitle, $paragraphStylePbTitle);
+                    $section->addTextBreak(); // enter in text
+                    $section->addText($body, $fontStylePbBody, $paragraphStylePbBody);
+                    $section->addTextBreak(); // enter in text
+                }else{
+                    Html::addHtml($section, $body, false, false);  // IF body is HTML Content
+                }
+    
+                //// Adding Text element with font customized using explicitly created font style object...
+                //$fontStyle = new Font();
+                //$fontStyle->setBold(true);
+                //$fontStyle->setName('Tahoma');
+                //$fontStyle->setSize(13);
+                //$myTextElement = $section->addText('"Believe you can and you\'re halfway there." (Theodor Roosevelt)');
+                //$myTextElement->setFontStyle($fontStyle);
+    
+                // $section->addPageBreak(); // Salto de Linea
+    
+                
+    
+                // Load Template and replace for value
+                ////$templateProcessor = new TemplateProcessor('TemplateRow.docx');
+                //// Variables on different parts of document
+                //$templateProcessor->setValue('weekday', date('l'));            // On section/content
+                //$templateProcessor->setValue('time', date('H:i'));             // On footer
+                //$templateProcessor->setValue('serverName', realpath(__DIR__)); // On header
+                //// Simple table
+                //$templateProcessor->cloneRow('rowValue', 10);
+                //$templateProcessor->setValue('rowValue#1', 'Sun');
+                //$templateProcessor->setValue('rowValue#2', 'Mercury');
+                //$templateProcessor->setValue('rowValue#3', 'Venus');
+                //$templateProcessor->setValue('rowNumber#1', '1');
+                //$templateProcessor->setValue('rowNumber#2', '2');
+                //$templateProcessor->setValue('rowNumber#3', '3');
+                //// Table with a spanned cell
+                /*$values = array(
+                    array(
+                        'userId'        => 1,
+                        'userFirstName' => 'James',
+                        'userName'      => 'Taylor',
+                        'userPhone'     => '+1 428 889 773',
+                    ),
+                );*/
+                //$templateProcessor->cloneRowAndSetValues('userId', $values);
+                //$templateProcessor->saveAs('results.docx');
+    
+    
+                // Load Template and replace for Block
+                //$templateProcessor = new TemplateProcessor('TemplateBlock.docx');
+                // Will clone everything between ${tag} and ${/tag}, the number of times. By default, 1.
+                //$templateProcessor->cloneBlock('CLONEME', 3);
+                // Everything between ${tag} and ${/tag}, will be deleted/erased.
+                //$templateProcessor->deleteBlock('DELETEME');
+                //$templateProcessor->saveAs('results.docx');
+    
+                // Saving the document
+                //$objWriter = IOFactoryWd::createWriter($phpWord, 'Word2007');
+                //$objWriter->save('php://output', $typeExp);
+                if(!$isDownloaded)   $phpWord->save($filename);
+                else    $phpWord->save('php://output');
+            }else{
+                $tempFile = Utilities::createTemporalFile(basename($filename));
+                // Load Template and replace for value
+                $templateProcessor = new TemplateProcessor($filename);
+                //// Variables on different parts of document
+                foreach($loadFileValues as $key => $value){
+                    $templateProcessor->setValue($key, $value);
+                }
+                $templateProcessor->saveAs($tempFile);
+                readfile($tempFile);
+                Utilities::removeTemporalFile($tempFile);
+            }
+            
+        }
+        catch(\Exception $e){ 
+            echo Yii::t("reporte","Error to export Word");
         }
     }
     
@@ -701,5 +943,18 @@ class Utilities {
             '12' => Yii::t("perfil", "Diciembre"),
         ];
     }
+    
+    public static function add_ceros($numero, $ceros) {
+        /* Ejemplos para usar.
+          $numero="123";
+          echo add_ceros($numero,8) */
+        $order_diez = explode(".", $numero);
+        $dif_diez = $ceros - strlen($order_diez[0]);
+        for ($m = 0; $m < $dif_diez; $m++) {
+            @$insertar_ceros .= 0;
+        }
+        return $insertar_ceros .= $numero;
+    }
+
     
 }

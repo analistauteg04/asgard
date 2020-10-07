@@ -4,16 +4,16 @@
  * Diana Lopez <dlopez@uteg.edu.ec>
  */
 
-$(document).ready(function () {
+$(document).ready(function() {
 
     /* Nacimiento */
-    $('#cmb_pais_nac').change(function () {
+    $('#cmb_pais_nac').change(function() {
         var link = $('#txth_base').val() + "/perfil/update";
         var arrParams = new Object();
         arrParams.pai_id = $(this).val();
         arrParams.getprovincias = true;
         arrParams.getarea = true;
-        requestHttpAjax(link, arrParams, function (response) {
+        requestHttpAjax(link, arrParams, function(response) {
             if (response.status == "OK") {
                 data = response.message;
                 setComboData(data.provincias, "cmb_prov_nac");
@@ -21,7 +21,7 @@ $(document).ready(function () {
                 if (data.provincias.length > 0) {
                     arrParams.prov_id = data.provincias[0].id;
                     arrParams.getcantones = true;
-                    requestHttpAjax(link, arrParams, function (response) {
+                    requestHttpAjax(link, arrParams, function(response) {
                         if (response.status == "OK") {
                             data = response.message;
                             setComboData(data.cantones, "cmb_ciu_nac");
@@ -36,12 +36,12 @@ $(document).ready(function () {
         $("#lbl_codeCountrycell").text($("#cmb_pais_nac option:selected").attr("data-code"));
     });
 
-    $('#cmb_prov_nac').change(function () {
+    $('#cmb_prov_nac').change(function() {
         var link = $('#txth_base').val() + "/perfil/update";
         var arrParams = new Object();
         arrParams.prov_id = $(this).val();
         arrParams.getcantones = true;
-        requestHttpAjax(link, arrParams, function (response) {
+        requestHttpAjax(link, arrParams, function(response) {
             if (response.status == "OK") {
                 data = response.message;
                 setComboData(data.cantones, "cmb_ciu_nac");
@@ -50,12 +50,12 @@ $(document).ready(function () {
     });
 
     /* Domicilio */
-    $('#cmb_pais_dom').change(function () {
+    $('#cmb_pais_dom').change(function() {
         var link = $('#txth_base').val() + "/perfil/update";
         var arrParams = new Object();
         arrParams.pai_id = $(this).val();
         arrParams.getprovincias = true;
-        requestHttpAjax(link, arrParams, function (response) {
+        requestHttpAjax(link, arrParams, function(response) {
             if (response.status == "OK") {
                 data = response.message;
                 setComboData(data.provincias, "cmb_prov_dom");
@@ -63,7 +63,7 @@ $(document).ready(function () {
                 if (data.provincias.length > 0) {
                     arrParams.prov_id = data.provincias[0].id;
                     arrParams.getcantones = true;
-                    requestHttpAjax(link, arrParams, function (response) {
+                    requestHttpAjax(link, arrParams, function(response) {
                         if (response.status == "OK") {
                             data = response.message;
                             setComboData(data.cantones, "cmb_ciu_dom");
@@ -76,12 +76,12 @@ $(document).ready(function () {
         $("#lbl_codeCountrydom").text($("#cmb_pais_dom option:selected").attr("data-code"));
     });
 
-    $('#cmb_prov_dom').change(function () {
+    $('#cmb_prov_dom').change(function() {
         var link = $('#txth_base').val() + "/perfil/update";
         var arrParams = new Object();
         arrParams.prov_id = $(this).val();
         arrParams.getcantones = true;
-        requestHttpAjax(link, arrParams, function (response) {
+        requestHttpAjax(link, arrParams, function(response) {
             if (response.status == "OK") {
                 data = response.message;
                 setComboData(data.cantones, "cmb_ciu_dom");
@@ -89,7 +89,7 @@ $(document).ready(function () {
         }, true);
     });
 
-    $('#cmb_raza_etnica').change(function () {
+    $('#cmb_raza_etnica').change(function() {
         var valor = $('#cmb_raza_etnica').val();
         if (valor == 6) {
             $("#txt_otra_etnia").removeAttr("disabled");
@@ -100,8 +100,8 @@ $(document).ready(function () {
     });
 
     // tabs actualizar
-    $('#paso1next').click(function () {
-        guardarForm1();
+    $('#paso1next').click(function() {
+        save();
         $("a[data-href='#paso1']").attr('data-toggle', 'none');
         $("a[data-href='#paso1']").parent().attr('class', 'disabled');
         $("a[data-href='#paso1']").attr('data-href', $("a[href='#paso1']").attr('href'));
@@ -111,13 +111,13 @@ $(document).ready(function () {
         $("a[data-href='#paso2']").trigger("click");
     });
 
-    $("#txt_doc_foto").change(function () {
-                mostrarImagen(this);
+    $("#txt_doc_foto").change(function() { 
+        mostrarImagen(this);
     });
 });
 
 /*GUARDAR INFORMACION EN TAB1 */
-function guardarForm1() {
+function save() {
 
     var arrParams = new Object();
     var link = $('#txth_base').val() + "/perfil/guardartab1";
@@ -167,9 +167,9 @@ function guardarForm1() {
 
     // alert('Entro JavaScript'+arrParams.toSource());
     if (!validateForm()) {
-        requestHttpAjax(link, arrParams, function (response) {
+        requestHttpAjax(link, arrParams, function(response) {
             showAlert(response.status, response.label, response.message);
-            setTimeout(function () {
+            setTimeout(function() {
                 window.location.href = $('#txth_base').val() + "/perfil/update";
             }, 3000);
         }, true);
@@ -177,13 +177,28 @@ function guardarForm1() {
 }
 
 /* Cargado de Imagen en Expediente Profesor Autor : Omar Romero */
-function mostrarImagen(input) {
-     if (input.files && input.files[0]) {
-          var reader = new FileReader();
-          reader.onload = function (e) {
-                   $('#img_destino').attr('src', e.target.result);
-          }
-          reader.readAsDataURL(input.files[0]);
-     }
+function mostrarImagen(input) { 
+    if (input.files && input.files[0]) {  
+        var reader = new FileReader();  
+        reader.onload = function(e) {    $('#img_destino').attr('src', e.target.result);   }  
+        reader.readAsDataURL(input.files[0]); 
+    }
+} 
+function saveCropImage() {
+    var objCropImg = getPosCoord();
+    var arrParams = new Object();
+    arrParams.crop_file = true;
+    arrParams.x = objCropImg.x;
+    arrParams.y = objCropImg.y;
+    arrParams.w = objCropImg.w;
+    arrParams.h = objCropImg.h;
+    var link = $('#txth_base').val() + "/perfil/savepicture";
+    requestHttpAjax(link, arrParams, function(response) {
+        showAlert(response.status, response.label, response.message);
+        if (response.status == "OK") {
+            setTimeout(function() {
+                location.href = $('#txth_base').val() + "/perfil/update";
+            }, 3000);
+        }
+    }, true);
 }
-     

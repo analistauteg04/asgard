@@ -3,6 +3,8 @@
 namespace app\models;
 
 use Yii;
+use \yii\data\ActiveDataProvider;
+use \yii\data\ArrayDataProvider;
 
 /**
  * This is the model class for table "canton".
@@ -107,6 +109,72 @@ class Canton extends \yii\db\ActiveRecord {
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":id_provincia", $id_provincia, \PDO::PARAM_INT);
         $resultData = $comando->queryAll();
+        return $resultData;
+    }
+
+    function getAllCantonesGrid($search = NULL, $dataProvider = false) {
+        $iduser = Yii::$app->session->get('PB_iduser', FALSE);
+        $search_cond = "%" . $search . "%";
+        $str_search = "";
+        if (isset($search)) {
+            $str_search = "(can.can_nombre like :search OR ";
+            $str_search .= "pro.pro_nombre like :search) AND";
+        }
+        $sql = "SELECT
+                    can.can_id AS id,
+                    can.can_nombre AS Nombre,
+                    pro.pro_nombre AS Provincia,
+                    can.can_estado AS Estado
+                FROM
+                    canton as can
+                    INNER JOIN provincia as pro on pro.pro_id=can.pro_id
+                WHERE
+                    $str_search
+                    can.can_estado_logico = 1
+                    AND pro.pro_estado_logico = 1
+                ORDER BY can.can_id;";
+        $comando = Yii::$app->db->createCommand($sql);
+        if (isset($search)) {
+            $comando->bindParam(":search", $search_cond, \PDO::PARAM_STR);
+        }
+        $res = $comando->queryAll();
+        if ($dataProvider) {
+            $dataProvider = new ArrayDataProvider([
+                'key' => 'can_id',
+                'allModels' => $res,
+                'pagination' => [
+                    'pageSize' => Yii::$app->params["pageSize"],
+                ],
+                'sort' => [
+                    'attributes' => ['Nombre', 'Provincia', 'Estado'],
+                ],
+            ]);
+            return $dataProvider;
+        }
+        return $res;
+    }
+
+    /**
+     * Función 
+     *
+     * @author Giovanni Vergara
+     * @param  $model
+     */
+    public static function NombrecantonXid($id_canton) {
+        $con = \Yii::$app->db_asgard;
+        $estado = 1;
+        $sql = "SELECT                    
+                   can_nombre as ciudad
+                FROM 
+                   " . $con->dbname . ".canton                   
+                WHERE 
+                   can_id=:id_canton AND                   
+                   can_estado=:estado AND
+                   can_estado_logico=:estado  ";
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":id_canton", $id_canton, \PDO::PARAM_INT);
+        $resultData = $comando->queryOne();
         return $resultData;
     }
 

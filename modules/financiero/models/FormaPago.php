@@ -116,5 +116,23 @@ class FormaPago extends \app\modules\financiero\components\CActiveRecord
         $resultData = $comando->queryall();
         return $resultData;
     }
+    /**
+     * Function formas de pago
+     * @author Giovanni Vergara <analistadesarrollo01@uteg.edu.ec>
+     * @param
+     * @return
+     */
+    public function consultarFormaPagosaldo() {
+        $con = \Yii::$app->db_facturacion;
+        $estado = 1;
+        $sql = "SELECT fp.fpag_id AS id, fp.fpag_nombre AS value  
+                FROM " . $con->dbname . ".forma_pago fp 
+                WHERE  fp.fpag_estado_logico = :estado AND
+                       fp.fpag_estado = :estado and (fp.fpag_id > 3 and fp.fpag_id < 7) ";                       
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $resultData = $comando->queryall();
+        return $resultData;
+    }
 
 }

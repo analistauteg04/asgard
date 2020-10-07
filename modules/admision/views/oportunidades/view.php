@@ -195,7 +195,7 @@ $fecha_actual = date("Y-m-d");
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                 <div class="form-group">
-                    <?php if (empty($arr_oportunidad["eaca_id"])) { ?>
+                    <?php if (empty($arr_oportunidad["esacademico"])) { ?>
                         <label for="cmb_modulo_estudio" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Module::t("crm", "Academic Study") ?></label>
                         <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
                             <input type="text" class="form-control PBvalidation keyupmce" value="<?= $arr_oportunidad['moestudio'] ?>" disabled  data-type="alfa">                        

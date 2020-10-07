@@ -76,11 +76,12 @@ function actualizarGridMarcacion() {
     var f_ini = $('#txt_fecha_ini').val();
     var f_fin = $('#txt_fecha_fin').val();
     var periodo = $('#cmb_periodo option:selected').val();
+    var estado = $('#cmb_estado option:selected').val();
 
     //Buscar almenos una clase con el nombre para ejecutar
     if (!$(".blockUI").length) {
         showLoadingPopup();
-        $('#PbMarcacion').PbGridView('applyFilterData', {'profesor': profesor, 'materia': materia, 'f_ini': f_ini, 'f_fin': f_fin, 'periodo': periodo});
+        $('#PbMarcacion').PbGridView('applyFilterData', {'profesor': profesor, 'materia': materia, 'f_ini': f_ini, 'f_fin': f_fin, 'periodo': periodo, 'estado': estado});
         setTimeout(hideLoadingPopup, 2000);
     }
 }
@@ -90,7 +91,8 @@ function exportExcel() {
     var f_ini = $('#txt_fecha_ini').val();
     var f_fin = $('#txt_fecha_fin').val();
     var periodo = $('#cmb_periodo option:selected').val();
-    window.location.href = $('#txth_base').val() + "/academico/marcacion/expexcel?profesor=" + profesor + "&materia=" + materia + "&f_ini=" + f_ini + "&f_fin=" + f_fin + "&periodo=" + periodo;
+    var estado = $('#cmb_estado option:selected').val();
+    window.location.href = $('#txth_base').val() + "/academico/marcacion/expexcel?profesor=" + profesor + "&materia=" + materia + "&f_ini=" + f_ini + "&f_fin=" + f_fin + "&periodo=" + periodo + "&estado=" + estado;
 }
 function exportPdf() {
     var profesor = $('#txt_buscarDataProfesor').val();
@@ -98,7 +100,8 @@ function exportPdf() {
     var f_ini = $('#txt_fecha_ini').val();
     var f_fin = $('#txt_fecha_fin').val();
     var periodo = $('#cmb_periodo option:selected').val();
-    window.location.href = $('#txth_base').val() + "/academico/marcacion/exppdf?pdf=1&profesor=" + profesor + "&materia=" + materia + "&f_ini=" + f_ini + "&f_fin=" + f_fin + "&periodo=" + periodo;
+    var estado = $('#cmb_estado option:selected').val();
+    window.location.href = $('#txth_base').val() + "/academico/marcacion/exppdf?pdf=1&profesor=" + profesor + "&materia=" + materia + "&f_ini=" + f_ini + "&f_fin=" + f_fin + "&periodo=" + periodo + "&estado=" + estado;
 }
 
 function cargarHorario() {

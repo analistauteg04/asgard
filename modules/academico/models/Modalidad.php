@@ -94,15 +94,15 @@ class Modalidad extends \app\modules\academico\components\CActiveRecord {
         $estado = 1;
             $sql = "SELECT distinct moda.mod_id as id,
                            moda.mod_nombre as name
-                    FROM " . $con->dbname . ".modalidad_unidad_academico mua "
-                    . "inner join " . $con->dbname . ".modalidad moda ON moda.mod_id = mua.mod_id
+                    FROM " . $con->dbname . ".modalidad_estudio_unidad meu "
+                    . "inner join " . $con->dbname . ".modalidad moda ON moda.mod_id = meu.mod_id
                     WHERE uaca_id = :uaca_id 
                     and emp_id =:emp_id
-                    and mua.muac_estado_logico = :estado
-                    and mua.muac_estado = :estado
+                    and meu.meun_estado_logico = :estado
+                    and meu.meun_estado = :estado
                     and moda.mod_estado_logico = :estado
                     and moda.mod_estado = :estado
-                    ORDER BY name asc";        
+                    ORDER BY 1 asc";        
         
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
@@ -152,6 +152,24 @@ class Modalidad extends \app\modules\academico\components\CActiveRecord {
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":modalidad", $modalidad, \PDO::PARAM_INT);
+        $resultData = $comando->queryOne();
+        return $resultData;
+    }
+
+    public function getCodeCCostoxModalidad($mod_id){
+        $con = \Yii::$app->db_academico;
+        $estado = 1;
+        $sql = "SELECT 
+                    mcco_code AS Cod
+                FROM 
+                    " . $con->dbname . ".modalidad_centro_costo            
+                WHERE   
+                    mod_id=:modalidad AND
+                    mcco_estado_logico=:estado AND 
+                    mcco_estado=:estado";
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":modalidad", $mod_id, \PDO::PARAM_INT);
         $resultData = $comando->queryOne();
         return $resultData;
     }

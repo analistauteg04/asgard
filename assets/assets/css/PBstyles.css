@@ -36,351 +36,448 @@ PenBlu is based on code by
 Yii Software LLC (http://www.yiisoft.com) Copyright © 2008
 
 */
+
+
 /*
     Created on : 05/09/2015, 09:34:13 PM
     Author     : eduardocueva
 */
 
-.btn-default:focus, .btn-default.focus {
+.btn-default:focus,
+.btn-default.focus {
     background-color: #f4f4f4 !important;
     color: #444 !important;
     border-color: #ddd !important;
 }
-.btn-primary:focus, .btn-primary.focus{
+
+.btn-primary:focus,
+.btn-primary.focus {
     color: #fff;
     background-color: #3c8dbc !important;
     border-color: #3c8dbc !important;
 }
-.btn-success:focus, .btn-success.focus{
+
+.btn-success:focus,
+.btn-success.focus {
     color: #fff;
     background-color: #00a65a !important;
     border-color: #00a65a !important;
 }
-.btn-info:focus, .btn-info.focus{
+
+.btn-info:focus,
+.btn-info.focus {
     color: #fff;
     background-color: #00c0ef !important;
     border-color: #00c0ef !important;
 }
-.btn-danger:focus, .btn-danger.focus{
+
+.btn-danger:focus,
+.btn-danger.focus {
     color: #fff;
     background-color: #d73925 !important;
     border-color: #d73925 !important;
 }
-.btn-warning:focus, .btn-warning.focus{
+
+.btn-warning:focus,
+.btn-warning.focus {
     color: #fff;
     background-color: #f39c12 !important;
     border-color: #f39c12 !important;
 }
 
-.btn:focus, .btn:active:focus, .btn.active:focus {
+.btn:focus,
+.btn:active:focus,
+.btn.active:focus {
     outline: 0 none !important;
 }
 
+
 /* CSS para alerts */
-#ModalLabelPB { margin-top: 7px; }
-#img-modal{ float: left; margin-right: 15px; width: 40px; height: 40px; background-repeat: repeat no-repeat;}
-.success-modalPB{ background-image: url(../images/modal/success.png);  }
-.error-modalPB{ background-image: url(../images/modal/error.png); }
-.warning-modalPB{ background-image: url(../images/modal/warning.png); }
-.info-modalPB{ background-image: url(../images/modal/info.png); }
+
+#ModalLabelPB {
+    margin-top: 7px;
+}
+
+#img-modal {
+    float: left;
+    margin-right: 15px;
+    width: 40px;
+    height: 40px;
+    background-repeat: repeat no-repeat;
+}
+
+.success-modalPB {
+    background-image: url(../images/modal/success.png);
+}
+
+.error-modalPB {
+    background-image: url(../images/modal/error.png);
+}
+
+.warning-modalPB {
+    background-image: url(../images/modal/warning.png);
+}
+
+.info-modalPB {
+    background-image: url(../images/modal/info.png);
+}
+
 
 /* Estilos de ShowLoadingPopup */
+
 .blockUI {
     //background-color: #FFFFFF !important;
 }
 
+
 /* CSS para show loading popup ref: http://cssload.net/ */
-.circularG{
-    background-color:#009FCD !important;
+
+.circularG {
+    background-color: #009FCD !important;
 }
-#circularG{
-    position:relative;
-    width:128px;
-    height:128px;
+
+#circularG {
+    position: relative;
+    width: 128px;
+    height: 128px;
     margin: 0px auto;
 }
 
-.circularG{
-    position:absolute;
-    background-color:#FFFFFF;
-    width:29px;
-    height:29px;
-    -moz-border-radius:19px;
-    -moz-animation-name:bounce_circularG;
-    -moz-animation-duration:1.04s;
-    -moz-animation-iteration-count:infinite;
-    -moz-animation-direction:linear;
-    -webkit-border-radius:19px;
-    -webkit-animation-name:bounce_circularG;
-    -webkit-animation-duration:1.04s;
-    -webkit-animation-iteration-count:infinite;
-    -webkit-animation-direction:linear;
-    -ms-border-radius:19px;
-    -ms-animation-name:bounce_circularG;
-    -ms-animation-duration:1.04s;
-    -ms-animation-iteration-count:infinite;
-    -ms-animation-direction:linear;
-    -o-border-radius:19px;
-    -o-animation-name:bounce_circularG;
-    -o-animation-duration:1.04s;
-    -o-animation-iteration-count:infinite;
-    -o-animation-direction:linear;
-    border-radius:19px !important;
-    animation-name:bounce_circularG;
-    animation-duration:1.04s;
-    animation-iteration-count:infinite;
-    animation-direction:linear;
+.circularG {
+    position: absolute;
+    background-color: #FFFFFF;
+    width: 29px;
+    height: 29px;
+    -moz-border-radius: 19px;
+    -moz-animation-name: bounce_circularG;
+    -moz-animation-duration: 1.04s;
+    -moz-animation-iteration-count: infinite;
+    -moz-animation-direction: linear;
+    -webkit-border-radius: 19px;
+    -webkit-animation-name: bounce_circularG;
+    -webkit-animation-duration: 1.04s;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-direction: linear;
+    -ms-border-radius: 19px;
+    -ms-animation-name: bounce_circularG;
+    -ms-animation-duration: 1.04s;
+    -ms-animation-iteration-count: infinite;
+    -ms-animation-direction: linear;
+    -o-border-radius: 19px;
+    -o-animation-name: bounce_circularG;
+    -o-animation-duration: 1.04s;
+    -o-animation-iteration-count: infinite;
+    -o-animation-direction: linear;
+    border-radius: 19px !important;
+    animation-name: bounce_circularG;
+    animation-duration: 1.04s;
+    animation-iteration-count: infinite;
+    animation-direction: linear;
 }
 
-#circularG_1{
-    left:0;
-    top:50px;
-    -moz-animation-delay:0.39s;
-    -webkit-animation-delay:0.39s;
-    -ms-animation-delay:0.39s;
-    -o-animation-delay:0.39s;
-    animation-delay:0.39s;
+#circularG_1 {
+    left: 0;
+    top: 50px;
+    -moz-animation-delay: 0.39s;
+    -webkit-animation-delay: 0.39s;
+    -ms-animation-delay: 0.39s;
+    -o-animation-delay: 0.39s;
+    animation-delay: 0.39s;
 }
 
-#circularG_2{
-    left:14px;
-    top:14px;
-    -moz-animation-delay:0.52s;
-    -webkit-animation-delay:0.52s;
-    -ms-animation-delay:0.52s;
-    -o-animation-delay:0.52s;
-    animation-delay:0.52s;
+#circularG_2 {
+    left: 14px;
+    top: 14px;
+    -moz-animation-delay: 0.52s;
+    -webkit-animation-delay: 0.52s;
+    -ms-animation-delay: 0.52s;
+    -o-animation-delay: 0.52s;
+    animation-delay: 0.52s;
 }
 
-#circularG_3{
-    top:0;
-    left:50px;
-    -moz-animation-delay:0.65s;
-    -webkit-animation-delay:0.65s;
-    -ms-animation-delay:0.65s;
-    -o-animation-delay:0.65s;
-    animation-delay:0.65s;
+#circularG_3 {
+    top: 0;
+    left: 50px;
+    -moz-animation-delay: 0.65s;
+    -webkit-animation-delay: 0.65s;
+    -ms-animation-delay: 0.65s;
+    -o-animation-delay: 0.65s;
+    animation-delay: 0.65s;
 }
 
-#circularG_4{
-    right:14px;
-    top:14px;
-    -moz-animation-delay:0.78s;
-    -webkit-animation-delay:0.78s;
-    -ms-animation-delay:0.78s;
-    -o-animation-delay:0.78s;
-    animation-delay:0.78s;
+#circularG_4 {
+    right: 14px;
+    top: 14px;
+    -moz-animation-delay: 0.78s;
+    -webkit-animation-delay: 0.78s;
+    -ms-animation-delay: 0.78s;
+    -o-animation-delay: 0.78s;
+    animation-delay: 0.78s;
 }
 
-#circularG_5{
-    right:0;
-    top:50px;
-    -moz-animation-delay:0.91s;
-    -webkit-animation-delay:0.91s;
-    -ms-animation-delay:0.91s;
-    -o-animation-delay:0.91s;
-    animation-delay:0.91s;
+#circularG_5 {
+    right: 0;
+    top: 50px;
+    -moz-animation-delay: 0.91s;
+    -webkit-animation-delay: 0.91s;
+    -ms-animation-delay: 0.91s;
+    -o-animation-delay: 0.91s;
+    animation-delay: 0.91s;
 }
 
-#circularG_6{
-    right:14px;
-    bottom:14px;
-    -moz-animation-delay:1.04s;
-    -webkit-animation-delay:1.04s;
-    -ms-animation-delay:1.04s;
-    -o-animation-delay:1.04s;
-    animation-delay:1.04s;
+#circularG_6 {
+    right: 14px;
+    bottom: 14px;
+    -moz-animation-delay: 1.04s;
+    -webkit-animation-delay: 1.04s;
+    -ms-animation-delay: 1.04s;
+    -o-animation-delay: 1.04s;
+    animation-delay: 1.04s;
 }
 
-#circularG_7{
-    left:50px;
-    bottom:0;
-    -moz-animation-delay:1.17s;
-    -webkit-animation-delay:1.17s;
-    -ms-animation-delay:1.17s;
-    -o-animation-delay:1.17s;
-    animation-delay:1.17s;
+#circularG_7 {
+    left: 50px;
+    bottom: 0;
+    -moz-animation-delay: 1.17s;
+    -webkit-animation-delay: 1.17s;
+    -ms-animation-delay: 1.17s;
+    -o-animation-delay: 1.17s;
+    animation-delay: 1.17s;
 }
 
-#circularG_8{
-    left:14px;
-    bottom:14px;
-    -moz-animation-delay:1.3s;
-    -webkit-animation-delay:1.3s;
-    -ms-animation-delay:1.3s;
-    -o-animation-delay:1.3s;
-    animation-delay:1.3s;
-}
-@-moz-keyframes bounce_circularG{
-    0%{
-    -moz-transform:scale(1)}
-    100%{
-    -moz-transform:scale(.3)}
-}
-@-webkit-keyframes bounce_circularG{
-    0%{
-    -webkit-transform:scale(1)}
-    100%{
-    -webkit-transform:scale(.3)}
-}
-@-ms-keyframes bounce_circularG{
-    0%{
-    -ms-transform:scale(1)}
-    100%{
-    -ms-transform:scale(.3)}
-}
-@-o-keyframes bounce_circularG{
-    0%{
-    -o-transform:scale(1)}
-    100%{
-    -o-transform:scale(.3)}
-}
-@keyframes bounce_circularG{
-    0%{
-    transform:scale(1)}
-    100%{
-    transform:scale(.3)}
+#circularG_8 {
+    left: 14px;
+    bottom: 14px;
+    -moz-animation-delay: 1.3s;
+    -webkit-animation-delay: 1.3s;
+    -ms-animation-delay: 1.3s;
+    -o-animation-delay: 1.3s;
+    animation-delay: 1.3s;
 }
 
-#circleG{
-	width:79px;
-	margin:auto;
+@-moz-keyframes bounce_circularG {
+    0% {
+        -moz-transform: scale(1)
+    }
+    100% {
+        -moz-transform: scale(.3)
+    }
 }
-.circleG{
-	background-color: #009FCD;
-	float:left;
-	height:17px;
-	margin-left:9px;
-	width:17px;
-	animation-name:bounce_circleG;
-		-o-animation-name:bounce_circleG;
-		-ms-animation-name:bounce_circleG;
-		-webkit-animation-name:bounce_circleG;
-		-moz-animation-name:bounce_circleG;
-	animation-duration:1.5575s;
-		-o-animation-duration:1.5575s;
-		-ms-animation-duration:1.5575s;
-		-webkit-animation-duration:1.5575s;
-		-moz-animation-duration:1.5575s;
-	animation-iteration-count:infinite;
-		-o-animation-iteration-count:infinite;
-		-ms-animation-iteration-count:infinite;
-		-webkit-animation-iteration-count:infinite;
-		-moz-animation-iteration-count:infinite;
-	animation-direction:normal;
-		-o-animation-direction:normal;
-		-ms-animation-direction:normal;
-		-webkit-animation-direction:normal;
-		-moz-animation-direction:normal;
-	border-radius:11px;
-		-o-border-radius:11px;
-		-ms-border-radius:11px;
-		-webkit-border-radius:11px;
-		-moz-border-radius:11px;
+
+@-webkit-keyframes bounce_circularG {
+    0% {
+        -webkit-transform: scale(1)
+    }
+    100% {
+        -webkit-transform: scale(.3)
+    }
 }
-#circleG_1{
-	animation-delay:0.45s;
-		-o-animation-delay:0.45s;
-		-ms-animation-delay:0.45s;
-		-webkit-animation-delay:0.45s;
-		-moz-animation-delay:0.45s;
+
+@-ms-keyframes bounce_circularG {
+    0% {
+        -ms-transform: scale(1)
+    }
+    100% {
+        -ms-transform: scale(.3)
+    }
 }
-#circleG_2{
-	animation-delay:1.05s;
-		-o-animation-delay:1.05s;
-		-ms-animation-delay:1.05s;
-		-webkit-animation-delay:1.05s;
-		-moz-animation-delay:1.05s;
+
+@-o-keyframes bounce_circularG {
+    0% {
+        -o-transform: scale(1)
+    }
+    100% {
+        -o-transform: scale(.3)
+    }
 }
-#circleG_3{
-	animation-delay:1.35s;
-		-o-animation-delay:1.35s;
-		-ms-animation-delay:1.35s;
-		-webkit-animation-delay:1.35s;
-		-moz-animation-delay:1.35s;
+
+@keyframes bounce_circularG {
+    0% {
+        transform: scale(1)
+    }
+    100% {
+        transform: scale(.3)
+    }
 }
-@keyframes bounce_circleG{
-	0%{}
-	50%{ background-color:#FFFFFF; }
-	100%{}
+
+#circleG {
+    width: 79px;
+    margin: auto;
 }
-@-o-keyframes bounce_circleG{
-	0%{}
-	50%{ background-color:#FFFFFF; }
-	100%{}
+
+.circleG {
+    background-color: #009FCD;
+    float: left;
+    height: 17px;
+    margin-left: 9px;
+    width: 17px;
+    animation-name: bounce_circleG;
+    -o-animation-name: bounce_circleG;
+    -ms-animation-name: bounce_circleG;
+    -webkit-animation-name: bounce_circleG;
+    -moz-animation-name: bounce_circleG;
+    animation-duration: 1.5575s;
+    -o-animation-duration: 1.5575s;
+    -ms-animation-duration: 1.5575s;
+    -webkit-animation-duration: 1.5575s;
+    -moz-animation-duration: 1.5575s;
+    animation-iteration-count: infinite;
+    -o-animation-iteration-count: infinite;
+    -ms-animation-iteration-count: infinite;
+    -webkit-animation-iteration-count: infinite;
+    -moz-animation-iteration-count: infinite;
+    animation-direction: normal;
+    -o-animation-direction: normal;
+    -ms-animation-direction: normal;
+    -webkit-animation-direction: normal;
+    -moz-animation-direction: normal;
+    border-radius: 11px;
+    -o-border-radius: 11px;
+    -ms-border-radius: 11px;
+    -webkit-border-radius: 11px;
+    -moz-border-radius: 11px;
 }
-@-ms-keyframes bounce_circleG{
-	0%{}
-	50%{ background-color:#FFFFFF; }
-	100%{}
+
+#circleG_1 {
+    animation-delay: 0.45s;
+    -o-animation-delay: 0.45s;
+    -ms-animation-delay: 0.45s;
+    -webkit-animation-delay: 0.45s;
+    -moz-animation-delay: 0.45s;
 }
-@-webkit-keyframes bounce_circleG{
-	0%{}
-	50%{ background-color:#FFFFFF; }
-	100%{}
+
+#circleG_2 {
+    animation-delay: 1.05s;
+    -o-animation-delay: 1.05s;
+    -ms-animation-delay: 1.05s;
+    -webkit-animation-delay: 1.05s;
+    -moz-animation-delay: 1.05s;
 }
-@-moz-keyframes bounce_circleG{
-	0%{}
-	50%{ background-color:#FFFFFF; }
-	100%{}
+
+#circleG_3 {
+    animation-delay: 1.35s;
+    -o-animation-delay: 1.35s;
+    -ms-animation-delay: 1.35s;
+    -webkit-animation-delay: 1.35s;
+    -moz-animation-delay: 1.35s;
 }
+
+@keyframes bounce_circleG {
+    0% {}
+    50% {
+        background-color: #FFFFFF;
+    }
+    100% {}
+}
+
+@-o-keyframes bounce_circleG {
+    0% {}
+    50% {
+        background-color: #FFFFFF;
+    }
+    100% {}
+}
+
+@-ms-keyframes bounce_circleG {
+    0% {}
+    50% {
+        background-color: #FFFFFF;
+    }
+    100% {}
+}
+
+@-webkit-keyframes bounce_circleG {
+    0% {}
+    50% {
+        background-color: #FFFFFF;
+    }
+    100% {}
+}
+
+@-moz-keyframes bounce_circleG {
+    0% {}
+    50% {
+        background-color: #FFFFFF;
+    }
+    100% {}
+}
+
+
 /* CCS para check */
-.input-group-addon-border-left{
+
+.input-group-addon-border-left {
     border-left: 1px solid #ccc !important;
 }
-.input-group-addon-pointer{
+
+.input-group-addon-pointer {
     cursor: pointer;
 }
+
+
 /* CCS para el reloj */
+
 .time-box {
     font-size: 35px;
-    font-family: "OpenSans-Light",sans-serif;
+    font-family: "OpenSans-Light", sans-serif;
 }
-.pbtimebox > a {
+
+.pbtimebox>a {
     height: 50px;
     padding: 15px 15px 0px !important;
 }
+
 .time-minilb {
     font-size: 13px;
     line-height: 5px;
     margin-left: 0;
     vertical-align: top;
 }
+
 .time-minidate {
     font-size: 13px;
     margin-left: -28px !important;
 }
-@media screen and (min-width: 766px) and (max-width: 876px){
+
+@media screen and (min-width: 766px) and (max-width: 876px) {
     .pbtimebox {
         display: none !important;
     }
 }
-@media screen and (max-width: 546px){
+
+@media screen and (max-width: 546px) {
     .pbtimebox {
         display: none !important;
     }
 }
+
+
 /* CSS para chats */
-.pb-chat{
+
+.pb-chat {
     width: 265px;
 }
+
 .list_users_chat {
     width: 35px;
     height: 35px;
     float: left;
 }
+
 .chat-status-online {
     box-shadow: 0 0 0 1px #1ec01e;
     background: #1ec01e;
 }
+
 .chat-status-busy {
     box-shadow: 0 0 0 1px #ffa500;
     background: #ffa500;
 }
+
 .chat-status-nonline {
     box-shadow: 0 0 0 1px #A9A9A9;
     background: #A9A9A9;
 }
+
 [class*="chat-status"] {
     position: absolute;
     width: 10px;
@@ -390,20 +487,65 @@ Yii Software LLC (http://www.yiisoft.com) Copyright © 2008
     left: 45px;
     border: 2px solid #FFF;
 }
+
 .p-relative {
     position: relative !important;
 }
+
 .div-chat {
     position: fixed;
     bottom: 0px;
     right: 0px;
     z-index: 900;
 }
-.div-chat > .chat-section > div.box {
+
+.div-chat>.chat-section>div.box {
     margin-bottom: 0px;
     float: right;
     margin-left: 10px;
 }
-.chat-section {
 
+.chat-section {}
+
+
+/* Style to Select2 */
+
+.select2-container--default .select2-selection--multiple .select2-selection__choice {
+    background-color: #3c8dbc !important;
+    border-color: #367fa9 !important;
+    padding: 1px 10px !important;
+    color: #fff !important;
+}
+
+.select2-container--default.select2-container--focus .select2-selection--multiple,
+.select2-container--default .select2-search--dropdown .select2-search__field {
+    border-color: #3c8dbc !important;
+}
+
+.select2-container--default.select2-container--focus,
+.select2-selection.select2-container--focus,
+.select2-container--default:focus,
+.select2-selection:focus,
+.select2-container--default:active,
+.select2-selection:active {
+    outline: none !important;
+}
+
+.select2-container--default .select2-selection--multiple {
+    border: 1px solid #d2d6de !important;
+    border-radius: 0 !important;
+}
+
+.select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+    margin-right: 5px !important;
+    color: rgba(255, 255, 255, 0.7) !important;
+}
+
+.select2-container--default.select2-container--focus .select2-selection--multiple {
+    border-color: #d2d6de;
+}
+
+.select2-search__field {
+    width: auto !important;
+    margin-left: 8px;
 }

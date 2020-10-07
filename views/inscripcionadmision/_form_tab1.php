@@ -92,7 +92,7 @@ $requisitosPRP = '<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
                         <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
                         </div>
                         <div class="col-sm-9 col-md-9 col-xs-9 col-lg-9">
-                            <div style = "width: 410px;" class="well"><span style="font-weight: bold">Fecha del taller introductorio: 13 de julio del 2019. Deberás cargar en el siguiente paso estos documentos:<br></span>
+                            <div style = "width: 410px;" class="well"><span style="font-weight: bold">Fecha del taller introductorio: 14 de marzo del 2020. Deberás cargar en el siguiente paso estos documentos:<br></span>
                                     Cédula de identidad o pasaporte <br>                                    
                                     Título de tercer nivel notarizado. <br>                                    
                                     Hoja de vida.   <br>
@@ -152,6 +152,14 @@ $requisitosPRP = '<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
     </div>
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="form-group">
+            <label for="txt_empresa" class="col-lg-3 col-md-3 col-sm-3 col-xs-3 control-label"><?= Yii::t("formulario", "Company") ?> <span class="text-danger">*</span></label>
+            <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
+                <input type="text" class="form-control PBvalidation keyupmce" id="txt_empresa" data-type="" data-keydown="true" placeholder="<?= Yii::t("formulario", "Company") ?>">
+            </div>
+        </div>
+    </div>   
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="form-group">
             <label for="txt_correo" class="col-lg-3 col-md-3 col-sm-3 col-xs-3 control-label"><?= Yii::t("formulario", "Email") ?> <span class="text-danger">*</span></label>
             <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
                 <input type="text" class="form-control PBvalidation" id="txt_correo" data-type="email" data-keydown="true" placeholder="<?= Yii::t("formulario", "Email") ?>">
@@ -209,7 +217,7 @@ $requisitosPRP = '<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
             </div>
         </div>
     </div> 
-    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12" id="divRequisitosCANP" style="display: block">   
+    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12" id="divRequisitosCANP" style="display: none">   
         <?php echo $requisitosCANP ?>
     </div>
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12" id="divRequisitosCANSP" style="display: none">   

@@ -188,7 +188,7 @@ $fecha_actual = date("Y-m-d");
                 <div class="form-group">
                     <label for="cmb_carrera_estudio" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label keyupmce"><?= Module::t("crm", "Academic Study") ?></label>
                     <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                        <?php if (empty($dataOportunidad["eaca_id"])) { ?>
+                        <?php if (empty($dataOportunidad["esacademico"])) { ?>
                             <?= Html::dropDownList("cmb_carrera_estudio", $dataOportunidad["mest_id"], $arr_moduloEstudio, ["class" => "form-control", "id" => "cmb_carrera_estudio"]) ?>
                         <?php 
                     } else { ?>

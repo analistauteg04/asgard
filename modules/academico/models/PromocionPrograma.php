@@ -257,7 +257,7 @@ class PromocionPrograma extends \yii\db\ActiveRecord {
      * Function consultar si existe ya el programa con los mismo datos antes de guardar
      * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>
      * @param   
-     * @return  $resultData (Retornar el código de promocion).
+     * @return  $resultData (Retornar el id de promocion).
      */
     public function consultarPromocion($ppro_anio, $ppro_mes, $uaca_id, $mod_id, $eaca_id) {
         $con = \Yii::$app->db_academico;
@@ -403,7 +403,7 @@ class PromocionPrograma extends \yii\db\ActiveRecord {
      * @param   
      * @return  $resultData (Retornar el código de paralelo).
      */
-    public function insertarParalelo($ppro_id, $pppr_cupo, $pppr_cupo_actual, $pppr_usuario_ingresa, $pppr_fecha_creacion) {
+    public function insertarParalelo($ppro_id, $pppr_cupo, $pppr_cupo_actual, $pppr_descripcion, $pppr_usuario_ingresa, $pppr_fecha_creacion) {
 
         $con = \Yii::$app->db_academico;
         $trans = $con->getTransaction(); // se obtiene la transacción actual
@@ -429,6 +429,10 @@ class PromocionPrograma extends \yii\db\ActiveRecord {
             $param_sql .= ", pppr_cupo_actual";
             $bsol_sql .= ", :pppr_cupo_actual";
         }
+        if (isset($pppr_descripcion)) {
+            $param_sql .= ", pppr_descripcion";
+            $bsol_sql .= ", :pppr_descripcion";
+        }
         if (isset($pppr_usuario_ingresa)) {
             $param_sql .= ", pppr_usuario_ingresa";
             $bsol_sql .= ", :pppr_usuario_ingresa";
@@ -450,6 +454,9 @@ class PromocionPrograma extends \yii\db\ActiveRecord {
 
             if (isset($pppr_cupo_actual))
                 $comando->bindParam(':pppr_cupo_actual', $pppr_cupo_actual, \PDO::PARAM_INT);
+
+            if (isset($pppr_descripcion))
+                $comando->bindParam(':pppr_descripcion', $pppr_descripcion, \PDO::PARAM_STR);
 
             if (isset($pppr_usuario_ingresa))
                 $comando->bindParam(':pppr_usuario_ingresa', $pppr_usuario_ingresa, \PDO::PARAM_INT);
@@ -600,6 +607,50 @@ class PromocionPrograma extends \yii\db\ActiveRecord {
                 $trans->rollback();
             return FALSE;
         }
+    }
+        /**
+     * Function consultar el codigo de estudio academico
+     * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>
+     * @param   
+     * @return  $resultData (Retornar el código de estudio academico).
+     */
+    public function consultarCodigoestudioaca($eaca_id) {
+        $con = \Yii::$app->db_academico;
+        $estado = 1;
+
+        $sql = "SELECT eaca_codigo 
+                   FROM " . $con->dbname . ".estudio_academico 
+                   WHERE eaca_id = :eaca_id 
+                        AND eaca_estado = :estado
+                        AND eaca_estado_logico = :estado";
+
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":eaca_id", $eaca_id, \PDO::PARAM_INT);
+        $resultData = $comando->queryOne();
+        return $resultData;
+    }
+    
+    /**
+     * Function consulta las promociones por programa. 
+     * @author Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;
+     * @param
+     * @return
+     */
+    public function consultarPromocionxProgramagen() {
+        $con = \Yii::$app->db_academico;
+        $estado = 1;
+        $sql = "SELECT ppro_id id, ppro_codigo name                 
+                FROM 
+                " . $con->dbname . ".promocion_programa  pp 
+                WHERE 
+                   pp.ppro_estado = :estado AND
+                   pp.ppro_estado_logico = :estado";
+
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);        
+        $resultData = $comando->queryAll();
+        return $resultData;
     }
 
 }

@@ -664,6 +664,8 @@ class Solicitudinscripcion extends \yii\db\ActiveRecord {
                         sins.uaca_id as nivel_interes,
                         sins.ming_id as metodo_ingreso,
                         sins.mod_id,
+                        sins.eaca_id,
+                        sins.emp_id,
                         (select ming.ming_nombre from " . $con->dbname . ".metodo_ingreso ming where ming.ming_id = sins.ming_id and ming.ming_estado = :estado AND ming.ming_estado_logico = :estado) as nombre_metodo_ingreso,
                         (select uaca.uaca_nombre from " . $con3->dbname . ".unidad_academica uaca where uaca.uaca_id = sins.uaca_id and uaca.uaca_estado = :estado AND uaca.uaca_estado_logico = :estado) as nombre_nivel_interes,
                         (select m.mod_nombre from " . $con3->dbname . ".modalidad m where  m.mod_id = sins.mod_id and m.mod_estado = :estado AND m.mod_estado_logico = :estado) as nombre_modalidad
@@ -1237,7 +1239,8 @@ class Solicitudinscripcion extends \yii\db\ActiveRecord {
                     sins_fecha_reprobacion,
                     sins_fecha_prenoprobacion,
                     sins_observacion, 		
-                    sins.sins_usuario_preaprueba as usu_preaprueba,                    
+                    sins.sins_usuario_preaprueba as usu_preaprueba,     
+                    sins.sins_usuario_ingreso as agente,               
                     case when ifnull((select opag_estado_pago
                                             from " . $con3->dbname . ".orden_pago op
                                             where op.sins_id = sins.sins_id
@@ -1249,7 +1252,8 @@ class Solicitudinscripcion extends \yii\db\ActiveRecord {
                     else 'Pagado' end as pago,
                     ifnull((select count(*) from " . $con->dbname . ".solicitudins_documento sd 
                             where sd.sins_id = sins.sins_id and sd.sdoc_estado = :estado and sd.sdoc_estado_logico = :estado),0) as numDocumentos,
-                    sins.emp_id
+                    sins.emp_id,
+                    concat(pges.per_pri_nombre, ' ', pges.per_pri_apellido) as Agente
                 FROM 
                     " . $con->dbname . ".solicitud_inscripcion as sins
                     INNER JOIN " . $con->dbname . ".interesado as inte on sins.int_id = inte.int_id                    
@@ -1258,6 +1262,8 @@ class Solicitudinscripcion extends \yii\db\ActiveRecord {
                     INNER JOIN " . $con1->dbname . ".modalidad as m on sins.mod_id = m.mod_id
                     INNER JOIN " . $con->dbname . ".res_sol_inscripcion as rsol on rsol.rsin_id = sins.rsin_id                    
                     -- INNER JOIN " . $con1->dbname . ".estudio_academico as eac on eac.eaca_id = sins.eaca_id 
+                    LEFT JOIN " . $con2->dbname . ".usuario as uges on uges.usu_id = sins.sins_usuario_ingreso 
+                    LEFT JOIN " . $con2->dbname . ".persona as pges on pges.per_id = uges.per_id 
                 WHERE 
                     $str_search        
                     sins.sins_estado_logico=:estado AND
@@ -1347,7 +1353,7 @@ class Solicitudinscripcion extends \yii\db\ActiveRecord {
      * @param   string  $dataTelefono   Telefono de la persona a Facturar
      * @return  $resultData (Retorna true si se realizo la operacion o false si fue error).
      */
-    public function crearDatosFacturaSolicitud($sins_id, $dataNombres, $dataApellidos, $dataTipDNI, $dataDNI, $dataDireccion, $dataTelefono, $dataCorreo=null) {
+    public function crearDatosFacturaSolicitud($sins_id, $dataNombres, $dataApellidos, $dataTipDNI, $dataDNI, $dataDireccion, $dataTelefono, $dataCorreo = null) {
         $con = \Yii::$app->db_captacion;
         $estado = 1;
         $tipo = ((self::$arr_DNI[$dataTipDNI]) ? self::$arr_DNI[$dataTipDNI] : self::$arr_DNI["3"]);
@@ -1437,6 +1443,7 @@ class Solicitudinscripcion extends \yii\db\ActiveRecord {
                     per.per_cedula as per_dni,
                     concat(per.per_pri_nombre ,' ', ifnull(per.per_seg_nombre,' ')) as per_nombres,
                     concat(per.per_pri_apellido ,' ', ifnull(per.per_seg_apellido,' ')) as per_apellidos,
+                    concat(pges.per_pri_nombre, ' ', pges.per_pri_apellido) as Agente,
                     uaca.uaca_nombre,
                     ifnull((select ming.ming_alias 
                                     from " . $con->dbname . ".metodo_ingreso as ming 
@@ -1462,6 +1469,8 @@ class Solicitudinscripcion extends \yii\db\ActiveRecord {
                     INNER JOIN " . $con1->dbname . ".modalidad as m on sins.mod_id = m.mod_id
                     INNER JOIN " . $con->dbname . ".res_sol_inscripcion as rsol on rsol.rsin_id = sins.rsin_id                    
                     INNER JOIN " . $con1->dbname . ".estudio_academico as eac on eac.eaca_id = sins.eaca_id 
+                    LEFT JOIN " . $con2->dbname . ".usuario as uges on uges.usu_id = sins.sins_usuario_ingreso 
+                    LEFT JOIN " . $con2->dbname . ".persona as pges on pges.per_id = uges.per_id 
                 WHERE 
                     $str_search         
                     sins.sins_estado_logico=:estado AND
@@ -1569,7 +1578,7 @@ class Solicitudinscripcion extends \yii\db\ActiveRecord {
      * @param   
      * @return  Id del registro insertado.
      */
-    public function insertarSolicitud($int_id, $uaca_id, $mod_id, $ming_id, $eaca_id, $mest_id, $emp_id, $num_solicitud, $rsin_id, $sins_fecha_solicitud, $sins_usuario_ingreso, $cemp_id=null) {
+    public function insertarSolicitud($int_id, $uaca_id, $mod_id, $ming_id, $eaca_id, $mest_id, $emp_id, $num_solicitud, $rsin_id, $sins_fecha_solicitud, $sins_usuario_ingreso, $cemp_id = null) {
         $con = \Yii::$app->db_captacion;
 
         $trans = $con->getTransaction(); // se obtiene la transacción actual.
@@ -1634,9 +1643,9 @@ class Solicitudinscripcion extends \yii\db\ActiveRecord {
             $bsrec_sql .= ", :cemp_id";
         }
         try {
-            $sql = "INSERT INTO " . $con->dbname . ".solicitud_inscripcion ($param_sql) VALUES($bsrec_sql)";            
+            $sql = "INSERT INTO " . $con->dbname . ".solicitud_inscripcion ($param_sql) VALUES($bsrec_sql)";
             $comando = $con->createCommand($sql);
-        
+
             if (isset($int_id))
                 $comando->bindParam(':int_id', $int_id, \PDO::PARAM_INT);
 
@@ -1669,12 +1678,12 @@ class Solicitudinscripcion extends \yii\db\ActiveRecord {
 
             if (isset($sins_usuario_ingreso))
                 $comando->bindParam(':sins_usuario_ingreso', $sins_usuario_ingreso, \PDO::PARAM_INT);
-            
+
             if (isset($sins_usuario_ingreso))
                 $comando->bindParam(':sins_usuario_ingreso', $sins_usuario_ingreso, \PDO::PARAM_INT);
 
             if (!empty($cemp_id)) {
-                if (isset($cemp_id)){
+                if (isset($cemp_id)) {
                     $comando->bindParam(':cemp_id', $cemp_id, \PDO::PARAM_INT);
                 }
             }
@@ -1896,7 +1905,7 @@ class Solicitudinscripcion extends \yii\db\ActiveRecord {
         $resultData = $comando->queryOne();
         return $resultData;
     }
-    
+
     /**
      * Function ConsultarXUnidadModalPrecio
      * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
@@ -1916,7 +1925,7 @@ class Solicitudinscripcion extends \yii\db\ActiveRecord {
                       im.ipar_estado_logico = :estado AND
                       ip.ipre_estado = :estado AND
                       ip.ipre_estado_logico = :estado";
-\app\models\Utilities::putMessageLogFile('$sql precio:'.$sql);
+        \app\models\Utilities::putMessageLogFile('$sql precio:' . $sql);
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":uaca_id", $uaca_id, \PDO::PARAM_INT);
@@ -1924,4 +1933,5 @@ class Solicitudinscripcion extends \yii\db\ActiveRecord {
         $resultData = $comando->queryOne();
         return $resultData;
     }
+
 }

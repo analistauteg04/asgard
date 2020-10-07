@@ -17,8 +17,16 @@ use app\models\Modulo;
 use app\models\Grupo;
 use app\models\Empresa;
 use app\models\Dash;
+use yii\base\Security;
+use app\modules\academico\models\Estudiante;
+use app\modules\academico\models\Profesor;
+use app\models\Persona;
+use yii\base\Exception;
 
 class SiteController extends CController {
+
+    protected $widthImg = "141";
+    protected $heightImg = "193";
 
     /**
      * @inheritdoc
@@ -62,6 +70,11 @@ class SiteController extends CController {
                         [
                         'allow' => true,
                         'actions' => ['getimage'],
+                        'roles' => ['?', '@'], // usuarios invitados
+                    ],
+                        [
+                        'allow' => true,
+                        'actions' => ['getcredencial'],
                         'roles' => ['?', '@'], // usuarios invitados
                     ],
                         [
@@ -565,6 +578,231 @@ class SiteController extends CController {
         ImagePng($im); // Mostramos la imagen
         ImageDestroy($im); // Liberamos la memoria que ocupaba la imagen
         exit();
+    }
+
+    public function actionGetcredencial($id){
+        $security = new Security();
+        $dataIdCipr = $security->decryptByPassword(Utilities::base64_url_decode($id), Yii::$app->params['keywordEncription']);
+        $data = json_decode($dataIdCipr, true);
+        $idper = $data["per_id"];
+        $idemp = $data["emp_id"];
+        $modelPersona = Persona::findOne($idper);
+        $modelEstudiante = Estudiante::findOne(['per_id' => $idper, 'est_estado_logico' => '1', 'est_estado' => '1']);
+        $modelDocente = Profesor::findOne(['per_id' => $idper, 'pro_estado_logico' => '1', 'pro_estado' => '1']);
+        $isEstudiante = false;
+        $isDocente = false;
+        $images_dir = 'rounded_corners';
+        $corner_radius = 10; // El radio de la esquina redondeada se establece en 20px por defecto
+        $foto_archivo = Yii::$app->basePath . Yii::$app->params["documentFolder"] . "ficha/" . $idper . "/doc_foto_per_" . $idper . ".jpeg";
+        $bg_credencial = Yii::$app->basePath . Yii::$app->params["documentFolder"] . "Credencial/credencial-admin-front.jpeg";
+        $bb_credencial = Yii::$app->basePath . Yii::$app->params["documentFolder"] . "Credencial/credencial-admin-back.jpeg";
+        $marginPhoto = 14; // Para credenciales Administrativas
+        $image_rounded = Yii::$app->basePath . Yii::$app->params["documentFolder"] . "Credencial/$images_dir/rounded_corner_".$corner_radius."px.b.png";
+        $image_rounded2 = NULL;
+        if($modelEstudiante){
+            $marginPhoto = 14; // Para credenciales Estudiantes
+            $image_rounded = Yii::$app->basePath . Yii::$app->params["documentFolder"] . "Credencial/$images_dir/rounded_corner_".$corner_radius."px.w.png";
+            $image_rounded2 = Yii::$app->basePath . Yii::$app->params["documentFolder"] . "Credencial/$images_dir/rounded_corner_".$corner_radius."px.lb.png";
+            $bg_credencial = Yii::$app->basePath . Yii::$app->params["documentFolder"] . "Credencial/credencial-estudiante-front.jpeg";
+            $bb_credencial = Yii::$app->basePath . Yii::$app->params["documentFolder"] . "Credencial/credencial-estudiante-back.jpeg";
+            $isEstudiante = true;
+        }
+        if($modelDocente && !$isEstudiante){
+            $bg_credencial = Yii::$app->basePath . Yii::$app->params["documentFolder"] . "Credencial/credencial-docente-front.jpeg";
+            $bb_credencial = Yii::$app->basePath . Yii::$app->params["documentFolder"] . "Credencial/credencial-docente-back.jpeg";
+            $isDocente = true;
+        }
+        
+        if(is_file($foto_archivo)){
+            // mostrar los archivos
+            Header("Content-type: image/png");
+            $size = [$this->widthImg,$this->heightImg];
+            $im1 = imagecreatefromjpeg($bg_credencial); //image 325 x 523 
+            $im2 = imagecreatefromjpeg($foto_archivo); //image 147 x 209 
+            $image = ImageCreateTrueColor($size[0], $size[1]);
+            imagecopyresampled($image,$im2,0,0,0,0,$size[0], $size[1], $size[0], $size[1]);
+            
+            $angle = 0; // The default angle is set to 0º
+            $topleft = true; // La esquina superior izquierda se muestra por defecto
+            $bottomleft = true; // La esquina inferior izquierda se muestra por defecto
+            $bottomright = true; // La esquina inferior derecha se muestra por defecto
+            $topright = true; // La esquina superior derecha se muestra por defecto
+            $white = ImageColorAllocate($image,255,255,255);
+            $black = ImageColorAllocate($image,0,0,0);
+            $corner_source = imagecreatefrompng($image_rounded);
+            $corner_width = imagesx($corner_source);  
+            $corner_height = imagesy($corner_source);  
+            $corner_resized = ImageCreateTrueColor($corner_radius, $corner_radius);
+            ImageCopyResampled($corner_resized, $corner_source, 0, 0, 0, 0, $corner_radius, $corner_radius, $corner_width, $corner_height);
+            $corner_width = imagesx($corner_resized);  
+            $corner_height = imagesy($corner_resized);
+
+            // Esquina inferior derecha
+            if ($bottomright == true) {
+                $dest_x = $size[0] - $corner_width;  
+                $dest_y = $size[1] - $corner_height;  
+                $rotated = imagerotate($corner_resized, 180, 0);
+                imagecolortransparent($rotated, $black); 
+                imagecopymerge($image, $rotated, $dest_x, $dest_y, 0, 0, $corner_width, $corner_height, 100);  
+            }
+
+            // Esquina inferior izquierda
+            if ($bottomleft == true) {
+                $dest_x = 0;  
+                $dest_y = $size[1] - $corner_height; 
+                $rotated = imagerotate($corner_resized, 90, 0);
+                imagecolortransparent($rotated, $black); 
+                imagecopymerge($image, $rotated, $dest_x, $dest_y, 0, 0, $corner_width, $corner_height, 100);  
+            }
+
+            if(isset($image_rounded2)){
+                $corner_source = imagecreatefrompng($image_rounded2);
+                ImageCopyResampled($corner_resized, $corner_source, 0, 0, 0, 0, $corner_radius, $corner_radius, $corner_width, $corner_height);
+                $corner_width = imagesx($corner_resized);  
+                $corner_height = imagesy($corner_resized);
+            }
+
+            // Esquina superior derecha
+            if ($topright == true) {
+                $dest_x = $size[0] - $corner_width;  
+                $dest_y = 0;  
+                $rotated = imagerotate($corner_resized, 270, 0);
+                imagecolortransparent($rotated, $black); 
+                imagecopymerge($image, $rotated, $dest_x, $dest_y, 0, 0, $corner_width, $corner_height, 100);  
+            }
+
+            // Esquina superior izquierda
+            if ($topleft == true) {
+                $dest_x = 0;  
+                $dest_y = 0;  
+                imagecolortransparent($corner_resized, $black); 
+                imagecopymerge($image, $corner_resized, $dest_x, $dest_y, 0, 0, $corner_width, $corner_height, 100);
+            } 
+
+            // Rotar la imagen
+            $image_rn = imagerotate($image, $angle, $white);
+
+            // Texto
+            $ttf_lightS = Yii::$app->basePath . Yii::$app->params["documentFolder"] . "fonts/Gotham-Light.otf";
+            $ttf_light = Yii::$app->basePath . Yii::$app->params["documentFolder"] . "fonts/Gotham-Book.otf";
+            $ttf_bold = Yii::$app->basePath . Yii::$app->params["documentFolder"] . "fonts/Gotham-Medium.ttf";
+            $ttf_boldH = Yii::$app->basePath . Yii::$app->params["documentFolder"] . "fonts/Gotham-Bold.ttf";
+            $ttf_arial = Yii::$app->basePath . Yii::$app->params["documentFolder"] . "fonts/Arial.ttf";
+            $ttf_arialB = Yii::$app->basePath . Yii::$app->params["documentFolder"] . "fonts/Arial-Bold.ttf";
+            $colorB = imagecolorallocate($im1, 255, 255, 255);//#FFFFFF
+            if($isEstudiante){
+                $colorB = imagecolorallocate($im1, 0, 84, 139);//#00548b
+            }
+            
+            $colorW = imagecolorallocate($im1, 255, 255, 255);//#FFFFFF
+            $font_size = 11;
+            $angulo = 0;
+            $posX = 12;
+            $posY = 385;
+
+            // Get image dimensions
+            $width = imagesx($im1);
+            $height = imagesy($im1);
+            // Get center coordinates of image
+            $centerX = $width / 2;
+            $centerY = $height / 2;
+
+            $nombre = $modelPersona->per_pri_nombre . " " . $modelPersona->per_pri_apellido . " " . $modelPersona->per_seg_apellido; // limite 30 caracteres
+            if(strlen($nombre) > 30){
+                $nombre = $modelPersona->per_pri_nombre . " " . $modelPersona->per_pri_apellido; 
+            }
+            //$nombre = str_replace(array("Á","É", "Í", "Ó", "Ú"), array("A", "E", "I", "O", "U"), $nombre);
+            $carrera = ""; // limite 30 caracteres
+            $modalidad = ""; // limite 30 caracteres
+            $cargo = ""; // limite 30 caracteres
+            $matricula = "";
+            $ttf_font = $ttf_boldH;
+            $widthDifference = 7;
+            if($isEstudiante){
+                $dataCarrera = $modelEstudiante->getInfoCarreraEstudiante($modelEstudiante->est_id, $idemp);
+                $ttf_font = $ttf_light;
+                $widthDifference = 0;
+                $carrera = (isset($dataCarrera['ResumenCarrera']) && $dataCarrera['ResumenCarrera'] != "")?$dataCarrera['ResumenCarrera']:$dataCarrera['Carrera']; // limite 30 caracteres
+                if(strlen($carrera) > 30){
+                    $carrera = substr($carrera, 0, 31) . ".";
+                }
+                //$modalidad = $dataCarrera['Modalidad']; // limite 30 caracteres
+                $matricula = $modelEstudiante->est_matricula;
+            }
+
+            // Get size of text
+            list($left, $bottom, $right, , , $top) = imageftbbox($font_size, $angulo, $ttf_font, strtoupper($nombre));
+            // Determine offset of text
+            $left_offset = ($right - $left) / 2;
+            $top_offset = ($bottom - $top) / 2;
+            // Generate coordinates
+            $x = $centerX - $left_offset;
+            $y = $centerY - $top_offset;
+            // Add text to image
+            //Imagen, tamaño, ángulo, x, y, color, fuente, texto
+            imagefttext($im1, $font_size, $angulo, $x, $posY + $widthDifference, $colorB, $ttf_font, strtoupper($nombre));
+            
+            if(!$isEstudiante && !$isDocente){
+                $cargo = ""; ///********************************************************* */ LLENAR CARGO
+                // Get size of text
+                list($left, $bottom, $right, , , $top) = imageftbbox($font_size, $angulo, $ttf_font, strtoupper($cargo));
+                // Determine offset of text
+                $left_offset = ($right - $left) / 2;
+                $top_offset = ($bottom - $top) / 2;
+                // Generate coordinates
+                $x = $centerX - $left_offset;
+                $y = $centerY - $top_offset;
+                // Add text to image
+                imagefttext($im1, $font_size, $angle, $x, 397, $colorB, $ttf_font, strtoupper($cargo));
+            }
+            
+            if($isEstudiante){
+                // Get size of text
+                list($left, $bottom, $right, , , $top) = imageftbbox($font_size, $angulo, $ttf_light, $carrera);
+                // Determine offset of text
+                $left_offset = ($right - $left) / 2;
+                $top_offset = ($bottom - $top) / 2;
+                // Generate coordinates
+                $x = $centerX - $left_offset;
+                $y = $centerY - $top_offset;
+                // Add text to image
+                imagefttext($im1, $font_size, $angulo, $x, 410, $colorB, $ttf_light, $carrera);
+            
+            
+                // Get size of text 
+                list($left, $bottom, $right, , , $top) = imageftbbox($font_size, $angulo, $ttf_light, $modalidad);
+                // Determine offset of text
+                $left_offset = ($right - $left) / 2;
+                $top_offset = ($bottom - $top) / 2;
+                // Generate coordinates
+                $x = $centerX - $left_offset;
+                $y = $centerY - $top_offset;
+                // Add text to image
+                imagefttext($im1, $font_size, $angle, $x, 430, $colorB, $ttf_light, $modalidad);
+
+                // Periodo
+                $periodo = date("Y") . " - " . ( 1 + date("Y"));
+                // Get size of text
+                list($left, $bottom, $right, , , $top) = imageftbbox(19, $angulo, $ttf_light, $periodo);
+                // Determine offset of text
+                $left_offset = ($right - $left) / 2;
+                $top_offset = ($bottom - $top) / 2;
+                // Generate coordinates
+                $x = $centerX - $left_offset;
+                $y = $centerY - $top_offset;
+                //Imagen, tamaño, ángulo, x, y, color, fuente, texto
+                imagefttext($im1, 19, 0, 85, 498, $colorW, $ttf_bold, $periodo);
+            }
+
+            // Crear la imagen final
+            //imagejpeg($image);
+            imagecopy($im1, $image_rn, (imagesx($im1)/2)-(imagesx($image_rn)/2), (imagesy($im1)/2)-(imagesy($image_rn)/2)-$marginPhoto, 0, 0, imagesx($image_rn), imagesy($image_rn));
+            
+            imagepng($im1);
+            imagedestroy($im1);
+            imagedestroy($image_rn);
+            exit();
+        }
     }
 
 }

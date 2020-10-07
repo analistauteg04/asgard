@@ -115,7 +115,6 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
             [['pges_telefono_empresa'], 'string', 'max' => 10],
             [['pges_cargo', 'pges_domicilio_num'], 'string', 'max' => 100],
             [['pges_genero', 'pges_nac_ecuatoriano', 'pges_estado_contacto', 'pges_estado', 'pges_estado_logico'], 'string', 'max' => 1],
-            [['cser_id'], 'exist', 'skipOnError' => true, 'targetClass' => ConocimientoServicio::className(), 'targetAttribute' => ['cser_id' => 'cser_id']],
             [['econ_id'], 'exist', 'skipOnError' => true, 'targetClass' => EstadoContacto::className(), 'targetAttribute' => ['econ_id' => 'econ_id']],
             [['ccan_id'], 'exist', 'skipOnError' => true, 'targetClass' => ConocimientoCanal::className(), 'targetAttribute' => ['ccan_id' => 'ccan_id']],
         ];
@@ -191,13 +190,6 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
      */
     public function getOportunidads() {
         return $this->hasMany(Oportunidad::className(), ['pges_id' => 'pges_id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getCser() {
-        return $this->hasOne(ConocimientoServicio::className(), ['cser_id' => 'cser_id']);
     }
 
     /**
@@ -829,7 +821,7 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
 
             $filtro .= " OR pges_pasaporte = :pges_pasaporte";
         }
-        if (empty($opcion)) {                        
+        if (empty($opcion)) {
             $sql = "SELECT                    
                     count(*) as registro ";
         } else {
@@ -942,6 +934,7 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
         $con1 = \Yii::$app->db;
         $con2 = \Yii::$app->db_academico;
         $estado = 1;
+        $str_search = "";
         $columnsAdd = "";
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
             $str_search .= "(a.pges_pri_nombre like :search OR ";
@@ -1008,6 +1001,7 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
                         pg.pges_codigo,
                         pg.pges_correo,
                         pg.pges_fecha_creacion,
+                        concat(pe.per_pri_nombre, ' ', pe.per_pri_apellido) as agente,
                         ifnull((select concat(pers.per_pri_nombre, ' ', ifnull(pers.per_pri_apellido,' ')) 
                                   from " . $con1->dbname . ".usuario usu 
                                   inner join " . $con1->dbname . ".persona pers on pers.per_id = usu.per_id
@@ -1021,33 +1015,16 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
                         pg.pges_domicilio_celular2,
                         pg.pges_trabajo_telefono,
                         emp.emp_id,
-                        uaca.uaca_id,
-                        /*
-                        (select 
-                            case  count(ba.bact_id)
-                               when 0 then 1 
-                               when 1 and (ba.eopo_id <> 3) then 1
-                               when 1 and (ba.eopo_id = 3) then 2
-                               when 2 then 2
-                            end as bact_id 
+                        uaca.uaca_id,                        
+                        case when opo.eopo_id >= 3 then 2
+                            when (select ifnull(count(ba.bact_id),0)
                             from db_crm.oportunidad o 
                             inner join db_crm.bitacora_actividades ba on ba.opo_id = o.opo_id
-                            -- inner join db_asgard.usua_grol_eper uge on uge.usu_id = ba.usu_id
-                            where o.pges_id = pg.pges_id                            
+                            inner join db_asgard.usua_grol_eper uge on uge.usu_id = ba.usu_id
+                            where o.pges_id = pg.pges_id
+                                            -- and ba.eopo_id = 3 
                             and o.opo_estado = :estado
-                            and o.opo_estado_logico = :estado
-                            and ba.bact_estado = :estado
-                            and ba.bact_estado_logico = :estado
-                            group by ba.eopo_id) as gestion 
-                        */
-                        case when (select ifnull(count(ba.bact_id),0)
-				from db_crm.oportunidad o 
-				inner join db_crm.bitacora_actividades ba on ba.opo_id = o.opo_id
-				inner join db_asgard.usua_grol_eper uge on uge.usu_id = ba.usu_id
-				where o.pges_id = pg.pges_id
-                                -- and ba.eopo_id = 3 
-				and o.opo_estado = :estado
-				and o.opo_estado_logico = :estado) < 2 then 1 else 2 end as gestion
+                            and o.opo_estado_logico = :estado) < 2 then 1 else 2 end as gestion
                 FROM " . $con->dbname . ".persona_gestion pg
                 INNER JOIN " . $con->dbname . ".estado_contacto ec on ec.econ_id = pg.econ_id
                 INNER JOIN " . $con1->dbname . ".tipo_persona tp on tp.tper_id = pg.tper_id  
@@ -1060,6 +1037,7 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
                 left JOIN " . $con->dbname . ".oportunidad opo on opo.opo_id = max_opor.opo_id                                          
                 left join " . $con1->dbname . ".empresa as emp on emp.emp_id=opo.emp_id
                 left JOIN " . $con2->dbname . ".unidad_academica uaca on uaca.uaca_id = opo.uaca_id
+                left JOIN ". $con1->dbname .".persona pe ON pe.per_id=pg.pges_usuario_ingreso
                 WHERE                           
                         pg.pges_estado = :estado
                         and pg.pges_estado_logico = :estado
@@ -1068,12 +1046,16 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
                         and ec.econ_estado = :estado 
                         and ec.econ_estado_logico = :estado 
                         and cc.ccan_estado = :estado 
-                        and cc.ccan_estado_logico = :estado 
+                        and cc.ccan_estado_logico = :estado                    
                 ) a ";
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
             $sql .= "WHERE $str_search 
                            a.pges_codigo = a.pges_codigo";
         }
+        if (isset($arrFiltro) && count($arrFiltro) == 0) { //Aqui se filtran solo los pendientes de gestionar, si debe borrar el if para q salgan todos
+            $sql .= "WHERE a.gestion < 2";
+        }
+        
         $sql .= " ORDER BY a.pges_fecha_creacion desc";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
@@ -1323,10 +1305,10 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
             //$opo_codigo = Secuencias::nuevaSecuencia($con, 1, 1, 1, 'SOL') ;//
             $opo_codigo = intval($mod_oportunidad->consultarUltimoCodcrm()) + 1;
             $pges_codigo = intval($mod_pergestion->consultarUltimoCodPerGest()) + 1;
-            for ($i = 0; $i < sizeof($Data); $i++) {
+            for ($i = 0; $i < sizeof($Data); $i++) {                 
                 //Verifico si Existe lOS datos en la tabla
                 $pges_id = PersonaGestion::existePersonaGestLeads($Data[$i]['pgest_correo'], $Data[$i]['pgest_numero']);
-                if ($pges_id == 0) {
+                if ($pges_id == 0) {                    
                     //if (!PersonaGestion::existePersonaGestLeads($Data[$i]['correo'], $Data[$i]['telefono'])) {
                     //Si no Existe lo inserta en la Tabla
                     $nombre = $Data[$i]['pgest_nombre'];
@@ -1339,8 +1321,8 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
                     }
 
                     $tper_id = 1; //Por defecto Natural
-                    $econ_id = 1; //=>En Contacto por defecto
-                    $pges_id = PersonaGestion::insertarPersonaGestionLeads($con, $pges_codigo, $tper_id, $nombre, $telefono, $correo, $contacto, $econ_id);
+                    $econ_id = 1; //=>En Contacto por defecto                    
+                    $pges_id = PersonaGestion::insertarPersonaGestionLeads($con, $pges_codigo, $tper_id, $nombre, $telefono, $correo, $contacto, $econ_id);                    
                     $pges_codigo++;
                     if ($pges_id > 0) {
                         //-------------------------------------------
@@ -1386,16 +1368,16 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
                         $padm_id = $agente['agente_id'];
                         //-------------------------------------------
                         //$pgco_id = $mod_oportunidad->insertarPersonaGestionContactoLeads($con, $pges_id,$Data[$i]);                        
-                        $opo_id = $mod_oportunidad->insertarOportunidadLeads($con, $opo_codigo, $emp_id, $pges_id, $padm_id, $Data[$i]);
+                        $opo_id = $mod_oportunidad->insertarOportunidadLeads($con, $opo_codigo, $emp_id, $pges_id, $padm_id, $Data[$i]);                        
                         $opo_codigo++;
-                        if ($opo_id > 0) {
-                            \app\models\Utilities::putMessageLogFile('antes de insertar actividad');
-                            $bact_id = $mod_oportunidad->insertarActividadLeads($con, $opo_id, $padm_id, $Data[$i]['pgest_comentario']);
+                        if ($opo_id > 0) {                            
+                            $bact_id = $mod_oportunidad->insertarActividadLeads($con, $opo_id, $padm_id, $Data[$i]['pgest_comentario']);                            
                         }
                     }
                 } else {
                     //Si existen en gestion Persona 
                     //$rawData[] = $Data[$i]['pgest_nombre'].'-'.$Data[$i]['pgest_correo'].'<br/>';                    
+                    \app\models\Utilities::putMessageLogFile('Contacto existente:'. $Data[$i]['pgest_correo']);   
                     $mensError .= 'Nombre: ' . $Data[$i]['pgest_nombre'] . ' - ' . $Data[$i]['pgest_correo'] . '<br/>';
                     $contError++;
                 }
@@ -2079,17 +2061,18 @@ class PersonaGestion extends \app\modules\admision\components\CActiveRecord {
      */
     public static function existePersonaGestion($correo, $numero) {
         //pgest_nombre,pgest_numero,pgest_correo 
-        $con = \Yii::$app->db_crm;            
+        $con = \Yii::$app->db_crm;
         $sql = "SELECT pges_id Ids
                     FROM " . $con->dbname . ".persona_gestion  
                 WHERE pges_estado_logico=1 AND (pges_correo=:pges_correo OR pges_celular=:pges_celular)";
-                
+
         $comando = $con->createCommand($sql);
         $comando->bindParam(":pges_correo", $correo, \PDO::PARAM_STR);
-        $comando->bindParam(":pges_celular", $numero, \PDO::PARAM_STR);      
+        $comando->bindParam(":pges_celular", $numero, \PDO::PARAM_STR);
         $rawData = $comando->queryScalar();
-        if ($rawData === false)        
+        if ($rawData === false)
             return 0;
         return $rawData; //Si Existe en la Tabla
     }
+
 }

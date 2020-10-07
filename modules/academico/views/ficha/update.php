@@ -241,7 +241,7 @@ if (base64_decode($_GET['mat']) > 0) {
             <div class="form-group">
                 <label for="cmb_tipo_sangre" class="col-sm-5 control-label"><?= Yii::t("formulario", "Blood Type") ?><span class="text-danger">*</span></label>
                 <div class="col-sm-7">
-                    <?= Html::dropDownList("cmb_tipo_sangre", $tsan_id, $tipos_sangre, ["class" => "form-control", "id" => "cmb_tipo_sangre"]) ?>
+                    <?= Html::dropDownList("cmb_tipo_sangre", $respPerinteresado['tsan_id'], $tipos_sangre, ["class" => "form-control", "id" => "cmb_tipo_sangre"]) ?>
                 </div>
             </div>
         </div>

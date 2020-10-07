@@ -52,20 +52,30 @@ use app\modules\admision\Module;
                 'value' => 'des_modalidad',
             ],
             [
+                'attribute' => 'agente',
+                'header' => Yii::t("formulario", "User login"),
+                'value' => 'agente',
+            ],
+            [
                 'attribute' => 'Estado Oportunidad',
                 'header' => Yii::t("formulario", "Status"),
                 'value' => 'des_estado',
             ],
             [
                 'attribute' => 'Fecha',
-                'header' => Yii::t("formulario", "Date"),
-                'value' => 'fecha',
+                'header' => Yii::t("formulario", "Registration Date"),
+                'value' => 'fecha_registro',
             ],
             [
+                'attribute' => 'Fecha',
+                'header' => Yii::t("formulario", "Date Next attention"),
+                'value' => 'fecha_proxima',
+            ],
+            /*[
                 'attribute' => 'Agente',
                 'header' => Yii::t("formulario", "Agent"),
                 'value' => 'padm_codigo',
-            ],
+            ],*/
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => Yii::t("formulario", "Actions"),
@@ -77,9 +87,9 @@ use app\modules\admision\Module;
                     'activities' => function ($url, $model) {
                         return Html::a('<span class="glyphicon glyphicon-th-large"></span>', Url::to(['actividades/listaractividadxoportunidad', 'opor_id' => base64_encode($model["opo_id"]), 'pges_id' => base64_encode($model["pges_id"])]), ["data-toggle" => "tooltip", "title" => "Ver Actividades", "data-pjax" => 0]);
                     },
-                    'reasigna' => function ($url, $model) {
+                    /*'reasigna' => function ($url, $model) {
                         return Html::a('<span class="glyphicon glyphicon-random"></span>', Url::to(['/admision/agentes/reasignagente', 'opor_id' => base64_encode($model['opo_id'])]), ["data-toggle" => "tooltip", "title" => "Re-Asignar Agente", "data-pjax" => 0]);
-                    },
+                    },*/
                 ],
             ],
         ],

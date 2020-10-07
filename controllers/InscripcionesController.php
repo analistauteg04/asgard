@@ -224,7 +224,7 @@ class InscripcionesController extends \yii\web\Controller {
             $econ_id = $conestcontacto[0]["id"];
             $tipo_persona = $mod_persona->consultarTipoPersona('Natural');
             //$tipo_persona = 1; // 1 persona natural // hacer funcion que traIGa id 
-            $empresa = "";
+            $empresa = ucfirst(mb_strtolower($data["empresa"],'UTF-8')); 
             $telefono_empresa = null;
             $direccion = null;
             $cargo = null;
@@ -304,7 +304,7 @@ class InscripcionesController extends \yii\web\Controller {
                 if ($cons_persona["registro"] == 0 || $busqueda == 0) {
                     $resp_consulta = $mod_pergestion->consultarMaxPergest();
                     $pges_codigo = $resp_consulta["maximo"];
-                    $resp_persona = $mod_pergestion->insertarPersonaGestion($pges_codigo, $tipo_persona, $conoce_uteg, $carrera, $nombre1, $nombre2, $apellido1, $apellido2, $cedula, null, $pasaporte, null, null, null, null, $pais, $provincia, $ciudad, null, null, $celular, $correo, null, null, null, null, null, null, null, $telefono, $celular2, null, null, null, null, null, null, null, null, null, null, $econ_id, $medio, $empresa, $contacto_empresa, $numero_contacto, $telefono_empresa, $direccion, $cargo, $usuario);
+                    $resp_persona = $mod_pergestion->insertarPersonaGestion($pges_codigo, $tipo_persona, $conoce_uteg, $carrera, $nombre1, $nombre2, $apellido1, $apellido2, $cedula, null, $pasaporte, null, null, null, null, $pais, $provincia, $ciudad, null, null, $celular, $correo, null, null, null, null, null, null, null, $telefono, $celular2, null, null, null, $empresa, null, null, null, null, null, null, $econ_id, $medio, null, $contacto_empresa, $numero_contacto, $telefono_empresa, $direccion, $cargo, $usuario);
                     if ($resp_persona) {
                         //$res_gescontacto = $mod_pergestion->insertarPersGestionContac($resp_persona, $nombres, $correo, $telefono, $celular, $pais);
                         //if ($res_gescontacto) {

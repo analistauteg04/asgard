@@ -191,4 +191,38 @@ class DetalleDescuentoItem extends \app\modules\financiero\components\CActiveRec
         $resultData = $comando->queryOne();
         return $resultData;
     }
+    
+    /**
+     * Function consultarDescuentoXitem
+     * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
+     * @param   
+     * @return  $resultData (Para obtener el id del detalle de descuento, filtrando por nivel de interés,
+     *                       modalidad e item. Es para los casos en que la unidad acadèmica es diferente de
+     *                       grado y posgrado)
+     */
+    public function consultarDescuentoXitemUnidad($uaca_id, $mod_id, $ite_id) {        
+        $con = \Yii::$app->db_facturacion;        
+        $estado = 1;                 
+            $sql = "SELECT d.ddit_id as id, d.ddit_descripcion as name
+                    FROM  " . $con->dbname . ".item_metodo_unidad a inner join " . $con->dbname . ".descuento_item b on b.ite_id = a.ite_id
+                          inner join " . $con->dbname . ".detalle_descuento_item d on d.dite_id = b.dite_id
+                    WHERE a.uaca_id = :uaca_id
+                          and a.mod_id = :mod_id	  
+                          and a.ite_id = :ite_id
+                          and d.ddit_estado_descuento = 'A'
+                          and now() between d.ddit_finicio and ifnull(d.ddit_ffin, now())  
+                          and a.imni_estado = :estado
+                          and a.imni_estado_logico = :estado
+                          and b.dite_estado = :estado
+                          and b.dite_estado_logico = :estado
+                          and d.ddit_estado = :estado
+                          and d.ddit_estado_logico = :estado";                   
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":uaca_id", $uaca_id, \PDO::PARAM_INT);        
+        $comando->bindParam(":mod_id", $mod_id, \PDO::PARAM_INT);        
+        $comando->bindParam(":ite_id", $ite_id, \PDO::PARAM_INT);
+        $resultData = $comando->queryAll();
+        return $resultData;                
+    }
 }

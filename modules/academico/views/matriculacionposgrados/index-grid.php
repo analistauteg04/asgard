@@ -66,7 +66,7 @@ academico::registerTranslations();
                 'template' => '{view} {paralelo}', //        
                 'buttons' => [
                     'view' => function ($url, $model) {
-                        return Html::a('<span class="glyphicon glyphicon-list-alt"></span>', Url::to(['/academico/matriculacionposgrados/viewpromocion', 'ids' => base64_encode($model['id'])]), ["data-toggle" => "tooltip", "title" => "Ver Programación", "data-pjax" => 0]);
+                        return Html::a('<span class="glyphicon glyphicon-list-alt"></span>', Url::to(['/academico/matriculacionposgrados/viewpromocion', 'ids' => base64_encode($model['id'])]), ["data-toggle" => "tooltip", "title" => "Ver Promoción", "data-pjax" => 0]);
                     },
                     'paralelo' => function ($url, $model) {
                         return Html::a('<span class="glyphicon glyphicon-list"></span>', Url::to(['/academico/matriculacionposgrados/indexparalelo', 'ids' => base64_encode($model['id'])]), ["data-toggle" => "tooltip", "title" => "Ver Paralelos", "data-pjax" => 0]);

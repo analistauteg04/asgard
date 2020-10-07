@@ -85,14 +85,14 @@ $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
+                <!-- <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
                     <div class="form-group">                
                         <label for="cmb_periodo" class="col-sm-4 col-md-4 col-xs-4 col-lg-4 control-label"><?= Yii::t("formulario", "Period"); ?> <span class="text-danger"></span></label>
                         <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                            <?= Html::dropDownList("cmb_periodo", 0, $arr_periodo, ["class" => "form-control", "id" => "cmb_periodo"]) ?>                        
+                            <? Html::dropDownList("cmb_periodo", 0, $arr_periodo, ["class" => "form-control", "id" => "cmb_periodo"]) ?>                        
                         </div>
                     </div>
-                </div>
+                </div>-->
             </div>
             <div class="col-md-12 col-xs-12 col-lg-12 col-sm-12">
                 <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">

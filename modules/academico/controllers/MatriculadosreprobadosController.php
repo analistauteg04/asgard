@@ -290,7 +290,7 @@ class MatriculadosreprobadosController extends \app\components\CController {
                 return;
             }
         }
-        $arrperiodo = $mod_periodo->consultarPeriodo();
+        //$arrperiodo = $mod_periodo->consultarPeriodo();
         $arradmitido = $mod_admitido->getMatriculados(0);
         $arr_ninteres = $mod_unidad->consultarUnidadAcademicasEmpresa(1);
         $arr_modalidad = $mod_modalidad->consultarModalidad($arr_ninteres[0]["id"], 1);
@@ -301,7 +301,7 @@ class MatriculadosreprobadosController extends \app\components\CController {
                     'arr_carrerra1' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arr_carrerra1), "id", "name"),
                     'arr_modalidad' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arr_modalidad), "id", "name"),
                     'arr_ninteres' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arr_ninteres), "id", "name"),
-                    'arr_periodo' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arrperiodo), "id", "name"),
+                    /*'arr_periodo' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arrperiodo), "id", "name"),*/
                     'arr_estado_aprobacion' => ArrayHelper::map([["id" => "0", "name" => "Aprobado"]], "id", "name"),
                     'arr_materia' => $arr_materia,
         ]);
@@ -566,7 +566,7 @@ class MatriculadosreprobadosController extends \app\components\CController {
         header("Content-Type: $content_type");
         header("Content-Disposition: attachment;filename=" . $nombarch);
         header('Cache-Control: max-age=0');
-        $colPosition = array("C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P");
+        $colPosition = array("C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O");
         $arrHeader = array(
             Yii::t("formulario", "DNI 1"),
             Yii::t("formulario", "First Names"),
@@ -576,8 +576,7 @@ class MatriculadosreprobadosController extends \app\components\CController {
             Yii::t("formulario", "Email"),
             Yii::t("formulario", "CellPhone"),
             Yii::t("formulario", "Academic unit"),
-            Yii::t("formulario", "Mode"),
-            academico::t("Academico", "Month Process"),
+            Yii::t("formulario", "Mode"),        
             academico::t("Academico", "Career/Program"),
             admision::t("Solicitudes", "Income Method"),
             Yii::t("formulario", "Subject"),
@@ -615,8 +614,7 @@ class MatriculadosreprobadosController extends \app\components\CController {
             Yii::t("formulario", "Email"),
             Yii::t("formulario", "CellPhone"),
             Yii::t("formulario", "Academic unit"),
-            Yii::t("formulario", "Mode"),
-            academico::t("Academico", "Month Process"),
+            Yii::t("formulario", "Mode"),          
             academico::t("Academico", "Career/Program"),
             admision::t("Solicitudes", "Income Method"),
             Yii::t("formulario", "Subject"),

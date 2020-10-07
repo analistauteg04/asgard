@@ -110,6 +110,8 @@ use yii\helpers\Html;
                         'cgen_direccion' => $respContGeneral['direccion'],
                         'per_foto' => $respPersona['per_foto'],
                         'otraetnia' => $respotraetnia['oetn_nombre'],
+                        "widthImg" => $widthImg,
+                        "heightImg" => $heightImg,
                     ]);
                     ?>
                 </form>

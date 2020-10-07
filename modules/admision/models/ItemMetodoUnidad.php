@@ -96,14 +96,14 @@ class ItemMetodoUnidad extends \yii\db\ActiveRecord
     public function consultarXitemMetniv($nint_id, $mod_id, $ming_id, $empresa_id, $carrera_id) {        
         $con = \Yii::$app->db_facturacion;        
         $estado = 1;
-        if ($empresa_id == 1) {
+        if ($empresa_id == 1) {            
             $sql = "SELECT ite_id 
                     FROM  " . $con->dbname . ".item_metodo_unidad
                     WHERE uaca_id = :nint_id
                           and mod_id = :mod_id
                           and ming_id = :ming_id
                           and imni_estado = :estado
-                          and imni_estado_logico = :estado"; 
+                          and imni_estado_logico = :estado";            
         } else {
             $sql = "SELECT ite_id 
                     FROM  " . $con->dbname . ".item_metodo_unidad
@@ -133,10 +133,10 @@ class ItemMetodoUnidad extends \yii\db\ActiveRecord
      * @return  $resultData (Para obtener el id del item, filtrando por nivel de interés,
      *                       modalidad, método de ingreso y carrera.)
      */
-    public function consultarXitemPrecio($nint_id, $mod_id, $ming_id, $eaca_id, $empresa_id) {        
+    public function consultarXitemPrecio($nint_id, $mod_id, $ming_id, $eaca_id) {        
         $con = \Yii::$app->db_facturacion;        
         $estado = 1;
-        if ($empresa_id == 1) {
+        if ($nint_id ==1 or $nint_id ==2) {
             $sql = "SELECT i.ite_id id, i.ite_nombre name
                     FROM  " . $con->dbname . ".item_metodo_unidad imu inner "
                             . "join " . $con->dbname . ".item i on imu.ite_id = i.ite_id
@@ -167,5 +167,5 @@ class ItemMetodoUnidad extends \yii\db\ActiveRecord
         $comando->bindParam(":mod_id", $mod_id, \PDO::PARAM_INT);        
         $resultData = $comando->queryAll();
         return $resultData;                
-    }
+    }         
 }

@@ -54,17 +54,25 @@ class ExportFile {
     public $footer = TRUE;
     public $typeExport = ""; // OUTPUT_TO_DOWNLOAD, INLINE, DOWNLOAD, FILE, STRING_RETURN
     public $reportName = "";
+    public $fontDir = "";
+    public $fontdata = array(); // example $fontdata["gothambook"] = ['R' => 'GothamBook.ttf'];
 
     function __construct() {
         ini_set("pcre.backtrack_limit", "5000000"); //aumento de memoria para generacion de reportes
         if ($this->reportName == "")
             $this->reportName = 'Reporte_' . date("Ymdhis");
-        if ($this->typeExport = "")
+        if ($this->typeExport == "")
             $this->typeExport = self::OUTPUT_TO_DOWNLOAD;
     }
 
     function createReportPdf($content) {
         //error_reporting(E_ERROR); // Se activa esta variable de config para evitar mostrar warnings y solo mostrar mensajes de error.
+        $defaultConfig = (new \Mpdf\Config\ConfigVariables())->getDefaults();
+        $fontDirs = $defaultConfig['fontDir'];
+
+        $defaultFontConfig = (new \Mpdf\Config\FontVariables())->getDefaults();
+        $fontData = $defaultFontConfig['fontdata'];
+
         $this->mpdf = new Mpdf([
                 "mode"   => $this->mode, 
                 "format" => $this->format, 
@@ -76,7 +84,12 @@ class ExportFile {
                 "margin_bottom" => $this->mgb, 
                 "margin_header" => $this->mgh, 
                 "margin_footer" => $this->mgf, 
-                "orientation"   => $this->orientation]);
+                "orientation"   => $this->orientation,
+                "fontDir" => (($this->fontDir != "")?(array_merge($fontDirs, [$this->fontDir])):$fontDirs),
+                "fontdata" => ((isset($this->fontdata) && $this->fontdata != "")?($fontData + $this->fontdata):$fontData),
+        ]);
+        
+        //Utilities::putMessageLogFile($this->mpdf->fontFileFinder->findFontFile());
         if ($this->footer)
             $this->mpdf->SetHTMLFooter("<div class='footer' style='font-size: 10px;'><div style='float: left; width: 50%;'>Pag: {PAGENO}</div><div style='float: left;width: 50%;text-align: right;'>Hora: " . date("H:i") . "</div></div>");
         $this->mpdf->WriteHTML($content);
