@@ -80,11 +80,11 @@ class Reporte extends \yii\db\ActiveRecord {
             }
         }
         $sql = "
-                SELECT  LPAD(op.opo_codigo,9,'0') Codigo,
+               SELECT  LPAD(op.opo_codigo,9,'0') Codigo,
                         date_format(bact.bact_fecha_registro, '%Y-%m-%d') F_Atencion,
                         date_format(bact.bact_fecha_registro, '%H:%i') H_Atencion,
-                        date_format(bact.bact_fecha_proxima_atencion, '%Y-%m-%d') F_Prox_At,
-                        date_format(bact.bact_fecha_proxima_atencion, '%H:%i') H_Prox_At,
+                        date_format(ifnull(bact.bact_fecha_proxima_atencion, ' '), '%Y-%m-%d') F_Prox_At,
+                        date_format(ifnull(bact.bact_fecha_proxima_atencion, ' '), '%H:%i') H_Prox_At,
                         emp.emp_razon_social,
                         pg.pges_cedula,
                         CONCAT(ifnull(pg.pges_pri_nombre,''), ' ', ifnull(pg.pges_seg_nombre,''), ' ', ifnull(pg.pges_pri_apellido,''), ' ', ifnull(pg.pges_seg_apellido,'')) Nombres_Completos,                        	

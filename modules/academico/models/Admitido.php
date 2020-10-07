@@ -546,7 +546,7 @@ class Admitido extends \yii\db\ActiveRecord {
                         admi.adm_id,                                               
                        (case when sins_beca = 1 then 'ICF' else 'No Aplica' end) as beca,                       
                         sins.emp_id,
-                        (select count(*) from " . $con1->dbname . ".pagos_contrato_programa pcp where pcp.adm_id = admi.adm_id and pcp.pcpr_estado = :estado and pcp.pcpr_estado_logico = :estado) as documento,
+                        /*(select count(*) from " . $con1->dbname . ".pagos_contrato_programa pcp where pcp.adm_id = admi.adm_id and pcp.pcpr_estado = :estado and pcp.pcpr_estado_logico = :estado) as documento,*/
                         (case when ifnull(mpi.mpin_id,0) > 0  then 'MAT_SI' else 'MAT_NO' end) as matriculado
                    FROM " . $con->dbname . ".admitido admi INNER JOIN " . $con->dbname . ".solicitud_inscripcion sins on sins.sins_id = admi.sins_id                 
                      INNER JOIN " . $con->dbname . ".interesado inte on sins.int_id = inte.int_id 
