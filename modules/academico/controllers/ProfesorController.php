@@ -305,6 +305,7 @@ class ProfesorController extends \app\components\CController {
             }
 
             $persona_model = Persona::findOne($id);
+            Utilities::putMessageLogFile('id:' . $id);
             $usuario_model = Usuario::findOne(["per_id" => $id, "usu_estado" => '1', "usu_estado_logico" => '1']);
             $empresa_persona_model = EmpresaPersona::findOne(["per_id" => $id, "eper_estado" => '1', "eper_estado_logico" => '1']);
             $email = (isset($persona_model->per_correo) && $persona_model->per_correo != "") ? ($persona_model->per_correo) : ($usuario_model->usu_user);
@@ -332,7 +333,7 @@ class ProfesorController extends \app\components\CController {
              * Inf. Domicilio
              */
             $arr_pais = Pais::findAll(["pai_estado" => 1, "pai_estado_logico" => 1]);
-
+            Utilities::putMessageLogFile('pais:' . $persona_model->pai_id_domicilio);
             $arr_pro = Provincia::findAll(["pai_id" => $persona_model->pai_id_domicilio, "pro_estado" => 1, "pro_estado_logico" => 1]);
 
             $arr_can = Canton::findAll(["pro_id" => $persona_model->pro_id_domicilio, "can_estado" => 1, "can_estado_logico" => 1]);
@@ -566,7 +567,7 @@ class ProfesorController extends \app\components\CController {
 
 
         $arr_inst_level = NivelInstruccion::findAll(["nins_estado" => 1, "nins_estado_logico" => 1]);
-        ;
+        
         $NewFormTab4 = $this->renderPartial('NewFormTab4', [
             'model' => new ArrayDataProvider(array()),
             'arr_inst_level' => (empty(ArrayHelper::map($arr_inst_level, "nins_id", "nins_nombre"))) ? array(Academico::t("profesor", "-- Select Instruction Level --")) : (ArrayHelper::map($arr_inst_level, "nins_id", "nins_nombre")),
