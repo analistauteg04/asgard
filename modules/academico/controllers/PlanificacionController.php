@@ -531,7 +531,7 @@ class PlanificacionController extends \app\components\CController {
         $unidad_acad_data = $uni_aca_model->consultarUnidadAcademicas();
         $modalidad_data = $modalidad_model->consultarModalidad($unidad_acad_data[0]["id"], $emp_id);
         $academic_study_data = $modcanal->consultarCarreraModalidad($unidad_acad_data[0]["id"], $mod_cabecera["mod_id"]);
-        $mod_detalle = $mod_periodo->consultarDetalleplanifica($pla_id, $per_id);
+        $mod_detalle = $mod_periodo->consultarDetalleplanifica($pla_id, $per_id, false);
         return $this->render('view', [
                     'arr_cabecera' => $mod_cabecera,
                     'model_detalle' => $mod_detalle,
@@ -599,12 +599,12 @@ class PlanificacionController extends \app\components\CController {
         $unidad_acad_data = $uni_aca_model->consultarUnidadAcademicas();
         $modalidad_data = $modalidad_model->consultarModalidad($unidad_acad_data[0]["id"], $emp_id);
         $academic_study_data = $modcanal->consultarCarreraModalidad($unidad_acad_data[0]["id"], $mod_cabecera["mod_id"]);
-        $mod_detalle = $mod_periodo->consultarDetalleplanifica($pla_id, $per_id);
+        $mod_detalle = $mod_periodo->consultarDetalleplanifica($pla_id, $per_id, false);
         $jornada = $mod_jornada->consultarJornadahorario();
         return $this->render('edit', [
                     'arr_cabecera' => $mod_cabecera,
                     'model_detalle' => $mod_detalle,
-                    'arr_unidad' => ArrayHelper::map($unidad_acad_data, "id", "name"),
+                    'arr_unidad' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Seleccionar"]], $unidad_acad_data), "id", "name"),
                     'arr_modalidad' => ArrayHelper::map($modalidad_data, "id", "name"),
                     'arr_carrera' => ArrayHelper::map($academic_study_data, "id", "name"),
                     'arr_periodo' => ArrayHelper::map($periodo, "id", "name"),

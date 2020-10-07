@@ -626,7 +626,7 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord {
      * @param   
      * @return  $resultData (información de los paralelos por período.)
      */
-    public function consultarDetalleplanifica($pla_id, $per_id) {
+    public function consultarDetalleplanifica($pla_id, $per_id, $onlyData = false) {
         $con = \Yii::$app->db_academico;
         // Bloque 1
         for ($i = 1; $i < 7; $i++) {
@@ -650,10 +650,10 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord {
                             WHEN 2 THEN 'Nocturno'  
                             WHEN 3 THEN 'Semipresencial'
                             WHEN 4 THEN 'Distancia'
-		    END AS pes_jornada, 'Bloque 1', moda.mod_nombre as modalidad, 'Hora " . $j . "' 
+		    END AS pes_jornada, 'Bloque 2', moda.mod_nombre as modalidad, 'Hora " . $j . "' 
                     FROM " . $con->dbname . ".planificacion_estudiante ples
                     INNER JOIN " . $con->dbname . ".modalidad moda ON  moda.mod_id = ples.pes_mod_b2_h" . $j . "
-                    INNER JOIN " . $con->dbname . ".malla_academica_detalle mad ON  mad.made_codigo_asignatura = pes_mat_b1_h" . $j . "_cod
+                    INNER JOIN " . $con->dbname . ".malla_academica_detalle mad ON  mad.made_codigo_asignatura = pes_mat_b2_h" . $j . "_cod
                     INNER JOIN " . $con->dbname . ".asignatura asig ON  asig.asi_id = mad.asi_id
                     where pla_id = " . $pla_id . " and per_id = " . $per_id . " ";
             if ($j < 6) {
@@ -674,7 +674,11 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord {
                 'attributes' => [],
             ],
         ]);
-        return $dataProvider;
+        if ($onlyData) {
+            return $resultData;
+        } else {
+            return $dataProvider;
+        }
     }
 
     /**
@@ -720,10 +724,19 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord {
         if (!empty($bloque) && !empty($hora)) {
             $modificar = "pes_mat_b" . $bloque . "_h" . $hora . "_cod = null,
                       pes_mod_b" . $bloque . "_h" . $hora . " = null,
-                      pes_mat_b" . $bloque . "_h" . $hora . "_nombre = null,
-        ";
+                      pes_mat_b" . $bloque . "_h" . $hora . "_nombre = null,";
         }
+        $este = "UPDATE db_academico.planificacion_estudiante		       
+                      SET
+                          $modificar
+                          pes_usuario_modifica = $pes_usuario_modifica,
+                          pes_fecha_modificacion = $pes_fecha_modificacion                          
+                      WHERE 
+                        pes_estado= 1 AND pla_id = $pla_id AND per_id = $per_id";
         \app\models\Utilities::putMessageLogFile('asdasfdg ' . $modificar);
+        \app\models\Utilities::putMessageLogFile('cvxcv ' . $este);
+        \app\models\Utilities::putMessageLogFile('qaaaa ' . $hora);
+        \app\models\Utilities::putMessageLogFile('xxxx ' . $bloque);
         try {
             $comando = $con->createCommand
                     ("UPDATE " . $con->dbname . ".planificacion_estudiante		       
