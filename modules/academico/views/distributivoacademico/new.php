@@ -75,61 +75,36 @@ academico::registerTranslations();
         <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
             <div class="form-group">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center">
-                    <button type="button" class="btn btn-primary" onclick="javascript:addAsignacion()"><?= Academico::t('profesor', 'Add') ?></button>
+                    <button type="button" class="btn btn-primary" onclick="javascript:addAsignacion('new')"><?= Academico::t('profesor', 'Add') ?></button>
                 </div>
             </div>
         </div>
     </div>
     
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-        <div class="">
-<?=
-    PbGridView::widget([
-        'id' => 'grid_asignacion_list',        
-        'dataProvider' => $model,        
-        'pajax' => true,
-        'summary' => false,
-        'columns' => [          
-            [
-                'attribute' => 'Tipo Asignación',
-                'header' => academico::t("Academico", "Assignment Type"),
-                'value' => 'des_tipo',
-            ],
-            [
-                'attribute' => 'Asignatura',
-                'header' => academico::t("Academico", "Subject"),
-                'value' => 'asi_nombre',
-            ],
-            [
-                'attribute' => 'Unidad Académica',
-                'header' => academico::t("Academico", "Academic unit"),
-                'value' => 'uaca_nombre',
-            ],
-            [
-                'attribute' => 'Modalidad',
-                'header' => academico::t("Academico", "Modality"),
-                'value' => 'mod_nombre',
-            ],
-            [
-                'attribute' => 'Horario',
-                'header' => academico::t("Academico", "Schedule"),
-                'value' => 'daho_horario',
-            ],            
-            [
-                'class' => 'yii\grid\ActionColumn',
-                //'header' => 'Action',
-                'contentOptions' => ['style' => 'text-align: center;'],
-                'headerOptions' => ['width' => '60'],
-                'template' => '{delete}',
-                'buttons' => [
-                    'delete' => function ($url, $model) {
-                         return Html::a('<span class="'.Utilities::getIcon('remove').'"></span>', null, ['href' => 'javascript:confirmDelete(\'deleteItem\',[\'' . $model['per_id'] . '\']);', "data-toggle" => "tooltip", "title" => Yii::t("accion","Delete")]);
-                    },
-                ],
-            ],
-        ],
-    ])
-?>
+        <div class="form-group">
+            <div class="box-body table-responsive no-padding">
+                <table  id="TbG_Data" class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th style="display:none; border:none;"><?= Yii::t("formulario", "Indice") ?></th>
+                            <th style="display:none; border:none;"><?= Yii::t("formulario", "Ids") ?></th>
+                            <th><?= academico::t("Academico", "Assignment Type") ?></th>
+                            <th><?= academico::t("Academico", "Subject") ?></th>
+                            <th><?= academico::t("Academico", "Academic unit") ?></th>                            
+                            <th style="display:none; border:none;"></th>
+                            <th><?= academico::t("Academico", "Modality") ?></th> 
+                            <th style="display:none; border:none;"></th>
+                            <th><?= academico::t("Academico", "Schedule") ?></th>                             
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
+        
 </form>

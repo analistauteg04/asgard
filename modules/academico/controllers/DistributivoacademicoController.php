@@ -114,13 +114,45 @@ class DistributivoacademicoController extends \app\components\CController {
         $distributivo_model = new DistributivoAcademico();
         $mod_periodoActual = new PeriodoAcademico();
         
+        if (Yii::$app->request->isAjax) {            
+            $data = Yii::$app->request->post();
+            if (isset($data["getmodalidad"])) {
+                $modalidad = $mod_modalidad->consultarModalidad($data["uaca_id"], $emp_id);
+                $message = array("modalidad" => $modalidad);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+            }
+            if(isset($data["getperiodo"])){
+                $periodo = $mod_periodo->getPeriodos_x_modalidad($data["mod_id"]);
+                $message = array("periodo" => $periodo);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+            }
+            if(isset($data["getjornada"])){                
+                $jornada = $distributivo_model->getJornadasByUnidadAcad($data["uaca_id"], $data["mod_id"]);
+                $message = array("jornada" => $jornada);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+            }
+            if(isset($data["gethorario"])){
+                $horario = $distributivo_model->getHorariosByUnidadAcad($data["uaca_id"], $data["mod_id"], $data['jornada_id']);
+                $message = array("horario" => $horario);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+            }
+            if(isset($data["getasignatura"])){
+                \app\models\Utilities::putMessageLogFile('periodo:'.$data["periodo_id"]);
+                \app\models\Utilities::putMessageLogFile('jornada:'.$data["jornada_id"]);
+                $asignatura = $mod_asignatura->getAsignatura_x_bloque_x_planif($data["periodo_id"], $data["jornada_id"]);
+                $message = array("asignatura" => $asignatura);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+            }
+        }
+        
         $arr_periodoActual = $mod_periodoActual->getPeriodoAcademicoActual();
         $arr_profesor = $mod_profesor->getProfesores();        
         $arr_unidad = $mod_unidad->consultarUnidadAcademicasEmpresa($emp_id);
         $arr_modalidad = $mod_modalidad->consultarModalidad($arr_unidad[0]["id"], $emp_id);
+        \app\models\Utilities::putMessageLogFile('modalidad:'.$arr_modalidad[0]["id"]);
         $arr_periodo = $mod_periodo->getPeriodos_x_modalidad($arr_modalidad[0]["id"]);
-        $arr_jornada = $distributivo_model->getJornadasByUnidadAcad($arr_unidad[0]["id"], $arr_modalidad[0]["id"]);        
-        $arr_asignatura = $mod_asignatura->getAsignatura_x_bloque_x_planif($arr_periodo[0]["id"]);
+        $arr_jornada = $distributivo_model->getJornadasByUnidadAcad($arr_unidad[0]["id"], $arr_modalidad[0]["id"]);           
+        $arr_asignatura = $mod_asignatura->getAsignatura_x_bloque_x_planif($arr_periodo[0]["id"],"N");
         $arr_horario = $distributivo_model->getHorariosByUnidadAcad($arr_unidad[0]["id"], $arr_modalidad[0]["id"], $arr_jornada[0]["id"]);
         $model = $distributivo_model->getDistribAcadXprofesorXperiodo(0,0);
         return $this->render('new', [
@@ -138,7 +170,7 @@ class DistributivoacademicoController extends \app\components\CController {
         ]);
     }
 
-    public function actionSave() {
+  public function actionSave() {
         $usu_id = @Yii::$app->session->get("PB_iduser");
         $fecha_transaccion = date(Yii::$app->params["dateTimeByDefault"]);
         $distributivo_model = new DistributivoAcademico();
@@ -172,6 +204,29 @@ class DistributivoacademicoController extends \app\components\CController {
                 $distributivo_model->daca_estado_logico = '1';
                 $distributivo_model->daca_estado = '1';
                 $distributivo_model->daca_usuario_ingreso = $usu_id;
+    
+                $arr_docencia = (isset($data["grid_docencia_list"]) && $data["grid_docencia_list"] != "") ? $data["grid_docencia_list"] : NULL;
+    
+                /** Se agregan Informacion de Expediente * */                     
+                    if (isset($arr_docencia)) {
+                        foreach ($arr_docencia as $key1 => $value1) {
+                            if ($value1[6] == "N") {
+                                $docencia_model = new ProfesorExpDoc();
+                                $docencia_model->ins_id = $value1[1];
+                                $docencia_model->pedo_fecha_inicio = $value1[2];
+                                $docencia_model->pedo_fecha_fin = $value1[3];
+                                $docencia_model->pedo_denominacion = ucwords($value1[4]);
+                                $docencia_model->pedo_asignaturas = ucwords($value1[5]);
+                                $docencia_model->pro_id = $profesor_model->pro_id;
+                                $docencia_model->pedo_estado = '1';
+                                $docencia_model->pedo_estado_logico = '1';
+                                $docencia_model->pedo_usuario_ingreso = $user_ingresa;
+                                $docencia_model->save();
+                            }
+                        }
+                    }                       
+ 
+    
                 if ($distributivo_model->save()) {
                     $message = array(
                         "wtmessage" => Yii::t("notificaciones", "Your information was successfully saved."),
@@ -190,7 +245,7 @@ class DistributivoacademicoController extends \app\components\CController {
             }
         }
     }
-
+    
     public function actionView($id) {
         $emp_id = @Yii::$app->session->get("PB_idempresa");
         $mod_modalidad = new Modalidad();
@@ -419,4 +474,33 @@ class DistributivoacademicoController extends \app\components\CController {
         $report->mpdf->Output('Reporte_' . date("Ymdhis") . ".pdf", ExportFile::OUTPUT_TO_DOWNLOAD);
     }
 
+    public function actionEliminaritems() {
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+            $user = Yii::$app->session->get("PB_iduser");
+            $id = $data["codigo_id"];
+            $tabla = $data["tabla_id"];
+            try {
+                if ($tabla == 1) {
+                    $instruccion_model = ProfesorInstruccion::findOne(["pins_id" => $id]);
+                    $instruccion_model->pins_estado_logico = '0';
+                    $instruccion_model->pins_fecha_modificacion = date(Yii::$app->params["dateTimeByDefault"]);
+                    $instruccion_model->pins_usuario_modifica = $user;
+                    $instruccion_model->update();
+                }
+               
+                $message = array(
+                    "wtmessage" => Yii::t("notificaciones", "Your information was successfully saved."),
+                    "title" => Yii::t('jslang', 'Success'),
+                );
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+            } catch (Exception $ex) {
+                $message = array(
+                    "wtmessage" => Yii::t('notificaciones', 'Your information has not been saved. Please try again.'),
+                    "title" => Yii::t('jslang', 'Error'),
+                );
+                return Utilities::ajaxResponse('NOOK', 'alert', Yii::t('jslang', 'Error'), 'true', $message);
+            }
+        }
+    }
 }
