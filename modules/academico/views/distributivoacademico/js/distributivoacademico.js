@@ -195,28 +195,26 @@ function update() {
 function save() {
     var link = $('#txth_base').val() + "/academico/distributivoacademico/save";
     var arrParams = new Object();
-    arrParams.profesor = $('#cmb_profesor').val();
-    arrParams.unidad = $('#cmb_unidad_dis').val();
-    arrParams.modalidad = $('#cmb_modalidad').val();
-    arrParams.periodo = $('#cmb_periodo').val();
-    arrParams.jornada = $('#cmb_jornada').val();
-    arrParams.materia = $('#cmb_materia').val();
-    arrParams.horario = $("#cmb_horario option:selected").text();
-    
-    /** Session Storages **/    
-    arrParams.grid_docencia_list = (JSON.parse(sessionStorage.grid_docencia_list)).data;
-    
-    if (!validateForm()) {
-        requestHttpAjax(link, arrParams, function(response) {
-            showAlert(response.status, response.label, response.message);
-            if (response.status == "OK") {
-                setTimeout(function() {
-                    var link = $('#txth_base').val() + "/academico/distributivoacademico/index";
-                    window.location = link;
-                }, 1000);
-            }
-        }, true);
+    arrParams.profesor = $('#cmb_profesor').val();    
+    arrParams.periodo = $('#txth_idperiodo').val();        
+    /** Session Storage **/    
+    if (sessionStorage.dts_asignacion_list) {
+        arrParams.grid_docencia_list = (JSON.parse(sessionStorage.dts_asignacion_list)).data;   
+        if (!validateForm()) {
+            requestHttpAjax(link, arrParams, function(response) {
+                showAlert(response.status, response.label, response.message);
+                if (response.status == "OK") {
+                    setTimeout(function() {
+                        var link = $('#txth_base').val() + "/academico/distributivocabecera/index";
+                        window.location = link;
+                    }, 1000);
+                }
+            }, true);
+        }
+    } else {
+        showAlert('NO_OK', 'error', {"wtmessage": "No Existe datos agregados", "title": 'Información'});
     }
+    
 }
 
 function deleteItem(id) {
@@ -285,8 +283,7 @@ function addAsignacion(opAccion) {
     }  
     
     if (opAccion != "edit") {
-        //*********   AGREGAR ITEMS *********
-        alert('nuevo');
+        //*********   Agregar materias *********
         var arr_Grid = new Array();
         if (sessionStorage.dts_asignacion_list) {
             /*Agrego a la Sesion*/
@@ -331,6 +328,7 @@ function objDistributivo(indice) {
     rowGrid.mod_name = $("#cmb_modalidad :selected").text();
     rowGrid.paca_id = $("#cmb_periodo").val();
     rowGrid.jor_id = $("#cmb_jornada").val();
+    rowGrid.jor_name = $("#cmb_jornada :selected").text();
     rowGrid.asi_id = $("#cmb_materia").val();
     rowGrid.asi_name = $("#cmb_materia :selected").text();
     rowGrid.hor_id = $("#cmb_horario").val();
@@ -354,14 +352,15 @@ function addVariosItem(TbGtable, lista, i) {
     $('#' + TbGtable + ' tr:last').after(retornaFila(i, lista, TbGtable, true));
 }
 
-function limpiarDetalle() {
-    $("#cmb_unidad_dis").val('');
-    $("#cmb_modalidad").val('');
-    $("#cmb_periodo").val('');
-    $("#cmb_jornada").val('');
-    $("#cmb_materia").val('');
-    $("#cmb_horario").val('');
-    $("#cmb_paralelo").val('');    
+function limpiarDetalle() {    
+    //$('#cmb_unidad_dis option[value="0"]').attr("selected", true);    
+    document.getElementById("cmb_unidad_dis").value = 0;
+    document.getElementById("cmb_modalidad").value = 0;
+    document.getElementById("cmb_periodo").value = 0;
+    document.getElementById("cmb_jornada").value = 0;
+    document.getElementById("cmb_materia").value = 0;
+    document.getElementById("cmb_horario").value = 0;
+    document.getElementById("cmb_paralelo").value = 0;            
 }
 
 function fillDataAlert() {
@@ -389,9 +388,10 @@ function retornaFila(c, Grid, TbGtable, op) {
     strFila += '<td>' + Grid[c]['asi_name'] + '</td>';
     strFila += '<td>' + Grid[c]['uni_name'] + '</td>';
 
-    strFila += '<td style="display:none; border:none;">' + Grid[c]['est_id'] + '</td>';
+    strFila += '<td style="display:none; border:none;">' + '</td>';
     strFila += '<td>' + Grid[c]['mod_name'] + '</td>';
-    strFila += '<td style="display:none; border:none;">' + Grid[c]['dre_tipo'] + '</td>';
+    strFila += '<td style="display:none; border:none;">' + '</td>';    
+    strFila += '<td>' + Grid[c]['jor_name'] + '</td>';
     strFila += '<td>' + Grid[c]['hor_name'] + '</td>';
     
     strFila += '<td>';//¿Está seguro de eliminar este elemento?   

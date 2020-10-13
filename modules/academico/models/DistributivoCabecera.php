@@ -187,7 +187,8 @@ class DistributivoCabecera extends \yii\db\ActiveRecord
      * @param   
      * @return  $resultData (Retornar los datos).
      */
-    public function insertarDistributivoCab($con, $data) {
+    public function insertarDistributivoCab($paca_id, $pro_id) {
+        $con = \Yii::$app->db_academico;
         $estado = '1';
         $usu_id = @Yii::$app->session->get("PB_iduser");
         $fecha_transaccion = date(Yii::$app->params["dateTimeByDefault"]);
@@ -195,13 +196,37 @@ class DistributivoCabecera extends \yii\db\ActiveRecord
             (paca_id, pro_id, dcab_estado_aprobacion, dcab_fecha_registro, dcab_usuario_ingreso, dcab_estado, dcab_estado_logico) VALUES
             (:paca_id, :pro_id, 1, :fecha, :usuario, :estado,:estado)";
         $command = $con->createCommand($sql);
-        $command->bindParam(":paca_id", $data['paca_id'], \PDO::PARAM_INT);
-        $command->bindParam(":pro_id", $data['pro_id'], \PDO::PARAM_INT);
+        $command->bindParam(":paca_id", $paca_id, \PDO::PARAM_INT);
+        $command->bindParam(":pro_id", $pro_id, \PDO::PARAM_INT);
         $command->bindParam(":fecha", $fecha_transaccion, \PDO::PARAM_STR);
         $command->bindParam(":usuario", $usu_id, \PDO::PARAM_INT);
         $command->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $command->execute();
         $idtabla = $con->getLastInsertID($con->dbname . '.distributivo_cabecera');
         return $idtabla;
+    }
+    
+       /**
+     * Function verifica si existe en distributivo cabecera
+     * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
+     * @param   
+     * @return  $resultData (Retornar los datos).
+     */
+    public function existeDistCabecera($paca_id, $pro_id){
+        $con_academico = \Yii::$app->db_academico;
+        $sql = "SELECT 
+                    dc.dcab_id 
+                FROM 
+                    " . $con_academico->dbname . ".distributivo_cabecera AS dc
+                WHERE
+                    dc.paca_id =:paca_id AND 
+                    dc.pro_id =:pro_id AND                     
+                    dc.dcab_estado = 1 AND
+                    dc.dcab_estado_logico = 1";
+        $comando = $con_academico->createCommand($sql);
+        $comando->bindParam(":uaca_id", $paca_id, \PDO::PARAM_INT);
+        $comando->bindParam(":mod_id", $pro_id, \PDO::PARAM_INT);        
+        $res = $comando->queryOne();
+        return $res;
     }
 }
