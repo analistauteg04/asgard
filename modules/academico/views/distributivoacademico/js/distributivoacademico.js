@@ -362,8 +362,6 @@ function limpiarDetalle() {
     $("#cmb_materia").val('');
     $("#cmb_horario").val('');
     $("#cmb_paralelo").val('');    
- 
-
 }
 
 function fillDataAlert() {
@@ -381,5 +379,57 @@ function fillDataAlert() {
         }],
     };
     showResponse(type, status, label, messagew);
+}
+
+function retornaFila(c, Grid, TbGtable, op) {
+    //var RutaImagenAccion='ruta IMG'//$('#txth_rutaImg').val();
+    var strFila = "";
+    strFila += '<td style="display:none; border:none;">' + Grid[c]['daca_id'] + '</td>';    
+    strFila += '<td>' + Grid[c]['tasi_name'] + '</td>';
+    strFila += '<td>' + Grid[c]['asi_name'] + '</td>';
+    strFila += '<td>' + Grid[c]['uni_name'] + '</td>';
+
+    strFila += '<td style="display:none; border:none;">' + Grid[c]['est_id'] + '</td>';
+    strFila += '<td>' + Grid[c]['mod_name'] + '</td>';
+    strFila += '<td style="display:none; border:none;">' + Grid[c]['dre_tipo'] + '</td>';
+    strFila += '<td>' + Grid[c]['hor_name'] + '</td>';
+    
+    strFila += '<td>';//¿Está seguro de eliminar este elemento?   
+    strFila += '<a onclick="eliminarItems(\'' + Grid[c]['indice'] + '\',\'' + TbGtable + '\')" ><span class="glyphicon glyphicon-trash"></span></a>';
+    //<span class='glyphicon glyphicon-remove'></span>
+    strFila += '</td>';
+
+    if (op) {
+        strFila = '<tr>' + strFila + '</tr>';
+    }
+    return strFila;
+}
+
+function eliminarItems(val, TbGtable) {
+    var ids = "";
+    //var count=0;
+    if (sessionStorage.dts_asignacion_list) {
+        var Grid = JSON.parse(sessionStorage.dts_asignacion_list);
+        if (Grid.length > 0) {
+            $('#' + TbGtable + ' tr').each(function () {
+                ids = $(this).find("td").eq(0).html();
+                if (ids == val) {
+                    var array = findAndRemove(Grid, 'indice', ids);
+                    sessionStorage.dts_asignacion_list = JSON.stringify(array);
+                    //if (count==0){sessionStorage.removeItem('detalleGrid')} 
+                    $(this).remove();
+                }
+            });
+        }
+    }
+}
+
+function findAndRemove(array, property, value) {
+    for (var i = 0; i < array.length; i++) {
+        if (array[i][property] == value) {
+            array.splice(i, 1);
+        }
+    }
+    return array;
 }
 
