@@ -313,6 +313,7 @@ class EstudioAcademico extends \app\modules\admision\components\CActiveRecord
             return 0; //en caso de que existe problema o no retorne nada tiene 1 por defecto 
         return $rawData;
     }
+    
     /**
      * Function obtener consultarCarrera x unidad
      * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>
@@ -336,6 +337,7 @@ class EstudioAcademico extends \app\modules\admision\components\CActiveRecord
         $resultData = $comando->queryAll();
         return $resultData;
     }
+
     /**
      * Function obtener consultarmodalidadxcarrera
      * @author   Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>

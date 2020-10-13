@@ -249,6 +249,38 @@ class MallaAcademica extends \yii\db\ActiveRecord
        
         $resultData = $comando->queryAll();               
         return $resultData;        
-    }    
-    
+    }  
+
+     /**
+     * Function obtener consultarmalla por unidad, modalidad, carrera
+     * @author   Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>
+     * @property       
+     * @return  
+     */
+    public function consultarmallasxcarrera($uaca_id, $mod_id, $eaca_id) {
+        $con = \Yii::$app->db_academico;
+        $estado = 1;
+        $sql = "SELECT 
+                    mac.maca_id AS id,
+                    mac.maca_nombre AS name  
+               FROM " . $con->dbname . ".modalidad_estudio_unidad meu  
+               INNER JOIN " . $con->dbname . ".malla_unidad_modalidad mum ON mum.meun_id = meu.meun_id                  
+               INNER JOIN " . $con->dbname . ".malla_academica mac ON mac.maca_id = mum.maca_id 
+               WHERE  meu.meun_estado_logico = :estado AND
+                      meu.meun_estado = :estado AND
+                      mum.mumo_estado_logico = :estado AND
+                      mum.mumo_estado = :estado AND
+                      mac.maca_estado_logico = :estado AND
+                      mac.maca_estado = :estado AND
+                      meu.uaca_id = :uaca_id AND
+                      meu.mod_id = :mod_id AND
+                      meu.eaca_id = :eaca_id";
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":uaca_id", $uaca_id, \PDO::PARAM_INT);
+        $comando->bindParam(":mod_id", $mod_id, \PDO::PARAM_INT);
+        $comando->bindParam(":eaca_id", $eaca_id, \PDO::PARAM_INT);        
+        $resultData = $comando->queryAll();
+        return $resultData;
+    }
 }

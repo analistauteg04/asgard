@@ -38,7 +38,7 @@ academico::registerTranslations();
             <div class="form-group"> 
             <label for="lbl_mallaest" class="col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= academico::t("Academico", "Academic Mesh"); ?></label>
                 <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
-                    <?= Html::dropDownList("cmb_malladoest", 0, $arr_periodo, ["class" => "form-control", "id" => "cmb_malladoest"]) ?>
+                    <?= Html::dropDownList("cmb_malladoest", 0, $arr_malla, ["class" => "form-control", "id" => "cmb_malladoest"]) ?>
                 </div>           
                 <label for="lbl_periodoest" class="col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= Yii::t("formulario", "Period"); ?></label>
                 <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
