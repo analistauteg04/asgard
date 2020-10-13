@@ -243,7 +243,7 @@ class DistributivoAcademico extends \yii\db\ActiveRecord {
             $str_condition .= "daho_jornada = :jornada_id AND ";
         }
         $sql = "SELECT 
-                    @row_number:=@row_number+1 as id,
+                    daho_id as id,
                     daho_horario AS name
                 FROM 
                     " . $con_academico->dbname . ".distributivo_academico_horario, (SELECT @row_number:=0) AS t 
@@ -298,7 +298,7 @@ class DistributivoAcademico extends \yii\db\ActiveRecord {
         return $res;
     }
 
-    public function existsDistribucionAcademico($pro_id, $asi_id, $uaca_id, $mod_id, $paca_id, $horario, $paralelo){
+    public function existsDistribucionAcademico($pro_id, $asi_id, $paca_id, $horario, $paralelo){
         $con_academico = \Yii::$app->db_academico;
         $sql = "SELECT 
                     da.daca_id as id,
@@ -310,9 +310,8 @@ class DistributivoAcademico extends \yii\db\ActiveRecord {
                     da.paca_id =:paca_id AND
                     da.pro_id =:pro_id AND 
                     da.asi_id =:asi_id AND 
-                    dah.uaca_id =:uaca_id AND 
-                    dah.mod_id =:mod_id AND 
-                    dah.daho_horario =:horario AND                     
+                    da.paralelo = :paralelo AND                    
+                    dah.daho_id =:horario AND                     
                     da.daca_estado = 1 AND
                     da.daca_estado_logico = 1 AND
                     dah.daho_estado = 1 AND
@@ -321,8 +320,8 @@ class DistributivoAcademico extends \yii\db\ActiveRecord {
         $comando->bindParam(":paca_id", $paca_id, \PDO::PARAM_INT);
         $comando->bindParam(":pro_id", $pro_id, \PDO::PARAM_INT);
         $comando->bindParam(":asi_id", $asi_id, \PDO::PARAM_INT);
-        $comando->bindParam(":uaca_id", $uaca_id, \PDO::PARAM_INT);
-        $comando->bindParam(":mod_id", $mod_id, \PDO::PARAM_INT);        
+        /*$comando->bindParam(":uaca_id", $uaca_id, \PDO::PARAM_INT);
+        $comando->bindParam(":mod_id", $mod_id, \PDO::PARAM_INT);        */
         $comando->bindParam(":horario", $horario, \PDO::PARAM_STR);
         $comando->bindParam(":paralelo", $paralelo, \PDO::PARAM_INT);
         $res = $comando->queryOne();
@@ -402,7 +401,8 @@ class DistributivoAcademico extends \yii\db\ActiveRecord {
      * @param   
      * @return  $resultData (Retornar los datos).
      */
-    public function insertarDistributivoAcademico($con, $data) {
+    public function insertarDistributivoAcademico($i, $data) {
+        $con = \Yii::$app->db_academico;
         $estado = '1';
         $usu_id = @Yii::$app->session->get("PB_iduser");
         $fecha_transaccion = date(Yii::$app->params["dateTimeByDefault"]);
@@ -413,14 +413,14 @@ class DistributivoAcademico extends \yii\db\ActiveRecord {
             (:paca_id, :ppro_id, :daca_tipo, :asi_id, :pro_id, :uaca_id, :mod_id, :daho_id,
              :fecha, :usuario, :estado, :estado)";
         $command = $con->createCommand($sql);
-        $command->bindParam(":paca_id", $data['paca_id'], \PDO::PARAM_INT);
-        $command->bindParam(":ppro_id", $data['ppro_id'], \PDO::PARAM_INT);
-        $command->bindParam(":daca_tipo", $data['daca_tipo'], \PDO::PARAM_INT);
-        $command->bindParam(":asi_id", $data['asi_id'], \PDO::PARAM_INT);
-        $command->bindParam(":pro_id", $data['pro_id'], \PDO::PARAM_INT);
-        $command->bindParam(":uaca_id", $data['uaca_id'], \PDO::PARAM_INT);
-        $command->bindParam(":mod_id", $data['mod_id'], \PDO::PARAM_INT);
-        $command->bindParam(":daho_id", $data['daho_id'], \PDO::PARAM_INT);
+        $command->bindParam(":paca_id", $data[$i]['paca_id'], \PDO::PARAM_INT);
+        $command->bindParam(":ppro_id", $data[$i]['ppro_id'], \PDO::PARAM_INT);
+        $command->bindParam(":daca_tipo", $data[$i]['daca_tipo'], \PDO::PARAM_INT);
+        $command->bindParam(":asi_id", $data[$i]['asi_id'], \PDO::PARAM_INT);
+        $command->bindParam(":pro_id", $data[$i]['pro_id'], \PDO::PARAM_INT);
+        $command->bindParam(":uaca_id", $data[$i]['uaca_id'], \PDO::PARAM_INT);
+        $command->bindParam(":mod_id", $data[$i]['mod_id'], \PDO::PARAM_INT);
+        $command->bindParam(":daho_id", $data[$i]['daho_id'], \PDO::PARAM_INT);
         $command->bindParam(":fecha", $fecha_transaccion, \PDO::PARAM_STR);
         $command->bindParam(":usuario", $usu_id, \PDO::PARAM_INT);
         $command->bindParam(":estado", $estado, \PDO::PARAM_STR);

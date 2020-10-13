@@ -80,11 +80,11 @@ PbGridView::widget([
                     }
                 },
                 'download' => function ($url, $model) {
-                    if ($model['perfil'] == 0) {
+                    //if ($model['perfil'] == 0) {
                         //if($model['Cv'] != "")
                         //return Html::a('<span class="'.Utilities::getIcon('download').'"></span>', 'javascript:', ["data-toggle" => "tooltip", "title" => Yii::t("accion","Download"), 'data-href' => Url::to(['profesor/download', 'route' => $model['Cv'], 'type' => 'down']), 'onclick' => 'downloadPdf(this)']);
                         return Html::a('<span class="glyphicon glyphicon-download"></span>', Url::to(['/academico/profesor/curriculumpdf', 'ids' => $model['per_id']]), ["data-toggle" => "tooltip", "title" => "Descargar Curriculum", "data-pjax" => "0"]);
-                    }
+                    //}
                 },
                 /*'pdf' => function ($url, $model) {
                     if ($model['perfil'] == 0) {
