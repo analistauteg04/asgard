@@ -149,7 +149,7 @@ class EstudioAcademico extends \app\modules\admision\components\CActiveRecord
 
     /**
      * Function Obtiene listado de materias
-     * @author Giovanni Ver <analistadesarrollo01@uteg.edu.ec>;
+     * @author Giovanni Vergara <analistadesarrollo01@uteg.edu.ec>;
      * @param
      * @return
      */
@@ -312,5 +312,51 @@ class EstudioAcademico extends \app\modules\admision\components\CActiveRecord
         if ($rawData === false)
             return 0; //en caso de que existe problema o no retorne nada tiene 1 por defecto 
         return $rawData;
+    }
+    /**
+     * Function obtener consultarCarrera x unidad
+     * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>
+     * @property       
+     * @return  
+     */
+    public function consultarCarreraxunidad($unidad) {
+        $con = \Yii::$app->db_academico;
+        $estado = 1;
+        $sql = "SELECT 
+                    eac.eaca_id AS id,
+                    eac.eaca_nombre AS name  
+               FROM " . $con->dbname . ".estudio_academico eac                    
+               WHERE  eac.eaca_estado_logico = :estado AND
+                      eac.eaca_estado = :estado AND
+                      eac.teac_id = :unidad  
+               ORDER BY 2 ";
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":unidad", $unidad, \PDO::PARAM_INT);        
+        $resultData = $comando->queryAll();
+        return $resultData;
+    }
+    /**
+     * Function obtener consultarmodalidadxcarrera
+     * @author   Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>
+     * @property       
+     * @return  
+     */
+    public function consultarmodalidadxcarrera($eaca_id) {
+        $con = \Yii::$app->db_academico;
+        $estado = 1;
+        $sql = "SELECT 
+                    meu.mod_id AS id,
+                    moda.mod_nombre AS name  
+               FROM " . $con->dbname . ".modalidad_estudio_unidad meu  
+               INNER JOIN " . $con->dbname . ".modalidad moda ON moda.mod_id = meu.mod_id                  
+               WHERE  meu.meun_estado_logico = :estado AND
+                      meu.meun_estado = :estado AND
+                      meu.eaca_id = :eaca_id";
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":eaca_id", $eaca_id, \PDO::PARAM_INT);        
+        $resultData = $comando->queryAll();
+        return $resultData;
     }
 }
