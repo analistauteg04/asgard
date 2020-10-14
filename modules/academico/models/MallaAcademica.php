@@ -283,4 +283,29 @@ class MallaAcademica extends \yii\db\ActiveRecord
         $resultData = $comando->queryAll();
         return $resultData;
     }
+
+    /**
+     * Function obtener consultarasignaturaxmalla 
+     * @author   Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>
+     * @property       
+     * @return  
+     */
+    public function consultarasignaturaxmalla($maca_id) {
+        $con = \Yii::$app->db_academico;
+        $estado = 1;
+        $sql = "SELECT mad.asi_id as id, asi.asi_nombre as name
+                    FROM " . $con->dbname . ".malla_academica_detalle mad
+                    INNER JOIN " . $con->dbname . ".asignatura asi ON asi.asi_id = mad.asi_id
+                    WHERE   mad.maca_id = :maca_id AND
+                            mad.made_estado = :estado AND
+                            mad.made_estado_logico = :estado AND
+                            asi.asi_estado = :estado AND
+                            asi.asi_estado_logico = :estado
+                    ORDER BY name";
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":maca_id", $maca_id, \PDO::PARAM_INT);
+        $resultData = $comando->queryAll();
+        return $resultData;
+    }
 }

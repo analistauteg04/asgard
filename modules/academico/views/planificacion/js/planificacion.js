@@ -77,7 +77,50 @@ $(document).ready(function () {
             $('#divFechasDistancia').css('display', 'none');
         }
     });
-
+    /************ crear nueva planificacion **********************************/
+    $('#cmb_carreraest').change(function () {
+        var link = $('#txth_base').val() + "/academico/planificacion/new";
+        var arrParams = new Object();
+        arrParams.eaca_id = $(this).val();
+        arrParams.getmodalidad = true;
+        arrParams.empresa_id = 1;
+        requestHttpAjax(link, arrParams, function (response) {
+            if (response.status == "OK") {
+                data = response.message;
+                setComboDataselect(data.modalidad, "cmb_modalidadest", "Seleccionar");
+                var arrParams = new Object();
+                if (data.modalidad.length > 0) {
+                    arrParams.uaca_id = $('#cmb_unidadest').val();
+                    arrParams.moda_id = data.modalidad[0].id;
+                    arrParams.eaca_id = $('#cmb_carreraest').val();
+                    arrParams.empresa_id = 1;
+                    arrParams.getmalla = true;
+                    requestHttpAjax(link, arrParams, function (response) {
+                        if (response.status == "OK") {
+                            data = response.message;
+                            setComboDataselect(data.mallaca, "cmb_malladoest", "Seleccionar");
+                        }
+                    }, true);
+                }
+            }
+        }, true);
+    });
+    $('#cmb_modalidadest').change(function () {
+        var link = $('#txth_base').val() + "/academico/planificacion/new";
+        var arrParams = new Object();
+        arrParams.uaca_id = $('#cmb_unidadest').val();
+        arrParams.moda_id = $(this).val();
+        arrParams.eaca_id = $('#cmb_carreraest').val();
+        arrParams.empresa_id = 1;
+        arrParams.getmalla = true;
+        requestHttpAjax(link, arrParams, function (response) {
+            if (response.status == "OK") {
+                data = response.message;
+                setComboDataselect(data.mallaca, "cmb_malladoest", "Seleccionar");
+            }
+        }, true); 
+    });
+    /*************************************************************************/
     $('#btn_buscarHorario').click(function () {
         actualizarGridHorario();
     });
