@@ -300,31 +300,26 @@ class DistributivoAcademico extends \yii\db\ActiveRecord {
 
     public function existsDistribucionAcademico($pro_id, $asi_id, $paca_id, $horario, $paralelo){
         $con_academico = \Yii::$app->db_academico;
-        $sql = "SELECT 
+        $sql = "SELECT
                     da.daca_id as id,
-                    dah.daho_id as daho_id
+                    da.daho_id as daho_id
                 FROM 
-                    " . $con_academico->dbname . ".distributivo_academico AS da
-                    INNER JOIN " . $con_academico->dbname . ".distributivo_academico_horario AS dah ON da.daho_id = dah.daho_id
+                    " . $con_academico->dbname . ".distributivo_academico AS da                    
                 WHERE
                     da.paca_id =:paca_id AND
                     da.pro_id =:pro_id AND 
                     da.asi_id =:asi_id AND 
-                    da.paralelo = :paralelo AND                    
-                    dah.daho_id =:horario AND                     
+                    da.daca_paralelo = :paralelo AND                    
+                    da.daho_id =:horario AND                     
                     da.daca_estado = 1 AND
-                    da.daca_estado_logico = 1 AND
-                    dah.daho_estado = 1 AND
-                    dah.daho_estado_logico = 1";
+                    da.daca_estado_logico = 1";
         $comando = $con_academico->createCommand($sql);
         $comando->bindParam(":paca_id", $paca_id, \PDO::PARAM_INT);
         $comando->bindParam(":pro_id", $pro_id, \PDO::PARAM_INT);
-        $comando->bindParam(":asi_id", $asi_id, \PDO::PARAM_INT);
-        /*$comando->bindParam(":uaca_id", $uaca_id, \PDO::PARAM_INT);
-        $comando->bindParam(":mod_id", $mod_id, \PDO::PARAM_INT);        */
-        $comando->bindParam(":horario", $horario, \PDO::PARAM_STR);
+        $comando->bindParam(":asi_id", $asi_id, \PDO::PARAM_INT);        
+        $comando->bindParam(":horario", $horario, \PDO::PARAM_INT);
         $comando->bindParam(":paralelo", $paralelo, \PDO::PARAM_INT);
-        $res = $comando->queryOne();
+        $res = $comando->queryOne();  
         return $res;
     }
 
@@ -413,14 +408,14 @@ class DistributivoAcademico extends \yii\db\ActiveRecord {
             (:paca_id, :ppro_id, :daca_tipo, :asi_id, :pro_id, :uaca_id, :mod_id, :daho_id,
              :fecha, :usuario, :estado, :estado)";
         $command = $con->createCommand($sql);
-        $command->bindParam(":paca_id", $data[$i]['paca_id'], \PDO::PARAM_INT);
-        $command->bindParam(":ppro_id", $data[$i]['ppro_id'], \PDO::PARAM_INT);
-        $command->bindParam(":daca_tipo", $data[$i]['daca_tipo'], \PDO::PARAM_INT);
-        $command->bindParam(":asi_id", $data[$i]['asi_id'], \PDO::PARAM_INT);
-        $command->bindParam(":pro_id", $data[$i]['pro_id'], \PDO::PARAM_INT);
-        $command->bindParam(":uaca_id", $data[$i]['uaca_id'], \PDO::PARAM_INT);
-        $command->bindParam(":mod_id", $data[$i]['mod_id'], \PDO::PARAM_INT);
-        $command->bindParam(":daho_id", $data[$i]['daho_id'], \PDO::PARAM_INT);
+        $command->bindParam(":paca_id", $data[$i]->paca_id, \PDO::PARAM_INT);
+        $command->bindParam(":ppro_id", $data[$i]->ppro_id, \PDO::PARAM_INT);
+        $command->bindParam(":daca_tipo", $data[$i]->daca_tipo, \PDO::PARAM_INT);
+        $command->bindParam(":asi_id", $data[$i]->asi_id, \PDO::PARAM_INT);
+        $command->bindParam(":pro_id", $data[$i]->pro_id, \PDO::PARAM_INT);
+        $command->bindParam(":uaca_id", $data[$i]->uaca_id, \PDO::PARAM_INT);
+        $command->bindParam(":mod_id", $data[$i]->mod_id, \PDO::PARAM_INT);
+        $command->bindParam(":daho_id", $data[$i]->daho_id, \PDO::PARAM_INT);
         $command->bindParam(":fecha", $fecha_transaccion, \PDO::PARAM_STR);
         $command->bindParam(":usuario", $usu_id, \PDO::PARAM_INT);
         $command->bindParam(":estado", $estado, \PDO::PARAM_STR);

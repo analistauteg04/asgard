@@ -181,12 +181,23 @@ class DistributivoacademicoController extends \app\components\CController {
             try {
                 $pro_id = $data['profesor'];
                 $paca_id = $data['periodo'];
-                $dts = (isset($data["grid_docencia_list"]) && $data["grid_docencia_list"] != "") ? $data["grid_docencia_list"] : NULL;                
-                if (!(empty($dts))) {
+                \app\models\Utilities::putMessageLogFile('profesor:'.$pro_id);
+                \app\models\Utilities::putMessageLogFile('período:'.$paca_id);
+                $dts = (isset($data["grid_docencia"]) && $data["grid_docencia"] != "") ? $data["grid_docencia"] : NULL;     
+                $datos = json_decode($dts);
+                //\app\models\Utilities::putMessageLogFile('dts:'.$dts);
+                if (isset($datos)) {
+                    \app\models\Utilities::putMessageLogFile('ingresa 1');
                     $valida = 1;
-                    for ($a=0; $a<sizeof($dts); $a++) {
-                        $dataExists = $distributivo_model->existsDistribucionAcademico($pro_id, $dts[$a]["asi_id"], $paca_id, $dts[$a]["hor_id"], $dts[$a]["par_id"]);
+                    //foreach ($datos as $key => $value1) {
+                    for ($i = 0; $i < sizeof($datos); $i++) {
+                        \app\models\Utilities::putMessageLogFile('ingresa al ciclo: ');
+                        \app\models\Utilities::putMessageLogFile('asignatura: '. $datos[$i]->asi_id);
+                        \app\models\Utilities::putMessageLogFile('horario: '. $datos[$i]->hor_id);
+                        \app\models\Utilities::putMessageLogFile('paralelo: '. $datos[$i]->par_id);
+                        $dataExists = $distributivo_model->existsDistribucionAcademico($pro_id, $datos[$i]->asi_id, $paca_id, $datos[$i]->hor_id, $datos[$i]->par_id);
                         if(isset($dataExists) && $dataExists != "" && count($dataExists) > 0) {
+                            \app\models\Utilities::putMessageLogFile('ya existe');
                             $valida = 0;
                             $message = array(
                                 "wtmessage" => academico::t('distributivoacademico', 'Register already exists in System.'),
@@ -195,23 +206,27 @@ class DistributivoacademicoController extends \app\components\CController {
                             return Utilities::ajaxResponse('NOOK', 'alert', Yii::t('jslang', 'Error'), 'true', $message);
                         }
                     }
+                    \app\models\Utilities::putMessageLogFile('despuès de validar');
                     //ha cumplido todas las validaciones entonces graba.
                     if ($valida == 1) {
                         // Verificar que exista en cabecera de distributivo.
                         $cons = $distributivo_cab->existeDistCabecera($paca_id,$pro_id);
                         if (empty($cons)) {
+                            \app\models\Utilities::putMessageLogFile('insertar en cabecera');
                             $cab = $distributivo_cab->insertarDistributivoCab($paca_id, $pro_id); 
                         }
-                        for ($a=0; $a<sizeof($dts); $a++) {
+                        for ($i = 0; $i < sizeof($datos); $i++) {
                             // Grabar en distributivo académico
-                            $res= $distributivo_model->insertarDistributivoAcademico($a, $dts);
+                            $res= $distributivo_model->insertarDistributivoAcademico($i, $datos);
+                            \app\models\Utilities::putMessageLogFile('despues de insertar en detalle');
                             if ($res>0) {
                                 $exito = '1';
                             } else {
                                 $exito = '0';
                             }
+                            \app\models\Utilities::putMessageLogFile('exito:'.$exito);
                         }                                
-                    }                                            
+                    }
                 }
                 if ($exito) {
                     $transaction->commit();
