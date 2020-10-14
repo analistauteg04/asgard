@@ -102,7 +102,7 @@ academico::registerTranslations();
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <div class="form-group">
                 <div class="box-body table-responsive no-padding">
-                    <table  id="PbPlanificaestudiantedit" class="table table-hover">
+                    <table  id="PbPlanificaestudiantnew" class="table table-hover">
                         <thead>
                             <tr>
                                 <th style="display:none; border:none;"><?= Yii::t("formulario", "pla_id") ?></th>

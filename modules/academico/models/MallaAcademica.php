@@ -293,7 +293,7 @@ class MallaAcademica extends \yii\db\ActiveRecord
     public function consultarasignaturaxmalla($maca_id) {
         $con = \Yii::$app->db_academico;
         $estado = 1;
-        $sql = "SELECT mad.asi_id as id, asi.asi_nombre as name
+        $sql = "SELECT mad.asi_id as id, concat(mad.made_codigo_asignatura, ' - ', asi.asi_nombre) as name
                     FROM " . $con->dbname . ".malla_academica_detalle mad
                     INNER JOIN " . $con->dbname . ".asignatura asi ON asi.asi_id = mad.asi_id
                     WHERE   mad.maca_id = :maca_id AND

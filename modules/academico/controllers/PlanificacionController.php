@@ -693,6 +693,11 @@ class PlanificacionController extends \app\components\CController {
                 $message = array("mallaca" => $mallaca);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }
+            if (isset($data["getmateria"])) {
+                $asignatura = $mod_malla->consultarasignaturaxmalla($data["maca_id"]);
+                $message = array("asignatura" => $asignatura);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+            }
         }
         return $this->render('new', [
                     //'arr_cabecera' => $mod_cabecera,
