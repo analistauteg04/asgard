@@ -396,26 +396,40 @@ class DistributivoAcademico extends \yii\db\ActiveRecord {
      * @param   
      * @return  $resultData (Retornar los datos).
      */
-    public function insertarDistributivoAcademico($i, $data) {
+    public function insertarDistributivoAcademico($i, $data, $pro_id, $paca_id) {
         $con = \Yii::$app->db_academico;
         $estado = '1';
         $usu_id = @Yii::$app->session->get("PB_iduser");
         $fecha_transaccion = date(Yii::$app->params["dateTimeByDefault"]);
+                       
         
-        $sql = "INSERT INTO " . $con->dbname . ".distributivo_academico
-            (paca_id, ppro_id, daca_tipo, asi_id, pro_id, uaca_id, mod_id, daho_id, 
-             daca_fecha_registro, daca_usuario_ingreso, daca_estado, daca_estado_logico) VALUES
-            (:paca_id, :ppro_id, :daca_tipo, :asi_id, :pro_id, :uaca_id, :mod_id, :daho_id,
-             :fecha, :usuario, :estado, :estado)";
+        if ($data[$i]->uni_id ==1) {
+            $sql = "INSERT INTO " . $con->dbname . ".distributivo_academico
+                    (paca_id, daca_tipo, asi_id, pro_id, uaca_id, mod_id, daho_id, daca_paralelo,
+                     daca_fecha_registro, daca_usuario_ingreso, daca_estado, daca_estado_logico) VALUES
+                    (:paca_id, :daca_tipo, :asi_id, :pro_id, :uaca_id, :mod_id, :daho_id, 
+                     :daca_paralelo, :fecha, :usuario, :estado, :estado)";
+        } else {
+            $sql = "INSERT INTO " . $con->dbname . ".distributivo_academico
+                    (paca_id, daca_tipo, asi_id, pro_id, uaca_id, mod_id, daho_id, pppr_id,
+                     daca_fecha_registro, daca_usuario_ingreso, daca_estado, daca_estado_logico) VALUES
+                    (:paca_id, :daca_tipo, :asi_id, :pro_id, :uaca_id, :mod_id, :daho_id, 
+                     :pppr_id, :fecha, :usuario, :estado, :estado)";
+        }
+        
         $command = $con->createCommand($sql);
-        $command->bindParam(":paca_id", $data[$i]->paca_id, \PDO::PARAM_INT);
-        $command->bindParam(":ppro_id", $data[$i]->ppro_id, \PDO::PARAM_INT);
-        $command->bindParam(":daca_tipo", $data[$i]->daca_tipo, \PDO::PARAM_INT);
+        $command->bindParam(":paca_id", $paca_id, \PDO::PARAM_INT);
+        if ($data[$i]->uni_id ==1) {            
+            $command->bindParam(":daca_paralelo", $data[$i]->par_id, \PDO::PARAM_INT);
+        }  else {
+            $command->bindParam(":pppr_id", $data[$i]->par_id, \PDO::PARAM_INT);            
+        }    
+        $command->bindParam(":daca_tipo", $data[$i]->tasi_id, \PDO::PARAM_INT);
         $command->bindParam(":asi_id", $data[$i]->asi_id, \PDO::PARAM_INT);
-        $command->bindParam(":pro_id", $data[$i]->pro_id, \PDO::PARAM_INT);
-        $command->bindParam(":uaca_id", $data[$i]->uaca_id, \PDO::PARAM_INT);
+        $command->bindParam(":pro_id", $pro_id, \PDO::PARAM_INT);
+        $command->bindParam(":uaca_id", $data[$i]->uni_id, \PDO::PARAM_INT);
         $command->bindParam(":mod_id", $data[$i]->mod_id, \PDO::PARAM_INT);
-        $command->bindParam(":daho_id", $data[$i]->daho_id, \PDO::PARAM_INT);
+        $command->bindParam(":daho_id", $data[$i]->hor_id, \PDO::PARAM_INT);
         $command->bindParam(":fecha", $fecha_transaccion, \PDO::PARAM_STR);
         $command->bindParam(":usuario", $usu_id, \PDO::PARAM_INT);
         $command->bindParam(":estado", $estado, \PDO::PARAM_STR);

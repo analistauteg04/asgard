@@ -182,22 +182,15 @@ class DistributivoacademicoController extends \app\components\CController {
                 $pro_id = $data['profesor'];
                 $paca_id = $data['periodo'];
                 \app\models\Utilities::putMessageLogFile('profesor:'.$pro_id);
-                \app\models\Utilities::putMessageLogFile('período:'.$paca_id);
                 $dts = (isset($data["grid_docencia"]) && $data["grid_docencia"] != "") ? $data["grid_docencia"] : NULL;     
                 $datos = json_decode($dts);
-                //\app\models\Utilities::putMessageLogFile('dts:'.$dts);
-                if (isset($datos)) {
-                    \app\models\Utilities::putMessageLogFile('ingresa 1');
+             
+                if (isset($datos)) {                    
                     $valida = 1;
                     //foreach ($datos as $key => $value1) {
-                    for ($i = 0; $i < sizeof($datos); $i++) {
-                        \app\models\Utilities::putMessageLogFile('ingresa al ciclo: ');
-                        \app\models\Utilities::putMessageLogFile('asignatura: '. $datos[$i]->asi_id);
-                        \app\models\Utilities::putMessageLogFile('horario: '. $datos[$i]->hor_id);
-                        \app\models\Utilities::putMessageLogFile('paralelo: '. $datos[$i]->par_id);
+                    for ($i = 0; $i < sizeof($datos); $i++) {                                                
                         $dataExists = $distributivo_model->existsDistribucionAcademico($pro_id, $datos[$i]->asi_id, $paca_id, $datos[$i]->hor_id, $datos[$i]->par_id);
-                        if(isset($dataExists) && $dataExists != "" && count($dataExists) > 0) {
-                            \app\models\Utilities::putMessageLogFile('ya existe');
+                        if(isset($dataExists) && $dataExists != "" && count($dataExists) > 0) {                            
                             $valida = 0;
                             $message = array(
                                 "wtmessage" => academico::t('distributivoacademico', 'Register already exists in System.'),
@@ -205,30 +198,35 @@ class DistributivoacademicoController extends \app\components\CController {
                             );
                             return Utilities::ajaxResponse('NOOK', 'alert', Yii::t('jslang', 'Error'), 'true', $message);
                         }
-                    }
-                    \app\models\Utilities::putMessageLogFile('despuès de validar');
+                    }                    
                     //ha cumplido todas las validaciones entonces graba.
                     if ($valida == 1) {
-                        // Verificar que exista en cabecera de distributivo.
+                        // Verificar que exista en cabecera de distributivo.                        
                         $cons = $distributivo_cab->existeDistCabecera($paca_id,$pro_id);
-                        if (empty($cons)) {
-                            \app\models\Utilities::putMessageLogFile('insertar en cabecera');
+                        \app\models\Utilities::putMessageLogFile('resultado:'.$cons);
+                        if ($cons==0) {                            
                             $cab = $distributivo_cab->insertarDistributivoCab($paca_id, $pro_id); 
-                        }
-                        for ($i = 0; $i < sizeof($datos); $i++) {
-                            // Grabar en distributivo académico
-                            $res= $distributivo_model->insertarDistributivoAcademico($i, $datos);
-                            \app\models\Utilities::putMessageLogFile('despues de insertar en detalle');
-                            if ($res>0) {
-                                $exito = '1';
-                            } else {
-                                $exito = '0';
+                            if ($cab>0) {
+                                $cabecera='true';                                
                             }
-                            \app\models\Utilities::putMessageLogFile('exito:'.$exito);
-                        }                                
+                        } else {
+                            $cabecera='true';
+                        }
+                        if ($cabecera=='true') {
+                            for ($i = 0; $i < sizeof($datos); $i++) {
+                                // Grabar en distributivo académico
+                                \app\models\Utilities::putMessageLogFile('ingresa a insertar detalle');
+                                $res= $distributivo_model->insertarDistributivoAcademico($i, $datos, $pro_id, $paca_id);                             
+                                if ($res>0) {
+                                    $exito = '1';
+                                } else {
+                                    $exito = '0';
+                                }                               
+                            }
+                        }
                     }
                 }
-                if ($exito) {
+                if ($exito=='1') {
                     $transaction->commit();
                     $message = array(
                         "wtmessage" => Yii::t("notificaciones", "La infomación ha sido grabada. "),
@@ -238,7 +236,7 @@ class DistributivoacademicoController extends \app\components\CController {
                 } else {
                     $transaction->rollback();
                     $message = array(
-                        "wtmessage" => Yii::t('notificaciones', 'Your information has not been saved. Please try again.'),
+                        "wtmessage" => Yii::t('notificaciones', 'Su información no ha sido grabada. Por favor intente nuevamente o contacte al área de Desarrollo.'),
                         "title" => Yii::t('jslang', 'Error'),
                     );
                     return Utilities::ajaxResponse('NOOK', 'alert', Yii::t('jslang', 'Error'), 'true', $message);
@@ -247,7 +245,7 @@ class DistributivoacademicoController extends \app\components\CController {
             }catch(Exception $e){
                 $transaction->rollback();
                 $message = array(
-                    "wtmessage" => Yii::t('notificaciones', 'Your information has not been saved. Please try again.'),
+                    "wtmessage" => Yii::t('notificaciones', 'Su información no ha sido grabada. Por favor intente nuevamente o contacte al área de Desarrollo.'),
                     "title" => Yii::t('jslang', 'Error'),
                 );
                 return Utilities::ajaxResponse('NOOK', 'alert', Yii::t('jslang', 'Error'), 'true', $message);

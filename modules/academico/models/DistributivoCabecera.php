@@ -192,9 +192,18 @@ class DistributivoCabecera extends \yii\db\ActiveRecord
         $estado = '1';
         $usu_id = @Yii::$app->session->get("PB_iduser");
         $fecha_transaccion = date(Yii::$app->params["dateTimeByDefault"]);
+        \app\models\Utilities::putMessageLogFile('insertar en cabecera');
+        \app\models\Utilities::putMessageLogFile('paca:'.$paca_id);
+        \app\models\Utilities::putMessageLogFile('pro_id:'.$pro_id);
+        \app\models\Utilities::putMessageLogFile('usuario:'.$usu_id);
+        \app\models\Utilities::putMessageLogFile('fecha:'.$fecha_transaccion);
+        
         $sql = "INSERT INTO " . $con->dbname . ".distributivo_cabecera
             (paca_id, pro_id, dcab_estado_aprobacion, dcab_fecha_registro, dcab_usuario_ingreso, dcab_estado, dcab_estado_logico) VALUES
-            (:paca_id, :pro_id, 1, :fecha, :usuario, :estado,:estado)";
+            (:paca_id, :pro_id, 1, :fecha, :usuario, :estado, :estado)";
+        
+        \app\models\Utilities::putMessageLogFile('sql insert:'.$sql);
+        
         $command = $con->createCommand($sql);
         $command->bindParam(":paca_id", $paca_id, \PDO::PARAM_INT);
         $command->bindParam(":pro_id", $pro_id, \PDO::PARAM_INT);
@@ -223,10 +232,15 @@ class DistributivoCabecera extends \yii\db\ActiveRecord
                     dc.pro_id =:pro_id AND                     
                     dc.dcab_estado = 1 AND
                     dc.dcab_estado_logico = 1";
+        
         $comando = $con_academico->createCommand($sql);
-        $comando->bindParam(":uaca_id", $paca_id, \PDO::PARAM_INT);
-        $comando->bindParam(":mod_id", $pro_id, \PDO::PARAM_INT);        
+        $comando->bindParam(":paca_id", $paca_id, \PDO::PARAM_INT);
+        $comando->bindParam(":pro_id", $pro_id, \PDO::PARAM_INT);        
         $res = $comando->queryOne();
-        return $res;
+        if (empty($res)) {
+            return 0;            
+        } else {
+            return $res;        
+        }        
     }
 }
