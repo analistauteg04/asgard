@@ -155,10 +155,10 @@ class NubefacturaController extends \app\components\CController {
             $result=VSDocumentos::anularDodSri($ids,'FA',1);//Reenviar Documentos AUTORIZAR
             $arroout=$errAuto->messageSystem('NO_OK',null, 1, null, null);
             if($result['status'] == 'OK'){//Si es Verdadero actualizo datos de base intermedia
-                /*$result=VSDocumentos::corregirDocSEA($ids,'FA');//Actualiza los datos de la Tablas de ERP o Altersoft
+                $result=VSDocumentos::corregirDocSEA($ids,'FA');//Actualiza los datos de la Tablas de ERP o Altersoft
                 if($result['status'] == 'OK'){
                     $arroout=  $errAuto->messageSystem('OK', null,12,null, null);
-                }*/
+                }
                 //$arroout=  $errAuto->messageSystem('OK', null,12,null, null);
                 $message = array(
                     "wtmessage" => Yii::t("notificaciones", $arroout['message']),
@@ -231,5 +231,20 @@ class NubefacturaController extends \app\components\CController {
             return;
         }
     }
-
+    
+    public function actionActulizaestado() {
+        if (Yii::$app->request->isAjax) {
+            Utilities::putMessageLogFile('llego');
+            $ids = isset($_POST['ids']) ? base64_decode($_POST['ids']) : NULL;
+            $arroout = VSDocumentos::actEstDocSri($ids, 'FA', 1); //Anula Documentos Autorizados del Websea
+            $message = array(
+                "wtmessage" => Yii::t("notificaciones", $arroout['message']),
+                "title" => Yii::t('jslang', 'Success'),
+            );
+            return Utilities::ajaxResponse($arroout['status'], 'alert', Yii::t("jslang", "Success"), false, $message);
+            //header('Content-type: application/json');
+            //echo json_encode($arroout);
+            //return;
+        }
+    }
 }

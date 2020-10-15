@@ -9,6 +9,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use app\widgets\PbGridView\PbGridView;
 use app\modules\fe_edoc\models\VSacceso;
+
 ?>
 
 <?=
@@ -38,20 +39,7 @@ PbGridView::widget([
             //'headerHtmlOptions' => array('style' => 'width:0px; display:none; border:none; textdecoration:none'),
             //'options' => array('style' => 'display:none; border:none;'),
         ],
-        [
-            'header' => Yii::t('fe_edoc', 'Download'),
-            'class' => 'yii\grid\ActionColumn',
-            'options' => array('style' => 'text-align:center', 'width' => '85px'),
-            'template' => '{pdf} {xml}',
-            'buttons' => array(
-                'pdf' => function ($url, $model) {
-                    return Html::a('<span class="text-danger fa fa-file-pdf-o"></span>', Url::to(['nubefactura/generarpdf', 'ids' => base64_encode($model['IdDoc'])]), ["data-toggle" => "tooltip", "title" => Yii::t('fe_edoc', 'Download PDF document'), "data-pjax" => 0]);
-                },
-                'xml' => function ($url, $model) {
-                    return Html::a('<span class="text-success fa fa-file-code-o"></span>', Url::to(['nubefactura/xmlautorizado', 'ids' => base64_encode($model['IdDoc'])]), ["data-toggle" => "tooltip", "title" => Yii::t('fe_edoc', 'Download XML document'), "data-pjax" => 0]);
-                },
-            ),
-        ],
+        
         [
             'attribute' => 'Estado',
             'header' => Yii::t('fe_edoc', 'Status'),
@@ -110,6 +98,31 @@ PbGridView::widget([
             'value' => function ($data) {
                 return Yii::$app->params["currency"].Yii::$app->formatter->format($data["ImporteTotal"],["decimal", 2]);
             },
+        ],
+        [
+            'class' => 'yii\grid\ActionColumn',
+            'header' => Yii::t('fe_edoc', 'Error'),
+            'template' => '{view}',
+            'buttons' => [
+                'view' => function ($url, $model) {
+                    //return Html::a('<span>' . substr($model['Mensaje'], 0, 20) . '... </span>', Url::to(['#']), ["data-toggle" => "tooltip", "title" => $model['Mensaje']]);
+                    return VSacceso::mensajeErrorSri($model['Mensaje']);
+                },
+            ],
+        ],
+        [
+            'header' => Yii::t('fe_edoc', 'Download'),
+            'class' => 'yii\grid\ActionColumn',
+            'options' => array('style' => 'text-align:center', 'width' => '85px'),
+            'template' => '{pdf} {xml}',
+            'buttons' => array(
+                'pdf' => function ($url, $model) {
+                    return Html::a('<span class="text-danger fa fa-file-pdf-o"></span>', Url::to(['nubefactura/generarpdf', 'ids' => base64_encode($model['IdDoc'])]), ["data-toggle" => "tooltip", "title" => Yii::t('fe_edoc', 'Download PDF document'), "data-pjax" => 0]);
+                },
+                'xml' => function ($url, $model) {
+                    return Html::a('<span class="text-success fa fa-file-code-o"></span>', Url::to(['nubefactura/xmlautorizado', 'ids' => base64_encode($model['IdDoc'])]), ["data-toggle" => "tooltip", "title" => Yii::t('fe_edoc', 'Download XML document'), "data-pjax" => 0]);
+                },
+            ),
         ],
         /*[
             //'attribute' => 'Observacion',

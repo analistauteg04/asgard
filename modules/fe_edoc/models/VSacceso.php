@@ -14,6 +14,8 @@
 namespace app\modules\fe_edoc\models;
 
 use Yii;
+use yii\helpers\Html;
+use yii\helpers\Url;
 
 class VSacceso {
     /*
@@ -65,6 +67,19 @@ class VSacceso {
                 $valRes = "Error";
         }
         return $valRes;
+    }
+    
+    public static function mensajeErrorSri($mensaje) {
+        if($mensaje<>''){
+            //return Html::a('<span>' . substr($mensaje, 0, 20) . '... </span>', 
+            return Html::a('<span> Error </span>',
+                    Url::to(['#']), ["data-toggle" => "tooltip", 
+                        "title" => $mensaje]);
+        }else{
+            return '';
+        }
+        
+        
     }
 
 }

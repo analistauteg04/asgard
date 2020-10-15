@@ -13,8 +13,8 @@ Yii::import('system.vendors.PHPMailer.*'); //Usar de Forma nativa.
 require_once('PHPMailerAutoload.php');
 
 class mailSystem {
-    private $domEmpresa='uteg.edu.ed';
-    private $mailSMTP='mail.uteg.edu.ed';
+    private $domEmpresa='uteg.edu.ec';
+    private $mailSMTP='mail.uteg.edu.ec';
     private $noResponder='no-responder@uteg.edu.ec';
     private $noResponderPass='xxxxxxx';
     private $port=465;
@@ -39,7 +39,7 @@ class mailSystem {
 
         // dirección remitente, p. ej.: no-responder@miempresa.com
         // nombre remitente, p. ej.: "Servicio de envío automático"
-        $mail->setFrom('no-responder@utimpor.com', 'Servicio de envío automático Utimpor.com');
+        $mail->setFrom('no-responder@uteg.edu.ec', 'Servicio de envío automático uteg.edu.ec');
         //$mail->setFrom('bvillacreses@utimpor.com', 'Utimpor.com');
 
         // asunto y cuerpo alternativo del mensaje
