@@ -418,7 +418,7 @@ class PlanificacionController extends \app\components\CController {
             $arrSearch["estudiante"] = $data['estudiante'];
             $arrSearch["unidad"] = $data['unidad'];
             $arrSearch["modalidad"] = $data['modalidad'];
-            /* $arrSearch["carrera"] = $data['carrera']; */
+            $arrSearch["carrera"] = $data['carrera']; 
             $arrSearch["periodo"] = $data['periodo'];
             $model_plan = $mod_periodo->consultarEstudianteplanifica($arrSearch);
             return $this->render('planificacionestudiante-grid', [
@@ -474,7 +474,7 @@ class PlanificacionController extends \app\components\CController {
         $arrSearch["estudiante"] = $data['estudiante'];
         $arrSearch["unidad"] = $data['unidad'];
         $arrSearch["modalidad"] = $data['modalidad'];
-        /* $arrSearch["carrera"] = $data['carrera']; */
+        $arrSearch["carrera"] = $data['carrera']; 
         $arrSearch["periodo"] = $data['periodo'];
         $arrData = array();
         if (empty($arrSearch)) {
@@ -501,7 +501,7 @@ class PlanificacionController extends \app\components\CController {
         $arrSearch["estudiante"] = $data['estudiante'];
         $arrSearch["unidad"] = $data['unidad'];
         $arrSearch["modalidad"] = $data['modalidad'];
-        /* $arrSearch["carrera"] = $data['carrera']; */
+        $arrSearch["carrera"] = $data['carrera'];
         $arrSearch["periodo"] = $data['periodo'];
         $arrData = array();
         if (empty($arrSearch)) {
