@@ -10,6 +10,9 @@ academico::registerTranslations();
 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
     <h4><span id="lbl_planear"><?= academico::t("Academico", "See Student Planning") ?></span></h4>
 </div><br><br><br>
+<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
+    <p class="text-danger"> <?= Yii::t("formulario", "Fields with * are required") ?> </p>
+</div>
 <form class="form-horizontal">
     <div class="row">
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">  
@@ -24,11 +27,11 @@ academico::registerTranslations();
         </div>  
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <div class="form-group">
-                <label for="lbl_carreraest" class="col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= Yii::t("crm", "Carrera"); ?></label>
+                <label for="lbl_carreraest" class="col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= Yii::t("crm", "Carrera"); ?> <span class="text-danger">*</span> </label>
                 <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
                     <?= Html::dropDownList("cmb_carreraest", 0, $arr_carrera, ["class" => "form-control", "id" => "cmb_carreraest"]) ?>
                 </div> 
-                <label for="lbl_modalidadest" class="col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= Yii::t("formulario", "Mode"); ?></label>
+                <label for="lbl_modalidadest" class="col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= Yii::t("formulario", "Mode"); ?> <span class="text-danger">*</span> </label>
                 <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
                     <?= Html::dropDownList("cmb_modalidadest", 0, $arr_modalidad, ["class" => "form-control", "id" => "cmb_modalidadest"]) ?>
                 </div>  
@@ -36,11 +39,11 @@ academico::registerTranslations();
         </div>   
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <div class="form-group"> 
-            <label for="lbl_mallaest" class="col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= academico::t("Academico", "Academic Mesh"); ?></label>
+            <label for="lbl_mallaest" class="col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= academico::t("Academico", "Academic Mesh"); ?> <span class="text-danger">*</span> </label>
                 <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
                     <?= Html::dropDownList("cmb_malladoest", 0, $arr_malla, ["class" => "form-control", "id" => "cmb_malladoest"]) ?>
                 </div>           
-                <label for="lbl_periodoest" class="col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= Yii::t("formulario", "Period"); ?></label>
+                <label for="lbl_periodoest" class="col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= Yii::t("formulario", "Period"); ?> <span class="text-danger">*</span> </label>
                 <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
                     <?= Html::dropDownList("cmb_periodoest", 0, $arr_periodo, ["class" => "form-control", "id" => "cmb_periodoest"]) ?>
                 </div>                                
@@ -48,7 +51,7 @@ academico::registerTranslations();
         </div> 
         <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
             <div class="form-group">
-                    <label for="txt_buscarest" class="col-sm-2 col-md-2 col-xs-2 col-lg-2 control-label"><?= Yii::t("formulario", "Student") ?></label>
+                    <label for="txt_buscarest" class="col-sm-2 col-md-2 col-xs-2 col-lg-2 control-label"><?= Yii::t("formulario", "Student") ?> <span class="text-danger">*</span> </label>
                 <div class="col-sm-8 col-md-8 col-xs-8 col-lg-8">
                     <input type="text" class="form-control" value="" id="txt_buscarest" placeholder="<?= Yii::t("formulario", "Search by Names") ?>">
                 </div>
@@ -61,11 +64,11 @@ academico::registerTranslations();
         <div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="form-group">
-                    <label for="lbl_asignaest" class="col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= academico::t("Academico", "Subject"); ?></label>
+                    <label for="lbl_asignaest" class="col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= academico::t("Academico", "Subject"); ?> <span class="text-danger">*</span> </label>
                     <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
                         <?= Html::dropDownList("cmb_asignaest", 0, $arr_materia, ["class" => "form-control", "id" => "cmb_asignaest"]) ?>
                     </div>   
-                    <label for="lbl_jornadaest" class="col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= academico::t("Academico", "Working day") ?></label>
+                    <label for="lbl_jornadaest" class="col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= academico::t("Academico", "Working day") ?> <span class="text-danger">*</span> </label>
                     <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
                         <?= Html::dropDownList("cmb_jornadaest", 0, $arr_jornada, ["class" => "form-control", "id" => "cmb_jornadaest"]) ?>
                     </div>  
@@ -73,11 +76,11 @@ academico::registerTranslations();
             </div>
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="form-group">
-                    <label for="lbl_bloqueest" class="col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= Yii::t("formulario", "Block"); ?></label>
+                    <label for="lbl_bloqueest" class="col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= Yii::t("formulario", "Block"); ?> <span class="text-danger">*</span> </label>
                     <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
                         <?= Html::dropDownList("cmb_bloqueest", 0, $arr_bloque, ["class" => "form-control", "id" => "cmb_bloqueest"]) ?>
                     </div>   
-                    <label for="lbl_modalidadesth" class="col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= Yii::t("formulario", "Mode"); ?></label>
+                    <label for="lbl_modalidadesth" class="col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= Yii::t("formulario", "Mode"); ?> <span class="text-danger">*</span> </label>
                     <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
                         <?= Html::dropDownList("cmb_modalidadesth", 0, $arr_modalidadh, ["class" => "form-control", "id" => "cmb_modalidadesth"]) ?>
                     </div>  
@@ -85,7 +88,7 @@ academico::registerTranslations();
             </div>
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="form-group">
-                    <label for="lbl_horaest" class="col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= academico::t("Academico", "Hour"); ?></label>
+                    <label for="lbl_horaest" class="col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= academico::t("Academico", "Hour"); ?> <span class="text-danger">*</span> </label>
                     <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
                         <?= Html::dropDownList("cmb_horaest", 0, $arr_hora, ["class" => "form-control", "id" => "cmb_horaest"]) ?>
                     </div> 
