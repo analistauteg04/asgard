@@ -179,7 +179,7 @@ class Asignatura extends \yii\db\ActiveRecord
      * @param   
      * @return  $resultData (Retornar las asignaturas por planificación y modalidad).
      */
-    public function getAsignatura_x_bloque_x_planif($pla_id) {
+    public function getAsignatura_x_bloque_x_planif($pla_id, $jornada_id) {
         $con = \Yii::$app->db_academico;
         $estado = 1;
 
@@ -188,6 +188,7 @@ class Asignatura extends \yii\db\ActiveRecord
                      on md.made_codigo_asignatura = pe.pes_mat_b1_h1_cod
                      inner join db_academico.asignatura a on a.asi_id = md.asi_id
                 WHERE pla_id = :pla_id
+                     and pes_jornada = :jornada_id
                      and pes_estado = 1
                      and pes_estado_logico = 1
                 UNION
@@ -196,6 +197,7 @@ class Asignatura extends \yii\db\ActiveRecord
                     on md.made_codigo_asignatura = pe.pes_mat_b1_h2_cod
                     inner join db_academico.asignatura a on a.asi_id = md.asi_id
                 WHERE pla_id = :pla_id
+                    and pes_jornada = :jornada_id
                     and pes_estado = 1
                     and pes_estado_logico = 1
                 UNION
@@ -204,6 +206,7 @@ class Asignatura extends \yii\db\ActiveRecord
                     on md.made_codigo_asignatura = pe.pes_mat_b1_h3_cod
                     inner join db_academico.asignatura a on a.asi_id = md.asi_id
                 WHERE pla_id = :pla_id
+                    and pes_jornada = :jornada_id
                     and pes_estado = 1
                     and pes_estado_logico = 1
                 UNION
@@ -212,6 +215,7 @@ class Asignatura extends \yii\db\ActiveRecord
                     on md.made_codigo_asignatura = pe.pes_mat_b1_h4_cod
                     inner join db_academico.asignatura a on a.asi_id = md.asi_id
                 WHERE pla_id = :pla_id
+                    and pes_jornada = :jornada_id
                     and pes_estado = 1
                  and pes_estado_logico = 1
                 UNION
@@ -220,12 +224,14 @@ class Asignatura extends \yii\db\ActiveRecord
                     on md.made_codigo_asignatura = pe.pes_mat_b1_h5_cod
                     inner join db_academico.asignatura a on a.asi_id = md.asi_id
                 WHERE pla_id = :pla_id
+                    and pes_jornada = :jornada_id
                     and pes_estado = 1
                     and pes_estado_logico = 1";
         
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);  
         $comando->bindParam(":pla_id", $pla_id, \PDO::PARAM_INT);  
+        $comando->bindParam(":jornada_id", $jornada_id, \PDO::PARAM_STR);  
         $resultData = $comando->queryAll();
         return $resultData;
     }   

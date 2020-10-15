@@ -77,7 +77,76 @@ $(document).ready(function () {
             $('#divFechasDistancia').css('display', 'none');
         }
     });
+    /************ crear nueva planificacion **********************************/
+    $('#cmb_carreraest').change(function () {
+        var link = $('#txth_base').val() + "/academico/planificacion/new";
+        var arrParams = new Object();
+        arrParams.eaca_id = $(this).val();
+        arrParams.getmodalidad = true;
+        arrParams.empresa_id = 1;
+        requestHttpAjax(link, arrParams, function (response) {
+            if (response.status == "OK") {
+                data = response.message;
+                setComboDataselect(data.modalidad, "cmb_modalidadest", "Seleccionar");
+                var arrParams = new Object();
+                if (data.modalidad.length > 0) {
+                    arrParams.uaca_id = $('#cmb_unidadest').val();
+                    arrParams.moda_id = data.modalidad[0].id;
+                    arrParams.eaca_id = $('#cmb_carreraest').val();
+                    arrParams.empresa_id = 1;
+                    arrParams.getmalla = true;
+                    requestHttpAjax(link, arrParams, function (response) {
+                        if (response.status == "OK") {
+                            data = response.message;
+                            setComboDataselect(data.mallaca, "cmb_malladoest", "Seleccionar");
+                            if (data.mallaca.length > 0) {
+                                arrParams.maca_id = data.mallaca[0].id;
+                                arrParams.empresa_id = 1;
+                                arrParams.getmateria = true;
+                                requestHttpAjax(link, arrParams, function (response) {
+                                    if (response.status == "OK") {
+                                        data = response.message;
+                                        setComboDataselect(data.asignatura, "cmb_asignaest", "Seleccionar");
+                                        
+                                    }
+                                }, true);
+                            } 
+                        }
+                    }, true);
+                }
+            }
+        }, true);
+    });
+    $('#cmb_modalidadest').change(function () {
+        var link = $('#txth_base').val() + "/academico/planificacion/new";
+        var arrParams = new Object();
+        arrParams.uaca_id = $('#cmb_unidadest').val();
+        arrParams.moda_id = $(this).val();
+        arrParams.eaca_id = $('#cmb_carreraest').val();
+        arrParams.empresa_id = 1;
+        arrParams.getmalla = true;
+        requestHttpAjax(link, arrParams, function (response) {
+            if (response.status == "OK") {
+                data = response.message;
+                setComboDataselect(data.mallaca, "cmb_malladoest", "Seleccionar");
+            }
+        }, true); 
+    });
 
+    $('#cmb_malladoest').change(function () {
+        var link = $('#txth_base').val() + "/academico/planificacion/new";
+        var arrParams = new Object();        
+        arrParams.maca_id = $(this).val();      
+        arrParams.empresa_id = 1;
+        arrParams.getmateria = true;
+        requestHttpAjax(link, arrParams, function (response) {
+            if (response.status == "OK") {
+                data = response.message;
+                setComboDataselect(data.asignatura, "cmb_asignaest", "Seleccionar");
+            }
+        }, true); 
+    });
+    /*************************************************************************/
     $('#btn_buscarHorario').click(function () {
         actualizarGridHorario();
     });
@@ -480,7 +549,7 @@ function deletematestudiante(plaid, perid, bloque, hora) {
 
 /* AGREGAR OPCIONES A GRID */
 function agregarItems(opAccion) {
-    var tGrid = 'PbPlanificaestudiantedit';
+    var tGrid = 'PbPlanificaestudiantnew';
     //var nombre = $('#cmb_estandar_evi option:selected').text();
     //Verifica que tenga nombre producto y tenga foto
     if ($('#cmb_asignaest').val() != '0' && $('#cmb_jornadaest').val() != '0' && $('#cmb_bloqueest').val() != '0' && $('#cmb_modalidadesth').val() != '0' && $('#cmb_horaest').val() != '0') {
@@ -619,7 +688,7 @@ function findAndRemove(array, property, value) {
 
 // Recarga la Grid de Productos si Existe
 function recargarGridItem() {
-    var tGrid = 'PbPlanificaestudiantedit';
+    var tGrid = 'PbPlanificaestudiantnew';
     if (sessionStorage.dts_datosItemplan) {
         var arr_Grid = JSON.parse(sessionStorage.dts_datosItemplan);
         if (arr_Grid.length > 0) {

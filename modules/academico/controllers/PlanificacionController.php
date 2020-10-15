@@ -10,6 +10,8 @@ use app\modules\academico\models\RegistroConfiguracion;
 use app\modules\academico\models\UnidadAcademica;
 use app\modules\admision\models\Oportunidad;
 use app\modules\academico\models\ModuloEstudio;
+use app\modules\academico\models\EstudioAcademico;
+use app\modules\academico\models\MallaAcademica;
 use yii\helpers\ArrayHelper;
 use yii\data\ArrayDataProvider;
 use yii\base\Exception;
@@ -659,5 +661,57 @@ class PlanificacionController extends \app\components\CController {
             }
         }
     }
-
+    public function actionNew() {
+        //$pla_id = $_GET["pla_id"];
+        //$per_id = $_GET["per_id"];
+        $emp_id = 1;
+        $mod_periodo = new PlanificacionEstudiante();
+        $periodo = $mod_periodo->consultarPeriodoplanifica(); //OJO DEBE ESTAR LLENO PLANIICACION Y PALNIFCACION ESTUDIANTE PARA Q SALGA
+        $uni_aca_model = new UnidadAcademica();
+        $modalidad_model = new Modalidad();
+        $modcarrera = new EstudioAcademico();
+        $mod_jornada = new DistributivoAcademicoHorario();
+        $mod_malla = new MallaAcademica();
+        //$mod_cabecera = $mod_periodo->consultarCabeceraplanifica($pla_id, $per_id);
+        $unidad_acad_data = $uni_aca_model->consultarUnidadAcademicas();
+        $academic_study_data = $modcarrera->consultarCarreraxunidad($unidad_acad_data[0]["id"]);
+        $modalidad_data = $modcarrera->consultarmodalidadxcarrera($academic_study_data[0]["id"]);
+        //$mod_detalle = $mod_periodo->consultarDetalleplanifica($pla_id, $per_id, false);
+        $jornada = $mod_jornada->consultarJornadahorario();
+        $malla = $mod_malla->consultarmallasxcarrera($unidad_acad_data[0]["id"], $modalidad_data[0]["id"], $modalidad_data[0]["id"]);
+        $materia = $mod_malla->consultarasignaturaxmalla($malla[0]["id"]);
+        
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+            if (isset($data["getmodalidad"])) {
+                $modalidad = $modcarrera->consultarmodalidadxcarrera($data["eaca_id"]);
+                $message = array("modalidad" => $modalidad);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+            } 
+            if (isset($data["getmalla"])) {
+                $mallaca = $mod_malla->consultarmallasxcarrera($data["uaca_id"], $data["moda_id"], $data["eaca_id"]);
+                $message = array("mallaca" => $mallaca);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+            }
+            if (isset($data["getmateria"])) {
+                $asignatura = $mod_malla->consultarasignaturaxmalla($data["maca_id"]);
+                $message = array("asignatura" => $asignatura);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+            }
+        }
+        return $this->render('new', [
+                    //'arr_cabecera' => $mod_cabecera,
+                    //'model_detalle' => $mod_detalle,
+                    'arr_unidad' => ArrayHelper::map($unidad_acad_data, "id", "name"),
+                    'arr_modalidad' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Seleccionar"]],$modalidad_data), "id", "name"),
+                    'arr_carrera' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Seleccionar"]], $academic_study_data), "id", "name"),
+                    'arr_periodo' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Seleccionar"]], $periodo), "id", "name"),
+                    'arr_jornada' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Seleccionar"]], $jornada), "id", "name"),
+                    'arr_bloque' => $this->Bloques(),
+                    'arr_hora' => $this->Horas(),
+                    'arr_modalidadh' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Seleccionar"]], $modalidad_data), "id", "name"),
+                    'arr_malla' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Seleccionar"]],$malla), "id", "name"),
+                    'arr_materia' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Seleccionar"]],$materia), "id", "name"),
+        ]);
+    }
 }
