@@ -773,8 +773,8 @@ class NubeFactura {
             $nEstado="1,4";
             //$nEstado="4,5,6";//Descomentar Solo Pruebas
             $docAut= $this->buscarDocFactAUT($con, $obj_var, $obj_con,$nEstado); 
-            cls_Global::putMessageLogFile($docAut);            
-            /*for ($i = 0; $i < count($docAut); $i++) {
+            //cls_Global::putMessageLogFile($docAut);            
+            for ($i = 0; $i < count($docAut); $i++) {
                 //cls_Global::putMessageLogFile($docAut[$i]); 
                 $ids=$docAut[$i]["Ids"];
                 if ($ids !== "") {
@@ -792,7 +792,7 @@ class NubeFactura {
                         return $result;
                     }
                 }
-            }*/
+            }
         } catch (Exception $e) { // se arroja una excepción si una consulta falla
             return VSexception::messageSystem('NO_OK', $e->getMessage(), 41, null, null);
         }
