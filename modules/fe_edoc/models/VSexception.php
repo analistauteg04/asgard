@@ -100,7 +100,8 @@ class VSexception {
                 $messageError = Yii::t('fe_edoc', 'Your document was returned for errors in the voucher.');
                 break;
             case 20://La solicitud fÚe realizada correctamente.
-                $messageError = Yii::t('fe_edoc', 'The request was completed successfully.');
+                $messageError = \app\modules\fe_edoc\Module::t('fe','The request was completed successfully.');
+                //$messageError = Yii::t('fe_edoc', 'The request was completed successfully.');
                 break;
             case 21://No podemos encontrar los datos que está solicitando.
                 $messageError = Yii::t('fe_edoc', 'We can not find the information you are requesting.');

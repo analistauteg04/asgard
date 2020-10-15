@@ -232,9 +232,9 @@ class NubefacturaController extends \app\components\CController {
         }
     }
     
+    
     public function actionActulizaestado() {
         if (Yii::$app->request->isAjax) {
-            Utilities::putMessageLogFile('llego');
             $ids = isset($_POST['ids']) ? base64_decode($_POST['ids']) : NULL;
             $arroout = VSDocumentos::actEstDocSri($ids, 'FA', 1); //Anula Documentos Autorizados del Websea
             $message = array(

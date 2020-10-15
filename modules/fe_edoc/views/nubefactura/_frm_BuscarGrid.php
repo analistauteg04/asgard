@@ -106,7 +106,7 @@ echo PbVPOS::widget([
 <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
     <div class="col-sm-8 col-md-8 col-xs-8 col-lg-8"></div>
     <div class="col-sm-2 col-md-2 col-xs-4 col-lg-2">  
-        <?php echo Html::button(Yii::t('fe_edoc', 'Act Estado'), array('id' => 'btn_estado', 'name' => 'btn_estado', 'class' => 'btn btn-primary btn-block', 'onclick' => 'fun_ActulizaEstado()')); ?>
+        <?php echo Html::button(Yii::t('fe_edoc', 'Reenviar'), array('id' => 'btn_estado', 'name' => 'btn_estado', 'class' => 'btn btn-primary btn-block', 'onclick' => 'fun_ActulizaEstado()')); ?>
         <?php echo Html::button(Yii::t('fe_edoc', 'Search'), array('id' => 'btn_buscar', 'name' => 'btn_buscar', 'class' => 'btn btn-primary btn-block', 'onclick' => 'buscarDataIndex("","")')); ?>
     </div>
 </div>

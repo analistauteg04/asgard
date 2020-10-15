@@ -171,11 +171,11 @@ function fun_EnviarCorreccion() {
 
 function fun_ActulizaEstado() {
     var ids = String($('#TbG_DOCUMENTO').PbGridView('getSelectedRows'));
-    alert(ids);
+    //alert(ids);
     var count = ids.split(",");
     if (count.length > 0 && ids != "") {
         if (!confirm(mgEnvDocum)) return false;
-        var link = $('#txth_base').val() + "/fe_edoc/nubefactura/actualizaestado";
+        var link = $('#txth_base').val() + "/fe_edoc/nubefactura/actulizaestado";
         var encodedIds = base64_encode(ids); //Verificar cofificacion Base
         $("#TbG_DOCUMENTO").addClass("loading");
         var arrParams = new Object();

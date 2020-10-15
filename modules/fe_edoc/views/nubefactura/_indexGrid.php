@@ -21,6 +21,7 @@ PbGridView::widget([
     'fnExportEXCEL' => "exportExcel",
     'fnExportPDF' => "exportPdf",
     'dataProvider' => $model,
+    'selectableRows'=>1,
     'columns' =>
     [
         [

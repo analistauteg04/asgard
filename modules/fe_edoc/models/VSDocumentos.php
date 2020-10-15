@@ -203,16 +203,16 @@ class VSDocumentos extends \app\modules\fe_edoc\components\CActiveRecord{
         try {
             switch ($tipDoc) {
                     Case "FA"://FACTURAS
-                        $sql = "UPDATE " . $con->dbname . ".NubeFactura SET Estado='$Estado' WHERE IdFactura='$Ids';";
+                        $sql = "UPDATE " . $con->dbname . ".NubeFactura SET Estado='$Estado' WHERE IdFactura IN ($Ids);";
                         break;
                     Case "GR"://GUIAS DE REMISION
-                        $sql = "UPDATE " . $con->dbname . ".NubeGuiaRemision SET Estado='$Estado' WHERE IdGuiaRemision='$Ids';";
+                        $sql = "UPDATE " . $con->dbname . ".NubeGuiaRemision SET Estado='$Estado' WHERE IdGuiaRemision IN ($Ids);";
                         break;
                     Case "RT"://RETENCIONES
-                        $sql = "UPDATE " . $con->dbname . ".NubeRetencion SET Estado='$Estado' WHERE IdRetencion='$Ids';";
+                        $sql = "UPDATE " . $con->dbname . ".NubeRetencion SET Estado='$Estado' WHERE IdRetencion IN ($Ids);";
                         break;
                     Case "NC"://NOTAS DE CREDITO
-                        $sql = "UPDATE " . $con->dbname . ".NubeNotaCredito SET Estado='$Estado' WHERE IdNotaCredito='$Ids';";
+                        $sql = "UPDATE " . $con->dbname . ".NubeNotaCredito SET Estado='$Estado' WHERE IdNotaCredito IN ($Ids);";
                         break;
                     Case "ND"://NOTAS DE DEBITO
                         //$sql = "UPDATE " . $con->dbname . ".NubeFactura SET EstadoEnv='$Estado' WHERE IdFactura='$Ids';";
@@ -223,7 +223,7 @@ class VSDocumentos extends \app\modules\fe_edoc\components\CActiveRecord{
                 $comando->execute();
                 $trans->commit();
                 //return true;
-                return $errAuto->messageSystem('OK', null,44,null, null);
+                return $errAuto->messageSystem('OK', null,20,null, null);
             } else {
                 //return false;
                 return $errAuto->messageSystem('NO_OK',null, 1, null, null);
