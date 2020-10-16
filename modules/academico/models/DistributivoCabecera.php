@@ -187,21 +187,100 @@ class DistributivoCabecera extends \yii\db\ActiveRecord
      * @param   
      * @return  $resultData (Retornar los datos).
      */
-    public function insertarDistributivoCab($con, $data) {
+    public function insertarDistributivoCab($paca_id, $pro_id) {
+        $con = \Yii::$app->db_academico;
         $estado = '1';
         $usu_id = @Yii::$app->session->get("PB_iduser");
         $fecha_transaccion = date(Yii::$app->params["dateTimeByDefault"]);
+        \app\models\Utilities::putMessageLogFile('insertar en cabecera');
+        \app\models\Utilities::putMessageLogFile('paca:'.$paca_id);
+        \app\models\Utilities::putMessageLogFile('pro_id:'.$pro_id);
+        \app\models\Utilities::putMessageLogFile('usuario:'.$usu_id);
+        \app\models\Utilities::putMessageLogFile('fecha:'.$fecha_transaccion);
+        
         $sql = "INSERT INTO " . $con->dbname . ".distributivo_cabecera
             (paca_id, pro_id, dcab_estado_aprobacion, dcab_fecha_registro, dcab_usuario_ingreso, dcab_estado, dcab_estado_logico) VALUES
-            (:paca_id, :pro_id, 1, :fecha, :usuario, :estado,:estado)";
+            (:paca_id, :pro_id, 1, :fecha, :usuario, :estado, :estado)";
+        
+        \app\models\Utilities::putMessageLogFile('sql insert:'.$sql);
+        
         $command = $con->createCommand($sql);
-        $command->bindParam(":paca_id", $data['paca_id'], \PDO::PARAM_INT);
-        $command->bindParam(":pro_id", $data['pro_id'], \PDO::PARAM_INT);
+        $command->bindParam(":paca_id", $paca_id, \PDO::PARAM_INT);
+        $command->bindParam(":pro_id", $pro_id, \PDO::PARAM_INT);
         $command->bindParam(":fecha", $fecha_transaccion, \PDO::PARAM_STR);
         $command->bindParam(":usuario", $usu_id, \PDO::PARAM_INT);
         $command->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $command->execute();
         $idtabla = $con->getLastInsertID($con->dbname . '.distributivo_cabecera');
         return $idtabla;
+    }
+    
+       /**
+     * Function verifica si existe en distributivo cabecera
+     * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
+     * @param   
+     * @return  $resultData (Retornar los datos).
+     */
+    public function existeDistCabecera($paca_id, $pro_id){
+        $con_academico = \Yii::$app->db_academico;
+        $sql = "SELECT 
+                    dc.dcab_id 
+                FROM 
+                    " . $con_academico->dbname . ".distributivo_cabecera AS dc
+                WHERE
+                    dc.paca_id =:paca_id AND 
+                    dc.pro_id =:pro_id AND                     
+                    dc.dcab_estado = 1 AND
+                    dc.dcab_estado_logico = 1";
+        
+        $comando = $con_academico->createCommand($sql);
+        $comando->bindParam(":paca_id", $paca_id, \PDO::PARAM_INT);
+        $comando->bindParam(":pro_id", $pro_id, \PDO::PARAM_INT);        
+        $res = $comando->queryOne();
+        if (empty($res)) {
+            return 0;            
+        } else {
+            return $res;        
+        }        
+    }
+    
+      /**
+     * Function obtiene datos de distributivo cabecera
+     * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
+     * @param   
+     * @return  $resultData (Retornar los datos).
+     */
+    public function obtenerDatosCabecera($cab_id){
+        $con_academico = \Yii::$app->db_academico;
+        $con_asgard = \Yii::$app->db_asgard;
+        $sql = "SELECT 
+                    dc.paca_id, dc.pro_id, per.per_cedula,
+                    concat(per.per_pri_apellido, ' ', ifnull(per.per_seg_apellido,'')) apellidos,
+                    concat(per.per_pri_nombre, ' ', ifnull(per.per_seg_nombre,'')) nombres,
+                    ifnull(CONCAT(ba.baca_nombre,'-',sa.saca_nombre,' ',sa.saca_anio),'') as periodo
+                FROM 
+                    " . $con_academico->dbname . ".distributivo_cabecera AS dc inner join " . $con_academico->dbname . ".profesor pr 
+                    on pr.pro_id = dc.pro_id inner join " . $con_asgard->dbname . ".persona per on per.per_id = pr.per_id
+                    inner join " . $con_academico->dbname . ".periodo_academico pa on pa.paca_id = dc.paca_id
+                    inner join " . $con_academico->dbname . ".semestre_academico sa on sa.saca_id = pa.saca_id
+                    inner join " . $con_academico->dbname . ".bloque_academico ba on ba.baca_id = pa.baca_id
+                WHERE
+                    dc.dcab_id =:dcab_id AND                     
+                    dc.dcab_estado = 1 AND
+                    dc.dcab_estado_logico = 1 AND
+                    pr.pro_estado = 1 AND
+                    per.per_estado = 1 AND
+                    pa.paca_estado = 1 AND
+                    sa.saca_estado = 1 AND
+                    ba.baca_estado = 1";
+        
+        $comando = $con_academico->createCommand($sql);
+        $comando->bindParam(":dcab_id", $cab_id, \PDO::PARAM_INT);        
+        $res = $comando->queryOne();
+        if (empty($res)) {
+            return 0;            
+        } else {
+            return $res;        
+        }        
     }
 }

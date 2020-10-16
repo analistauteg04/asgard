@@ -204,10 +204,10 @@
                                     </div>
                                     <div class="clear"></div>
                                     <br/>
-                                    <div>
+                                    <!--<div>
                                         <div class="tcoll_address bold"><?php echo app\modules\fe_edoc\Module::t("fe", "Address Branch") ?>:</div>
                                         <div class="tcolr_address"><?php echo Yii::$app->controller->pdf_dir_sucursal; ?></div>
-                                    </div>
+                                    </div>-->
                                     <div class="clear"></div>
                                     <br/>
                                     <?php if(Yii::$app->controller->pdf_num_contribuyente != ""): ?>
@@ -285,7 +285,9 @@
                                                 "message" => Yii::$app->controller->pdf_cla_acceso,
                                                 "base64" => true,
                                                 "font_size" => 35
-                                            ]) : ""; ?>
+                                            ]) : "";
+                                            
+                                            ?>
                                         </div>
                                     </div>
                                 </div>

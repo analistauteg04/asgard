@@ -81,9 +81,11 @@ class NubeFactura extends \app\modules\fe_edoc\components\CActiveRecord {
                         CONCAT(A.Establecimiento,'-',A.PuntoEmision,'-',A.Secuencial) NumDocumento,
                         A.FechaEmision,A.IdentificacionComprador,A.RazonSocialComprador,
                         A.TotalSinImpuesto,A.TotalDescuento,A.Propina,A.ImporteTotal,
-                        'FACTURA' NombreDocumento,A.AutorizacionSri,A.ClaveAcceso,A.FechaAutorizacion
+                        'FACTURA' NombreDocumento,A.AutorizacionSri,A.ClaveAcceso,A.FechaAutorizacion,
+                        (SELECT CONCAT('<',Codigo,'>',Descripcion,': ',Solucion) FROM " . $con->dbname . ".VSValidacion_Mensajes WHERE Codigo=CodigoError) Mensaje
                         FROM " . $con->dbname . ".NubeFactura A
                 WHERE A.CodigoDocumento='$this->tipoDoc'  AND A.Estado NOT IN (5) ";
+        
         
         //Usuarios Vendedor con * es privilegiado y puede ver lo que factura el resta
         $sql .= ($usuarioErp!='1') ? "AND A.UsuarioCreador IN ('$usuarioErp')" : "";//Para Usuario Vendedores.

@@ -192,5 +192,48 @@ class VSDocumentos extends \app\modules\fe_edoc\components\CActiveRecord{
         $rawData = $conApp->createCommand($sql)->queryOne();  //Un solo Registro => $rawData['RazonSocial']
         return $rawData;
     }
+    
+    
+    //Cambia el Estado de Envio de los Documentos electronicos 15-10-2020
+    public static function actEstDocSri($Ids,$tipDoc,$Estado) {
+        //2 = ESTE ESTADO PERMITE QUE SE REENVIE EL CORREO
+        $errAuto= new VSexception();
+        $con = Yii::$app->db_edoc;
+        $trans = $con->beginTransaction();
+        try {
+            switch ($tipDoc) {
+                    Case "FA"://FACTURAS
+                        $sql = "UPDATE " . $con->dbname . ".NubeFactura SET Estado='$Estado' WHERE IdFactura IN ($Ids);";
+                        break;
+                    Case "GR"://GUIAS DE REMISION
+                        $sql = "UPDATE " . $con->dbname . ".NubeGuiaRemision SET Estado='$Estado' WHERE IdGuiaRemision IN ($Ids);";
+                        break;
+                    Case "RT"://RETENCIONES
+                        $sql = "UPDATE " . $con->dbname . ".NubeRetencion SET Estado='$Estado' WHERE IdRetencion IN ($Ids);";
+                        break;
+                    Case "NC"://NOTAS DE CREDITO
+                        $sql = "UPDATE " . $con->dbname . ".NubeNotaCredito SET Estado='$Estado' WHERE IdNotaCredito IN ($Ids);";
+                        break;
+                    Case "ND"://NOTAS DE DEBITO
+                        //$sql = "UPDATE " . $con->dbname . ".NubeFactura SET EstadoEnv='$Estado' WHERE IdFactura='$Ids';";
+                        break;
+                }
+            if ($sql <> '') {//Verifica si Existe Sentencia SQL
+                $comando = $con->createCommand($sql);
+                $comando->execute();
+                $trans->commit();
+                //return true;
+                return $errAuto->messageSystem('OK', null,20,null, null);
+            } else {
+                //return false;
+                return $errAuto->messageSystem('NO_OK',null, 1, null, null);
+            }
+        } catch (Exception $e) { // se arroja una excepción si una consulta falla
+            $trans->rollBack();
+            throw $e;
+            //return false;
+            return $errAuto->messageSystem('NO_OK',null, 1, null, null);
+        }
+    }
 
 }
