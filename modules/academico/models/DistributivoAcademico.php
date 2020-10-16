@@ -190,11 +190,8 @@ class DistributivoAcademico extends \yii\db\ActiveRecord {
                     m.mod_estado = :estado AND
                     ua.uaca_estado_logico = :estado AND 
                     ua.uaca_estado = :estado AND
-                    pa.paca_estado_logico = :estado AND 
-                    pa.paca_estado = :estado AND
-                    pa.paca_estado_logico = :estado AND 
-                    pa.paca_estado = :estado AND
-                    pa.paca_estado_logico = :estado ";
+                    pa.paca_estado_logico = :estado";
+        
         $comando = $con_academico->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         if (isset($search) && $search != "") {
@@ -438,4 +435,59 @@ class DistributivoAcademico extends \yii\db\ActiveRecord {
         return $idtabla;
     }    
 
+    public function getListarDistribProfesor($paca_id, $pro_id, $onlyData = false){
+        $con_academico = \Yii::$app->db_academico;      
+        $estado = "1";
+        
+        $sql = "SELECT 
+                    da.daca_id AS Id,                     
+                    ua.uaca_nombre AS UnidadAcademica,
+                    m.mod_nombre AS Modalidad,
+                    a.asi_nombre AS Asignatura,                     
+                    CASE
+                        WHEN da.daca_tipo = 1 THEN 'Académico'
+                        WHEN da.daca_tipo = 2 THEN 'Investigación'
+                        WHEN da.daca_tipo = 3 THEN 'Vinculación'
+                        WHEN da.daca_tipo = 4 THEN 'Tutorías'
+                        ELSE ''
+                    END AS tipo_asignacion,
+                    concat(daho_horario, ' (', daho_hora_inicio, '-', daho_hora_fin, ')') as horario
+                FROM 
+                    " . $con_academico->dbname . ".distributivo_academico AS da 
+                    LEFT JOIN " . $con_academico->dbname . ".distributivo_academico_horario AS dh ON da.daho_id = dh.daho_id                    
+                    INNER JOIN " . $con_academico->dbname . ".modalidad AS m ON da.mod_id = m.mod_id
+                    INNER JOIN " . $con_academico->dbname . ".unidad_academica AS ua ON da.uaca_id = ua.uaca_id
+                    INNER JOIN " . $con_academico->dbname . ".asignatura AS a ON da.asi_id = a.asi_id                    
+                WHERE       
+                    da.paca_id = :periodo AND
+                    da.pro_id = :profesor AND
+                    da.daca_estado_logico = :estado AND 
+                    da.daca_estado = :estado AND                    
+                    m.mod_estado_logico = :estado AND 
+                    m.mod_estado = :estado AND
+                    ua.uaca_estado_logico = :estado AND 
+                    ua.uaca_estado = :estado AND
+                    a.asi_estado = :estado";                   
+        
+        $comando = $con_academico->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);        
+        $comando->bindParam(":periodo", $paca_id, \PDO::PARAM_INT);
+        $comando->bindParam(":profesor", $pro_id, \PDO::PARAM_INT);       
+
+        $res = $comando->queryAll();
+        if ($onlyData)
+            return $res;
+        $dataProvider = new ArrayDataProvider([
+            'key' => 'Id',
+            'allModels' => $res,
+            'pagination' => [
+                'pageSize' => Yii::$app->params["pageSize"],
+            ],
+            'sort' => [
+                'attributes' => ['Nombres', "Cedula", "UnidadAcademica", "Modalidad", "Periodo"],
+            ],
+        ]);
+
+        return $dataProvider;
+    }
 }

@@ -105,6 +105,7 @@ $(document).ready(function() {
     });
     
     $('#cmb_tipo_asignacion').change(function () {
+        document.getElementById("cmb_profesor").disabled=true;
         tipo = $('#cmb_tipo_asignacion').val();        
         if (tipo == 1) {
             $('#bloque1').css('display', 'block');            

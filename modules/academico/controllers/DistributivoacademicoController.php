@@ -147,8 +147,7 @@ class DistributivoacademicoController extends \app\components\CController {
         $arr_periodoActual = $mod_periodoActual->getPeriodoAcademicoActual();
         $arr_profesor = $mod_profesor->getProfesores();        
         $arr_unidad = $mod_unidad->consultarUnidadAcademicasEmpresa($emp_id);
-        $arr_modalidad = $mod_modalidad->consultarModalidad($arr_unidad[0]["id"], $emp_id);
-        \app\models\Utilities::putMessageLogFile('modalidad:'.$arr_modalidad[0]["id"]);
+        $arr_modalidad = $mod_modalidad->consultarModalidad($arr_unidad[0]["id"], $emp_id);        
         $arr_periodo = $mod_periodo->getPeriodos_x_modalidad($arr_modalidad[0]["id"]);
         $arr_jornada = $distributivo_model->getJornadasByUnidadAcad($arr_unidad[0]["id"], $arr_modalidad[0]["id"]);           
         $arr_asignatura = $mod_asignatura->getAsignatura_x_bloque_x_planif($arr_periodo[0]["id"],"N");
@@ -253,38 +252,14 @@ class DistributivoacademicoController extends \app\components\CController {
         }
     }
     
-    public function actionView($id) {
-        $emp_id = @Yii::$app->session->get("PB_idempresa");
-        $mod_modalidad = new Modalidad();
-        $mod_unidad = new UnidadAcademica();
-        $mod_periodo = new PeriodoAcademicoMetIngreso();
-        $distributivo_model = DistributivoAcademico::findOne($id);
-        $arr_unidad = $mod_unidad->consultarUnidadAcademicasEmpresa($emp_id);
-        $arr_modalidad = $mod_modalidad->consultarModalidad($distributivo_model->uaca_id, $emp_id);
-        $arr_periodo = $mod_periodo->consultarPeriodoAcademico();
-        $mod_asignatura = Asignatura::findAll(['asi_estado' => 1, 'asi_estado_logico' => 1]);
-        $arr_jornada = $distributivo_model->getJornadasByUnidadAcad($distributivo_model->uaca_id, $distributivo_model->mod_id);
-        $mod_profesor = new Profesor();
-        $arr_profesor = $mod_profesor->getProfesores();
-        $arr_horario = $distributivo_model->getHorariosByUnidadAcad($distributivo_model->uaca_id, $distributivo_model->mod_id, $arr_jornada[0]["id"]);
-        $mod_horario = DistributivoAcademicoHorario::findOne($distributivo_model->daho_id);
-        $horario_values = ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_horario), "id", "name");
+    public function actionView($id) {                
+        $distributivo_model = new DistributivoAcademico();
+        $distributivo_cab = new DistributivoCabecera();
+        $resCab = $distributivo_cab->obtenerDatosCabecera($id);
+        $arr_distributivo = $distributivo_model->getListarDistribProfesor($resCab["paca_id"], $resCab["pro_id"]);
         return $this->render('view', [
-            'arr_profesor' => ArrayHelper::map(array_merge([["Id" => "0", "Nombres" => Yii::t("formulario", "Grid")]], $arr_profesor), "Id", "Nombres"),
-            'arr_unidad' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_unidad), "id", "name"),
-            'arr_modalidad' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_modalidad), "id", "name"),
-            'arr_periodo' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_periodo), "id", "name"),
-            'arr_materias' => ArrayHelper::map(array_merge([["asi_id" => "0", "asi_nombre" => Yii::t("formulario", "Grid")]], $mod_asignatura), "asi_id", "asi_nombre"),
-            'arr_jornada' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_jornada), "id", "name"),
-            'arr_horario' => $horario_values,
-            'pro_id'  => $distributivo_model->pro_id,
-            'uaca_id' => $distributivo_model->uaca_id,
-            'mod_id'  => $distributivo_model->mod_id,
-            'paca_id' => $distributivo_model->paca_id,
-            'asi_id'  => $distributivo_model->asi_id,
-            'horario' => array_search($mod_horario->daho_horario, $horario_values),
-            'jornada' => $mod_horario->daho_jornada,
-            'daca_id' => $id,
+            'arr_cabecera' => $resCab,            
+            'arr_detalle' => $arr_distributivo,   
         ]);
     }
 
