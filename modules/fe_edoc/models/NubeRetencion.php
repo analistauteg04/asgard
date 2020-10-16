@@ -144,7 +144,8 @@ class NubeRetencion extends \app\modules\fe_edoc\components\CActiveRecord {
                     CONCAT(A.CodigoTransaccionERP,'-',A.Establecimiento,'-',A.PuntoEmision,'-',A.Secuencial) NumDocumento,
                     A.FechaEmision,A.IdentificacionSujetoRetenido,A.RazonSocialSujetoRetenido,
                     A.TotalRetencion,'COMPROBANTE DE RETENCION' NombreDocumento,A.AutorizacionSri,
-                       A.ClaveAcceso,A.FechaAutorizacion,A.DocSustentoERP
+                    A.ClaveAcceso,A.FechaAutorizacion,A.DocSustentoERP,
+                    (SELECT CONCAT('<',Codigo,'>',Descripcion,': ',Solucion) FROM " . $con->dbname . ".VSValidacion_Mensajes WHERE Codigo=CodigoError) Mensaje
                     FROM " . $con->dbname . ".NubeRetencion A
                 WHERE A.CodigoDocumento='$this->tipoDoc' AND A.Estado NOT IN (5) ";
         

@@ -462,7 +462,7 @@ class Distributivo extends \yii\db\ActiveRecord {
         }
         $sql = "SELECT  d.uaca_nombre as unidad, e.mod_nombre as modalidad,
                         p.per_cedula as identificacion, 
-                        concat(p.per_pri_nombre, ' ', p.per_pri_apellido, ' ', ifnull(p.per_seg_apellido,'')) as estudiante,
+                        concat(p.per_pri_apellido, ' ', ifnull(p.per_seg_apellido,''), ' ', p.per_pri_nombre) as estudiante,
                         concat(saca_nombre, '-', baca_nombre,'-',baca_anio) as periodo,
                         z.asi_nombre as asignatura,
                         case when m.eppa_estado_pago = '1' then 'Autorizado' else 'No Autorizado' end as pago
@@ -484,7 +484,8 @@ class Distributivo extends \yii\db\ActiveRecord {
                     and a.daca_estado = :estado
                     and a.daca_estado_logico = :estado
                     and g.daes_estado = :estado
-                    and g.daes_estado_logico = :estado";
+                    and g.daes_estado_logico = :estado 
+                order by p.per_pri_apellido, p.per_seg_apellido";
 
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);

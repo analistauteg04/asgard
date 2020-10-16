@@ -105,6 +105,7 @@ $(document).ready(function() {
     });
     
     $('#cmb_tipo_asignacion').change(function () {
+        document.getElementById("cmb_profesor").disabled=true;
         tipo = $('#cmb_tipo_asignacion').val();        
         if (tipo == 1) {
             $('#bloque1').css('display', 'block');            
@@ -197,38 +198,28 @@ function save() {
     var arrParams = new Object();
     arrParams.profesor = $('#cmb_profesor').val();    
     arrParams.periodo = $('#txth_idperiodo').val();        
-    /** Session Storage **/    
+    /** Session Storage **/        
     if (sessionStorage.dts_asignacion_list) {
-        arrParams.grid_docencia_list = (JSON.parse(sessionStorage.dts_asignacion_list)).data;   
-        if (!validateForm()) {
-            requestHttpAjax(link, arrParams, function(response) {
-                showAlert(response.status, response.label, response.message);
-                if (response.status == "OK") {
-                    setTimeout(function() {
-                        var link = $('#txth_base').val() + "/academico/distributivocabecera/index";
-                        window.location = link;
-                    }, 1000);
-                }
-            }, true);
+        var arr_Grid = JSON.parse(sessionStorage.dts_asignacion_list);
+        if (arr_Grid.length > 0) {            
+            arrParams.grid_docencia = sessionStorage.dts_asignacion_list;   
+            if (!validateForm()) {
+                requestHttpAjax(link, arrParams, function(response) {
+                    showAlert(response.status, response.label, response.message);
+                    if (response.status == "OK") {
+                        setTimeout(function() {
+                            var link = $('#txth_base').val() + "/academico/distributivocabecera/index";
+                            window.location = link;
+                        }, 1000);
+                    }
+                }, true);
+            }
+        } else {
+            showAlert('NO_OK', 'error', {"wtmessage": "No Existe datos agregados", "title": 'Información'});
         }
     } else {
         showAlert('NO_OK', 'error', {"wtmessage": "No Existe datos agregados", "title": 'Información'});
-    }
-    
-}
-
-function deleteItem(id) {
-    var link = $('#txth_base').val() + "/academico/distributivoacademico/delete";
-    var arrParams = new Object();
-    arrParams.id = id;
-    requestHttpAjax(link, arrParams, function(response) {
-        if (response.status == "OK") {
-            searchModules();
-            setTimeout(function() {
-                showAlert(response.status, response.label, response.message);
-            }, 1000);
-        }
-    }, true);
+    }    
 }
 
 function exportExcel() {

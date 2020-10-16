@@ -513,16 +513,22 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord {
             $str_search .= "(pers.per_pri_nombre like :estudiante OR ";
             $str_search .= "pers.per_seg_nombre like :estudiante OR ";
             $str_search .= "pers.per_pri_apellido like :estudiante OR ";
-            $str_search .= "pers.per_seg_nombre like :estudiante )  AND ";
-
+            $str_search .= "pers.per_seg_nombre like :estudiante OR ";
+            $str_search .= "pers.per_cedula like :estudiante)  AND ";
 
             if ($arrFiltro['modalidad'] > 0) {
-                $str_search .= " plan.mod_id = :mod_id AND ";
+                $str_search .= " plan.mod_id = :modalidad AND ";
+            }
+
+            if ($arrFiltro['carrera'] != 'Todas') {
+                $str_search .= " plae.pes_carrera like :carrera AND ";
             }
 
             if ($arrFiltro['periodo'] != '0') {
                 $str_search .= " plan.pla_periodo_academico = :periodo AND ";
             }
+
+          
         }
         if ($onlyData == false) {
             $idplanifica = 'plae.pla_id, ';
@@ -546,22 +552,31 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord {
                     plan.pla_estado_logico = :estado AND
                     pers.per_estado = :estado AND
                     pers.per_estado_logico = :estado";
-
+       
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
             $search_cond = "%" . $arrFiltro["estudiante"] . "%";
             $comando->bindParam(":estudiante", $search_cond, \PDO::PARAM_STR);
+           \app\models\Utilities::putMessageLogFile('str_searchxx: ' . $sql);
+               
+            if ($arrFiltro['modalidad'] > 0 ) {
+                $modalidad = $arrFiltro["modalidad"];
+                $comando->bindParam(":modalidad", $modalidad, \PDO::PARAM_INT); 
+            }
+
+            if ($arrFiltro['carrera'] != 'Todas') {                
+                $search_carrera = "%" . $arrFiltro["carrera"] . "%";
+                $comando->bindParam(":carrera", $search_carrera, \PDO::PARAM_STR);
+            }
 
             if ($arrFiltro['periodo'] != '0') {
                 $periodo = $arrFiltro["periodo"];
                 $comando->bindParam(":periodo", $periodo, \PDO::PARAM_STR);
             }
-            if ($arrFiltro['modalidad'] > 0) {
-                $modalidad = $arrFiltro["modalidad"];
-                $comando->bindParam(":mod_id", $modalidad, \PDO::PARAM_INT);
-            }
+            
         }
+       
         $resultData = $comando->queryAll();
         $dataProvider = new ArrayDataProvider([
             'key' => 'id',
@@ -631,10 +646,10 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord {
         // Bloque 1
         for ($i = 1; $i < 7; $i++) {
             $sql .= "SELECT pes_mat_b1_h" . $i . "_cod as cod_asignatura, asig.asi_nombre as asignatura, CASE pes_jornada  
-                            WHEN 1 THEN 'Matutino'  
-                            WHEN 2 THEN 'Nocturno'  
-                            WHEN 3 THEN 'Semipresencial'
-                            WHEN 4 THEN 'Distancia'
+                            WHEN 'M' THEN 'Matutino'  
+                            WHEN 'N' THEN 'Nocturno'  
+                            WHEN 'S' THEN 'Semipresencial'
+                            WHEN 'D' THEN 'Distancia'
 		    END AS pes_jornada, 'Bloque 1', moda.mod_nombre as modalidad, 'Hora " . $i . "' 
                     FROM " . $con->dbname . ".planificacion_estudiante ples
                     INNER JOIN " . $con->dbname . ".modalidad moda ON  moda.mod_id = ples.pes_mod_b1_h" . $i . "
@@ -646,10 +661,10 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord {
         // Bloque 2
         for ($j = 1; $j < 7; $j++) {
             $sql .= "SELECT pes_mat_b2_h" . $j . "_cod as cod_asignatura, asig.asi_nombre as asignatura, CASE pes_jornada  
-                            WHEN 1 THEN 'Matutino'  
-                            WHEN 2 THEN 'Nocturno'  
-                            WHEN 3 THEN 'Semipresencial'
-                            WHEN 4 THEN 'Distancia'
+                            WHEN 'M' THEN 'Matutino'  
+                            WHEN 'N' THEN 'Nocturno'  
+                            WHEN 'S' THEN 'Semipresencial'
+                            WHEN 'D' THEN 'Distancia'
 		    END AS pes_jornada, 'Bloque 2', moda.mod_nombre as modalidad, 'Hora " . $j . "' 
                     FROM " . $con->dbname . ".planificacion_estudiante ples
                     INNER JOIN " . $con->dbname . ".modalidad moda ON  moda.mod_id = ples.pes_mod_b2_h" . $j . "
@@ -863,4 +878,28 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord {
         }
     }
 
+    /**
+     * Function Consultar modalidad y periodo en planificacion.
+     * @author  Giovanni Vergara <analistadesarrollo01@uteg.edu.ec>;
+     * @property       
+     * @return  
+     */
+    public function consultarDatoscabplanifica($mod_id, $pla_periodo_academico) {
+        $con = \Yii::$app->db_academico;
+        $estado = 1;
+
+        $sql = "SELECT count(*) as existe
+                FROM " . $con->dbname . ".planificacion plan
+                WHERE plan.mod_id = :mod_id AND
+                      plan.pla_periodo_academico_id = :pla_periodo_academico AND
+                      plan.pla_estado = :estado AND
+                      plan.pla_estado_logico = :estado";
+
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":mod_id", $mod_id, \PDO::PARAM_INT);
+        $comando->bindParam(":pla_periodo_academico_id", $pla_periodo_academico, \PDO::PARAM_STR);
+        $resultData = $comando->queryOne();
+        return $resultData;
+    }
 }

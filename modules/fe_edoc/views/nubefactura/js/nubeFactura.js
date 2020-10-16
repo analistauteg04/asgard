@@ -169,6 +169,39 @@ function fun_EnviarCorreccion() {
     return true;
 }
 
+function fun_ActulizaEstado() {
+    var ids = String($('#TbG_DOCUMENTO').PbGridView('getSelectedRows'));
+    //alert(ids);
+    var count = ids.split(",");
+    if (count.length > 0 && ids != "") {
+        if (!confirm(mgEnvDocum)) return false;
+        var link = $('#txth_base').val() + "/fe_edoc/nubefactura/actulizaestado";
+        var encodedIds = base64_encode(ids); //Verificar cofificacion Base
+        $("#TbG_DOCUMENTO").addClass("loading");
+        var arrParams = new Object();
+        arrParams.ids = encodedIds;
+        requestHttpAjax(link, arrParams, function(response) {
+            if (response.status == "OK") {
+                $("#messageInfo").html(response.message + buttonAlert);
+                alerMessage();
+                showAlert(response.status, response.label, response.message);
+                //actualizarTbG_DOCUMENTO();
+                buscarDataIndex('', '');
+            } else {
+                $("#messageInfo").html(response.message + buttonAlert);
+                alerMessage();
+                showAlert(response.status, response.label, response.message);
+            }
+        }, true);
+        $("#TbG_DOCUMENTO").removeClass("loading");
+    } else {
+        $("#messageInfo").html(selecDocAnu + buttonAlert);
+        alerMessage();
+        shortModal(objLang.Select_an_item_to_process_the_request_, 'error', 'NO_OK');
+    }
+    return true;
+}
+
 function fun_EnviarAnular() {
     var ids = String($('#TbG_DOCUMENTO').PbGridView('getSelectedRows'));
     var count = ids.split(",");

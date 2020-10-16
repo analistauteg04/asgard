@@ -130,5 +130,6 @@ class VSValidador {
             'NO' => Yii::t('formulario', 'NO'),
         ];
     }
+    
 
 }

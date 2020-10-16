@@ -21,8 +21,10 @@ class cls_Base {
     public function conexionIntermedio() {
         //Configuracion Local
         $bd_host = "localhost";
-        $bd_usuario = 'uteg';
-        $bd_password ='Utegadmin2016*';
+        $bd_usuario = 'root';
+        $bd_password ='root00';
+        //$bd_usuario = 'uteg';
+        //$bd_password ='Utegadmin2016*';
         $bd_base = $this->BdIntermedio;
         $con = new mysqli($bd_host,$bd_usuario,$bd_password,$bd_base);
         $con->set_charset('utf8');//Convierte todo lo que esté codificado de latin1 a UTF-8 Errore de Ñ o Caractes especiales 
@@ -38,8 +40,10 @@ class cls_Base {
     public function conexionAppWeb() {
         //Configuracion Local
         $bd_host = "localhost";
-        $bd_usuario = "uteg";
-        $bd_password = "Utegadmin2016*";
+        $bd_usuario = 'root';
+        $bd_password ='root00';
+        //$bd_usuario = "uteg";
+        //$bd_password = "Utegadmin2016*";
         $bd_base = $this->BdAppweb;
         $con = new mysqli($bd_host,$bd_usuario,$bd_password,$bd_base);
         $con->set_charset('utf8');//Convierte todo lo que esté codificado de latin1 a UTF-8 Errore de Ñ o Caractes especiales 

@@ -411,14 +411,14 @@ class PlanificacionController extends \app\components\CController {
         $modcanal = new Oportunidad();
         $unidad_acad_data = $uni_aca_model->consultarUnidadAcademicas();
         $modalidad_data = $modalidad_model->consultarModalidad($unidad_acad_data[0]["id"], $emp_id);
-        $academic_study_data = $modcanal->consultarCarreraModalidad($unidad_acad_data[0]["id"], $modalidad_data[0]["id"]);
+        $academic_study_data = $modcanal->consultarCarreraModalidad(null,null);
         $model_plan = $mod_periodo->consultarEstudianteplanifica();
         $data = Yii::$app->request->get();
         if ($data['PBgetFilter']) {
             $arrSearch["estudiante"] = $data['estudiante'];
-            $arrSearch["unidad"] = $data['unidad'];
+            //$arrSearch["unidad"] = $data['unidad'];
             $arrSearch["modalidad"] = $data['modalidad'];
-            /* $arrSearch["carrera"] = $data['carrera']; */
+            $arrSearch["carrera"] = $data['carrera']; 
             $arrSearch["periodo"] = $data['periodo'];
             $model_plan = $mod_periodo->consultarEstudianteplanifica($arrSearch);
             return $this->render('planificacionestudiante-grid', [
@@ -472,9 +472,9 @@ class PlanificacionController extends \app\components\CController {
         $mod_periodo = new PlanificacionEstudiante();
         $data = Yii::$app->request->get();
         $arrSearch["estudiante"] = $data['estudiante'];
-        $arrSearch["unidad"] = $data['unidad'];
+        //$arrSearch["unidad"] = $data['unidad'];
         $arrSearch["modalidad"] = $data['modalidad'];
-        /* $arrSearch["carrera"] = $data['carrera']; */
+        $arrSearch["carrera"] = $data['carrera']; 
         $arrSearch["periodo"] = $data['periodo'];
         $arrData = array();
         if (empty($arrSearch)) {
@@ -499,9 +499,9 @@ class PlanificacionController extends \app\components\CController {
         $mod_periodo = new PlanificacionEstudiante();
         $data = Yii::$app->request->get();
         $arrSearch["estudiante"] = $data['estudiante'];
-        $arrSearch["unidad"] = $data['unidad'];
+        //$arrSearch["unidad"] = $data['unidad'];
         $arrSearch["modalidad"] = $data['modalidad'];
-        /* $arrSearch["carrera"] = $data['carrera']; */
+        $arrSearch["carrera"] = $data['carrera'];
         $arrSearch["periodo"] = $data['periodo'];
         $arrData = array();
         if (empty($arrSearch)) {
@@ -679,6 +679,26 @@ class PlanificacionController extends \app\components\CController {
         //$mod_detalle = $mod_periodo->consultarDetalleplanifica($pla_id, $per_id, false);
         $jornada = $mod_jornada->consultarJornadahorario();
         $malla = $mod_malla->consultarmallasxcarrera($unidad_acad_data[0]["id"], $modalidad_data[0]["id"], $modalidad_data[0]["id"]);
+        $materia = $mod_malla->consultarasignaturaxmalla($malla[0]["id"]);
+        
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+            if (isset($data["getmodalidad"])) {
+                $modalidad = $modcarrera->consultarmodalidadxcarrera($data["eaca_id"]);
+                $message = array("modalidad" => $modalidad);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+            } 
+            if (isset($data["getmalla"])) {
+                $mallaca = $mod_malla->consultarmallasxcarrera($data["uaca_id"], $data["moda_id"], $data["eaca_id"]);
+                $message = array("mallaca" => $mallaca);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+            }
+            if (isset($data["getmateria"])) {
+                $asignatura = $mod_malla->consultarasignaturaxmalla($data["maca_id"]);
+                $message = array("asignatura" => $asignatura);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+            }
+        }
         return $this->render('new', [
                     //'arr_cabecera' => $mod_cabecera,
                     //'model_detalle' => $mod_detalle,
@@ -691,6 +711,7 @@ class PlanificacionController extends \app\components\CController {
                     'arr_hora' => $this->Horas(),
                     'arr_modalidadh' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Seleccionar"]], $modalidad_data), "id", "name"),
                     'arr_malla' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Seleccionar"]],$malla), "id", "name"),
+                    'arr_materia' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Seleccionar"]],$materia), "id", "name"),
         ]);
     }
 }

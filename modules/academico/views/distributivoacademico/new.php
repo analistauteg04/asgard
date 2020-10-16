@@ -108,3 +108,8 @@ academico::registerTranslations();
     </div>
         
 </form>
+<?php
+$this->registerJs(
+    "loadSessionCampos('dts_asignacion_list', '', '', '');",
+    $this::POS_END);
+?>
