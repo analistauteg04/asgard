@@ -516,7 +516,7 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord {
             $str_search .= "pers.per_seg_nombre like :estudiante OR ";
             $str_search .= "pers.per_cedula like :estudiante)  AND ";
 
-            if ($arrFiltro['modalidad'] != 0) {
+            if ($arrFiltro['modalidad'] > 0) {
                 $str_search .= " plan.mod_id = :modalidad AND ";
             }
 
@@ -550,17 +550,18 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord {
                     plan.pla_estado_logico = :estado AND
                     pers.per_estado = :estado AND
                     pers.per_estado_logico = :estado";
-
+       
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
             $search_cond = "%" . $arrFiltro["estudiante"] . "%";
             $comando->bindParam(":estudiante", $search_cond, \PDO::PARAM_STR);
-
-           if ($arrFiltro['modalidad'] != 0 ) {
+           //\app\models\Utilities::putMessageLogFile('str_search: ' . $str_search);
+               
+            if ($arrFiltro['modalidad'] > 0 ) {
                 $modalidad = $arrFiltro["modalidad"];
-                $comando->bindParam(":modalidad", $modalidad, \PDO::PARAM_INT);
-           }
+                $comando->bindParam(":modalidad", $modalidad, \PDO::PARAM_INT); 
+            }
             if ($arrFiltro['periodo'] != '0') {
                 $periodo = $arrFiltro["periodo"];
                 $comando->bindParam(":periodo", $periodo, \PDO::PARAM_STR);
@@ -571,6 +572,7 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord {
                 $comando->bindParam(":carrera", $search_carrera, \PDO::PARAM_STR);
             }
         }
+       
         $resultData = $comando->queryAll();
         $dataProvider = new ArrayDataProvider([
             'key' => 'id',
