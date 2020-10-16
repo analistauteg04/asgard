@@ -14,6 +14,10 @@ $(document).ready(function () {
     $('#btn_buscarPlanestudiante').click(function () {
         actualizarGridPlanest();
     });
+
+    $('#btn_saveplanificacion').click(function () {
+        guardaplanificacion();
+    });
     /************ planificacion x estudiante **********************************/
     $('#cmb_unidades').change(function () {
         var link = $('#txth_base').val() + "/academico/planificacion/planificacionestudiante";
@@ -107,10 +111,10 @@ $(document).ready(function () {
                                     if (response.status == "OK") {
                                         data = response.message;
                                         setComboDataselect(data.asignatura, "cmb_asignaest", "Seleccionar");
-                                        
+
                                     }
                                 }, true);
-                            } 
+                            }
                         }
                     }, true);
                 }
@@ -130,13 +134,13 @@ $(document).ready(function () {
                 data = response.message;
                 setComboDataselect(data.mallaca, "cmb_malladoest", "Seleccionar");
             }
-        }, true); 
+        }, true);
     });
 
     $('#cmb_malladoest').change(function () {
         var link = $('#txth_base').val() + "/academico/planificacion/new";
-        var arrParams = new Object();        
-        arrParams.maca_id = $(this).val();      
+        var arrParams = new Object();
+        arrParams.maca_id = $(this).val();
         arrParams.empresa_id = 1;
         arrParams.getmateria = true;
         requestHttpAjax(link, arrParams, function (response) {
@@ -144,7 +148,7 @@ $(document).ready(function () {
                 data = response.message;
                 setComboDataselect(data.asignatura, "cmb_asignaest", "Seleccionar");
             }
-        }, true); 
+        }, true);
     });
     /*************************************************************************/
     $('#btn_buscarHorario').click(function () {
@@ -229,7 +233,7 @@ function actualizarGridMarcacion() {
     //Buscar almenos una clase con el nombre para ejecutar
     if (!$(".blockUI").length) {
         showLoadingPopup();
-        $('#PbMarcacion').PbGridView('applyFilterData', {'profesor': profesor, 'materia': materia, 'f_ini': f_ini, 'f_fin': f_fin, 'periodo': periodo});
+        $('#PbMarcacion').PbGridView('applyFilterData', { 'profesor': profesor, 'materia': materia, 'f_ini': f_ini, 'f_fin': f_fin, 'periodo': periodo });
         setTimeout(hideLoadingPopup, 2000);
     }
 }
@@ -298,7 +302,7 @@ function actualizarGridHorario() {
     //Buscar almenos una clase con el nombre para ejecutar
     if (!$(".blockUI").length) {
         showLoadingPopup();
-        $('#PbHorario').PbGridView('applyFilterData', {'profesor': profesor, 'unidad': unidad, 'modalidad': modalidad, 'f_ini': f_ini, 'f_fin': f_fin, 'periodo': periodo});
+        $('#PbHorario').PbGridView('applyFilterData', { 'profesor': profesor, 'unidad': unidad, 'modalidad': modalidad, 'f_ini': f_ini, 'f_fin': f_fin, 'periodo': periodo });
         setTimeout(hideLoadingPopup, 2000);
     }
 }
@@ -335,7 +339,7 @@ function cargarNoMarcadas() {
 
     if (!$(".blockUI").length) {
         showLoadingPopup();
-        $('#PbNomarcacion').PbGridView('applyFilterData', {'profesor': profesor, 'materia': materia, 'unidad': unidad, 'modalidad': modalidad, 'f_ini': f_ini, 'f_fin': f_fin, 'periodo': periodo, 'tipo': tipo});
+        $('#PbNomarcacion').PbGridView('applyFilterData', { 'profesor': profesor, 'materia': materia, 'unidad': unidad, 'modalidad': modalidad, 'f_ini': f_ini, 'f_fin': f_fin, 'periodo': periodo, 'tipo': tipo });
         setTimeout(hideLoadingPopup, 2000);
     }
 }
@@ -451,7 +455,7 @@ function actualizarGridPlanest() {
     //Buscar almenos una clase con el nombre para ejecutar
     if (!$(".blockUI").length) {
         showLoadingPopup();
-        $('#PbPlanificaestudiante').PbGridView('applyFilterData', {'estudiante': estudiante, /*'unidad': unidad,*/ 'modalidad': modalidad, 'carrera': carrera, 'periodo': periodo});
+        $('#PbPlanificaestudiante').PbGridView('applyFilterData', { 'estudiante': estudiante, /*'unidad': unidad,*/ 'modalidad': modalidad, 'carrera': carrera, 'periodo': periodo });
         setTimeout(hideLoadingPopup, 2000);
     }
 }
@@ -460,7 +464,7 @@ function exportExcelplanifica() {
     var estudiante = $('#txt_buscarDataPlanifica').val();
     //var unidad = $('#cmb_unidades option:selected').val();
     var modalidad = $('#cmb_modalidades option:selected').val();
-    var carrera =  $('#cmb_carreras option:selected').text(); //$('#cmb_carreras option:selected').val();
+    var carrera = $('#cmb_carreras option:selected').text(); //$('#cmb_carreras option:selected').val();
     var periodo = $('#cmb_periodo option:selected').val();
     window.location.href = $('#txth_base').val() + "/academico/planificacion/expexcelplanifica?estudiante=" + estudiante + /*"&unidad=" + unidad +*/ '&modalidad=' + modalidad + "&carrera=" + carrera + "&periodo=" + periodo;
 }
@@ -471,7 +475,7 @@ function exportPdfplanifica() {
     var modalidad = $('#cmb_modalidades option:selected').val();
     var carrera = $('#cmb_carreras option:selected').text(); //$('#cmb_carreras option:selected').val();
     var periodo = $('#cmb_periodo option:selected').val();
-    window.location.href = $('#txth_base').val() + "/academico/planificacion/exppdfplanifica?pdf=1&estudiante=" + estudiante + /*"&unidad=" + unidad +*/ '&modalidad=' + modalidad + "&carrera=" + carrera +  "&periodo=" + periodo;
+    window.location.href = $('#txth_base').val() + "/academico/planificacion/exppdfplanifica?pdf=1&estudiante=" + estudiante + /*"&unidad=" + unidad +*/ '&modalidad=' + modalidad + "&carrera=" + carrera + "&periodo=" + periodo;
 }
 function accion(plaid, perid) {
     var link = $('#txth_base').val() + "/academico/planificacion/deleteplanest";
@@ -562,10 +566,15 @@ function agregarItems(opAccion) {
                 arr_Grid = JSON.parse(sessionStorage.dts_datosItemplan);
                 var size = arr_Grid.length;
                 if (size > 0) {
-                    //Varios Items
+                    //Varios Items                    
                     arr_Grid[size] = objProducto(size);
                     sessionStorage.dts_datosItemplan = JSON.stringify(arr_Grid);
-                    addVariosItem(tGrid, arr_Grid, -1);
+                    //alert ('indice' + size);
+                    //if (size < 6) {
+                        addVariosItem(tGrid, arr_Grid, -1);
+                    /*} else {
+                        showAlert('NO_OK', 'error', { "wtmessage": "Ya tiene seleccionada el maximo de  asignaturas", "title": 'Información' });
+                    }*/
                     limpiarDetalle();
                 } else {
                     /*Agrego a la Sesion*/
@@ -587,7 +596,7 @@ function agregarItems(opAccion) {
             //data edicion
         }
     } else {
-        showAlert('NO_OK', 'error', {"wtmessage": "Todos los datos son obligatorios", "title": 'Información'});
+        showAlert('NO_OK', 'error', { "wtmessage": "Todos los datos del detalle planificación son obligatorios", "title": 'Información' });
     }
 }
 function objProducto(indice) {
@@ -610,6 +619,7 @@ function objProducto(indice) {
 
     //rowGrid.pro_otros = ($("#chk_otros").prop("checked")) ? 1 : 0;
     rowGrid.accion = "new";
+    //alert ('indice' + rowGrid.indice);
     return rowGrid;
 }
 function addPrimerItem(TbGtable, lista, i) {
@@ -698,4 +708,35 @@ function recargarGridItem() {
             }
         }
     }
+}
+
+function guardaplanificacion() {
+    var arrParams = new Object();
+    var link = $('#txth_base').val() + "/academico/planificacion/saveplanificacion";
+
+    arrParams.carreraest = $('#cmb_carreraest').val();
+    arrParams.modalidadest = $('#cmb_modalidadest').val();
+    arrParams.mallaest = $('#cmb_malladoest').val();
+    arrParams.periodoest = $('#cmb_periodoest').val();
+    arrParams.nombreest = $('#txt_buscarest').val();
+    if ($('#cmb_carreraest').val() != '0' && $('#cmb_modalidadest').val() != '0' && $('#cmb_malladoest').val() != '0' && $('#cmb_periodoest').val() != '0' && $('#txt_buscarest').val().length > '0') {
+        if (sessionStorage.dts_datosItemplan) {
+            alert('Puedo grabar');
+            /*if (!validateForm()) {
+                requestHttpAjax(link, arrParams, function (response) {
+                    showAlert(response.status, response.label, response.message);
+                    if (!response.error) {
+                     setTimeout(function () {
+                     window.location.href = $('#txth_base').val() + "/academico/planificacion/planificacionestudiante";
+                     }, 3000);
+                    }
+                }, true);
+            }*/
+        } else {
+            showAlert('NO_OK', 'error', { "wtmessage": "No ha ingresado detalle en planificación", "title": 'Información' });
+        }
+    } else {
+        showAlert('NO_OK', 'error', { "wtmessage": "Todos los datos de la cabecera planificación son obligatorios", "title": 'Información' });
+    }
+
 }

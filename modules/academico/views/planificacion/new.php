@@ -8,7 +8,7 @@ use app\modules\academico\Module as academico;
 academico::registerTranslations();
 ?>
 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-    <h4><span id="lbl_planear"><?= academico::t("Academico", "See Student Planning") ?></span></h4>
+    <h4><span id="lbl_planear"><?= academico::t("Academico", "Headboard Student Planning") ?></span></h4>
 </div><br><br><br>
 <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
     <p class="text-danger"> <?= Yii::t("formulario", "Fields with * are required") ?> </p>
@@ -123,6 +123,12 @@ academico::registerTranslations();
                     </table>
                 </div>
             </div>
-        </div>
+        </div></br></br></br></br>
+        <div class='col-md-12 col-sm-12 col-xs-12 col-lg-12'>        
+            <div class="col-sm-10 col-md-10 col-xs-8 col-lg-10"></div>
+            <div class="col-sm-2 col-md-2 col-xs-4 col-lg-2">                
+                <a id="btn_saveplanificacion" href="javascript:" class="btn btn-primary btn-block"> <?= Yii::t("formulario", "Save") ?></a>
+            </div>        
+        </div> 
     </div>
     </form>     
