@@ -222,20 +222,6 @@ function save() {
     }    
 }
 
-function deleteItem(id) {
-    var link = $('#txth_base').val() + "/academico/distributivoacademico/delete";
-    var arrParams = new Object();
-    arrParams.id = id;
-    requestHttpAjax(link, arrParams, function(response) {
-        if (response.status == "OK") {
-            searchModules();
-            setTimeout(function() {
-                showAlert(response.status, response.label, response.message);
-            }, 1000);
-        }
-    }, true);
-}
-
 function exportExcel() {
     var search = $('#txt_buscarData').val();
     var unidad = $('#cmb_unidad_dis').val();

@@ -13,3 +13,5 @@ alter table db_academico.distributivo_academico drop ppro_id;
 update db_academico.distributivo_academico a
 set a.daho_id = (select daho_id from db_academico.distributivo_academico_horario where uaca_id = a.uaca_id and mod_id = a.mod_id and daho_jornada = a.daca_jornada and daho_horario = a.daca_horario)
 where a.daho_id is null
+
+-- Colocar daca_horario y daca_jornada que permitan nulos o eliminarlos despuès.
