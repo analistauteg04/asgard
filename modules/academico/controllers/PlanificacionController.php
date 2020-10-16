@@ -411,12 +411,12 @@ class PlanificacionController extends \app\components\CController {
         $modcanal = new Oportunidad();
         $unidad_acad_data = $uni_aca_model->consultarUnidadAcademicas();
         $modalidad_data = $modalidad_model->consultarModalidad($unidad_acad_data[0]["id"], $emp_id);
-        $academic_study_data = $modcanal->consultarCarreraModalidad($unidad_acad_data[0]["id"], $modalidad_data[0]["id"]);
+        $academic_study_data = $modcanal->consultarCarreraModalidad(null,null);
         $model_plan = $mod_periodo->consultarEstudianteplanifica();
         $data = Yii::$app->request->get();
         if ($data['PBgetFilter']) {
             $arrSearch["estudiante"] = $data['estudiante'];
-            $arrSearch["unidad"] = $data['unidad'];
+            //$arrSearch["unidad"] = $data['unidad'];
             $arrSearch["modalidad"] = $data['modalidad'];
             $arrSearch["carrera"] = $data['carrera']; 
             $arrSearch["periodo"] = $data['periodo'];
@@ -472,7 +472,7 @@ class PlanificacionController extends \app\components\CController {
         $mod_periodo = new PlanificacionEstudiante();
         $data = Yii::$app->request->get();
         $arrSearch["estudiante"] = $data['estudiante'];
-        $arrSearch["unidad"] = $data['unidad'];
+        //$arrSearch["unidad"] = $data['unidad'];
         $arrSearch["modalidad"] = $data['modalidad'];
         $arrSearch["carrera"] = $data['carrera']; 
         $arrSearch["periodo"] = $data['periodo'];
@@ -499,7 +499,7 @@ class PlanificacionController extends \app\components\CController {
         $mod_periodo = new PlanificacionEstudiante();
         $data = Yii::$app->request->get();
         $arrSearch["estudiante"] = $data['estudiante'];
-        $arrSearch["unidad"] = $data['unidad'];
+        //$arrSearch["unidad"] = $data['unidad'];
         $arrSearch["modalidad"] = $data['modalidad'];
         $arrSearch["carrera"] = $data['carrera'];
         $arrSearch["periodo"] = $data['periodo'];

@@ -520,13 +520,15 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord {
                 $str_search .= " plan.mod_id = :modalidad AND ";
             }
 
+            if ($arrFiltro['carrera'] != 'Todas') {
+                $str_search .= " plae.pes_carrera like :carrera AND ";
+            }
+
             if ($arrFiltro['periodo'] != '0') {
                 $str_search .= " plan.pla_periodo_academico = :periodo AND ";
             }
 
-            if ($arrFiltro['carrera'] != 'Todas') {
-                $str_search .= " plae.pes_carrera like :carrera AND ";
-            }
+          
         }
         if ($onlyData == false) {
             $idplanifica = 'plae.pla_id, ';
@@ -556,21 +558,23 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord {
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
             $search_cond = "%" . $arrFiltro["estudiante"] . "%";
             $comando->bindParam(":estudiante", $search_cond, \PDO::PARAM_STR);
-           //\app\models\Utilities::putMessageLogFile('str_search: ' . $str_search);
+           \app\models\Utilities::putMessageLogFile('str_searchxx: ' . $sql);
                
             if ($arrFiltro['modalidad'] > 0 ) {
                 $modalidad = $arrFiltro["modalidad"];
                 $comando->bindParam(":modalidad", $modalidad, \PDO::PARAM_INT); 
-            }
-            if ($arrFiltro['periodo'] != '0') {
-                $periodo = $arrFiltro["periodo"];
-                $comando->bindParam(":periodo", $periodo, \PDO::PARAM_STR);
             }
 
             if ($arrFiltro['carrera'] != 'Todas') {                
                 $search_carrera = "%" . $arrFiltro["carrera"] . "%";
                 $comando->bindParam(":carrera", $search_carrera, \PDO::PARAM_STR);
             }
+
+            if ($arrFiltro['periodo'] != '0') {
+                $periodo = $arrFiltro["periodo"];
+                $comando->bindParam(":periodo", $periodo, \PDO::PARAM_STR);
+            }
+            
         }
        
         $resultData = $comando->queryAll();
