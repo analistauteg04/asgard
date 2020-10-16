@@ -571,7 +571,7 @@ function agregarItems(opAccion) {
                     sessionStorage.dts_datosItemplan = JSON.stringify(arr_Grid);
                     //alert ('indice' + size);
                     //if (size < 6) {
-                        addVariosItem(tGrid, arr_Grid, -1);
+                    addVariosItem(tGrid, arr_Grid, -1);
                     /*} else {
                         showAlert('NO_OK', 'error', { "wtmessage": "Ya tiene seleccionada el maximo de  asignaturas", "title": 'Información' });
                     }*/
@@ -641,8 +641,13 @@ function limpiarDetalle() {
 function addVariosItem(TbGtable, lista, i) {
     //i=(i==-1)?($('#'+TbGtable+' tr').length)-1:i;
     i = ($('#' + TbGtable + ' tr').length) - 1;
+    //alert ('dasd' + i);
     //$('#'+TbGtable+' >table >tbody').append(retornaFilaProducto(i,lista,TbGtable,true));
-    $('#' + TbGtable + ' tr:last').after(retornaFila(i, lista, TbGtable, true));
+    if (i < 6) {
+        $('#' + TbGtable + ' tr:last').after(retornaFila(i, lista, TbGtable, true));
+    } else {
+        showAlert('NO_OK', 'error', { "wtmessage": "Ya tiene ingresadas 6 matrerias permitidas", "title": 'Información' });
+    }
 }
 
 function retornaFila(c, Grid, TbGtable, op) {
@@ -661,7 +666,7 @@ function retornaFila(c, Grid, TbGtable, op) {
     strFila += '<td>';//¿Está seguro de eliminar este elemento?   
     strFila += '<a onclick="eliminarItems(\'' + Grid[c]['indice'] + '\',\'' + TbGtable + '\')" ><span class="glyphicon glyphicon-remove"></span></a>';
     strFila += '</td>';
-
+    //alert('cxc'+ Grid[c]['indice']); //Este necesito regresar
     if (op) {
         strFila = '<tr>' + strFila + '</tr>';
     }
