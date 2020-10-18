@@ -845,13 +845,71 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord {
     }
 
     /**
+     * Function insertarDataPlanificacionestudiante 
+     * Guiarse de insertarPersona
+     * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>
+     * @property integer $userid
+     * @return  
+     */
+    /* INSERTAR DATOS */
+    public function insertarDataPlanificacionestudiante($data) {
+        $arroout = array();
+        $con = \Yii::$app->db_academico;        
+        $trans = $con->beginTransaction();
+        try {
+            //$per_id = @Yii::$app->session->get("PB_perid");    
+            $data = isset($data['DATA']) ? $data['DATA'] : array();
+            $this->insertarPlanificacionestudiante($con,json_decode($data));
+            $trans->commit();
+            $con->close();
+            //RETORNA DATOS 
+            //$arroout["ids"]= $ftem_id;
+            $arroout["status"]= true;
+            //$arroout["secuencial"]= $doc_numero;
+            
+                       
+            return $arroout;
+        } catch (\Exception $e) {
+            $trans->rollBack();
+            $con->close();
+            //throw $e;
+            $arroout["status"]= false;
+            return $arroout;
+        }
+    }
+    /** FALTA MODIFICAR ojoooo
      * Function insertarPlanificacionestudiante 
      * Guiarse de insertarPersona
      * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>
      * @property integer $userid
      * @return  
      */
-    public function insertarPlanificacionestudiante($con, $parameters, $keys, $name_table) {
+    private function insertarPlanificacionestudiante($con,$dts) {
+        //dre_id
+        $usu_id = @Yii::$app->session->get("PB_iduser");
+        /*for ($i = 0; $i < sizeof($dts); $i++) {
+            $sql = "INSERT INTO " . $con->dbname . ".planificacion_estudiante
+                    (pla_id,per_id,pes_jornada,pes_cod_carrera,pes_carrera,pes_dni,
+                        pes_nombres,dre_estado,dre_fecha_archivo,dre_estado_logico)VALUES
+                    (:est_id,:dre_tipo,:dre_codificacion,:dre_ruta,:dre_imagen,:dre_descripcion,
+                        :dre_usu_ingresa,:dre_estado,:dre_fecha_archivo,:dre_estado_logico)";
+            $command = $con->createCommand($sql);
+            $command->bindParam(":est_id", $dts[$i]->est_id, \PDO::PARAM_INT);
+            $command->bindParam(":dre_tipo", $dts[$i]->dre_tipo, \PDO::PARAM_INT);
+            $command->bindParam(":dre_codificacion", $dts[$i]->dre_codificacion, \PDO::PARAM_STR);
+            $command->bindParam(":dre_ruta", $dts[$i]->dre_ruta, \PDO::PARAM_STR);
+            $command->bindParam(":dre_imagen", $dts[$i]->dre_imagen, \PDO::PARAM_STR);
+            $command->bindParam(":dre_descripcion", ucwords(strtolower($dts[$i]->dre_descripcion)), \PDO::PARAM_STR);
+            $command->bindParam(":dre_usu_ingresa", $usu_id, \PDO::PARAM_INT);
+            $command->bindParam(":dre_estado", $dts[$i]->dre_estado, \PDO::PARAM_INT);
+            $command->bindParam(":dre_fecha_archivo", $dts[$i]->dre_fecha_archivo, \PDO::PARAM_STR);            
+            $command->bindParam(":dre_estado_logico", $dts[$i]->dre_estado_logico, \PDO::PARAM_INT);
+            //$command->bindParam(":per_nombre", $data[0]['per_nombre'], \PDO::PARAM_STR);
+            $command->execute();
+        }*/
+        
+    }
+   /* public function insertarPlanificacionestudiante($con, $parameters, $keys, $name_table) {
         $trans = $con->getTransaction();
         $param_sql .= "" . $keys[0];
         $bdet_sql .= "'" . $parameters[0] . "'";
@@ -876,7 +934,7 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord {
             }
             return 0;
         }
-    }
+    }*/
 
     /**
      * Function Consultar modalidad y periodo en planificacion.

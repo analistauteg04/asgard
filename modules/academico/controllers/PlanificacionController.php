@@ -411,14 +411,14 @@ class PlanificacionController extends \app\components\CController {
         $modcanal = new Oportunidad();
         $unidad_acad_data = $uni_aca_model->consultarUnidadAcademicas();
         $modalidad_data = $modalidad_model->consultarModalidad($unidad_acad_data[0]["id"], $emp_id);
-        $academic_study_data = $modcanal->consultarCarreraModalidad(null,null);
+        $academic_study_data = $modcanal->consultarCarreraModalidad(null, null);
         $model_plan = $mod_periodo->consultarEstudianteplanifica();
         $data = Yii::$app->request->get();
         if ($data['PBgetFilter']) {
             $arrSearch["estudiante"] = $data['estudiante'];
             //$arrSearch["unidad"] = $data['unidad'];
             $arrSearch["modalidad"] = $data['modalidad'];
-            $arrSearch["carrera"] = $data['carrera']; 
+            $arrSearch["carrera"] = $data['carrera'];
             $arrSearch["periodo"] = $data['periodo'];
             $model_plan = $mod_periodo->consultarEstudianteplanifica($arrSearch);
             return $this->render('planificacionestudiante-grid', [
@@ -474,7 +474,7 @@ class PlanificacionController extends \app\components\CController {
         $arrSearch["estudiante"] = $data['estudiante'];
         //$arrSearch["unidad"] = $data['unidad'];
         $arrSearch["modalidad"] = $data['modalidad'];
-        $arrSearch["carrera"] = $data['carrera']; 
+        $arrSearch["carrera"] = $data['carrera'];
         $arrSearch["periodo"] = $data['periodo'];
         $arrData = array();
         if (empty($arrSearch)) {
@@ -661,6 +661,7 @@ class PlanificacionController extends \app\components\CController {
             }
         }
     }
+
     public function actionNew() {
         //$pla_id = $_GET["pla_id"];
         //$per_id = $_GET["per_id"];
@@ -680,14 +681,14 @@ class PlanificacionController extends \app\components\CController {
         $jornada = $mod_jornada->consultarJornadahorario();
         $malla = $mod_malla->consultarmallasxcarrera($unidad_acad_data[0]["id"], $modalidad_data[0]["id"], $modalidad_data[0]["id"]);
         $materia = $mod_malla->consultarasignaturaxmalla($malla[0]["id"]);
-        
+
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
             if (isset($data["getmodalidad"])) {
                 $modalidad = $modcarrera->consultarmodalidadxcarrera($data["eaca_id"]);
                 $message = array("modalidad" => $modalidad);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
-            } 
+            }
             if (isset($data["getmalla"])) {
                 $mallaca = $mod_malla->consultarmallasxcarrera($data["uaca_id"], $data["moda_id"], $data["eaca_id"]);
                 $message = array("mallaca" => $mallaca);
@@ -703,15 +704,39 @@ class PlanificacionController extends \app\components\CController {
                     //'arr_cabecera' => $mod_cabecera,
                     //'model_detalle' => $mod_detalle,
                     'arr_unidad' => ArrayHelper::map($unidad_acad_data, "id", "name"),
-                    'arr_modalidad' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Seleccionar"]],$modalidad_data), "id", "name"),
+                    'arr_modalidad' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Seleccionar"]], $modalidad_data), "id", "name"),
                     'arr_carrera' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Seleccionar"]], $academic_study_data), "id", "name"),
                     'arr_periodo' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Seleccionar"]], $periodo), "id", "name"),
                     'arr_jornada' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Seleccionar"]], $jornada), "id", "name"),
                     'arr_bloque' => $this->Bloques(),
                     'arr_hora' => $this->Horas(),
                     'arr_modalidadh' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Seleccionar"]], $modalidad_data), "id", "name"),
-                    'arr_malla' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Seleccionar"]],$malla), "id", "name"),
-                    'arr_materia' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Seleccionar"]],$materia), "id", "name"),
+                    'arr_malla' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Seleccionar"]], $malla), "id", "name"),
+                    'arr_materia' => ArrayHelper::map(array_merge([["id" => "0", "name" => "Seleccionar"]], $materia), "id", "name"),
         ]);
     }
+
+    public function actionSaveplanificacion() {
+        if (Yii::$app->request->isAjax) {
+           $mod_planifica = new PlanificacionEstudiante();
+            $data = Yii::$app->request->post();
+            $accion = isset($data['ACCION']) ? $data['ACCION'] : "";
+            if ($accion == "Create") {
+                //Nuevo Registro
+                $resul = $mod_planifica->insertarDataPlanificacionestudiante($data);
+            } else if ($accion == "Update") {
+                //Modificar Planificacion
+                //$resul = $mod_repositorio->actualizarMedicos($data);                
+            }
+            if ($resul['status']) {
+                $message = ["info" => Yii::t('exception', '<strong>Well done!</strong> your information was successfully saved.')];
+                echo Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message, $resul);
+            } else {
+                $message = ["info" => Yii::t('exception', 'The above error occurred while the Web server was processing your request.')];
+                echo Utilities::ajaxResponse('NO_OK', 'alert', Yii::t('jslang', 'Error'), 'false', $message);
+            }
+            return;
+        }
+    }
+
 }

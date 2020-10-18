@@ -233,7 +233,7 @@ function actualizarGridMarcacion() {
     //Buscar almenos una clase con el nombre para ejecutar
     if (!$(".blockUI").length) {
         showLoadingPopup();
-        $('#PbMarcacion').PbGridView('applyFilterData', { 'profesor': profesor, 'materia': materia, 'f_ini': f_ini, 'f_fin': f_fin, 'periodo': periodo });
+        $('#PbMarcacion').PbGridView('applyFilterData', {'profesor': profesor, 'materia': materia, 'f_ini': f_ini, 'f_fin': f_fin, 'periodo': periodo});
         setTimeout(hideLoadingPopup, 2000);
     }
 }
@@ -302,7 +302,7 @@ function actualizarGridHorario() {
     //Buscar almenos una clase con el nombre para ejecutar
     if (!$(".blockUI").length) {
         showLoadingPopup();
-        $('#PbHorario').PbGridView('applyFilterData', { 'profesor': profesor, 'unidad': unidad, 'modalidad': modalidad, 'f_ini': f_ini, 'f_fin': f_fin, 'periodo': periodo });
+        $('#PbHorario').PbGridView('applyFilterData', {'profesor': profesor, 'unidad': unidad, 'modalidad': modalidad, 'f_ini': f_ini, 'f_fin': f_fin, 'periodo': periodo});
         setTimeout(hideLoadingPopup, 2000);
     }
 }
@@ -339,7 +339,7 @@ function cargarNoMarcadas() {
 
     if (!$(".blockUI").length) {
         showLoadingPopup();
-        $('#PbNomarcacion').PbGridView('applyFilterData', { 'profesor': profesor, 'materia': materia, 'unidad': unidad, 'modalidad': modalidad, 'f_ini': f_ini, 'f_fin': f_fin, 'periodo': periodo, 'tipo': tipo });
+        $('#PbNomarcacion').PbGridView('applyFilterData', {'profesor': profesor, 'materia': materia, 'unidad': unidad, 'modalidad': modalidad, 'f_ini': f_ini, 'f_fin': f_fin, 'periodo': periodo, 'tipo': tipo});
         setTimeout(hideLoadingPopup, 2000);
     }
 }
@@ -455,7 +455,7 @@ function actualizarGridPlanest() {
     //Buscar almenos una clase con el nombre para ejecutar
     if (!$(".blockUI").length) {
         showLoadingPopup();
-        $('#PbPlanificaestudiante').PbGridView('applyFilterData', { 'estudiante': estudiante, /*'unidad': unidad,*/ 'modalidad': modalidad, 'carrera': carrera, 'periodo': periodo });
+        $('#PbPlanificaestudiante').PbGridView('applyFilterData', {'estudiante': estudiante, /*'unidad': unidad,*/ 'modalidad': modalidad, 'carrera': carrera, 'periodo': periodo});
         setTimeout(hideLoadingPopup, 2000);
     }
 }
@@ -569,12 +569,7 @@ function agregarItems(opAccion) {
                     //Varios Items                    
                     arr_Grid[size] = objProducto(size);
                     sessionStorage.dts_datosItemplan = JSON.stringify(arr_Grid);
-                    //alert ('indice' + size);
-                    //if (size < 6) {
                     addVariosItem(tGrid, arr_Grid, -1);
-                    /*} else {
-                        showAlert('NO_OK', 'error', { "wtmessage": "Ya tiene seleccionada el maximo de  asignaturas", "title": 'Información' });
-                    }*/
                     limpiarDetalle();
                 } else {
                     /*Agrego a la Sesion*/
@@ -596,7 +591,7 @@ function agregarItems(opAccion) {
             //data edicion
         }
     } else {
-        showAlert('NO_OK', 'error', { "wtmessage": "Todos los datos del detalle planificación son obligatorios", "title": 'Información' });
+        showAlert('NO_OK', 'error', {"wtmessage": "Todos los datos del detalle planificación son obligatorios", "title": 'Información'});
     }
 }
 function objProducto(indice) {
@@ -630,11 +625,12 @@ function addPrimerItem(TbGtable, lista, i) {
 }
 
 function limpiarDetalle() {
-    $('#txt_fecha_documento_evi').val("");
-    /*$('#txt_descripcion').val("");
-     $('#txth_doc_archivo').val('');
-     $('#txth_doc_archivo_ruta').val('');
-     $('#txt_doc_archivo').fileinput('clear');   */
+    $('#cmb_asignaest').val("0");
+    $('#cmb_jornadaest').val("0");
+    $('#cmb_bloqueest').val("0");
+    $('#cmb_modalidadesth').val("0");
+    $('#cmb_horaest').val("0");
+    //$('#txt_doc_archivo').fileinput('clear');
 
 }
 
@@ -643,10 +639,13 @@ function addVariosItem(TbGtable, lista, i) {
     i = ($('#' + TbGtable + ' tr').length) - 1;
     //alert ('dasd' + i);
     //$('#'+TbGtable+' >table >tbody').append(retornaFilaProducto(i,lista,TbGtable,true));
-    if (i < 6) {
+    if (i < 12) {
+        /* lista.forEach(function (lista, i) {
+         console.log("lista " + i + " | Asignatura: " + lista.asignatura + " Bloque: " + lista.bloque + " Hora: " + lista.hora)
+         });*/
         $('#' + TbGtable + ' tr:last').after(retornaFila(i, lista, TbGtable, true));
     } else {
-        showAlert('NO_OK', 'error', { "wtmessage": "Ya tiene ingresadas 6 matrerias permitidas", "title": 'Información' });
+        showAlert('NO_OK', 'error', {"wtmessage": "Ya tiene ingresadas máximo de materias permitidas", "title": 'Información'});
     }
 }
 
@@ -717,6 +716,7 @@ function recargarGridItem() {
 
 function guardaplanificacion() {
     var arrParams = new Object();
+    var accion = "Create";
     var link = $('#txth_base').val() + "/academico/planificacion/saveplanificacion";
 
     arrParams.carreraest = $('#cmb_carreraest').val();
@@ -726,22 +726,33 @@ function guardaplanificacion() {
     arrParams.nombreest = $('#txt_buscarest').val();
     if ($('#cmb_carreraest').val() != '0' && $('#cmb_modalidadest').val() != '0' && $('#cmb_malladoest').val() != '0' && $('#cmb_periodoest').val() != '0' && $('#txt_buscarest').val().length > '0') {
         if (sessionStorage.dts_datosItemplan) {
-            alert('Puedo grabar');
-            /*if (!validateForm()) {
+            //alert('Puedo grabar');
+            var arr_Grid = JSON.parse(sessionStorage.dts_datosItemplan);
+            if (arr_Grid.length > 0) {
+                arrParams.DATA = sessionStorage.dts_datosItemplan
+                arrParams.ACCION = accion;
                 requestHttpAjax(link, arrParams, function (response) {
-                    showAlert(response.status, response.label, response.message);
-                    if (!response.error) {
-                     setTimeout(function () {
-                     window.location.href = $('#txth_base').val() + "/academico/planificacion/planificacionestudiante";
-                     }, 3000);
+                    var message = response.message;
+                    if (response.status == "OK") {
+                        showAlert(response.status, response.type, {"wtmessage": message.info, "title": response.label});
+                        limpiarDetalle();
+                        sessionStorage.removeItem('dts_datosItemplan')                       
+                        setTimeout(function () {
+                            parent.window.location.href = $('#txth_base').val() + "/academico/planificacion/planificacionestudiante";
+                        }, 2000);
+                    } else {
+                        showAlert(response.status, response.type, {"wtmessage": message.info, "title": response.label});
                     }
                 }, true);
-            }*/
+            } else {
+                //arrParams.DATA = new Array();
+                showAlert('NO_OK', 'error', {"wtmessage": "No Existe datos ", "title": 'Información'});
+            }
         } else {
-            showAlert('NO_OK', 'error', { "wtmessage": "No ha ingresado detalle en planificación", "title": 'Información' });
+            showAlert('NO_OK', 'error', {"wtmessage": "No ha ingresado detalle en planificación", "title": 'Información'});
         }
     } else {
-        showAlert('NO_OK', 'error', { "wtmessage": "Todos los datos de la cabecera planificación son obligatorios", "title": 'Información' });
+        showAlert('NO_OK', 'error', {"wtmessage": "Todos los datos de la cabecera planificación son obligatorios", "title": 'Información'});
     }
 
 }
