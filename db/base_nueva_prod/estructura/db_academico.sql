@@ -1313,7 +1313,7 @@ create table if not exists `planificacion` (
  `pla_fecha_inicio` timestamp not null,
  `pla_fecha_fin` timestamp not null,
  `pla_periodo_academico` varchar(100) null, 
- `pla_path` text not null,
+ `pla_path` text null,
  `pla_estado` varchar(1) not null, 
  `pla_fecha_creacion` timestamp not null default current_timestamp,
  `pla_usuario_modifica` bigint(20) null,

@@ -946,17 +946,17 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord {
         $con = \Yii::$app->db_academico;
         $estado = 1;
 
-        $sql = "SELECT count(*) as existe
+        $sql = "SELECT pla_id
                 FROM " . $con->dbname . ".planificacion plan
                 WHERE plan.mod_id = :mod_id AND
-                      plan.pla_periodo_academico_id = :pla_periodo_academico AND
+                      plan.pla_periodo_academico = :pla_periodo_academico AND
                       plan.pla_estado = :estado AND
                       plan.pla_estado_logico = :estado";
 
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":mod_id", $mod_id, \PDO::PARAM_INT);
-        $comando->bindParam(":pla_periodo_academico_id", $pla_periodo_academico, \PDO::PARAM_STR);
+        $comando->bindParam(":pla_periodo_academico", $pla_periodo_academico, \PDO::PARAM_STR);
         $resultData = $comando->queryOne();
         return $resultData;
     }

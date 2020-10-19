@@ -603,7 +603,7 @@ function objProducto(indice) {
     //rowGrid.componente_evi = "";
 
     rowGrid.asignatura = $('#cmb_asignaest option:selected').text();
-    rowGrid.jornada = $('#cmb_jornadaest option:selected').text();
+    // rowGrid.jornada = $('#cmb_jornadaest option:selected').text();
     /*if ($('#cmb_componente_evi option:selected').text() != "Seleccionar") {
      rowGrid.componente_evi = $('#cmb_componente_evi option:selected').text();
      }*/
@@ -626,7 +626,7 @@ function addPrimerItem(TbGtable, lista, i) {
 
 function limpiarDetalle() {
     $('#cmb_asignaest').val("0");
-    $('#cmb_jornadaest').val("0");
+    // $('#cmb_jornadaest').val("0");
     $('#cmb_bloqueest').val("0");
     $('#cmb_modalidadesth').val("0");
     $('#cmb_horaest').val("0");
@@ -658,7 +658,7 @@ function retornaFila(c, Grid, TbGtable, op) {
     strFila += '<td style=" display:none; border:none;">' + pla_id + '</td>';
     strFila += '<td style=" display:none;border:none;">' + per_id + '</td>';
     strFila += '<td>' + Grid[c]['asignatura'] + '</td>';
-    strFila += '<td>' + Grid[c]['jornada'] + '</td>';
+    // strFila += '<td>' + Grid[c]['jornada'] + '</td>';
     strFila += '<td>' + Grid[c]['bloque'] + '</td>';
     strFila += '<td>' + Grid[c]['modalidad'] + '</td>';
     strFila += '<td>' + Grid[c]['hora'] + '</td>';
@@ -724,7 +724,8 @@ function guardaplanificacion() {
     arrParams.mallaest = $('#cmb_malladoest').val();
     arrParams.periodoest = $('#cmb_periodoest').val();
     arrParams.nombreest = $('#txt_buscarest').val();
-    if ($('#cmb_carreraest').val() != '0' && $('#cmb_modalidadest').val() != '0' && $('#cmb_malladoest').val() != '0' && $('#cmb_periodoest').val() != '0' && $('#txt_buscarest').val().length > '0') {
+    arrParams.jornadaest = $('#cmb_jornadaest').val();
+    if ($('#cmb_jornadaest').val() != '0' && $('#cmb_carreraest').val() != '0' && $('#cmb_modalidadest').val() != '0' && $('#cmb_malladoest').val() != '0' && $('#cmb_periodoest').val() != '0' && $('#txt_buscarest').val().length > '0') {
         if (sessionStorage.dts_datosItemplan) {
             //alert('Puedo grabar');
             var arr_Grid = JSON.parse(sessionStorage.dts_datosItemplan);
