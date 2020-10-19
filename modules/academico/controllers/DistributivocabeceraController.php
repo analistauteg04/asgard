@@ -117,16 +117,13 @@ class DistributivocabeceraController extends \app\components\CController {
         $distributivo_model = new DistributivoAcademico();
         $distributivo_cab = new DistributivoCabecera();
         if (Yii::$app->request->isAjax) {
-            $data = Yii::$app->request->post();                         
-             \app\models\Utilities::putMessageLogFile('id:'.$data["id"]);   
+            $data = Yii::$app->request->post();                                      
             $id = $data["id"];            
-            $resCab = $distributivo_cab->obtenerDatosCabecera($id);
-            \app\models\Utilities::putMessageLogFile('estado:'.$resCab["estado"]);            
+            $resCab = $distributivo_cab->obtenerDatosCabecera($id);            
             if ($resCab["estado"] != 2) {   
                 $con = \Yii::$app->db_academico;
                 $transaction = $con->beginTransaction();
-                try {                       
-                    \app\models\Utilities::putMessageLogFile('ingresa a inactivar');            
+                try {                                           
                     $resInactCab = $distributivo_cab->inactivarDistributivoCabecera($id);                    
                     \app\models\Utilities::putMessageLogFile('$resInactCab:'.$resInactCab);            
                     if ($resInactCab) {

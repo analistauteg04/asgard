@@ -48,6 +48,14 @@ class DistributivoacademicoController extends \app\components\CController {
         ];
     }
     
+    public function estado() {
+        return [
+            '0' => Yii::t("formulario", "Seleccionar"),
+            '1' => Yii::t("formulario", "APPROVED"),
+            '2' => Yii::t("formulario", "Rejected"),            
+        ];
+    }
+    
     public function actionIndex() {
         $per_id = @Yii::$app->session->get("PB_perid");
         $emp_id = @Yii::$app->session->get("PB_idempresa");
@@ -263,6 +271,18 @@ class DistributivoacademicoController extends \app\components\CController {
         ]);
     }
 
+    public function actionReview($id) {                
+        $distributivo_model = new DistributivoAcademico();
+        $distributivo_cab = new DistributivoCabecera();
+        $resCab = $distributivo_cab->obtenerDatosCabecera($id);
+        $arr_distributivo = $distributivo_model->getListarDistribProfesor($resCab["paca_id"], $resCab["pro_id"]);
+        return $this->render('review', [
+            'arr_cabecera' => $resCab,            
+            'arr_detalle' => $arr_distributivo,   
+            'arr_estado' => $this->estado(),
+        ]);
+    }
+    
     public function actionEdit($id) {
         $emp_id = @Yii::$app->session->get("PB_idempresa");
         $mod_modalidad = new Modalidad();

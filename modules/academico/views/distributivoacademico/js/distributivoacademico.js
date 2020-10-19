@@ -119,6 +119,15 @@ $(document).ready(function() {
             $('#bloque4').css('display', 'none');
         }
     });
+    
+    $('#cmb_estado').change(function () {        
+        estado = $('#cmb_estado').val();        
+        if (estado == 2) {
+            $('#observacion').css('display', 'block');                       
+        } else {
+            $('#observacion').css('display', 'none');                       
+        }
+    });
 });
 
 // Recarga la Grid de Productos si Existe

@@ -54,7 +54,7 @@ academico::registerTranslations();
                         return Html::a('<span class="'.Utilities::getIcon('remove').'"></span>', null, ['href' => 'javascript:confirmDelete(\'deleteItem\',[\'' . $model['Id'] . '\']);', "data-toggle" => "tooltip", "title" => Yii::t("accion","Delete")]);
                     },
                     'Approbe' => function ($url, $model){
-                        return Html::a('<span class="'.Utilities::getIcon('edit').'"></span>', Url::to(['distributivoacademico/revisar', 'id' => $model['Id']]), ["data-toggle" => "tooltip", "title" => Yii::t("accion","Approbe")]);
+                        return Html::a('<span class="'.Utilities::getIcon('edit').'"></span>', Url::to(['distributivoacademico/review', 'id' => $model['Id']]), ["data-toggle" => "tooltip", "title" => Yii::t("accion","Approbe")]);
                     },
                     'Download' => function ($url, $model){
                         return Html::a('<span class="'.Utilities::getIcon('download').'"></span>', Url::to(['distributivoacademico/descargar', 'id' => $model['Id']]), ["data-toggle" => "tooltip", "title" => Yii::t("accion","Download")]);
