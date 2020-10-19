@@ -9,10 +9,10 @@ require_once('PHPMailerAutoload.php');
 class mailSystem {
     private $domEmpresa='uteg.edu.ec';
     private $mailSMTP='smtp.gmail.com';
-    //private $noResponder='no-responder@uteg.edu.ec';
     private $noResponder='notificaciones@uteg.edu.ec';
-    private $adminMail='analistadesarrollo01@uteg.edu.ec';//Cambiar 
+    //private $adminMail='developer@uteg.edu.ec';//Cambiar 
     private $noResponderPass='F@cult@d0nline2o17';//Clave de correo NO responder
+    private $Port= 587;//465;//587
     public $Subject='Ha Recibido un(a)  Nuevo(a)!!! ';
     public $file_to_attachXML='';
     public $file_to_attachPDF='';
@@ -33,7 +33,7 @@ class mailSystem {
         
         $mail->IsSMTP();
         $mail->SMTPSecure = "tls";//"ssl";
-        $mail->Port = 587;//465;
+        $mail->Port = $this->Port;
         // la dirección del servidor, p. ej.: smtp.servidor.com
         $mail->Host = $this->mailSMTP;
         $mail->setFrom($this->noResponder, 'Servicio de envío automático '.$this->domEmpresa);
@@ -59,7 +59,9 @@ class mailSystem {
         }
         //if($DataCorreos==0){
             //Correos Alternativos de admin  $adminMail
-            $mail->addBCC("bvillacreses@utimpor.com", "Byron Villa");
+            $mail->addBCC("byron_villacresesf@hotmail.com", "Byron Villa");
+            //$mail->addBCC("analistadesarrollo01@uteg.edu.ec", "Grace");
+            //$mail->addBCC("analistadesarrollo02@uteg.edu.ec", "Geovanni");
             //$mail->addBCC($usuData["CorreoUser"], $usuData["NombreUser"]);//Enviar Correos del Vendedor
         //}
         
@@ -82,6 +84,7 @@ class mailSystem {
 
         if (!$mail->Send()) {
             //echo "Error enviando: " . $mail->ErrorInfo;
+            cls_Global::putMessageLogFile($mail->ErrorInfo);
             return $obj_var->messageSystem('NO_OK', "Error enviando: " . $mail->ErrorInfo, null, null, null);
         } else {
             //echo "¡¡Enviado!!";
@@ -106,7 +109,7 @@ class mailSystem {
 
         // si el cuerpo del mensaje es HTML
         $mail->MsgHTML($body);
-        $mail->AddAddress("bvillacreses@utimpor.com", "Ing.Byron Villa");
+        $mail->AddAddress("byron_villacresesf@hotmail.com", "Ing.Byron Villa");
 
         $mail->SMTPAuth = true;
 
@@ -173,7 +176,7 @@ class mailSystem {
         $mail->isHTML(true);
 
         $mail->Subject = $subject;
-        $mail->Body = printFormatEmailClient($body);
+        $mail->Body = $this->printFormatEmailClient($body);
         $mail->AltBody = $body;
 
         if (!$mail->send()) {
@@ -188,7 +191,7 @@ class mailSystem {
         Global $empresa;
         $file = dirname(__FILE__) . DIRECTORY_SEPARATOR . "/layouts/mailing.php";
         if ($titleMessage == "")
-            $titleMessage = "Facturación Electrónica";
+            $titleMessage = "Documento Electrónica";
         $name = "UTEG";
         $cabecera_head = $name . ", " . "la solución que usted necesita";
         $browser_label = "Ver en su Browser";

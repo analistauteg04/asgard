@@ -4,10 +4,10 @@ return ['fe_edoc' => [
             'db_edoc' => [
                 'class' => 'app\components\CConnection',
                 'dsn' => 'mysql:host=localhost;dbname=db_edoc',
-                'username' => 'root',
-                //'username' => 'uteg',
-                //'password' => 'Utegadmin2016*',
-                 'password' => 'root00',
+                //'username' => 'root',
+                'username' => 'uteg',
+                'password' => 'Utegadmin2016*',
+                //'password' => 'root00',
                 'charset' => 'utf8',
                 'dbname' => 'db_edoc',
                 'dbserver' => 'localhost'
