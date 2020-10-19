@@ -257,7 +257,8 @@ class DistributivoCabecera extends \yii\db\ActiveRecord
                     dc.paca_id, dc.pro_id, per.per_cedula,
                     concat(per.per_pri_apellido, ' ', ifnull(per.per_seg_apellido,'')) apellidos,
                     concat(per.per_pri_nombre, ' ', ifnull(per.per_seg_nombre,'')) nombres,
-                    ifnull(CONCAT(ba.baca_nombre,'-',sa.saca_nombre,' ',sa.saca_anio),'') as periodo
+                    ifnull(CONCAT(ba.baca_nombre,'-',sa.saca_nombre,' ',sa.saca_anio),'') as periodo,
+                    ifnull(dc.dcab_estado_aprobacion,0) estado
                 FROM 
                     " . $con_academico->dbname . ".distributivo_cabecera AS dc inner join " . $con_academico->dbname . ".profesor pr 
                     on pr.pro_id = dc.pro_id inner join " . $con_asgard->dbname . ".persona per on per.per_id = pr.per_id
@@ -272,15 +273,41 @@ class DistributivoCabecera extends \yii\db\ActiveRecord
                     per.per_estado = 1 AND
                     pa.paca_estado = 1 AND
                     sa.saca_estado = 1 AND
-                    ba.baca_estado = 1";
+                    ba.baca_estado = 1;";
         
         $comando = $con_academico->createCommand($sql);
         $comando->bindParam(":dcab_id", $cab_id, \PDO::PARAM_INT);        
-        $res = $comando->queryOne();
-        if (empty($res)) {
-            return 0;            
-        } else {
-            return $res;        
-        }        
+        $res = $comando->queryOne();       
+        return $res;                        
     }
+    
+     /**
+     * Function inactivar datos distributivo cabecera
+     * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
+     * @param   
+     * @return  $resultData (Retornar los datos).
+     */
+    public function inactivarDistributivoCabecera($id) {
+        $con = \Yii::$app->db_academico;
+        $estado = '1';
+        $usu_id = @Yii::$app->session->get("PB_iduser");
+        $fecha_transaccion = date(Yii::$app->params["dateTimeByDefault"]);
+                                       
+        $sql = "UPDATE " . $con->dbname . ".distributivo_cabecera
+                SET dcab_fecha_modificacion = :fecha, 
+                    dcab_usuario_modifica = :usuario, 
+                    dcab_estado = '0', 
+                    dcab_estado_logico = '0'
+                WHERE dcab_id = :id
+                      AND dcab_estado = :estado
+                      AND dcab_estado_logico = :estado";
+        
+        $command = $con->createCommand($sql);
+        $command->bindParam(":id", $id, \PDO::PARAM_INT);                
+        $command->bindParam(":fecha", $fecha_transaccion, \PDO::PARAM_STR);
+        $command->bindParam(":usuario", $usu_id, \PDO::PARAM_INT);
+        $command->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $idtabla= $command->execute();  
+        return $idtabla;
+    } 
 }

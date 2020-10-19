@@ -116,18 +116,11 @@ $mensajePDF='
                             $mensajePDF .= '</div>
                         </td>
                     </tr>
-                    <tr>
-                        <td>
-                            <div>
-                                <p>
-                                    "<b style="color:red">NOTA:</b> UTEG Solicita a usted enviar el comprobante de retención a <b style="color:green">retenciones@uteg.edu.ec</b>  en un máximo en los (5) días hábiles posteriores a la emisión de la facturas de acuerdo con el Art. 95 del RALRTI.
-                                </p>
-                            </div>
-                        </td>
-                    </tr>
+                    
                 </tbody>
             </table>';
          } 
     $mensajePDF .= '</body>
+        
 </html>';
 ?>

@@ -119,6 +119,15 @@ $(document).ready(function() {
             $('#bloque4').css('display', 'none');
         }
     });
+    
+    $('#cmb_estado').change(function () {        
+        estado = $('#cmb_estado').val();        
+        if (estado == 2) {
+            $('#observacion').css('display', 'block');                       
+        } else {
+            $('#observacion').css('display', 'none');                       
+        }
+    });
 });
 
 // Recarga la Grid de Productos si Existe
@@ -220,20 +229,6 @@ function save() {
     } else {
         showAlert('NO_OK', 'error', {"wtmessage": "No Existe datos agregados", "title": 'Información'});
     }    
-}
-
-function deleteItem(id) {
-    var link = $('#txth_base').val() + "/academico/distributivoacademico/delete";
-    var arrParams = new Object();
-    arrParams.id = id;
-    requestHttpAjax(link, arrParams, function(response) {
-        if (response.status == "OK") {
-            searchModules();
-            setTimeout(function() {
-                showAlert(response.status, response.label, response.message);
-            }, 1000);
-        }
-    }, true);
 }
 
 function exportExcel() {

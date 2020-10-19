@@ -610,6 +610,7 @@ class NubeFactura {
             for ($i = 0; $i < sizeof($cabDoc); $i++) {
                 //Retorna Informacion de Correos
                 $rowUser=$obj_var->buscarCedRuc($cabDoc[$i]['CedRuc']);//Verifico si Existe la Cedula o Ruc
+                //cls_Global::putMessageLogFile($rowUser);
                 if($rowUser['status'] == 'OK'){
                     //Existe el Usuario y su Correo Listo para enviar
                     $row=$rowUser['data'];
@@ -646,7 +647,6 @@ class NubeFactura {
                     $usuData=array();
                     //$usuData=$objEmpData->buscarDatoVendedor($cabFact[0]["USU_ID"]);//DATOS vendedor Correos
                     include('formatFact/facturaPDF.php');
-                  
                     //COMETAR EN CASO DE NO PRESENTAR ESTA INFO
                     $mPDF1->SetWatermarkText('ESTA INFORMACIÓN ES UNA PRUEBA');
                     $mPDF1->watermark_font= 'DejaVuSansCondensed';
@@ -656,11 +656,11 @@ class NubeFactura {
                     $mPDF1->WriteHTML($mensajePDF); //hacemos un render partial a una vista preparada, en este caso es la vista docPDF
                     $mPDF1->Output($obj_var->rutaPDF.$dataMail->filePDF, 'F');//I=lo presenta navegador  F=ENVIA A UN ARCHVIO                   
                     
-                    $body = "El archivo con nombre no cumple con el formato.";
+                    //$body = "El archivo con nombre no cumple con el formato.";
                     $resulMail=$dataMail->enviarMail($htmlMail,$cabDoc,$obj_var,$usuData,$i);
                     //$resulMail=$dataMail->sendEmail(null,$cabDoc[$i]["CorreoPer"],array($dataMail->fileXML,$dataMail->filePDF)
-                    //                                ,$dataMail->Subject,$body);
-                    
+                                                    //,$dataMail->Subject,$body);
+                    //cls_Global::putMessageLogFile($resulMail);
                     if($resulMail["status"]=='OK'){
                     //if($resulMail){
                         $cabDoc[$i]['EstadoEnv']=6;//Correo Envia

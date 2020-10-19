@@ -490,4 +490,36 @@ class DistributivoAcademico extends \yii\db\ActiveRecord {
 
         return $dataProvider;
     }
+    
+     /**
+     * Function inactivar datos distributivo académico
+     * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
+     * @param   
+     * @return  $resultData (Retornar los datos).
+     */
+    public function inactivarDistributivoAcademico($pro_id, $paca_id) {
+        $con = \Yii::$app->db_academico;
+        $estado = '1';
+        $usu_id = @Yii::$app->session->get("PB_iduser");
+        $fecha_transaccion = date(Yii::$app->params["dateTimeByDefault"]);
+                                       
+        $sql = "UPDATE " . $con->dbname . ".distributivo_academico
+                SET daca_fecha_modificacion = :fecha, 
+                    daca_usuario_modifica = :usuario, 
+                    daca_estado = '0', 
+                    daca_estado_logico = '0' 
+                WHERE paca_id = :paca_id
+                     AND pro_id = :pro_id 
+                     AND daca_estado = :estado
+                     AND daca_estado = :estado";
+        
+        $command = $con->createCommand($sql);
+        $command->bindParam(":paca_id", $paca_id, \PDO::PARAM_INT);        
+        $command->bindParam(":pro_id", $pro_id, \PDO::PARAM_INT);        
+        $command->bindParam(":fecha", $fecha_transaccion, \PDO::PARAM_STR);
+        $command->bindParam(":usuario", $usu_id, \PDO::PARAM_INT);
+        $command->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $idtabla= $command->execute();  
+        return $idtabla;
+    } 
 }

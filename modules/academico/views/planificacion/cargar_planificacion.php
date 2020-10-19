@@ -120,8 +120,6 @@ academico::registerTranslations();
             </div>   
         </div>    
     </div>
-        
-    
          <div class='col-md-12 col-sm-12 col-xs-12 col-lg-12'>        
             <div class="col-sm-10 col-md-10 col-xs-8 col-lg-10"></div>
             <div class="col-sm-2 col-md-2 col-xs-4 col-lg-2">                
