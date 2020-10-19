@@ -22,7 +22,11 @@ academico::registerTranslations();
                 <label for="lbl_unidadest" class="col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= Yii::t("crm", "Academic Unit"); ?></label>
                 <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
                     <?= Html::dropDownList("cmb_unidadest", 0, $arr_unidad, ["class" => "form-control", "id" => "cmb_unidadest", "Disabled" => "true"]) ?>
-                </div>                   
+                </div> 
+                <label for="lbl_jornadaest" class="col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= academico::t("Academico", "Working day") ?> <span class="text-danger">*</span> </label>
+                <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
+                    <?= Html::dropDownList("cmb_jornadaest", 0, $arr_jornada, ["class" => "form-control", "id" => "cmb_jornadaest"]) ?>
+                </div>                
             </div>        
         </div>  
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -68,32 +72,33 @@ academico::registerTranslations();
                     <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
                         <?= Html::dropDownList("cmb_asignaest", 0, $arr_materia, ["class" => "form-control", "id" => "cmb_asignaest"]) ?>
                     </div>   
-                    <label for="lbl_jornadaest" class="col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= academico::t("Academico", "Working day") ?> <span class="text-danger">*</span> </label>
+                    <!-- <label for="lbl_jornadaest" class="col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><? academico::t("Academico", "Working day") ?> <span class="text-danger">*</span> </label>
                     <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
-                        <?= Html::dropDownList("cmb_jornadaest", 0, $arr_jornada, ["class" => "form-control", "id" => "cmb_jornadaest"]) ?>
-                    </div>  
-                </div>        
-            </div>
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <div class="form-group">
+                        <? Html::dropDownList("cmb_jornadaest", 0, $arr_jornada, ["class" => "form-control", "id" => "cmb_jornadaest"]) ?>
+                    </div> -->
                     <label for="lbl_bloqueest" class="col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= Yii::t("formulario", "Block"); ?> <span class="text-danger">*</span> </label>
                     <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
                         <?= Html::dropDownList("cmb_bloqueest", 0, $arr_bloque, ["class" => "form-control", "id" => "cmb_bloqueest"]) ?>
-                    </div>   
+                    </div> 
+                </div>        
+            </div>
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="form-group">  
                     <label for="lbl_modalidadesth" class="col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= Yii::t("formulario", "Mode"); ?> <span class="text-danger">*</span> </label>
                     <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
                         <?= Html::dropDownList("cmb_modalidadesth", 0, $arr_modalidadh, ["class" => "form-control", "id" => "cmb_modalidadesth"]) ?>
                     </div>  
-                </div>        
-            </div>
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <div class="form-group">
                     <label for="lbl_horaest" class="col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= academico::t("Academico", "Hour"); ?> <span class="text-danger">*</span> </label>
                     <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
                         <?= Html::dropDownList("cmb_horaest", 0, $arr_hora, ["class" => "form-control", "id" => "cmb_horaest"]) ?>
                     </div> 
                 </div>        
             </div>
+            <!-- <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="form-group">
+                    
+                </div>        
+            </div>-->
         </div>
         <div class="form-group">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -111,7 +116,7 @@ academico::registerTranslations();
                                 <th style="display:none; border:none;"><?= Yii::t("formulario", "pla_id") ?></th>
                                 <th style="display:none; border:none;"><?= Yii::t("formulario", "per_id") ?></th>
                                 <th><?= academico::t("Academico", "Subject") ?></th>
-                                <th><?= academico::t("Academico", "Working day") ?></th>
+                                <!-- <th><? academico::t("Academico", "Working day") ?></th>-->
                                 <th><?= Yii::t("formulario", "Block") ?></th>                            
                                 <th><?= Yii::t("formulario", "Mode") ?></th>
                                 <th><?= academico::t("Academico", "Hour") ?></th>                            

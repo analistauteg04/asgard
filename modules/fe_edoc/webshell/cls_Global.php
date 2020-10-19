@@ -22,7 +22,7 @@ class cls_Global {
     public static $ambt_id='1';//Ambiente de Pruebas por Defecto =1 =>2 Produccion (cambiar en caso de Pruebas)
     //public static $IdsUsu='1';//Valor por defecto(Alimenta al Autorizar el Documento)
     var $consumidorfinal='9999999999';
-    var $dateStartFact='2019-02-12';
+    var $dateStartFact='2020-08-01';
     var $datebydefault='d-m-Y';
     public static $dateXML = "d/m/Y";
     public $decimalPDF=2;
@@ -77,6 +77,7 @@ class cls_Global {
                                         ON A.per_id=B.per_id AND B.usu_est_log=1
                 WHERE A.per_ced_ruc='$cedRuc' AND A.per_est_log=1 ";
             //echo $sql;
+            //cls_Global::putMessageLogFile($sql);
             $sentencia = $conCont->query($sql);
             if ($sentencia->num_rows > 0) {
                 //Retorna Solo 1 Registro Asociado

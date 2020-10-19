@@ -48,7 +48,7 @@ $mensaje='
             <br /><br />
             <div style="text-align: center; font-family: Arial; padding: 10px 50px 0px;">
                 <span style="color:#9a4d9d; font-size:35px;">
-                    GENERACIÓN DE DOCUMENTO ELECTRÓNICO
+                    Generación de documento electrónico
                 </span>
             </div>
             <!-- body message begin -->
@@ -57,7 +57,7 @@ $mensaje='
                     <div id="div-table">
                         <div class="trow">
                             <p>
-                                <label class="titleLabel">Estimad@:</label><br><span class="titleName">'.utf8_encode($cabDoc[$i]["RazonSoc"]).'</span><br> 
+                                <label class="titleLabel">Estimado(a):</label><br><span class="titleName">'.utf8_encode($cabDoc[$i]["RazonSoc"]).'</span><br> 
                                 Ha recibido un documendo electronico de <label class="titleLabel">'.strtoupper($objEmp["RazonSocial"]) .'</label>
                             </p>
                         </div>
@@ -103,7 +103,7 @@ $mensaje='
                             <div class="tcol-td form-group">
                                 <p>
                                     Adem&aacute;s puede realizar la impresi&oacute;n su documento accediendo a nuestro portal <a target="_blank" href="'.$obj_var->rutaLink.'">aqui</a>.<br><br>
-                                    Atentamente,<br><br>
+                                    <label class="titleLabel">Atentamente</label>,<br>
                                     <label class="titleLabel">'.strtoupper($objEmp["RazonSocial"]) .'</label>
                                 </p>
                             </div>
