@@ -119,15 +119,7 @@ $(document).ready(function() {
             $('#bloque4').css('display', 'none');
         }
     });
-    
-    $('#cmb_estado').change(function () {        
-        estado = $('#cmb_estado').val();        
-        if (estado == 2) {
-            $('#observacion').css('display', 'block');                       
-        } else {
-            $('#observacion').css('display', 'none');                       
-        }
-    });
+        
 });
 
 // Recarga la Grid de Productos si Existe
@@ -216,6 +208,7 @@ function save() {
                 requestHttpAjax(link, arrParams, function(response) {
                     showAlert(response.status, response.label, response.message);
                     if (response.status == "OK") {
+                        loadSessionCampos('dts_asignacion_list', '', '', '');
                         setTimeout(function() {
                             var link = $('#txth_base').val() + "/academico/distributivocabecera/index";
                             window.location = link;

@@ -15,3 +15,22 @@ set a.daho_id = (select daho_id from db_academico.distributivo_academico_horario
 where a.daho_id is null
 
 -- Colocar daca_horario y daca_jornada que permitan nulos o eliminarlos despuès.
+
+create table if not exists `distributivo_cabecera` (
+  `dcab_id` bigint(20) not null auto_increment primary key, 
+  `paca_id` bigint(20) null,
+  `pro_id` bigint(20) not null,
+  `dcab_estado_revision` varchar(1) null,
+  `dcab_observacion_revision` varchar(1000) null,
+  `dcab_fecha_revision` timestamp null default null,
+  `dcab_usuario_revision` bigint(20) null,
+  `dcab_fecha_registro` timestamp null default null,
+  `dcab_usuario_ingreso` bigint(20) not null,
+  `dcab_usuario_modifica` bigint(20) null,
+  `dcab_estado` varchar(1) not null,
+  `dcab_fecha_creacion` timestamp not null default current_timestamp,
+  `dcab_fecha_modificacion` timestamp null default null,
+  `dcab_estado_logico` varchar(1) not null,
+  foreign key (pro_id) references `profesor`(pro_id),
+  foreign key (paca_id) references `periodo_academico`(paca_id)
+);

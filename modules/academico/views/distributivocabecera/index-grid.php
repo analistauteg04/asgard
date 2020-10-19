@@ -39,7 +39,7 @@ academico::registerTranslations();
             [
                 'attribute' => 'Estado',
                 'header' => Yii::t("formulario", "Status"),
-                'value' => 'estado',
+                'value' => 'estadoRevision',
             ],    
             [
                 'class' => 'yii\grid\ActionColumn',
@@ -54,10 +54,14 @@ academico::registerTranslations();
                         return Html::a('<span class="'.Utilities::getIcon('remove').'"></span>', null, ['href' => 'javascript:confirmDelete(\'deleteItem\',[\'' . $model['Id'] . '\']);', "data-toggle" => "tooltip", "title" => Yii::t("accion","Delete")]);
                     },
                     'Approbe' => function ($url, $model){
-                        return Html::a('<span class="'.Utilities::getIcon('edit').'"></span>', Url::to(['distributivoacademico/review', 'id' => $model['Id']]), ["data-toggle" => "tooltip", "title" => Yii::t("accion","Approbe")]);
+                        if ($model['estado'] == 1 ) {
+                            return Html::a('<span class="'.Utilities::getIcon('edit').'"></span>', Url::to(['distributivocabecera/review', 'id' => $model['Id']]), ["data-toggle" => "tooltip", "title" => Yii::t("formulario","Revisar Distributivo")]);
+                        } else {
+                          return "<span class = 'glyphicon glyphicon-ok' data-toggle = 'tooltip' title ='Revisar Distributivo'  data-pjax = 0></span>";  
+                        }
                     },
                     'Download' => function ($url, $model){
-                        return Html::a('<span class="'.Utilities::getIcon('download').'"></span>', Url::to(['distributivoacademico/descargar', 'id' => $model['Id']]), ["data-toggle" => "tooltip", "title" => Yii::t("accion","Download")]);
+                        return Html::a('<span class="'.Utilities::getIcon('download').'"></span>', Url::to(['distributivocabecera/descargar', 'id' => $model['Id']]), ["data-toggle" => "tooltip", "title" => Yii::t("accion","Download")]);
                     }
                 ],               
             ],                                

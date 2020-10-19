@@ -17,7 +17,7 @@ use app\modules\academico\Module as academico;
 </div>
 <div>
     <?=
-    $this->render('view-grid', [
+    $this->render('review-grid', [
         'arr_detalle' => $arr_detalle, 
         ]);
     ?>

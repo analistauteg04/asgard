@@ -48,14 +48,6 @@ class DistributivoacademicoController extends \app\components\CController {
         ];
     }
     
-    public function estado() {
-        return [
-            '0' => Yii::t("formulario", "Seleccionar"),
-            '1' => Yii::t("formulario", "APPROVED"),
-            '2' => Yii::t("formulario", "Rejected"),            
-        ];
-    }
-    
     public function actionIndex() {
         $per_id = @Yii::$app->session->get("PB_perid");
         $emp_id = @Yii::$app->session->get("PB_idempresa");
@@ -191,11 +183,11 @@ class DistributivoacademicoController extends \app\components\CController {
                 \app\models\Utilities::putMessageLogFile('profesor:'.$pro_id);
                 $dts = (isset($data["grid_docencia"]) && $data["grid_docencia"] != "") ? $data["grid_docencia"] : NULL;     
                 $datos = json_decode($dts);
-             
+                
                 if (isset($datos)) {                    
-                    $valida = 1;
+                    $valida = 1;                    
                     //foreach ($datos as $key => $value1) {
-                    for ($i = 0; $i < sizeof($datos); $i++) {                                                
+                    for ($i = 0; $i < sizeof($datos); $i++) {                                
                         $dataExists = $distributivo_model->existsDistribucionAcademico($pro_id, $datos[$i]->asi_id, $paca_id, $datos[$i]->hor_id, $datos[$i]->par_id);
                         if(isset($dataExists) && $dataExists != "" && count($dataExists) > 0) {                            
                             $valida = 0;
@@ -268,18 +260,6 @@ class DistributivoacademicoController extends \app\components\CController {
         return $this->render('view', [
             'arr_cabecera' => $resCab,            
             'arr_detalle' => $arr_distributivo,   
-        ]);
-    }
-
-    public function actionReview($id) {                
-        $distributivo_model = new DistributivoAcademico();
-        $distributivo_cab = new DistributivoCabecera();
-        $resCab = $distributivo_cab->obtenerDatosCabecera($id);
-        $arr_distributivo = $distributivo_model->getListarDistribProfesor($resCab["paca_id"], $resCab["pro_id"]);
-        return $this->render('review', [
-            'arr_cabecera' => $resCab,            
-            'arr_detalle' => $arr_distributivo,   
-            'arr_estado' => $this->estado(),
         ]);
     }
     
@@ -474,35 +454,5 @@ class DistributivoacademicoController extends \app\components\CController {
                 ])
         );
         $report->mpdf->Output('Reporte_' . date("Ymdhis") . ".pdf", ExportFile::OUTPUT_TO_DOWNLOAD);
-    }
-
-    public function actionEliminaritems() {
-        if (Yii::$app->request->isAjax) {
-            $data = Yii::$app->request->post();
-            $user = Yii::$app->session->get("PB_iduser");
-            $id = $data["codigo_id"];
-            $tabla = $data["tabla_id"];
-            try {
-                if ($tabla == 1) {
-                    $instruccion_model = ProfesorInstruccion::findOne(["pins_id" => $id]);
-                    $instruccion_model->pins_estado_logico = '0';
-                    $instruccion_model->pins_fecha_modificacion = date(Yii::$app->params["dateTimeByDefault"]);
-                    $instruccion_model->pins_usuario_modifica = $user;
-                    $instruccion_model->update();
-                }
-               
-                $message = array(
-                    "wtmessage" => Yii::t("notificaciones", "Your information was successfully saved."),
-                    "title" => Yii::t('jslang', 'Success'),
-                );
-                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
-            } catch (Exception $ex) {
-                $message = array(
-                    "wtmessage" => Yii::t('notificaciones', 'Your information has not been saved. Please try again.'),
-                    "title" => Yii::t('jslang', 'Error'),
-                );
-                return Utilities::ajaxResponse('NOOK', 'alert', Yii::t('jslang', 'Error'), 'true', $message);
-            }
-        }
-    }
+    }    
 }
