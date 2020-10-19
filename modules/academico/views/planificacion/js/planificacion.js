@@ -719,18 +719,19 @@ function guardaplanificacion() {
     var accion = "Create";
     var link = $('#txth_base').val() + "/academico/planificacion/saveplanificacion";
 
-    arrParams.carreraest = $('#cmb_carreraest').val();
+    arrParams.jornadaest = $('#cmb_jornadaest').text();
+    arrParams.carreraest = $('#cmb_carreraest').text();
     arrParams.modalidadest = $('#cmb_modalidadest').val();
     arrParams.mallaest = $('#cmb_malladoest').val();
     arrParams.periodoest = $('#cmb_periodoest').val();
     arrParams.nombreest = $('#txt_buscarest').val();
-    arrParams.jornadaest = $('#cmb_jornadaest').val();
-    if ($('#cmb_jornadaest').val() != '0' && $('#cmb_carreraest').val() != '0' && $('#cmb_modalidadest').val() != '0' && $('#cmb_malladoest').val() != '0' && $('#cmb_periodoest').val() != '0' && $('#txt_buscarest').val().length > '0') {
+    
+    if ($('#cmb_jornadaest').text() != 'Seleccionar' && $('#cmb_carreraest').text() != 'Seleccionar' && $('#cmb_modalidadest').val() != '0' && $('#cmb_malladoest').val() != '0' && $('#cmb_periodoest').val() != '0' && $('#txt_buscarest').val().length > '0') {
         if (sessionStorage.dts_datosItemplan) {
             //alert('Puedo grabar');
             var arr_Grid = JSON.parse(sessionStorage.dts_datosItemplan);
             if (arr_Grid.length > 0) {
-                arrParams.DATA = sessionStorage.dts_datosItemplan
+                arrParams.DATAS = sessionStorage.dts_datosItemplan
                 arrParams.ACCION = accion;
                 requestHttpAjax(link, arrParams, function (response) {
                     var message = response.message;

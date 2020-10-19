@@ -859,7 +859,14 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord {
         try {
             //$per_id = @Yii::$app->session->get("PB_perid");    
             $data = isset($data['DATA']) ? $data['DATA'] : array();
-            $this->insertarPlanificacionestudiante($con,json_decode($data));
+            for ($i = 0; $i < sizeof(json_decode($data)); $i++) {
+                // recorrer y crear un arrrglo solo con los campos a ingresar de horario y bloque
+                // crear string del insert
+
+                // crear el string de los
+
+            }
+            $this->insertarPlanificacionestudiante($con, $pla_id, $per_id, $pes_jornada, $pes_carrera, $pes_dni, $pes_nombres, $insertar, $valores);
             $trans->commit();
             $con->close();
             //RETORNA DATOS 
@@ -884,17 +891,47 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord {
      * @property integer $userid
      * @return  
      */
-    private function insertarPlanificacionestudiante($con,$dts) {
-        //dre_id
-        $usu_id = @Yii::$app->session->get("PB_iduser");
-        /*for ($i = 0; $i < sizeof($dts); $i++) {
+    private function insertarPlanificacionestudiante($con, $pla_id, $per_id, $pes_jornada, $pes_carrera, $pes_dni, $pes_nombres, $insertar, $valores) {
+        //$usu_id = @Yii::$app->session->get("PB_iduser");
+        //for ($i = 0; $i < sizeof($dts); $i++) {
             $sql = "INSERT INTO " . $con->dbname . ".planificacion_estudiante
-                    (pla_id,per_id,pes_jornada,pes_cod_carrera,pes_carrera,pes_dni,
-                        pes_nombres,dre_estado,dre_fecha_archivo,dre_estado_logico)VALUES
-                    (:est_id,:dre_tipo,:dre_codificacion,:dre_ruta,:dre_imagen,:dre_descripcion,
-                        :dre_usu_ingresa,:dre_estado,:dre_fecha_archivo,:dre_estado_logico)";
+                    (pla_id,
+                     per_id,
+                     pes_jornada,pes_cod_carrera,
+                     pes_carrera,pes_dni,
+                     pes_nombres, " . 
+                     /*pes_mat_b1_h1_cod, 
+                     pes_mod_b1_h1, 
+                     pes_mat_b1_h2_cod, 
+                     pes_mod_b1_h2,
+                     pes_mat_b1_h3_cod, 
+                     pes_mod_b1_h3,
+                     pes_mat_b1_h4_cod, 
+                     pes_mod_b1_h4,
+                     pes_mat_b1_h5_cod, 
+                     pes_mod_b1_h5,
+                     pes_mat_b1_h6_cod, 
+                     pes_mod_b1_h6,  
+                     pes_mat_b2_h1_cod, 
+                     pes_mod_b2_h1, 
+                     pes_mat_b2_h2_cod, 
+                     pes_mod_b2_h2,
+                     pes_mat_b2_h3_cod, 
+                     pes_mod_b2_h3,
+                     pes_mat_b2_h4_cod, 
+                     pes_mod_b2_h4,
+                     pes_mat_b2_h5_cod, 
+                     pes_mod_b2_h5,
+                     pes_mat_b2_h6_cod, 
+                     pes_mod_b2_h6, */
+                    $insertar . "
+                    pes_estado,
+                    pes_fecha_creacion,
+                    pes_estado_logico)VALUES
+                    (". $pla_id . "," . $per_id . "," . $pes_jornada . "," . $pes_carrera . "," . $pes_dni . "," 
+                      . $pes_nombres . "," . $valores . ")";
             $command = $con->createCommand($sql);
-            $command->bindParam(":est_id", $dts[$i]->est_id, \PDO::PARAM_INT);
+            /*$command->bindParam(":est_id", $dts[$i]->est_id, \PDO::PARAM_INT);
             $command->bindParam(":dre_tipo", $dts[$i]->dre_tipo, \PDO::PARAM_INT);
             $command->bindParam(":dre_codificacion", $dts[$i]->dre_codificacion, \PDO::PARAM_STR);
             $command->bindParam(":dre_ruta", $dts[$i]->dre_ruta, \PDO::PARAM_STR);
@@ -903,10 +940,10 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord {
             $command->bindParam(":dre_usu_ingresa", $usu_id, \PDO::PARAM_INT);
             $command->bindParam(":dre_estado", $dts[$i]->dre_estado, \PDO::PARAM_INT);
             $command->bindParam(":dre_fecha_archivo", $dts[$i]->dre_fecha_archivo, \PDO::PARAM_STR);            
-            $command->bindParam(":dre_estado_logico", $dts[$i]->dre_estado_logico, \PDO::PARAM_INT);
+            $command->bindParam(":dre_estado_logico", $dts[$i]->dre_estado_logico, \PDO::PARAM_INT);*/
             //$command->bindParam(":per_nombre", $data[0]['per_nombre'], \PDO::PARAM_STR);
             $command->execute();
-        }*/
+        //}
         
     }
    /* public function insertarPlanificacionestudiante($con, $parameters, $keys, $name_table) {

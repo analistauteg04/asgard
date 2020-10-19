@@ -733,11 +733,18 @@ class PlanificacionController extends \app\components\CController {
         if ( Yii::$app->request->isAjax ) {
             $mod_planifica = new PlanificacionEstudiante();
             $data = Yii::$app->request->post();
+            $jornada = substr($data['jornadaest'],0,1);
             $carrera = $data['carreraest'];
             $modalidad = $data['modalidadest'];
             $malla = $data['mallaest'];
             $periodo = $data['periodoest'];
-            $nombre = $data['nombreest'];
+            //$estudiantedata = $data['nombreest']; //OJO ESTO LUEGO HABILITAR CUADO SE TOME DE LA BUSQUEDA
+            $estudiantedata = "1 - 2222222222 - Juan Perez";
+            $datos = explode(" - ", $estudiantedata);
+            $per_id = $datos[0];
+            $dni = $datos[1];
+            $nombre = $datos[2];
+            
             $accion = isset( $data['ACCION'] ) ? $data['ACCION'] : '';
             if ( $accion == 'Create' ) {
                 // Consultar si la modalidad y periodo existen
@@ -745,7 +752,7 @@ class PlanificacionController extends \app\components\CController {
                 //existe guardar
                 if ( $resulpla_id['pla_id'] ) {
                     //Nuevo Registro
-                    $resul = $mod_planifica->insertarDataPlanificacionestudiante( $data );
+                    $resul = $mod_planifica->insertarDataPlanificacionestudiante($resulpla_id['pla_id'], $per_id, $jornada, $carrera, $dni, $nombre, $data['DATAS']);
                 } else {
                     // no existe mensaje que no permitar guardar
                     /*$message = ['info' => Yii::t( 'exception', 'No se puede guardar período académico y modalidad no existe, crearla en cargar planificación.' )];
