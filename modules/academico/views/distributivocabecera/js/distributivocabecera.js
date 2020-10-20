@@ -69,17 +69,15 @@ function saveReview() {
     arrParams.resultado = $('#cmb_estado').val();
     arrParams.observacion = $('#txt_detalle').val();
     //alert('id:'+id);
+    
     requestHttpAjax(link, arrParams, function(response) {
-        if (!validateForm()) {
-                requestHttpAjax(link, arrParams, function(response) {
-                    showAlert(response.status, response.label, response.message);
-                    if (response.status == "OK") {
-                        setTimeout(function() {
-                            var link = $('#txth_base').val() + "/academico/distributivocabecera/index";
-                            window.location = link;
-                        }, 1000);
-                    }
-                }, true);
-            }
+        showAlert(response.status, response.label, response.message);
+        if (response.status == "OK") {
+            setTimeout(function() {
+                var link = $('#txth_base').val() + "/academico/distributivocabecera/index";
+                window.location = link;
+            }, 1000);
+        }
     }, true);
+     
 }

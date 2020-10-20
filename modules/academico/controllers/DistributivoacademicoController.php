@@ -48,6 +48,15 @@ class DistributivoacademicoController extends \app\components\CController {
         ];
     }
     
+    private function estados() {
+        return [
+            '0' => Yii::t("formulario", "Seleccionar"),
+            '1' => Yii::t("formulario", "Por aprobar"),
+            '2' => Yii::t("formulario", "Aprobado"),
+            '3' => Yii::t("formulario", "No aprobado"),      
+        ];
+    }
+    
     public function actionIndex() {
         $per_id = @Yii::$app->session->get("PB_perid");
         $emp_id = @Yii::$app->session->get("PB_idempresa");
@@ -260,6 +269,7 @@ class DistributivoacademicoController extends \app\components\CController {
         return $this->render('view', [
             'arr_cabecera' => $resCab,            
             'arr_detalle' => $arr_distributivo,   
+            'arr_estados' => $this->estados(),
         ]);
     }
     

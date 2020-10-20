@@ -254,7 +254,8 @@ class DistributivoCabecera extends \yii\db\ActiveRecord
                     concat(per.per_pri_apellido, ' ', ifnull(per.per_seg_apellido,'')) apellidos,
                     concat(per.per_pri_nombre, ' ', ifnull(per.per_seg_nombre,'')) nombres,
                     ifnull(CONCAT(ba.baca_nombre,'-',sa.saca_nombre,' ',sa.saca_anio),'') as periodo,
-                    ifnull(dc.dcab_estado_revision,0) estado
+                    ifnull(dc.dcab_estado_revision,0) estado,
+                    dcab_observacion_revision observacion
                 FROM 
                     " . $con_academico->dbname . ".distributivo_cabecera AS dc inner join " . $con_academico->dbname . ".profesor pr 
                     on pr.pro_id = dc.pro_id inner join " . $con_asgard->dbname . ".persona per on per.per_id = pr.per_id
@@ -330,8 +331,7 @@ class DistributivoCabecera extends \yii\db\ActiveRecord
                 WHERE dcab_id = :id
                       AND dcab_estado = :estado
                       AND dcab_estado_logico = :estado";
-        
-        \app\models\Utilities::putMessageLogFile('$resultadoREV:'.$sql);            
+                
         $command = $con->createCommand($sql);
         $command->bindParam(":id", $id, \PDO::PARAM_INT);                
         $command->bindParam(":fecha", $fecha_transaccion, \PDO::PARAM_STR);
@@ -344,7 +344,6 @@ class DistributivoCabecera extends \yii\db\ActiveRecord
         }        
         $command->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $idtabla= $command->execute();  
-        return $idtabla;
-         \app\models\Utilities::putMessageLogFile('RESUL:'.$idtabla);    
+        return $idtabla;       
     } 
 }

@@ -193,24 +193,41 @@ class DistributivocabeceraController extends \app\components\CController {
             $observacion = $data["observacion"];  
             $con = \Yii::$app->db_academico;
             $transaction = $con->beginTransaction();
-            try {                                           
-                $resultado = $distributivo_cab->revisarDistributivo($id, $estado, ucfirst($observacion));   
-                \app\models\Utilities::putMessageLogFile('$resultadoREV:'.$resultado);            
-                if ($resultado) {                        
-                    $transaction->commit();
-                    $message = array(
-                        "wtmessage" => Yii::t("notificaciones", "Your information was successfully saved."),
-                        "title" => Yii::t('jslang', 'Success'),
-                    );
-                    return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'true', $message);
+            try {     
+                if ($estado !=0) {
+                    if ($estado ==3 && empty($observacion)) {
+                        $transaction->rollback();
+                        $message = array(
+                            "wtmessage" => Yii::t('notificaciones', 'Digite una observación de la Revisión.'),
+                            "title" => Yii::t('jslang', 'Error'),
+                        );
+                        return Utilities::ajaxResponse('NOOK', 'alert', Yii::t('jslang', 'Error'), 'true', $message);
+                    }
+                    $resultado = $distributivo_cab->revisarDistributivo($id, $estado, ucfirst(strtolower($observacion)));   
+                    \app\models\Utilities::putMessageLogFile('resultadoREV:'.$resultado);            
+                    if ($resultado) {                         
+                        $transaction->commit();
+                        $message = array(
+                            "wtmessage" => Yii::t("notificaciones", "Your information was successfully saved."),
+                            "title" => Yii::t('jslang', 'Success'),
+                        );
+                        return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'true', $message);
+                    } else {                        
+                        $transaction->rollback();
+                        $message = array(
+                            "wtmessage" => Yii::t('notificaciones', 'Your information has not been saved. Please try again.'),
+                            "title" => Yii::t('jslang', 'Error'),
+                        );
+                        return Utilities::ajaxResponse('NOOK', 'alert', Yii::t('jslang', 'Error'), 'true', $message);
+                    }
                 } else {
                     $transaction->rollback();
                     $message = array(
-                        "wtmessage" => Yii::t('notificaciones', 'Your information has not been saved. Please try again.'),
+                        "wtmessage" => Yii::t('notificaciones', 'Seleccione un estado de Revisión.'),
                         "title" => Yii::t('jslang', 'Error'),
                     );
                     return Utilities::ajaxResponse('NOOK', 'alert', Yii::t('jslang', 'Error'), 'true', $message);
-                }
+                }                
 
             } catch (Exception $ex) {
                 $transaction->rollback();
