@@ -136,47 +136,59 @@ class PlanificacionController extends \app\components\CController {
                 try {
                     $namefile = substr_replace($data['archivo'], $data['modalidad'], 14, 0);
                     //\app\models\Utilities::putMessageLogFile('ssss: ' . $data['archivo']);
-                    $path = 'planificacion/' . $namefile;
-                    $modelo_planificacion = new Planificacion();
-                    $modelo_planificacion->mod_id = $data['modalidad'];
-                    $modelo_planificacion->per_id = $per_id;
-                    $modelo_planificacion->pla_fecha_inicio = $data['fechaInicio'];
-                    $modelo_planificacion->pla_fecha_fin = $data['fechaFin'];
-                    $modelo_planificacion->pla_periodo_academico = $data['periodoAcademico'];
-                    $modelo_planificacion->pla_path = $path;
-                    $modelo_planificacion->pla_estado = '1';
-                    $modelo_planificacion->pla_estado_logico = '1';
-                    if ($modelo_planificacion->save() && $data['archivo'] != '.') {
-                        /*  return Utilities::ajaxResponse( 'NO_OK', 'alert', Yii::t( 'jslang', 'Error' ), true, 'guardado' );
-                         */
-                        $pla_id = $modelo_planificacion->getPrimaryKey();
-                        $carga_archivo = $model_planificacionEstudiante->processFile($namefile, $pla_id);
-                        /*  return Utilities::ajaxResponse( 'NO_OK', 'alert', Yii::t( 'jslang', 'Error' ), true, $carga_archivo );
-                         */
-                        if ($carga_archivo['status']) {
+                    //consultar periodo y modalidad sino existe guardar
+                    $mod_planifica = new PlanificacionEstudiante();
+                    $resulpla_id = $mod_planifica->consultarDatoscabplanifica($data['modalidad'], $data['periodoAcademico']);
+                    if (empty($resulpla_id['pla_id'])) {
+                        $path = 'planificacion/' . $namefile;
+                        $modelo_planificacion = new Planificacion();
+                        $modelo_planificacion->mod_id = $data['modalidad'];
+                        $modelo_planificacion->per_id = $per_id;
+                        $modelo_planificacion->pla_fecha_inicio = $data['fechaInicio'];
+                        $modelo_planificacion->pla_fecha_fin = $data['fechaFin'];
+                        $modelo_planificacion->pla_periodo_academico = $data['periodoAcademico'];
+                        $modelo_planificacion->pla_path = $path;
+                        $modelo_planificacion->pla_estado = '1';
+                        $modelo_planificacion->pla_estado_logico = '1';
+                        if ($modelo_planificacion->save() && $data['archivo'] != '.') {
+                            /*  return Utilities::ajaxResponse( 'NO_OK', 'alert', Yii::t( 'jslang', 'Error' ), true, 'guardado' );
+                             */
+                            $pla_id = $modelo_planificacion->getPrimaryKey();
+                            $carga_archivo = $model_planificacionEstudiante->processFile($namefile, $pla_id);
+                            /*  return Utilities::ajaxResponse( 'NO_OK', 'alert', Yii::t( 'jslang', 'Error' ), true, $carga_archivo );
+                             */
+                            if ($carga_archivo['status']) {
+                                $message = array(
+                                    'wtmessage' => Yii::t('notificaciones', 'Archivo procesado correctamente. ' . $carga_archivo['message']),
+                                    'title' => Yii::t('jslang', 'Success'),
+                                );
+                                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), false, $message);
+                            } else {
+                                /* $modelo_planificacion_saved = Planificacion::findOne( $pla_id );
+                                  $modelo_planificacion_saved->delete();
+                                 */
+                                $message = array(
+                                    'wtmessage' => Yii::t('notificaciones', 'Error al procesar el archivo1. ' . $carga_archivo['message']),
+                                    'title' => Yii::t('jslang', 'Error'),
+                                );
+
+                                return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t('jslang', 'Error'), true, $message);
+                            }
+                        } else {
+                            //\app\models\Utilities::putMessageLogFile('entro aqui: ' . $data['archivo']);
                             $message = array(
-                                'wtmessage' => Yii::t('notificaciones', 'Archivo procesado correctamente. ' . $carga_archivo['message']),
+                                'wtmessage' => Yii::t('notificaciones', 'Se creó la planificación correctamente. ' . $carga_archivo['message']),
                                 'title' => Yii::t('jslang', 'Success'),
                             );
                             return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), false, $message);
-                        } else {
-                            /* $modelo_planificacion_saved = Planificacion::findOne( $pla_id );
-                              $modelo_planificacion_saved->delete();
-                             */
-                            $message = array(
-                                'wtmessage' => Yii::t('notificaciones', 'Error al procesar el archivo1. ' . $carga_archivo['message']),
-                                'title' => Yii::t('jslang', 'Error'),
-                            );
-
-                            return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t('jslang', 'Error'), true, $message);
                         }
-                    } else {
-                        //\app\models\Utilities::putMessageLogFile('entro aqui: ' . $data['archivo']);
+                    } else { // si ya existe la modalidad y la planificacion creada no permitir volver a guardar
                         $message = array(
-                            'wtmessage' => Yii::t('notificaciones', 'Se creó la planificación correctamente. ' . $carga_archivo['message']),
-                            'title' => Yii::t('jslang', 'Success'),
+                            'wtmessage' => Yii::t('notificaciones', 'No se puede crear la planificacion ya existe ese período y modalidad. ' . $carga_archivo['message']),
+                            'title' => Yii::t('jslang', 'Error'),
                         );
-                        return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), false, $message);
+
+                        return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t('jslang', 'Error'), true, $message);
                     }
                 } catch (Exception $ex) {
                     /* $modelo_planificacion_saved = Planificacion::findOne( $pla_id );
@@ -209,7 +221,7 @@ class PlanificacionController extends \app\components\CController {
         if (file_exists($file)) {
             Yii::$app->response->sendFile($file);
         } else {
-            /*             * en caso de que no */
+            /** en caso de que no */
         }
         return;
     }
@@ -751,7 +763,7 @@ class PlanificacionController extends \app\components\CController {
             $per_id = $datos[0];
             $dni = $datos[1];
             $nombre = $datos[2];
-            /*             * * *** */
+            /*             * **** */
             $accion = isset($data['ACCION']) ? $data['ACCION'] : '';
             if ($accion == 'Create') {
                 // Consultar si la modalidad y periodo existen
@@ -793,10 +805,7 @@ class PlanificacionController extends \app\components\CController {
                     \app\models\Utilities::putMessageLogFile('valores: ' . $valores);
                     $resul = $mod_planifica->insertarDataPlanificacionestudiante($resulpla_id['pla_id'], $per_id, $jornada, $carrera, $dni, $nombre, $insertar, $valores);
                 } else {
-                    // no existe mensaje que no permitar guardar
-                    /* $message = ['info' => Yii::t( 'exception', 'No se puede guardar período académico y modalidad no existe, crearla en cargar planificación.' )];
-                      echo Utilities::ajaxResponse( 'NO_OK', 'alert', Yii::t( 'jslang', 'Error' ), 'false', $message, $resul );
-                     */
+                    // no existe mensaje que no permitar guardar      
                     $noentra = 'NO';
                 }
             } else if ($accion == 'Update') {
