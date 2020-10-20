@@ -719,8 +719,8 @@ function guardaplanificacion() {
     var accion = "Create";
     var link = $('#txth_base').val() + "/academico/planificacion/saveplanificacion";
 
-    arrParams.jornadaest = $('#cmb_jornadaest').text();
-    arrParams.carreraest = $('#cmb_carreraest').text();
+    arrParams.jornadaest = $('#cmb_jornadaest option:selected').text();
+    arrParams.carreraest = $('#cmb_carreraest option:selected').text();
     arrParams.modalidadest = $('#cmb_modalidadest').val();
     arrParams.mallaest = $('#cmb_malladoest').val();
     arrParams.periodoest = $('#cmb_periodoest').val();
