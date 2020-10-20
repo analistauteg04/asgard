@@ -128,10 +128,11 @@ class DistributivocabeceraController extends \app\components\CController {
             $data = Yii::$app->request->post();                                      
             $id = $data["id"];            
             $resCab = $distributivo_cab->obtenerDatosCabecera($id);            
-            if ($resCab["estado"] != 2) {   
-                $con = \Yii::$app->db_academico;
-                $transaction = $con->beginTransaction();
-                try {                                           
+            
+            $con = \Yii::$app->db_academico;
+            $transaction = $con->beginTransaction();
+            try {                         
+                if ($resCab["estado"] != 2) {
                     $resInactCab = $distributivo_cab->inactivarDistributivoCabecera($id);                    
                     \app\models\Utilities::putMessageLogFile('$resInactCab:'.$resInactCab);            
                     if ($resInactCab) {
@@ -152,24 +153,25 @@ class DistributivocabeceraController extends \app\components\CController {
                             );
                             return Utilities::ajaxResponse('NOOK', 'alert', Yii::t('jslang', 'Error'), 'true', $message);
                         }
-                    }                                        
-                } catch (Exception $ex) {
+                    }                     
+                } else {  //Tiene estado aprobado
                     $transaction->rollback();
                     $message = array(
-                        "wtmessage" => Yii::t('notificaciones', 'Your information has not been saved. Please try again.'),
-                        "title" => Yii::t('jslang', 'Error'),
-                    );
-                    return Utilities::ajaxResponse('NOOK', 'alert', Yii::t('jslang', 'Error'), 'true', $message);
-                }
-            } else { // Tiene estado aprobado
-                $message = array(
                         "wtmessage" => Yii::t('notificaciones', 'Imposible eliminar el distributivo, porque se encuentra aprobado.'),
                         "title" => Yii::t('jslang', 'Error'),
                     );
-                    return Utilities::ajaxResponse('NOOK', 'alert', Yii::t('jslang', 'Error'), 'true', $message);
-            }
-            
-       }
+                    return Utilities::ajaxResponse('NOOK', 'alert', Yii::t('jslang', 'Error'), 'true', $message);                        
+                }
+
+            } catch (Exception $ex) {
+                $transaction->rollback();
+                $message = array(
+                    "wtmessage" => Yii::t('notificaciones', 'Your information has not been saved. Please try again.'),
+                    "title" => Yii::t('jslang', 'Error'),
+                );
+                return Utilities::ajaxResponse('NOOK', 'alert', Yii::t('jslang', 'Error'), 'true', $message);
+            }                       
+        }
     }
     
     public function actionReview($id) {                

@@ -53,10 +53,10 @@ function deleteItem(id) {
     arrParams.id = id;
     //alert('id:'+id);
     requestHttpAjax(link, arrParams, function(response) {
-        if (response.status == "OK") {
-            searchModules();
-            setTimeout(function() {
-                showAlert(response.status, response.label, response.message);
+        showAlert(response.status, response.label, response.message);        
+        if (response.status == "OK") {              
+            setTimeout(function() {   
+                searchModules();
             }, 1000);
         }
     }, true);

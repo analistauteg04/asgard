@@ -51,7 +51,12 @@ academico::registerTranslations();
                         return Html::a('<span class="'.Utilities::getIcon('view').'"></span>', Url::to(['distributivoacademico/view', 'id' => $model['Id']]), ["data-toggle" => "tooltip", "title" => Yii::t("accion","View")]);
                     },
                     'delete' => function ($url, $model) {
-                        return Html::a('<span class="'.Utilities::getIcon('remove').'"></span>', null, ['href' => 'javascript:confirmDelete(\'deleteItem\',[\'' . $model['Id'] . '\']);', "data-toggle" => "tooltip", "title" => Yii::t("accion","Delete")]);
+                        if ($model['estado'] == 1 or $model['estado'] == 3 ) {
+                            return Html::a('<span class="'.Utilities::getIcon('remove').'"></span>', null, ['href' => 'javascript:confirmDelete(\'deleteItem\',[\'' . $model['Id'] . '\']);', "data-toggle" => "tooltip", "title" => Yii::t("accion","Delete")]);
+                        } else {
+                          return "<span class = 'glyphicon glyphicon-remove' data-toggle = 'tooltip' title ='Eliminar'  data-pjax = 0></span>";  
+                        }
+                        
                     },
                     'Approbe' => function ($url, $model){
                         if ($model['estado'] == 1 or $model['estado'] == 3 ) {
