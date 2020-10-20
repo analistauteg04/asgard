@@ -15,6 +15,7 @@ set a.daho_id = (select daho_id from db_academico.distributivo_academico_horario
 where a.daho_id is null
 
 -- Colocar daca_horario y daca_jornada que permitan nulos o eliminarlos despuès.
+-- Colocar asi_id, uaca_id, mod_id que permitan valores nulos.
 
 create table if not exists `distributivo_cabecera` (
   `dcab_id` bigint(20) not null auto_increment primary key, 

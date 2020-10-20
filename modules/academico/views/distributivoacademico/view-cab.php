@@ -60,7 +60,7 @@ academico::registerTranslations();
                 <div class="form-group">
                     <label for="txt_estado" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label" id="lbl_estado"><?= Yii::t("formulario", "Review Status") ?></label>
                     <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                        <?= Html::dropDownList("cmb_estado", $arr_cabecera['estado'], $arr_estados, ["class" => "form-control", "id" => "cmb_estado"]) ?>
+                        <?= Html::dropDownList("cmb_estado", $arr_cabecera['estado'], $arr_estados, ["class" => "form-control", "id" => "cmb_estado", "disabled" => "false"]) ?>
                     </div>
                 </div>
             </div>
