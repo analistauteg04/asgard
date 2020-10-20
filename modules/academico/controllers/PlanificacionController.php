@@ -135,6 +135,7 @@ class PlanificacionController extends \app\components\CController {
                 $model_planificacionEstudiante = new PlanificacionEstudiante();
                 try {
                     $namefile = substr_replace($data['archivo'], $data['modalidad'], 14, 0);
+                    //\app\models\Utilities::putMessageLogFile('ssss: ' . $data['archivo']);
                     $path = 'planificacion/' . $namefile;
                     $modelo_planificacion = new Planificacion();
                     $modelo_planificacion->mod_id = $data['modalidad'];
@@ -145,7 +146,7 @@ class PlanificacionController extends \app\components\CController {
                     $modelo_planificacion->pla_path = $path;
                     $modelo_planificacion->pla_estado = '1';
                     $modelo_planificacion->pla_estado_logico = '1';
-                    if ($modelo_planificacion->save()) {
+                    if ($modelo_planificacion->save() && $data['archivo'] != '.') {
                         /*  return Utilities::ajaxResponse( 'NO_OK', 'alert', Yii::t( 'jslang', 'Error' ), true, 'guardado' );
                          */
                         $pla_id = $modelo_planificacion->getPrimaryKey();
@@ -169,6 +170,13 @@ class PlanificacionController extends \app\components\CController {
 
                             return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t('jslang', 'Error'), true, $message);
                         }
+                    } else {
+                        //\app\models\Utilities::putMessageLogFile('entro aqui: ' . $data['archivo']);
+                        $message = array(
+                            'wtmessage' => Yii::t('notificaciones', 'Se creó la planificación correctamente. ' . $carga_archivo['message']),
+                            'title' => Yii::t('jslang', 'Success'),
+                        );
+                        return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), false, $message);
                     }
                 } catch (Exception $ex) {
                     /* $modelo_planificacion_saved = Planificacion::findOne( $pla_id );
@@ -752,7 +760,7 @@ class PlanificacionController extends \app\components\CController {
                 if ($resulpla_id['pla_id']) {
                     //Nuevo Registro
                     \app\models\Utilities::putMessageLogFile('ddd: ' . $data['DATAS']);
-                   
+
                     $arrplan = json_decode($data['DATAS'], true);
                     \app\models\Utilities::putMessageLogFile('adsd: ' . $arrplan[0]['asignatura']);
                     for ($i = 0; $i < sizeof($arrplan); $i++) {
@@ -779,7 +787,7 @@ class PlanificacionController extends \app\components\CController {
                         $materia = explode(" - ", $arrplan[$i]['asignatura']);
                         $mat_cod = $materia[0];
                         //$mat_nombre = $materia[1];
-                        $valores .= "'".$mat_cod ."', " . $modalidades . ",";
+                        $valores .= "'" . $mat_cod . "', " . $modalidades . ",";
                     }
                     \app\models\Utilities::putMessageLogFile('inserta: ' . $insertar);
                     \app\models\Utilities::putMessageLogFile('valores: ' . $valores);

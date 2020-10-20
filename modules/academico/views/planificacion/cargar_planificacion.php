@@ -10,56 +10,69 @@ use app\modules\academico\Module as academico;
 
 academico::registerTranslations();
 
+$leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
+          <div class="form-group">
+          <div class="col-sm-10 col-md-10 col-xs-10 col-lg-10">
+          <div style = "width: 520px;" class="alert alert-info"><span style="font-weight: bold"> Nota: </span> Si solo necesita crear el período de planificación no cargue ningún archivo.</div>
+          </div>
+          </div>
+          </div>';
 ?>
 <form class="form-horizontal" enctype="multipart/form-data" >
     <h3><span id="lbl_titulo"><?= academico::t("Academico", "Planning Load") ?></span></h3>
     <br></br>
+    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
+        <p class="text-danger"> <?= Yii::t("formulario", "Fields with * are required") ?> </p>
+    </div>
+     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
+        <?php echo $leyenda; ?>
+    </div> 
     <div class='row'>
         <div class='col-lg-12 col-md-12 col-sm-12 col-xs-12'> 
             <div class="form-group">
-                <label for="frm_per_aca" class="col-sm-3 control-label"><?= academico::t("planificacion", "Periodo Academico") ?></label>
+                <label for="frm_per_aca" class="col-sm-3 control-label"><?= academico::t("planificacion", "Periodo Academico") ?> <span class="text-danger">*</span> </label>
                 <div class="col-sm-9">
-                    <input type="text" class="form-control PBvalidation" id="frm_per_aca" value="" data-type="all" placeholder="<?= academico::t("planificacion", "Periodo Academico")  ?>">
+                    <input type="text" class="form-control PBvalidation" id="frm_per_aca" value="" data-type="all" placeholder="<?= academico::t("planificacion", "Periodo Academico") ?>">
                 </div>
             </div>
             <div class="form-group">
-                <label for="dtp_pla_fecha_ini" class="col-sm-3 control-label"><?= academico::t("planificacion", "Inicio") ?></label>
+                <label for="dtp_pla_fecha_ini" class="col-sm-3 control-label"><?= academico::t("planificacion", "Inicio") ?> <span class="text-danger">*</span> </label>
                 <div class="col-sm-9">
                     <?=
-                        DatePicker::widget([
-                            'id' => 'dtp_pla_fecha_ini',
-                            'name' => 'dtp_pla_fecha_ini',
-                            'type' => DatePicker::TYPE_INPUT,
-                            'value' => '',
-                            'options' => ["class" => "form-control PBvalidation","data-type" => "fecha", "placeholder" => academico::t("planificacion", "Inicio"),],
-                            'pluginOptions' => [
-                                'autoclose'=>true,
-                                'format' => 'yyyy-mm-dd',
-                            ]
-                        ]);
+                    DatePicker::widget([
+                        'id' => 'dtp_pla_fecha_ini',
+                        'name' => 'dtp_pla_fecha_ini',
+                        'type' => DatePicker::TYPE_INPUT,
+                        'value' => '',
+                        'options' => ["class" => "form-control PBvalidation", "data-type" => "fecha", "placeholder" => academico::t("planificacion", "Inicio"),],
+                        'pluginOptions' => [
+                            'autoclose' => true,
+                            'format' => 'yyyy-mm-dd',
+                        ]
+                    ]);
                     ?>
                 </div>
             </div>
             <div class="form-group">
-                <label for="dtp_pla_fecha_fin" class="col-sm-3 control-label"><?= academico::t("planificacion", "Fin") ?></label>
+                <label for="dtp_pla_fecha_fin" class="col-sm-3 control-label"><?= academico::t("planificacion", "Fin") ?> <span class="text-danger">*</span> </label>
                 <div class="col-sm-9">
                     <?=
-                        DatePicker::widget([
-                            'id' => 'dtp_pla_fecha_fin',
-                            'name' => 'dtp_pla_fecha_fin',
-                            'type' => DatePicker::TYPE_INPUT,
-                            'value' => '',
-                            'options' => ["class" => "form-control PBvalidation","data-type" => "fecha", "placeholder" => academico::t("planificacion", "Fin"),],
-                            'pluginOptions' => [
-                                'autoclose'=>true,
-                                'format' => 'yyyy-mm-dd',
-                            ]
-                        ]);
+                    DatePicker::widget([
+                        'id' => 'dtp_pla_fecha_fin',
+                        'name' => 'dtp_pla_fecha_fin',
+                        'type' => DatePicker::TYPE_INPUT,
+                        'value' => '',
+                        'options' => ["class" => "form-control PBvalidation", "data-type" => "fecha", "placeholder" => academico::t("planificacion", "Fin"),],
+                        'pluginOptions' => [
+                            'autoclose' => true,
+                            'format' => 'yyyy-mm-dd',
+                        ]
+                    ]);
                     ?>
                 </div>
             </div>
             <div class="form-group">
-                <label for="cmb_moda" class="col-sm-3 control-label"><?= academico::t("planificacion", "Modalidad") ?></label>
+                <label for="cmb_moda" class="col-sm-3 control-label"><?= academico::t("planificacion", "Modalidad") ?> <span class="text-danger">*</span> </label>
                 <div class="col-sm-9">
                     <?= Html::dropDownList("cmb_moda", "", $arr_modalidad, ["class" => "form-control", "id" => "cmb_moda"]) ?>
                 </div>
@@ -114,17 +127,17 @@ academico::registerTranslations();
                                 var acciones = [{id: 'reloadpage', class: 'btn btn-primary', value: objLang.Accept, callback: 'reloadPage'}];                           
                             }",
                         ],
-                    ]);//style="display: none;"
+                    ]); //style="display: none;"
                     ?>
                 </div>     
             </div>   
         </div>    
     </div>
-         <div class='col-md-12 col-sm-12 col-xs-12 col-lg-12'>        
-            <div class="col-sm-10 col-md-10 col-xs-8 col-lg-10"></div>
-            <div class="col-sm-2 col-md-2 col-xs-4 col-lg-2">                
-                <a id="btn_cargarDocumento" href="javascript:" class="btn btn-primary btn-block"> <?= Yii::t("formulario", "Send") ?></a>
-            </div>        
-        </div>      
+    <div class='col-md-12 col-sm-12 col-xs-12 col-lg-12'>        
+        <div class="col-sm-10 col-md-10 col-xs-8 col-lg-10"></div>
+        <div class="col-sm-2 col-md-2 col-xs-4 col-lg-2">                
+            <a id="btn_cargarDocumento" href="javascript:" class="btn btn-primary btn-block"> <?= Yii::t("formulario", "Send") ?></a>
+        </div>        
+    </div>      
 </form>
 
