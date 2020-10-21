@@ -778,7 +778,7 @@ create table if not exists `distributivo_academico_horario` (
 create table if not exists `distributivo_academico` (
   `daca_id` bigint(20) not null auto_increment primary key, 
   `paca_id` bigint(20) null,    
-  `daca_tipo` bigint(20) null,
+  `tdis_id` bigint(20) null,
   `asi_id` bigint(20) null,
   `pro_id` bigint(20) not null,  
   `uaca_id` bigint(20) null,  
@@ -799,7 +799,8 @@ create table if not exists `distributivo_academico` (
   foreign key (uaca_id) references `unidad_academica`(uaca_id), 
   foreign key (mod_id) references `modalidad`(mod_id),  
   foreign key (daho_id) references `distributivo_academico_horario`(daho_id),
-  foreign key (pppr_id) references `paralelo_promocion_programa`(pppr_id)
+  foreign key (pppr_id) references `paralelo_promocion_programa`(pppr_id),
+  foreign key (tdis_id) references `tipo_distributivo`(tdis_id)
 );
 
 -- --------------------------------------------------------
@@ -1175,8 +1176,8 @@ create table if not exists `resumen_resultado_evaluacion` (
 --
 create table if not exists `tipo_distributivo` (
  `tdis_id` bigint(20) not null auto_increment primary key,
- `tdis_nombre` varchar(250) default null,
- `tdis_estado` varchar(1) not null,
+ `tdis_nombre` varchar(250) default null, 
+ `tdis_estado` varchar(1) not null, 
  `tdis_fecha_creacion` timestamp not null default current_timestamp,
  `tdis_fecha_modificacion` timestamp null default null,
  `tdis_estado_logico` varchar(1) not null
@@ -1785,8 +1786,22 @@ create table if not exists `distributivo_cabecera` (
   foreign key (pro_id) references `profesor`(pro_id),
   foreign key (paca_id) references `periodo_academico`(paca_id)
 );
-	
- 	
+
+-- --------------------------------------------------------
+--
+-- Estructura de tabla para la tabla `configuracion_tipo_distributivo`
+--
+create table if not exists db_academico.`configuracion_tipo_distributivo` (
+ `ctdi_id` bigint(20) not null auto_increment primary key,
+ `tdis_id` varchar(250) not null,
+ `ctdi_estado_vigencia` varchar(1) not null,
+ `ctdi_horas_semanal` integer(3) not null,
+ `ctdi_estado` varchar(1) not null,
+ `ctdi_fecha_creacion` timestamp not null default current_timestamp,
+ `ctdi_fecha_modificacion` timestamp null default null,
+ `ctdi_estado_logico` varchar(1) not null
+);
+
  
  
  

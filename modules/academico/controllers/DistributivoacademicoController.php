@@ -27,17 +27,7 @@ use Exception;
 academico::registerTranslations();
 admision::registerTranslations();
 
-class DistributivoacademicoController extends \app\components\CController {
-    public function tipoAsignacion() {
-        return [
-            '0' => Yii::t("formulario", "Seleccionar"),
-            '1' => Yii::t("formulario", "Académico"),
-            '2' => Yii::t("formulario", "Investigación"),
-            '3' => Yii::t("formulario", "Vinculación"),
-            '4' => Yii::t("formulario", "Tutorías"),
-        ];
-    }
-    
+class DistributivoacademicoController extends \app\components\CController {        
     public function paralelo() {
         return [
             '0' => Yii::t("formulario", "Seleccionar"),
@@ -123,6 +113,7 @@ class DistributivoacademicoController extends \app\components\CController {
         $mod_profesor = new Profesor();
         $distributivo_model = new DistributivoAcademico();
         $mod_periodoActual = new PeriodoAcademico();
+        $mod_tipo_distributivo = new TipoDistributivo();
         
         if (Yii::$app->request->isAjax) {            
             $data = Yii::$app->request->post();
@@ -162,6 +153,8 @@ class DistributivoacademicoController extends \app\components\CController {
         $arr_asignatura = $mod_asignatura->getAsignatura_x_bloque_x_planif($arr_periodo[0]["id"],"N");
         $arr_horario = $distributivo_model->getHorariosByUnidadAcad($arr_unidad[0]["id"], $arr_modalidad[0]["id"], $arr_jornada[0]["id"]);
         $model = $distributivo_model->getDistribAcadXprofesorXperiodo(0,0);
+        $arr_tipo_distributivo = $mod_tipo_distributivo->consultarTipoDistributivo();
+        
         return $this->render('new', [
             'arr_profesor' => ArrayHelper::map(array_merge([["Id" => "0", "Nombres" => Yii::t("formulario", "Select")]], $arr_profesor), "Id", "Nombres"),
             'arr_unidad' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arr_unidad), "id", "name"),
@@ -170,7 +163,7 @@ class DistributivoacademicoController extends \app\components\CController {
             'arr_materias' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arr_asignatura), "id", "name"),
             'arr_jornada' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arr_jornada), "id", "name"),
             'arr_horario' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arr_horario), "id", "name"),
-            'arr_tipo_asignacion' => $this->tipoAsignacion(),
+            'arr_tipo_asignacion' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arr_tipo_distributivo), "id", "name"),
             'arr_paralelo' => $this->paralelo(),
             'model' => $model,
             'arr_periodoActual' => $arr_periodoActual,
@@ -196,17 +189,29 @@ class DistributivoacademicoController extends \app\components\CController {
                 if (isset($datos)) {                    
                     $valida = 1;                    
                     //foreach ($datos as $key => $value1) {
-                    for ($i = 0; $i < sizeof($datos); $i++) {                                
-                        $dataExists = $distributivo_model->existsDistribucionAcademico($pro_id, $datos[$i]->asi_id, $paca_id, $datos[$i]->hor_id, $datos[$i]->par_id);
-                        if(isset($dataExists) && $dataExists != "" && count($dataExists) > 0) {                            
+                    for ($i = 0; $i < sizeof($datos); $i++) {       
+                        //Valida que no exista el mismo tipo de distributivo con el profesor que se està registrando..
+                        $dataExists = $distributivo_model->existsDistribucionAcademico($pro_id, $data[$i]->tasi_id, $data[$i]->uni_id, $datos[$i]->asi_id, $paca_id, $datos[$i]->hor_id, $datos[$i]->par_id);
+                        if(isset($dataExists) && $dataExists != "" && count($dataExists) > 0) {                                                  
                             $valida = 0;
                             $message = array(
                                 "wtmessage" => academico::t('distributivoacademico', 'Register already exists in System.'),
                                 "title" => Yii::t('jslang', 'Error'),
                             );
                             return Utilities::ajaxResponse('NOOK', 'alert', Yii::t('jslang', 'Error'), 'true', $message);
+                        } else {
+                            // Valida que no exista el mismo tipo de distributivo en otro profesor.
+                            $dataExisOtro = $distributivo_model->existsDistribAcadOtroProf($data[$i]->uni_id, $datos[$i]->asi_id, $paca_id, $datos[$i]->hor_id, $datos[$i]->par_id);
+                            if(isset($dataExisOtro) && $dataExisOtro != "" && count($dataExisOtro) > 0) {
+                                $valida = 0;
+                                $message = array(
+                                    "wtmessage" => academico::t('distributivoacademico', 'Register already exists in System.'),
+                                    "title" => Yii::t('jslang', 'Error'),
+                                );
+                                return Utilities::ajaxResponse('NOOK', 'alert', Yii::t('jslang', 'Error'), 'true', $message);
+                            }
                         }
-                    }                    
+                    }             
                     //ha cumplido todas las validaciones entonces graba.
                     if ($valida == 1) {
                         // Verificar que exista en cabecera de distributivo.                        
@@ -225,8 +230,7 @@ class DistributivoacademicoController extends \app\components\CController {
                                 // Grabar en distributivo académico
                                 \app\models\Utilities::putMessageLogFile('ingresa a insertar detalle: '. $i);
                                 $res= $distributivo_model->insertarDistributivoAcademico($i, $datos, $pro_id, $paca_id);                             
-                                if ($res>0) {
-                                     \app\models\Utilities::putMessageLogFile('res insertar detalle: '. $res);
+                                if ($res>0) {                                     
                                     $exito = '1';
                                 } else {
                                     $exito = '0';
