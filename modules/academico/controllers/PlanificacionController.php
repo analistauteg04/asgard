@@ -715,7 +715,7 @@ class PlanificacionController extends \app\components\CController {
         $jornada = $mod_jornada->consultarJornadahorario();
         $malla = $mod_malla->consultarmallasxcarrera($unidad_acad_data[0]['id'], $modalidad_data[0]['id'], $modalidad_data[0]['id']);
         $materia = $mod_malla->consultarasignaturaxmalla($malla[0]['id']);
-
+        $modalidades = $modalidad_model->consultarModalidad($unidad_acad_data[0]['id'],1);
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
             if (isset($data['getmodalidad'])) {
@@ -744,7 +744,7 @@ class PlanificacionController extends \app\components\CController {
                     'arr_jornada' => ArrayHelper::map(array_merge([['id' => '0', 'name' => 'Seleccionar']], $jornada), 'id', 'name'),
                     'arr_bloque' => $this->Bloques(),
                     'arr_hora' => $this->Horas(),
-                    'arr_modalidadh' => ArrayHelper::map(array_merge([['id' => '0', 'name' => 'Seleccionar']], $modalidad_data), 'id', 'name'),
+                    'arr_modalidadh' => ArrayHelper::map(array_merge([['id' => '0', 'name' => 'Seleccionar']], $modalidades), 'id', 'name'),
                     'arr_malla' => ArrayHelper::map(array_merge([['id' => '0', 'name' => 'Seleccionar']], $malla), 'id', 'name'),
                     'arr_materia' => ArrayHelper::map(array_merge([['id' => '0', 'name' => 'Seleccionar']], $materia), 'id', 'name'),
         ]);

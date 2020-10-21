@@ -25,29 +25,26 @@ use Yii;
  * @property MallaAcademica[] $mallaAcademicas
  * @property ModalidadEstudioUnidad[] $modalidadEstudioUnidads
  */
-class EstudioAcademico extends \app\modules\admision\components\CActiveRecord
-{
+class EstudioAcademico extends \app\modules\admision\components\CActiveRecord {
+
     /**
      * {@inheritdoc}
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return 'estudio_academico';
     }
 
     /**
      * @return \yii\db\Connection the database connection used by this AR class.
      */
-    public static function getDb()
-    {
+    public static function getDb() {
         return Yii::$app->get('db_academico');
     }
 
     /**
      * {@inheritdoc}
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['teac_id', 'eaca_nombre', 'eaca_descripcion', 'eaca_alias', 'eaca_alias_resumen', 'eaca_usuario_ingreso', 'eaca_estado', 'eaca_estado_logico'], 'required'],
             [['teac_id', 'eaca_usuario_ingreso', 'eaca_usuario_modifica'], 'integer'],
@@ -63,8 +60,7 @@ class EstudioAcademico extends \app\modules\admision\components\CActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'eaca_id' => 'Eaca ID',
             'teac_id' => 'Teac ID',
@@ -84,27 +80,24 @@ class EstudioAcademico extends \app\modules\admision\components\CActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getTeac()
-    {
+    public function getTeac() {
         return $this->hasOne(TipoEstudioAcademico::className(), ['teac_id' => 'teac_id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getMallaAcademicas()
-    {
+    public function getMallaAcademicas() {
         return $this->hasMany(MallaAcademica::className(), ['eaca_id' => 'eaca_id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getModalidadEstudioUnidads()
-    {
+    public function getModalidadEstudioUnidads() {
         return $this->hasMany(ModalidadEstudioUnidad::className(), ['eaca_id' => 'eaca_id']);
     }
-    
+
     public function obtenerCarreraXFacu($nint_id) {
         $con = \Yii::$app->db_academico;
         $estado = 1;
@@ -246,7 +239,7 @@ class EstudioAcademico extends \app\modules\admision\components\CActiveRecord
         $resultData = $comando->queryAll();
         return $resultData;
     }
-    
+
     /**
      * Function obtener consultarCarrera 
      * @author      Grace Viteri <analistadesarrollo01@uteg.edu.ec>
@@ -264,56 +257,55 @@ class EstudioAcademico extends \app\modules\admision\components\CActiveRecord
                       eac.eaca_estado = :estado
                ORDER BY 2 ";
         $comando = $con->createCommand($sql);
-        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);        
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $resultData = $comando->queryAll();
         return $resultData;
     }
-    
-     /** Se debe cambiar esta funcion que regrese el codigo de area ***ojo***
-     * Function consultarIdsCarrera
-     * @author  Byron Villacreses <developer@uteg.edu.ec>
-     * @property integer car_id      
-     * @return  
-     */
 
-    public static function consultarIdsEstudioAca($TextAlias) {
-        $con = \Yii::$app->db_academico;        
-        $sql = "SELECT eaca_id Ids 
-                    FROM " . $con->dbname . ".estudio_academico  
-                WHERE eaca_estado=1 AND eaca_alias=:eaca_alias ";                
-        $comando = $con->createCommand($sql);
-        $comando->bindParam(":eaca_alias", $TextAlias, \PDO::PARAM_STR);
-        //return $comando->queryAll();
-        $rawData=$comando->queryScalar();
-        if ($rawData === false)
-            return 0; //en caso de que existe problema o no retorne nada tiene 1 por defecto 
-        return $rawData;
-    }    
-    
     /** Se debe cambiar esta funcion que regrese el codigo de area ***ojo***
      * Function consultarIdsCarrera
      * @author  Byron Villacreses <developer@uteg.edu.ec>
      * @property integer car_id      
      * @return  
      */
-    public static function consultarIdsModEstudio($CodEmp,$TextAlias) {
-        $con = \Yii::$app->db_academico;                
+    public static function consultarIdsEstudioAca($TextAlias) {
+        $con = \Yii::$app->db_academico;
+        $sql = "SELECT eaca_id Ids 
+                    FROM " . $con->dbname . ".estudio_academico  
+                WHERE eaca_estado=1 AND eaca_alias=:eaca_alias ";
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":eaca_alias", $TextAlias, \PDO::PARAM_STR);
+        //return $comando->queryAll();
+        $rawData = $comando->queryScalar();
+        if ($rawData === false)
+            return 0; //en caso de que existe problema o no retorne nada tiene 1 por defecto 
+        return $rawData;
+    }
+
+    /** Se debe cambiar esta funcion que regrese el codigo de area ***ojo***
+     * Function consultarIdsCarrera
+     * @author  Byron Villacreses <developer@uteg.edu.ec>
+     * @property integer car_id      
+     * @return  
+     */
+    public static function consultarIdsModEstudio($CodEmp, $TextAlias) {
+        $con = \Yii::$app->db_academico;
         $sql = "SELECT A.mest_id Ids 
                     FROM " . $con->dbname . ".modulo_estudio A
                             INNER JOIN 	" . $con->dbname . ".modulo_estudio_empresa B
                                     ON A.mest_id=B.mest_id
             WHERE A.mest_estado=1 AND B.emp_id=:emp_id AND A.mest_alias=:mest_alias;";
-        
+
         $comando = $con->createCommand($sql);
         $comando->bindParam(":mest_alias", $TextAlias, \PDO::PARAM_STR);
         $comando->bindParam(":emp_id", $CodEmp, \PDO::PARAM_INT);
         //return $comando->queryAll();
-        $rawData=$comando->queryScalar();
+        $rawData = $comando->queryScalar();
         if ($rawData === false)
             return 0; //en caso de que existe problema o no retorne nada tiene 1 por defecto 
         return $rawData;
     }
-    
+
     /**
      * Function obtener consultarCarrera x unidad
      * @author  Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>
@@ -333,7 +325,7 @@ class EstudioAcademico extends \app\modules\admision\components\CActiveRecord
                ORDER BY 2 ";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
-        $comando->bindParam(":unidad", $unidad, \PDO::PARAM_INT);        
+        $comando->bindParam(":unidad", $unidad, \PDO::PARAM_INT);
         $resultData = $comando->queryAll();
         return $resultData;
     }
@@ -352,13 +344,14 @@ class EstudioAcademico extends \app\modules\admision\components\CActiveRecord
                     moda.mod_nombre AS name  
                FROM " . $con->dbname . ".modalidad_estudio_unidad meu  
                INNER JOIN " . $con->dbname . ".modalidad moda ON moda.mod_id = meu.mod_id                  
-               WHERE  meu.meun_estado_logico = :estado AND
-                      meu.meun_estado = :estado AND
-                      meu.eaca_id = :eaca_id";
+               WHERE  meu.eaca_id = :eaca_id AND
+                      meu.meun_estado_logico = :estado AND
+                      meu.meun_estado = :estado";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
-        $comando->bindParam(":eaca_id", $eaca_id, \PDO::PARAM_INT);        
+        $comando->bindParam(":eaca_id", $eaca_id, \PDO::PARAM_INT);
         $resultData = $comando->queryAll();
         return $resultData;
     }
+
 }
