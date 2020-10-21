@@ -30,7 +30,8 @@ academico::registerTranslations();
             <div class="form-group">
                 <label for="lbl_carreraest" class="col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= Yii::t("crm", "Carrera"); ?></label>
                 <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
-                    <?= Html::dropDownList("cmb_carreraest", 1, $arr_carrera, ["class" => "form-control", "id" => "cmb_carreraest", "Disabled" => "disabled"]) ?>
+                    <!-- <? Html::dropDownList("cmb_carreraest",$arr_idcarrera["eaca_id"], $arr_carrera, ["class" => "form-control", "id" => "cmb_carreraest", "Disabled" => "disabled"]) ?>-->
+                    <input type="text" class="form-control" value="<?= $arr_idcarrera["pes_carrera"] ?>" disabled ="true" id="txt_carrera" placeholder="<?= Yii::t("crm", "Carrera") ?>">
                 </div>  
                 <label for="lbl_periodoest" class="col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= Yii::t("formulario", "Period"); ?></label>
                 <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
