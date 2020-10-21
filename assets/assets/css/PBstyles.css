@@ -122,6 +122,11 @@ Yii Software LLC (http://www.yiisoft.com) Copyright © 2008
     background-image: url(../images/modal/info.png);
 }
 
+.modal-alert {
+    position: relative;
+    padding: 15px;
+}
+
 
 /* Estilos de ShowLoadingPopup */
 

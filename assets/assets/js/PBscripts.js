@@ -605,6 +605,16 @@ function showAlert(status, label, message) {
     var callbackfn = "";
     var cont = 0;
 
+    // se rellena el contenido del alertBox
+    $(idModal + ">div>div>div.modal-alert").removeClass("show");
+    $(idModal + ">div>div>div.modal-alert").addClass("hide");
+    $(idModal + ">div>div>div.modal-alert>div.alert>h4").html("");
+    $(idModal + ">div>div>div.modal-alert>div.alert").removeClass("alert-success");
+    $(idModal + ">div>div>div.modal-alert>div.alert").removeClass("alert-warning");
+    $(idModal + ">div>div>div.modal-alert>div.alert").removeClass("alert-info");
+    $(idModal + ">div>div>div.modal-alert>div.alert").removeClass("alert-danger");
+    $(idModal + ">div>div>div.modal-alert>div.alert").addClass("alert-success");
+
     // se rellena el contenido del alert
     $(idModal + ">div>div>div.modal-body").html("");
     $(idModal + ">div>div>div.modal-body").html(wtmessage);
@@ -691,6 +701,36 @@ function showAlert(status, label, message) {
 
     //execute modal
     $(idModal).modal();
+}
+
+function setAlertMessage(status, label, message) {
+    var idModal = "#myModalPB";
+    var evalabel = label.toLowerCase();
+    $(idModal + ">div>div>div.modal-alert").removeClass("hide");
+    $(idModal + ">div>div>div.modal-alert").addClass("show");
+    $(idModal + ">div>div>div.modal-alert>div.alert").removeClass("alert-success");
+    $(idModal + ">div>div>div.modal-alert>div.alert").removeClass("alert-warning");
+    $(idModal + ">div>div>div.modal-alert>div.alert").removeClass("alert-info");
+    $(idModal + ">div>div>div.modal-alert>div.alert").removeClass("alert-danger");
+
+    if (status == "OK") {
+        if (evalabel == "success" || objLang.Success == label) {
+            $(idModal + ">div>div>div.modal-alert>div.alert>h4").html(objLang.Success);
+            $(idModal + ">div>div>div.modal-alert>div.alert").addClass("alert-success");
+        } else {
+            $(idModal + ">div>div>div.modal-alert>div.alert>h4").html(objLang.Success);
+            $(idModal + ">div>div>div.modal-alert>div.alert").addClass("alert-success");
+        }
+    } else {
+        if (evalabel == "error" || objLang.Error == label) {
+            $(idModal + ">div>div>div.modal-alert>div.alert>h4").html(objLang.Error);
+            $(idModal + ">div>div>div.modal-alert>div.alert").addClass("alert-danger");
+        } else {
+            $(idModal + ">div>div>div.modal-alert>div.alert>h4").html(objLang.Warning);
+            $(idModal + ">div>div>div.modal-alert>div.alert").addClass("alert-warning");
+        }
+    }
+    $(idModal + ">div>div>div.modal-alert>div.alert>div#alert-text").html(message);
 }
 
 function closeAlert(id) {
