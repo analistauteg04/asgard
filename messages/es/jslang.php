@@ -96,6 +96,7 @@ return array(
     'Reload' => 'Recargar',
     'Restart Session' => 'Reiniciar Sesión',
     'second(s)' => 'segundo(s)',
+    'Save' => 'Guardar',
     'Send' => 'Enviar',
     'Sending File' => 'Enviando Archivo',
     'Service not available' => 'Servicio no disponible.',
