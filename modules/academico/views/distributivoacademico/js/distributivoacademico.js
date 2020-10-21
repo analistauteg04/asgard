@@ -315,18 +315,33 @@ function objDistributivo(indice) {
     rowGrid.daca_id = 0;
     rowGrid.tasi_id = $("#cmb_tipo_asignacion").val();
     rowGrid.tasi_name = $("#cmb_tipo_asignacion :selected").text();
-    rowGrid.uni_id = $("#cmb_unidad_dis").val();    
-    rowGrid.uni_name = $("#cmb_unidad_dis :selected").text();  
-    rowGrid.mod_id = $("#cmb_modalidad").val();
-    rowGrid.mod_name = $("#cmb_modalidad :selected").text();
-    rowGrid.paca_id = $("#cmb_periodo").val();
-    rowGrid.jor_id = $("#cmb_jornada").val();
-    rowGrid.jor_name = $("#cmb_jornada :selected").text();
-    rowGrid.asi_id = $("#cmb_materia").val();
-    rowGrid.asi_name = $("#cmb_materia :selected").text();
-    rowGrid.hor_id = $("#cmb_horario").val();
-    rowGrid.hor_name = $("#cmb_horario :selected").text(); 
-    rowGrid.par_id = $("#cmb_paralelo").val();
+    if ($("#cmb_tipo_asignacion").val() == 1) {
+        rowGrid.uni_id = $("#cmb_unidad_dis").val();    
+        rowGrid.uni_name = $("#cmb_unidad_dis :selected").text();  
+        rowGrid.mod_id = $("#cmb_modalidad").val();
+        rowGrid.mod_name = $("#cmb_modalidad :selected").text();
+        rowGrid.paca_id = $("#cmb_periodo").val();
+        rowGrid.jor_id = $("#cmb_jornada").val();
+        rowGrid.jor_name = $("#cmb_jornada :selected").text();
+        rowGrid.asi_id = $("#cmb_materia").val();
+        rowGrid.asi_name = $("#cmb_materia :selected").text();
+        rowGrid.hor_id = $("#cmb_horario").val();
+        rowGrid.hor_name = $("#cmb_horario :selected").text(); 
+        rowGrid.par_id = $("#cmb_paralelo").val();
+    } else {
+        rowGrid.uni_id = $("#cmb_unidad_dis").val();    
+        rowGrid.uni_name = 'N/A';
+        rowGrid.mod_id = $("#cmb_modalidad").val();
+        rowGrid.mod_name = 'N/A';
+        rowGrid.paca_id = $("#cmb_periodo").val();
+        rowGrid.jor_id = $("#cmb_jornada").val();
+        rowGrid.jor_name = 'N/A';
+        rowGrid.asi_id = $("#cmb_materia").val();
+        rowGrid.asi_name = 'N/A';
+        rowGrid.hor_id = $("#cmb_horario").val();
+        rowGrid.hor_name = 'N/A';
+        rowGrid.par_id = $("#cmb_paralelo").val();
+    }
         
     //rowGrid.pro_otros = ($("#chk_otros").prop("checked")) ? 1 : 0;
     rowGrid.accion = "new";
@@ -376,6 +391,7 @@ function fillDataAlert() {
 function retornaFila(c, Grid, TbGtable, op) {
     //var RutaImagenAccion='ruta IMG'//$('#txth_rutaImg').val();
     var strFila = "";
+    strFila += '<td style="display:none; border:none;">' + Grid[c]['indice'] + '</td>';    
     strFila += '<td style="display:none; border:none;">' + Grid[c]['daca_id'] + '</td>';    
     strFila += '<td>' + Grid[c]['tasi_name'] + '</td>';
     strFila += '<td>' + Grid[c]['asi_name'] + '</td>';
@@ -405,9 +421,9 @@ function eliminarItems(val, TbGtable) {
         var Grid = JSON.parse(sessionStorage.dts_asignacion_list);
         if (Grid.length > 0) {
             $('#' + TbGtable + ' tr').each(function () {
-                ids = $(this).find("td").eq(0).html();
+                ids = $(this).find("td").eq(0).html();               
                 if (ids == val) {
-                    var array = findAndRemove(Grid, 'indice', ids);
+                    var array = findAndRemove(Grid, 'indice', val);
                     sessionStorage.dts_asignacion_list = JSON.stringify(array);
                     //if (count==0){sessionStorage.removeItem('detalleGrid')} 
                     $(this).remove();

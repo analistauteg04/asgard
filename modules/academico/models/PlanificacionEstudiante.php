@@ -3,6 +3,7 @@
 namespace app\modules\academico\models;
 
 use Yii;
+use app\models\Utilities;
 use \yii\data\ActiveDataProvider;
 use \yii\data\ArrayDataProvider;
 use yii\base\Exception;
@@ -527,8 +528,6 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord {
             if ($arrFiltro['periodo'] != '0') {
                 $str_search .= " plan.pla_periodo_academico = :periodo AND ";
             }
-
-          
         }
         if ($onlyData == false) {
             $idplanifica = 'plae.pla_id, ';
@@ -552,20 +551,20 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord {
                     plan.pla_estado_logico = :estado AND
                     pers.per_estado = :estado AND
                     pers.per_estado_logico = :estado";
-       
+
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
             $search_cond = "%" . $arrFiltro["estudiante"] . "%";
             $comando->bindParam(":estudiante", $search_cond, \PDO::PARAM_STR);
-           \app\models\Utilities::putMessageLogFile('str_searchxx: ' . $sql);
-               
-            if ($arrFiltro['modalidad'] > 0 ) {
+            \app\models\Utilities::putMessageLogFile('str_searchxx: ' . $sql);
+
+            if ($arrFiltro['modalidad'] > 0) {
                 $modalidad = $arrFiltro["modalidad"];
-                $comando->bindParam(":modalidad", $modalidad, \PDO::PARAM_INT); 
+                $comando->bindParam(":modalidad", $modalidad, \PDO::PARAM_INT);
             }
 
-            if ($arrFiltro['carrera'] != 'Todas') {                
+            if ($arrFiltro['carrera'] != 'Todas') {
                 $search_carrera = "%" . $arrFiltro["carrera"] . "%";
                 $comando->bindParam(":carrera", $search_carrera, \PDO::PARAM_STR);
             }
@@ -574,9 +573,8 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord {
                 $periodo = $arrFiltro["periodo"];
                 $comando->bindParam(":periodo", $periodo, \PDO::PARAM_STR);
             }
-            
         }
-       
+
         $resultData = $comando->queryAll();
         $dataProvider = new ArrayDataProvider([
             'key' => 'id',
@@ -852,38 +850,32 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord {
      * @return  
      */
     /* INSERTAR DATOS */
-    public function insertarDataPlanificacionestudiante($data) {
+    public function insertarDataPlanificacionestudiante($pla_id, $per_id, $pes_jornada, $pes_carrera, $pes_dni, $pes_nombres, $insertar, $valores) {
         $arroout = array();
-        $con = \Yii::$app->db_academico;        
+        $con = \Yii::$app->db_academico;
         $trans = $con->beginTransaction();
         try {
             //$per_id = @Yii::$app->session->get("PB_perid");    
-            $data = isset($data['DATA']) ? $data['DATA'] : array();
-            for ($i = 0; $i < sizeof(json_decode($data)); $i++) {
-                // recorrer y crear un arrrglo solo con los campos a ingresar de horario y bloque
-                // crear string del insert
-
-                // crear el string de los
-
-            }
+            $data = isset($data['DATA']) ? $data['DATAS'] : array();
             $this->insertarPlanificacionestudiante($con, $pla_id, $per_id, $pes_jornada, $pes_carrera, $pes_dni, $pes_nombres, $insertar, $valores);
             $trans->commit();
             $con->close();
             //RETORNA DATOS 
             //$arroout["ids"]= $ftem_id;
-            $arroout["status"]= true;
+            $arroout["status"] = true;
             //$arroout["secuencial"]= $doc_numero;
-            
-                       
+
+
             return $arroout;
         } catch (\Exception $e) {
             $trans->rollBack();
             $con->close();
             //throw $e;
-            $arroout["status"]= false;
+            $arroout["status"] = false;
             return $arroout;
         }
     }
+
     /** FALTA MODIFICAR ojoooo
      * Function insertarPlanificacionestudiante 
      * Guiarse de insertarPersona
@@ -893,85 +885,25 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord {
      */
     private function insertarPlanificacionestudiante($con, $pla_id, $per_id, $pes_jornada, $pes_carrera, $pes_dni, $pes_nombres, $insertar, $valores) {
         //$usu_id = @Yii::$app->session->get("PB_iduser");
-        //for ($i = 0; $i < sizeof($dts); $i++) {
-            $sql = "INSERT INTO " . $con->dbname . ".planificacion_estudiante
+        $estado = 1;
+        $sql = "INSERT INTO " . $con->dbname . ".planificacion_estudiante
                     (pla_id,
                      per_id,
-                     pes_jornada,pes_cod_carrera,
-                     pes_carrera,pes_dni,
-                     pes_nombres, " . 
-                     /*pes_mat_b1_h1_cod, 
-                     pes_mod_b1_h1, 
-                     pes_mat_b1_h2_cod, 
-                     pes_mod_b1_h2,
-                     pes_mat_b1_h3_cod, 
-                     pes_mod_b1_h3,
-                     pes_mat_b1_h4_cod, 
-                     pes_mod_b1_h4,
-                     pes_mat_b1_h5_cod, 
-                     pes_mod_b1_h5,
-                     pes_mat_b1_h6_cod, 
-                     pes_mod_b1_h6,  
-                     pes_mat_b2_h1_cod, 
-                     pes_mod_b2_h1, 
-                     pes_mat_b2_h2_cod, 
-                     pes_mod_b2_h2,
-                     pes_mat_b2_h3_cod, 
-                     pes_mod_b2_h3,
-                     pes_mat_b2_h4_cod, 
-                     pes_mod_b2_h4,
-                     pes_mat_b2_h5_cod, 
-                     pes_mod_b2_h5,
-                     pes_mat_b2_h6_cod, 
-                     pes_mod_b2_h6, */
-                    $insertar . "
-                    pes_estado,
-                    pes_fecha_creacion,
-                    pes_estado_logico)VALUES
-                    (". $pla_id . "," . $per_id . "," . $pes_jornada . "," . $pes_carrera . "," . $pes_dni . "," 
-                      . $pes_nombres . "," . $valores . ")";
-            $command = $con->createCommand($sql);
-            /*$command->bindParam(":est_id", $dts[$i]->est_id, \PDO::PARAM_INT);
-            $command->bindParam(":dre_tipo", $dts[$i]->dre_tipo, \PDO::PARAM_INT);
-            $command->bindParam(":dre_codificacion", $dts[$i]->dre_codificacion, \PDO::PARAM_STR);
-            $command->bindParam(":dre_ruta", $dts[$i]->dre_ruta, \PDO::PARAM_STR);
-            $command->bindParam(":dre_imagen", $dts[$i]->dre_imagen, \PDO::PARAM_STR);
-            $command->bindParam(":dre_descripcion", ucwords(strtolower($dts[$i]->dre_descripcion)), \PDO::PARAM_STR);
-            $command->bindParam(":dre_usu_ingresa", $usu_id, \PDO::PARAM_INT);
-            $command->bindParam(":dre_estado", $dts[$i]->dre_estado, \PDO::PARAM_INT);
-            $command->bindParam(":dre_fecha_archivo", $dts[$i]->dre_fecha_archivo, \PDO::PARAM_STR);            
-            $command->bindParam(":dre_estado_logico", $dts[$i]->dre_estado_logico, \PDO::PARAM_INT);*/
-            //$command->bindParam(":per_nombre", $data[0]['per_nombre'], \PDO::PARAM_STR);
-            $command->execute();
-        //}
-        
+                     pes_jornada,
+                     pes_carrera,
+                     pes_dni,
+                     pes_nombres, " .
+                     $insertar . "
+                     pes_estado,                   
+                     pes_estado_logico)VALUES
+                    (" . $pla_id . "," . $per_id . ",'" . $pes_jornada . "','" . $pes_carrera . "','" . $pes_dni . "','"
+                . $pes_nombres . "'," . $valores . " '" . $estado . "','" . $estado . "')";
+        \app\models\Utilities::putMessageLogFile('guarda insert..: ' . $insertar);
+        \app\models\Utilities::putMessageLogFile('guarda valor..: ' . $valores);
+        \app\models\Utilities::putMessageLogFile('guarda sql..: ' . $sql);
+        $command = $con->createCommand($sql);
+        $command->execute();
     }
-   /* public function insertarPlanificacionestudiante($con, $parameters, $keys, $name_table) {
-        $trans = $con->getTransaction();
-        $param_sql .= "" . $keys[0];
-        $bdet_sql .= "'" . $parameters[0] . "'";
-        for ($i = 1; $i < count($parameters); $i++) {
-            if (isset($parameters[$i])) {
-                $param_sql .= ", " . $keys[$i];
-                $bdet_sql .= ", '" . $parameters[$i] . "'";
-            }
-        }
-        try {
-            $sql = "INSERT INTO " . $con->dbname . '.' . $name_table . " ($param_sql) VALUES($bdet_sql);";
-            \app\models\Utilities::putMessageLogFile('insert planificacion_estudiante:' . $sql);
-            $comando = $con->createCommand($sql);
-            $result = $comando->execute();
-            $idtable = $con->getLastInsertID($con->dbname . '.' . $name_table);
-            if ($trans !== null)
-                $trans->commit();
-            return $idtable;
-        } catch (Exception $ex) {
-            if ($trans !== null) {
-                $trans->rollback();
-            }
-            return 0;
-        }
-    }*/
 
     /**
      * Function Consultar modalidad y periodo en planificacion.
@@ -997,4 +929,5 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord {
         $resultData = $comando->queryOne();
         return $resultData;
     }
+
 }

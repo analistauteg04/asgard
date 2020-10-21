@@ -223,9 +223,10 @@ class DistributivoacademicoController extends \app\components\CController {
                         if ($cabecera=='true') {
                             for ($i = 0; $i < sizeof($datos); $i++) {
                                 // Grabar en distributivo académico
-                                \app\models\Utilities::putMessageLogFile('ingresa a insertar detalle');
+                                \app\models\Utilities::putMessageLogFile('ingresa a insertar detalle: '. $i);
                                 $res= $distributivo_model->insertarDistributivoAcademico($i, $datos, $pro_id, $paca_id);                             
                                 if ($res>0) {
+                                     \app\models\Utilities::putMessageLogFile('res insertar detalle: '. $res);
                                     $exito = '1';
                                 } else {
                                     $exito = '0';

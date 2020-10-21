@@ -87,6 +87,7 @@ academico::registerTranslations();
                 <table  id="TbG_Data" class="table table-hover">
                     <thead>
                         <tr>                            
+                            <th style="display:none; border:none;"><?= Yii::t("formulario", "Indice") ?></th>
                             <th style="display:none; border:none;"><?= Yii::t("formulario", "Ids") ?></th>
                             <th><?= academico::t("Academico", "Assignment Type") ?></th>
                             <th><?= academico::t("Academico", "Subject") ?></th>
