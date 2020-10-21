@@ -565,6 +565,7 @@ class PlanificacionController extends \app\components\CController {
         $modalidad_data = $modalidad_model->consultarModalidad($unidad_acad_data[0]['id'], $emp_id);
         $academic_study_data = $modcanal->consultarCarreraModalidad($unidad_acad_data[0]['id'], $mod_cabecera['mod_id']);
         $mod_detalle = $mod_periodo->consultarDetalleplanifica($pla_id, $per_id, false);
+        $mod_carrera = $mod_periodo->consultarIdcarrera($pla_id, $per_id);
         return $this->render('view', [
                     'arr_cabecera' => $mod_cabecera,
                     'model_detalle' => $mod_detalle,
@@ -572,6 +573,7 @@ class PlanificacionController extends \app\components\CController {
                     'arr_modalidad' => ArrayHelper::map($modalidad_data, 'id', 'name'),
                     'arr_carrera' => ArrayHelper::map($academic_study_data, 'id', 'name'),
                     'arr_periodo' => ArrayHelper::map($periodo, 'id', 'name'),
+                    'arr_idcarrera' => $mod_carrera,
         ]);
     }
 

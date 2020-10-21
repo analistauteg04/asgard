@@ -930,4 +930,29 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord {
         return $resultData;
     }
 
+    /**
+     * Function Consultar id de carrera.
+     * @author  Giovanni Vergara <analistadesarrollo01@uteg.edu.ec>;
+     * @property       
+     * @return  
+     */
+    public function consultarIdcarrera($pla_id, $per_id) {
+        $con = \Yii::$app->db_academico;
+        $estado = 1;
+
+        $sql = "SELECT plan.pes_carrera, esta.eaca_id
+                FROM " . $con->dbname . ".planificacion_estudiante plan
+                INNER JOIN " . $con->dbname . ".estudio_academico esta ON esta.eaca_nombre = plan.pes_carrera
+                WHERE plan.pla_id = :pla_id AND
+                      plan.per_id = :per_id AND
+                      plan.pes_estado = :estado AND
+                      plan.pes_estado_logico = :estado";
+
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":pla_id", $pla_id, \PDO::PARAM_INT);
+        $comando->bindParam(":per_id", $per_id, \PDO::PARAM_INT);
+        $resultData = $comando->queryOne();
+        return $resultData;
+    }
 }
