@@ -693,6 +693,11 @@ function showAlert(status, label, message) {
     $(idModal).modal();
 }
 
+function closeAlert(id) {
+    id = id || 'myModalPB';
+    $('#' + id).modal('toggle');
+}
+
 function showClockTime() {
     var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
         "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
