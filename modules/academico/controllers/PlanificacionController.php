@@ -560,12 +560,28 @@ class PlanificacionController extends \app\components\CController {
         $uni_aca_model = new UnidadAcademica();
         $modalidad_model = new Modalidad();
         $modcanal = new Oportunidad();
+        $mod_jornada = new DistributivoAcademicoHorario();
         $mod_cabecera = $mod_periodo->consultarCabeceraplanifica($pla_id, $per_id);
         $unidad_acad_data = $uni_aca_model->consultarUnidadAcademicas();
         $modalidad_data = $modalidad_model->consultarModalidad($unidad_acad_data[0]['id'], $emp_id);
         $academic_study_data = $modcanal->consultarCarreraModalidad($unidad_acad_data[0]['id'], $mod_cabecera['mod_id']);
         $mod_detalle = $mod_periodo->consultarDetalleplanifica($pla_id, $per_id, false);
-        $mod_carrera = $mod_periodo->consultarIdcarrera($pla_id, $per_id);
+        $mod_carrera = $mod_periodo->consultardataplan($pla_id, $per_id);
+        $jornada = $mod_jornada->consultarJornadahorario();
+        switch ($mod_carrera['pes_jornada']) {
+            case "M":
+                $jornadacab = '1';
+                break;
+            case "N":
+                $jornadacab = '2';
+                break;
+            case "S":
+                $jornadacab = '3';
+                break;
+            case "D":
+                $jornadacab = '4';
+                break;
+        }
         return $this->render('view', [
                     'arr_cabecera' => $mod_cabecera,
                     'model_detalle' => $mod_detalle,
@@ -574,6 +590,8 @@ class PlanificacionController extends \app\components\CController {
                     'arr_carrera' => ArrayHelper::map($academic_study_data, 'id', 'name'),
                     'arr_periodo' => ArrayHelper::map($periodo, 'id', 'name'),
                     'arr_idcarrera' => $mod_carrera,
+                    'arr_jornada' => ArrayHelper::map(array_merge([['id' => '0', 'name' => 'Seleccionar']], $jornada), 'id', 'name'),
+                    'valorjornada' => $jornadacab,
         ]);
     }
 
@@ -635,7 +653,22 @@ class PlanificacionController extends \app\components\CController {
         $modalidad_data = $modalidad_model->consultarModalidad($unidad_acad_data[0]['id'], $emp_id);
         $academic_study_data = $modcanal->consultarCarreraModalidad($unidad_acad_data[0]['id'], $mod_cabecera['mod_id']);
         $mod_detalle = $mod_periodo->consultarDetalleplanifica($pla_id, $per_id, false);
+        $mod_carrera = $mod_periodo->consultardataplan($pla_id, $per_id);
         $jornada = $mod_jornada->consultarJornadahorario();
+        switch ($mod_carrera['pes_jornada']) {
+            case "M":
+                $jornadacab = '1';
+                break;
+            case "N":
+                $jornadacab = '2';
+                break;
+            case "S":
+                $jornadacab = '3';
+                break;
+            case "D":
+                $jornadacab = '4';
+                break;
+        }
         return $this->render('edit', [
                     'arr_cabecera' => $mod_cabecera,
                     'model_detalle' => $mod_detalle,
@@ -647,6 +680,8 @@ class PlanificacionController extends \app\components\CController {
                     'arr_hora' => $this->Horas(),
                     'arr_modalidadh' => ArrayHelper::map(array_merge([['id' => '0', 'name' => 'Seleccionar']], $modalidad_data), 'id', 'name'),
                     'arr_jornada' => ArrayHelper::map(array_merge([['id' => '0', 'name' => 'Seleccionar']], $jornada), 'id', 'name'),
+                    'arr_idcarrera' => $mod_carrera,
+                    'valorjornada' => $jornadacab,
         ]);
     }
 
@@ -715,7 +750,7 @@ class PlanificacionController extends \app\components\CController {
         $jornada = $mod_jornada->consultarJornadahorario();
         $malla = $mod_malla->consultarmallasxcarrera($unidad_acad_data[0]['id'], $modalidad_data[0]['id'], $modalidad_data[0]['id']);
         $materia = $mod_malla->consultarasignaturaxmalla($malla[0]['id']);
-        $modalidades = $modalidad_model->consultarModalidad($unidad_acad_data[0]['id'],1);
+        $modalidades = $modalidad_model->consultarModalidad($unidad_acad_data[0]['id'], 1);
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
             if (isset($data['getmodalidad'])) {
@@ -773,10 +808,10 @@ class PlanificacionController extends \app\components\CController {
                 //existe guardar
                 if ($resulpla_id['pla_id']) {
                     //Nuevo Registro
-                    \app\models\Utilities::putMessageLogFile('ddd: ' . $data['DATAS']);
+                    // \app\models\Utilities::putMessageLogFile('ddd: ' . $data['DATAS']);
 
                     $arrplan = json_decode($data['DATAS'], true);
-                    \app\models\Utilities::putMessageLogFile('adsd: ' . $arrplan[0]['asignatura']);
+                    // \app\models\Utilities::putMessageLogFile('adsd: ' . $arrplan[0]['asignatura']);
                     for ($i = 0; $i < sizeof($arrplan); $i++) {
                         // recorrer y crear un arrrglo solo con los campos a ingresar de horario y bloque
                         // crear string del insert
@@ -803,8 +838,8 @@ class PlanificacionController extends \app\components\CController {
                         //$mat_nombre = $materia[1];
                         $valores .= "'" . $mat_cod . "', " . $modalidades . ",";
                     }
-                    \app\models\Utilities::putMessageLogFile('inserta: ' . $insertar);
-                    \app\models\Utilities::putMessageLogFile('valores: ' . $valores);
+                    //\app\models\Utilities::putMessageLogFile('inserta: ' . $insertar);
+                    // \app\models\Utilities::putMessageLogFile('valores: ' . $valores);
                     $resul = $mod_planifica->insertarDataPlanificacionestudiante($resulpla_id['pla_id'], $per_id, $jornada, $carrera, $dni, $nombre, $insertar, $valores);
                 } else {
                     // no existe mensaje que no permitar guardar      

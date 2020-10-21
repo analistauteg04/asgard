@@ -936,11 +936,14 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord {
      * @property       
      * @return  
      */
-    public function consultarIdcarrera($pla_id, $per_id) {
+    public function consultardataplan($pla_id, $per_id) {
         $con = \Yii::$app->db_academico;
         $estado = 1;
 
-        $sql = "SELECT plan.pes_carrera, esta.eaca_id
+        $sql = "SELECT plan.pes_carrera, 
+                       esta.eaca_id,
+                       plan.pes_jornada,
+                       plan.pes_nombres
                 FROM " . $con->dbname . ".planificacion_estudiante plan
                 INNER JOIN " . $con->dbname . ".estudio_academico esta ON esta.eaca_nombre = plan.pes_carrera
                 WHERE plan.pla_id = :pla_id AND
