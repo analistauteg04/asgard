@@ -255,3 +255,8 @@ INSERT INTO `distributivo_academico_horario` (`daho_id`, `uaca_id`, `mod_id`, `d
 (41, 1, 1, '2', 'VI4H', '19:00', '20:30', '0', '0', '0', '0', '1', '0', '0', '1', '1'),
 (42, 1, 1, '2', 'VI5H', '20:00', '21:30', '0', '0', '0', '0', '1', '0', '0', '1', '1');	
 
+
+INSERT INTO db_academico.`configuracion_tipo_distributivo` (`ctdi_id`, `tdis_id`, `ctdi_estado_vigencia`, `ctdi_horas_semanal`, `ctdi_estado`, `ctdi_estado_logico`)
+VALUES (1, 2, '1', 2, '1', '1'),
+(2, 3, '1', 2, '1', '1'),
+(3, 4, '1', 2, '1', '1');
