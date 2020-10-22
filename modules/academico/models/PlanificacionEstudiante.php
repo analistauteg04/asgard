@@ -936,14 +936,17 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord {
      * @property       
      * @return  
      */
-    public function consultardataplan($pla_id, $per_id) {
+    public function consultardataplan($pla_id, $per_id, $materia) {
         $con = \Yii::$app->db_academico;
         $estado = 1;
 
         $sql = "SELECT plan.pes_carrera, 
                        esta.eaca_id,
                        plan.pes_jornada,
-                       plan.pes_nombres
+                       plan.pes_nombres,
+                       ifnull((SELECT maca.maca_nombre FROM " . $con->dbname . ".malla_academica_detalle made  
+		                       INNER JOIN " . $con->dbname . ".malla_academica maca ON maca.maca_id = made.maca_id
+                               WHERE made_codigo_asignatura = :materia), ' ') as malla
                 FROM " . $con->dbname . ".planificacion_estudiante plan
                 INNER JOIN " . $con->dbname . ".estudio_academico esta ON esta.eaca_nombre = plan.pes_carrera
                 WHERE plan.pla_id = :pla_id AND
@@ -955,6 +958,7 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord {
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":pla_id", $pla_id, \PDO::PARAM_INT);
         $comando->bindParam(":per_id", $per_id, \PDO::PARAM_INT);
+        $comando->bindParam(":materia", $materia, \PDO::PARAM_STR);
         $resultData = $comando->queryOne();
         return $resultData;
     }

@@ -42,10 +42,10 @@ academico::registerTranslations();
         </div> 
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <div class="form-group">           
-               <!-- <label for="lbl_mallaest" class="col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><? academico::t("Academico", "Academic Mesh"); ?></label>
+                <label for="lbl_mallaest" class="col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= academico::t("Academico", "Academic Mesh"); ?> </label>
                 <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
-                     <input type="text" class="form-control" value="<? $arr_idcarrera["pes_carrera"] ?>" disabled ="true" id="txt_malla" placeholder="<?= academico::t("Academico", "Academic Mesh"); ?>">
-                </div> -->
+                    <input type="text" class="form-control" value="<?= $arr_idcarrera["malla"] ?>" id="txt_buscarest" disabled = "true" placeholder="<?= Yii::t("formulario", "Search by Names") ?>">    
+                </div>  
                 <label for="lbl_periodoest" class="col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= Yii::t("formulario", "Period"); ?></label>
                 <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
                     <?= Html::dropDownList("cmb_periodoest", $arr_cabecera["pla_periodo_academico"], $arr_periodo, ["class" => "form-control", "id" => "cmb_periodoest", "Disabled" => "disabled"]) ?>

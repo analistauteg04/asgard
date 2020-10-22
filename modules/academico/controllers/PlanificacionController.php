@@ -566,7 +566,8 @@ class PlanificacionController extends \app\components\CController {
         $modalidad_data = $modalidad_model->consultarModalidad($unidad_acad_data[0]['id'], $emp_id);
         $academic_study_data = $modcanal->consultarCarreraModalidad($unidad_acad_data[0]['id'], $mod_cabecera['mod_id']);
         $mod_detalle = $mod_periodo->consultarDetalleplanifica($pla_id, $per_id, false);
-        $mod_carrera = $mod_periodo->consultardataplan($pla_id, $per_id);
+        $mod_malla = $mod_periodo->consultarDetalleplanifica($pla_id, $per_id, true);
+        $mod_carrera = $mod_periodo->consultardataplan($pla_id, $per_id, $mod_malla[0]['cod_asignatura']);
         $jornada = $mod_jornada->consultarJornadahorario();
         switch ($mod_carrera['pes_jornada']) {
             case "M":
@@ -591,7 +592,7 @@ class PlanificacionController extends \app\components\CController {
                     'arr_periodo' => ArrayHelper::map($periodo, 'id', 'name'),
                     'arr_idcarrera' => $mod_carrera,
                     'arr_jornada' => ArrayHelper::map(array_merge([['id' => '0', 'name' => 'Seleccionar']], $jornada), 'id', 'name'),
-                    'valorjornada' => $jornadacab,
+                    'valorjornada' => $jornadacab,                   
         ]);
     }
 
@@ -653,7 +654,8 @@ class PlanificacionController extends \app\components\CController {
         $modalidad_data = $modalidad_model->consultarModalidad($unidad_acad_data[0]['id'], $emp_id);
         $academic_study_data = $modcanal->consultarCarreraModalidad($unidad_acad_data[0]['id'], $mod_cabecera['mod_id']);
         $mod_detalle = $mod_periodo->consultarDetalleplanifica($pla_id, $per_id, false);
-        $mod_carrera = $mod_periodo->consultardataplan($pla_id, $per_id);
+        $mod_malla = $mod_periodo->consultarDetalleplanifica($pla_id, $per_id, true);
+        $mod_carrera = $mod_periodo->consultardataplan($pla_id, $per_id, $mod_malla[0]['cod_asignatura']);
         $jornada = $mod_jornada->consultarJornadahorario();
         switch ($mod_carrera['pes_jornada']) {
             case "M":
