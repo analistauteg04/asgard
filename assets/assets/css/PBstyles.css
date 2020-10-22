@@ -127,6 +127,38 @@ Yii Software LLC (http://www.yiisoft.com) Copyright © 2008
     padding: 15px;
 }
 
+.box .overlay,
+.overlay-wrapper .overlay,
+div.modal>div.modal-dialog>div.modal-content>div.overlay {
+    z-index: 50;
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 3px;
+}
+
+.box>.overlay,
+.overlay-wrapper>.overlay,
+.box>.loading-img,
+.overlay-wrapper>.loading-img,
+div.modal>div.modal-dialog>div.modal-content>div.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.box .overlay>.fa,
+.overlay-wrapper .overlay>.fa,
+div.modal>div.modal-dialog>div.modal-content>div.overlay>.fa {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-left: -15px;
+    margin-top: -15px;
+    color: #000;
+    font-size: 30px;
+}
+
 
 /* Estilos de ShowLoadingPopup */
 

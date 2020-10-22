@@ -61,6 +61,9 @@
                 </div>
             </div>
             <div class="modal-body">Content</div>
+            <div class="overlay hide">
+              <i class="fa fa-refresh fa-spin"></i>
+            </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
             </div>

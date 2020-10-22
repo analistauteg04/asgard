@@ -615,6 +615,10 @@ function showAlert(status, label, message) {
     $(idModal + ">div>div>div.modal-alert>div.alert").removeClass("alert-danger");
     $(idModal + ">div>div>div.modal-alert>div.alert").addClass("alert-success");
 
+    // se limpia overlay
+    $(idModal + ">div>div>div.overlay").removeClass("show");
+    $(idModal + ">div>div>div.overlay").addClass("hide");
+
     // se rellena el contenido del alert
     $(idModal + ">div>div>div.modal-body").html("");
     $(idModal + ">div>div>div.modal-body").html(wtmessage);
@@ -736,6 +740,18 @@ function setAlertMessage(status, label, message) {
 function closeAlert(id) {
     id = id || 'myModalPB';
     $('#' + id).modal('toggle');
+}
+
+function setOnLoadingAlert(id) {
+    id = id || 'myModalPB';
+    $("#" + id + ">div>div>div.overlay").removeClass("hide");
+    $("#" + id + ">div>div>div.overlay").addClass("show");
+}
+
+function setOffLoadingAlert(id) {
+    id = id || 'myModalPB';
+    $("#" + id + ">div>div>div.overlay").removeClass("show");
+    $("#" + id + ">div>div>div.overlay").addClass("hide");
 }
 
 function showClockTime() {
