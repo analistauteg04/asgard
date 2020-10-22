@@ -220,7 +220,8 @@ class DistributivoCabecera extends \yii\db\ActiveRecord
     public function existeDistCabecera($paca_id, $pro_id){
         $con_academico = \Yii::$app->db_academico;
         $sql = "SELECT 
-                    dc.dcab_id 
+                    dc.dcab_id,
+                    dc.dcab_estado_revision
                 FROM 
                     " . $con_academico->dbname . ".distributivo_cabecera AS dc
                 WHERE

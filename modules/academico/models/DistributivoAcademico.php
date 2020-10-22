@@ -304,6 +304,7 @@ class DistributivoAcademico extends \yii\db\ActiveRecord {
     public function existsDistribucionAcademico($pro_id, $tdis_id, $uaca_id, $asi_id, $paca_id, $horario, $paralelo){
         $con_academico = \Yii::$app->db_academico;
         if ($tdis_id==1) {
+            \app\models\Utilities::putMessageLogFile('ingresa porque es docencia');
             $sql = "SELECT
                     da.daca_id as id                    
                 FROM 
@@ -315,6 +316,7 @@ class DistributivoAcademico extends \yii\db\ActiveRecord {
                     da.daho_id =:horario AND ";
             
             if ($uaca_id ==1) {
+                 \app\models\Utilities::putMessageLogFile('uaca_id:'.$uaca_id);
                 $sql .= "da.daca_paralelo = :paralelo AND                         
                         da.daca_estado = 1 AND
                         da.daca_estado_logico = 1;";
@@ -323,7 +325,7 @@ class DistributivoAcademico extends \yii\db\ActiveRecord {
                          da.daca_estado = 1 AND
                          da.daca_estado_logico = 1;";
             }            
-        } else { // Verifiaciòn de otros tipos de distributivo.
+        } else { // Verificación de otros tipos de distributivo.
             $sql = "SELECT
                     da.daca_id as id
                 FROM 
@@ -334,14 +336,24 @@ class DistributivoAcademico extends \yii\db\ActiveRecord {
                     da.tdis_id =:tdis_id AND 
                     da.daca_estado = 1 AND
                     da.daca_estado_logico = 1;";
-        }        
+        }    
+        \app\models\Utilities::putMessageLogFile('sql:'.$sql);
+        \app\models\Utilities::putMessageLogFile('asignatura:'.$asi_id);
+        \app\models\Utilities::putMessageLogFile('horario:'.$horario);        
+        \app\models\Utilities::putMessageLogFile('paralelo:'.$paralelo);
+        \app\models\Utilities::putMessageLogFile('tipo dis:'.$tdis_id);        
+        \app\models\Utilities::putMessageLogFile('periodo:'.$paca_id);   
+        \app\models\Utilities::putMessageLogFile('profesor:'.$pro_id);   
+        
         $comando = $con_academico->createCommand($sql);
         $comando->bindParam(":paca_id", $paca_id, \PDO::PARAM_INT);
         $comando->bindParam(":pro_id", $pro_id, \PDO::PARAM_INT);
-        $comando->bindParam(":asi_id", $asi_id, \PDO::PARAM_INT);        
-        $comando->bindParam(":horario", $horario, \PDO::PARAM_INT);
-        $comando->bindParam(":paralelo", $paralelo, \PDO::PARAM_INT);
         $comando->bindParam(":tdis_id", $tdis_id, \PDO::PARAM_INT);
+        if ($tdis_id==1) {
+            $comando->bindParam(":asi_id", $asi_id, \PDO::PARAM_INT);        
+            $comando->bindParam(":horario", $horario, \PDO::PARAM_INT);
+            $comando->bindParam(":paralelo", $paralelo, \PDO::PARAM_INT);
+        }
         $res = $comando->queryOne();  
         return $res;
     }

@@ -119,7 +119,28 @@ $(document).ready(function() {
             $('#bloque4').css('display', 'none');
         }
     });
-        
+    
+    $('#cmb_profesor').change(function () {   
+        var link = $('#txth_base').val() + "/academico/distributivocabecera/validadistributivo";
+        var arrParams = new Object();
+        arrParams.pro_id = $('#cmb_profesor').val();        
+        arrParams.paca_id = $('#txth_idperiodo').val();
+        arrParams.transaccion = "N";
+        if (!validateForm()) {
+            requestHttpAjax(link, arrParams, function(response) {                
+                if (response.status == "NOOK") {
+                    document.getElementById("cmb_tipo_asignacion").disabled=false;  
+                } else {
+                    document.getElementById("cmb_tipo_asignacion").disabled=true;  
+                }
+                setTimeout(function() {
+                    var link = $('#txth_base').val() + "/academico/distributivocabecera/new";
+                    window.location = link;
+                }, 1000);
+                
+            }, true);
+        }            
+    });              
 });
 
 // Recarga la Grid de Productos si Existe

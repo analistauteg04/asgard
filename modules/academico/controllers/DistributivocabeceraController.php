@@ -241,4 +241,39 @@ class DistributivocabeceraController extends \app\components\CController {
             }                        
        }
     }
+    
+    public function actionValidadistributivo(){  
+        $distributivo_cab = new DistributivoCabecera();
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();                                      
+            $pro_id = $data["pro_id"];     
+            $paca_id = $data["paca_id"];
+            $tran_id = $data["transaccion"];
+            
+            if ($pro_id !=0) {
+                $resp = $distributivo_cab->existeDistCabecera($paca_id, $pro_id);
+                if (($resp == 0) and ($tran_id== "N")) {
+                    $message = array(
+                       "wtmessage" => Yii::t('notificaciones', 'Profesor ya tiene distributivo creado para este período académico.'),
+                       "title" => Yii::t('jslang', 'Error'),
+                   );
+                   return Utilities::ajaxResponse('NOOK', 'alert', Yii::t('jslang', 'Error'), 'true', $message);
+                } 
+                if (($resp["dcab_estado_revision"] == 2) and ($tran_id != "N")){
+                     $message = array(
+                       "wtmessage" => Yii::t('notificaciones', 'Distributivo ya se encuentra aprobado, imposible realizar cambios'),
+                       "title" => Yii::t('jslang', 'Error'),
+                   );
+                   return Utilities::ajaxResponse('NOOK', 'alert', Yii::t('jslang', 'Error'), 'true', $message);
+                }
+            } else {
+                $message = array(
+                       "wtmessage" => Yii::t('notificaciones', 'Seleccione un profesor'),
+                       "title" => Yii::t('jslang', 'Error'),
+                   );
+                   return Utilities::ajaxResponse('NOOK', 'alert', Yii::t('jslang', 'Error'), 'true', $message);
+            }
+            
+        }
+    }
 }
