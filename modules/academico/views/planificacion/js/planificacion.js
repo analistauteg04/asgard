@@ -567,11 +567,21 @@ function agregarItems(opAccion) {
                 arr_Grid = JSON.parse(sessionStorage.dts_datosItemplan);
                 var size = arr_Grid.length;
                 if (size > 0) {
-                    //Varios Items                    
-                    arr_Grid[size] = objProducto(size);
-                    sessionStorage.dts_datosItemplan = JSON.stringify(arr_Grid);
-                    addVariosItem(tGrid, arr_Grid, -1);
+                    var vasignatura = $('#cmb_asignaest option:selected').text();
+                    //console.log(vasignatura);
+                    if (checkId(vasignatura)) {
+                         //alert('El asignatura ya está siendo usado');
+                         showAlert('NO_OK', 'error', {"wtmessage": "Ya ha ingresado esa asignatura", "title": 'Información'});
+                         return;
+                    }
+                    else{
+                         //Varios Items                    
+                        arr_Grid[size] = objProducto(size);
+                        sessionStorage.dts_datosItemplan = JSON.stringify(arr_Grid);
+                        addVariosItem(tGrid, arr_Grid, -1); 
+                    }
                     limpiarDetalle();
+                   
                 } else {
                     /*Agrego a la Sesion*/
                     //Primer Items                   
@@ -637,14 +647,15 @@ function limpiarDetalle() {
 
 function addVariosItem(TbGtable, lista, i) {
     //i=(i==-1)?($('#'+TbGtable+' tr').length)-1:i;
-    i = ($('#' + TbGtable + ' tr').length) - 1;
+    i = ($('#' + TbGtable + ' tr').length) - 1; 
     //alert ('dasd' + i);
     //$('#'+TbGtable+' >table >tbody').append(retornaFilaProducto(i,lista,TbGtable,true));
     if (i < 12) {
-        /* lista.forEach(function (lista, i) {
-         console.log("lista " + i + " | Asignatura: " + lista.asignatura + " Bloque: " + lista.bloque + " Hora: " + lista.hora)
-         });*/
+         //lista.forEach(function (lista, i) {
+           // console.log("lista " + i + " | Asignatura: " + lista.asignatura + " Bloque: " + lista.bloque + " Hora: " + lista.hora)
+         //}); 
         $('#' + TbGtable + ' tr:last').after(retornaFila(i, lista, TbGtable, true));
+           
     } else {
         showAlert('NO_OK', 'error', {"wtmessage": "Ya tiene ingresadas máximo de materias permitidas", "title": 'Información'});
     }
@@ -658,7 +669,7 @@ function retornaFila(c, Grid, TbGtable, op) {
     strFila += '<td style="display:none; border:none;">' + Grid[c]['indice'] + '</td>';
     strFila += '<td style=" display:none; border:none;">' + pla_id + '</td>';
     strFila += '<td style=" display:none;border:none;">' + per_id + '</td>';
-    strFila += '<td>' + Grid[c]['asignatura'] + '</td>';
+    strFila += '<td for="asignatura">' + Grid[c]['asignatura'] + '</td>';
     // strFila += '<td>' + Grid[c]['jornada'] + '</td>';
     strFila += '<td>' + Grid[c]['bloque'] + '</td>';
     strFila += '<td>' + Grid[c]['modalidad'] + '</td>';
@@ -671,6 +682,12 @@ function retornaFila(c, Grid, TbGtable, op) {
         strFila = '<tr>' + strFila + '</tr>';
     }
     return strFila;
+}
+
+function checkId (id) {
+    let ids = document.querySelectorAll('#PbPlanificaestudiantnew td[for="asignatura"]');
+    //console.log(ids);
+    return [].filter.call(ids, td => td.textContent === id).length === 1;
 }
 
 function eliminarItems(val, TbGtable) {
