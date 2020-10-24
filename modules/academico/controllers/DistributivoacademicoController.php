@@ -183,60 +183,48 @@ class DistributivoacademicoController extends \app\components\CController {
                 $pro_id = $data['profesor'];
                 $paca_id = $data['periodo'];
                 \app\models\Utilities::putMessageLogFile('profesor:'.$pro_id);
+                \app\models\Utilities::putMessageLogFile('PERIODO:'.$paca_id);
                 $dts = (isset($data["grid_docencia"]) && $data["grid_docencia"] != "") ? $data["grid_docencia"] : NULL;     
                 $datos = json_decode($dts);
                 //Validar que no exista en distributivo_cabecera porque para crear no debe existir.
                 $cons = $distributivo_cab->existeDistCabecera($paca_id,$pro_id);                        
-                if ($cons==0) {                            
+                \app\models\Utilities::putMessageLogFile('EXISTE CABECERA: '. $cons);          
+                if ($cons==0) {                        
                     if (isset($datos)) {                    
                         $valida = 1;                             
-                        for ($i = 0; $i < sizeof($datos); $i++) {       
-                            //Valida que no exista el mismo tipo de distributivo con el profesor que se està registrando..
-                            $dataExists = $distributivo_model->existsDistribucionAcademico($pro_id, $data[$i]->tasi_id, $data[$i]->uni_id, $datos[$i]->asi_id, $paca_id, $datos[$i]->hor_id, $datos[$i]->par_id);
-                            if(isset($dataExists) && $dataExists != "" && count($dataExists) > 0) {  
-                                \app\models\Utilities::putMessageLogFile('existe validacion 1');
-                                $valida = 0;
-                                $transaction->rollback();
-                                $message = array(
-                                    "wtmessage" => academico::t('distributivoacademico', 'Register already exists in System.'),
-                                    "title" => Yii::t('jslang', 'Error'),
-                                );
-                                return Utilities::ajaxResponse('NOOK', 'alert', Yii::t('jslang', 'Error'), 'true', $message);
-                            } else {
-                                // Valida que no exista el mismo tipo de distributivo en otro profesor.
-                                $dataExisOtro = $distributivo_model->existsDistribAcadOtroProf($data[$i]->uni_id, $datos[$i]->asi_id, $paca_id, $datos[$i]->hor_id, $datos[$i]->par_id);
-                                if(isset($dataExisOtro) && $dataExisOtro != "" && count($dataExisOtro) > 0) {
+                        for ($i = 0; $i < sizeof($datos); $i++) {                                                         
+                            // Valida que no exista el mismo tipo de distributivo en otro profesor.
+                            if ($datos[$i]->tasi_id == 1) {
+                                $dataExisOtro = $distributivo_model->existsDistribAcadOtroProf($datos[$i]->uni_id, $datos[$i]->tasi_id, $datos[$i]->asi_id, $paca_id, $datos[$i]->hor_id, $datos[$i]->par_id);
+                                if($dataExisOtro["id"] > 0) {                                       
                                      \app\models\Utilities::putMessageLogFile('existe validacion 2');
                                     $valida = 0;
                                     $transaction->rollback();
                                     $message = array(
-                                        "wtmessage" => academico::t('distributivoacademico', 'Register already exists in System.'),
+                                        "wtmessage" => academico::t('distributivoacademico', 'Ya existe el registro en otro docente.'),
                                         "title" => Yii::t('jslang', 'Error'),
                                     );
                                     return Utilities::ajaxResponse('NOOK', 'alert', Yii::t('jslang', 'Error'), 'true', $message);
                                 }
-                            }
-                        }             
-                        //ha cumplido todas las validaciones entonces graba.
-                        if ($valida == 1) {                                             
-                            $cab = $distributivo_cab->insertarDistributivoCab($paca_id, $pro_id); 
-                            if ($cab>0) {
-                                $cabecera='true';                                
-                            }                       
-                            if ($cabecera=='true') {
-                                for ($i = 0; $i < sizeof($datos); $i++) {
-                                    // Grabar en distributivo académico
-                                    \app\models\Utilities::putMessageLogFile('ingresa a insertar detalle: '. $i);
-                                    $res= $distributivo_model->insertarDistributivoAcademico($i, $datos, $pro_id, $paca_id);                             
-                                    if ($res>0) {                                     
-                                        $exito = '1';
-                                    } else {
-                                        $exito = '0';
-                                    }                               
-                                }
-                            }
+                            }                                
                         }
-                    }
+                    }                  
+                    //ha cumplido todas las validaciones entonces graba.
+                    if ($valida == 1) {                                             
+                        $cab = $distributivo_cab->insertarDistributivoCab($paca_id, $pro_id); 
+                        if ($cab>0) {                                
+                            for ($i = 0; $i < sizeof($datos); $i++) {
+                                // Grabar en distributivo académico
+                                \app\models\Utilities::putMessageLogFile('ingresa a insertar detalle: '. $i);
+                                $res= $distributivo_model->insertarDistributivoAcademico($i, $datos, $pro_id, $paca_id);                             
+                                if ($res>0) {                                     
+                                    $exito = '1';
+                                } else {
+                                    $exito = '0';
+                                }                               
+                            }   
+                        }
+                    }                
                 } else {
                     $transaction->rollback();
                     $message = array(

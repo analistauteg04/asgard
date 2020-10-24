@@ -315,8 +315,7 @@ class DistributivoAcademico extends \yii\db\ActiveRecord {
                     da.asi_id =:asi_id AND 
                     da.daho_id =:horario AND ";
             
-            if ($uaca_id ==1) {
-                 \app\models\Utilities::putMessageLogFile('uaca_id:'.$uaca_id);
+            if ($uaca_id ==1) {              
                 $sql .= "da.daca_paralelo = :paralelo AND                         
                         da.daca_estado = 1 AND
                         da.daca_estado_logico = 1;";
@@ -336,8 +335,7 @@ class DistributivoAcademico extends \yii\db\ActiveRecord {
                     da.tdis_id =:tdis_id AND 
                     da.daca_estado = 1 AND
                     da.daca_estado_logico = 1;";
-        }    
-        \app\models\Utilities::putMessageLogFile('sql:'.$sql);
+        }            
         \app\models\Utilities::putMessageLogFile('asignatura:'.$asi_id);
         \app\models\Utilities::putMessageLogFile('horario:'.$horario);        
         \app\models\Utilities::putMessageLogFile('paralelo:'.$paralelo);
@@ -354,8 +352,14 @@ class DistributivoAcademico extends \yii\db\ActiveRecord {
             $comando->bindParam(":horario", $horario, \PDO::PARAM_INT);
             $comando->bindParam(":paralelo", $paralelo, \PDO::PARAM_INT);
         }
-        $res = $comando->queryOne();  
-        return $res;
+        \app\models\Utilities::putMessageLogFile('antes del queryone');   
+        \app\models\Utilities::putMessageLogFile('sql:'.$sql);
+        $res = $comando->queryOne();          
+        if (empty($res)) {                         
+            return 0;            
+        } else {            
+            return $res;     
+        }                 
     }
 
     public function getDistribucionAcademicoHorario($uaca_id, $mod_id, $jornada, $horario){
@@ -565,7 +569,7 @@ class DistributivoAcademico extends \yii\db\ActiveRecord {
      * @param   
      * @return  $resultData (Retornar los datos).
      */
-    public function existsDistribAcadOtroProf($uaca_id, $asi_id, $paca_id, $horario, $paralelo){
+    public function existsDistribAcadOtroProf($uaca_id, $tasi_id, $asi_id, $paca_id, $horario, $paralelo){
         $con_academico = \Yii::$app->db_academico;
         
         $sql = "SELECT
@@ -573,7 +577,8 @@ class DistributivoAcademico extends \yii\db\ActiveRecord {
             FROM 
                 " . $con_academico->dbname . ".distributivo_academico AS da                    
             WHERE
-                da.paca_id =:paca_id AND                     
+                da.paca_id =:paca_id AND     
+                da.tdis_id = :tasi_id AND 
                 da.asi_id =:asi_id AND 
                 da.daho_id =:horario AND ";
 
@@ -585,13 +590,18 @@ class DistributivoAcademico extends \yii\db\ActiveRecord {
             $sql .= "da.pppr_id = :paralelo AND                          
                      da.daca_estado = 1 AND
                      da.daca_estado_logico = 1;";
-        }                    
+        }                          
         $comando = $con_academico->createCommand($sql);
         $comando->bindParam(":paca_id", $paca_id, \PDO::PARAM_INT);        
         $comando->bindParam(":asi_id", $asi_id, \PDO::PARAM_INT);        
         $comando->bindParam(":horario", $horario, \PDO::PARAM_INT);
-        $comando->bindParam(":paralelo", $paralelo, \PDO::PARAM_INT);        
+        $comando->bindParam(":paralelo", $paralelo, \PDO::PARAM_INT);     
+        $comando->bindParam(":tasi_id", $tasi_id, \PDO::PARAM_INT);
         $res = $comando->queryOne();  
-        return $res;
+        if (empty($res)) {
+            return 0;            
+        } else {
+            return $res;        
+        }               
     }
 }

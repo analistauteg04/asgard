@@ -26,7 +26,7 @@ academico::registerTranslations();
             <div class="form-group">            
                 <label for="cmb_tipo_asignacion" class="col-sm-2 col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= academico::t("Academico", "Tipo Asignación") ?></label>
                 <div class="col-sm-3 col-xs-3 col-md-3 col-lg-3">
-                    <?= Html::dropDownList("cmb_tipo_asignacion", 0,  $arr_tipo_asignacion , ["class" => "form-control", "id" => "cmb_tipo_asignacion"]) ?>
+                    <?= Html::dropDownList("cmb_tipo_asignacion", 0,  $arr_tipo_asignacion , ["class" => "form-control", "id" => "cmb_tipo_asignacion", "disabled" => "true"]) ?>
                 </div>   
                 <div id="bloque1" style="display: none">
                 <label for="cmb_unidad_dis" class="col-sm-2 col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= Yii::t("formulario", "Academic unit") ?></label>
