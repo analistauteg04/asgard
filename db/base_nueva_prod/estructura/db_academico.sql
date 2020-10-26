@@ -784,6 +784,7 @@ create table if not exists `distributivo_academico` (
   `uaca_id` bigint(20) null,  
   `mod_id` bigint(20) null,  
   `daho_id` bigint(20) null,
+  `daca_num_estudiantes_online` integer(3) null,
   `daca_paralelo` bigint(20) null,
   `pppr_id` bigint(20) null,
   `daca_fecha_registro` timestamp null default null,
@@ -1793,7 +1794,11 @@ create table if not exists `distributivo_cabecera` (
 --
 create table if not exists db_academico.`configuracion_tipo_distributivo` (
  `ctdi_id` bigint(20) not null auto_increment primary key,
- `tdis_id` varchar(250) not null,
+ `tdis_id` bigint(20) not null,
+ `uaca_id` bigint(20) null,
+ `mod_id` bigint(20) null,
+ `ctdi_horas_inicio` integer(3) null,
+ `ctdi_horas_fin` integer(3) null,
  `ctdi_estado_vigencia` varchar(1) not null,
  `ctdi_horas_semanal` integer(3) not null,
  `ctdi_estado` varchar(1) not null,

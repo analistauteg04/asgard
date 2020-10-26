@@ -72,6 +72,15 @@ academico::registerTranslations();
                 </div>   
             </div>
         </div>
+        <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12" id="bloque5" style="display: none">
+            <div class="form-group">                        
+                <label for="txt_num_estudiantes" class="col-sm-2 col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= academico::t("distributivoacademico", "Number of students") ?></label>
+                <div class="col-sm-3 col-xs-3 col-md-3 col-lg-3">
+                    <input type="text" class="form-control keyupmce" value="" id="txt_num_estudiantes"  data-type="number" placeholder="<?= academico::t("distributivoacademico", "Number of students") ?>">
+                </div>   
+                
+            </div>
+        </div>
         <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
             <div class="form-group">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center">

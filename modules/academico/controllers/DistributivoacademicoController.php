@@ -181,27 +181,28 @@ class DistributivoacademicoController extends \app\components\CController {
             $transaction = $con->beginTransaction();
             try {
                 $pro_id = $data['profesor'];
-                $paca_id = $data['periodo'];
-                \app\models\Utilities::putMessageLogFile('profesor:'.$pro_id);
-                \app\models\Utilities::putMessageLogFile('PERIODO:'.$paca_id);
+                $paca_id = $data['periodo'];                
                 $dts = (isset($data["grid_docencia"]) && $data["grid_docencia"] != "") ? $data["grid_docencia"] : NULL;     
                 $datos = json_decode($dts);
                 //Validar que no exista en distributivo_cabecera porque para crear no debe existir.
-                $cons = $distributivo_cab->existeDistCabecera($paca_id,$pro_id);                        
-                \app\models\Utilities::putMessageLogFile('EXISTE CABECERA: '. $cons);          
+                $cons = $distributivo_cab->existeDistCabecera($paca_id,$pro_id);                                             
                 if ($cons==0) {                        
                     if (isset($datos)) {                    
-                        $valida = 1;                             
-                        for ($i = 0; $i < sizeof($datos); $i++) {                                                         
+                        $valida = 1;          
+                         \app\models\Utilities::putMessageLogFile('antes del for');
+                        for ($i = 0; $i < sizeof($datos); $i++) {  
+                              \app\models\Utilities::putMessageLogFile('en el ciclo for');
                             // Valida que no exista el mismo tipo de distributivo en otro profesor.
-                            if ($datos[$i]->tasi_id == 1) {
+                            if ($datos[$i]->tasi_id == 1) {             
+                                \app\models\Utilities::putMessageLogFile('antes de validar ');
                                 $dataExisOtro = $distributivo_model->existsDistribAcadOtroProf($datos[$i]->uni_id, $datos[$i]->tasi_id, $datos[$i]->asi_id, $paca_id, $datos[$i]->hor_id, $datos[$i]->par_id);
+                                \app\models\Utilities::putMessageLogFile('resultado: '.$dataExisOtro);
                                 if($dataExisOtro["id"] > 0) {                                       
-                                     \app\models\Utilities::putMessageLogFile('existe validacion 2');
+                                    \app\models\Utilities::putMessageLogFile('existe validacion 2');
                                     $valida = 0;
                                     $transaction->rollback();
                                     $message = array(
-                                        "wtmessage" => academico::t('distributivoacademico', 'Ya existe el registro en otro docente.'),
+                                        "wtmessage" => academico::t('distributivoacademico', 'Ya se encuentra asignada la materia '. $dataExisOtro["asignatura"] . ' en el docente ' . $dataExisOtro["profesor"]),
                                         "title" => Yii::t('jslang', 'Error'),
                                     );
                                     return Utilities::ajaxResponse('NOOK', 'alert', Yii::t('jslang', 'Error'), 'true', $message);
@@ -243,7 +244,7 @@ class DistributivoacademicoController extends \app\components\CController {
                 } else {
                     $transaction->rollback();
                     $message = array(
-                        "wtmessage" => Yii::t('notificaciones', 'Su información no ha sido grabada. Por favor intente nuevamente o contacte al área de Desarrollo.'),
+                        "wtmessage" => Yii::t('notificaciones', 'Su información no ha sido grabada. Por favor intente nuevamente o contacte al área de DesarrolloXXX.'),
                         "title" => Yii::t('jslang', 'Error'),
                     );
                     return Utilities::ajaxResponse('NOOK', 'alert', Yii::t('jslang', 'Error'), 'true', $message);

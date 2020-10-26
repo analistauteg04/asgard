@@ -72,7 +72,12 @@ $(document).ready(function() {
                       }, true);
                   }
               }
-        }, false);        
+        }, false);   
+        if ($('#cmb_unidad_dis').val() == 1 && $(this).val()==1) {
+            $('#bloque5').css('display', 'block');
+        } else {
+            $('#bloque5').css('display', 'none');
+        }
     });
        
     $('#cmb_jornada').change(function() {
@@ -474,8 +479,7 @@ function validar(tasi_id,asi_id,hor_id,par_id){
     if (sessionStorage.dts_asignacion_list) {
         arr_Grid1 = JSON.parse(sessionStorage.dts_asignacion_list);       
         var size_arr = arr_Grid1.length;           
-        for (var i=0; i<= size_arr; i++) {   
-            alert('indice: '+ i);
+        for (var i=0; i<= size_arr; i++) {               
             if (i < size_arr) {
                 if (tasi_id ==1) { // tipo de asignación docencia                    
                     if ((arr_Grid1[i]['tasi_id'] == tasi_id) && (arr_Grid1[i]['asi_id'] == asi_id) && (arr_Grid1[i]['hor_id'] == hor_id) && (arr_Grid1[i]['par_id'] == par_id)) {                         
