@@ -12,6 +12,7 @@ use app\modules\admision\models\Oportunidad;
 use app\modules\academico\models\ModuloEstudio;
 use app\modules\academico\models\EstudioAcademico;
 use app\modules\academico\models\MallaAcademica;
+use app\models\Persona;
 use yii\helpers\ArrayHelper;
 use yii\data\ArrayDataProvider;
 use yii\base\Exception;
@@ -753,6 +754,7 @@ class PlanificacionController extends \app\components\CController {
         $malla = $mod_malla->consultarmallasxcarrera($unidad_acad_data[0]['id'], $modalidad_data[0]['id'], $modalidad_data[0]['id']);
         $materia = $mod_malla->consultarasignaturaxmalla($malla[0]['id']);
         $modalidades = $modalidad_model->consultarModalidad($unidad_acad_data[0]['id'], 1);
+        $busquedalumno = $mod_periodo->busquedaEstudianteplanificacion();
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
             if (isset($data['getmodalidad'])) {
@@ -784,25 +786,31 @@ class PlanificacionController extends \app\components\CController {
                     'arr_modalidadh' => ArrayHelper::map(array_merge([['id' => '0', 'name' => 'Seleccionar']], $modalidades), 'id', 'name'),
                     'arr_malla' => ArrayHelper::map(array_merge([['id' => '0', 'name' => 'Seleccionar']], $malla), 'id', 'name'),
                     'arr_materia' => ArrayHelper::map(array_merge([['id' => '0', 'name' => 'Seleccionar']], $materia), 'id', 'name'),
+                    'arr_alumno' => ArrayHelper::map(array_merge([['id' => '0', 'name' => 'Seleccionar']], $busquedalumno), 'id', 'name'),
+
         ]);
     }
 
     public function actionSaveplanificacion() {
         if (Yii::$app->request->isAjax) {
             $mod_planifica = new PlanificacionEstudiante();
+            $mod_persona = new Persona();
             $data = Yii::$app->request->post();
             $jornada = substr($data['jornadaest'], 0, 1);
             $carrera = $data['carreraest'];
             $modalidad = $data['modalidadest'];
             //$malla = $data['mallaest'];
             $periodo = $data['periodoest'];
-            //$estudiantedata = $data['nombreest']; //OJO ESTO LUEGO HABILITAR CUADO SE TOME DE LA BUSQUEDA
-            $estudiantedata = "1 - 2222222222 - Juan Perez";
+            $per_id = $data['nombreest']; //OJO ESTO LUEGO HABILITAR CUADO SE TOME DE LA BUSQUEDA
+            $data_persona = $mod_persona->consultaPersonaId($per_id);
+            /*$estudiantedata = "1 - 2222222222 - Juan Perez";
             $datos = explode(" - ", $estudiantedata);
-            $per_id = $datos[0];
-            $dni = $datos[1];
-            $nombre = $datos[2];
-            /*             * **** */
+            $per_id = $datos[0];*/
+            $dni = $data_persona['per_cedula'];
+            $nombre = $data_persona['per_pri_nombre'] . ' ' . $data_persona['per_pri_apellido'];
+            //\app\models\Utilities::putMessageLogFile('dni: ' . $dni);
+            //\app\models\Utilities::putMessageLogFile('nombres: ' . $nombre);
+            
             $accion = isset($data['ACCION']) ? $data['ACCION'] : '';
             if ($accion == 'Create') {
                 // Consultar si la modalidad y periodo existen
@@ -839,9 +847,7 @@ class PlanificacionController extends \app\components\CController {
                         $mat_cod = $materia[0];
                         //$mat_nombre = $materia[1];
                         $valores .= "'" . $mat_cod . "', " . $modalidades . ",";
-                    }
-                    //\app\models\Utilities::putMessageLogFile('inserta: ' . $insertar);
-                    // \app\models\Utilities::putMessageLogFile('valores: ' . $valores);
+                    }                    
                     $resul = $mod_planifica->insertarDataPlanificacionestudiante($resulpla_id['pla_id'], $per_id, $jornada, $carrera, $dni, $nombre, $insertar, $valores);
                 } else {
                     // no existe mensaje que no permitar guardar      

@@ -746,10 +746,10 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord {
                           pes_fecha_modificacion = $pes_fecha_modificacion                          
                       WHERE 
                         pes_estado= 1 AND pla_id = $pla_id AND per_id = $per_id";
-        \app\models\Utilities::putMessageLogFile('asdasfdg ' . $modificar);
+        /*\app\models\Utilities::putMessageLogFile('asdasfdg ' . $modificar);
         \app\models\Utilities::putMessageLogFile('cvxcv ' . $este);
         \app\models\Utilities::putMessageLogFile('qaaaa ' . $hora);
-        \app\models\Utilities::putMessageLogFile('xxxx ' . $bloque);
+        \app\models\Utilities::putMessageLogFile('xxxx ' . $bloque);*/
         try {
             $comando = $con->createCommand
                     ("UPDATE " . $con->dbname . ".planificacion_estudiante		       
@@ -960,6 +960,33 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord {
         $comando->bindParam(":per_id", $per_id, \PDO::PARAM_INT);
         $comando->bindParam(":materia", $materia, \PDO::PARAM_STR);
         $resultData = $comando->queryOne();
+        return $resultData;
+    }
+
+
+    /**
+     * Function busca los etudiantes para autocompletar en palnificacion. 
+     * @author Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;
+     * @param
+     * @return
+     */
+    public function busquedaEstudianteplanificacion() {
+        $con = \Yii::$app->db_academico;
+        $estado = 1;
+        
+        $sql = "SELECT est.per_id as id, concat(/*est.per_id, ' - ',*/ pers.per_cedula, ' - ', 
+                    ifnull(pers.per_pri_nombre, ' ') ,' ', 
+                    ifnull(pers.per_pri_apellido,' ')) as name
+                    FROM db_academico.estudiante est
+                    JOIN db_asgard.persona pers ON pers.per_id = est.per_id
+                WHERE pers.per_estado = :estado AND
+                      pers.per_estado_logico = :estado AND
+                      est.est_estado = :estado AND
+                      est.est_estado_logico = :estado;";
+
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $resultData = $comando->queryAll();
         return $resultData;
     }
 }

@@ -742,9 +742,9 @@ function guardaplanificacion() {
     arrParams.modalidadest = $('#cmb_modalidadest').val();
     arrParams.mallaest = $('#cmb_malladoest').val();
     arrParams.periodoest = $('#cmb_periodoest').val();
-    arrParams.nombreest = $('#txt_buscarest').val();
-    
-    if ($('#cmb_jornadaest').val() != '0' && $('#cmb_carreraest').text() != 'Seleccionar' && $('#cmb_modalidadest').val() != '0' && $('#cmb_malladoest').val() != '0' && $('#cmb_periodoest').val() != '0' && $('#txt_buscarest').val().length > '0') {
+    arrParams.nombreest = $('#cmb_buscarest').val();
+    //alert(arrParams.nombreest);
+    if ($('#cmb_jornadaest').val() != '0' && $('#cmb_carreraest').text() != 'Seleccionar' && $('#cmb_modalidadest').val() != '0' && $('#cmb_malladoest').val() != '0' && $('#cmb_periodoest').val() != '0' && $('#cmb_buscarest').val() > '0') {
         if (sessionStorage.dts_datosItemplan) {
             //alert('Puedo grabar');
             var arr_Grid = JSON.parse(sessionStorage.dts_datosItemplan);
