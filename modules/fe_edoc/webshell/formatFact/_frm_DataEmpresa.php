@@ -30,8 +30,12 @@ $cabDocPDF .='<tr>
                 <td>
                     <span class="titleLabel">OBLIGADO A LLEVAR CONTABILIDAD:</span>
                     <span>'.strtoupper($objEmp['ObligadoContabilidad']) .'</span>
-                </td>
-                
+                </td>                
+            </tr>
+            <tr>
+                <td>
+                    <span class="titleLabel">AGENTE DE RETENCIÓN SEGÚN RESOLUCIÓN N° NAC-DNCRASC20-00000001</span>
+                </td>                
             </tr>
             
         </tbody>
