@@ -70,7 +70,7 @@ academico::registerTranslations();
                 <div class="form-group">
                     <label for="lbl_asignaest" class="col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= academico::t("Academico", "Subject"); ?></label>
                     <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
-                        <?= Html::dropDownList("cmb_asignaest", 0, $arr_unidad, ["class" => "form-control", "id" => "cmb_asignaest"]) ?>
+                        <?= Html::dropDownList("cmb_asignaest", 0, $arr_materia, ["class" => "form-control", "id" => "cmb_asignaest"]) ?>
                     </div>   
                     <label for="lbl_jornadaest" class="col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= academico::t("Academico", "Working day") ?></label>
                     <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">

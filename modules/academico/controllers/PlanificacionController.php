@@ -650,6 +650,7 @@ class PlanificacionController extends \app\components\CController {
         $uni_aca_model = new UnidadAcademica();
         $modalidad_model = new Modalidad();
         $modcanal = new Oportunidad();
+        $mode_malla = new MallaAcademica();
         $mod_cabecera = $mod_periodo->consultarCabeceraplanifica($pla_id, $per_id);
         $unidad_acad_data = $uni_aca_model->consultarUnidadAcademicas();
         $modalidad_data = $modalidad_model->consultarModalidad($unidad_acad_data[0]['id'], $emp_id);
@@ -658,6 +659,8 @@ class PlanificacionController extends \app\components\CController {
         $mod_malla = $mod_periodo->consultarDetalleplanifica($pla_id, $per_id, true);
         $mod_carrera = $mod_periodo->consultardataplan($pla_id, $per_id, $mod_malla[0]['cod_asignatura']);
         $jornada = $mod_jornada->consultarJornadahorario();
+        $malla = $mode_malla->consultarmallasxcarrera($unidad_acad_data[0]['id'], $mod_cabecera['mod_id'], $mod_carrera['eaca_id']);
+        $materia = $mode_malla->consultarasignaturaxmalla($malla[0]['id']);
         switch ($mod_carrera['pes_jornada']) {
             case "M":
                 $jornadacab = '1';
@@ -685,6 +688,7 @@ class PlanificacionController extends \app\components\CController {
                     'arr_jornada' => ArrayHelper::map(array_merge([['id' => '0', 'name' => 'Seleccionar']], $jornada), 'id', 'name'),
                     'arr_idcarrera' => $mod_carrera,
                     'valorjornada' => $jornadacab,
+                    'arr_materia' => ArrayHelper::map(array_merge([['id' => '0', 'name' => 'Seleccionar']], $materia), 'id', 'name'),
         ]);
     }
 
@@ -751,7 +755,7 @@ class PlanificacionController extends \app\components\CController {
         $modalidad_data = $modcarrera->consultarmodalidadxcarrera($academic_study_data[0]['id']);
         //$mod_detalle = $mod_periodo->consultarDetalleplanifica( $pla_id, $per_id, false );
         $jornada = $mod_jornada->consultarJornadahorario();
-        $malla = $mod_malla->consultarmallasxcarrera($unidad_acad_data[0]['id'], $modalidad_data[0]['id'], $modalidad_data[0]['id']);
+        $malla = $mod_malla->consultarmallasxcarrera($unidad_acad_data[0]['id'], $modalidad_data[0]['id'], $academic_study_data[0]['id']);
         $materia = $mod_malla->consultarasignaturaxmalla($malla[0]['id']);
         $modalidades = $modalidad_model->consultarModalidad($unidad_acad_data[0]['id'], 1);
         $busquedalumno = $mod_periodo->busquedaEstudianteplanificacion();
@@ -803,23 +807,20 @@ class PlanificacionController extends \app\components\CController {
             $periodo = $data['periodoest'];
             $per_id = $data['nombreest']; //OJO ESTO LUEGO HABILITAR CUADO SE TOME DE LA BUSQUEDA
             $data_persona = $mod_persona->consultaPersonaId($per_id);
-            /*$estudiantedata = "1 - 2222222222 - Juan Perez";
-            $datos = explode(" - ", $estudiantedata);
-            $per_id = $datos[0];*/
             $dni = $data_persona['per_cedula'];
             $nombre = $data_persona['per_pri_nombre'] . ' ' . $data_persona['per_pri_apellido'];
-            //\app\models\Utilities::putMessageLogFile('dni: ' . $dni);
-            //\app\models\Utilities::putMessageLogFile('nombres: ' . $nombre);
-            
+            // Consultar si la modalidad y periodo existen, devuelve pla_id
+            $resulpla_id = $mod_planifica->consultarDatoscabplanifica($modalidad, $periodo);
+            // Consultar pla_id y per_id existe
+            $exitealumno = $mod_planifica->consultarAlumnoplan($resulpla_id['pla_id'], $per_id);
             $accion = isset($data['ACCION']) ? $data['ACCION'] : '';
             if ($accion == 'Create') {
-                // Consultar si la modalidad y periodo existen
-                $resulpla_id = $mod_planifica->consultarDatoscabplanifica($modalidad, $periodo);
-                //existe guardar
+                 //existe guardar modalidad y periodo
                 if ($resulpla_id['pla_id']) {
-                    //Nuevo Registro
-                    // \app\models\Utilities::putMessageLogFile('ddd: ' . $data['DATAS']);
-
+                    // si existe pla_id y per_id no guardar enviar mensaje a que debe modificar
+                    if ($exitealumno['planexiste'] == '0') {
+                    /***************/
+                    //Nuevo Registro  
                     $arrplan = json_decode($data['DATAS'], true);
                     // \app\models\Utilities::putMessageLogFile('adsd: ' . $arrplan[0]['asignatura']);
                     for ($i = 0; $i < sizeof($arrplan); $i++) {
@@ -850,6 +851,10 @@ class PlanificacionController extends \app\components\CController {
                     }                    
                     $resul = $mod_planifica->insertarDataPlanificacionestudiante($resulpla_id['pla_id'], $per_id, $jornada, $carrera, $dni, $nombre, $insertar, $valores);
                 } else {
+                        // no existe mensaje que no permitar guardar      
+                        $noentra = 'NOS';
+                    }
+                } else {
                     // no existe mensaje que no permitar guardar      
                     $noentra = 'NO';
                 }
@@ -864,7 +869,10 @@ class PlanificacionController extends \app\components\CController {
             } elseif ($noentra == 'NO') {
                 $message = ['info' => Yii::t('exception', 'No se puede guardar período académico y modalidad no existe, crearla en cargar planificación.')];
                 echo Utilities::ajaxResponse('NO_OK', 'alert', Yii::t('jslang', 'Error'), 'false', $message);
-            } else {
+            } elseif ($noentra == 'NOS') {
+                $message = ['info' => Yii::t('exception', 'No se puede guardar estudiante ya tiene datos para ese periodo, por favor ir modificar de ser el caso.')];
+                echo Utilities::ajaxResponse('NO_OK', 'alert', Yii::t('jslang', 'Error'), 'false', $message);
+            }else {
                 $message = ['info' => Yii::t('exception', 'The above error occurred while the Web server was processing your request.')];
                 echo Utilities::ajaxResponse('NO_OK', 'alert', Yii::t('jslang', 'Error'), 'false', $message);
             }

@@ -989,4 +989,29 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord {
         $resultData = $comando->queryAll();
         return $resultData;
     }
+
+      /**
+     * Function Consultar modalidad y periodo en planificacion.
+     * @author  Giovanni Vergara <analistadesarrollo01@uteg.edu.ec>;
+     * @property       
+     * @return  
+     */
+    public function consultarAlumnoplan($pla_id, $per_id) {
+        $con = \Yii::$app->db_academico;
+        $estado = 1;
+
+        $sql = "SELECT count(*) as planexiste
+                FROM " . $con->dbname . ".planificacion_estudiante 
+                WHERE pla_id = :pla_id AND
+                      per_id = :per_id AND
+                      pes_estado = :estado AND
+                      pes_estado_logico = :estado";
+
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":pla_id", $pla_id, \PDO::PARAM_INT);
+        $comando->bindParam(":per_id", $per_id, \PDO::PARAM_INT);
+        $resultData = $comando->queryOne();
+        return $resultData;
+    }
 }
