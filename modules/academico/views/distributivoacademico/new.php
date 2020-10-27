@@ -103,6 +103,7 @@ academico::registerTranslations();
                             <th><?= academico::t("Academico", "Academic unit") ?></th>                            
                             <th style="display:none; border:none;"></th>
                             <th><?= academico::t("Academico", "Modality") ?></th> 
+                            <th><?= academico::t("distributivoacademico", "Number of students") ?></th> 
                             <th style="display:none; border:none;"></th>                            
                             <th><?= academico::t("Academico", "Working day") ?></th>                             
                             <th><?= academico::t("Academico", "Schedule") ?></th>                             

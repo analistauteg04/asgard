@@ -179,11 +179,11 @@ class Asignatura extends \yii\db\ActiveRecord
      * @param   
      * @return  $resultData (Retornar las asignaturas por planificación y modalidad).
      */
-    public function getAsignatura_x_bloque_x_planif($pla_id, $jornada_id) {
+    public function getAsignatura_x_bloque_x_planif($pla_id, $jornada_id, $bloque) {
         $con = \Yii::$app->db_academico;
         $estado = 1;
-
-        $sql = "SELECT distinct a.asi_id id, asi_nombre name
+        if ($bloque=="B1") {
+            $sql = "SELECT distinct a.asi_id id, asi_nombre name
                 FROM db_academico.planificacion_estudiante pe inner join db_academico.malla_academica_detalle md
                      on md.made_codigo_asignatura = pe.pes_mat_b1_h1_cod
                      inner join db_academico.asignatura a on a.asi_id = md.asi_id
@@ -227,6 +227,52 @@ class Asignatura extends \yii\db\ActiveRecord
                     and pes_jornada = :jornada_id
                     and pes_estado = 1
                     and pes_estado_logico = 1";
+        } else {
+            $sql = "SELECT distinct a.asi_id id, asi_nombre name
+                FROM db_academico.planificacion_estudiante pe inner join db_academico.malla_academica_detalle md
+                     on md.made_codigo_asignatura = pe.pes_mat_b2_h1_cod
+                     inner join db_academico.asignatura a on a.asi_id = md.asi_id
+                WHERE pla_id = :pla_id
+                     and pes_jornada = :jornada_id
+                     and pes_estado = 1
+                     and pes_estado_logico = 1
+                UNION
+                SELECT distinct a.asi_id id, asi_nombre name
+                FROM db_academico.planificacion_estudiante pe inner join db_academico.malla_academica_detalle md
+                    on md.made_codigo_asignatura = pe.pes_mat_b2_h2_cod
+                    inner join db_academico.asignatura a on a.asi_id = md.asi_id
+                WHERE pla_id = :pla_id
+                    and pes_jornada = :jornada_id
+                    and pes_estado = 1
+                    and pes_estado_logico = 1
+                UNION
+                SELECT distinct a.asi_id id, asi_nombre name
+                FROM db_academico.planificacion_estudiante pe inner join db_academico.malla_academica_detalle md
+                    on md.made_codigo_asignatura = pe.pes_mat_b2_h3_cod
+                    inner join db_academico.asignatura a on a.asi_id = md.asi_id
+                WHERE pla_id = :pla_id
+                    and pes_jornada = :jornada_id
+                    and pes_estado = 1
+                    and pes_estado_logico = 1
+                UNION
+                SELECT distinct a.asi_id id, asi_nombre name
+                FROM db_academico.planificacion_estudiante pe inner join db_academico.malla_academica_detalle md
+                    on md.made_codigo_asignatura = pe.pes_mat_b2_h4_cod
+                    inner join db_academico.asignatura a on a.asi_id = md.asi_id
+                WHERE pla_id = :pla_id
+                    and pes_jornada = :jornada_id
+                    and pes_estado = 1
+                 and pes_estado_logico = 1
+                UNION
+                SELECT distinct a.asi_id id, asi_nombre name
+                FROM db_academico.planificacion_estudiante pe inner join db_academico.malla_academica_detalle md
+                    on md.made_codigo_asignatura = pe.pes_mat_b2_h5_cod
+                    inner join db_academico.asignatura a on a.asi_id = md.asi_id
+                WHERE pla_id = :pla_id
+                    and pes_jornada = :jornada_id
+                    and pes_estado = 1
+                    and pes_estado_logico = 1";
+        }        
         
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);  

@@ -114,6 +114,7 @@ class DistributivoacademicoController extends \app\components\CController {
         $distributivo_model = new DistributivoAcademico();
         $mod_periodoActual = new PeriodoAcademico();
         $mod_tipo_distributivo = new TipoDistributivo();
+        $arr_periodoActual = $mod_periodoActual->getPeriodoAcademicoActual();
         
         if (Yii::$app->request->isAjax) {            
             $data = Yii::$app->request->post();
@@ -138,19 +139,18 @@ class DistributivoacademicoController extends \app\components\CController {
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }
             if(isset($data["getasignatura"])){               
-                $asignatura = $mod_asignatura->getAsignatura_x_bloque_x_planif($data["periodo_id"], $data["jornada_id"]);
+                $asignatura = $mod_asignatura->getAsignatura_x_bloque_x_planif($data["periodo_id"], $data["jornada_id"], $arr_periodoActual["baca_nombre"]);
                 $message = array("asignatura" => $asignatura);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }
         }
-        
-        $arr_periodoActual = $mod_periodoActual->getPeriodoAcademicoActual();
+                
         $arr_profesor = $mod_profesor->getProfesores();        
         $arr_unidad = $mod_unidad->consultarUnidadAcademicasEmpresa($emp_id);
         $arr_modalidad = $mod_modalidad->consultarModalidad($arr_unidad[0]["id"], $emp_id);        
         $arr_periodo = $mod_periodo->getPeriodos_x_modalidad($arr_modalidad[0]["id"]);
         $arr_jornada = $distributivo_model->getJornadasByUnidadAcad($arr_unidad[0]["id"], $arr_modalidad[0]["id"]);           
-        $arr_asignatura = $mod_asignatura->getAsignatura_x_bloque_x_planif($arr_periodo[0]["id"],"N");
+        $arr_asignatura = $mod_asignatura->getAsignatura_x_bloque_x_planif($arr_periodo[0]["id"],"N", $arr_periodoActual["baca_nombre"]);
         $arr_horario = $distributivo_model->getHorariosByUnidadAcad($arr_unidad[0]["id"], $arr_modalidad[0]["id"], $arr_jornada[0]["id"]);
         $model = $distributivo_model->getDistribAcadXprofesorXperiodo(0,0);
         $arr_tipo_distributivo = $mod_tipo_distributivo->consultarTipoDistributivo();
@@ -188,21 +188,18 @@ class DistributivoacademicoController extends \app\components\CController {
                 $cons = $distributivo_cab->existeDistCabecera($paca_id,$pro_id);                                             
                 if ($cons==0) {                        
                     if (isset($datos)) {                    
-                        $valida = 1;          
-                         \app\models\Utilities::putMessageLogFile('antes del for');
-                        for ($i = 0; $i < sizeof($datos); $i++) {  
-                              \app\models\Utilities::putMessageLogFile('en el ciclo for');
+                        $valida = 1;                                   
+                        for ($i = 0; $i < sizeof($datos); $i++) {                                
                             // Valida que no exista el mismo tipo de distributivo en otro profesor.
-                            if ($datos[$i]->tasi_id == 1) {             
-                                \app\models\Utilities::putMessageLogFile('antes de validar ');
+                            if ($datos[$i]->tasi_id == 1) {                                             
                                 $dataExisOtro = $distributivo_model->existsDistribAcadOtroProf($datos[$i]->uni_id, $datos[$i]->tasi_id, $datos[$i]->asi_id, $paca_id, $datos[$i]->hor_id, $datos[$i]->par_id);
-                                \app\models\Utilities::putMessageLogFile('resultado: '.$dataExisOtro);
-                                if($dataExisOtro["id"] > 0) {                                       
+                               
+                                if(!empty($dataExisOtro)) { 
                                     \app\models\Utilities::putMessageLogFile('existe validacion 2');
                                     $valida = 0;
                                     $transaction->rollback();
                                     $message = array(
-                                        "wtmessage" => academico::t('distributivoacademico', 'Ya se encuentra asignada la materia '. $dataExisOtro["asignatura"] . ' en el docente ' . $dataExisOtro["profesor"]),
+                                        "wtmessage" => academico::t('distributivoacademico', 'Ya se encuentra asignada la materia '. $dataExisOtro["asignatura"] . ' en el docente ' . $dataExisOtro["profesor"] . " en el mismo horario y paralelo."),
                                         "title" => Yii::t('jslang', 'Error'),
                                     );
                                     return Utilities::ajaxResponse('NOOK', 'alert', Yii::t('jslang', 'Error'), 'true', $message);

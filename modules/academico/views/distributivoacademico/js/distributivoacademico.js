@@ -290,6 +290,7 @@ function addAsignacion(opAccion) {
         var asi_id = $("#cmb_materia").val();        
         var hor_id = $("#cmb_horario").val();        
         var par_id = $("#cmb_paralelo").val();
+        var hor_onl = $("#txt_num_estudiantes").val();
         
         if (uni_id == 0 || mod_id == 0 || paca_id == 0 || jor_id == 0 || asi_id == 0 || hor_id == 0 || par_id == 0) {
             fillDataAlert();
@@ -300,9 +301,11 @@ function addAsignacion(opAccion) {
     var res = 0;
     res = validar(tasi_id,asi_id,hor_id,par_id);    
     if (res == 1) {         
-        showAlert('NO_OK', 'error', {"wtmessage": "Ya existe el registro en el mismo docente", "title": 'Información'});            
+        showAlert('NO_OK', 'error', {"wtmessage": "Ya existe el registro en el mismo docente.", "title": 'Información'});            
     } else if   (res == 2) {         
-        showAlert('NO_OK', 'error', {"wtmessage": "Ya existe el registro en el mismo horario para el mismo docente", "title": 'Información'});         
+        showAlert('NO_OK', 'error', {"wtmessage": "Ya existe el registro en el mismo horario para el mismo docente.", "title": 'Información'});         
+    } else if (uni_id==1 && mod_id==1 && hor_onl=="") {
+        showAlert('NO_OK', 'error', {"wtmessage": "Debe ingresar número de estudiantes.", "title": 'Información'});           
     } else {
         if (opAccion != "edit") {            
             //*********   Agregar materias *********
@@ -358,6 +361,7 @@ function objDistributivo(indice) {
         rowGrid.hor_id = $("#cmb_horario").val();
         rowGrid.hor_name = $("#cmb_horario :selected").text(); 
         rowGrid.par_id = $("#cmb_paralelo").val();
+        rowGrid.num_estudiantes = $("#txt_num_estudiantes").val();
     } else {
         rowGrid.uni_id = $("#cmb_unidad_dis").val();    
         rowGrid.uni_name = 'N/A';
@@ -371,6 +375,7 @@ function objDistributivo(indice) {
         rowGrid.hor_id = $("#cmb_horario").val();
         rowGrid.hor_name = 'N/A';
         rowGrid.par_id = $("#cmb_paralelo").val();
+        rowGrid.num_estudiantes = 'N/A';        
     }
         
     //rowGrid.pro_otros = ($("#chk_otros").prop("checked")) ? 1 : 0;
@@ -398,7 +403,8 @@ function limpiarDetalle() {
     document.getElementById("cmb_jornada").value = 0;
     document.getElementById("cmb_materia").value = 0;
     document.getElementById("cmb_horario").value = 0;
-    document.getElementById("cmb_paralelo").value = 0;            
+    document.getElementById("cmb_paralelo").value = 0;          
+    document.getElementById("txt_num_estudiantes").value = "";   
 }
 
 function fillDataAlert() {
@@ -429,6 +435,8 @@ function retornaFila(c, Grid, TbGtable, op) {
 
     strFila += '<td style="display:none; border:none;">' + '</td>';
     strFila += '<td>' + Grid[c]['mod_name'] + '</td>';
+    strFila += '<td>' + Grid[c]['num_estudiantes'] + '</td>';
+        
     strFila += '<td style="display:none; border:none;">' + '</td>';    
     strFila += '<td>' + Grid[c]['jor_name'] + '</td>';
     strFila += '<td>' + Grid[c]['hor_name'] + '</td>';
