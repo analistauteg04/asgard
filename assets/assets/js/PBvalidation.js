@@ -8,24 +8,24 @@ var FileIdioma = "es";
 var FileExtensions = ['jpg', 'png', 'pdf'];
 var browseLabel = " Examinar..";
 var FileSize = 1024;
-var nsegundos = 3000;//3000ms = 3s
+var nsegundos = 3000; //3000ms = 3s
 /* variable globales */
 /* variable globales fe_edoc */
-var t_show=0;
-var t_hide=5000;
-var t_transi=1500;
-var buttonAlert='<button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>';
-var selecDoc='Seleccionar documento para autorizar';
-var selecDocAnu='Seleccionar documento para Anular';
-var selecDocMail='Seleccionar documento para Reenviar';
-var mgEliminar='Está seguro que desea Eliminar estos Item';
-var mgGuardar='Está seguro que desea Guardar estos Item';
-var mgEnvDocum='Está seguro que desea Enviar estos Documentos';
-var mgEnvDocumAnu='Está seguro que desea Anular estos Documentos';
+var t_show = 0;
+var t_hide = 5000;
+var t_transi = 1500;
+var buttonAlert = '<button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>';
+var selecDoc = 'Seleccionar documento para autorizar';
+var selecDocAnu = 'Seleccionar documento para Anular';
+var selecDocMail = 'Seleccionar documento para Reenviar';
+var mgEliminar = 'Está seguro que desea Eliminar estos Item';
+var mgGuardar = 'Está seguro que desea Guardar estos Item';
+var mgEnvDocum = 'Está seguro que desea Enviar estos Documentos';
+var mgEnvDocumAnu = 'Está seguro que desea Anular estos Documentos';
 
-function alerMessage(){
-    setTimeout(function() {$("#messageInfo").fadeIn(t_transi);},t_show);
-    setTimeout(function() {$("#messageInfo").fadeOut(t_transi);},t_hide);
+function alerMessage() {
+    setTimeout(function() { $("#messageInfo").fadeIn(t_transi); }, t_show);
+    setTimeout(function() { $("#messageInfo").fadeOut(t_transi); }, t_hide);
 }
 /* fin variable globales fe_edoc */
 var ico = new Object();
@@ -37,8 +37,8 @@ ico.visible = {
 };
 
 /*  VALIDA LA CLASE EN PBvalidation CADA EVENTO DEL CONTROL data-type  */
-$(function () {
-    $("body").on("keyup", ".PBvalidation", function (event) {
+$(function() {
+    $("body").on("keyup", ".PBvalidation", function(event) {
         if ($(this).attr('data-required') != undefined || $(this).attr('data-required') != "true") {
             if (($(this).attr('data-keydown') != undefined) && ($(this).attr('data-keydown') == "true")) {
                 var result = new Object();
@@ -53,10 +53,10 @@ $(function () {
                     var messagew = {
                         "wtmessage": message,
                         "acciones": [{
-                                "id": "btnalert",
-                                "class": "btn-primary clclass praclose",
-                                "value": objLang.Accept
-                            }]
+                            "id": "btnalert",
+                            "class": "btn-primary clclass praclose",
+                            "value": objLang.Accept
+                        }]
                     };
                     //showResponse(type, status, label, messagew);
                 }
@@ -66,7 +66,7 @@ $(function () {
         }
     });
 
-    $('body').on("keyup", ".PBvalidationField", function (event) {
+    $('body').on("keyup", ".PBvalidationField", function(event) {
         if ($(this).attr('data-required') != undefined || $(this).attr('data-required') != "true") {
             if ($(this).attr('data-type') != undefined) {
                 var isNumber = true;
@@ -125,19 +125,19 @@ function validateType(type, valor, ref) {
     var sizeMax = false;
     var sizeMin = false;
     var fecha_recepta = valor;
-            var fecha_actual = new Date();
-            var dd = fecha_actual.getDate();
-            var mm = fecha_actual.getMonth() + 1; //hoy es 0!
-            var yyyy = fecha_actual.getFullYear();
+    var fecha_actual = new Date();
+    var dd = fecha_actual.getDate();
+    var mm = fecha_actual.getMonth() + 1; //hoy es 0!
+    var yyyy = fecha_actual.getFullYear();
 
-            if (dd < 10) {
-                dd = '0' + dd
-            }
+    if (dd < 10) {
+        dd = '0' + dd
+    }
 
-            if (mm < 10) {
-                mm = '0' + mm
-            }
-            fecha_actual = yyyy+'-'+mm+'-'+dd; 
+    if (mm < 10) {
+        mm = '0' + mm
+    }
+    fecha_actual = yyyy + '-' + mm + '-' + dd;
     if ($(ref).attr('data-required') == "false") {
         if ($(ref).val() == "") {
             removeIco(ref);
@@ -166,13 +166,13 @@ function validateType(type, valor, ref) {
         return result;
     }
     switch (type) {
-        case 'number'://solo numeros
+        case 'number': //solo numeros
             result.response = validarExpresion(/^(?:\+|-)?\d+$/, valor);
             if (!result.response) {
                 result.errorMessage = objLang.Only_allow_numbers_;
             }
             break;
-        case 'alfa'://solo letras
+        case 'alfa': //solo letras
             result.response = validarExpresion(/^([a-zA-ZáéíóúÁÉÍÓÚÑñ '])+$/, valor);
             if (!result.response) {
                 result.errorMessage = objLang.Only_allowed_to_enter_letters_;
@@ -196,7 +196,7 @@ function validateType(type, valor, ref) {
                 result.errorMessage = objLang.The_dni_is_incorrect;
             }
             break;
-        case 'email'://email        
+        case 'email': //email        
             result.response = validarExpresion(/^[\w-\.]{3,}@([\w-]{2,}\.)*([\w-]{2,}\.)[\w-]{2,4}$/, valor); // /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
             if (!result.response) {
                 result.errorMessage = objLang.The_email_field_does_not_have_a_correct_format_;
@@ -269,9 +269,8 @@ function validateType(type, valor, ref) {
                 result.errorMessage = objLang.Invalid_time;
             }
             break;
-        case 'fecha_rec':                      
-            if (fecha_recepta <= fecha_actual)
-            {
+        case 'fecha_rec':
+            if (fecha_recepta <= fecha_actual) {
                 result.response = validarExpresion(/^(19|20)\d\d[-](0[1-9]|1[012])[-](0[1-9]|[12][0-9]|3[01])/, valor);
             }
             if (!result.response) {
@@ -280,8 +279,7 @@ function validateType(type, valor, ref) {
             break;
         case 'fecha_aten':
             var fecha_atiende = valor;
-            if (fecha_atiende >= $('#txt_fecha_recepcion').val())
-            {
+            if (fecha_atiende >= $('#txt_fecha_recepcion').val()) {
                 result.response = validarExpresion(/^(19|20)\d\d[-](0[1-9]|1[012])[-](0[1-9]|[12][0-9]|3[01])/, valor);
             }
             if (!result.response) {
@@ -290,8 +288,7 @@ function validateType(type, valor, ref) {
             break;
         case 'fecha_pro':
             var fecha_proxima = valor;
-            if (fecha_proxima >= $('#txt_fecha_atencion').val())
-            {
+            if (fecha_proxima >= $('#txt_fecha_atencion').val()) {
                 result.response = validarExpresion(/^(19|20)\d\d[-](0[1-9]|1[012])[-](0[1-9]|[12][0-9]|3[01])/, valor);
             }
             if (!result.response) {
@@ -300,21 +297,20 @@ function validateType(type, valor, ref) {
             break;
         case 'fecha_fin':
             var fecha_fin = valor;
-            if (fecha_fin >= $('#txt_fecha_inicio').val())
-            {
+            if (fecha_fin >= $('#txt_fecha_inicio').val()) {
                 result.response = validarExpresion(/^(19|20)\d\d[-](0[1-9]|1[012])[-](0[1-9]|[12][0-9]|3[01])/, valor);
             }
             if (!result.response) {
                 result.errorMessage = objLang.The_end_date_can_not_be_before_the_begin_date;
             }
-            break;    
+            break;
         case 'url':
             result.response = validarExpresion(/^(http|https)\:\/\/[a-z0-9\.-]+\.[a-z]{2,4}/, valor);
             if (!result.response) {
                 result.errorMessage = objLang.Invalid_url_;
             }
             break;
-        default:// all
+        default: // all
             result.response = validarExpresion(/^(.|\n)+$/, valor);
             if (!result.response) {
                 result.errorMessage = objLang.The_field_must_not_be_empty_;
@@ -376,39 +372,43 @@ function validateSize(sizeMax, sizeMin, valor) {
     return result;
 }
 
-function validateForm(widthAlert) {
+function validateForm(widthAlert, onlyMsg) {
     var message = "";
+    onlyMsg = onlyMsg || false;
     var stresponse = false;
     widthAlert = widthAlert || null;
-    $(".PBvalidation").each(function () {
+    $(".PBvalidation").each(function() {
         var result = new Object();
         noVal:
-                if ($(this).attr('data-required') == "false" && $(this).val() == "") {
-            if ($(this).val() == "") {
-                removeIco(this);
-                break noVal;
-            }
-        } else {
-            if (($(this).attr('data-required') != undefined) || $(this).attr('data-required') != 'true') {
-                removeIco(this);
-                if ($(this).attr('data-callback') != undefined)
-                    result = executeCallback($(this), $(this).attr('data-callback'));
-                else {
-                    if ($(this).attr('data-type') == undefined) {
-                        result = validateType("all", $(this).val(), this); // valor por defecto alfa
-                    } else
-                        result = validateType($(this).attr('data-type'), $(this).val(), this);
+            if ($(this).attr('data-required') == "false" && $(this).val() == "") {
+                if ($(this).val() == "") {
+                    removeIco(this);
+                    break noVal;
                 }
-                setIconValidator(this, result.response, result.errorMessage, false);
-                if (!result.response) { // si devuelve false puede ser que no pasa etapa de validacion o no hay nada que validar
-                    stresponse = true;
-                    var fieldId = $(this).attr("id");
-                    var labeltxt = $("label[for='" + fieldId + "']").text();
-                    message += "<b>" + labeltxt + ":</b> " + result.errorMessage + "<br />";
+            } else {
+                if (($(this).attr('data-required') != undefined) || $(this).attr('data-required') != 'true') {
+                    removeIco(this);
+                    if ($(this).attr('data-callback') != undefined)
+                        result = executeCallback($(this), $(this).attr('data-callback'));
+                    else {
+                        if ($(this).attr('data-type') == undefined) {
+                            result = validateType("all", $(this).val(), this); // valor por defecto alfa
+                        } else
+                            result = validateType($(this).attr('data-type'), $(this).val(), this);
+                    }
+                    setIconValidator(this, result.response, result.errorMessage, false);
+                    if (!result.response) { // si devuelve false puede ser que no pasa etapa de validacion o no hay nada que validar
+                        stresponse = true;
+                        var fieldId = $(this).attr("id");
+                        var labeltxt = $("label[for='" + fieldId + "']").text();
+                        message += "<b>" + labeltxt + ":</b> " + result.errorMessage + "<br />";
+                    }
                 }
             }
-        }
     });
+    if (onlyMsg) {
+        return message;
+    }
     if (stresponse) {
         var type = "alert";
         var label = "error";
@@ -419,10 +419,10 @@ function validateForm(widthAlert) {
                 "wtmessage": message,
                 "title": objLang.Error,
                 "acciones": [{
-                        "id": "btnalert",
-                        "class": "btn-primary clclass praclose",
-                        "value": objLang.Accept
-                    }],
+                    "id": "btnalert",
+                    "class": "btn-primary clclass praclose",
+                    "value": objLang.Accept
+                }],
                 "htmloptions": {
                     "style": {
                         "width": widthAlert
@@ -434,10 +434,10 @@ function validateForm(widthAlert) {
                 "wtmessage": message,
                 "title": objLang.Error,
                 "acciones": [{
-                        "id": "btnalert",
-                        "class": "btn-primary clclass praclose",
-                        "value": objLang.Accept
-                    }],
+                    "id": "btnalert",
+                    "class": "btn-primary clclass praclose",
+                    "value": objLang.Accept
+                }],
             };
         }
         showResponse(type, status, label, messagew);
@@ -563,7 +563,7 @@ function setIconValidator(element, noError, msgError, forceValid) {
         if (!$(element).hasClass("spacingIcon"))
             $(element).addClass("spacingIcon");
         if ($(element).hasClass("ico-valid")) {
-            $(element).stop().animate(ico.hidden, 150, function () {
+            $(element).stop().animate(ico.hidden, 150, function() {
                 switchIco(element, 'ico-invalid', ico);
             });
         } else
@@ -573,7 +573,7 @@ function setIconValidator(element, noError, msgError, forceValid) {
             if (!$(element).hasClass("spacingIcon"))
                 $(element).addClass("spacingIcon");
             if ($(element).hasClass("ico-invalid")) {
-                $(element).stop().animate(ico.hidden, 150, function () {
+                $(element).stop().animate(ico.hidden, 150, function() {
                     switchIco(element, 'ico-valid', ico);
                 });
             } else
@@ -583,29 +583,34 @@ function setIconValidator(element, noError, msgError, forceValid) {
         }
     }
 }
+
 function switchIco(e, css, ico) {
     $(e).removeClass('ico-valid').removeClass('ico-invalid').addClass(css).stop().animate(ico.visible, 150);
 }
+
 function removeIco(e) {
     if (!$(e).hasClass("spacingIcon"))
         $(e).removeClass("spacingIcon");
     $(e).removeClass('ico-valid').removeClass('ico-invalid');
     $(e).css('background-position', '');
 }
+
 function removeIcos() {
-    $(".PBvalidation").each(function () {
+    $(".PBvalidation").each(function() {
         id = "#" + $(this).attr("id");
         removeIco(id);
     });
 }
+
 function setInitPositionIco(e, ico) {
     if ($(e).css('background-position') != null) {
         if ($(e).css('background-position') != "98% 50%")
             $(e).css(ico.hidden);
     }
 }
+
 function hideIcons(e) {
-    $(e).stop().animate(ico.hidden, 150, function () {
+    $(e).stop().animate(ico.hidden, 150, function() {
         removeIco(e);
     });
 }

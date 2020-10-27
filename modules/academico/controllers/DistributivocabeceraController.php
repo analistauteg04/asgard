@@ -27,6 +27,14 @@ class DistributivocabeceraController extends \app\components\CController {
         ];
     }
     
+     private function estadoRevision() {
+        return [
+            '0' => Yii::t("formulario", "Seleccionar"),
+            '2' => Yii::t("formulario", "APPROVED"),
+            '3' => Yii::t("formulario", "Not approved"),            
+        ];
+    }
+    
     public function actionIndex() {
         $per_id = @Yii::$app->session->get("PB_perid");        
         $model = NULL;
@@ -120,10 +128,11 @@ class DistributivocabeceraController extends \app\components\CController {
             $data = Yii::$app->request->post();                                      
             $id = $data["id"];            
             $resCab = $distributivo_cab->obtenerDatosCabecera($id);            
-            if ($resCab["estado"] != 2) {   
-                $con = \Yii::$app->db_academico;
-                $transaction = $con->beginTransaction();
-                try {                                           
+            
+            $con = \Yii::$app->db_academico;
+            $transaction = $con->beginTransaction();
+            try {                         
+                if ($resCab["estado"] != 2) {
                     $resInactCab = $distributivo_cab->inactivarDistributivoCabecera($id);                    
                     \app\models\Utilities::putMessageLogFile('$resInactCab:'.$resInactCab);            
                     if ($resInactCab) {
@@ -144,23 +153,136 @@ class DistributivocabeceraController extends \app\components\CController {
                             );
                             return Utilities::ajaxResponse('NOOK', 'alert', Yii::t('jslang', 'Error'), 'true', $message);
                         }
-                    }                                        
-                } catch (Exception $ex) {
+                    }                     
+                } else {  //Tiene estado aprobado
                     $transaction->rollback();
                     $message = array(
-                        "wtmessage" => Yii::t('notificaciones', 'Your information has not been saved. Please try again.'),
-                        "title" => Yii::t('jslang', 'Error'),
-                    );
-                    return Utilities::ajaxResponse('NOOK', 'alert', Yii::t('jslang', 'Error'), 'true', $message);
-                }
-            } else { // Tiene estado aprobado
-                $message = array(
                         "wtmessage" => Yii::t('notificaciones', 'Imposible eliminar el distributivo, porque se encuentra aprobado.'),
                         "title" => Yii::t('jslang', 'Error'),
                     );
+                    return Utilities::ajaxResponse('NOOK', 'alert', Yii::t('jslang', 'Error'), 'true', $message);                        
+                }
+
+            } catch (Exception $ex) {
+                $transaction->rollback();
+                $message = array(
+                    "wtmessage" => Yii::t('notificaciones', 'Your information has not been saved. Please try again.'),
+                    "title" => Yii::t('jslang', 'Error'),
+                );
+                return Utilities::ajaxResponse('NOOK', 'alert', Yii::t('jslang', 'Error'), 'true', $message);
+            }                       
+        }
+    }
+    
+    public function actionReview($id) {                
+        $distributivo_model = new DistributivoAcademico();
+        $distributivo_cab = new DistributivoCabecera();
+        $resCab = $distributivo_cab->obtenerDatosCabecera($id);
+        $arr_distributivo = $distributivo_model->getListarDistribProfesor($resCab["paca_id"], $resCab["pro_id"]);
+        return $this->render('review', [
+            'arr_cabecera' => $resCab,            
+            'arr_detalle' => $arr_distributivo,   
+            'arr_estado' => $this->estadoRevision(),
+        ]);
+    }
+    
+    public function actionSavereview(){                
+        $distributivo_cab = new DistributivoCabecera();
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();                                      
+            $id = $data["id"];                        
+            $estado = $data["resultado"];  
+            $observacion = $data["observacion"];  
+            $con = \Yii::$app->db_academico;
+            $transaction = $con->beginTransaction();
+            try {     
+                if ($estado !=0) {
+                    if ($estado ==3 && empty($observacion)) {
+                        $transaction->rollback();
+                        $message = array(
+                            "wtmessage" => Yii::t('notificaciones', 'Digite una observación de la Revisión.'),
+                            "title" => Yii::t('jslang', 'Error'),
+                        );
+                        return Utilities::ajaxResponse('NOOK', 'alert', Yii::t('jslang', 'Error'), 'true', $message);
+                    }
+                    $resultado = $distributivo_cab->revisarDistributivo($id, $estado, ucfirst(strtolower($observacion)));   
+                    \app\models\Utilities::putMessageLogFile('resultadoREV:'.$resultado);            
+                    if ($resultado) {                         
+                        $transaction->commit();
+                        $message = array(
+                            "wtmessage" => Yii::t("notificaciones", "Your information was successfully saved."),
+                            "title" => Yii::t('jslang', 'Success'),
+                        );
+                        return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'true', $message);
+                    } else {                        
+                        $transaction->rollback();
+                        $message = array(
+                            "wtmessage" => Yii::t('notificaciones', 'Your information has not been saved. Please try again.'),
+                            "title" => Yii::t('jslang', 'Error'),
+                        );
+                        return Utilities::ajaxResponse('NOOK', 'alert', Yii::t('jslang', 'Error'), 'true', $message);
+                    }
+                } else {
+                    $transaction->rollback();
+                    $message = array(
+                        "wtmessage" => Yii::t('notificaciones', 'Seleccione un estado de Revisión.'),
+                        "title" => Yii::t('jslang', 'Error'),
+                    );
                     return Utilities::ajaxResponse('NOOK', 'alert', Yii::t('jslang', 'Error'), 'true', $message);
-            }
-            
+                }                
+
+            } catch (Exception $ex) {
+                $transaction->rollback();
+                $message = array(
+                    "wtmessage" => Yii::t('notificaciones', 'Your information has not been saved. Please try again.'),
+                    "title" => Yii::t('jslang', 'Error'),
+                );
+                return Utilities::ajaxResponse('NOOK', 'alert', Yii::t('jslang', 'Error'), 'true', $message);
+            }                        
        }
+    }
+    
+    public function actionValidadistributivo(){  
+        $distributivo_cab = new DistributivoCabecera();
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();                                      
+            $pro_id = $data["pro_id"];     
+            $paca_id = $data["paca_id"];
+            $tran_id = $data["transaccion"];
+            \app\models\Utilities::putMessageLogFile('profesor:'.$pro_id);   
+            //if ($pro_id !=0) {
+            if(isset($data["getvalida"])){
+                $resp = $distributivo_cab->existeDistCabecera($data["paca_id"], $data["pro_id"]);
+                if ($data["transaccion"] == "N") {
+                    if (($resp != 0)) {
+                        $message = array(
+                           "wtmessage" => Yii::t('notificaciones', 'Profesor ya tiene distributivo creado para este período académico.'),
+                           "title" => Yii::t('jslang', 'Error'),
+                       );
+                       return Utilities::ajaxResponse('NOOK', 'alert', Yii::t('jslang', 'Error'), 'true', $message);
+                    } else {
+                        $message = array(
+                           "wtmessage" => Yii::t('notificaciones', 'OK'),
+                           "title" => Yii::t('jslang', 'Success'),
+                        );
+                        return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Error'), 'true', $message);
+                    } 
+                } else {
+                    if ($resp["dcab_estado_revision"] == 2){
+                        $message = array(
+                          "wtmessage" => Yii::t('notificaciones', 'Distributivo ya se encuentra aprobado, imposible realizar cambios'),
+                          "title" => Yii::t('jslang', 'Error'),
+                      );
+                      return Utilities::ajaxResponse('NOOK', 'alert', Yii::t('jslang', 'Error'), 'true', $message);
+                   } else {
+                        $message = array(
+                           "wtmessage" => Yii::t('notificaciones', 'OK'),
+                           "title" => Yii::t('jslang', 'Success'),
+                        );
+                        return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Error'), 'true', $message);
+                   } 
+                }                
+            }                                      
+        }
     }
 }

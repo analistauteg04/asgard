@@ -4,8 +4,17 @@
  * and open the template in the editor.
  */
 $(document).ready(function() {
- $('#btn_buscarData_dist').click(function() {
+    $('#btn_buscarData_dist').click(function() {
         searchModules();
+    });
+    
+    $('#cmb_estado').change(function () {        
+        estado = $('#cmb_estado').val();        
+        if (estado == 3) {
+            $('#observacion').css('display', 'block');                       
+        } else {
+            $('#observacion').css('display', 'none');                       
+        }
     });
  });
 
@@ -44,11 +53,31 @@ function deleteItem(id) {
     arrParams.id = id;
     //alert('id:'+id);
     requestHttpAjax(link, arrParams, function(response) {
-        if (response.status == "OK") {
-            searchModules();
-            setTimeout(function() {
-                showAlert(response.status, response.label, response.message);
+        showAlert(response.status, response.label, response.message);        
+        if (response.status == "OK") {              
+            setTimeout(function() {   
+                searchModules();
             }, 1000);
         }
     }, true);
+}
+
+function saveReview() {
+    var link = $('#txth_base').val() + "/academico/distributivocabecera/savereview";
+    var arrParams = new Object();
+    arrParams.id = $('#txth_ids').val();
+    arrParams.resultado = $('#cmb_estado').val();
+    arrParams.observacion = $('#txt_detalle').val();
+    //alert('id:'+id);
+    
+    requestHttpAjax(link, arrParams, function(response) {
+        showAlert(response.status, response.label, response.message);
+        if (response.status == "OK") {
+            setTimeout(function() {
+                var link = $('#txth_base').val() + "/academico/distributivocabecera/index";
+                window.location = link;
+            }, 1000);
+        }
+    }, true);
+     
 }

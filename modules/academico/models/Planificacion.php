@@ -73,15 +73,15 @@ class Planificacion extends \yii\db\ActiveRecord {
     /**
      * @return \yii\db\ActiveQuery
      */
-    /* public static function getAllPlanificacionesGrid($search = NULL, $dataProvider = false) {
-      $iduser = Yii::$app->session->get('PB_iduser', FALSE);
-      $search_cond = "%" . $search . "%";
-      $str_search = "";
-      if (isset($search)) {
-      $str_search = "(pl.pla_periodo_academico like :search OR ";
-      $str_search .= "mod.mod_nombre like :search) AND ";
-      }
-      $sql = "SELECT
+    /*public static function getAllPlanificacionesGrid($search = NULL, $dataProvider = false) {
+        $iduser = Yii::$app->session->get('PB_iduser', FALSE);
+        $search_cond = "%" . $search . "%";
+        $str_search = "";
+        if (isset($search)) {
+            $str_search = "(pl.pla_periodo_academico like :search OR ";
+            $str_search .= "mod.mod_nombre like :search) AND ";
+        }
+        $sql = "SELECT
       pl.pla_id as id,
       pl.pla_periodo_academico as Periodo Academico
       mod.mod_nombre as Nombre Modalidad
@@ -93,22 +93,22 @@ class Planificacion extends \yii\db\ActiveRecord {
       pl.pla_estado_logico=1 and
       mod.mod_estado_logico=1 and
       ORDER BY pl.pla_id;";
-      $comando = Yii::$app->db_academico->createCommand($sql);
-      if($dataProvider){
-      $dataProvider = new ArrayDataProvider([
-      'key' => 'pla_id',
-      'allModels' => $res,
-      'pagination' => [
-      'pageSize' => Yii::$app->params["pageSize"],
-      ],
-      'sort' => [
-      'attributes' => ['Pla_per_aca', 'Modalidad'],
-      ],
-      ]);
-      return $dataProvider;
-      }
-      return $res;
-      } */
+        $comando = Yii::$app->db_academico->createCommand($sql);
+        if ($dataProvider) {
+            $dataProvider = new ArrayDataProvider([
+                'key' => 'pla_id',
+                'allModels' => $res,
+                'pagination' => [
+                    'pageSize' => Yii::$app->params["pageSize"],
+                ],
+                'sort' => [
+                    'attributes' => ['Pla_per_aca', 'Modalidad'],
+                ],
+            ]);
+            return $dataProvider;
+        }
+        return $res;
+    }*/
 
     public static function getAllPlanificacionesGrid($planificacion, $pla_periodo_academico, $mod_id) {
         $filter = "";
@@ -202,11 +202,11 @@ class Planificacion extends \yii\db\ActiveRecord {
                     moda.mod_estado_logico = :estado;                
                 ";
         $comando = $con->createCommand($sql);
-        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);  
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $resultData = $comando->queryAll();
         return $resultData;
     }
-    
+
     /**
      * Function getPeriodos_x_modalidad
      * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
@@ -221,11 +221,13 @@ class Planificacion extends \yii\db\ActiveRecord {
                 FROM " . $con->dbname . ".planificacion p
                 WHERE mod_id = :mod_id and
                      pla_estado = :estado and pla_estado_logico = :estado";
-        
+
         $comando = $con->createCommand($sql);
-        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);  
-        $comando->bindParam(":mod_id", $mod_id, \PDO::PARAM_INT);  
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":mod_id", $mod_id, \PDO::PARAM_INT);
         $resultData = $comando->queryAll();
         return $resultData;
-    }   
+    }
+    
+
 }

@@ -3,8 +3,8 @@
 use yii\helpers\Html;
 use app\widgets\PbGridView\PbGridView;
 use app\modules\academico\Module as academico;
-
-//print_r($model_detalle);
+use kartik\select2\Select2;
+// print_r($arr_alumno);
 academico::registerTranslations();
 ?>
 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -54,12 +54,25 @@ academico::registerTranslations();
             </div>        
         </div> 
         <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
-            <div class="form-group">
-                    <label for="txt_buscarest" class="col-sm-2 col-md-2 col-xs-2 col-lg-2 control-label"><?= Yii::t("formulario", "Student") ?> <span class="text-danger">*</span> </label>
-                <div class="col-sm-8 col-md-8 col-xs-8 col-lg-8">
-                    <input type="text" class="form-control" value="" id="txt_buscarest" placeholder="<?= Yii::t("formulario", "Search by Names") ?>">
-                </div>
-            </div>
+             <div class="form-group">
+                  <label for="txt_buscarest" class="col-sm-2 col-md-2 col-xs-2 col-lg-2 control-label"><?= Yii::t("formulario", "Student") ?> <span class="text-danger">*</span> </label>
+                 <div class="col-sm-8 col-md-8 col-xs-8 col-lg-8">
+                <!--    <input type="text" class="form-control" value="" id="txt_buscarest" placeholder="<?= Yii::t("formulario", "Search by Names") ?>"> -->
+                <?php //echo '<label class="control-label">Tag Single</label>';
+                 echo Select2::widget([
+                'name' => 'cmb_buscarest',
+                'id' => 'cmb_buscarest',
+                'value' => '0', // initial value
+                'data' => $arr_alumno,
+                'options' => ['placeholder' => 'Seleccionar'],
+                'pluginOptions' => [
+                    'tags' => true,
+                    'tokenSeparators' => [',', ' '],
+                    'maximumInputLength' => 50
+                ],
+            ]); ?>
+                </div>                 
+            </div>                 
         </div>      
     </div> 
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">

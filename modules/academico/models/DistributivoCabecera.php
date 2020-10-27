@@ -49,10 +49,11 @@ class DistributivoCabecera extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['paca_id', 'pro_id', 'dcab_usuario_aprobacion', 'dcab_usuario_ingreso', 'dcab_usuario_modifica'], 'integer'],
+            [['paca_id', 'pro_id', 'dcab_usuario_revision', 'dcab_usuario_ingreso', 'dcab_usuario_modifica'], 'integer'],
             [['pro_id', 'dcab_usuario_ingreso', 'dcab_estado', 'dcab_estado_logico'], 'required'],
-            [['dcab_fecha_aprobacion', 'dcab_fecha_registro', 'dcab_fecha_creacion', 'dcab_fecha_modificacion'], 'safe'],
-            [['dcab_estado_aprobacion', 'dcab_estado', 'dcab_estado_logico'], 'string', 'max' => 1],
+            [['dcab_fecha_revision', 'dcab_fecha_registro', 'dcab_fecha_creacion', 'dcab_fecha_modificacion'], 'safe'],
+            [['dcab_estado_revision', 'dcab_estado', 'dcab_estado_logico'], 'string', 'max' => 1],
+            [['dcab_observacion_revision'], 'string', 'max' => 1000],
             [['pro_id'], 'exist', 'skipOnError' => true, 'targetClass' => Profesor::className(), 'targetAttribute' => ['pro_id' => 'pro_id']],
             [['paca_id'], 'exist', 'skipOnError' => true, 'targetClass' => PeriodoAcademico::className(), 'targetAttribute' => ['paca_id' => 'paca_id']],
         ];
@@ -67,9 +68,10 @@ class DistributivoCabecera extends \yii\db\ActiveRecord
             'dcab_id' => 'Dcab ID',
             'paca_id' => 'Paca ID',
             'pro_id' => 'Pro ID',
-            'dcab_estado_aprobacion' => 'Dcab Estado Aprobacion',
-            'dcab_fecha_aprobacion' => 'Dcab Fecha Aprobacion',
-            'dcab_usuario_aprobacion' => 'Dcab Usuario Aprobacion',
+            'dcab_estado_revision' => 'Dcab Estado Revision',
+            'dcab_observacion_revision' => 'Dcab Observacion Revision',
+            'dcab_fecha_revision' => 'Dcab Fecha Revision',
+            'dcab_usuario_revision' => 'Dcab Usuario Revision',
             'dcab_fecha_registro' => 'Dcab Fecha Registro',
             'dcab_usuario_ingreso' => 'Dcab Usuario Ingreso',
             'dcab_usuario_modifica' => 'Dcab Usuario Modifica',
@@ -116,10 +118,10 @@ class DistributivoCabecera extends \yii\db\ActiveRecord
             $str_periodo = "pa.paca_id = :periodo AND ";
         }        
         if (isset($estado_aprobacion) && $estado_aprobacion > 0) {
-            $str_estado_probacion = "da.dcab_estado_aprobacion = :estado_aprobacion AND ";
+            $str_estado_probacion = "da.dcab_estado_revision = :estado_aprobacion AND ";
         }   
         if (!$onlyData) {
-            $select = " da.dcab_id AS Id,";
+            $select = " da.dcab_id AS Id, da.dcab_estado_revision as estado, ";
         }
         $sql = "SELECT 
                     $select
@@ -127,10 +129,10 @@ class DistributivoCabecera extends \yii\db\ActiveRecord
                     pe.per_cedula AS Cedula,                    
                     ifnull(CONCAT(blq.baca_anio,' (',blq.baca_nombre,'-',sem.saca_nombre,')'),blq.baca_anio) AS Periodo,                    
                     CASE
-                        WHEN da.dcab_estado_aprobacion = 1 THEN 'Por aprobar'
-                        WHEN da.dcab_estado_aprobacion = 2 THEN 'Aprobado'
+                        WHEN da.dcab_estado_revision = 1 THEN 'Por aprobar'
+                        WHEN da.dcab_estado_revision = 2 THEN 'Aprobado'
                         ELSE 'No Aprobado'
-                    END AS estado
+                    END AS estadoRevision
                    
                 FROM 
                     " . $con_academico->dbname . ".distributivo_cabecera AS da                     
@@ -192,18 +194,12 @@ class DistributivoCabecera extends \yii\db\ActiveRecord
         $estado = '1';
         $usu_id = @Yii::$app->session->get("PB_iduser");
         $fecha_transaccion = date(Yii::$app->params["dateTimeByDefault"]);
-        \app\models\Utilities::putMessageLogFile('insertar en cabecera');
-        \app\models\Utilities::putMessageLogFile('paca:'.$paca_id);
-        \app\models\Utilities::putMessageLogFile('pro_id:'.$pro_id);
-        \app\models\Utilities::putMessageLogFile('usuario:'.$usu_id);
-        \app\models\Utilities::putMessageLogFile('fecha:'.$fecha_transaccion);
+        \app\models\Utilities::putMessageLogFile('insertar en cabecera');    
         
         $sql = "INSERT INTO " . $con->dbname . ".distributivo_cabecera
-            (paca_id, pro_id, dcab_estado_aprobacion, dcab_fecha_registro, dcab_usuario_ingreso, dcab_estado, dcab_estado_logico) VALUES
+            (paca_id, pro_id, dcab_estado_revision, dcab_fecha_registro, dcab_usuario_ingreso, dcab_estado, dcab_estado_logico) VALUES
             (:paca_id, :pro_id, 1, :fecha, :usuario, :estado, :estado)";
-        
-        \app\models\Utilities::putMessageLogFile('sql insert:'.$sql);
-        
+                        
         $command = $con->createCommand($sql);
         $command->bindParam(":paca_id", $paca_id, \PDO::PARAM_INT);
         $command->bindParam(":pro_id", $pro_id, \PDO::PARAM_INT);
@@ -224,7 +220,8 @@ class DistributivoCabecera extends \yii\db\ActiveRecord
     public function existeDistCabecera($paca_id, $pro_id){
         $con_academico = \Yii::$app->db_academico;
         $sql = "SELECT 
-                    dc.dcab_id 
+                    dc.dcab_id,
+                    dc.dcab_estado_revision
                 FROM 
                     " . $con_academico->dbname . ".distributivo_cabecera AS dc
                 WHERE
@@ -258,7 +255,8 @@ class DistributivoCabecera extends \yii\db\ActiveRecord
                     concat(per.per_pri_apellido, ' ', ifnull(per.per_seg_apellido,'')) apellidos,
                     concat(per.per_pri_nombre, ' ', ifnull(per.per_seg_nombre,'')) nombres,
                     ifnull(CONCAT(ba.baca_nombre,'-',sa.saca_nombre,' ',sa.saca_anio),'') as periodo,
-                    ifnull(dc.dcab_estado_aprobacion,0) estado
+                    ifnull(dc.dcab_estado_revision,0) estado,
+                    dcab_observacion_revision observacion
                 FROM 
                     " . $con_academico->dbname . ".distributivo_cabecera AS dc inner join " . $con_academico->dbname . ".profesor pr 
                     on pr.pro_id = dc.pro_id inner join " . $con_asgard->dbname . ".persona per on per.per_id = pr.per_id
@@ -309,5 +307,44 @@ class DistributivoCabecera extends \yii\db\ActiveRecord
         $command->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $idtabla= $command->execute();  
         return $idtabla;
+    } 
+    
+    /**
+     * Function inactivar datos distributivo cabecera
+     * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
+     * @param   
+     * @return  $resultData (Retornar los datos).
+     */
+    public function revisarDistributivo($id, $resultado, $observacion) {
+        $con = \Yii::$app->db_academico;
+        $estado = '1';
+        $usu_id = @Yii::$app->session->get("PB_iduser");
+        $fecha_transaccion = date(Yii::$app->params["dateTimeByDefault"]);
+        $OK = "Ok";    
+        
+        $sql = "UPDATE " . $con->dbname . ".distributivo_cabecera
+                SET dcab_estado_revision = :resultado,       
+                    dcab_observacion_revision = :observacion,
+                    dcab_fecha_revision = :fecha,
+                    dcab_usuario_revision = :usuario,
+                    dcab_fecha_modificacion = :fecha, 
+                    dcab_usuario_modifica = :usuario                    
+                WHERE dcab_id = :id
+                      AND dcab_estado = :estado
+                      AND dcab_estado_logico = :estado";
+                
+        $command = $con->createCommand($sql);
+        $command->bindParam(":id", $id, \PDO::PARAM_INT);                
+        $command->bindParam(":fecha", $fecha_transaccion, \PDO::PARAM_STR);
+        $command->bindParam(":usuario", $usu_id, \PDO::PARAM_INT);
+        $command->bindParam(":resultado", $resultado, \PDO::PARAM_INT);
+        if ($resultado==3) {
+            $command->bindParam(":observacion", ucfirst($observacion), \PDO::PARAM_STR);            
+        } else {
+            $command->bindParam(":observacion", $OK, \PDO::PARAM_STR);       
+        }        
+        $command->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $idtabla= $command->execute();  
+        return $idtabla;       
     } 
 }

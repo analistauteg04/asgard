@@ -54,7 +54,16 @@
                 <span id="img-modal" class="success-modalPB"></span>
                 <h4 class="modal-title" id="ModalLabelPB">Modal title</h4>
             </div>
+            <div class="modal-alert hide">
+                <div class="alert alert-success" style="margin-bottom: 0px;">
+                    <h4>Success</h4>
+                    <div id="alert-text"></div>
+                </div>
+            </div>
             <div class="modal-body">Content</div>
+            <div class="overlay hide">
+              <i class="fa fa-refresh fa-spin"></i>
+            </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
             </div>

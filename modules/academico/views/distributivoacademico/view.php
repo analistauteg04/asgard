@@ -9,7 +9,8 @@ use app\modules\academico\Module as academico;
     <form class="form-horizontal">
         <?=
         $this->render('view-cab', [ 
-            'arr_cabecera' => $arr_cabecera,                        
+            'arr_cabecera' => $arr_cabecera, 
+            'arr_estados' => $arr_estados, 
           ]);
         ?>
     </form>

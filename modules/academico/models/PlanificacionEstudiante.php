@@ -3,6 +3,7 @@
 namespace app\modules\academico\models;
 
 use Yii;
+use app\models\Utilities;
 use \yii\data\ActiveDataProvider;
 use \yii\data\ArrayDataProvider;
 use yii\base\Exception;
@@ -527,8 +528,6 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord {
             if ($arrFiltro['periodo'] != '0') {
                 $str_search .= " plan.pla_periodo_academico = :periodo AND ";
             }
-
-          
         }
         if ($onlyData == false) {
             $idplanifica = 'plae.pla_id, ';
@@ -552,20 +551,20 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord {
                     plan.pla_estado_logico = :estado AND
                     pers.per_estado = :estado AND
                     pers.per_estado_logico = :estado";
-       
+
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
             $search_cond = "%" . $arrFiltro["estudiante"] . "%";
             $comando->bindParam(":estudiante", $search_cond, \PDO::PARAM_STR);
-           \app\models\Utilities::putMessageLogFile('str_searchxx: ' . $sql);
-               
-            if ($arrFiltro['modalidad'] > 0 ) {
+            \app\models\Utilities::putMessageLogFile('str_searchxx: ' . $sql);
+
+            if ($arrFiltro['modalidad'] > 0) {
                 $modalidad = $arrFiltro["modalidad"];
-                $comando->bindParam(":modalidad", $modalidad, \PDO::PARAM_INT); 
+                $comando->bindParam(":modalidad", $modalidad, \PDO::PARAM_INT);
             }
 
-            if ($arrFiltro['carrera'] != 'Todas') {                
+            if ($arrFiltro['carrera'] != 'Todas') {
                 $search_carrera = "%" . $arrFiltro["carrera"] . "%";
                 $comando->bindParam(":carrera", $search_carrera, \PDO::PARAM_STR);
             }
@@ -574,9 +573,8 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord {
                 $periodo = $arrFiltro["periodo"];
                 $comando->bindParam(":periodo", $periodo, \PDO::PARAM_STR);
             }
-            
         }
-       
+
         $resultData = $comando->queryAll();
         $dataProvider = new ArrayDataProvider([
             'key' => 'id',
@@ -748,10 +746,10 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord {
                           pes_fecha_modificacion = $pes_fecha_modificacion                          
                       WHERE 
                         pes_estado= 1 AND pla_id = $pla_id AND per_id = $per_id";
-        \app\models\Utilities::putMessageLogFile('asdasfdg ' . $modificar);
+        /*\app\models\Utilities::putMessageLogFile('asdasfdg ' . $modificar);
         \app\models\Utilities::putMessageLogFile('cvxcv ' . $este);
         \app\models\Utilities::putMessageLogFile('qaaaa ' . $hora);
-        \app\models\Utilities::putMessageLogFile('xxxx ' . $bloque);
+        \app\models\Utilities::putMessageLogFile('xxxx ' . $bloque);*/
         try {
             $comando = $con->createCommand
                     ("UPDATE " . $con->dbname . ".planificacion_estudiante		       
@@ -852,31 +850,32 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord {
      * @return  
      */
     /* INSERTAR DATOS */
-    public function insertarDataPlanificacionestudiante($data) {
+    public function insertarDataPlanificacionestudiante($pla_id, $per_id, $pes_jornada, $pes_carrera, $pes_dni, $pes_nombres, $insertar, $valores) {
         $arroout = array();
-        $con = \Yii::$app->db_academico;        
+        $con = \Yii::$app->db_academico;
         $trans = $con->beginTransaction();
         try {
             //$per_id = @Yii::$app->session->get("PB_perid");    
-            $data = isset($data['DATA']) ? $data['DATA'] : array();
-            $this->insertarPlanificacionestudiante($con,json_decode($data));
+            $data = isset($data['DATA']) ? $data['DATAS'] : array();
+            $this->insertarPlanificacionestudiante($con, $pla_id, $per_id, $pes_jornada, $pes_carrera, $pes_dni, $pes_nombres, $insertar, $valores);
             $trans->commit();
             $con->close();
             //RETORNA DATOS 
             //$arroout["ids"]= $ftem_id;
-            $arroout["status"]= true;
+            $arroout["status"] = true;
             //$arroout["secuencial"]= $doc_numero;
-            
-                       
+
+
             return $arroout;
         } catch (\Exception $e) {
             $trans->rollBack();
             $con->close();
             //throw $e;
-            $arroout["status"]= false;
+            $arroout["status"] = false;
             return $arroout;
         }
     }
+
     /** FALTA MODIFICAR ojoooo
      * Function insertarPlanificacionestudiante 
      * Guiarse de insertarPersona
@@ -884,57 +883,27 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord {
      * @property integer $userid
      * @return  
      */
-    private function insertarPlanificacionestudiante($con,$dts) {
-        //dre_id
-        $usu_id = @Yii::$app->session->get("PB_iduser");
-        /*for ($i = 0; $i < sizeof($dts); $i++) {
-            $sql = "INSERT INTO " . $con->dbname . ".planificacion_estudiante
-                    (pla_id,per_id,pes_jornada,pes_cod_carrera,pes_carrera,pes_dni,
-                        pes_nombres,dre_estado,dre_fecha_archivo,dre_estado_logico)VALUES
-                    (:est_id,:dre_tipo,:dre_codificacion,:dre_ruta,:dre_imagen,:dre_descripcion,
-                        :dre_usu_ingresa,:dre_estado,:dre_fecha_archivo,:dre_estado_logico)";
-            $command = $con->createCommand($sql);
-            $command->bindParam(":est_id", $dts[$i]->est_id, \PDO::PARAM_INT);
-            $command->bindParam(":dre_tipo", $dts[$i]->dre_tipo, \PDO::PARAM_INT);
-            $command->bindParam(":dre_codificacion", $dts[$i]->dre_codificacion, \PDO::PARAM_STR);
-            $command->bindParam(":dre_ruta", $dts[$i]->dre_ruta, \PDO::PARAM_STR);
-            $command->bindParam(":dre_imagen", $dts[$i]->dre_imagen, \PDO::PARAM_STR);
-            $command->bindParam(":dre_descripcion", ucwords(strtolower($dts[$i]->dre_descripcion)), \PDO::PARAM_STR);
-            $command->bindParam(":dre_usu_ingresa", $usu_id, \PDO::PARAM_INT);
-            $command->bindParam(":dre_estado", $dts[$i]->dre_estado, \PDO::PARAM_INT);
-            $command->bindParam(":dre_fecha_archivo", $dts[$i]->dre_fecha_archivo, \PDO::PARAM_STR);            
-            $command->bindParam(":dre_estado_logico", $dts[$i]->dre_estado_logico, \PDO::PARAM_INT);
-            //$command->bindParam(":per_nombre", $data[0]['per_nombre'], \PDO::PARAM_STR);
-            $command->execute();
-        }*/
-        
+    private function insertarPlanificacionestudiante($con, $pla_id, $per_id, $pes_jornada, $pes_carrera, $pes_dni, $pes_nombres, $insertar, $valores) {
+        //$usu_id = @Yii::$app->session->get("PB_iduser");
+        $estado = 1;
+        $sql = "INSERT INTO " . $con->dbname . ".planificacion_estudiante
+                    (pla_id,
+                     per_id,
+                     pes_jornada,
+                     pes_carrera,
+                     pes_dni,
+                     pes_nombres, " .
+                     $insertar . "
+                     pes_estado,                   
+                     pes_estado_logico)VALUES
+                    (" . $pla_id . "," . $per_id . ",'" . $pes_jornada . "','" . $pes_carrera . "','" . $pes_dni . "','"
+                . $pes_nombres . "'," . $valores . " '" . $estado . "','" . $estado . "')";
+        \app\models\Utilities::putMessageLogFile('guarda insert..: ' . $insertar);
+        \app\models\Utilities::putMessageLogFile('guarda valor..: ' . $valores);
+        \app\models\Utilities::putMessageLogFile('guarda sql..: ' . $sql);
+        $command = $con->createCommand($sql);
+        $command->execute();
     }
-   /* public function insertarPlanificacionestudiante($con, $parameters, $keys, $name_table) {
-        $trans = $con->getTransaction();
-        $param_sql .= "" . $keys[0];
-        $bdet_sql .= "'" . $parameters[0] . "'";
-        for ($i = 1; $i < count($parameters); $i++) {
-            if (isset($parameters[$i])) {
-                $param_sql .= ", " . $keys[$i];
-                $bdet_sql .= ", '" . $parameters[$i] . "'";
-            }
-        }
-        try {
-            $sql = "INSERT INTO " . $con->dbname . '.' . $name_table . " ($param_sql) VALUES($bdet_sql);";
-            \app\models\Utilities::putMessageLogFile('insert planificacion_estudiante:' . $sql);
-            $comando = $con->createCommand($sql);
-            $result = $comando->execute();
-            $idtable = $con->getLastInsertID($con->dbname . '.' . $name_table);
-            if ($trans !== null)
-                $trans->commit();
-            return $idtable;
-        } catch (Exception $ex) {
-            if ($trans !== null) {
-                $trans->rollback();
-            }
-            return 0;
-        }
-    }*/
 
     /**
      * Function Consultar modalidad y periodo en planificacion.
@@ -958,6 +927,66 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord {
         $comando->bindParam(":mod_id", $mod_id, \PDO::PARAM_INT);
         $comando->bindParam(":pla_periodo_academico", $pla_periodo_academico, \PDO::PARAM_STR);
         $resultData = $comando->queryOne();
+        return $resultData;
+    }
+
+    /**
+     * Function Consultar id de carrera.
+     * @author  Giovanni Vergara <analistadesarrollo01@uteg.edu.ec>;
+     * @property       
+     * @return  
+     */
+    public function consultardataplan($pla_id, $per_id, $materia) {
+        $con = \Yii::$app->db_academico;
+        $estado = 1;
+
+        $sql = "SELECT plan.pes_carrera, 
+                       esta.eaca_id,
+                       plan.pes_jornada,
+                       plan.pes_nombres,
+                       ifnull((SELECT maca.maca_nombre FROM " . $con->dbname . ".malla_academica_detalle made  
+		                       INNER JOIN " . $con->dbname . ".malla_academica maca ON maca.maca_id = made.maca_id
+                               WHERE made_codigo_asignatura = :materia), ' ') as malla
+                FROM " . $con->dbname . ".planificacion_estudiante plan
+                INNER JOIN " . $con->dbname . ".estudio_academico esta ON esta.eaca_nombre = plan.pes_carrera
+                WHERE plan.pla_id = :pla_id AND
+                      plan.per_id = :per_id AND
+                      plan.pes_estado = :estado AND
+                      plan.pes_estado_logico = :estado";
+
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":pla_id", $pla_id, \PDO::PARAM_INT);
+        $comando->bindParam(":per_id", $per_id, \PDO::PARAM_INT);
+        $comando->bindParam(":materia", $materia, \PDO::PARAM_STR);
+        $resultData = $comando->queryOne();
+        return $resultData;
+    }
+
+
+    /**
+     * Function busca los etudiantes para autocompletar en palnificacion. 
+     * @author Giovanni Vergara <analistadesarrollo02@uteg.edu.ec>;
+     * @param
+     * @return
+     */
+    public function busquedaEstudianteplanificacion() {
+        $con = \Yii::$app->db_academico;
+        $estado = 1;
+        
+        $sql = "SELECT est.per_id as id, concat(/*est.per_id, ' - ',*/ pers.per_cedula, ' - ', 
+                    ifnull(pers.per_pri_nombre, ' ') ,' ', 
+                    ifnull(pers.per_pri_apellido,' ')) as name
+                    FROM db_academico.estudiante est
+                    JOIN db_asgard.persona pers ON pers.per_id = est.per_id
+                WHERE pers.per_estado = :estado AND
+                      pers.per_estado_logico = :estado AND
+                      est.est_estado = :estado AND
+                      est.est_estado_logico = :estado;";
+
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $resultData = $comando->queryAll();
         return $resultData;
     }
 }

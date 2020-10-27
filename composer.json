@@ -38,7 +38,8 @@
         "kartik-v/yii2-tabs-x": "dev-master",
         "codeitnowin/barcode": "*",
         "himiklab/yii2-recaptcha-widget": "*",
-        "svrnm/exceldatatables": "*"
+        "svrnm/exceldatatables": "*",
+        "kartik-v/yii2-widget-select2": "@dev"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",
