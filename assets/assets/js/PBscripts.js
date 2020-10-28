@@ -55,6 +55,9 @@ $(document).ready(function() {
     $('.multiSelects').select2({
         placeholder: 'Escoja una o varias opciones',
     });
+    $("form").on("change", ".file-upload-field", function() {
+        $(this).parent(".file-upload-wrapper").attr("data-text", $(this).val().replace(/.*(\/|\\)/, ''));
+    });
 });
 var pageValues = [];
 var my_skins = [
@@ -384,6 +387,11 @@ function requestHttpAjax(link, arrParams, callback, loading, isUploadFile, dataT
         }
     }
     if (isUploadFile) {
+        var frmData = new FormData();
+        for (var key in arrParams) {
+            frmData.append(key, arrParams[key]);
+        }
+        arrParams = frmData;
         contentType = false;
         processData = false;
     }
