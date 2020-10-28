@@ -203,12 +203,12 @@
                                         <div class="tcolr_address"><?php echo Yii::$app->controller->pdf_dir_matriz; ?></div>
                                     </div>
                                     <div class="clear"></div>
-                                    <br/>
-                                    <!--<div>
+                                    <!--<br/>
+                                    <div>
                                         <div class="tcoll_address bold"><?php echo app\modules\fe_edoc\Module::t("fe", "Address Branch") ?>:</div>
                                         <div class="tcolr_address"><?php echo Yii::$app->controller->pdf_dir_sucursal; ?></div>
-                                    </div>-->
-                                    <div class="clear"></div>
+                                    </div>
+                                    <div class="clear"></div>-->
                                     <br/>
                                     <?php if(Yii::$app->controller->pdf_num_contribuyente != ""): ?>
                                     <div>
@@ -217,11 +217,20 @@
                                     </div>
                                     <div class="clear"></div>
                                     <br/>
-                                    <?php endif; ?>
+                                    <?php endif; ?>                                  
                                     <div>
                                         <div class="tcoll bold" style="width: 75%;"><?php echo app\modules\fe_edoc\Module::t("fe", "BOUND TO TAKE ACCOUNTING") ?>:</div>
                                         <div class="tcolr" style="width: 20%;"><?php echo Yii::$app->controller->pdf_contabilidad; ?></div>
-                                    </div>                                    
+                                    </div> 
+                                    <div class="clear"></div>
+                                    <br/>
+                                    <div>
+                                        <div class="tcoll bold" style="width: 100%;">
+                                            <?php echo app\modules\fe_edoc\Module::t("fe", "AGENTE DE RETENCIÓN SEGÚN RESOLUCIÓN") ?><br/>
+                                            <?php echo app\modules\fe_edoc\Module::t("fe", "N° NAC-DNCRASC20-00000001") ?>
+                                        </div>
+                                    </div>
+                   
                                 </div>
                             </div>
                             <div class="clear"></div>
@@ -285,8 +294,7 @@
                                                 "message" => Yii::$app->controller->pdf_cla_acceso,
                                                 "base64" => true,
                                                 "font_size" => 35
-                                            ]) : "";
-                                            
+                                            ]) : "";                                            
                                             ?>
                                         </div>
                                     </div>

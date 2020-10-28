@@ -255,8 +255,28 @@ INSERT INTO `distributivo_academico_horario` (`daho_id`, `uaca_id`, `mod_id`, `d
 (41, 1, 1, '2', 'VI4H', '19:00', '20:30', '0', '0', '0', '0', '1', '0', '0', '1', '1'),
 (42, 1, 1, '2', 'VI5H', '20:00', '21:30', '0', '0', '0', '0', '1', '0', '0', '1', '1');	
 
+create table if not exists db_academico.`configuracion_tipo_distributivo` (
+ `ctdi_id` bigint(20) not null auto_increment primary key,
+ `tdis_id` bigint(20) not null,
+ `uaca_id` bigint(20) null,
+ `mod_id` bigint(20) null,
+ `ctdi_horas_inicio` integer(3) null,
+ `ctdi_horas_fin` integer(3) null,
+ `ctdi_estado_vigencia` varchar(1) not null,
+ `ctdi_horas_semanal` integer(3) not null,
+ `ctdi_estado` varchar(1) not null,
+ `ctdi_fecha_creacion` timestamp not null default current_timestamp,
+ `ctdi_fecha_modificacion` timestamp null default null,
+ `ctdi_estado_logico` varchar(1) not null
+);
 
-INSERT INTO db_academico.`configuracion_tipo_distributivo` (`ctdi_id`, `tdis_id`, `ctdi_estado_vigencia`, `ctdi_horas_semanal`, `ctdi_estado`, `ctdi_estado_logico`)
-VALUES (1, 2, '1', 2, '1', '1'),
-(2, 3, '1', 2, '1', '1'),
-(3, 4, '1', 2, '1', '1');
+
+INSERT INTO db_academico.`configuracion_tipo_distributivo` (`ctdi_id`, `tdis_id`, `uaca_id`, `mod_id`, `ctdi_horas_inicio`, `ctdi_horas_fin`, `ctdi_estado_vigencia`, `ctdi_horas_semanal`, `ctdi_estado`, `ctdi_estado_logico`) VALUES
+(1, 2, null, null, null, null, '1', 2, '1', '1'),
+(2, 3, null, null, null, null, '1', 2, '1', '1'),
+(3, 4, null, null, null, null, '1', 2, '1', '1'),
+(4, 1, 1, 1, 0, 10, '1', 2, '1', '1'),
+(5, 1, 1, 1, 11, 20, '1', 3, '1', '1'),
+(6, 1, 1, 1, 21, 30, '1', 4, '1', '1'),
+(7, 1, 1, 1, 31, 50, '1', 5, '1', '1'),
+(8, 1, 1, 1, 51, 100, '1', 7, '1', '1');

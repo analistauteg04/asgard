@@ -72,7 +72,12 @@ $(document).ready(function() {
                       }, true);
                   }
               }
-        }, false);        
+        }, false);   
+        if ($('#cmb_unidad_dis').val() == 1 && $(this).val()==1) {
+            $('#bloque5').css('display', 'block');
+        } else {
+            $('#bloque5').css('display', 'none');
+        }
     });
        
     $('#cmb_jornada').change(function() {
@@ -119,7 +124,23 @@ $(document).ready(function() {
             $('#bloque4').css('display', 'none');
         }
     });
-        
+    
+    $('#cmb_profesor').change(function () {   
+        var link = $('#txth_base').val() + "/academico/distributivocabecera/validadistributivo";
+        var arrParams = new Object();
+        arrParams.pro_id = $('#cmb_profesor').val();        
+        arrParams.paca_id = $('#txth_idperiodo').val();
+        arrParams.transaccion = "N";
+        arrParams.getvalida = true;
+        requestHttpAjax(link, arrParams, function(response) {                
+            if (response.status == "NOOK") {                  
+                showAlert(response.status, response.label, response.message);
+                document.getElementById("cmb_tipo_asignacion").disabled=true;  
+            } else {
+                document.getElementById("cmb_tipo_asignacion").disabled=false;  
+            }                              
+        }, true);
+    });              
 });
 
 // Recarga la Grid de Productos si Existe
@@ -198,7 +219,8 @@ function save() {
     var link = $('#txth_base').val() + "/academico/distributivoacademico/save";
     var arrParams = new Object();
     arrParams.profesor = $('#cmb_profesor').val();    
-    arrParams.periodo = $('#txth_idperiodo').val();        
+    arrParams.periodo = $('#txth_idperiodo').val();  
+
     /** Session Storage **/        
     if (sessionStorage.dts_asignacion_list) {
         var arr_Grid = JSON.parse(sessionStorage.dts_asignacion_list);
@@ -217,10 +239,10 @@ function save() {
                 }, true);
             }
         } else {
-            showAlert('NO_OK', 'error', {"wtmessage": "No Existe datos agregados", "title": 'Información'});
+            showAlert('NO_OK', 'error', {"wtmessage": "No Existen datos agregados", "title": 'Información'});
         }
     } else {
-        showAlert('NO_OK', 'error', {"wtmessage": "No Existe datos agregados", "title": 'Información'});
+        showAlert('NO_OK', 'error', {"wtmessage": "No Existen datos agregados", "title": 'Información'});
     }    
 }
 
@@ -268,44 +290,55 @@ function addAsignacion(opAccion) {
         var asi_id = $("#cmb_materia").val();        
         var hor_id = $("#cmb_horario").val();        
         var par_id = $("#cmb_paralelo").val();
+        var hor_onl = $("#txt_num_estudiantes").val();
         
         if (uni_id == 0 || mod_id == 0 || paca_id == 0 || jor_id == 0 || asi_id == 0 || hor_id == 0 || par_id == 0) {
             fillDataAlert();
             return;
         }
     }  
-    
-    if (opAccion != "edit") {
-        //*********   Agregar materias *********
-        var arr_Grid = new Array();
-        if (sessionStorage.dts_asignacion_list) {
-            /*Agrego a la Sesion*/
-            arr_Grid = JSON.parse(sessionStorage.dts_asignacion_list);
-            var size = arr_Grid.length;
-            if (size > 0) {                
-                arr_Grid[size] = objDistributivo(size);
-                sessionStorage.dts_asignacion_list = JSON.stringify(arr_Grid);
-                addVariosItem(tGrid, arr_Grid, -1);
-                limpiarDetalle();               
-            } else {
+    //Recorrer el session storage para verificar validaciones.    
+    var res = 0;
+    res = validar(tasi_id,asi_id,hor_id,par_id);    
+    if (res == 1) {         
+        showAlert('NO_OK', 'error', {"wtmessage": "Ya existe el registro en el mismo docente.", "title": 'Información'});            
+    } else if   (res == 2) {         
+        showAlert('NO_OK', 'error', {"wtmessage": "Ya existe el registro en el mismo horario para el mismo docente.", "title": 'Información'});         
+    } else if (uni_id==1 && mod_id==1 && hor_onl=="") {
+        showAlert('NO_OK', 'error', {"wtmessage": "Debe ingresar número de estudiantes.", "title": 'Información'});           
+    } else {
+        if (opAccion != "edit") {            
+            //*********   Agregar materias *********
+            var arr_Grid = new Array();
+            if (sessionStorage.dts_asignacion_list) {
                 /*Agrego a la Sesion*/
-                //Primer Items                   
+                arr_Grid = JSON.parse(sessionStorage.dts_asignacion_list);
+                var size = arr_Grid.length;
+                if (size > 0) {                                    
+                    arr_Grid[size] = objDistributivo(size);
+                    sessionStorage.dts_asignacion_list = JSON.stringify(arr_Grid);
+                    addVariosItem(tGrid, arr_Grid, -1);
+                    limpiarDetalle();               
+                } else {
+                    /*Agrego a la Sesion*/
+                    //Primer Items                   
+                    arr_Grid[0] = objDistributivo(0);
+                    sessionStorage.dts_asignacion_list = JSON.stringify(arr_Grid);
+                    addPrimerItem(tGrid, arr_Grid, 0);
+                    limpiarDetalle();
+                }
+            } else {
+                //No existe la Session
+                //Primer Items
                 arr_Grid[0] = objDistributivo(0);
                 sessionStorage.dts_asignacion_list = JSON.stringify(arr_Grid);
                 addPrimerItem(tGrid, arr_Grid, 0);
                 limpiarDetalle();
             }
         } else {
-            //No existe la Session
-            //Primer Items
-            arr_Grid[0] = objDistributivo(0);
-            sessionStorage.dts_asignacion_list = JSON.stringify(arr_Grid);
-            addPrimerItem(tGrid, arr_Grid, 0);
-            limpiarDetalle();
+            //data edicion
         }
-    } else {
-        //data edicion
-    }    
+    }
 }
 
 function objDistributivo(indice) {
@@ -328,6 +361,7 @@ function objDistributivo(indice) {
         rowGrid.hor_id = $("#cmb_horario").val();
         rowGrid.hor_name = $("#cmb_horario :selected").text(); 
         rowGrid.par_id = $("#cmb_paralelo").val();
+        rowGrid.num_estudiantes = $("#txt_num_estudiantes").val();
     } else {
         rowGrid.uni_id = $("#cmb_unidad_dis").val();    
         rowGrid.uni_name = 'N/A';
@@ -341,6 +375,7 @@ function objDistributivo(indice) {
         rowGrid.hor_id = $("#cmb_horario").val();
         rowGrid.hor_name = 'N/A';
         rowGrid.par_id = $("#cmb_paralelo").val();
+        rowGrid.num_estudiantes = 'N/A';        
     }
         
     //rowGrid.pro_otros = ($("#chk_otros").prop("checked")) ? 1 : 0;
@@ -368,7 +403,8 @@ function limpiarDetalle() {
     document.getElementById("cmb_jornada").value = 0;
     document.getElementById("cmb_materia").value = 0;
     document.getElementById("cmb_horario").value = 0;
-    document.getElementById("cmb_paralelo").value = 0;            
+    document.getElementById("cmb_paralelo").value = 0;          
+    document.getElementById("txt_num_estudiantes").value = "";   
 }
 
 function fillDataAlert() {
@@ -399,6 +435,8 @@ function retornaFila(c, Grid, TbGtable, op) {
 
     strFila += '<td style="display:none; border:none;">' + '</td>';
     strFila += '<td>' + Grid[c]['mod_name'] + '</td>';
+    strFila += '<td>' + Grid[c]['num_estudiantes'] + '</td>';
+        
     strFila += '<td style="display:none; border:none;">' + '</td>';    
     strFila += '<td>' + Grid[c]['jor_name'] + '</td>';
     strFila += '<td>' + Grid[c]['hor_name'] + '</td>';
@@ -440,5 +478,35 @@ function findAndRemove(array, property, value) {
         }
     }
     return array;
+}
+
+function validar(tasi_id,asi_id,hor_id,par_id){
+    var arr_Grid1 = new Array();
+    var estado = 0;
+    
+    if (sessionStorage.dts_asignacion_list) {
+        arr_Grid1 = JSON.parse(sessionStorage.dts_asignacion_list);       
+        var size_arr = arr_Grid1.length;           
+        for (var i=0; i<= size_arr; i++) {               
+            if (i < size_arr) {
+                if (tasi_id ==1) { // tipo de asignación docencia                    
+                    if ((arr_Grid1[i]['tasi_id'] == tasi_id) && (arr_Grid1[i]['asi_id'] == asi_id) && (arr_Grid1[i]['hor_id'] == hor_id) && (arr_Grid1[i]['par_id'] == par_id)) {                         
+                        estado = 1;
+                        return estado;
+                    } 
+                    if ((arr_Grid1[i]['tasi_id'] == tasi_id) && (arr_Grid1[i]['asi_id'] != asi_id) && (arr_Grid1[i]['hor_id'] == hor_id)) {                         
+                        estado = 2;
+                        return estado;
+                    }
+                }   else {
+                    if (arr_Grid1[i]['tasi_id'] == tasi_id) { //otros tipos de asignaciones                        
+                        estado = 1;
+                        return estado;
+                    }
+                }    
+            }                      
+        }                            
+    }        
+    return estado;
 }
 

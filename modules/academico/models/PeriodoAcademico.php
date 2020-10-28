@@ -140,7 +140,8 @@ class PeriodoAcademico extends \yii\db\ActiveRecord
         $estado = 1;
         
         $sql = "SELECT  pera.paca_id as id,
-                        ifnull(CONCAT(blq.baca_nombre,'-',sem.saca_nombre,' ',sem.saca_anio),'') as nombre
+                        ifnull(CONCAT(blq.baca_nombre,'-',sem.saca_nombre,' ',sem.saca_anio),'') as nombre,
+                        blq.baca_nombre
                 FROM " . $con->dbname . ".periodo_academico pera
                      inner join " . $con->dbname . ".semestre_academico sem  ON sem.saca_id = pera.saca_id
                      inner join " . $con->dbname . ".bloque_academico blq ON blq.baca_id = pera.baca_id

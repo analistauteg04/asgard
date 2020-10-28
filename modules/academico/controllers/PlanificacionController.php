@@ -12,6 +12,7 @@ use app\modules\admision\models\Oportunidad;
 use app\modules\academico\models\ModuloEstudio;
 use app\modules\academico\models\EstudioAcademico;
 use app\modules\academico\models\MallaAcademica;
+use app\models\Persona;
 use yii\helpers\ArrayHelper;
 use yii\data\ArrayDataProvider;
 use yii\base\Exception;
@@ -566,7 +567,8 @@ class PlanificacionController extends \app\components\CController {
         $modalidad_data = $modalidad_model->consultarModalidad($unidad_acad_data[0]['id'], $emp_id);
         $academic_study_data = $modcanal->consultarCarreraModalidad($unidad_acad_data[0]['id'], $mod_cabecera['mod_id']);
         $mod_detalle = $mod_periodo->consultarDetalleplanifica($pla_id, $per_id, false);
-        $mod_carrera = $mod_periodo->consultardataplan($pla_id, $per_id);
+        $mod_malla = $mod_periodo->consultarDetalleplanifica($pla_id, $per_id, true);
+        $mod_carrera = $mod_periodo->consultardataplan($pla_id, $per_id, $mod_malla[0]['cod_asignatura']);
         $jornada = $mod_jornada->consultarJornadahorario();
         switch ($mod_carrera['pes_jornada']) {
             case "M":
@@ -591,7 +593,7 @@ class PlanificacionController extends \app\components\CController {
                     'arr_periodo' => ArrayHelper::map($periodo, 'id', 'name'),
                     'arr_idcarrera' => $mod_carrera,
                     'arr_jornada' => ArrayHelper::map(array_merge([['id' => '0', 'name' => 'Seleccionar']], $jornada), 'id', 'name'),
-                    'valorjornada' => $jornadacab,
+                    'valorjornada' => $jornadacab,                   
         ]);
     }
 
@@ -648,13 +650,17 @@ class PlanificacionController extends \app\components\CController {
         $uni_aca_model = new UnidadAcademica();
         $modalidad_model = new Modalidad();
         $modcanal = new Oportunidad();
+        $mode_malla = new MallaAcademica();
         $mod_cabecera = $mod_periodo->consultarCabeceraplanifica($pla_id, $per_id);
         $unidad_acad_data = $uni_aca_model->consultarUnidadAcademicas();
         $modalidad_data = $modalidad_model->consultarModalidad($unidad_acad_data[0]['id'], $emp_id);
         $academic_study_data = $modcanal->consultarCarreraModalidad($unidad_acad_data[0]['id'], $mod_cabecera['mod_id']);
         $mod_detalle = $mod_periodo->consultarDetalleplanifica($pla_id, $per_id, false);
-        $mod_carrera = $mod_periodo->consultardataplan($pla_id, $per_id);
+        $mod_malla = $mod_periodo->consultarDetalleplanifica($pla_id, $per_id, true);
+        $mod_carrera = $mod_periodo->consultardataplan($pla_id, $per_id, $mod_malla[0]['cod_asignatura']);
         $jornada = $mod_jornada->consultarJornadahorario();
+        $malla = $mode_malla->consultarmallasxcarrera($unidad_acad_data[0]['id'], $mod_cabecera['mod_id'], $mod_carrera['eaca_id']);
+        $materia = $mode_malla->consultarasignaturaxmalla($malla[0]['id']);
         switch ($mod_carrera['pes_jornada']) {
             case "M":
                 $jornadacab = '1';
@@ -682,6 +688,7 @@ class PlanificacionController extends \app\components\CController {
                     'arr_jornada' => ArrayHelper::map(array_merge([['id' => '0', 'name' => 'Seleccionar']], $jornada), 'id', 'name'),
                     'arr_idcarrera' => $mod_carrera,
                     'valorjornada' => $jornadacab,
+                    'arr_materia' => ArrayHelper::map(array_merge([['id' => '0', 'name' => 'Seleccionar']], $materia), 'id', 'name'),
         ]);
     }
 
@@ -748,9 +755,10 @@ class PlanificacionController extends \app\components\CController {
         $modalidad_data = $modcarrera->consultarmodalidadxcarrera($academic_study_data[0]['id']);
         //$mod_detalle = $mod_periodo->consultarDetalleplanifica( $pla_id, $per_id, false );
         $jornada = $mod_jornada->consultarJornadahorario();
-        $malla = $mod_malla->consultarmallasxcarrera($unidad_acad_data[0]['id'], $modalidad_data[0]['id'], $modalidad_data[0]['id']);
+        $malla = $mod_malla->consultarmallasxcarrera($unidad_acad_data[0]['id'], $modalidad_data[0]['id'], $academic_study_data[0]['id']);
         $materia = $mod_malla->consultarasignaturaxmalla($malla[0]['id']);
         $modalidades = $modalidad_model->consultarModalidad($unidad_acad_data[0]['id'], 1);
+        $busquedalumno = $mod_periodo->busquedaEstudianteplanificacion();
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
             if (isset($data['getmodalidad'])) {
@@ -782,34 +790,38 @@ class PlanificacionController extends \app\components\CController {
                     'arr_modalidadh' => ArrayHelper::map(array_merge([['id' => '0', 'name' => 'Seleccionar']], $modalidades), 'id', 'name'),
                     'arr_malla' => ArrayHelper::map(array_merge([['id' => '0', 'name' => 'Seleccionar']], $malla), 'id', 'name'),
                     'arr_materia' => ArrayHelper::map(array_merge([['id' => '0', 'name' => 'Seleccionar']], $materia), 'id', 'name'),
+                    'arr_alumno' => ArrayHelper::map(array_merge([['id' => '0', 'name' => 'Seleccionar']], $busquedalumno), 'id', 'name'),
+
         ]);
     }
 
     public function actionSaveplanificacion() {
+        $usu_autenticado = @Yii::$app->session->get('PB_iduser');
         if (Yii::$app->request->isAjax) {
             $mod_planifica = new PlanificacionEstudiante();
+            $mod_persona = new Persona();
             $data = Yii::$app->request->post();
             $jornada = substr($data['jornadaest'], 0, 1);
             $carrera = $data['carreraest'];
             $modalidad = $data['modalidadest'];
             //$malla = $data['mallaest'];
             $periodo = $data['periodoest'];
-            //$estudiantedata = $data['nombreest']; //OJO ESTO LUEGO HABILITAR CUADO SE TOME DE LA BUSQUEDA
-            $estudiantedata = "1 - 2222222222 - Juan Perez";
-            $datos = explode(" - ", $estudiantedata);
-            $per_id = $datos[0];
-            $dni = $datos[1];
-            $nombre = $datos[2];
-            /*             * **** */
+            $per_id = $data['nombreest']; //OJO ESTO LUEGO HABILITAR CUADO SE TOME DE LA BUSQUEDA
+            $data_persona = $mod_persona->consultaPersonaId($per_id);
+            $dni = $data_persona['per_cedula'];
+            $nombre = $data_persona['per_pri_nombre'] . ' ' . $data_persona['per_pri_apellido'];
+            // Consultar si la modalidad y periodo existen, devuelve pla_id
+            $resulpla_id = $mod_planifica->consultarDatoscabplanifica($modalidad, $periodo);
+            // Consultar pla_id y per_id existe
+            $exitealumno = $mod_planifica->consultarAlumnoplan($resulpla_id['pla_id'], $per_id);
             $accion = isset($data['ACCION']) ? $data['ACCION'] : '';
             if ($accion == 'Create') {
-                // Consultar si la modalidad y periodo existen
-                $resulpla_id = $mod_planifica->consultarDatoscabplanifica($modalidad, $periodo);
-                //existe guardar
+                 //existe guardar modalidad y periodo
                 if ($resulpla_id['pla_id']) {
-                    //Nuevo Registro
-                    // \app\models\Utilities::putMessageLogFile('ddd: ' . $data['DATAS']);
-
+                    // si existe pla_id y per_id no guardar enviar mensaje a que debe modificar
+                    if ($exitealumno['planexiste'] == '0') {
+                    /***************/
+                    //Nuevo Registro  
                     $arrplan = json_decode($data['DATAS'], true);
                     // \app\models\Utilities::putMessageLogFile('adsd: ' . $arrplan[0]['asignatura']);
                     for ($i = 0; $i < sizeof($arrplan); $i++) {
@@ -837,17 +849,53 @@ class PlanificacionController extends \app\components\CController {
                         $mat_cod = $materia[0];
                         //$mat_nombre = $materia[1];
                         $valores .= "'" . $mat_cod . "', " . $modalidades . ",";
-                    }
-                    //\app\models\Utilities::putMessageLogFile('inserta: ' . $insertar);
-                    // \app\models\Utilities::putMessageLogFile('valores: ' . $valores);
+                    }                    
                     $resul = $mod_planifica->insertarDataPlanificacionestudiante($resulpla_id['pla_id'], $per_id, $jornada, $carrera, $dni, $nombre, $insertar, $valores);
+                } else {
+                        // no existe mensaje que no permitar guardar      
+                        $noentra = 'NOS';
+                    }
                 } else {
                     // no existe mensaje que no permitar guardar      
                     $noentra = 'NO';
                 }
             } else if ($accion == 'Update') {
+                \app\models\Utilities::putMessageLogFile('entro..: '); 
+                $plan_id = $data['pla_id'];
+                $pers_id = $data['per_id'];
                 //Modificar Planificacion
-                //$resul = $mod_repositorio->actualizarMedicos( $data );
+                /***************/
+                    //Nuevo Registro  
+                    $arrplanedit = json_decode($data['DATAS'], true);
+                    for ($i = 0; $i < sizeof($arrplanedit); $i++) {
+                        // recorrer y crear un arreglo solo con los campos a ingresar de horario y bloque
+                        // crear string del modificar
+                        $bloque = substr($arrplanedit[$i]['bloque'], -1);
+                        $horario = substr($arrplanedit[$i]['hora'], -1);
+                        switch ($arrplanedit[$i]['modalidad']) {
+                            case "Online":
+                                $modalidades = '1';
+                                break;
+                            case "Presencial":
+                                $modalidades = '2';
+                                break;
+                            case "Semipresencial":
+                                $modalidades = '3';
+                                break;
+                            case "Distancia":
+                                $modalidades = '4';
+                                break;
+                        }
+                        // crear el string de los valores
+                        $materia = explode(" - ", $arrplanedit[$i]['asignatura']);
+                        $mat_cod = $materia[0];      
+                        $codmateria  = 'pes_mat_b' . $bloque . '_h' . $horario . '= '. $mat_cod . ', ';
+                        $modmateria  = 'pes_mod_b' . $bloque . '_h' . $horario . '= '. $modalidades . ', ';                  
+                        //$valores .= "'" . $mat_cod . "', " . $modalidades . ",";  
+                        $modificar .=  $codmateria . ' ' .  modmateria;                    
+                    }   
+                    \app\models\Utilities::putMessageLogFile('modifica string..: ' . $modificar);                 
+                    //$resul = $mod_planifica->modificarDataPlanificacionestudiante($plan_id, $pers_id, $usu_autenticado, $modificar);
             }
 
             if ($resul['status']) {
@@ -856,7 +904,10 @@ class PlanificacionController extends \app\components\CController {
             } elseif ($noentra == 'NO') {
                 $message = ['info' => Yii::t('exception', 'No se puede guardar período académico y modalidad no existe, crearla en cargar planificación.')];
                 echo Utilities::ajaxResponse('NO_OK', 'alert', Yii::t('jslang', 'Error'), 'false', $message);
-            } else {
+            } elseif ($noentra == 'NOS') {
+                $message = ['info' => Yii::t('exception', 'No se puede guardar estudiante ya tiene datos para ese periodo, por favor ir modificar de ser el caso.')];
+                echo Utilities::ajaxResponse('NO_OK', 'alert', Yii::t('jslang', 'Error'), 'false', $message);
+            }else {
                 $message = ['info' => Yii::t('exception', 'The above error occurred while the Web server was processing your request.')];
                 echo Utilities::ajaxResponse('NO_OK', 'alert', Yii::t('jslang', 'Error'), 'false', $message);
             }

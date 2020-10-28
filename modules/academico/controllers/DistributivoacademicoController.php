@@ -114,6 +114,7 @@ class DistributivoacademicoController extends \app\components\CController {
         $distributivo_model = new DistributivoAcademico();
         $mod_periodoActual = new PeriodoAcademico();
         $mod_tipo_distributivo = new TipoDistributivo();
+        $arr_periodoActual = $mod_periodoActual->getPeriodoAcademicoActual();
         
         if (Yii::$app->request->isAjax) {            
             $data = Yii::$app->request->post();
@@ -138,19 +139,18 @@ class DistributivoacademicoController extends \app\components\CController {
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }
             if(isset($data["getasignatura"])){               
-                $asignatura = $mod_asignatura->getAsignatura_x_bloque_x_planif($data["periodo_id"], $data["jornada_id"]);
+                $asignatura = $mod_asignatura->getAsignatura_x_bloque_x_planif($data["periodo_id"], $data["jornada_id"], $arr_periodoActual["baca_nombre"]);
                 $message = array("asignatura" => $asignatura);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }
         }
-        
-        $arr_periodoActual = $mod_periodoActual->getPeriodoAcademicoActual();
+                
         $arr_profesor = $mod_profesor->getProfesores();        
         $arr_unidad = $mod_unidad->consultarUnidadAcademicasEmpresa($emp_id);
         $arr_modalidad = $mod_modalidad->consultarModalidad($arr_unidad[0]["id"], $emp_id);        
         $arr_periodo = $mod_periodo->getPeriodos_x_modalidad($arr_modalidad[0]["id"]);
         $arr_jornada = $distributivo_model->getJornadasByUnidadAcad($arr_unidad[0]["id"], $arr_modalidad[0]["id"]);           
-        $arr_asignatura = $mod_asignatura->getAsignatura_x_bloque_x_planif($arr_periodo[0]["id"],"N");
+        $arr_asignatura = $mod_asignatura->getAsignatura_x_bloque_x_planif($arr_periodo[0]["id"],"N", $arr_periodoActual["baca_nombre"]);
         $arr_horario = $distributivo_model->getHorariosByUnidadAcad($arr_unidad[0]["id"], $arr_modalidad[0]["id"], $arr_jornada[0]["id"]);
         $model = $distributivo_model->getDistribAcadXprofesorXperiodo(0,0);
         $arr_tipo_distributivo = $mod_tipo_distributivo->consultarTipoDistributivo();
@@ -181,51 +181,36 @@ class DistributivoacademicoController extends \app\components\CController {
             $transaction = $con->beginTransaction();
             try {
                 $pro_id = $data['profesor'];
-                $paca_id = $data['periodo'];
-                \app\models\Utilities::putMessageLogFile('profesor:'.$pro_id);
+                $paca_id = $data['periodo'];                
                 $dts = (isset($data["grid_docencia"]) && $data["grid_docencia"] != "") ? $data["grid_docencia"] : NULL;     
                 $datos = json_decode($dts);
-                
-                if (isset($datos)) {                    
-                    $valida = 1;                    
-                    //foreach ($datos as $key => $value1) {
-                    for ($i = 0; $i < sizeof($datos); $i++) {       
-                        //Valida que no exista el mismo tipo de distributivo con el profesor que se està registrando..
-                        $dataExists = $distributivo_model->existsDistribucionAcademico($pro_id, $data[$i]->tasi_id, $data[$i]->uni_id, $datos[$i]->asi_id, $paca_id, $datos[$i]->hor_id, $datos[$i]->par_id);
-                        if(isset($dataExists) && $dataExists != "" && count($dataExists) > 0) {                                                  
-                            $valida = 0;
-                            $message = array(
-                                "wtmessage" => academico::t('distributivoacademico', 'Register already exists in System.'),
-                                "title" => Yii::t('jslang', 'Error'),
-                            );
-                            return Utilities::ajaxResponse('NOOK', 'alert', Yii::t('jslang', 'Error'), 'true', $message);
-                        } else {
+                //Validar que no exista en distributivo_cabecera porque para crear no debe existir.
+                $cons = $distributivo_cab->existeDistCabecera($paca_id,$pro_id);                                             
+                if ($cons==0) {                        
+                    if (isset($datos)) {                    
+                        $valida = 1;                                   
+                        for ($i = 0; $i < sizeof($datos); $i++) {                                
                             // Valida que no exista el mismo tipo de distributivo en otro profesor.
-                            $dataExisOtro = $distributivo_model->existsDistribAcadOtroProf($data[$i]->uni_id, $datos[$i]->asi_id, $paca_id, $datos[$i]->hor_id, $datos[$i]->par_id);
-                            if(isset($dataExisOtro) && $dataExisOtro != "" && count($dataExisOtro) > 0) {
-                                $valida = 0;
-                                $message = array(
-                                    "wtmessage" => academico::t('distributivoacademico', 'Register already exists in System.'),
-                                    "title" => Yii::t('jslang', 'Error'),
-                                );
-                                return Utilities::ajaxResponse('NOOK', 'alert', Yii::t('jslang', 'Error'), 'true', $message);
-                            }
+                            if ($datos[$i]->tasi_id == 1) {                                             
+                                $dataExisOtro = $distributivo_model->existsDistribAcadOtroProf($datos[$i]->uni_id, $datos[$i]->tasi_id, $datos[$i]->asi_id, $paca_id, $datos[$i]->hor_id, $datos[$i]->par_id);
+                               
+                                if(!empty($dataExisOtro)) { 
+                                    \app\models\Utilities::putMessageLogFile('existe validacion 2');
+                                    $valida = 0;
+                                    $transaction->rollback();
+                                    $message = array(
+                                        "wtmessage" => academico::t('distributivoacademico', 'Ya se encuentra asignada la materia '. $dataExisOtro["asignatura"] . ' en el docente ' . $dataExisOtro["profesor"] . " en el mismo horario y paralelo."),
+                                        "title" => Yii::t('jslang', 'Error'),
+                                    );
+                                    return Utilities::ajaxResponse('NOOK', 'alert', Yii::t('jslang', 'Error'), 'true', $message);
+                                }
+                            }                                
                         }
-                    }             
+                    }                  
                     //ha cumplido todas las validaciones entonces graba.
-                    if ($valida == 1) {
-                        // Verificar que exista en cabecera de distributivo.                        
-                        $cons = $distributivo_cab->existeDistCabecera($paca_id,$pro_id);
-                        \app\models\Utilities::putMessageLogFile('resultado:'.$cons);
-                        if ($cons==0) {                            
-                            $cab = $distributivo_cab->insertarDistributivoCab($paca_id, $pro_id); 
-                            if ($cab>0) {
-                                $cabecera='true';                                
-                            }
-                        } else {
-                            $cabecera='true';
-                        }
-                        if ($cabecera=='true') {
+                    if ($valida == 1) {                                             
+                        $cab = $distributivo_cab->insertarDistributivoCab($paca_id, $pro_id); 
+                        if ($cab>0) {                                
                             for ($i = 0; $i < sizeof($datos); $i++) {
                                 // Grabar en distributivo académico
                                 \app\models\Utilities::putMessageLogFile('ingresa a insertar detalle: '. $i);
@@ -235,10 +220,17 @@ class DistributivoacademicoController extends \app\components\CController {
                                 } else {
                                     $exito = '0';
                                 }                               
-                            }
+                            }   
                         }
-                    }
-                }
+                    }                
+                } else {
+                    $transaction->rollback();
+                    $message = array(
+                        "wtmessage" => academico::t('distributivoacademico', 'Ya existe distributivo para este profesor en el período actual'),
+                        "title" => Yii::t('jslang', 'Error'),
+                    );
+                    return Utilities::ajaxResponse('NOOK', 'alert', Yii::t('jslang', 'Error'), 'true', $message);
+                }            
                 if ($exito=='1') {
                     $transaction->commit();
                     $message = array(
@@ -249,7 +241,7 @@ class DistributivoacademicoController extends \app\components\CController {
                 } else {
                     $transaction->rollback();
                     $message = array(
-                        "wtmessage" => Yii::t('notificaciones', 'Su información no ha sido grabada. Por favor intente nuevamente o contacte al área de Desarrollo.'),
+                        "wtmessage" => Yii::t('notificaciones', 'Su información no ha sido grabada. Por favor intente nuevamente o contacte al área de DesarrolloXXX.'),
                         "title" => Yii::t('jslang', 'Error'),
                     );
                     return Utilities::ajaxResponse('NOOK', 'alert', Yii::t('jslang', 'Error'), 'true', $message);

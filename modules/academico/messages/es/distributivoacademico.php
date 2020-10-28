@@ -41,8 +41,10 @@
 
 return [
     "Add Student" => "Agregar Estudiante",
-    "Register already exists in System." => "Registro ya existe en el Sistema.",
-    "Profesor Lists by Subject" => "Listado de Profesores por Asignatura",
-    "Student Lists by Subject" => "Listado de Estudiantes por Asignatura",
     "List of Distributive Teachers" => "Listado de Distributivo de Profesores",
+    "Number of students" => "Número de estudiantes",
+    "Profesor Lists by Subject" => "Listado de Profesores por Asignatura",
+    "Register already exists in System." => "Registro ya existe en el Sistema.",    
+    "Student Lists by Subject" => "Listado de Estudiantes por Asignatura",
+    
 ];
