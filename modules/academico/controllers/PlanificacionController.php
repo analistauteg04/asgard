@@ -796,6 +796,7 @@ class PlanificacionController extends \app\components\CController {
     }
 
     public function actionSaveplanificacion() {
+        $usu_autenticado = @Yii::$app->session->get('PB_iduser');
         if (Yii::$app->request->isAjax) {
             $mod_planifica = new PlanificacionEstudiante();
             $mod_persona = new Persona();
@@ -859,8 +860,42 @@ class PlanificacionController extends \app\components\CController {
                     $noentra = 'NO';
                 }
             } else if ($accion == 'Update') {
+                \app\models\Utilities::putMessageLogFile('entro..: '); 
+                $plan_id = $data['pla_id'];
+                $pers_id = $data['per_id'];
                 //Modificar Planificacion
-                //$resul = $mod_repositorio->actualizarMedicos( $data );
+                /***************/
+                    //Nuevo Registro  
+                    $arrplanedit = json_decode($data['DATAS'], true);
+                    for ($i = 0; $i < sizeof($arrplanedit); $i++) {
+                        // recorrer y crear un arreglo solo con los campos a ingresar de horario y bloque
+                        // crear string del modificar
+                        $bloque = substr($arrplanedit[$i]['bloque'], -1);
+                        $horario = substr($arrplanedit[$i]['hora'], -1);
+                        switch ($arrplanedit[$i]['modalidad']) {
+                            case "Online":
+                                $modalidades = '1';
+                                break;
+                            case "Presencial":
+                                $modalidades = '2';
+                                break;
+                            case "Semipresencial":
+                                $modalidades = '3';
+                                break;
+                            case "Distancia":
+                                $modalidades = '4';
+                                break;
+                        }
+                        // crear el string de los valores
+                        $materia = explode(" - ", $arrplanedit[$i]['asignatura']);
+                        $mat_cod = $materia[0];      
+                        $codmateria  = 'pes_mat_b' . $bloque . '_h' . $horario . '= '. $mat_cod . ', ';
+                        $modmateria  = 'pes_mod_b' . $bloque . '_h' . $horario . '= '. $modalidades . ', ';                  
+                        //$valores .= "'" . $mat_cod . "', " . $modalidades . ",";  
+                        $modificar .=  $codmateria . ' ' .  modmateria;                    
+                    }   
+                    \app\models\Utilities::putMessageLogFile('modifica string..: ' . $modificar);                 
+                    //$resul = $mod_planifica->modificarDataPlanificacionestudiante($plan_id, $pers_id, $usu_autenticado, $modificar);
             }
 
             if ($resul['status']) {
