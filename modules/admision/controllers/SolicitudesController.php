@@ -796,14 +796,14 @@ class SolicitudesController extends \app\components\CController {
                 if ($dni_archivo === FALSE)
                     throw new Exception('Error doc Dni no renombrado.');
             }
-            /* if (isset($data["arc_doc_certvota"]) && $data["arc_doc_certvota"] != "") {
+            if (isset($data["arc_doc_certvota"]) && $data["arc_doc_certvota"] != "") {
               $arrIm = explode(".", basename($data["arc_doc_certvota"]));
               $typeFile = strtolower($arrIm[count($arrIm) - 1]);
               $certvota_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_certvota_per_" . $per_id . "." . $typeFile;
               $certvota_archivo = DocumentoAdjuntar::addLabelTimeDocumentos($sins_id, $certvota_archivo, $timeSt);
               if ($certvota_archivo === FALSE)
               throw new Exception('Error doc certificado vot. no renombrado.');
-              } */
+            } 
             if (isset($data["arc_doc_foto"]) && $data["arc_doc_foto"] != "") {
                 $arrIm = explode(".", basename($data["arc_doc_foto"]));
                 $typeFile = strtolower($arrIm[count($arrIm) - 1]);
@@ -895,7 +895,7 @@ class SolicitudesController extends \app\components\CController {
                     $mod_solinsxdoc3->sdoc_estado_logico = "1";
 
                     if ($mod_solinsxdoc3->save()) {
-                        /* if ($es_extranjero == "1" or ( empty($es_extranjero))) {
+                        if ($es_extranjero == "1" or ( empty($es_extranjero))) {
                           $mod_solinsxdoc4 = new SolicitudinsDocumento();
                           $mod_solinsxdoc4->sins_id = $sins_id;
                           $mod_solinsxdoc4->int_id = $interesado_id;
@@ -907,7 +907,7 @@ class SolicitudesController extends \app\components\CController {
                           if (!$mod_solinsxdoc4->save()) {
                           throw new Exception('Error doc certvot no creado.');
                           }
-                          } */
+                        } 
                         if ($beca == "1") {
                             $mod_solinsxdoc5 = new SolicitudinsDocumento();
                             $mod_solinsxdoc5->sins_id = $sins_id;
@@ -1026,12 +1026,12 @@ class SolicitudesController extends \app\components\CController {
                     $typeFile = strtolower($arrIm[count($arrIm) - 1]);
                     $dni_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_dni_per_" . $per_id . "." . $typeFile;
                 }
-                /* $certvota_archivo = "";
+                $certvota_archivo = "";
                   if (isset($data["arc_doc_certvota"]) && $data["arc_doc_certvota"] != "") {
                   $arrIm = explode(".", basename($data["arc_doc_certvota"]));
                   $typeFile = strtolower($arrIm[count($arrIm) - 1]);
                   $certvota_archivo = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_certvota_per_" . $per_id . "." . $typeFile;
-                  } */
+                } 
                 $foto_archivo = "";
                 if (isset($data["arc_doc_foto"]) && $data["arc_doc_foto"] != "") {
                     $arrIm = explode(".", basename($data["arc_doc_foto"]));
@@ -1089,14 +1089,14 @@ class SolicitudesController extends \app\components\CController {
                 if ($dni_archivo === false)
                     throw new Exception('Error doc Dni no renombrado.');
             }
-            /* if (isset($data["arc_doc_certvota"]) && $data["arc_doc_certvota"] != "") {
+            if (isset($data["arc_doc_certvota"]) && $data["arc_doc_certvota"] != "") {
               $arrIm = explode(".", basename($data["arc_doc_certvota"]));
               $typeFile = strtolower($arrIm[count($arrIm) - 1]);
               $certvota_archivoOld = Yii::$app->params["documentFolder"] . "solicitudinscripcion/" . $per_id . "/doc_certvota_per_" . $per_id . "." . $typeFile;
               $certvota_archivo = DocumentoAdjuntar::addLabelTimeDocumentos($sins_id, $certvota_archivoOld, $timeSt);
               if ($certvota_archivo === false)
               throw new Exception('Error doc certificado vot. no renombrado.');
-              } */
+            }
             if (isset($data["arc_doc_foto"]) && $data["arc_doc_foto"] != "") {
                 $arrIm = explode(".", basename($data["arc_doc_foto"]));
                 $typeFile = strtolower($arrIm[count($arrIm) - 1]);
@@ -1468,14 +1468,14 @@ class SolicitudesController extends \app\components\CController {
                                             }
                                         }
                                         // Se bloquea el correo de re probacion de solicitud
-                                        /* $tituloMensaje = Yii::t("interesado", "UTEG - Registration Online");
+                                          $tituloMensaje = Yii::t("interesado", "UTEG - Registration Online");
                                           $asunto = Yii::t("interesado", "UTEG - Registration Online");
                                           $body = Utilities::getMailMessage("Requestapplicantdenied", array("[[observacion]]" => $obs_correo), Yii::$app->language);
                                           $bodyadmision = Utilities::getMailMessage("Requestadmissions", array("[[nombre_aspirante]]" => $nombre_completo, "[[estado_solicitud]]" => $estado), Yii::$app->language);
                                           Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [$correo => $pri_apellido . " " . $pri_nombre], $asunto, $body);
                                           Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["soporteEmail"] => "Soporte"], $asunto, $body);
                                           Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["admisiones"] => "Jefe"], $asunto, $bodyadmision);
-                                          Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["soporteEmail"] => "Soporte"], $asunto, $bodyadmision); */
+                                          Utilities::sendEmail($tituloMensaje, Yii::$app->params["adminEmail"], [Yii::$app->params["soporteEmail"] => "Soporte"], $asunto, $bodyadmision);
                                         $exito = 1;
                                     } else {
                                         $message = array

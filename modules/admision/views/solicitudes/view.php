@@ -172,18 +172,18 @@ financiero::registerTranslations();
             </div>
         </div>        
 
-        <?php //if (($txth_extranjero == "1") or ( empty($txth_extranjero))) { ?>
-        <!--<div class="col-md-6  doc_certvota cinteres">
+        <?php if (($txth_extranjero == "1") or ( empty($txth_extranjero))) { ?>
+        <div class="col-md-6  doc_certvota cinteres">
             <div class="form-group">
-                <label for="txth_doc_certvota" class="col-sm-4 control-label keyupmce"><? Yii::t("formulario", "Voting Certificate") ?></label>
+                <label for="txth_doc_certvota" class="col-sm-4 control-label keyupmce"><?= Yii::t("formulario", "Voting Certificate") ?></label>
                 <div class="col-sm-7 ">                
         <?php
-        //echo "<a href='" . Url::to(['/site/getimage', 'route' => "$arch3"]) . "' download='" . $arch3 . "' ><span class='glyphicon glyphicon-download-alt'></span>Descargar Imagen</a>"
+        echo "<a href='" . Url::to(['/site/getimage', 'route' => "$arch3"]) . "' download='" . $arch3 . "' ><span class='glyphicon glyphicon-download-alt'></span>Descargar Imagen</a>"
         ?>
                 </div>
             </div>
-        </div>-->
-        <?php //} ?>
+        </div>
+        <?php } ?>
         <?php if ($personaData["uaca_id"] == 2) { ?>   
             <!-- <div class="col-md-6  doc_foto cinteres">
                 <div class="form-group">
@@ -324,30 +324,30 @@ financiero::registerTranslations();
                 <?php } ?>      
             </div>
         </div>            
-        <!-- <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
+        <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
             <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
                 <div class="form-group">
-                    <label for="chk_certificado" class="col-sm-10 col-md-10 col-xs-10 col-lg-10 control-label"><? admision::t("Solicitudes", "Does not meet acceptance conditions in voting certificate") ?></label>
+                    <label for="chk_certificado" class="col-sm-10 col-md-10 col-xs-10 col-lg-10 control-label"><?= admision::t("Solicitudes", "Does not meet acceptance conditions in voting certificate") ?></label>
                     <div class="col-sm-1 ">                     
-                        <input type="checkbox" class="" id="chk_certificado"  data-type="alfa" data-keydown="true" placeholder="<? Yii::t("solicitud_ins", "Does not meet acceptance conditions in title") ?>">                      
+                        <input type="checkbox" class="" id="chk_certificado"  data-type="alfa" data-keydown="true" placeholder="<?= Yii::t("solicitud_ins", "Does not meet acceptance conditions in title") ?>">                      
                     </div>
                 </div>
                 <div class="col-md-13 col-sm-13 col-xs-13 col-lg-13" id="Divcondcerti" style="visibility: hidden;" >
                     <div class="form-group">               
         <?php
-        //for ($i = 0; $i < count($arr_certv); $i++) {
-        //$chk_concerti = "chk_concerti" . $i;
+        for ($i = 0; $i < count($arr_certv); $i++) {
+        $chk_concerti = "chk_concerti" . $i;
         ?>  
-                            <p for="<?= $chk_concerti ?>" class="col-sm-10 col-md-10 col-xs-10 col-lg-10 control-label"><?php //echo $arr_certv[$i]['name']         ?></p>
+                            <p for="<?= $chk_concerti ?>" class="col-sm-10 col-md-10 col-xs-10 col-lg-10 control-label"><?php echo $arr_certv[$i]['name'] ?></p>
                             <div class="col-sm-1 ">    
-                                <? Html::hiddenInput('txth_cond_certi' . $i, $arr_certv[$i]['id'], ['id' => 'txth_cond_certi' . $i]); ?>
-                                <input type="checkbox" class="" id="<? $chk_concerti ?>" data-type="alfa" data-keydown="true" placeholder="<? $arr_certv[$i]['name'] ?>">  
+                                <?= Html::hiddenInput('txth_cond_certi' . $i, $arr_certv[$i]['id'], ['id' => 'txth_cond_certi' . $i]); ?>
+                                <input type="checkbox" class="" id="<?= $chk_concerti ?>" data-type="alfa" data-keydown="true" placeholder="<?= $arr_certv[$i]['name'] ?>">  
                             </div>
-        <?php //} ?>   
+        <?php } ?>   
                     </div>
                 </div>     
             </div>
-        </div>  -->
+        </div>  
         <?php if ($personaData["cemp_id"] > 0) { ?>   
         <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
             <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
