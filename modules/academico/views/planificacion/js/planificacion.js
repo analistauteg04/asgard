@@ -23,7 +23,7 @@ $(document).ready(function () {
     $('#btn_modificarplanificacion').click(function () {
         modificarplanificacion();
     });
-    
+
     /************ planificacion x estudiante **********************************/
     $('#cmb_unidades').change(function () {
         var link = $('#txth_base').val() + "/academico/planificacion/planificacionestudiante";
@@ -239,7 +239,7 @@ function actualizarGridMarcacion() {
     //Buscar almenos una clase con el nombre para ejecutar
     if (!$(".blockUI").length) {
         showLoadingPopup();
-        $('#PbMarcacion').PbGridView('applyFilterData', {'profesor': profesor, 'materia': materia, 'f_ini': f_ini, 'f_fin': f_fin, 'periodo': periodo});
+        $('#PbMarcacion').PbGridView('applyFilterData', { 'profesor': profesor, 'materia': materia, 'f_ini': f_ini, 'f_fin': f_fin, 'periodo': periodo });
         setTimeout(hideLoadingPopup, 2000);
     }
 }
@@ -308,7 +308,7 @@ function actualizarGridHorario() {
     //Buscar almenos una clase con el nombre para ejecutar
     if (!$(".blockUI").length) {
         showLoadingPopup();
-        $('#PbHorario').PbGridView('applyFilterData', {'profesor': profesor, 'unidad': unidad, 'modalidad': modalidad, 'f_ini': f_ini, 'f_fin': f_fin, 'periodo': periodo});
+        $('#PbHorario').PbGridView('applyFilterData', { 'profesor': profesor, 'unidad': unidad, 'modalidad': modalidad, 'f_ini': f_ini, 'f_fin': f_fin, 'periodo': periodo });
         setTimeout(hideLoadingPopup, 2000);
     }
 }
@@ -345,7 +345,7 @@ function cargarNoMarcadas() {
 
     if (!$(".blockUI").length) {
         showLoadingPopup();
-        $('#PbNomarcacion').PbGridView('applyFilterData', {'profesor': profesor, 'materia': materia, 'unidad': unidad, 'modalidad': modalidad, 'f_ini': f_ini, 'f_fin': f_fin, 'periodo': periodo, 'tipo': tipo});
+        $('#PbNomarcacion').PbGridView('applyFilterData', { 'profesor': profesor, 'materia': materia, 'unidad': unidad, 'modalidad': modalidad, 'f_ini': f_ini, 'f_fin': f_fin, 'periodo': periodo, 'tipo': tipo });
         setTimeout(hideLoadingPopup, 2000);
     }
 }
@@ -461,7 +461,7 @@ function actualizarGridPlanest() {
     //Buscar almenos una clase con el nombre para ejecutar
     if (!$(".blockUI").length) {
         showLoadingPopup();
-        $('#PbPlanificaestudiante').PbGridView('applyFilterData', {'estudiante': estudiante, /*'unidad': unidad,*/ 'modalidad': modalidad, 'carrera': carrera, 'periodo': periodo});
+        $('#PbPlanificaestudiante').PbGridView('applyFilterData', { 'estudiante': estudiante, /*'unidad': unidad,*/ 'modalidad': modalidad, 'carrera': carrera, 'periodo': periodo });
         setTimeout(hideLoadingPopup, 2000);
     }
 }
@@ -574,20 +574,25 @@ function agregarItems(opAccion) {
                 var size = arr_Grid.length;
                 if (size > 0) {
                     var vasignatura = $('#cmb_asignaest option:selected').text();
+                    var vbloque = $('#cmb_bloqueest option:selected').text();
+                    var vhora = $('#cmb_horaest option:selected').text();
                     //console.log(vasignatura);
-                    if (checkId(vasignatura)) {
-                         //alert('El asignatura ya está siendo usado');
-                         showAlert('NO_OK', 'error', {"wtmessage": "Ya ha ingresado esa asignatura", "title": 'Información'});
-                         return;
+                    if (checkId(vasignatura, 'asignatura') || (checkId(vbloque, 'bloque') && checkId(vhora, 'hora'))) {
+                        showAlert('NO_OK', 'error', { "wtmessage": "Ya ha ingresado esa asignatura, hora y bloque", "title": 'Información' });
+                        return;
                     }
-                    else{
-                         //Varios Items                    
+                   /* else if (checkId(vbloque, 'bloque') && checkId(vhora, 'hora')) {
+                        showAlert('NO_OK', 'error', { "wtmessage": "Ya ha ingresado una asignatura en ese bloque y hora", "title": 'Información' });
+                        return;
+                    }*/
+                    else {
+                        //Varios Items                    
                         arr_Grid[size] = objProducto(size);
                         sessionStorage.dts_datosItemplan = JSON.stringify(arr_Grid);
-                        addVariosItem(tGrid, arr_Grid, -1); 
-                    }
+                        addVariosItem(tGrid, arr_Grid, -1);
+                    }         
                     limpiarDetalle();
-                   
+
                 } else {
                     /*Agrego a la Sesion*/
                     //Primer Items                   
@@ -608,7 +613,7 @@ function agregarItems(opAccion) {
             //data edicion
         }
     } else {
-        showAlert('NO_OK', 'error', {"wtmessage": "Todos los datos del detalle planificación son obligatorios", "title": 'Información'});
+        showAlert('NO_OK', 'error', { "wtmessage": "Todos los datos del detalle planificación son obligatorios", "title": 'Información' });
     }
 }
 function objProducto(indice) {
@@ -653,17 +658,17 @@ function limpiarDetalle() {
 
 function addVariosItem(TbGtable, lista, i) {
     //i=(i==-1)?($('#'+TbGtable+' tr').length)-1:i;
-    i = ($('#' + TbGtable + ' tr').length) - 1; 
+    i = ($('#' + TbGtable + ' tr').length) - 1;
     //alert ('dasd' + i);
     //$('#'+TbGtable+' >table >tbody').append(retornaFilaProducto(i,lista,TbGtable,true));
     if (i < 12) {
-         //lista.forEach(function (lista, i) {
-           // console.log("lista " + i + " | Asignatura: " + lista.asignatura + " Bloque: " + lista.bloque + " Hora: " + lista.hora)
-         //}); 
+        //lista.forEach(function (lista, i) {
+        // console.log("lista " + i + " | Asignatura: " + lista.asignatura + " Bloque: " + lista.bloque + " Hora: " + lista.hora)
+        //}); 
         $('#' + TbGtable + ' tr:last').after(retornaFila(i, lista, TbGtable, true));
-           
+
     } else {
-        showAlert('NO_OK', 'error', {"wtmessage": "Ya tiene ingresadas máximo de materias permitidas", "title": 'Información'});
+        showAlert('NO_OK', 'error', { "wtmessage": "Ya tiene ingresadas máximo de materias permitidas", "title": 'Información' });
     }
 }
 
@@ -677,9 +682,9 @@ function retornaFila(c, Grid, TbGtable, op) {
     strFila += '<td style=" display:none;border:none;">' + per_id + '</td>';
     strFila += '<td for="asignatura">' + Grid[c]['asignatura'] + '</td>';
     // strFila += '<td>' + Grid[c]['jornada'] + '</td>';
-    strFila += '<td>' + Grid[c]['bloque'] + '</td>';
+    strFila += '<td for="bloque">' + Grid[c]['bloque'] + '</td>';
     strFila += '<td>' + Grid[c]['modalidad'] + '</td>';
-    strFila += '<td>' + Grid[c]['hora'] + '</td>';
+    strFila += '<td for="hora">' + Grid[c]['hora'] + '</td>';
     strFila += '<td>';//¿Está seguro de eliminar este elemento?   
     strFila += '<a onclick="eliminarItems(\'' + Grid[c]['indice'] + '\',\'' + TbGtable + '\')" ><span class="glyphicon glyphicon-remove"></span></a>';
     strFila += '</td>';
@@ -690,10 +695,11 @@ function retornaFila(c, Grid, TbGtable, op) {
     return strFila;
 }
 
-function checkId (id) {
-    let ids = document.querySelectorAll('#PbPlanificaestudiantnew td[for="asignatura"]');
-    //console.log(ids);
-    return [].filter.call(ids, td => td.textContent === id).length === 1;
+function checkId(id, cadena) {
+    let ids = document.querySelectorAll('#PbPlanificaestudiantnew td[for="' + cadena + '"]');
+    //console.log('+++' + ids);
+    //console.log('sdd' + [].filter.call(ids, td => td.textContent === id).length === 1);
+    return [].filter.call(ids, td => td.textContent === id).length === 1;    
 }
 
 function eliminarItems(val, TbGtable) {
@@ -760,25 +766,25 @@ function guardaplanificacion() {
                 requestHttpAjax(link, arrParams, function (response) {
                     var message = response.message;
                     if (response.status == "OK") {
-                        showAlert(response.status, response.type, {"wtmessage": message.info, "title": response.label});
+                        showAlert(response.status, response.type, { "wtmessage": message.info, "title": response.label });
                         limpiarDetalle();
-                        sessionStorage.removeItem('dts_datosItemplan')                       
+                        sessionStorage.removeItem('dts_datosItemplan')
                         setTimeout(function () {
                             parent.window.location.href = $('#txth_base').val() + "/academico/planificacion/planificacionestudiante";
                         }, 2000);
                     } else {
-                        showAlert(response.status, response.type, {"wtmessage": message.info, "title": response.label});
+                        showAlert(response.status, response.type, { "wtmessage": message.info, "title": response.label });
                     }
                 }, true);
             } else {
                 //arrParams.DATA = new Array();
-                showAlert('NO_OK', 'error', {"wtmessage": "No Existe datos ", "title": 'Información'});
+                showAlert('NO_OK', 'error', { "wtmessage": "No Existe datos ", "title": 'Información' });
             }
         } else {
-            showAlert('NO_OK', 'error', {"wtmessage": "No ha ingresado detalle en planificación", "title": 'Información'});
+            showAlert('NO_OK', 'error', { "wtmessage": "No ha ingresado detalle en planificación", "title": 'Información' });
         }
     } else {
-        showAlert('NO_OK', 'error', {"wtmessage": "Todos los datos de la cabecera planificación son obligatorios", "title": 'Información'});
+        showAlert('NO_OK', 'error', { "wtmessage": "Todos los datos de la cabecera planificación son obligatorios", "title": 'Información' });
     }
 
 }
@@ -798,31 +804,31 @@ function modificarplanificacion() {
     arrParams.per_id = $('#txth_per_id').val();
     //alert(arrParams.nombreest);
     //if ($('#cmb_jornadaest').val() != '0' && $('#txt_carrera').text() != 'Seleccionar' && $('#cmb_modalidadest').val() != '0' && /*$('#cmb_malladoest').val() != '0' &&*/ $('#cmb_periodoest').val() != '0' && $('#cmb_buscarest').val() > '0') {
-        //if (sessionStorage.dts_datosItemplanedit) {
-            //alert('Puedo grabar');
-            var arr_Grid = JSON.parse(sessionStorage.dts_datosItemplanedit);
-            if (arr_Grid.length > 0) {
-                arrParams.DATAS = sessionStorage.dts_datosItemplanedit
-                arrParams.ACCION = accion;
-                requestHttpAjax(link, arrParams, function (response) {
-                    var message = response.message;
-                    if (response.status == "OK") {
-                        showAlert(response.status, response.type, {"wtmessage": message.info, "title": response.label});
-                        limpiarDetalle();
-                        sessionStorage.removeItem('dts_datosItemplanedit')                       
-                        setTimeout(function () {
-                            parent.window.location.href = $('#txth_base').val() + "/academico/planificacion/planificacionestudiante";
-                        }, 2000);
-                    } else {
-                        showAlert(response.status, response.type, {"wtmessage": message.info, "title": response.label});
-                    }
-                }, true);
-            } else {               
-                showAlert('NO_OK', 'error', {"wtmessage": "No Existe datos ", "title": 'Información'});
+    //if (sessionStorage.dts_datosItemplanedit) {
+    //alert('Puedo grabar');
+    var arr_Grid = JSON.parse(sessionStorage.dts_datosItemplanedit);
+    if (arr_Grid.length > 0) {
+        arrParams.DATAS = sessionStorage.dts_datosItemplanedit
+        arrParams.ACCION = accion;
+        requestHttpAjax(link, arrParams, function (response) {
+            var message = response.message;
+            if (response.status == "OK") {
+                showAlert(response.status, response.type, { "wtmessage": message.info, "title": response.label });
+                limpiarDetalle();
+                sessionStorage.removeItem('dts_datosItemplanedit')
+                setTimeout(function () {
+                    parent.window.location.href = $('#txth_base').val() + "/academico/planificacion/planificacionestudiante";
+                }, 2000);
+            } else {
+                showAlert(response.status, response.type, { "wtmessage": message.info, "title": response.label });
             }
-        /*} else {
-            showAlert('NO_OK', 'error', {"wtmessage": "No ha ingresado detalle en planificación", "title": 'Información'});
-        }*/
+        }, true);
+    } else {
+        showAlert('NO_OK', 'error', { "wtmessage": "No Existe datos ", "title": 'Información' });
+    }
+    /*} else {
+        showAlert('NO_OK', 'error', {"wtmessage": "No ha ingresado detalle en planificación", "title": 'Información'});
+    }*/
     /*} else {
         showAlert('NO_OK', 'error', {"wtmessage": "Todos los datos de la cabecera planificación son obligatorios", "title": 'Información'});
     }*/
