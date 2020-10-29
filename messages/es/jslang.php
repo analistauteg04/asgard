@@ -124,6 +124,6 @@ return array(
     'The attention date can not be after the today' => 'No es válido, La fecha atención no puede ser después de hoy. ',
     'The end date can not be before the begin date' => 'La fecha fin no puede ser antes de la fecha inicio.',
     'Invalid age number' => 'Edad no es válido.',
-
+    'Upload' => 'Subir',
 );
 ?>
