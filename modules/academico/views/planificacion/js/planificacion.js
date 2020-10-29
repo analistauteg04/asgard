@@ -828,3 +828,7 @@ function modificarplanificacion() {
     }*/
 
 }
+function edit() {
+    var link = $('#txth_base').val() + "/academico/planificacion/edit" + "?pla_id=" + $("#txth_pla_id").val() + "&per_id=" + $("#txth_per_id").val();
+    window.location = link;
+}

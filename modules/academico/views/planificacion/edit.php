@@ -10,9 +10,9 @@ academico::registerTranslations();
 ?>
 <?= Html::hiddenInput('txth_pla_id', $_GET['pla_id'], ['id' => 'txth_pla_id']); ?>
 <?= Html::hiddenInput('txth_per_id', $_GET['per_id'], ['id' => 'txth_per_id']); ?>
-<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-    <h4><span id="lbl_planear"><?= academico::t("Academico", "See Student Planning") ?></span></h4>
-</div><br><br><br>
+<!-- <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+    <h4><span id="lbl_planear"><? academico::t("Academico", "See Student Planning") ?></span></h4>
+</div><br><br><br>-->
 <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
     <p class="text-danger"> <?= Yii::t("formulario", "Fields with * are required") ?> </p>
 </div>
@@ -198,12 +198,12 @@ academico::registerTranslations();
             </div>
         </div>-->
         </div></br></br></br></br>
-        <div class='col-md-12 col-sm-12 col-xs-12 col-lg-12'>        
+        <!-- <div class='col-md-12 col-sm-12 col-xs-12 col-lg-12'>        
             <div class="col-sm-10 col-md-10 col-xs-8 col-lg-10"></div>
             <div class="col-sm-2 col-md-2 col-xs-4 col-lg-2">                
-                <a id="btn_modificarplanificacion" href="javascript:" class="btn btn-primary btn-block"> <?= Yii::t("formulario", "Update") ?></a>
+                <a id="btn_modificarplanificacion" href="javascript:" class="btn btn-primary btn-block"> <? Yii::t("formulario", "Update") ?></a>
             </div>        
-        </div> 
+        </div> -->
     </div>
     </div>    
 </form> 
