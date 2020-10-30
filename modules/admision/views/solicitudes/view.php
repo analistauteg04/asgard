@@ -8,7 +8,7 @@ use app\modules\financiero\Module as financiero;
 
 academico::registerTranslations();
 financiero::registerTranslations();
-//print_r($arr_condfoto);
+//print_r($arr_condcurriculum);
 ?>
 <?= Html::hiddenInput('txth_sins_id', base64_encode($sins_id), ['id' => 'txth_sins_id']); ?>
 <?= Html::hiddenInput('txth_per_id', base64_encode($per_id), ['id' => 'txth_per_id']); ?>
@@ -371,8 +371,30 @@ financiero::registerTranslations();
                 </div>     
             </div>
         </div>  
-        <?php if ($personaData["cemp_id"] > 0) { ?>   
         <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
+        <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
+                <div class="form-group">
+                    <label for="chk_curriculum" class="col-sm-10 col-md-10 col-xs-10 col-lg-10 control-label"><?= admision::t("Solicitudes", "Does not meet acceptance conditions in curriculum") ?></label>
+                    <div class="col-sm-1 ">                     
+                        <input type="checkbox" class="" id="chk_curriculum" data-type="alfa" data-keydown="true" placeholder="<?= admision::t("Solicitudes", "Does not meet acceptance conditions in curriculum") ?>">  
+                    </div>
+                </div>
+                <div class="col-md-13 col-sm-13 col-xs-13 col-lg-13" id="Divcondcurriculum"  style="visibility: hidden;" >  
+                    <div class="form-group">  
+                        <?php
+                        for ($n = 0; $n < count($arr_condcurriculum); $n++) {
+                            $chk_condcurriculum = "chk_condcurriculum" . $n;
+                            ?>  
+                            <p for="<?= $chk_condcurriculum ?>" class="col-sm-10  col-md-10 col-xs-10 col-lg-10 control-label"><?php echo $arr_condcurriculum[$n]['name'] ?></p>
+                            <div class="col-sm-1 ">    
+                                <?= Html::hiddenInput('txth_cond_curriculum' . $n, $arr_condcurriculum[$n]['id'], ['id' => 'txth_cond_curriculum' . $n]); ?>
+                                <input type="checkbox" class="" id="<?= $chk_condcurriculum ?>" data-type="alfa" data-keydown="true" placeholder="<?= $arr_condcurriculum[$n]['name'] ?>">  
+                            </div>
+                        <?php } ?>     
+                    </div>
+                </div> 
+            </div>  
+        <?php if ($personaData["cemp_id"] > 0) { ?> 
             <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
                 <div class="form-group">
                     <label for="chk_convenio" class="col-sm-10 col-md-10 col-xs-10 col-lg-10 control-label"><?= admision::t("Solicitudes", "Does not meet acceptance conditions in convent") ?></label>
@@ -380,7 +402,6 @@ financiero::registerTranslations();
                         <input type="checkbox" class="" id="chk_convenio" data-type="alfa" data-keydown="true" placeholder="<?= admision::t("Solicitudes", "Does not meet acceptance conditions in convent") ?>">  
                     </div>
                 </div>
-
                 <div class="col-md-13 col-sm-13 col-xs-13 col-lg-13" id="Divcondcon"  style="visibility: hidden;" >  
                     <div class="form-group">  
                         <?php
@@ -396,8 +417,8 @@ financiero::registerTranslations();
                     </div>
                 </div> 
             </div>  
+         <?php } ?> 
         </div>
-        <?php } ?> 
         <?php
         //} else {
         if (!empty($resp_rechazo) && $personaData["rsin_id"] != 2) {

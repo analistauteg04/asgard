@@ -664,6 +664,14 @@ $(document).ready(function () {
         }
     });
 
+    $('#chk_curriculum').change(function () {
+        if ($('#chk_curriculum').prop('checked')) {
+            $('#Divcondcurriculum').css('visibility', 'visible');
+        } else {
+            $('#Divcondcurriculum').css('visibility', 'hidden');
+        }
+    });
+
     $('#btn_buscarData').click(function () {
         actualizarGrid();
     });
@@ -1184,16 +1192,19 @@ var condiciondni = new Array();
 var condicioncerti = new Array();
 var condicionconvi = new Array();
 var condicionfoto = new Array();
+var condicioncurriculum = new Array();
 var len = condiciontitulo.length;
 var len1 = condiciondni.length;
 var len2 = condicioncerti.length;
 var len3 = condicionconvi.length;
 var len4 = condicionfoto.length;
+var len5 = condicioncurriculum.length;
 var obstitulo = "";
 var obsdni = "";
 var obscerti = "";
 var obsconvi = "";
 var obsfoto = "";
+var obscurriculum = "";
 /**
  * Function arreglo_check, forma arreglo con las condiciones elegidas tanto para los documentos: título y documento de identidad.
  * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
@@ -1336,6 +1347,20 @@ function arreglo_check() {
             len4 = len4 + 1;
         }
     }
+
+    //AQUI PARA CURRICULUM
+    if ($('#chk_curriculum').prop('checked')) {
+        obscurriculum = $('#chk_curriculum').attr('placeholder');
+        if ($('#chk_condcurriculum0').prop('checked')) {
+            if (len5 == 0) {
+                condicioncurriculum[0] = $('#txth_cond_curriculum0').val();
+            } else {
+                condicioncurriculum[len5] = $('#txth_cond_curriculum0').val();
+            }
+            len5 = len5 + 1;
+        }       
+        
+    }
 }
 
 //Guarda la Revisión final de solicitudes de inscripción.
@@ -1359,6 +1384,7 @@ function Approve() {
         arrParams.condicioncerti = condicioncerti;
         arrParams.condicionconvi = condicionconvi;
         arrParams.condicionfoto = condicionfoto;
+        arrParams.condicioncurriculum = condicioncurriculum;
         //Condiciones que indican que se ha seleccionado un(os) checkboxes.
         if (len > 0) {
             arrParams.titulo = 1;
@@ -1394,6 +1420,14 @@ function Approve() {
                 arrParams.observacion = obsfoto;
             } else {
                 arrParams.observacion = arrParams.observacion + "<br/>" + obsfoto;
+            }
+        }
+        if (len5 > 0) {
+            arrParams.curriculum = 1;
+            if (arrParams.observacion == "") {
+                arrParams.observacion = obscurriculum;
+            } else {
+                arrParams.observacion = arrParams.observacion + "<br/>" + obscurriculum;
             }
         }
 

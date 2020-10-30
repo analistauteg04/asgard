@@ -151,6 +151,7 @@ class SolicitudesController extends \app\components\CController {
         $resp_rechazo = $mod_solins->consultaSolicitudRechazada($sins_id, 'A');
         $resp_condcertv = $mod_solins->consultarSolnoaprobada(3, $tiponacext);
         $resp_condfoto = $mod_solins->consultarSolnoaprobada(4, $tiponacext);
+        $resp_condcurriculum = $mod_solins->consultarSolnoaprobada(7, $tiponacext);
         $resp_condcon = $mod_solins->consultarSolnoaprobada(8, $tiponacext);
 
         return $this->render('view', [
@@ -178,6 +179,7 @@ class SolicitudesController extends \app\components\CController {
                     "arr_observa" => $observa,
                     "arr_condcon" => $resp_condcon,
                     "arr_condfoto" => $resp_condfoto,
+                    "arr_condcurriculum" =>$resp_condcurriculum,
         ]);
     }
 
@@ -1253,6 +1255,8 @@ class SolicitudesController extends \app\components\CController {
             $condicionesCerti = $data["condicioncerti"];
             $condicionesFoto = $data["condicionfoto"];
             $foto = $data["foto"];
+            $condicionesCurriculum = $data["condicioncurriculum"];
+            $curriculum = $data["curriculum"];
 
             $con = \Yii::$app->db_captacion;
             $transaction = $con->beginTransaction();
@@ -1443,6 +1447,17 @@ class SolicitudesController extends \app\components\CController {
                                         for ($d = 0; $d < count($condicionesFoto); $d++) {
                                             $resp_rechfoto = $mod_solins->Insertarsolicitudrechazada($sins_id, 4, $condicionesFoto[$d], $srec_etapa, $obs_rechazofoto, $respusuario['usu_id']);
                                             if ($resp_rechfoto) {
+                                                $ok = "1";
+                                            } else {
+                                                $ok = "0";
+                                            }
+                                        }
+                                    }
+                                    if ($curriculum == 1) {
+                                        $obs_rechazocurriculum = "No cumple condiciones de aceptación en curriculum.";
+                                        for ($f = 0; $f < count($condicionesCurriculum); $f++) {
+                                            $resp_rechcurriculum = $mod_solins->Insertarsolicitudrechazada($sins_id, 7, $condicionesCurriculum[$f], $srec_etapa, $obs_rechazocurriculum, $respusuario['usu_id']);
+                                            if ($resp_rechcurriculum) {
                                                 $ok = "1";
                                             } else {
                                                 $ok = "0";

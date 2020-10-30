@@ -15,6 +15,7 @@ namespace app\modules\admision\messages;
      "Create Application for Registration" => "Crear Solicitud de Inscripción",
      "Data General Interested" => "Datos Generales Interesado",
      "Document" => "Documento",
+     "Does not meet acceptance conditions in curriculum" => "No cumple condiciones de aceptación en curriculum:",
      "Does not meet acceptance conditions in photo" => "No cumple condiciones de aceptación en foto:",
      "Does not meet acceptance conditions in title" => "No cumple condiciones de aceptación en título:",
      "Does not meet acceptance conditions on identity document" => "No cumple condiciones de aceptación en documento de identidad:",
