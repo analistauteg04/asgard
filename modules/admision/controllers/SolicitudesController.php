@@ -150,6 +150,7 @@ class SolicitudesController extends \app\components\CController {
         $resp_conddni = $mod_solins->consultarSolnoaprobada(2, $tiponacext);
         $resp_rechazo = $mod_solins->consultaSolicitudRechazada($sins_id, 'A');
         $resp_condcertv = $mod_solins->consultarSolnoaprobada(3, $tiponacext);
+        $resp_condfoto = $mod_solins->consultarSolnoaprobada(4, $tiponacext);
         $resp_condcon = $mod_solins->consultarSolnoaprobada(8, $tiponacext);
 
         return $this->render('view', [
@@ -176,6 +177,7 @@ class SolicitudesController extends \app\components\CController {
                     "arr_certv" => $resp_condcertv,
                     "arr_observa" => $observa,
                     "arr_condcon" => $resp_condcon,
+                    "arr_condfoto" => $resp_condfoto,
         ]);
     }
 
@@ -1249,6 +1251,8 @@ class SolicitudesController extends \app\components\CController {
             $observarevisa = ucwords(strtolower($data["observarevisa"]));
             $cemp_id = $data["cemp_id"];
             $condicionesCerti = $data["condicioncerti"];
+            $condicionesFoto = $data["condicionfoto"];
+            $foto = $data["foto"];
 
             $con = \Yii::$app->db_captacion;
             $transaction = $con->beginTransaction();
@@ -1428,6 +1432,17 @@ class SolicitudesController extends \app\components\CController {
                                         for ($b = 0; $b < count($condicionesCerti); $b++) {
                                             $resp_rechcer = $mod_solins->Insertarsolicitudrechazada($sins_id, 3, $condicionesCerti[$b], $srec_etapa, $obs_rechazo, $respusuario['usu_id']);
                                             if ($resp_rechcer) {
+                                                $ok = "1";
+                                            } else {
+                                                $ok = "0";
+                                            }
+                                        }
+                                    }                                    
+                                    if ($foto == 1) {
+                                        $obs_rechazofoto = "No cumple condiciones de aceptación en foto.";
+                                        for ($d = 0; $d < count($condicionesFoto); $d++) {
+                                            $resp_rechfoto = $mod_solins->Insertarsolicitudrechazada($sins_id, 4, $condicionesFoto[$d], $srec_etapa, $obs_rechazofoto, $respusuario['usu_id']);
+                                            if ($resp_rechfoto) {
                                                 $ok = "1";
                                             } else {
                                                 $ok = "0";

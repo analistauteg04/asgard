@@ -640,6 +640,14 @@ $(document).ready(function () {
         }
     });
 
+    $('#chk_foto').change(function () {
+        if ($('#chk_foto').prop('checked')) {
+            $('#Divcondfoto').css('visibility', 'visible');
+        } else {
+            $('#Divcondfoto').css('visibility', 'hidden');
+        }
+    });
+
     $('#chk_certificado').change(function () {
         if ($('#chk_certificado').prop('checked')) {
             $('#Divcondcerti').css('visibility', 'visible');
@@ -1175,14 +1183,17 @@ var condiciontitulo = new Array();
 var condiciondni = new Array();
 var condicioncerti = new Array();
 var condicionconvi = new Array();
+var condicionfoto = new Array();
 var len = condiciontitulo.length;
 var len1 = condiciondni.length;
 var len2 = condicioncerti.length;
 var len3 = condicionconvi.length;
+var len4 = condicionfoto.length;
 var obstitulo = "";
 var obsdni = "";
 var obscerti = "";
 var obsconvi = "";
+var obsfoto = "";
 /**
  * Function arreglo_check, forma arreglo con las condiciones elegidas tanto para los documentos: título y documento de identidad.
  * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
@@ -1253,6 +1264,7 @@ function arreglo_check() {
             len1 = len1 + 1;
         }
     }
+
     //AQUI PARA CERTIFICADO VOTACION
     if ($('#chk_certificado').prop('checked')) {
         obscerti = $('#chk_certificado').attr('placeholder');
@@ -1295,6 +1307,35 @@ function arreglo_check() {
         }       
         
     }
+
+    //AQUI PARA FOTO
+    if ($('#chk_foto').prop('checked')) {
+        obsfoto = $('#chk_foto').attr('placeholder');
+        if ($('#chk_confoto0').prop('checked')) {
+            if (len4 == 0) {
+                condicionfoto[0] = $('#txth_cond_foto0').val();
+            } else {
+                condicionfoto[len4] = $('#txth_cond_foto0').val();
+            }
+            len4 = len4 + 1;
+        }
+        if ($('#chk_confoto1').prop('checked')) {
+            if (len4 == 0) {
+                condicionfoto[0] = $('#txth_cond_foto1').val();
+            } else {
+                condicionfoto[len4] = $('#txth_cond_foto1').val();
+            }
+            len4 = len4 + 1;
+        }
+        if ($('#chk_confoto2').prop('checked')) {
+            if (len4 == 0) {
+                condicionfoto[0] = $('#txth_cond_foto2').val();
+            } else {
+                condicionfoto[len4] = $('#txth_cond_foto2').val();
+            }
+            len4 = len4 + 1;
+        }
+    }
 }
 
 //Guarda la Revisión final de solicitudes de inscripción.
@@ -1317,6 +1358,7 @@ function Approve() {
         arrParams.condicionesdni = condiciondni;
         arrParams.condicioncerti = condicioncerti;
         arrParams.condicionconvi = condicionconvi;
+        arrParams.condicionfoto = condicionfoto;
         //Condiciones que indican que se ha seleccionado un(os) checkboxes.
         if (len > 0) {
             arrParams.titulo = 1;
@@ -1344,6 +1386,14 @@ function Approve() {
                 arrParams.observacion = obsconvi;
             } else {
                 arrParams.observacion = arrParams.observacion + "<br/>" + obsconvi;
+            }
+        }
+        if (len4 > 0) {
+            arrParams.foto = 1;
+            if (arrParams.observacion == "") {
+                arrParams.observacion = obsfoto;
+            } else {
+                arrParams.observacion = arrParams.observacion + "<br/>" + obsfoto;
             }
         }
 

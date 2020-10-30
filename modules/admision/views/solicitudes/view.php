@@ -8,6 +8,7 @@ use app\modules\financiero\Module as financiero;
 
 academico::registerTranslations();
 financiero::registerTranslations();
+//print_r($arr_condfoto);
 ?>
 <?= Html::hiddenInput('txth_sins_id', base64_encode($sins_id), ['id' => 'txth_sins_id']); ?>
 <?= Html::hiddenInput('txth_per_id', base64_encode($per_id), ['id' => 'txth_per_id']); ?>
@@ -325,25 +326,47 @@ financiero::registerTranslations();
             </div>
         </div>            
         <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
+        <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
+                <div class="form-group">
+                    <label for="chk_foto" class="col-sm-10 col-md-10 col-xs-10 col-lg-10 control-label"><?= admision::t("Solicitudes", "Does not meet acceptance conditions in photo") ?></label>
+                    <div class="col-sm-1 ">                     
+                        <input type="checkbox" class="" id="chk_foto"  data-type="alfa" data-keydown="true" placeholder="<?= Yii::t("solicitud_ins", "Does not meet acceptance conditions in photo") ?>">                      
+                    </div>
+                </div>
+                <div class="col-md-13 col-sm-13 col-xs-13 col-lg-13" id="Divcondfoto" style="visibility: hidden;" >
+                    <div class="form-group">               
+                <?php
+                    for ($i = 0; $i < count($arr_condfoto); $i++) {
+                        $chk_confoto = "chk_confoto" . $i;
+                ?>  
+                            <p for="<?= $chk_confoto ?>" class="col-sm-10 col-md-10 col-xs-10 col-lg-10 control-label"><?php echo $arr_condfoto[$i]['name'] ?></p>
+                            <div class="col-sm-1 ">    
+                                <?= Html::hiddenInput('txth_cond_foto' . $i, $arr_condfoto[$i]['id'], ['id' => 'txth_cond_foto' . $i]); ?>
+                                <input type="checkbox" class="" id="<?= $chk_confoto ?>" data-type="alfa" data-keydown="true" placeholder="<?= $arr_condfoto[$i]['name'] ?>">  
+                            </div>
+                <?php } ?>   
+                    </div>
+                </div>     
+            </div>
             <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
                 <div class="form-group">
                     <label for="chk_certificado" class="col-sm-10 col-md-10 col-xs-10 col-lg-10 control-label"><?= admision::t("Solicitudes", "Does not meet acceptance conditions in voting certificate") ?></label>
                     <div class="col-sm-1 ">                     
-                        <input type="checkbox" class="" id="chk_certificado"  data-type="alfa" data-keydown="true" placeholder="<?= Yii::t("solicitud_ins", "Does not meet acceptance conditions in title") ?>">                      
+                        <input type="checkbox" class="" id="chk_certificado"  data-type="alfa" data-keydown="true" placeholder="<?= Yii::t("solicitud_ins", "Does not meet acceptance conditions in voting certificate") ?>">                      
                     </div>
                 </div>
                 <div class="col-md-13 col-sm-13 col-xs-13 col-lg-13" id="Divcondcerti" style="visibility: hidden;" >
                     <div class="form-group">               
-        <?php
-        for ($i = 0; $i < count($arr_certv); $i++) {
-        $chk_concerti = "chk_concerti" . $i;
-        ?>  
+                <?php
+                    for ($i = 0; $i < count($arr_certv); $i++) {
+                        $chk_concerti = "chk_concerti" . $i;
+                ?>  
                             <p for="<?= $chk_concerti ?>" class="col-sm-10 col-md-10 col-xs-10 col-lg-10 control-label"><?php echo $arr_certv[$i]['name'] ?></p>
                             <div class="col-sm-1 ">    
                                 <?= Html::hiddenInput('txth_cond_certi' . $i, $arr_certv[$i]['id'], ['id' => 'txth_cond_certi' . $i]); ?>
                                 <input type="checkbox" class="" id="<?= $chk_concerti ?>" data-type="alfa" data-keydown="true" placeholder="<?= $arr_certv[$i]['name'] ?>">  
                             </div>
-        <?php } ?>   
+                <?php } ?>   
                     </div>
                 </div>     
             </div>
