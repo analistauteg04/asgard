@@ -923,7 +923,8 @@ class Usuario extends \yii\db\ActiveRecord implements IdentityInterface {
                     usu.usu_id as id,
                     usu.usu_user as Username,
                     per.per_pri_nombre as Nombres,
-                    per.per_pri_apellido as Apellidos
+                    per.per_pri_apellido as Apellidos,
+                    CONCAT(per.per_pri_apellido, ' ', per.per_pri_nombre) as Persona
                     -- emp.emp_nombre_comercial as Empresa
                 FROM 
                     usuario as usu
