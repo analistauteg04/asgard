@@ -894,9 +894,9 @@ class Usuario extends \yii\db\ActiveRecord implements IdentityInterface {
         return $command->queryAll();        
     }
 
-    public static function getListUsers($search = NULL, $onlyData = false, $removeSelfUser = false){
+    public static function getListUsers($search = NULL, $idempresa = NULL, $onlyData = false, $removeSelfUser = false){
         $iduser    = Yii::$app->session->get('PB_iduser', FALSE);
-        $idempresa = Yii::$app->session->get('PB_idempresa', FALSE);
+        $emp_id = (isset($idempresa)?$idempresa:(Yii::$app->session->get('PB_idempresa', FALSE)));
         $search_cond = "%".$search."%";
         $condition = "";
         $str_search = "";
@@ -941,7 +941,7 @@ class Usuario extends \yii\db\ActiveRecord implements IdentityInterface {
                 ORDER BY per.per_pri_apellido;";
         $comando = Yii::$app->db->createCommand($sql);
         if($iduser != 1){
-            $comando->bindParam(":emp_id",$idempresa, \PDO::PARAM_INT);
+            $comando->bindParam(":emp_id",$emp_id, \PDO::PARAM_INT);
         }
         if(isset($search)){
             $comando->bindParam(":search",$search_cond, \PDO::PARAM_STR);
