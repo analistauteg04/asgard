@@ -372,7 +372,8 @@ financiero::registerTranslations();
             </div>
         </div>  
         <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
-        <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
+        <?php if ($personaData["uaca_id"] == 2) { ?>
+            <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
                 <div class="form-group">
                     <label for="chk_curriculum" class="col-sm-10 col-md-10 col-xs-10 col-lg-10 control-label"><?= admision::t("Solicitudes", "Does not meet acceptance conditions in curriculum") ?></label>
                     <div class="col-sm-1 ">                     
@@ -394,6 +395,7 @@ financiero::registerTranslations();
                     </div>
                 </div> 
             </div>  
+            <?php } ?> 
         <?php if ($personaData["cemp_id"] > 0) { ?> 
             <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
                 <div class="form-group">
