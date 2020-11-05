@@ -18,6 +18,7 @@ academico::registerTranslations();
 admision::registerTranslations();
 
 class DistributivocabeceraController extends \app\components\CController {
+    public $pdf_cla_acceso = "";
     private function estados() {
         return [
             '0' => Yii::t("formulario", "Todos"),
@@ -285,4 +286,53 @@ class DistributivocabeceraController extends \app\components\CController {
             }                                      
         }
     }
+    
+    public function actionGenerarmateriacarga($ids) {//ok
+        //try {
+            
+            $ids = isset($_GET['ids']) ? base64_decode($_GET['ids']) : NULL;
+            $rep = new ExportFile();
+            //$this->layout = false;
+            $this->layout = '@modules/academico/views/tpl_asignamaterias/main';
+            //$this->view->title = "Invoices";
+            
+            $DistADO = new DistributivoCabecera();
+            $cabDist = $DistADO->consultarCabDistributivo($ids);
+            //Utilities::putMessageLogFile($cabDist);
+            
+            /*$especiesADO = new Especies();
+            $cabFact = $especiesADO->consultarEspecieGenerada($ids);
+            if ($cabFact['uaca_id'] == '1') {
+                $carrera = 'facultad/carrera';
+                $facultaded = 'Facultad de Grado';
+            }
+            if ($cabFact['uaca_id'] == '2') {
+                $carrera = 'maestría';
+                $facultaded = 'Facultad de Posgrado';
+            }*/
+            //$objEsp = $especiesADO->getDataEspecie($cabFact['esp_id']);
+            $codigo = "222";//$objEsp[0]['codigo'] . '-' . $cabFact['egen_numero_solicitud'];
+            //setlocale(LC_TIME,"es_ES");//strftime("%A, %d de %B de %Y", date("d-m-Y"));
+            setlocale(LC_TIME, 'es_CO.UTF-8');
+
+      
+            $FechaDia = strftime("%A %d de %B %G", strtotime(date("d-m-Y"))); //date("j F de Y");   
+            //$cabFact['FechaDia'] = strftime("%A %d de %B %G", strtotime($cabFact['fecha_aprobacion']));
+            //$this->pdf_cla_acceso = $codigo;
+            $rep->orientation = "P"; // tipo de orientacion L => Horizontal, P => Vertical   
+            $rep->createReportPdf(
+                    $this->render('@modules/academico/views/tpl_asignamaterias/cargahora', [
+                        'cabDist' => $cabDist,
+                        'FechaDia' => $FechaDia,
+                        //'carrera' => $carrera,
+                        //'facultaded' => $facultaded,
+                    ])
+            );
+            $rep->mpdf->Output('CARGA_HORAS_' . $codigo . ".pdf", ExportFile::OUTPUT_TO_DOWNLOAD);
+            //exit;
+//        } catch (Exception $e) {
+//            echo $e->getMessage();
+//        }
+    }
+
 }

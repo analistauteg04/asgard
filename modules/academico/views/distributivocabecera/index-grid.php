@@ -66,7 +66,7 @@ academico::registerTranslations();
                         }
                     },
                     'Download' => function ($url, $model){
-                        return Html::a('<span class="'.Utilities::getIcon('download').'"></span>', Url::to(['distributivocabecera/descargar', 'id' => $model['Id']]), ["data-toggle" => "tooltip", "title" => Yii::t("accion","Download")]);
+                        return Html::a('<span class="'.Utilities::getIcon('download').'"></span>', Url::to(['/academico/distributivocabecera/generarmateriacarga', 'ids' => base64_encode($model['Id'])]), ["data-toggle" => "tooltip", "title" => Yii::t("accion","Download"),"data-pjax" => "0"]);
                     }
                 ],               
             ],                                

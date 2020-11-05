@@ -346,5 +346,22 @@ class DistributivoCabecera extends \yii\db\ActiveRecord
         $command->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $idtabla= $command->execute();  
         return $idtabla;       
-    } 
+    }
+    
+    public function consultarCabDistributivo($Ids) {
+        $con = \Yii::$app->db_academico;
+        $con_db = \Yii::$app->db;//Conexin Asgard
+        $sql = "SELECT A.*,CONCAT(C.per_pri_nombre,' ',C.per_pri_apellido) Nombres
+                    FROM " . $con->dbname . ".distributivo_cabecera A
+                      INNER JOIN (" . $con->dbname . ".profesor B
+                        INNER JOIN db_asgard.persona C ON B.per_id=C.per_id)
+                      ON A.pro_id=B.pro_id
+                 WHERE A.dcab_estado=1 AND A.dcab_id=:ids ";
+        
+        /*$sql = "SELECT A.* FROM " . $con->dbname . ".cabecera_solicitud A
+                    WHERE  A.csol_estado=1 AND A.csol_estado_logico=1 AND A.csol_id= :csol_id;";*/
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":ids", $Ids, \PDO::PARAM_INT);
+        return $comando->queryAll();
+    }
 }
