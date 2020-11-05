@@ -983,7 +983,7 @@ class Utilities {
         $dias_diferencia = $segundos_diferencia / (60 * 60 * 24);
 
         //obtengo el valor absoulto de los días (quito el posible signo negativo)
-        $dias_diferencia = abs($dias_diferencia);
+        //$dias_diferencia = abs($dias_diferencia);
 
         //quito los decimales a los días de diferencia
         $dias_diferencia = floor($dias_diferencia);
