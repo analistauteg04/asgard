@@ -672,4 +672,31 @@ class DistributivoAcademico extends \yii\db\ActiveRecord
         $res = $comando->queryOne();                
         return $res;                   
     }
+    
+    /**
+     * Function Verifica los programas de estudio por unidad y modalidad.
+     * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
+     * @param   
+     * @return  $resultData (Retornar los datos).
+     */
+    public function getModalidadEstudio($uaca_id, $mod_id){
+        $con_academico = \Yii::$app->db_academico;
+        $estado = "1";
+        
+        $sql = "SELECT a.meun_id id, b.eaca_nombre name
+                FROM db_academico.modalidad_estudio_unidad a inner join db_academico.estudio_academico b
+                     on b.eaca_id = a.eaca_id
+                WHERE a.uaca_id = $uaca_id -- :uaca_id 
+                      and a.mod_id = $mod_id -- :mod_id
+                      and a.meun_estado = 1
+                      and a.meun_estado_logico = 1";        
+        
+        $comando = $con_academico->createCommand($sql);
+        $comando->bindParam(":uaca_id", $uaca_id, \PDO::PARAM_INT);        
+        $comando->bindParam(":mod_id", $mod_id, \PDO::PARAM_INT);                
+        $comando->bindParam("estado", $estado, \PDO::PARAM_STR);
+
+        $res = $comando->queryAll();                
+        return $res;                   
+    }
 }

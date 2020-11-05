@@ -17,6 +17,8 @@ delete from db_academico.malla_unidad_modalidad;
 delete from db_academico.malla_academica;
 alter table db_academico.malla_academica_detalle add made_semestre int not null after asi_id;
 alter table db_academico.malla_academica_detalle add made_asi_requisito bigint(20) null after fmac_id;
+alter table db_academico.malla_academica_detalle add made_horas_docencia integer(4) null after made_codigo_asignatura;
+alter table db_academico.malla_academica_detalle add made_horas_otros integer(4) null after made_horas_docencia;
 
 -- --------------------------------------------------------
 -- 

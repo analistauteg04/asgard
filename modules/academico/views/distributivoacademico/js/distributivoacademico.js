@@ -37,19 +37,43 @@ $(document).ready(function() {
                 }//                                   
             }
         }, false);
+        
+        if ($('#cmb_unidad_dis').val() == 2) {
+            $('#bloque6').css('display', 'block');
+            $('#bloque2-1').css('display', 'none');
+        } else {
+            $('#bloque6').css('display', 'none');
+            $('#bloque2-1').css('display', 'block');
+        }
+        
     });
     
     $('#cmb_modalidad').change(function() {
         var link = $('#txth_base').val() + "/academico/distributivoacademico/new";
-        var arrParams = new Object();       
-        arrParams.mod_id = $(this).val(); 
-        arrParams.getperiodo = true;
-        requestHttpAjax(link, arrParams, function(response) {
-            if (response.status == "OK") {
+        if ($('#cmb_unidad_dis').val()==2) {
+             // Posgrado
+            var arrParams = new Object();
+            arrParams.uaca_id = $('#cmb_unidad_dis').val();
+            arrParams.mod_id = $(this).val();                
+            arrParams.getestudio = true;
+            requestHttpAjax(link, arrParams, function(response) {
+                if (response.status == "OK") {
                     data = response.message;
-                    setComboDataselect(data.periodo, "cmb_periodo", "Todos");
-            }
-        }, true);
+                    setComboDataselect(data.carrera, "cmb_programa", "Todos");
+                }
+            }, true);    
+        } else {
+            var arrParams = new Object();       
+            arrParams.mod_id = $(this).val(); 
+            arrParams.getperiodo = true;
+            requestHttpAjax(link, arrParams, function(response) {
+                if (response.status == "OK") {
+                        data = response.message;
+                        setComboDataselect(data.periodo, "cmb_periodo", "Todos");
+                }
+            }, true);
+        }
+        
         var arrParams = new Object();
         arrParams.uaca_id = $('#cmb_unidad_dis').val();
         arrParams.mod_id = $(this).val();        
@@ -72,7 +96,8 @@ $(document).ready(function() {
                       }, true);
                   }
               }
-        }, false);   
+        }, false);                     
+        
         if ($('#cmb_unidad_dis').val() == 1 && $(this).val()==1) {
             $('#bloque5').css('display', 'block');
         } else {
@@ -115,11 +140,13 @@ $(document).ready(function() {
         if (tipo == 1) {
             $('#bloque1').css('display', 'block');            
             $('#bloque2').css('display', 'block');
+            $('#bloque2-1').css('display', 'block');
             $('#bloque3').css('display', 'block');
             $('#bloque4').css('display', 'block');
         } else {
             $('#bloque1').css('display', 'none');            
             $('#bloque2').css('display', 'none');
+            $('#bloque2-1').css('display', 'none');
             $('#bloque3').css('display', 'none');
             $('#bloque4').css('display', 'none');
         }
@@ -140,7 +167,21 @@ $(document).ready(function() {
                 document.getElementById("cmb_tipo_asignacion").disabled=false;  
             }                              
         }, true);
-    });              
+    });  
+    
+    $('#cmb_programa').change(function () {   
+        var link = $('#txth_base').val() + "/academico/distributivoacademico/new";
+        var arrParams = new Object();
+        arrParams.meun_id = $('#cmb_programa').val();                
+        arrParams.getasignaturapos = true;
+        requestHttpAjax(link, arrParams, function(response) {
+            if (response.status == "OK") {
+                data = response.message;
+                setComboDataselect(data.asignaturapos, "cmb_materia", "Todos"); 
+            }
+        }, true);
+    });  
+        
 });
 
 // Recarga la Grid de Productos si Existe

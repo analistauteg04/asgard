@@ -282,5 +282,32 @@ class Asignatura extends \yii\db\ActiveRecord
         return $resultData;
     }   
     
-    
+    /**
+     * Function getAsignaturaPosgrado
+     * @author  Grace Viteri <analistadesarrollo01@uteg.edu.ec>
+     * @param   
+     * @return  $resultData (Retornar las asignaturas por planificación y modalidad).
+     */
+    public function getAsignaturaPosgrado($meun_id) {
+        $con = \Yii::$app->db_academico;
+        $estado = 1;
+        
+            $sql = "SELECT c.asi_id id, c.asi_nombre name
+                    FROM db_academico.malla_academica_detalle a inner join db_academico.malla_unidad_modalidad b
+                        on b.maca_id = a.maca_id
+                    INNER JOIN db_academico.asignatura c on c.asi_id = a.asi_id
+                    WHERE b.meun_id = $meun_id
+                          and b.mumo_estado = 1
+                          and b.mumo_estado_logico = 1
+                          and a.made_estado = 1
+                          and a.made_estado_logico = 1
+                    ORDER BY 2 asc";
+           
+        
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);  
+        $comando->bindParam(":meun_id", $meun_id, \PDO::PARAM_INT);          
+        $resultData = $comando->queryAll();
+        return $resultData;
+    } 
 }

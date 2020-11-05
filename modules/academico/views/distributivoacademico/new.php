@@ -36,18 +36,29 @@ academico::registerTranslations();
                 </div>
             </div>
         </div>    
-        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="bloque2" style="display: none">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <div class="form-group">    
-                <label for="cmb_modalidad" class="col-sm-2 col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= Yii::t("formulario", "Mode") ?></label>
-                <div class="col-sm-3 col-xs-3 col-md-3 col-lg-3">
-                    <?= Html::dropDownList("cmb_modalidad", 0, $arr_modalidad, ["class" => "form-control", "id" => "cmb_modalidad"]) ?>
-                </div>         
-                <label for="cmb_periodo" class="col-sm-2 col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= Yii::t("formulario", "Period") ?></label>
-                <div class="col-sm-3 col-xs-3 col-md-3 col-lg-3">
-                    <?= Html::dropDownList("cmb_periodo", 0,  $arr_periodo , ["class" => "form-control", "id" => "cmb_periodo"]) ?>
-                </div>       
+                <div id="bloque2" style="display: none">
+                    <label for="cmb_modalidad" class="col-sm-2 col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= Yii::t("formulario", "Mode") ?></label>
+                    <div class="col-sm-3 col-xs-3 col-md-3 col-lg-3">
+                        <?= Html::dropDownList("cmb_modalidad", 0, $arr_modalidad, ["class" => "form-control", "id" => "cmb_modalidad"]) ?>
+                    </div>                
+                </div>
+                <div id="bloque2-1" style="display: none">
+                    <label for="cmb_periodo" class="col-sm-2 col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= Yii::t("formulario", "Period") ?></label>
+                    <div class="col-sm-3 col-xs-3 col-md-3 col-lg-3">
+                        <?= Html::dropDownList("cmb_periodo", 0,  $arr_periodo , ["class" => "form-control", "id" => "cmb_periodo"]) ?>
+                    </div>   
+                </div>  
+                <div id="bloque6" style="display: none">
+                    <label for="cmb_programa" class="col-sm-2 col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= academico::t("Academico", "Career/Program") ?></label>
+                    <div class="col-sm-3 col-xs-3 col-md-3 col-lg-3">
+                        <?= Html::dropDownList("cmb_programa", 0,  $arr_programa , ["class" => "form-control", "id" => "cmb_programa"]) ?>
+                    </div> 
+                </div>  
             </div>                                            
-        </div>    
+        </div>  
+        
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="bloque3" style="display: none">
             <div class="form-group">                        
                 <label for="cmb_jornada" class="col-sm-2 col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= academico::t("Academico", "Working day") ?></label>
