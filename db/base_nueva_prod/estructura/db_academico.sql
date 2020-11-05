@@ -265,6 +265,8 @@ create table if not exists `malla_academica_detalle` (
   `fmac_id` bigint(20) not null,
   `made_codigo_asignatura` varchar(300) not null,
   `made_asi_requisito` bigint(20) null,
+  `made_horas_docencia` integer(4) null,
+  `made_horas_otros` integer(4) null,
   `made_hora` integer(04) null,
   `made_credito` integer(2) null,
   `made_usuario_ingreso` bigint(20) not null,
@@ -753,16 +755,8 @@ create table if not exists `distributivo_academico_horario` (
   `uaca_id` bigint(20) not null,
   `mod_id` bigint(20) not null,
   `daho_jornada` varchar(1) not null,
-  `daho_horario` varchar(10) not null,
-  `daho_hora_inicio` varchar(10) null,
-  `daho_hora_fin` varchar(10) null,
-  `daho_lunes` varchar(1) null,
-  `daho_martes` varchar(1) null,
-  `daho_miercoles` varchar(1) null,
-  `daho_jueves` varchar(1) null,
-  `daho_viernes` varchar(1) null,
-  `daho_sabado` varchar(1) null,
-  `daho_domingo` varchar(1) null,
+  `daho_descripcion` varchar(1000) null,
+  `daho_horario` varchar(10) not null,  
   `daho_estado` varchar(1) not null,
   `daho_fecha_creacion` timestamp not null default current_timestamp,
   `daho_fecha_modificacion` timestamp null default null,
@@ -826,9 +820,8 @@ create table if not exists `distributivo_horario` (
 -- 
 create table if not exists `distributivo_horario_det` (
   `dhde_id` bigint(20) not null auto_increment primary key,   
-  `dhor_id` bigint(20) not null,
-  `dia_id` bigint(20) not null,  
-  `dhde_fecha_clase` timestamp null default null,
+  `daho_id` bigint(20) not null,
+  `dia_id` bigint(20) not null,    
   `dhde_hora_inicio` varchar(10) not null,
   `dhde_hora_fin` varchar(10) not null,  
   `dhde_usuario_ingreso` bigint(20) not null,
@@ -837,7 +830,7 @@ create table if not exists `distributivo_horario_det` (
   `dhde_fecha_creacion` timestamp not null default current_timestamp,
   `dhde_fecha_modificacion` timestamp null default null,
   `dhde_estado_logico` varchar(1) not null,
-  foreign key (dhor_id) references `distributivo_horario`(dhor_id)
+  foreign key (daho_id) references `distributivo_academico_horario`(daho_id)
 );
 
 -- --------------------------------------------------------
@@ -1807,6 +1800,3 @@ create table if not exists db_academico.`configuracion_tipo_distributivo` (
  `ctdi_estado_logico` varchar(1) not null
 );
 
- 
- 
- 

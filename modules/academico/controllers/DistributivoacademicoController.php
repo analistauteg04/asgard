@@ -143,6 +143,17 @@ class DistributivoacademicoController extends \app\components\CController {
                 $message = array("asignatura" => $asignatura);
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }
+            if(isset($data["getasignaturapos"])){               
+                $asignatura = $mod_asignatura->getAsignaturaPosgrado($data["meun_id"]);
+                $message = array("asignaturapos" => $asignatura);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+            }
+            
+            if(isset($data["getestudio"])){               
+                $estudio = $distributivo_model->getModalidadEstudio($data["uaca_id"], $data["mod_id"]);
+                $message = array("carrera" => $estudio);
+                return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
+            }
         }
                 
         $arr_profesor = $mod_profesor->getProfesores();        
@@ -154,7 +165,8 @@ class DistributivoacademicoController extends \app\components\CController {
         $arr_horario = $distributivo_model->getHorariosByUnidadAcad($arr_unidad[0]["id"], $arr_modalidad[0]["id"], $arr_jornada[0]["id"]);
         $model = $distributivo_model->getDistribAcadXprofesorXperiodo(0,0);
         $arr_tipo_distributivo = $mod_tipo_distributivo->consultarTipoDistributivo();
-        
+        $arr_programa = $distributivo_model->getModalidadEstudio(2, 1);
+                
         return $this->render('new', [
             'arr_profesor' => ArrayHelper::map(array_merge([["Id" => "0", "Nombres" => Yii::t("formulario", "Select")]], $arr_profesor), "Id", "Nombres"),
             'arr_unidad' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arr_unidad), "id", "name"),
@@ -167,6 +179,7 @@ class DistributivoacademicoController extends \app\components\CController {
             'arr_paralelo' => $this->paralelo(),
             'model' => $model,
             'arr_periodoActual' => $arr_periodoActual,
+            'arr_programa' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Select")]], $arr_programa), "id", "name"),
         ]);
     }
 
