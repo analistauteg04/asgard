@@ -956,5 +956,38 @@ class Utilities {
         return $insertar_ceros .= $numero;
     }
 
-    
+    public static function getDiffDate($fechaInicio, $fechaFin){
+        $ano1 = date('Y', strtotime($fechaInicio));
+        $mes1 = date('m', strtotime($fechaInicio));
+        $dia1 = date('d', strtotime($fechaInicio));
+        $hora1 = date('H', strtotime($fechaInicio));
+        $min1 = date('i', strtotime($fechaInicio));
+        $seg1 = date('s', strtotime($fechaInicio));
+
+        //defino fecha 2
+        $ano2 = date('Y', strtotime($fechaFin));
+        $mes2 = date('m', strtotime($fechaFin));
+        $dia2 = date('d', strtotime($fechaFin));
+        $hora2 = date('H', strtotime($fechaFin));
+        $min2 = date('i', strtotime($fechaFin));
+        $seg2 = date('s', strtotime($fechaFin));
+
+        //calculo timestam de las dos fechas
+        $timestamp1 = mktime($hora1,$min1,$seg1,$mes1,$dia1,$ano1);
+        $timestamp2 = mktime($hora2,$min2,$seg2,$mes2,$dia2,$ano2);
+
+        //resto a una fecha la otra
+        $segundos_diferencia = $timestamp2 - $timestamp1;
+
+        //convierto segundos en días
+        $dias_diferencia = $segundos_diferencia / (60 * 60 * 24);
+
+        //obtengo el valor absoulto de los días (quito el posible signo negativo)
+        $dias_diferencia = abs($dias_diferencia);
+
+        //quito los decimales a los días de diferencia
+        $dias_diferencia = floor($dias_diferencia);
+
+        return $dias_diferencia;
+    }
 }
