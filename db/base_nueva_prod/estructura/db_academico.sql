@@ -754,17 +754,19 @@ create table if not exists `distributivo_academico_horario` (
   `daho_id` bigint(20) not null auto_increment primary key,   
   `uaca_id` bigint(20) not null,
   `mod_id` bigint(20) not null,
+  `eaca_id` bigint(20) null,
   `daho_jornada` varchar(1) not null,
   `daho_descripcion` varchar(1000) null,
   `daho_horario` varchar(10) not null,  
+  `daho_total_horas` integer(2) null,
   `daho_estado` varchar(1) not null,
   `daho_fecha_creacion` timestamp not null default current_timestamp,
   `daho_fecha_modificacion` timestamp null default null,
   `daho_estado_logico` varchar(1) not null,  
   foreign key (uaca_id) references `unidad_academica`(uaca_id), 
-  foreign key (mod_id) references `modalidad`(mod_id)
+  foreign key (mod_id) references `modalidad`(mod_id),
+  foreign key (eaca_id) references `estudio_academico`(eaca_id)
 );
-
 -- --------------------------------------------------------
 -- 
 -- Estructura de tabla para la tabla `distributivo_academico`

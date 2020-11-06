@@ -548,15 +548,7 @@ class DistributivoAcademico extends \yii\db\ActiveRecord
                     ifnull(m.mod_nombre,'') AS Modalidad,
                     ifnull(a.asi_nombre,'') AS Asignatura,                     
                     t.tdis_nombre AS tipo_asignacion,
-                    (case when da.tdis_id=1 then 
-                        concat((case when (dh.uaca_id = 1) and (dh.mod_id = 2) and (dh.daho_horario in('1H','2H','3H')) and (dh.daho_jornada = 1) then 'L-M-J'
-                            when (dh.uaca_id = 1) and (dh.mod_id = 2) and (dh.daho_horario in('1H','2H')) and (dh.daho_jornada = 2) then 'L-M-J'
-                            when (dh.uaca_id = 1) and (dh.mod_id = 2) and (dh.daho_horario = '3H' and dh.daho_jornada = 2) then 'MIE-VIE'
-                            when (dh.uaca_id = 1) and (dh.mod_id = 2) and (dh.daho_horario = '4H') then 'MIE'
-                            when (dh.uaca_id = 1) and (dh.mod_id = 2) and (dh.daho_horario = '5H') then 'VIE'
-                            when (dh.uaca_id = 1) and (dh.mod_id = 2) and (dh.daho_horario = '6H') then 'SÁB'
-                       when (dh.uaca_id = 1) and (dh.mod_id in(3,4)) then 'SÁB'
-                       else dh.daho_horario end),' (', dh.daho_hora_inicio, ' - ', dh.daho_hora_fin, ' )') else '' end) as horario
+                    dh.daho_descripcion as horario
                 FROM 
                     " . $con_academico->dbname . ".distributivo_academico AS da 
                     LEFT JOIN " . $con_academico->dbname . ".distributivo_academico_horario AS dh ON da.daho_id = dh.daho_id                    
