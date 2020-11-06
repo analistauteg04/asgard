@@ -768,6 +768,19 @@ create table if not exists `distributivo_academico_horario` (
   foreign key (eaca_id) references `estudio_academico`(eaca_id)
 );
 -- --------------------------------------------------------
+--
+-- Estructura de tabla para la tabla `tipo_distributivo`
+--
+create table if not exists `tipo_distributivo` (
+ `tdis_id` bigint(20) not null auto_increment primary key,
+ `tdis_nombre` varchar(250) default null, 
+ `tdis_estado` varchar(1) not null, 
+ `tdis_fecha_creacion` timestamp not null default current_timestamp,
+ `tdis_fecha_modificacion` timestamp null default null,
+ `tdis_estado_logico` varchar(1) not null
+);
+
+-- --------------------------------------------------------
 -- 
 -- Estructura de tabla para la tabla `distributivo_academico`
 -- 
@@ -1166,18 +1179,7 @@ create table if not exists `resumen_resultado_evaluacion` (
  foreign key (pro_id) references `profesor`(pro_id)
 );
 
--- --------------------------------------------------------
---
--- Estructura de tabla para la tabla `tipo_distributivo`
---
-create table if not exists `tipo_distributivo` (
- `tdis_id` bigint(20) not null auto_increment primary key,
- `tdis_nombre` varchar(250) default null, 
- `tdis_estado` varchar(1) not null, 
- `tdis_fecha_creacion` timestamp not null default current_timestamp,
- `tdis_fecha_modificacion` timestamp null default null,
- `tdis_estado_logico` varchar(1) not null
-);
+
 
 -- --------------------------------------------------------
 --
@@ -1802,3 +1804,9 @@ create table if not exists db_academico.`configuracion_tipo_distributivo` (
  `ctdi_estado_logico` varchar(1) not null
 );
 
+<<<<<<< HEAD
+ 
+ 
+ 
+=======
+>>>>>>> dd2177c038ed7175b148e2761a156cf7a1da18e3
