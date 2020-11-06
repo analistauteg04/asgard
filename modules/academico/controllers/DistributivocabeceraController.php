@@ -287,7 +287,7 @@ class DistributivocabeceraController extends \app\components\CController {
         }
     }
     
-    public function actionGenerarmateriacarga($ids) {//ok
+    public function actionGenerarmateriacarga($ids) {
         //try {
             
             $ids = isset($_GET['ids']) ? base64_decode($_GET['ids']) : NULL;
@@ -298,37 +298,33 @@ class DistributivocabeceraController extends \app\components\CController {
             
             $DistADO = new DistributivoCabecera();
             $cabDist = $DistADO->consultarCabDistributivo($ids);
-            //Utilities::putMessageLogFile($cabDist);
-            
-            /*$especiesADO = new Especies();
-            $cabFact = $especiesADO->consultarEspecieGenerada($ids);
-            if ($cabFact['uaca_id'] == '1') {
-                $carrera = 'facultad/carrera';
-                $facultaded = 'Facultad de Grado';
+            $detDist = $DistADO->consultarDetDistributivo($cabDist[0]['paca_id'],$cabDist[0]['pro_id']);
+            //Recorre las horas para extraer sus dias y hora
+            for ($fil = 0; $fil < sizeof($detDist); $fil++) {
+                //Si tipo Distributivo =1 Tiene datos en la tabla distributivo horas
+                if ($detDist[$fil]['tdis_id'] == 1) {
+                    $horaDist = $DistADO->consultarDistHoras($detDist[$fil]['daho_id']);
+                    $detDist[$fil]['DIAS']=$horaDist[0]['DIAS'];
+                    $detDist[$fil]['HORAS']=$horaDist[0]['HORAS'];
+                }else{
+                    $detDist[$fil]['DIAS']="N/A";
+                    $detDist[$fil]['HORAS']="N/A";
+                }
             }
-            if ($cabFact['uaca_id'] == '2') {
-                $carrera = 'maestría';
-                $facultaded = 'Facultad de Posgrado';
-            }*/
-            //$objEsp = $especiesADO->getDataEspecie($cabFact['esp_id']);
-            $codigo = "222";//$objEsp[0]['codigo'] . '-' . $cabFact['egen_numero_solicitud'];
-            //setlocale(LC_TIME,"es_ES");//strftime("%A, %d de %B de %Y", date("d-m-Y"));
+            //Utilities::putMessageLogFile($detDist);
             setlocale(LC_TIME, 'es_CO.UTF-8');
-
-      
-            $FechaDia = strftime("%A %d de %B %G", strtotime(date("d-m-Y"))); //date("j F de Y");   
+            $FechaDia = strftime("%d de %B %G", strtotime(date("d-m-Y"))); //date("j F de Y");   
             //$cabFact['FechaDia'] = strftime("%A %d de %B %G", strtotime($cabFact['fecha_aprobacion']));
             //$this->pdf_cla_acceso = $codigo;
             $rep->orientation = "P"; // tipo de orientacion L => Horizontal, P => Vertical   
             $rep->createReportPdf(
                     $this->render('@modules/academico/views/tpl_asignamaterias/cargahora', [
                         'cabDist' => $cabDist,
+                        'detDist' => $detDist,
                         'FechaDia' => $FechaDia,
-                        //'carrera' => $carrera,
-                        //'facultaded' => $facultaded,
                     ])
             );
-            $rep->mpdf->Output('CARGA_HORAS_' . $codigo . ".pdf", ExportFile::OUTPUT_TO_DOWNLOAD);
+            $rep->mpdf->Output($cabDist[0]['Nombres'].'_'.'BLOQUE_' . $cabDist[0]['baca_descripcion'].'_'.$cabDist[0]['baca_anio'] . ".pdf", ExportFile::OUTPUT_TO_DOWNLOAD);
             //exit;
 //        } catch (Exception $e) {
 //            echo $e->getMessage();

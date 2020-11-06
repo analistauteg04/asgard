@@ -351,17 +351,49 @@ class DistributivoCabecera extends \yii\db\ActiveRecord
     public function consultarCabDistributivo($Ids) {
         $con = \Yii::$app->db_academico;
         $con_db = \Yii::$app->db;//Conexin Asgard
-        $sql = "SELECT A.*,CONCAT(C.per_pri_nombre,' ',C.per_pri_apellido) Nombres
+        $sql = "SELECT A.*,CONCAT(C.per_pri_nombre,' ',C.per_pri_apellido) Nombres,UPPER(E.baca_descripcion) baca_descripcion,E.baca_anio
                     FROM " . $con->dbname . ".distributivo_cabecera A
                       INNER JOIN (" . $con->dbname . ".profesor B
                         INNER JOIN db_asgard.persona C ON B.per_id=C.per_id)
                       ON A.pro_id=B.pro_id
+                      INNER JOIN (db_academico.periodo_academico D
+                        INNER JOIN db_academico.bloque_academico E ON E.baca_id=D.baca_id)
+                      ON D.paca_id=A.paca_id
                  WHERE A.dcab_estado=1 AND A.dcab_id=:ids ";
         
         /*$sql = "SELECT A.* FROM " . $con->dbname . ".cabecera_solicitud A
                     WHERE  A.csol_estado=1 AND A.csol_estado_logico=1 AND A.csol_id= :csol_id;";*/
         $comando = $con->createCommand($sql);
         $comando->bindParam(":ids", $Ids, \PDO::PARAM_INT);
+        return $comando->queryAll();
+    }
+    
+    public function consultarDetDistributivo($PacaId,$ProId) {
+        $con = \Yii::$app->db_academico;
+        $sql = "SELECT A.*,B.asi_nombre,C.uaca_nombre,D.mod_nombre,
+                    DATE_FORMAT(E.paca_fecha_inicio,'%d/%m/%Y') paca_fecha_inicio,DATE_FORMAT(E.paca_fecha_fin,'%d/%m/%Y') paca_fecha_fin
+                FROM " . $con->dbname . ".distributivo_academico A
+                  INNER JOIN " . $con->dbname . ".asignatura B ON A.asi_id=B.asi_id
+                  INNER JOIN " . $con->dbname . ".unidad_academica C ON C.uaca_id=A.uaca_id
+                  INNER JOIN " . $con->dbname . ".modalidad D ON D.mod_id=A.mod_id
+                  INNER JOIN " . $con->dbname . ".periodo_academico E ON E.paca_id=A.paca_id
+              WHERE A.paca_id = :paca_id AND A.pro_id = :pro_id ";
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":paca_id", $PacaId, \PDO::PARAM_INT);
+        $comando->bindParam(":pro_id", $ProId, \PDO::PARAM_INT);
+        return $comando->queryAll();
+    }
+    
+    public function consultarDistHoras($Ids) {
+        $con = \Yii::$app->db_academico;
+        $sql = "SELECT CONCAT(daho_hora_inicio,' - ',daho_hora_fin) HORAS,
+                    CONCAT(IF(daho_lunes=1,'LUN-',''),IF(daho_martes=1,'MAR-',''),IF(daho_miercoles=1,'MIE-',''),
+                        IF(daho_jueves=1,'JUE-',''),IF(daho_viernes=1,'VIE-',''),IF(daho_sabado=1,'SAB-',''),
+                        IF(daho_domingo=1,'DOM','')) DIAS
+                    FROM " . $con->dbname . ".distributivo_academico_horario
+                WHERE daho_estado_logico=1 AND daho_id = :daho_id ;";
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":daho_id", $Ids, \PDO::PARAM_INT);
         return $comando->queryAll();
     }
 }

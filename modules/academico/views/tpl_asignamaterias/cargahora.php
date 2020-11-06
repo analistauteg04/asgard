@@ -68,6 +68,10 @@
 </style>
 <div>
    
+    <div class="bold" style="text-align: center">
+        ASIGNACION DE MATERIAS CORRESPONDIENTES AL BLOQUE <?php echo $cabDist[0]['baca_descripcion'] ?> <?php echo $cabDist[0]['baca_anio'] ?>. 
+    </div>
+    <br><br>
     <div class="divTable">
         <div class="divRow">
             <div  class="divCell bold" style="width:10%;"><?php echo app\modules\fe_edoc\Module::t("fe", "DOCENTE") ?>:</div>
@@ -104,10 +108,21 @@
                     <span><?php echo app\modules\fe_edoc\Module::t("fe", "FECHA DE FIN") ?></span>
                 </td>
             </tr>
-            
-
+            <?php for ($fil = 0; $fil < sizeof($detDist); $fil++) { ?>
+                <tr>
+                    <td class="marcoCel"><?php echo $detDist[$fil]['asi_nombre'] ?></td>
+                    <td class="marcoCel"><?php echo $detDist[$fil]['DIAS'] ?></td>
+                    <td class="marcoCel"><?php echo $detDist[$fil]['HORAS'] ?></td>
+                    <td class="marcoCel"><?php echo $detDist[$fil]['uaca_nombre'] ?></td>
+                    <td class="marcoCel"><?php echo $detDist[$fil]['mod_nombre'] ?></td>
+                    <td class="marcoCel"><?php echo $detDist[$fil]['paca_fecha_inicio'] ?></td>
+                    <td class="marcoCel"><?php echo $detDist[$fil]['paca_fecha_fin'] ?></td>
+                </tr>
+            <?php } ?>
         </tbody>
     </table>
+    
+    <br><br>
 
     <div style="text-justify: auto">
         <p>
