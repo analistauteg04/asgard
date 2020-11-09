@@ -114,6 +114,9 @@ academico::registerTranslations();
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <h4><span id="lbl_evaluar"><?= Yii::t("formulario", "Asignaturas Planificadas del estudiante") ?></span></h4>
         </div><br>
+        <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
+            <p class="text-danger"> <?= Yii::t("formulario", "Al eliminar la asignatura de este cuadro es el registro guardado anteriormente y es permanente") ?> </p>
+        </div><br>
         <?=
         PbGridView::widget([
             'id' => 'PbPlanificaestudiantedit',
@@ -160,9 +163,12 @@ academico::registerTranslations();
                 ],
             ],
         ])
-        ?>   
+        ?> <br>  
         </div><div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <h4><span id="lbl_evaluar"><?= Yii::t("formulario", "Nuevas Asignaturas del estudiante") ?></span></h4>
+        </div>
+        <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
+            <p class="text-danger"> <?= Yii::t("formulario", "Al eliminar la asignatura de este cuadro es temporal, antes de actualizar los datos") ?> </p>
         </div><br><br>
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <div class="form-group">

@@ -802,9 +802,9 @@ function modificarplanificacion() {
     arrParams.nombreest = $('#cmb_buscarest').val();
     arrParams.pla_id = $('#txth_pla_id').val();
     arrParams.per_id = $('#txth_per_id').val();
-    //alert(arrParams.nombreest);
+    
     //if ($('#cmb_jornadaest').val() != '0' && $('#txt_carrera').text() != 'Seleccionar' && $('#cmb_modalidadest').val() != '0' && /*$('#cmb_malladoest').val() != '0' &&*/ $('#cmb_periodoest').val() != '0' && $('#cmb_buscarest').val() > '0') {
-    //if (sessionStorage.dts_datosItemplan) {
+    if (sessionStorage.dts_datosItemplan) {
     //alert('Puedo grabar');
     var arr_Grid = JSON.parse(sessionStorage.dts_datosItemplan);
     if (arr_Grid.length > 0) {
@@ -826,9 +826,9 @@ function modificarplanificacion() {
     } else {
         showAlert('NO_OK', 'error', { "wtmessage": "No Existe datos ", "title": 'Información' });
     }
-    /*} else {
-        showAlert('NO_OK', 'error', {"wtmessage": "No ha ingresado detalle en planificación", "title": 'Información'});
-    }*/
+     } else {
+        showAlert('NO_OK', 'error', {"wtmessage": "No ha ingresado nuevas asignaturas del estudiante", "title": 'Información'});
+    }
     /*} else {
         showAlert('NO_OK', 'error', {"wtmessage": "Todos los datos de la cabecera planificación son obligatorios", "title": 'Información'});
     }*/
