@@ -10,9 +10,6 @@ academico::registerTranslations();
 ?>
 <?= Html::hiddenInput('txth_pla_id', $_GET['pla_id'], ['id' => 'txth_pla_id']); ?>
 <?= Html::hiddenInput('txth_per_id', $_GET['per_id'], ['id' => 'txth_per_id']); ?>
-<!-- <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-    <h4><span id="lbl_planear"><? academico::t("Academico", "See Student Planning") ?></span></h4>
-</div><br><br><br>-->
 <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
     <p class="text-danger"> <?= Yii::t("formulario", "Fields with * are required") ?> </p>
 </div>
@@ -99,20 +96,24 @@ academico::registerTranslations();
                     </div> 
                 </div>        
             </div>
-            <!-- <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <div class="form-group">
-                    
-                </div>        
-            </div>-->
-        </div>
-        <div class="form-group">
+         </div>        
+        <!-- <div class="form-group">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center">
-                <button id="btn_AgregarItemat" type="button" class="btn btn-primary" ><?= Academico::t('profesor', 'Add') ?></button>
-                <!-- <div class="col-sm-2 col-md-2 col-xs-2 col-lg-2 text-center">
-                    <a id="btn_AgregarItemat" href="javascript:" class="btn btn-primary btn-block"> <? Yii::t("formulario", "Add") ?></a>
-                </div>-->
+                <button type="button" class="btn btn-primary" onclick="javascript:addMaterias()"><?= Academico::t('profesor', 'Add') ?></button>
+                <a id="btn_EditItemat" href="javascript:" class="btn btn-primary btn-block"> <?= Yii::t("formulario", "Add") ?></a>
+                
+            </div>
+        </div> -->
+        <div class="form-group">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="col-sm-2 col-md-2 col-xs-2 col-lg-2 text-center">
+                    <a id="btn_AgregarItemat" href="javascript:" class="btn btn-primary btn-block"> <?= Yii::t("formulario", "Agregar") ?></a>
+                </div>
             </div>
         </div>
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <h4><span id="lbl_evaluar"><?= Yii::t("formulario", "Asignaturas Planificadas del estudiante") ?></span></h4>
+        </div><br>
         <?=
         PbGridView::widget([
             'id' => 'PbPlanificaestudiantedit',
@@ -120,16 +121,15 @@ academico::registerTranslations();
             'pajax' => true,
             'summary' => false,
             'columns' => [
+                //['class' => 'yii\grid\SerialColumn', 'options' => ['width' => '10']],
                 [
                     'attribute' => 'asignatura',
                     'header' => academico::t("Academico", "Subject"),
-                    'value' => 'asignatura',
-                ],
-                [
-                    'attribute' => 'jornada',
-                    'header' => academico::t("Academico", "Working day"),
-                    'value' => 'pes_jornada',
-                ],
+                    'options' => ['width' => '590'],
+                    'value'=>function ($model_detalle) {
+                        return $model_detalle['cod_asignatura']  . ' - ' . $model_detalle['asignatura'];
+                    },
+                ],           
                 [
                     'attribute' => 'bloque',
                     'header' => Yii::t("formulario", "Block"),
@@ -153,23 +153,26 @@ academico::registerTranslations();
                     'buttons' => [
                         'delete' => function ($url, $model_detalle) {
                             return Html::a('<span class="' . Utilities::getIcon('remove') . '"></span>', null, ['href' => 'javascript:', 'onclick' => "deletematestudiante(" . $_GET['pla_id'] . ", " . $_GET['per_id'] . ", " . substr($model_detalle['Bloque 1'], -1) . ", " . substr($model_detalle['Hora 1'], -1) . ");", "data-toggle" => "tooltip", "title" => Yii::t("accion", "Delete")]);
-                            //return Html::a('<span class="'.Utilities::getIcon('remove').'"></span>', null, ['href' => 'javascript:', 'onclick' => "javascript:removeItemplanifaciacion(this, " . $_GET['pla_id'] . ", " . $_GET['per_id'] . ", " . substr($model_detalle['Bloque 1'], -1) . ", " . substr($model_detalle['Hora 1'], -1) . ");", "data-toggle" => "tooltip", "title" => Yii::t("accion","Delete")]);                         
+                            //return Html::a('<span class="'.Utilities::getIcon('remove').'"></span>', null, ['href' => 'javascript:', 'onclick' => "javascript:removeItemPlanificacion(this, " . $_GET['pla_id'] . ", " . $_GET['per_id'] . ", " . substr($model_detalle['Bloque 1'], -1) . ", " . substr($model_detalle['Hora 1'], -1) . ");", "data-toggle" => "tooltip", "title" => Yii::t("accion","Delete")]);                         
+                            //return Html::a('<span class="'.Utilities::getIcon('remove').'"></span>', null, ['href' => 'javascript:', 'onclick' => "javascript:removeItemPlanificacion(3);", "data-toggle" => "tooltip", "title" => Yii::t("accion","Delete")]);                         
                         },
                     ],
                 ],
             ],
         ])
-        ?> 
-        <!--<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        ?>   
+        </div><div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <h4><span id="lbl_evaluar"><?= Yii::t("formulario", "Nuevas Asignaturas del estudiante") ?></span></h4>
+        </div><br><br>
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <div class="form-group">
                 <div class="box-body table-responsive no-padding">
-                    <table  id="PbPlanificaestudiantedit" class="table table-hover">
+                    <table  id="PbPlanificaestudiantnew" class="table table-hover">
                         <thead>
                             <tr>
                                 <th style="display:none; border:none;"><?= Yii::t("formulario", "pla_id") ?></th>
                                 <th style="display:none; border:none;"><?= Yii::t("formulario", "per_id") ?></th>
-                                <th><?= academico::t("Academico", "Subject") ?></th>
-                                <th><?= academico::t("Academico", "Working day") ?></th>
+                                <th style="width:52.5%"><?= academico::t("Academico", "Subject") ?></th>
                                 <th><?= Yii::t("formulario", "Block") ?></th>                            
                                 <th><?= Yii::t("formulario", "Mode") ?></th>
                                 <th><?= academico::t("Academico", "Hour") ?></th>                            
@@ -177,27 +180,12 @@ academico::registerTranslations();
                             </tr>
                         </thead>
                         <tbody>
-        <?php
-        /* for ($i = 0; $i < count($model_detalle); $i++) {
-          $indice = $i++;
-          echo '<tr>';
-          echo '<td>' . $$indice . '</td>';
-          echo '  <td style="display:none; border:none;">' .$_GET['pla_id'] . '</td>';
-          echo '<td style="display:none; border:none;">' . $_GET['per_id'] . '</td>';
-          echo '<td>' . $model_detalle [$i]["asignatura"] . '</td>';
-          echo '<td>' . $model_detalle [$i]["pes_jornada"] . '</td>';
-          echo '<td>' . $model_detalle [$i]["Bloque 1"] . '</td>';
-          echo '<td>' . $model_detalle [$i]["modalidad"] . '</td>';
-          echo '<td>' . $model_detalle [$i]["Hora 1"] . '</td>';
-          echo ' </tr>';
-          } */
-        ?>       
                         </tbody>
                     </table>
                 </div>
             </div>
-        </div>-->
-        </div></br></br></br></br>
+        </div>
+       </div>  
         <!-- <div class='col-md-12 col-sm-12 col-xs-12 col-lg-12'>        
             <div class="col-sm-10 col-md-10 col-xs-8 col-lg-10"></div>
             <div class="col-sm-2 col-md-2 col-xs-4 col-lg-2">                
@@ -205,5 +193,5 @@ academico::registerTranslations();
             </div>        
         </div> -->
     </div>
-    </div>    
+    </div>  
 </form> 

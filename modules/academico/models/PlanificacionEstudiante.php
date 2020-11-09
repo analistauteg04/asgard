@@ -643,7 +643,7 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord {
         $con = \Yii::$app->db_academico;
         // Bloque 1
         for ($i = 1; $i < 7; $i++) {
-            $sql .= "SELECT pes_mat_b1_h" . $i . "_cod as cod_asignatura, asig.asi_nombre as asignatura, CASE pes_jornada  
+            $sql .= "SELECT pes_id as Ids, pes_mat_b1_h" . $i . "_cod as cod_asignatura, asig.asi_nombre as asignatura, CASE pes_jornada  
                             WHEN 'M' THEN 'Matutino'  
                             WHEN 'N' THEN 'Nocturno'  
                             WHEN 'S' THEN 'Semipresencial'
@@ -658,7 +658,7 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord {
         }
         // Bloque 2
         for ($j = 1; $j < 7; $j++) {
-            $sql .= "SELECT pes_mat_b2_h" . $j . "_cod as cod_asignatura, asig.asi_nombre as asignatura, CASE pes_jornada  
+            $sql .= "SELECT pes_id as Ids, pes_mat_b2_h" . $j . "_cod as cod_asignatura, asig.asi_nombre as asignatura, CASE pes_jornada  
                             WHEN 'M' THEN 'Matutino'  
                             WHEN 'N' THEN 'Nocturno'  
                             WHEN 'S' THEN 'Semipresencial'
@@ -1001,9 +1001,9 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord {
         try {
             $comando = $con->createCommand
                     ("UPDATE " . $con->dbname . ".planificacion_estudiante      
-                      SET pes_usuario_modificacion = " . $pes_usuario_modifica . ", " . 
+                      SET pes_usuario_modifica = " . $pes_usuario_modifica . ", " . 
                       $modificar . "
-                      pes_fecha_modificacion = " . $fecha . "                                         
+                      pes_fecha_modificacion = '" . $fecha . "'                                         
                       WHERE
                         pla_id = " . $pla_id . " AND                        
                         per_id = " . $per_id . " AND

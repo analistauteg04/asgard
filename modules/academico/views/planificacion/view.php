@@ -74,16 +74,14 @@ academico::registerTranslations();
         'pajax' => true,
         'summary' => false,
         'columns' => [
+            ['class' => 'yii\grid\SerialColumn', 'options' => ['width' => '10']],
             [
                 'attribute' => 'asignatura',
                 'header' => academico::t("Academico", "Subject"),
-                'value' => 'asignatura',
-            ],
-            [
-                'attribute' => 'jornada',
-                'header' => academico::t("Academico", "Working day"),
-                'value' => 'pes_jornada',
-            ],
+                'value'=>function ($model_detalle) {
+                    return $model_detalle['cod_asignatura']  . ' - ' . $model_detalle['asignatura'];
+                },
+            ],    
             [
                 'attribute' => 'bloque',
                 'header' => Yii::t("formulario", "Block"),

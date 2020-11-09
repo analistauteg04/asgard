@@ -889,13 +889,13 @@ class PlanificacionController extends \app\components\CController {
                         // crear el string de los valores
                         $materia = explode(" - ", $arrplanedit[$i]['asignatura']);
                         $mat_cod = $materia[0];      
-                        $codmateria  = 'pes_mat_b' . $bloque . '_h' . $horario . '= '. $mat_cod . ', ';
-                        $modmateria  = 'pes_mod_b' . $bloque . '_h' . $horario . '= '. $modalidades . ', ';                  
+                        $codmateria  = "pes_mat_b" . $bloque . "_h" . $horario . "_cod = '" . $mat_cod . "', ";
+                        $modmateria  = "pes_mod_b" . $bloque . "_h" . $horario . "= '" . $modalidades . "', ";                  
                         //$valores .= "'" . $mat_cod . "', " . $modalidades . ",";  
-                        $modificar .=  $codmateria . ' ' .  modmateria;                    
+                        $modificar .=  $codmateria . ' ' .  $modmateria;                    
                     }   
                     \app\models\Utilities::putMessageLogFile('modifica string..: ' . $modificar);                 
-                    //$resul = $mod_planifica->modificarDataPlanificacionestudiante($plan_id, $pers_id, $usu_autenticado, $modificar);
+                    $resul = $mod_planifica->modificarDataPlanificacionestudiante($plan_id, $pers_id, $usu_autenticado, $modificar);
             }
 
             if ($resul['status']) {
