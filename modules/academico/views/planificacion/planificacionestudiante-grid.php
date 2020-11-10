@@ -5,9 +5,7 @@ use yii\helpers\Url;
 use app\models\Utilities;
 use app\widgets\PbGridView\PbGridView;
 use app\modules\admision\Module as admision;
-//use app\modules\academico\Module as academico;
 
-//print_r($model);
 admision::registerTranslations();
 ?>
 <?= Html::hiddenInput('txth_ids', '', ['id' => 'txth_ids']); ?>

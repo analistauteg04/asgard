@@ -557,8 +557,7 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord {
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
             $search_cond = "%" . $arrFiltro["estudiante"] . "%";
             $comando->bindParam(":estudiante", $search_cond, \PDO::PARAM_STR);
-            //\app\models\Utilities::putMessageLogFile('str_searchxx: ' . $sql);
-
+            
             if ($arrFiltro['modalidad'] > 0) {
                 $modalidad = $arrFiltro["modalidad"];
                 $comando->bindParam(":modalidad", $modalidad, \PDO::PARAM_INT);
@@ -676,7 +675,6 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord {
 
         $comando = $con->createCommand($sql);
         $resultData = $comando->queryall();
-        //\app\models\Utilities::putMessageLogFile($resultData);
         $dataProvider = new ArrayDataProvider([
             'key' => 'id',
             'allModels' => $resultData,
@@ -702,8 +700,7 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord {
      */
     public function consultarCabeceraplanifica($pla_id, $per_id) {
         $con = \Yii::$app->db_academico;
-        //$estado = 1;
-
+        
         $sql = "SELECT plan.mod_id, 
                        plan.pla_periodo_academico,
                        plae.pes_carrera
@@ -712,7 +709,6 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord {
                 WHERE plan.pla_id = :pla_id and plae.per_id = :per_id";
 
         $comando = $con->createCommand($sql);
-        //$comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
         $comando->bindParam(":pla_id", $pla_id, \PDO::PARAM_INT);
         $comando->bindParam(":per_id", $per_id, \PDO::PARAM_INT);
         $resultData = $comando->queryOne();
@@ -746,10 +742,6 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord {
                           pes_fecha_modificacion = $pes_fecha_modificacion                          
                       WHERE 
                         pes_estado= 1 AND pla_id = $pla_id AND per_id = $per_id";
-        /*\app\models\Utilities::putMessageLogFile('asdasfdg ' . $modificar);
-        \app\models\Utilities::putMessageLogFile('cvxcv ' . $este);
-        \app\models\Utilities::putMessageLogFile('qaaaa ' . $hora);
-        \app\models\Utilities::putMessageLogFile('xxxx ' . $bloque);*/
         try {
             $comando = $con->createCommand
                     ("UPDATE " . $con->dbname . ".planificacion_estudiante		       
@@ -787,23 +779,18 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord {
         $arroout = array();
         $con = \Yii::$app->db_academico;
         $trans = $con->beginTransaction();
-        try {
-            //$per_id = @Yii::$app->session->get("PB_perid");    
+        try {            
             $data = isset($data['DATA']) ? $data['DATAS'] : array();
             $this->insertarPlanificacionestudiante($con, $pla_id, $per_id, $pes_jornada, $pes_carrera, $pes_dni, $pes_nombres, $insertar, $valores);
             $trans->commit();
             $con->close();
-            //RETORNA DATOS 
-            //$arroout["ids"]= $ftem_id;
+            //RETORNA DATOS             
             $arroout["status"] = true;
-            //$arroout["secuencial"]= $doc_numero;
-
-
+           
             return $arroout;
         } catch (\Exception $e) {
             $trans->rollBack();
-            $con->close();
-            //throw $e;
+            $con->close();           
             $arroout["status"] = false;
             return $arroout;
         }
@@ -817,7 +804,6 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord {
      * @return  
      */
     private function insertarPlanificacionestudiante($con, $pla_id, $per_id, $pes_jornada, $pes_carrera, $pes_dni, $pes_nombres, $insertar, $valores) {
-        //$usu_id = @Yii::$app->session->get("PB_iduser");
         $estado = 1;
         $sql = "INSERT INTO " . $con->dbname . ".planificacion_estudiante
                     (pla_id,
@@ -831,9 +817,7 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord {
                      pes_estado_logico)VALUES
                     (" . $pla_id . "," . $per_id . ",'" . $pes_jornada . "','" . $pes_carrera . "','" . $pes_dni . "','"
                 . $pes_nombres . "'," . $valores . " '" . $estado . "','" . $estado . "')";
-        //\app\models\Utilities::putMessageLogFile('guarda insert..: ' . $insertar);
-        //\app\models\Utilities::putMessageLogFile('guarda valor..: ' . $valores);
-        //\app\models\Utilities::putMessageLogFile('guarda sql..: ' . $sql);
+        
         $command = $con->createCommand($sql);
         $command->execute();
     }
@@ -961,22 +945,17 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord {
         $trans = $con->beginTransaction();
         $fecha = date(Yii::$app->params["dateTimeByDefault"]);
         try {
-            //$per_id = @Yii::$app->session->get("PB_perid");    
             $data = isset($data['DATA']) ? $data['DATAS'] : array();
             $this->modificarPlanificacionestudiante($con,$pla_id, $per_id, $pes_usuario_modifica,$fecha, $modificar);
             $trans->commit();
             $con->close();
             //RETORNA DATOS 
-            //$arroout["ids"]= $ftem_id;
             $arroout["status"] = true;
-            //$arroout["secuencial"]= $doc_numero;
-
-
+            
             return $arroout;
         } catch (\Exception $e) {
             $trans->rollBack();
             $con->close();
-            //throw $e;
             $arroout["status"] = false;
             return $arroout;
         }
@@ -989,7 +968,6 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord {
      * @return
      */
     public function modificarPlanificacionestudiante($con,$pla_id, $per_id, $pes_usuario_modifica,$fecha, $modificar) {
-        //$con = \Yii::$app->db_academico;
         $pes_usuario_modificacion = date(Yii::$app->params["dateTimeByDefault"]);
         $estado = 1;
         $trans = $con->getTransaction(); // se obtiene la transacción actual
