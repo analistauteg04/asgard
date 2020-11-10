@@ -749,11 +749,9 @@ class PlanificacionController extends \app\components\CController {
         $modcarrera = new EstudioAcademico();
         $mod_jornada = new DistributivoAcademicoHorario();
         $mod_malla = new MallaAcademica();
-        //$mod_cabecera = $mod_periodo->consultarCabeceraplanifica( $pla_id, $per_id );
         $unidad_acad_data = $uni_aca_model->consultarUnidadAcademicas();
         $academic_study_data = $modcarrera->consultarCarreraxunidad($unidad_acad_data[0]['id']);
         $modalidad_data = $modcarrera->consultarmodalidadxcarrera($academic_study_data[0]['id']);
-        //$mod_detalle = $mod_periodo->consultarDetalleplanifica( $pla_id, $per_id, false );
         $jornada = $mod_jornada->consultarJornadahorario();
         $malla = $mod_malla->consultarmallasxcarrera($unidad_acad_data[0]['id'], $modalidad_data[0]['id'], $academic_study_data[0]['id']);
         $materia = $mod_malla->consultarasignaturaxmalla($malla[0]['id']);
@@ -777,9 +775,7 @@ class PlanificacionController extends \app\components\CController {
                 return Utilities::ajaxResponse('OK', 'alert', Yii::t('jslang', 'Success'), 'false', $message);
             }
         }
-        return $this->render('new', [
-                    //'arr_cabecera' => $mod_cabecera,
-                    //'model_detalle' => $mod_detalle,
+        return $this->render('new', [                 
                     'arr_unidad' => ArrayHelper::map($unidad_acad_data, 'id', 'name'),
                     'arr_modalidad' => ArrayHelper::map(array_merge([['id' => '0', 'name' => 'Seleccionar']], $modalidad_data), 'id', 'name'),
                     'arr_carrera' => ArrayHelper::map(array_merge([['id' => '0', 'name' => 'Seleccionar']], $academic_study_data), 'id', 'name'),
@@ -806,7 +802,7 @@ class PlanificacionController extends \app\components\CController {
             $modalidad = $data['modalidadest'];
             //$malla = $data['mallaest'];
             $periodo = $data['periodoest'];
-            $per_id = $data['nombreest']; //OJO ESTO LUEGO HABILITAR CUADO SE TOME DE LA BUSQUEDA
+            $per_id = $data['nombreest']; 
             $data_persona = $mod_persona->consultaPersonaId($per_id);
             $dni = $data_persona['per_cedula'];
             $nombre = $data_persona['per_pri_nombre'] . ' ' . $data_persona['per_pri_apellido'];
@@ -823,7 +819,6 @@ class PlanificacionController extends \app\components\CController {
                     /***************/
                     //Nuevo Registro  
                     $arrplan = json_decode($data['DATAS'], true);
-                    // \app\models\Utilities::putMessageLogFile('adsd: ' . $arrplan[0]['asignatura']);
                     for ($i = 0; $i < sizeof($arrplan); $i++) {
                         // recorrer y crear un arrrglo solo con los campos a ingresar de horario y bloque
                         // crear string del insert
@@ -891,7 +886,6 @@ class PlanificacionController extends \app\components\CController {
                         $mat_cod = $materia[0];      
                         $codmateria  = "pes_mat_b" . $bloque . "_h" . $horario . "_cod = '" . $mat_cod . "', ";
                         $modmateria  = "pes_mod_b" . $bloque . "_h" . $horario . "= '" . $modalidades . "', ";                  
-                        //$valores .= "'" . $mat_cod . "', " . $modalidades . ",";  
                         $modificar .=  $codmateria . ' ' .  $modmateria;                    
                     }   
                     \app\models\Utilities::putMessageLogFile('modifica string..: ' . $modificar);                 

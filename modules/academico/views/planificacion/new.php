@@ -4,7 +4,6 @@ use yii\helpers\Html;
 use app\widgets\PbGridView\PbGridView;
 use app\modules\academico\Module as academico;
 use kartik\select2\Select2;
-// print_r($arr_alumno);
 academico::registerTranslations();
 ?>
 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -107,11 +106,6 @@ academico::registerTranslations();
                     </div> 
                 </div>        
             </div>
-            <!-- <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <div class="form-group">
-                    
-                </div>        
-            </div>-->
         </div>
         <div class="form-group">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -132,8 +126,7 @@ academico::registerTranslations();
                                 <!-- <th><? academico::t("Academico", "Working day") ?></th>-->
                                 <th><?= Yii::t("formulario", "Block") ?></th>                            
                                 <th><?= Yii::t("formulario", "Mode") ?></th>
-                                <th><?= academico::t("Academico", "Hour") ?></th>                            
-
+                                <th><?= academico::t("Academico", "Hour") ?></th>  
                             </tr>
                         </thead>
                         <tbody>

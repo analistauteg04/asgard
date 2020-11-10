@@ -619,24 +619,15 @@ function agregarItems(opAccion) {
 function objProducto(indice) {
     var rowGrid = new Object();
     rowGrid.indice = indice;
-    /*alert('zcxvcx' + $('#txth_pla_id').val());
-     rowGrid.pla_id = $('#txth_pla_id').val();
+    /*rowGrid.pla_id = $('#txth_pla_id').val();
      rowGrid.per_id = $('#txth_per_id').val();*/
-    //rowGrid.componente_evi = "";
-
+    
     rowGrid.asignatura = $('#cmb_asignaest option:selected').text();
-    // rowGrid.jornada = $('#cmb_jornadaest option:selected').text();
-    /*if ($('#cmb_componente_evi option:selected').text() != "Seleccionar") {
-     rowGrid.componente_evi = $('#cmb_componente_evi option:selected').text();
-     }*/
-
+    // rowGrid.jornada = $('#cmb_jornadaest option:selected').text();    
     rowGrid.bloque = $('#cmb_bloqueest option:selected').text();
     rowGrid.modalidad = $('#cmb_modalidadesth option:selected').text();
     rowGrid.hora = $('#cmb_horaest option:selected').text();
-
-    //rowGrid.pro_otros = ($("#chk_otros").prop("checked")) ? 1 : 0;
     rowGrid.accion = "new";
-    //alert ('indice' + rowGrid.indice);
     return rowGrid;
 }
 function addPrimerItem(TbGtable, lista, i) {
@@ -659,13 +650,8 @@ function limpiarDetalle() {
 function addVariosItem(TbGtable, lista, i) {
     //i=(i==-1)?($('#'+TbGtable+' tr').length)-1:i;
     i = ($('#' + TbGtable + ' tr').length) - 1;
-    //alert ('dasd' + i);
-    //$('#'+TbGtable+' >table >tbody').append(retornaFilaProducto(i,lista,TbGtable,true));
-    if (i < 12) {
-        //lista.forEach(function (lista, i) {
-        // console.log("lista " + i + " | Asignatura: " + lista.asignatura + " Bloque: " + lista.bloque + " Hora: " + lista.hora)
-        //}); 
-        $('#' + TbGtable + ' tr:last').after(retornaFila(i, lista, TbGtable, true));
+     if (i < 12) {
+         $('#' + TbGtable + ' tr:last').after(retornaFila(i, lista, TbGtable, true));
 
     } else {
         showAlert('NO_OK', 'error', { "wtmessage": "Ya tiene ingresadas máximo de materias permitidas", "title": 'Información' });
@@ -754,12 +740,10 @@ function guardaplanificacion() {
     arrParams.modalidadest = $('#cmb_modalidadest').val();
     arrParams.mallaest = $('#cmb_malladoest').val();
     arrParams.periodoest = $('#cmb_periodoest').val();
-    arrParams.nombreest = $('#cmb_buscarest').val();
-    //alert(arrParams.nombreest);
+    arrParams.nombreest = $('#cmb_buscarest').val();   
     if ($('#cmb_jornadaest').val() != '0' && $('#cmb_carreraest').text() != 'Seleccionar' && $('#cmb_modalidadest').val() != '0' && $('#cmb_malladoest').val() != '0' && $('#cmb_periodoest').val() != '0' && $('#cmb_buscarest').val() > '0') {
         if (sessionStorage.dts_datosItemplan) {
-            //alert('Puedo grabar');
-            var arr_Grid = JSON.parse(sessionStorage.dts_datosItemplan);
+             var arr_Grid = JSON.parse(sessionStorage.dts_datosItemplan);
             if (arr_Grid.length > 0) {
                 arrParams.DATAS = sessionStorage.dts_datosItemplan
                 arrParams.ACCION = accion;
@@ -776,8 +760,7 @@ function guardaplanificacion() {
                         showAlert(response.status, response.type, { "wtmessage": message.info, "title": response.label });
                     }
                 }, true);
-            } else {
-                //arrParams.DATA = new Array();
+            } else {             
                 showAlert('NO_OK', 'error', { "wtmessage": "No Existe datos ", "title": 'Información' });
             }
         } else {
@@ -805,7 +788,6 @@ function modificarplanificacion() {
     
     //if ($('#cmb_jornadaest').val() != '0' && $('#txt_carrera').text() != 'Seleccionar' && $('#cmb_modalidadest').val() != '0' && /*$('#cmb_malladoest').val() != '0' &&*/ $('#cmb_periodoest').val() != '0' && $('#cmb_buscarest').val() > '0') {
     if (sessionStorage.dts_datosItemplan) {
-    //alert('Puedo grabar');
     var arr_Grid = JSON.parse(sessionStorage.dts_datosItemplan);
     if (arr_Grid.length > 0) {
         arrParams.DATAS = sessionStorage.dts_datosItemplan
