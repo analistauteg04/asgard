@@ -9,9 +9,6 @@ academico::registerTranslations();
 ?>
 <?= Html::hiddenInput('txth_pla_id', $_GET['pla_id'], ['id' => 'txth_pla_id']); ?>
 <?= Html::hiddenInput('txth_per_id', $_GET['per_id'], ['id' => 'txth_per_id']); ?>
-<!-- <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-    <h4><span id="lbl_planear"><? academico::t("Academico", "See Student Planning") ?></span></h4>
-</div><br><br><br>-->
 <form class="form-horizontal">
     <div class="row">
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">  
