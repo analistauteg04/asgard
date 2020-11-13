@@ -145,7 +145,7 @@ class RegistroMarcacion extends \yii\db\ActiveRecord {
                     prof.pro_estado_logico = :estado AND
                     asig.asi_estado = :estado AND
                     asig.asi_estado_logico = :estado  AND
-                    paca.paca_activo = 'A' 
+                    paca.paca_activo = 'A'                    
                ";
         $comando = $con->createCommand($sql);
         $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);

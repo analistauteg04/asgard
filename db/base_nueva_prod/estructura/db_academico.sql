@@ -793,9 +793,8 @@ create table if not exists `distributivo_academico` (
   `uaca_id` bigint(20) null,  
   `mod_id` bigint(20) null,  
   `daho_id` bigint(20) null,
-  `daca_num_estudiantes_online` integer(3) null,
-  `daca_paralelo` bigint(20) null,
-  `pppr_id` bigint(20) null,
+  `dhpa_id` bigint(20) null,  
+  `daca_num_estudiantes_online` integer(3) null,  
   `daca_fecha_registro` timestamp null default null,
   `daca_usuario_ingreso` bigint(20) not null,
   `daca_usuario_modifica` bigint(20)  null,
@@ -808,16 +807,16 @@ create table if not exists `distributivo_academico` (
   foreign key (asi_id) references `asignatura`(asi_id),  
   foreign key (uaca_id) references `unidad_academica`(uaca_id), 
   foreign key (mod_id) references `modalidad`(mod_id),  
-  foreign key (daho_id) references `distributivo_academico_horario`(daho_id),
-  foreign key (pppr_id) references `paralelo_promocion_programa`(pppr_id),
-  foreign key (tdis_id) references `tipo_distributivo`(tdis_id)
+  foreign key (daho_id) references `distributivo_academico_horario`(daho_id),  
+  foreign key (tdis_id) references `tipo_distributivo`(tdis_id),
+  foreign key (dhpa_id) references `distributivo_horario_paralelo`(dhpa_id)
 );
 
 -- --------------------------------------------------------
 -- 
 -- Estructura de tabla para la tabla `distributivo_horario`
 -- 
-create table if not exists `distributivo_horario` (
+/*create table if not exists `distributivo_horario` (
   `dhor_id` bigint(20) not null auto_increment primary key, 
   `ppla_id` bigint(20) null,  
   `dhor_usuario_ingreso` bigint(20) not null,
@@ -827,7 +826,7 @@ create table if not exists `distributivo_horario` (
   `dhor_fecha_modificacion` timestamp null default null,
   `dhor_estado_logico` varchar(1) not null,
   foreign key (ppla_id) references `paralelo_planificacion`(ppla_id)
-);
+);*/
 
 -- --------------------------------------------------------
 -- 
@@ -852,7 +851,7 @@ create table if not exists `distributivo_horario_det` (
 -- 
 -- Estructura de tabla para la tabla `marcacion_detalle_horario` 
 -- --------------------------------------------------------
-create table if not exists `marcacion_detalle_horario` (
+/*create table if not exists `marcacion_detalle_horario` (
   `mdho_id` bigint(20) not null auto_increment primary key,   
   `dhde_id` bigint(20) not null,  
   `mdho_fecha_hora_entrada` timestamp null,    
@@ -865,7 +864,7 @@ create table if not exists `marcacion_detalle_horario` (
   `mdho_fecha_modificacion` timestamp null default null,
   `mdho_estado_logico` varchar(1) not null,  
   foreign key (dhde_id) references `distributivo_horario_det`(dhde_id)
-);
+);*/
 
 -- --------------------------------------------------------
 -- 
@@ -1801,12 +1800,23 @@ create table if not exists db_academico.`configuracion_tipo_distributivo` (
  `ctdi_estado` varchar(1) not null,
  `ctdi_fecha_creacion` timestamp not null default current_timestamp,
  `ctdi_fecha_modificacion` timestamp null default null,
- `ctdi_estado_logico` varchar(1) not null
+ `ctdi_estado_logico` varchar(1) not null,
+ foreign key (tdis_id) references `tipo_distributivo`(tdis_id),
+ foreign key (uaca_id) references `unidad_academica`(uaca_id),
+ foreign key (mod_id) references `modalidad`(mod_id)
 );
 
-<<<<<<< HEAD
- 
- 
- 
-=======
->>>>>>> dd2177c038ed7175b148e2761a156cf7a1da18e3
+
+create table if not exists db_academico.`distributivo_horario_paralelo` (
+  `dhpa_id` bigint(20) not null auto_increment primary key,   
+  `daho_id` bigint(20) not null,
+  `dhpa_grupo` varchar(2) null,
+  `dhpa_paralelo` varchar(10) not null,  
+  `dhpa_usuario_ingreso` bigint(20) not null,
+  `dhpa_usuario_modifica` bigint(20) null,  
+  `dhpa_estado` varchar(1) not null,
+  `dhpa_fecha_creacion` timestamp not null default current_timestamp,
+  `dhpa_fecha_modificacion` timestamp null default null,
+  `dhpa_estado_logico` varchar(1) not null,
+  foreign key (daho_id) references `distributivo_academico_horario`(daho_id)
+);

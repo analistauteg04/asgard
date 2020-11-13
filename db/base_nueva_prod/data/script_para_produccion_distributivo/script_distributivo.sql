@@ -14,7 +14,10 @@ create table if not exists db_academico.`configuracion_tipo_distributivo` (
  `ctdi_estado` varchar(1) not null,
  `ctdi_fecha_creacion` timestamp not null default current_timestamp,
  `ctdi_fecha_modificacion` timestamp null default null,
- `ctdi_estado_logico` varchar(1) not null
+ `ctdi_estado_logico` varchar(1) not null,
+ foreign key (tdis_id) references `tipo_distributivo`(tdis_id),
+ foreign key (uaca_id) references `unidad_academica`(uaca_id),
+ foreign key (mod_id) references `modalidad`(mod_id)
 );
 
 INSERT INTO db_academico.`configuracion_tipo_distributivo` (`ctdi_id`, `tdis_id`, `uaca_id`, `mod_id`, `ctdi_horas_inicio`, `ctdi_horas_fin`, `ctdi_estado_vigencia`, `ctdi_horas_semanal`, `ctdi_estado`, `ctdi_estado_logico`) VALUES
@@ -29,13 +32,10 @@ INSERT INTO db_academico.`configuracion_tipo_distributivo` (`ctdi_id`, `tdis_id`
 
 alter table db_academico.distributivo_academico add daho_id bigint(20) after mod_id;
 alter table db_academico.distributivo_academico add tdis_id bigint(20) after paca_id;  
-alter table db_academico.distributivo_academico add daca_paralelo bigint(20) after daho_id;  
-alter table db_academico.distributivo_academico add pppr_id bigint(20) after daca_paralelo;  
-Alter table db_academico.distributivo_academico add foreign key (pppr_id) references paralelo_promocion_programa (pppr_id);
+alter table db_academico.distributivo_academico add dhpa_id bigint(20) after daho_id;  
 Alter table db_academico.distributivo_academico drop foreign key distributivo_academico_ibfk_6;
-alter table db_academico.distributivo_academico drop ppro_id;  
 Alter table db_academico.distributivo_academico add foreign key (tdis_id) references tipo_distributivo (tdis_id);
-Alter table db_academico.distributivo_academico add daca_num_estudiantes_online integer(3) after daho_id;
+Alter table db_academico.distributivo_academico add daca_num_estudiantes_online integer(3) after dhpa_id;
 
 update db_academico.distributivo_academico a
 set a.daho_id = (select daho_id from db_academico.distributivo_academico_horario where uaca_id = a.uaca_id and mod_id = a.mod_id and daho_jornada = a.daca_jornada and daho_horario = a.daca_horario)
@@ -61,6 +61,29 @@ create table if not exists db_academico.`distributivo_cabecera` (
   `dcab_estado_logico` varchar(1) not null,
   foreign key (pro_id) references `profesor`(pro_id),
   foreign key (paca_id) references `periodo_academico`(paca_id)
+);
+
+/* verificar que la tabla distributivo_academico_horario se pase asì */
+-- --------------------------------------------------------
+-- 
+-- Estructura de tabla para la tabla `distributivo_academico_horario` 
+-- --------------------------------------------------------
+create table if not exists `distributivo_academico_horario` (
+  `daho_id` bigint(20) not null auto_increment primary key,   
+  `uaca_id` bigint(20) not null,
+  `mod_id` bigint(20) not null,
+  `eaca_id` bigint(20) null,
+  `daho_jornada` varchar(1) not null,
+  `daho_descripcion` varchar(1000) null,
+  `daho_horario` varchar(10) not null,  
+  `daho_total_horas` integer(2) null,
+  `daho_estado` varchar(1) not null,
+  `daho_fecha_creacion` timestamp not null default current_timestamp,
+  `daho_fecha_modificacion` timestamp null default null,
+  `daho_estado_logico` varchar(1) not null,  
+  foreign key (uaca_id) references `unidad_academica`(uaca_id), 
+  foreign key (mod_id) references `modalidad`(mod_id),
+  foreign key (eaca_id) references `estudio_academico`(eaca_id)
 );
 
 /* Verificar que no estè en producciòn, y si està serìa de eliminar el campo fecha de clase y 
@@ -90,28 +113,18 @@ alter table db_academico.distributivo_academico_horario add daho_total_horas int
 alter table db_academico.distributivo_academico_horario add eaca_id bigint(20) after mod_id;
 
 
-
-/* verificar que la tabla distributivo_academico_horario se pase asì */
--- --------------------------------------------------------
--- 
--- Estructura de tabla para la tabla `distributivo_academico_horario` 
--- --------------------------------------------------------
-create table if not exists `distributivo_academico_horario` (
-  `daho_id` bigint(20) not null auto_increment primary key,   
-  `uaca_id` bigint(20) not null,
-  `mod_id` bigint(20) not null,
-  `eaca_id` bigint(20) null,
-  `daho_jornada` varchar(1) not null,
-  `daho_descripcion` varchar(1000) null,
-  `daho_horario` varchar(10) not null,  
-  `daho_total_horas` integer(2) null,
-  `daho_estado` varchar(1) not null,
-  `daho_fecha_creacion` timestamp not null default current_timestamp,
-  `daho_fecha_modificacion` timestamp null default null,
-  `daho_estado_logico` varchar(1) not null,  
-  foreign key (uaca_id) references `unidad_academica`(uaca_id), 
-  foreign key (mod_id) references `modalidad`(mod_id),
-  foreign key (eaca_id) references `estudio_academico`(eaca_id)
+create table if not exists `distributivo_horario_paralelo` (
+  `dhpa_id` bigint(20) not null auto_increment primary key,   
+  `daho_id` bigint(20) not null,
+  `dhpa_grupo` varchar(2) null,
+  `dhpa_paralelo` varchar(10) not null,  
+  `dhpa_usuario_ingreso` bigint(20) not null,
+  `dhpa_usuario_modifica` bigint(20) null,  
+  `dhpa_estado` varchar(1) not null,
+  `dhpa_fecha_creacion` timestamp not null default current_timestamp,
+  `dhpa_fecha_modificacion` timestamp null default null,
+  `dhpa_estado_logico` varchar(1) not null,
+  foreign key (daho_id) references `distributivo_academico_horario`(daho_id)
 );
 
 
