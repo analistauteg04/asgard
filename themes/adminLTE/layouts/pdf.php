@@ -68,11 +68,11 @@ if ($popup == "content" && $isUser) {
                         margin: 0px;
                         padding: 0px;
                     }
-                    table thead tr, .thcol{
+                    table thead tr, table tfoot tr, .thcol{
                         background-color: #9b9b9c;
                         height: 20px;
                     }
-                    table thead tr th {
+                    table thead tr th, table tfoot tr th {
                         text-transform: uppercase;
                         font-weight: bold;
                         color: #ffffff;
