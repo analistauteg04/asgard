@@ -522,7 +522,7 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord {
             }
 
             if ($arrFiltro['carrera'] != 'Todas') {
-                $str_search .= " plae.pes_carrera like :carrera AND ";
+                $str_search .= " esta.eaca_nombre like :carrera AND ";
             }
 
             if ($arrFiltro['periodo'] != '0') {
@@ -538,11 +538,12 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord {
                     $idper
                     pers.per_cedula,
                     plae.pes_nombres,
-                    plae.pes_carrera,
+                    esta.eaca_nombre as pes_carrera,
                     plan.pla_periodo_academico
                 FROM " . $con->dbname . ".planificacion_estudiante plae
                 INNER JOIN " . $con->dbname . ".planificacion plan ON plan.pla_id = plae.pla_id
                 INNER JOIN " . $con1->dbname . ".persona pers ON pers.per_id = plae.per_id
+                INNER JOIN " . $con->dbname . ".estudio_academico esta ON esta.eaca_alias = plae.pes_carrera
                 WHERE 
                     $str_search
                     plae.pes_estado = :estado AND
@@ -857,7 +858,7 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord {
         $con = \Yii::$app->db_academico;
         $estado = 1;
 
-        $sql = "SELECT plan.pes_carrera, 
+        $sql = "SELECT esta.eaca_nombre as pes_carrera, 
                        esta.eaca_id,
                        plan.pes_jornada,
                        plan.pes_nombres,
@@ -865,7 +866,7 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord {
 		                       INNER JOIN " . $con->dbname . ".malla_academica maca ON maca.maca_id = made.maca_id
                                WHERE made_codigo_asignatura = :materia), ' ') as malla
                 FROM " . $con->dbname . ".planificacion_estudiante plan
-                INNER JOIN " . $con->dbname . ".estudio_academico esta ON esta.eaca_nombre = plan.pes_carrera
+                INNER JOIN " . $con->dbname . ".estudio_academico esta ON esta.eaca_alias = plan.pes_carrera
                 WHERE plan.pla_id = :pla_id AND
                       plan.per_id = :per_id AND
                       plan.pes_estado = :estado AND
