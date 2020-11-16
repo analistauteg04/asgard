@@ -335,7 +335,7 @@ class DistributivoController extends \app\components\CController {
         }
         $arr_unidad = $mod_unidad->consultarUnidadAcademicasEmpresa(1);
         $arr_modalidad = $mod_modalidad->consultarModalidad($arr_unidad[0]["id"], 1);
-        $arr_periodo = $mod_periodo->consultarPeriodoAcademico();
+        $arr_periodo = $mod_periodo->consultarPeriodoAcademicotodos();
         $arr_asignatura = $distributivo_model->consultarAsiganturaxuniymoda(0, 0);
         return $this->render('listarestudiantepago', [
                     'mod_unidad' => ArrayHelper::map(array_merge([["id" => "0", "name" => Yii::t("formulario", "Grid")]], $arr_unidad), "id", "name"),

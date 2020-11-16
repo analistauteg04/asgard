@@ -607,8 +607,8 @@ class Distributivo extends \yii\db\ActiveRecord {
                     inner join " . $con->dbname . ".bloque_academico t on t.baca_id = f.baca_id
                     inner join " . $con->dbname . ".asignatura z on a.asi_id = z.asi_id
                     left join " . $con->dbname . ".estudiante_periodo_pago m on (m.est_id = g.est_id and m.paca_id = f.paca_id)
-                WHERE $str_search f.paca_activo = 'A'
-                    and a.daca_estado = :estado
+                WHERE $str_search /* f.paca_activo = 'A'
+                    and*/ a.daca_estado = :estado
                     and a.daca_estado_logico = :estado
                     and g.daes_estado = :estado
                     and g.daes_estado_logico = :estado";
