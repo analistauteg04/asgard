@@ -18,7 +18,6 @@ academico::registerTranslations();
         'fnExportEXCEL' => "exportExcelDistpago",
         'fnExportPDF' => "exportPdfDispago",
         'dataProvider' => $model,
-        //'pajax' => false,
         'columns' =>
         [
             [
@@ -35,12 +34,7 @@ academico::registerTranslations();
                 'attribute' => 'modalidad',
                 'header' => Yii::t("formulario", "Mode"),
                 'value' => 'modalidad',
-            ],
-            /* [
-              'attribute' => 'asignatura',
-              'header' => Yii::t("formulario", "Subject"),
-              'value' => 'asignatura',
-              ], */
+            ],            
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => Yii::t("formulario", "Subject"),
@@ -82,9 +76,6 @@ academico::registerTranslations();
                 'header' => Yii::t("formulario", "Date"),
                 'value' => 'fecha_pago',
             ],
-            /* [   
-              'class' => 'app\widgets\PbGridView\PbCheckboxColumn',
-              ], */
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => Academico::t("matriculacion", "Select"),
