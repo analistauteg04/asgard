@@ -9,9 +9,9 @@ USE `db_gpr`;
 --
 -- --------------------------------------------------------
 INSERT INTO `umbral` (`umb_id`, `umb_nombre`, `umb_descripcion`, `umb_color`, `umb_per_inicio`, `umb_per_fin`,`umb_usuario_ingreso`, `umb_usuario_modifica`, `umb_estado`, `umb_fecha_creacion`, `umb_fecha_modificacion`, `umb_estado_logico`) VALUES
-(1, 'Indicador de Satisfacción', 'Señal de cumplimiento Satisfactorio.', '#3d754c', '90', '100', 1, NULL, '1', '2020-09-14 15:00:00', NULL, '1'),
-(2, 'Indicador de Alarma', 'Niveles preocupantes del indicador.', '#ffff00', '75', '89', 1, NULL, '1', '2020-09-14 15:00:00', NULL, '1'),
-(3, 'Indicador Crítico', 'Niveles graves del indicador. Señal de aplicar correctivos urgentes.', '#ff0000', '0', '74', 1, NULL, '1', '2020-09-14 15:00:00', NULL, '1');
+(1, 'Indicador de Satisfacción', 'Señal de cumplimiento Satisfactorio.', '#00a65a', '90', '100', 1, NULL, '1', '2020-09-14 15:00:00', NULL, '1'),
+(2, 'Indicador de Alarma', 'Niveles preocupantes del indicador.', '#f39c12', '75', '89', 1, NULL, '1', '2020-09-14 15:00:00', NULL, '1'),
+(3, 'Indicador Crítico', 'Niveles graves del indicador. Señal de aplicar correctivos urgentes.', '#dd4b39', '0', '74', 1, NULL, '1', '2020-09-14 15:00:00', NULL, '1');
 
 -- --------------------------------------------------------
 --
@@ -101,25 +101,43 @@ INSERT INTO `patron_indicador` (`pind_id`, `pind_nombre`, `pind_descripcion`, `p
 
 -- --------------------------------------------------------
 --
--- Tabla `frecuencia_indicador`
+-- Tabla `comportamiento_indicador`
 --
 -- --------------------------------------------------------
-INSERT INTO `frecuencia_indicador` (`find_id`, `find_nombre`, `find_descripcion`, `find_usuario_ingreso`, `find_usuario_modifica`, `find_estado`, `find_fecha_creacion`, `find_fecha_modificacion`, `find_estado_logico`) VALUES
-(1, 'Mensual', 'Mensual', 1, NULL, '1', '2020-09-14 15:00:00', NULL, '1'),
-(2, 'Bimestral', 'Bimestral', 1, NULL, '1', '2020-09-14 15:00:00', NULL, '1'),
-(3, 'Trimestral', 'Trimestral', 1, NULL, '1', '2020-09-14 15:00:00', NULL, '1'),
-(4, 'Semestral', 'Semestral', 1, NULL, '1', '2020-09-14 15:00:00', NULL, '1'),
-(5, 'Anual', 'Anual', 1, NULL, '1', '2020-09-14 15:00:00', NULL, '1');
+INSERT INTO `comportamiento_indicador` (`cind_id`, `cind_nombre`, `cind_descripcion`, `cind_usuario_ingreso`, `cind_usuario_modifica`, `cind_estado`, `cind_fecha_creacion`, `cind_fecha_modificacion`, `cind_estado_logico`) VALUES
+(1, 'Contínuo', 'Contínuo', 1, NULL, '1', '2020-09-14 15:00:00', NULL, '1'),
+(2, 'Discreto', 'Discreto', 1, NULL, '1', '2020-09-14 15:00:00', NULL, '1');
 
 -- --------------------------------------------------------
 --
--- Tabla `periodo_indicador`
+-- Tabla `frecuencia_indicador`
 --
 -- --------------------------------------------------------
-INSERT INTO `periodo_indicador` (`pein_id`, `pein_nombre`, `pein_descripcion`, `pein_usuario_ingreso`, `pein_usuario_modifica`, `pein_estado`, `pein_fecha_creacion`, `pein_fecha_modificacion`, `pein_estado_logico`) VALUES
-(1, 'Mensual', 'Mensual', 1, NULL, '1', '2020-09-14 15:00:00', NULL, '1'),
-(2, 'Bimestral', 'Bimestral', 1, NULL, '1', '2020-09-14 15:00:00', NULL, '1'),
-(3, 'Trimestral', 'Trimestral', 1, NULL, '1', '2020-09-14 15:00:00', NULL, '1');
+INSERT INTO `frecuencia_indicador` (`find_id`, `find_nombre`, `find_descripcion`, `find_denominador`, `find_items`, `find_usuario_ingreso`, `find_usuario_modifica`, `find_estado`, `find_fecha_creacion`, `find_fecha_modificacion`, `find_estado_logico`) VALUES
+(1, 'Mensual', 'Mensual', 12, 1, '["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"]', NULL, '1', '2020-09-14 15:00:00', NULL, '1'),
+(2, 'Bimestral', 'Bimestral', 6, 1, '["JAN-FEB", "MAR-APR", "MAY-JUN", "JUL-AUG", "SEP-OCT", "NOV-DEC"]', NULL, '1', '2020-09-14 15:00:00', NULL, '1'),
+(3, 'Trimestral', 'Trimestral', 4, 1, '["JAN-MAR", "ABR-JUN", "JUL-SEP","OCT-DEC"]', NULL, '1', '2020-09-14 15:00:00', NULL, '1'),
+(4, 'Semestral', 'Semestral', 2, 1, '["JAN-JUN", "JUL-DEC"]', NULL, '1', '2020-09-14 15:00:00', NULL, '1'),
+(5, 'Anual', 'Anual', 1, 1, '["JAN-DEC"]', NULL, '1', '2020-09-14 15:00:00', NULL, '1');
+
+-- --------------------------------------------------------
+--
+-- Tabla `tipo_unidad`
+--
+-- --------------------------------------------------------
+INSERT INTO `tipo_unidad` (`tuni_id`, `tuni_nombre`, `tuni_descripcion`, `tuni_alias`, `tuni_usuario_ingreso`, `tuni_usuario_modifica`, `tuni_estado`, `tuni_fecha_creacion`, `tuni_fecha_modificacion`, `tuni_estado_logico`) VALUES
+(1, 'Administrativa', 'Administrativa', 'Adm', 1, NULL, '1', '2020-09-14 15:00:00', NULL, '1'),
+(2, 'Académica', 'Académica', 'Aca', 1, NULL, '1', '2020-09-14 15:00:00', NULL, '1');
+
+-- --------------------------------------------------------
+--
+-- Tabla `tipo_unidad`
+--
+-- --------------------------------------------------------
+INSERT INTO `nivel` (`niv_id`, `niv_nombre`, `niv_descripcion`, `niv_usuario_ingreso`, `niv_usuario_modifica`, `niv_estado`, `niv_fecha_creacion`, `niv_fecha_modificacion`, `niv_estado_logico`) VALUES
+(1, 'N1', 'Autoridades', 1, NULL, '1', '2020-09-14 15:00:00', NULL, '1'),
+(2, 'N2', 'Jefaturas', 1, NULL, '1', '2020-09-14 15:00:00', NULL, '1'),
+(3, 'N3', 'Operativos', 1, NULL, '1', '2020-09-14 15:00:00', NULL, '1');
 
 -- --------------------------------------------------------
 --
@@ -142,65 +160,46 @@ INSERT INTO `entidad` (`ent_id`, `cat_id`, `emp_id`, `ent_nombre`, `ent_descripc
 -- Tabla `unidad_gpr`
 --
 -- --------------------------------------------------------
-INSERT INTO `unidad_gpr` (`ugpr_id`, `ent_id`, `ugpr_nombre`, `ugpr_descripcion`, `ugpr_usuario_ingreso`, `ugpr_usuario_modifica`, `ugpr_estado`, `ugpr_fecha_creacion`, `ugpr_fecha_modificacion`, `ugpr_estado_logico`) VALUES
-(1, 1, 'Finanzas', 'Finanzas', 1, NULL, '1', '2020-09-14 15:00:00', NULL, '1'),
-(2, 1, 'Colecturia', 'Colecturia', 1, NULL, '1', '2020-09-14 15:00:00', NULL, '1');
-
+INSERT INTO `unidad_gpr` (`ugpr_id`, `ent_id`, `tuni_id`, `ugpr_nombre`, `ugpr_descripcion`, `ugpr_usuario_ingreso`, `ugpr_usuario_modifica`, `ugpr_estado`, `ugpr_fecha_creacion`, `ugpr_fecha_modificacion`, `ugpr_estado_logico`) VALUES
+(1, 1, 1, 'Vicerrectorado Académico', 'Vicerrectorado Académico', 1, NULL, '1', '2020-09-14 15:00:00', NULL, '1'),
+(2, 1, 2, 'Secretaría General', 'Secretaría General', 1, NULL, '1', '2020-09-14 15:00:00', NULL, '1'),
+(3, 1, 2, 'Facultad de Posgrado', 'Facultad de Posgrado e Investigación (Online)', 1, NULL, '1', '2020-09-14 15:00:00', NULL, '1'),
+(4, 1, 2, 'Facultad de Grado', 'Facultad de Grado Presencial', 1, NULL, '1', '2020-09-14 15:00:00', NULL, '1'),
+(5, 1, 2, 'Dirección de Investigaciones', 'Dirección de Investigaciones', 1, NULL, '1', '2020-09-14 15:00:00', NULL, '1'),
+(6, 1, 2, 'Coordinación de Bienestar Universitario', 'Coordinación de Bienestar Universitario', 1, NULL, '1', '2020-09-14 15:00:00', NULL, '1'),
+(7, 1, 2, 'Biblioteca', 'Biblioteca', 1, NULL, '1', '2020-09-14 15:00:00', NULL, '1'),
+(8, 1, 2, 'Coordinación de Relaciones Internacionales', 'Coordinación de Relaciones Internacionales', 1, NULL, '1', '2020-09-14 15:00:00', NULL, '1'),
+(9, 1, 2, 'Coordinación de Vinculación', 'Coordinación de Vinculación', 1, NULL, '1', '2020-09-14 15:00:00', NULL, '1'),
+(10, 1, 2, 'Centro de Idiomas', 'Centro de Idiomas', 1, NULL, '1', '2020-09-14 15:00:00', NULL, '1'),
+(11, 1, 2, 'Interculturalidad, diálogo de saberes y gestión ambiental', 'Interculturalidad, diálogo de saberes y gestión ambiental', 1, NULL, '1', '2020-09-14 15:00:00', NULL, '1'),
+(12, 1, 1, 'Dirección Ejecutiva', 'Dirección Ejecutiva', 1, NULL, '1', '2020-09-14 15:00:00', NULL, '1'),
+(13, 1, 2, 'Auditoría de Calidad', 'Auditoría de Calidad', 1, NULL, '1', '2020-09-14 15:00:00', NULL, '1'),
+(14, 1, 2, 'Dirección Financiera', 'Dirección Financiera', 1, NULL, '1', '2020-09-14 15:00:00', NULL, '1'),
+(15, 1, 2, 'Dirección de Talento Humano', 'Dirección de Talento Humano', 1, NULL, '1', '2020-09-14 15:00:00', NULL, '1'),
+(16, 1, 2, 'Dirección Administrativa', 'Dirección Administrativa', 1, NULL, '1', '2020-09-14 15:00:00', NULL, '1'),
+(17, 1, 2, 'Gestión Documental', 'Gestión Documental', 1, NULL, '1', '2020-09-14 15:00:00', NULL, '1'),
+(18, 1, 2, 'Procesos', 'Procesos', 1, NULL, '1', '2020-09-14 15:00:00', NULL, '1'),
+(19, 1, 2, 'Desarrollo', 'Desarrollo', 1, NULL, '1', '2020-09-14 15:00:00', NULL, '1'),
+(20, 1, 2, 'Infraestructura', 'Infraestructura', 1, NULL, '1', '2020-09-14 15:00:00', NULL, '1'),
+(21, 1, 2, 'Admisiones', 'Admisiones', 1, NULL, '1', '2020-09-14 15:00:00', NULL, '1'),
+(22, 1, 2, 'Operaciones', 'Operaciones', 1, NULL, '1', '2020-09-14 15:00:00', NULL, '1'),
+(23, 1, 2, 'Producción Audiovisual', 'Producción Audiovisual', 1, NULL, '1', '2020-09-14 15:00:00', NULL, '1');
 -- --------------------------------------------------------
 --
 -- Tabla `subunidad_gpr`
 --
 -- --------------------------------------------------------
 INSERT INTO `subunidad_gpr` (`sgpr_id`, `ugpr_id`, `sgpr_nombre`, `sgpr_descripcion`, `sgpr_usuario_ingreso`, `sgpr_usuario_modifica`, `sgpr_estado`, `sgpr_fecha_creacion`, `sgpr_fecha_modificacion`, `sgpr_estado_logico`) VALUES
-(1, 1, 'Dirección Financiera', 'Dirección Financiera', 1, NULL, '1', '2020-09-14 15:00:00', NULL, '1'),
-(2, 1, 'DIS-Infraestructura', 'DIS-Infraestructura', 1, NULL, '1', '2020-09-14 15:00:00', NULL, '1'),
-(3, 1, 'DIS-Gestión Documental', 'DIS-Gestión Documental', 1, NULL, '1', '2020-09-14 15:00:00', NULL, '1'),
-(4, 1, 'Dirección Administrativa', 'Dirección Administrativa', 1, NULL, '1', '2020-09-14 15:00:00', NULL, '1'),
-(5, 1, 'Dirección de Investigaciones', 'Dirección de Investigaciones', 1, NULL, '1', '2020-09-14 15:00:00', NULL, '1'),
-(6, 1, 'Biblioteca', 'Biblioteca', 1, NULL, '1', '2020-09-14 15:00:00', NULL, '1'),
-(7, 1, 'Secretaría General', 'Secretaría General', 1, NULL, '1', '2020-09-14 15:00:00', NULL, '1'),
-(8, 1, 'Facultad de Grado Presencial', 'Facultad de Grado Presencial', 1, NULL, '1', '2020-09-14 15:00:00', NULL, '1'),
-(9, 1, 'DIS-Admisiones', 'DIS-Admisiones', 1, NULL, '1', '2020-09-14 15:00:00', NULL, '1'),
-(10, 1, 'Dirección de Talento Humano', 'Dirección de Talento Humano', 1, NULL, '1', '2020-09-14 15:00:00', NULL, '1'),
-(11, 1, 'Facultad de Estudios Online', 'Facultad de Estudios Online', 1, NULL, '1', '2020-09-14 15:00:00', NULL, '1'),
-(12, 1, 'Coordinación de Vinculación con la Sociedad', 'Coordinación de Vinculación con la Sociedad', 1, NULL, '1', '2020-09-14 15:00:00', NULL, '1'),
-(13, 1, 'DIS-Procesos', 'DIS-Procesos', 1, NULL, '1', '2020-09-14 15:00:00', NULL, '1'),
-(14, 1, 'Coordinación de Bienestar Universitario', 'Coordinación de Bienestar Universitario', 1, NULL, '1', '2020-09-14 15:00:00', NULL, '1'),
-(15, 1, 'Facultad de Grado (Semipresencial - Distancia)', 'Facultad de Grado (Semipresencial - Distancia)', 1, NULL, '1', '2020-09-14 15:00:00', NULL, '1'),
-(16, 1, 'DIS-Desarrollo', 'DIS-Desarrollo', 1, NULL, '1', '2020-09-14 15:00:00', NULL, '1'),
-(17, 1, 'Operaciones', 'Operaciones', 1, NULL, '1', '2020-09-14 15:00:00', NULL, '1'),
-(18, 1, 'Producción Audiovisual', 'Producción Audiovisual', 1, NULL, '1', '2020-09-14 15:00:00', NULL, '1'),
-(19, 1, 'Centro de Idiomas', 'Centro de Idiomas', 1, NULL, '1', '2020-09-14 15:00:00', NULL, '1'),
-(20, 1, 'Facultad de Posgrado e Investigación (Online)', 'Facultad de Posgrado e Investigación (Online)', 1, NULL, '1', '2020-09-14 15:00:00', NULL, '1'),
-(21, 1, 'Auditoría de Calidad', 'Auditoría de Calidad', 1, NULL, '1', '2020-09-14 15:00:00', NULL, '1'),
-(22, 1, 'Coordinación de Relaciones Internacionales', 'Coordinación de Relaciones Internacionales', 1, NULL, '1', '2020-09-14 15:00:00', NULL, '1'),
-(23, 1, 'Facultad de Posgrado e Investigación (Presencial)', 'Facultad de Posgrado e Investigación (Presencial)', 1, NULL, '1', '2020-09-14 15:00:00', NULL, '1'),
-(24, 1, 'Interculturalidad, diálogo de saberes y gestión ambiental', 'Interculturalidad, diálogo de saberes y gestión ambiental', 1, NULL, '1', '2020-09-14 15:00:00', NULL, '1');
+(1, 1, 'Finanzas', 'Finanzas', 1, NULL, '1', '2020-09-14 15:00:00', NULL, '1'),
+(2, 1, 'Colecturia', 'Colecturia', 1, NULL, '1', '2020-09-14 15:00:00', NULL, '1');
 
 -- --------------------------------------------------------
 --
--- Tabla `unidad_administrativa`
+-- Tabla `responsable_unidad`
 --
 -- --------------------------------------------------------
-INSERT INTO `unidad_administrativa` (`uadm_id`, `ent_id`, `uadm_nombre`, `uadm_descripcion`, `uadm_usuario_ingreso`, `uadm_usuario_modifica`, `uadm_estado`, `uadm_fecha_creacion`, `uadm_fecha_modificacion`, `uadm_estado_logico`) VALUES
-(1, 1, 'Dirección Ejecutiva', 'Dirección Ejecutiva', 1, NULL, '1', '2020-09-14 15:00:00', NULL, '1'),
-(2, 1, 'Vicerrectorado Académico', 'Vicerrectorado Académico', 1, NULL, '1', '2020-09-14 15:00:00', NULL, '1');
-
--- --------------------------------------------------------
---
--- Tabla `responsable_subunidad`
---
--- --------------------------------------------------------
-INSERT INTO `responsable_subunidad` (`rsub_id`, `sgpr_id`, `usu_id`, `emp_id`, `rsub_usuario_ingreso`, `rsub_usuario_modifica`, `rsub_estado`, `rsub_fecha_creacion`, `rsub_fecha_modificacion`, `rsub_estado_logico`) VALUES
-(1, 1, 1, 1, 1, NULL, '1', '2020-09-14 15:00:00', NULL, '1');
-
--- --------------------------------------------------------
---
--- Tabla `responsable_administrativo`
---
--- --------------------------------------------------------
-INSERT INTO `responsable_administrativo` (`radm_id`, `uadm_id`, `usu_id`, `emp_id`, `radm_usuario_ingreso`, `radm_usuario_modifica`, `radm_estado`, `radm_fecha_creacion`, `radm_fecha_modificacion`, `radm_estado_logico`) VALUES
-(1, 1, 1, 1, 1, NULL, '1', '2020-09-14 15:00:00', NULL, '1');
+INSERT INTO `responsable_unidad` (`runi_id`, `ugpr_id`, `usu_id`, `emp_id`, `runi_isadmin`, `runi_usuario_ingreso`, `runi_usuario_modifica`, `runi_estado`, `runi_fecha_creacion`, `runi_fecha_modificacion`, `runi_estado_logico`) VALUES
+(1, 1, 1, 1, '1', 1, NULL, '1', '2020-09-14 15:00:00', NULL, '1');
 
 -- --------------------------------------------------------
 --
