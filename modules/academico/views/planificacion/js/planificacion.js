@@ -273,12 +273,15 @@ function cargarDocumento() {
     arrParams.modalidad = $('#cmb_moda').val();
     if (!validateForm()) {
         requestHttpAjax(link, arrParams, function (response) {
-            showAlert(response.status, response.label, response.message);
-            /* if (!response.error) {
-             setTimeout(function () {
-             window.location.href = $('#txth_base').val() + "/academico/planificacion/index";
-             }, 3000);
-             } */
+            var message = response.message;
+            if (response.status == "OK") {
+                showAlert(response.status, response.type, { "wtmessage": message.info, "title": response.label });
+                setTimeout(function () {
+                    parent.window.location.href = $('#txth_base').val() + "/academico/planificacion/index";
+                }, 2000);
+            } else {
+                showAlert(response.status, response.type, { "wtmessage": message.info, "title": response.label });
+            }
         }, true);
     }
 }

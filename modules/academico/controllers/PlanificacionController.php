@@ -48,8 +48,6 @@ class PlanificacionController extends \app\components\CController {
     public function actionIndex() {
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->get();
-            /* if ( isset( $data['search'] ) ) {
-             */
             $pla_periodo_academico = $data['pla_periodo_academico'];
             $mod_id = $data['mod_id'];
             $dataPlanificaciones = Planificacion::getAllPlanificacionesGrid($search, $pla_periodo_academico, $mod_id);
@@ -136,7 +134,6 @@ class PlanificacionController extends \app\components\CController {
                 $model_planificacionEstudiante = new PlanificacionEstudiante();
                 try {
                     $namefile = substr_replace($data['archivo'], $data['modalidad'], 14, 0);
-                    //\app\models\Utilities::putMessageLogFile('ssss: ' . $data['archivo']);
                     //consultar periodo y modalidad sino existe guardar
                     $mod_planifica = new PlanificacionEstudiante();
                     $resulpla_id = $mod_planifica->consultarDatoscabplanifica($data['modalidad'], $data['periodoAcademico']);
@@ -152,12 +149,8 @@ class PlanificacionController extends \app\components\CController {
                         $modelo_planificacion->pla_estado = '1';
                         $modelo_planificacion->pla_estado_logico = '1';
                         if ($modelo_planificacion->save() && $data['archivo'] != '.') {
-                            /*  return Utilities::ajaxResponse( 'NO_OK', 'alert', Yii::t( 'jslang', 'Error' ), true, 'guardado' );
-                             */
                             $pla_id = $modelo_planificacion->getPrimaryKey();
                             $carga_archivo = $model_planificacionEstudiante->processFile($namefile, $pla_id);
-                            /*  return Utilities::ajaxResponse( 'NO_OK', 'alert', Yii::t( 'jslang', 'Error' ), true, $carga_archivo );
-                             */
                             if ($carga_archivo['status']) {
                                 $message = array(
                                     'wtmessage' => Yii::t('notificaciones', 'Archivo procesado correctamente. ' . $carga_archivo['message']),
@@ -176,7 +169,6 @@ class PlanificacionController extends \app\components\CController {
                                 return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t('jslang', 'Error'), true, $message);
                             }
                         } else {
-                            //\app\models\Utilities::putMessageLogFile('entro aqui: ' . $data['archivo']);
                             $message = array(
                                 'wtmessage' => Yii::t('notificaciones', 'Se creó la planificación correctamente. ' . $carga_archivo['message']),
                                 'title' => Yii::t('jslang', 'Success'),
@@ -196,7 +188,7 @@ class PlanificacionController extends \app\components\CController {
                       $modelo_planificacion_saved->delete();
                      */
                     $message = array(
-                        'wtmessage' => Yii::t('notificaciones', 'Error al procesar el archivo2.'),
+                        'wtmessage' => Yii::t('notificaciones', 'Error al procesar el archivo.'),
                         'title' => Yii::t('jslang', 'Error'),
                     );
                     return Utilities::ajaxResponse('NO_OK', 'alert', Yii::t('jslang', 'Error'), true, $message);
@@ -743,7 +735,6 @@ class PlanificacionController extends \app\components\CController {
         $emp_id = 1;
         $mod_periodo = new PlanificacionEstudiante();
         $periodo = $mod_periodo->consultarPeriodoplanifica();
-        //OJO DEBE ESTAR LLENO PLANIICACION Y PALNIFCACION ESTUDIANTE PARA Q SALGA
         $uni_aca_model = new UnidadAcademica();
         $modalidad_model = new Modalidad();
         $modcarrera = new EstudioAcademico();
@@ -888,7 +879,6 @@ class PlanificacionController extends \app\components\CController {
                         $modmateria  = "pes_mod_b" . $bloque . "_h" . $horario . "= '" . $modalidades . "', ";                  
                         $modificar .=  $codmateria . ' ' .  $modmateria;                    
                     }   
-                    \app\models\Utilities::putMessageLogFile('modifica string..: ' . $modificar);                 
                     $resul = $mod_planifica->modificarDataPlanificacionestudiante($plan_id, $pers_id, $usu_autenticado, $modificar);
             }
 
