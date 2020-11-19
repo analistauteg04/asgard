@@ -5,6 +5,9 @@
 DROP SCHEMA IF EXISTS `db_gpr`;
 CREATE SCHEMA IF NOT EXISTS `db_gpr` DEFAULT CHARACTER SET utf8 ;
 USE `db_gpr` ;
+
+-- GRANT ALL PRIVILEGES ON `db_asgard`.* TO 'uteg'@'localhost' IDENTIFIED BY 'Utegadmin2016*';
+
 -- --------------------------------------------------------
 -- 
 -- Estructura de tabla para la tabla `umbral`
@@ -578,7 +581,7 @@ create table if not exists `proyecto` (
   `pro_descripcion` varchar(500) not null,
   `pro_restricciones` varchar(500) not null,
   `pro_fecha_inicio` timestamp not null,
-  `pro_fecha_fin` timestamp not null,
+  `pro_fecha_fin` timestamp not null default current_timestamp,
   `pro_presupuesto` double(12,4) not null,
   `pro_cerrado` varchar(1) null default '0',
   `pro_razon_cambio` text null default NULL,
