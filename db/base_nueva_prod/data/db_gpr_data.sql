@@ -114,11 +114,11 @@ INSERT INTO `comportamiento_indicador` (`cind_id`, `cind_nombre`, `cind_descripc
 --
 -- --------------------------------------------------------
 INSERT INTO `frecuencia_indicador` (`find_id`, `find_nombre`, `find_descripcion`, `find_denominador`, `find_items`, `find_usuario_ingreso`, `find_usuario_modifica`, `find_estado`, `find_fecha_creacion`, `find_fecha_modificacion`, `find_estado_logico`) VALUES
-(1, 'Mensual', 'Mensual', 12, 1, '["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"]', NULL, '1', '2020-09-14 15:00:00', NULL, '1'),
-(2, 'Bimestral', 'Bimestral', 6, 1, '["JAN-FEB", "MAR-APR", "MAY-JUN", "JUL-AUG", "SEP-OCT", "NOV-DEC"]', NULL, '1', '2020-09-14 15:00:00', NULL, '1'),
-(3, 'Trimestral', 'Trimestral', 4, 1, '["JAN-MAR", "ABR-JUN", "JUL-SEP","OCT-DEC"]', NULL, '1', '2020-09-14 15:00:00', NULL, '1'),
-(4, 'Semestral', 'Semestral', 2, 1, '["JAN-JUN", "JUL-DEC"]', NULL, '1', '2020-09-14 15:00:00', NULL, '1'),
-(5, 'Anual', 'Anual', 1, 1, '["JAN-DEC"]', NULL, '1', '2020-09-14 15:00:00', NULL, '1');
+(1, 'Mensual', 'Mensual', 12, '["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"]', 1, NULL, '1', '2020-09-14 15:00:00', NULL, '1'),
+(2, 'Bimestral', 'Bimestral', 6, '["JAN-FEB", "MAR-APR", "MAY-JUN", "JUL-AUG", "SEP-OCT", "NOV-DEC"]', 1, NULL, '1', '2020-09-14 15:00:00', NULL, '1'),
+(3, 'Trimestral', 'Trimestral', 4, '["JAN-MAR", "ABR-JUN", "JUL-SEP","OCT-DEC"]', 1, NULL, '1', '2020-09-14 15:00:00', NULL, '1'),
+(4, 'Semestral', 'Semestral', 2, '["JAN-JUN", "JUL-DEC"]', 1, NULL, '1', '2020-09-14 15:00:00', NULL, '1'),
+(5, 'Anual', 'Anual', 1, '["JAN-DEC"]', 1, NULL, '1', '2020-09-14 15:00:00', NULL, '1');
 
 -- --------------------------------------------------------
 --
