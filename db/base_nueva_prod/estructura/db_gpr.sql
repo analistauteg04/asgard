@@ -6,7 +6,7 @@ DROP SCHEMA IF EXISTS `db_gpr`;
 CREATE SCHEMA IF NOT EXISTS `db_gpr` DEFAULT CHARACTER SET utf8 ;
 USE `db_gpr` ;
 
--- GRANT ALL PRIVILEGES ON `db_asgard`.* TO 'uteg'@'localhost' IDENTIFIED BY 'Utegadmin2016*';
+-- GRANT ALL PRIVILEGES ON `db_gpr`.* TO 'uteg'@'localhost' IDENTIFIED BY 'Utegadmin2016*';
 
 -- --------------------------------------------------------
 -- 
