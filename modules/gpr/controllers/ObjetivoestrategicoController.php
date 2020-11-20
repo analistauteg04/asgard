@@ -7,6 +7,7 @@ use app\modules\gpr\models\ObjetivoEstrategico;
 use app\modules\gpr\models\Enfoque;
 use app\modules\gpr\models\CategoriaBsc;
 use app\models\Utilities;
+use app\modules\gpr\models\Entidad;
 use app\modules\gpr\models\PlanificacionPedi;
 use yii\data\ArrayDataProvider;
 use yii\helpers\ArrayHelper;
@@ -19,17 +20,20 @@ class ObjetivoestrategicoController extends \app\components\CController {
     public function actionIndex() {
         $model = new ObjetivoEstrategico();
         $data = Yii::$app->request->get();
+        $user_id = Yii::$app->session->get('PB_iduser', FALSE);
+        $emp_id = Yii::$app->session->get("PB_idempresa", FALSE);
         if (isset($data["PBgetFilter"])) {
             return $this->renderPartial('index-grid', [
                 "model" => $model->getAllObjEstGrid($data["search"], $data["cbsc"], $data["enfoque"], $data["plan"], true)
             ]);
         }
         $arr_enfoque = Enfoque::findAll(['enf_estado' => '1', 'enf_estado_logico' => '1']);
-        $arr_enfoque = array_merge(['0' => gpr::t('enfoque', "-- All Focus --")],ArrayHelper::map($arr_enfoque, "enf_id", "enf_nombre"));
+        $arr_enfoque = ['0' => gpr::t('enfoque', "-- All Focus --")] + ArrayHelper::map($arr_enfoque, "enf_id", "enf_nombre");
         $arr_bsc = CategoriaBsc::findAll(['cbsc_estado' => '1', 'cbsc_estado_logico' => '1']);
-        $arr_bsc = array_merge(['0' => gpr::t('categoriabsc', '-- All Category BSC --')],ArrayHelper::map($arr_bsc, "cbsc_id", "cbsc_nombre"));
-        $arr_plan = PlanificacionPedi::findAll(['pped_estado' => '1', 'pped_estado_logico' => '1']);
-        $arr_plan = array_merge(['0' => gpr::t('planificacionpedi', '-- All Pedi Planning --')],ArrayHelper::map($arr_plan, "pped_id", "pped_nombre"));
+        $arr_bsc = ['0' => gpr::t('categoriabsc', '-- All Category BSC --')] + ArrayHelper::map($arr_bsc, "cbsc_id", "cbsc_nombre");
+        $entidad = Entidad::findOne(['ent_estado' => '1', 'ent_estado_logico' => '1', 'emp_id' => $emp_id]);
+        $arr_plan = PlanificacionPedi::findAll(['pped_estado' => '1', 'pped_estado_logico' => '1', 'ent_id' => $entidad->ent_id]);
+        $arr_plan = ['0' => gpr::t('planificacionpedi', '-- All Pedi Planning --')] + ArrayHelper::map($arr_plan, "pped_id", "pped_nombre");
         return $this->render('index', [
             'model' => $model->getAllObjEstGrid(NULL, NULL, NULL, NULL, true),
             'arr_bsc' => $arr_bsc,
@@ -39,12 +43,15 @@ class ObjetivoestrategicoController extends \app\components\CController {
     }
 
     public function actionNew() {
+        $user_id = Yii::$app->session->get('PB_iduser', FALSE);
+        $emp_id = Yii::$app->session->get("PB_idempresa", FALSE);
         $arr_enfoque = Enfoque::findAll(['enf_estado' => '1', 'enf_estado_logico' => '1']);
-        $arr_enfoque = array_merge(['0' => gpr::t('enfoque', '-- Select a Focus Name --')],ArrayHelper::map($arr_enfoque, "enf_id", "enf_nombre"));
+        $arr_enfoque = ['0' => gpr::t('enfoque', '-- Select a Focus Name --')] + ArrayHelper::map($arr_enfoque, "enf_id", "enf_nombre");
         $arr_bsc = CategoriaBsc::findAll(['cbsc_estado' => '1', 'cbsc_estado_logico' => '1']);
-        $arr_bsc = array_merge(['0' => gpr::t('categoriabsc', '-- Select a Category BSC --')],ArrayHelper::map($arr_bsc, "cbsc_id", "cbsc_nombre"));
-        $arr_plan = PlanificacionPedi::findAll(['pped_estado' => '1', 'pped_estado_logico' => '1', 'pped_estado_cierre' => 0]);
-        $arr_plan = array_merge(['0' => gpr::t('planificacionpedi', '-- Select a Pedi Planning --')],ArrayHelper::map($arr_plan, "pped_id", "pped_nombre"));
+        $arr_bsc = ['0' => gpr::t('categoriabsc', '-- Select a Category BSC --')] + ArrayHelper::map($arr_bsc, "cbsc_id", "cbsc_nombre");
+        $entidad = Entidad::findOne(['ent_estado' => '1', 'ent_estado_logico' => '1', 'emp_id' => $emp_id]);
+        $arr_plan = PlanificacionPedi::findAll(['pped_estado' => '1', 'pped_estado_logico' => '1', 'pped_estado_cierre' => 0, 'ent_id' => $entidad->ent_id]);
+        $arr_plan = ['0' => gpr::t('planificacionpedi', '-- Select a Pedi Planning --')] + ArrayHelper::map($arr_plan, "pped_id", "pped_nombre");
         $_SESSION['JSLANG']['Please select a Category BSC.'] = gpr::t('objetivoestrategico', 'Please select a Category BSC.');
         $_SESSION['JSLANG']['Please select a Focus.'] = gpr::t('objetivoestrategico', 'Please select a Focus.');
         $_SESSION['JSLANG']['Please select a Pedi Planning.'] = gpr::t('planificacionpedi', 'Please select a Pedi Planning.');
@@ -59,12 +66,15 @@ class ObjetivoestrategicoController extends \app\components\CController {
         $data = Yii::$app->request->get();
         if (isset($data['id'])) {
             $id = $data['id'];
+            $user_id = Yii::$app->session->get('PB_iduser', FALSE);
+            $emp_id = Yii::$app->session->get("PB_idempresa", FALSE);
+            $entidad = Entidad::findOne(['ent_estado' => '1', 'ent_estado_logico' => '1', 'emp_id' => $emp_id]);
             $arr_enfoque = Enfoque::findAll(['enf_estado' => '1', 'enf_estado_logico' => '1']);
-            $arr_enfoque = array_merge(['0' => gpr::t('enfoque', '-- Select a Focus Name --')],ArrayHelper::map($arr_enfoque, "enf_id", "enf_nombre"));
+            $arr_enfoque = ['0' => gpr::t('enfoque', '-- Select a Focus Name --')] + ArrayHelper::map($arr_enfoque, "enf_id", "enf_nombre");
             $arr_bsc = CategoriaBsc::findAll(['cbsc_estado' => '1', 'cbsc_estado_logico' => '1']);
-            $arr_bsc = array_merge(['0' => gpr::t('categoriabsc', '-- Select a Category BSC --')],ArrayHelper::map($arr_bsc, "cbsc_id", "cbsc_nombre"));
-            $arr_plan = PlanificacionPedi::findAll(['pped_estado' => '1', 'pped_estado_logico' => '1', 'pped_estado_cierre' => 0]);
-            $arr_plan = array_merge(['0' => gpr::t('planificacionpedi', '-- Select a Pedi Planning --')],ArrayHelper::map($arr_plan, "pped_id", "pped_nombre"));
+            $arr_bsc = ['0' => gpr::t('categoriabsc', '-- Select a Category BSC --')] + ArrayHelper::map($arr_bsc, "cbsc_id", "cbsc_nombre");
+            $arr_plan = PlanificacionPedi::findAll(['pped_estado' => '1', 'pped_estado_logico' => '1', 'pped_estado_cierre' => 0, 'ent_id' => $entidad->ent_id]);
+            $arr_plan = ['0' => gpr::t('planificacionpedi', '-- Select a Pedi Planning --')] + ArrayHelper::map($arr_plan, "pped_id", "pped_nombre");
             return $this->render('view', [
                 'model' => ObjetivoEstrategico::findOne($id),
                 'arr_enfoque' => $arr_enfoque,
@@ -79,12 +89,15 @@ class ObjetivoestrategicoController extends \app\components\CController {
         $data = Yii::$app->request->get();
         if (isset($data['id'])) {
             $id = $data['id'];
+            $user_id = Yii::$app->session->get('PB_iduser', FALSE);
+            $emp_id = Yii::$app->session->get("PB_idempresa", FALSE);
+            $entidad = Entidad::findOne(['ent_estado' => '1', 'ent_estado_logico' => '1', 'emp_id' => $emp_id]);
             $arr_enfoque = Enfoque::findAll(['enf_estado' => '1', 'enf_estado_logico' => '1']);
-            $arr_enfoque = array_merge(['0' => gpr::t('enfoque', '-- Select a Focus Name --')],ArrayHelper::map($arr_enfoque, "enf_id", "enf_nombre"));
+            $arr_enfoque = ['0' => gpr::t('enfoque', '-- Select a Focus Name --')] + ArrayHelper::map($arr_enfoque, "enf_id", "enf_nombre");
             $arr_bsc = CategoriaBsc::findAll(['cbsc_estado' => '1', 'cbsc_estado_logico' => '1']);
-            $arr_bsc = array_merge(['0' => gpr::t('categoriabsc', '-- Select a Category BSC --')],ArrayHelper::map($arr_bsc, "cbsc_id", "cbsc_nombre"));
-            $arr_plan = PlanificacionPedi::findAll(['pped_estado' => '1', 'pped_estado_logico' => '1', 'pped_estado_cierre' => 0]);
-            $arr_plan = array_merge(['0' => gpr::t('planificacionpedi', '-- Select a Pedi Planning --')],ArrayHelper::map($arr_plan, "pped_id", "pped_nombre"));
+            $arr_bsc = ['0' => gpr::t('categoriabsc', '-- Select a Category BSC --')] + ArrayHelper::map($arr_bsc, "cbsc_id", "cbsc_nombre");
+            $arr_plan = PlanificacionPedi::findAll(['pped_estado' => '1', 'pped_estado_logico' => '1', 'pped_estado_cierre' => 0, 'ent_id' => $entidad->ent_id]);
+            $arr_plan = ['0' => gpr::t('planificacionpedi', '-- Select a Pedi Planning --')] + ArrayHelper::map($arr_plan, "pped_id", "pped_nombre");
             $_SESSION['JSLANG']['Please select a Category BSC.'] = gpr::t('objetivoestrategico', 'Please select a Category BSC.');
             $_SESSION['JSLANG']['Please select a Focus.'] = gpr::t('objetivoestrategico', 'Please select a Focus.');
             $_SESSION['JSLANG']['Please select a Pedi Planning.'] = gpr::t('planificacionpedi', 'Please select a Pedi Planning.');

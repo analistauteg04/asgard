@@ -45,4 +45,6 @@ return [
     "Configuration Type Status" => "Configuration Type Status",
     "Configuration Type Enabled" => "Configuration Type Enabled",
     "Configuration Type Disabled" => "Configuration Type Disabled",
+    "-- Select a Configuration Type --" => "-- Select a Configuration Type --",
+    "Please select a Configuration Type." => "Please select a Configuration Type.",
 ];

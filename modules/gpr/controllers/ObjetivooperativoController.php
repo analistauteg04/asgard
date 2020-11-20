@@ -23,15 +23,17 @@ class ObjetivooperativoController extends \app\components\CController {
     public function actionIndex() {
         $model = new ObjetivoOperativo();
         $data = Yii::$app->request->get();
+        $user_id = Yii::$app->session->get('PB_iduser', FALSE);
+        $emp_id = Yii::$app->session->get("PB_idempresa", FALSE);
         if (isset($data["PBgetFilter"])) {
             return $this->renderPartial('index-grid', [
                 "model" => $model->getAllObjOpeGrid($data["search"], $data["objetivo"], $data["plan"], true)
             ]);
         }
         $arr_objesp = ObjetivoEspecifico::getArrayObjEspecifico();
-        $arr_objesp = array_merge(['0' => gpr::t('objetivoespecifico', '-- All Specific Objective --')],ArrayHelper::map($arr_objesp, "id", "name"));
+        $arr_objesp = ['0' => gpr::t('objetivoespecifico', '-- All Specific Objective --')] + ArrayHelper::map($arr_objesp, "id", "name");
         $arr_plan = PlanificacionPoa::findAll(['ppoa_estado' => '1', 'ppoa_estado_logico' => '1']);
-        $arr_plan = array_merge(['0' => gpr::t('planificacionpoa', '-- All Poa Planning --')],ArrayHelper::map($arr_plan, "ppoa_id", "ppoa_nombre"));
+        $arr_plan = ['0' => gpr::t('planificacionpoa', '-- All Poa Planning --')] + ArrayHelper::map($arr_plan, "ppoa_id", "ppoa_nombre");
         return $this->render('index', [
             'model' => $model->getAllObjOpeGrid(NULL, NULL, NULL, true),
             'arr_objesp' => $arr_objesp,
@@ -44,11 +46,11 @@ class ObjetivooperativoController extends \app\components\CController {
         $emp_id = Yii::$app->session->get("PB_idempresa", FALSE);
         
         $arr_objesp = ObjetivoEspecifico::getArrayObjEspecifico();
-        $arr_objesp = array_merge(['0' => gpr::t('objetivoespecifico', '-- Select a Specific Objective --')], ArrayHelper::map($arr_objesp, "id", "name"));
-        $arr_unidad = SubunidadGpr::getArraySubUnidad();
-        $arr_unidad = array_merge(['0' => gpr::t('subunidad', '-- Select a Subunit Name --')], ArrayHelper::map($arr_unidad, "id", "name"));
+        $arr_objesp = ['0' => gpr::t('objetivoespecifico', '-- Select a Specific Objective --')] + ArrayHelper::map($arr_objesp, "id", "name");
+        $arr_unidad = UnidadGpr::getArrayUnidad();
+        $arr_unidad = ['0' => gpr::t('unidad', '-- Select an Unity Name --')] + ArrayHelper::map($arr_unidad, "id", "name");
         $arr_poa = PlanificacionPoa::getArrayPlanPoa();
-        $arr_poa = array_merge(['0' => gpr::t('planificacionpoa', '-- Select a Poa Planning --')], ArrayHelper::map($arr_poa, "id", "name"));
+        $arr_poa = ['0' => gpr::t('planificacionpoa', '-- Select a Poa Planning --')] + ArrayHelper::map($arr_poa, "id", "name");
 
         $_SESSION['JSLANG']['Please select a Subunit Name.'] = gpr::t('subunidad', 'Please select a Subunit Name.');
         $_SESSION['JSLANG']['Please select a Specific Objective.'] = gpr::t('objetivoespecifico', 'Please select a Specific Objective.');
@@ -68,11 +70,11 @@ class ObjetivooperativoController extends \app\components\CController {
             $emp_id = Yii::$app->session->get("PB_idempresa", FALSE);
             
             $arr_objesp = ObjetivoEspecifico::getArrayObjEspecifico();
-            $arr_objesp = array_merge(['0' => gpr::t('objetivoespecifico', '-- Select a Specific Objective --')], ArrayHelper::map($arr_objesp, "id", "name"));
-            $arr_unidad = SubunidadGpr::getArraySubUnidad();
-            $arr_unidad = array_merge(['0' => gpr::t('subunidad', '-- Select a Subunit Name --')], ArrayHelper::map($arr_unidad, "id", "name"));
+            $arr_objesp = ['0' => gpr::t('objetivoespecifico', '-- Select a Specific Objective --')] + ArrayHelper::map($arr_objesp, "id", "name");
+            $arr_unidad = UnidadGpr::getArrayUnidad();
+            $arr_unidad = ['0' => gpr::t('unidad', '-- Select an Unity Name --')] + ArrayHelper::map($arr_unidad, "id", "name");
             $arr_poa = PlanificacionPoa::getArrayPlanPoa();
-            $arr_poa = array_merge(['0' => gpr::t('planificacionpoa', '-- Select a Poa Planning --')], ArrayHelper::map($arr_poa, "id", "name"));
+            $arr_poa = ['0' => gpr::t('planificacionpoa', '-- Select a Poa Planning --')] + ArrayHelper::map($arr_poa, "id", "name");
 
             $_SESSION['JSLANG']['Please select a Subunit Name.'] = gpr::t('subunidad', 'Please select a Subunit Name.');
             $_SESSION['JSLANG']['Please select a Specific Objective.'] = gpr::t('objetivoespecifico', 'Please select a Specific Objective.');
@@ -94,11 +96,11 @@ class ObjetivooperativoController extends \app\components\CController {
             $user_id = Yii::$app->session->get('PB_iduser', FALSE);
             $emp_id = Yii::$app->session->get("PB_idempresa", FALSE);
             $arr_objesp = ObjetivoEspecifico::getArrayObjEspecifico();
-            $arr_objesp = array_merge(['0' => gpr::t('objetivoespecifico', '-- Select a Specific Objective --')], ArrayHelper::map($arr_objesp, "id", "name"));
-            $arr_unidad = SubunidadGpr::getArraySubUnidad();
-            $arr_unidad = array_merge(['0' => gpr::t('subunidad', '-- Select a Subunit Name --')], ArrayHelper::map($arr_unidad, "id", "name"));
+            $arr_objesp = ['0' => gpr::t('objetivoespecifico', '-- Select a Specific Objective --')] + ArrayHelper::map($arr_objesp, "id", "name");
+            $arr_unidad = UnidadGpr::getArrayUnidad();
+            $arr_unidad = ['0' => gpr::t('unidad', '-- Select an Unity Name --')] + ArrayHelper::map($arr_unidad, "id", "name");
             $arr_poa = PlanificacionPoa::getArrayPlanPoa();
-            $arr_poa = array_merge(['0' => gpr::t('planificacionpoa', '-- Select a Poa Planning --')], ArrayHelper::map($arr_poa, "id", "name"));
+            $arr_poa = ['0' => gpr::t('planificacionpoa', '-- Select a Poa Planning --')] + ArrayHelper::map($arr_poa, "id", "name");
 
             $_SESSION['JSLANG']['Please select a Subunit Name.'] = gpr::t('subunidad', 'Please select a Subunit Name.');
             $_SESSION['JSLANG']['Please select a Specific Objective.'] = gpr::t('objetivoespecifico', 'Please select a Specific Objective.');
@@ -130,7 +132,7 @@ class ObjetivooperativoController extends \app\components\CController {
                 $model->oope_descripcion = $descripcion;
                 $model->ppoa_id = $plan;
                 $model->oesp_id = $especifico;
-                $model->sgpr_id = $unidad;
+                $model->ugpr_id = $unidad;
                 $model->oope_fecha_actualizacion = $fecha_modificacion;
                 $model->oope_descripcion = $descripcion;
                 $model->oope_estado = $estado;
@@ -173,7 +175,7 @@ class ObjetivooperativoController extends \app\components\CController {
                 $model->oope_descripcion = $descripcion;
                 $model->ppoa_id = $plan;
                 $model->oesp_id = $especifico;
-                $model->sgpr_id = $unidad;
+                $model->ugpr_id = $unidad;
                 $model->oope_usuario_modifica = $user_id;
                 $model->oope_fecha_modificacion = $fecha_modificacion;
                 $model->oope_estado = $estado;

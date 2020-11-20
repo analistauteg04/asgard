@@ -21,7 +21,7 @@ gpr::registerTranslations();
         <div class="form-group">
             <label for="frm_desc" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label"><?= gpr::t("planificacionpoa", "Poa Planning Description") ?> <span class="text-danger">*</span></label>
             <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                <textarea id="frm_desc" class="form-control PBvalidation" rows="5" data-type="alfa" placeholder="<?= gpr::t("planificacionpoa", "Poa Planning Description") ?>"><?=  $model->ppoa_descripcion ?></textarea>        
+                <textarea id="frm_desc" class="form-control PBvalidation" rows="5" data-type="all" placeholder="<?= gpr::t("planificacionpoa", "Poa Planning Description") ?>"><?=  $model->ppoa_descripcion ?></textarea>        
             </div>
         </div>
     </div> 

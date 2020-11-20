@@ -26,7 +26,7 @@ gpr::registerTranslations();
     </div> 
     <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
         <div class="form-group">
-            <label for="cmb_obj" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label"><?= gpr::t("objetivoestrategico", 'Strategic Objective Name') ?> <span class="text-danger">*</span></label>
+            <label for="cmb_obj" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label"><?= gpr::t("objetivoespecifico", "Specific Objective Name") ?> <span class="text-danger">*</span></label>
             <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
                 <?= Html::dropDownList("cmb_obj", 0, $arr_obj, ["class" => "form-control", "id" => "cmb_obj"]) ?>  
             </div>

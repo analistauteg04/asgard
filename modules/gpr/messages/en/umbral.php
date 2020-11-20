@@ -52,6 +52,7 @@ return [
     "Please select a Threshold Name." => "Please select a Threshold Name.",
     "Threshold Start of Range" => "Threshold Start of Range",
     "Threshold End of Range" => "Threshold End of Range",
+    "Range Threshold" => "Range Threshold",
     "Numeric value for Threshold" => "Numeric value for Threshold",
     "Please the Init Value of Threshold must be less than End Value." => "Please the Init Value of Threshold must be less than End Value.",
 ];

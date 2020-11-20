@@ -12,7 +12,7 @@ use yii\base\Exception;
  *
  * @property int $oesp_id
  * @property int $oest_id
- * @property int $uadm_id
+ * @property int $ugpr_id
  * @property string $oesp_nombre
  * @property string $oesp_descripcion
  * @property int $oesp_usuario_ingreso
@@ -24,7 +24,7 @@ use yii\base\Exception;
  *
  * @property EstrategiaObjespe[] $estrategiaObjespes
  * @property ObjetivoEstrategico $oest
- * @property UnidadAdministrativa $uadm
+ * @property UnidadGpr $ugpr
  * @property ObjetivoOperativo[] $objetivoOperativos
  */
 class ObjetivoEspecifico extends \yii\db\ActiveRecord
@@ -51,14 +51,14 @@ class ObjetivoEspecifico extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['oest_id', 'uadm_id', 'oesp_nombre', 'oesp_descripcion', 'oesp_usuario_ingreso', 'oesp_estado', 'oesp_estado_logico'], 'required'],
-            [['oest_id', 'uadm_id', 'oesp_usuario_ingreso', 'oesp_usuario_modifica'], 'integer'],
+            [['oest_id', 'ugpr_id', 'oesp_nombre', 'oesp_descripcion', 'oesp_usuario_ingreso', 'oesp_estado', 'oesp_estado_logico'], 'required'],
+            [['oest_id', 'ugpr_id', 'oesp_usuario_ingreso', 'oesp_usuario_modifica'], 'integer'],
             [['oesp_fecha_creacion', 'oesp_fecha_modificacion'], 'safe'],
             [['oesp_nombre'], 'string', 'max' => 300],
             [['oesp_descripcion'], 'string', 'max' => 500],
             [['oesp_estado', 'oesp_estado_logico'], 'string', 'max' => 1],
             [['oest_id'], 'exist', 'skipOnError' => true, 'targetClass' => ObjetivoEstrategico::className(), 'targetAttribute' => ['oest_id' => 'oest_id']],
-            [['uadm_id'], 'exist', 'skipOnError' => true, 'targetClass' => UnidadAdministrativa::className(), 'targetAttribute' => ['uadm_id' => 'uadm_id']],
+            [['ugpr_id'], 'exist', 'skipOnError' => true, 'targetClass' => UnidadGpr::className(), 'targetAttribute' => ['ugpr_id' => 'ugpr_id']],
         ];
     }
 
@@ -70,7 +70,7 @@ class ObjetivoEspecifico extends \yii\db\ActiveRecord
         return [
             'oesp_id' => 'Oesp ID',
             'oest_id' => 'Oest ID',
-            'uadm_id' => 'Uadm ID',
+            'ugpr_id' => 'Ugpr ID',
             'oesp_nombre' => 'Oesp Nombre',
             'oesp_descripcion' => 'Oesp Descripcion',
             'oesp_usuario_ingreso' => 'Oesp Usuario Ingreso',
@@ -89,7 +89,7 @@ class ObjetivoEspecifico extends \yii\db\ActiveRecord
      */
     public function getEstrategiaObjespes()
     {
-        return $this->hasMany(EstrategiaObjespe::className(), ['oesp_id' => 'oesp_id']);
+        return $this->hasMany(EstrategiaObjEsp::className(), ['oesp_id' => 'oesp_id']);
     }
 
     /**
@@ -103,13 +103,13 @@ class ObjetivoEspecifico extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[Uadm]].
+     * Gets query for [[Ugpr]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getUadm()
+    public function getUgpr()
     {
-        return $this->hasOne(UnidadAdministrativa::className(), ['uadm_id' => 'uadm_id']);
+        return $this->hasOne(UnidadGpr::className(), ['ugpr_id' => 'ugpr_id']);
     }
 
     /**
@@ -126,6 +126,9 @@ class ObjetivoEspecifico extends \yii\db\ActiveRecord
         $search_cond = "%".$search."%";
         $str_search = "";
         $con = Yii::$app->db_gpr;
+        $con2 = Yii::$app->db;
+        $user_id = Yii::$app->session->get('PB_iduser', FALSE);
+        $emp_id  = Yii::$app->session->get("PB_idempresa", FALSE);
         if(isset($search)){
             $str_search  = "(oep.oesp_nombre like :search OR ";
             $str_search .= "oep.oesp_descripcion like :search) AND ";
@@ -134,34 +137,51 @@ class ObjetivoEspecifico extends \yii\db\ActiveRecord
             $str_search .= "oet.oest_id = :objetivo AND ";
         }
         if(isset($unidad) && $unidad > 0){
-            $str_search .= "ua.uadm_id = :unidad AND ";
+            $str_search .= "ua.ugpr_id = :unidad AND ";
         }
+        if(ResponsableUnidad::userIsAdmin($user_id, $emp_id)){
+            $search .= " em.emp_id = $emp_id AND ";
+        }elseif($user_id != 1){
+            $search .= " em.emp_id = $emp_id AND u.usu_id = $user_id AND ";
+        }
+        $str_search_no_admin = " pl.pped_estado_cierre = '0' AND ";
         $sql = "SELECT 
                     oep.oesp_id as id,
                     oep.oesp_nombre as Nombre,
                     oep.oesp_descripcion as Descripcion,
                     oet.oest_nombre as Objetivo,
-                    ua.uadm_nombre as Unidad,
+                    ua.ugpr_nombre as Unidad,
                     pl.pped_nombre as PlanificacionPedi,
                     pl.pped_estado_cierre as CierrePedi,
                     oep.oesp_estado as Estado
                 FROM 
                     ".$con->dbname.".objetivo_especifico AS oep
                     INNER JOIN ".$con->dbname.".objetivo_estrategico AS oet ON oet.oest_id = oep.oest_id
-                    INNER JOIN ".$con->dbname.".unidad_administrativa AS ua ON ua.uadm_id = oep.uadm_id
+                    INNER JOIN ".$con->dbname.".unidad_gpr AS ua ON ua.ugpr_id = oep.ugpr_id
                     INNER JOIN ".$con->dbname.".planificacion_pedi AS pl ON pl.pped_id = oet.pped_id
                     INNER JOIN ".$con->dbname.".entidad AS en ON en.ent_id = pl.ent_id
+                    INNER JOIN ".$con->dbname.".tipo_unidad AS tu ON tu.tuni_id = ua.tuni_id
+                    INNER JOIN ".$con->dbname.".responsable_unidad AS rp ON rp.ugpr_id = ua.ugpr_id
+                    INNER JOIN ".$con2->dbname.".empresa AS em ON en.emp_id = em.emp_id
+                    INNER JOIN ".$con2->dbname.".usuario AS u ON u.usu_id = rp.usu_id
                 WHERE 
+                    $str_search_no_admin
                     $str_search
+                    tu.tuni_id = 1 AND 
                     oep.oesp_estado_logico=1 AND
                     oet.oest_estado_logico=1 AND
                     oet.oest_estado=1 AND
                     pl.pped_estado_logico=1 AND
                     pl.pped_estado=1 AND
-                    ua.uadm_estado_logico=1 AND
-                    ua.uadm_estado=1 AND
+                    ua.ugpr_estado_logico=1 AND
+                    ua.ugpr_estado=1 AND
+                    tu.tuni_estado_logico=1 AND
+                    tu.tuni_estado=1 AND
                     en.ent_estado_logico=1 AND
                     en.ent_estado=1
+                GROUP BY  
+                    oep.oesp_id, oep.oesp_nombre, oep.oesp_descripcion, oet.oest_nombre, 
+                    ua.ugpr_nombre, pl.pped_nombre, pl.pped_estado_cierre, oep.oesp_estado
                 ORDER BY oep.oesp_id;";
         $comando = Yii::$app->db->createCommand($sql);
         if(isset($search)){
@@ -196,9 +216,12 @@ class ObjetivoEspecifico extends \yii\db\ActiveRecord
         $con = Yii::$app->db_gpr;
         $con2 = Yii::$app->db;
         $search = "";
-        if($user_id != 1){
+        if(ResponsableUnidad::userIsAdmin($user_id, $emp_id)){
+            $search .= " em.emp_id = $emp_id AND ";
+        }elseif($user_id != 1){
             $search .= " em.emp_id = $emp_id AND u.usu_id = $user_id AND ";
         }
+        $str_search_no_admin = " pl.pped_estado_cierre = '0' AND ";
         $sql = "SELECT 
                     oep.oesp_id as id,
                     oep.oesp_nombre as name
@@ -208,12 +231,15 @@ class ObjetivoEspecifico extends \yii\db\ActiveRecord
                     INNER JOIN ".$con->dbname.".planificacion_pedi AS pl ON pl.pped_id = oet.pped_id
                     INNER JOIN ".$con->dbname.".entidad AS en ON en.ent_id = pl.ent_id
                     INNER JOIN ".$con->dbname.".unidad_gpr AS un ON un.ent_id = en.ent_id
-                    INNER JOIN ".$con->dbname.".subunidad_gpr AS su ON su.ugpr_id = un.ugpr_id
-                    INNER JOIN ".$con->dbname.".responsable_subunidad AS rp ON rp.sgpr_id = su.sgpr_id
+                    -- INNER JOIN ".$con->dbname.".subunidad_gpr AS su ON su.ugpr_id = un.ugpr_id
+                    INNER JOIN ".$con->dbname.".responsable_unidad AS rp ON rp.ugpr_id = un.ugpr_id
                     INNER JOIN ".$con2->dbname.".empresa AS em ON en.emp_id = em.emp_id
                     INNER JOIN ".$con2->dbname.".usuario AS u ON u.usu_id = rp.usu_id
+                    INNER JOIN ".$con->dbname.".tipo_unidad AS tu ON tu.tuni_id = un.tuni_id
                 WHERE 
+                    $str_search_no_admin 
                     $search
+                    tu.tuni_alias <> 'Adm' AND 
                     oep.oesp_estado_logico=1 AND
                     oet.oest_estado_logico=1 AND
                     oet.oest_estado=1 AND
@@ -224,8 +250,8 @@ class ObjetivoEspecifico extends \yii\db\ActiveRecord
                     em.emp_estado=1 AND
                     un.ugpr_estado_logico=1 AND
                     un.ugpr_estado=1 AND
-                    su.sgpr_estado_logico=1 AND
-                    su.sgpr_estado=1 AND
+                    -- su.sgpr_estado_logico=1 AND
+                    -- su.sgpr_estado=1 AND
                     en.ent_estado_logico=1 AND
                     en.ent_estado=1
                 GROUP BY oep.oesp_id, oep.oesp_nombre

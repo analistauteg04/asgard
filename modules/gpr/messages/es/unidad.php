@@ -46,8 +46,11 @@ return [
     "Unity Status" => "Estado de la Unidad",
     "Unity Enabled" => "Activada Unidad",
     "Unity Disabled" => "Desactivada Unidad",
-    "-- Select a Unity Name --" => "-- Seleccione una Unidad --",
+    "-- Select an Unity Name --" => "-- Seleccione una Unidad --",
+    "-- Select a Type of Unit --" => "-- Seleccione un Tipo de Unidad --",
     "-- All Unities --" => "-- Todas las Unidades --",
     "Please select an Unity Name." => "Por favor selecciona una Unidad.",
+    "Please select a Type of Unit." => "Por favor seleccione un Tipo de Unidad.",
     "Search by Entity, Category, Unity" => "Buscar por Entidad, Categoria, Unidad",
+    "Type of Unit" => "Tipo de Unidad",
 ];

@@ -120,4 +120,23 @@ class Umbral extends \yii\db\ActiveRecord
         }
         return $res;
     }
+
+    public static function getUmbralByParameter($parameter){
+        $con = Yii::$app->db_gpr;
+        $sql = "SELECT 
+                    umb_nombre as Nombre,
+                    umb_color as Color,
+                    umb_per_inicio as Inicio,
+                    umb_per_fin as Fin
+                FROM 
+                    ".$con->dbname.".umbral
+                WHERE 
+                    umb_per_inicio <= :parameter AND umb_per_fin >= :parameter 
+                    AND umb_estado_logico=1 AND umb_estado=1
+                ORDER BY umb_id;";
+        $comando = Yii::$app->db->createCommand($sql);
+        $comando->bindParam(":parameter",$parameter, \PDO::PARAM_INT);
+        $res = $comando->queryOne();
+        return $res;
+    }
 }

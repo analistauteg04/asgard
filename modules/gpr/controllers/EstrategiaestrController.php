@@ -6,6 +6,8 @@ use Yii;
 use app\modules\gpr\models\ObjetivoEstrategico;
 use app\modules\gpr\models\EstrategiaObjEstr;
 use app\models\Utilities;
+use app\modules\gpr\models\Entidad;
+use app\modules\gpr\models\PlanificacionPedi;
 use yii\data\ArrayDataProvider;
 use yii\helpers\ArrayHelper;
 use yii\base\Exception;
@@ -16,14 +18,18 @@ class EstrategiaestrController extends \app\components\CController {
 
     public function actionIndex() {
         $model = new EstrategiaObjEstr();
+        $user_id = Yii::$app->session->get('PB_iduser', FALSE);
+        $emp_id = Yii::$app->session->get("PB_idempresa", FALSE);
         $data = Yii::$app->request->get();
         if (isset($data["PBgetFilter"])) {
             return $this->renderPartial('index-grid', [
                 "model" => $model->getAllEstrategiasEstrGrid($data["search"], $data["objetivo"], true)
             ]);
         }
-        $arr_objestr = ObjetivoEstrategico::findAll(['oest_estado' => '1', 'oest_estado_logico' => '1']);
-        $arr_objestr = array_merge(['0' => gpr::t('objetivoestrategico', "-- All Strategic Objective --")],ArrayHelper::map($arr_objestr, "oest_id", "oest_nombre"));
+        $entidad = Entidad::findOne(['ent_estado' => '1', 'ent_estado_logico' => '1', 'emp_id' => $emp_id]);
+        $planPedi = PlanificacionPedi::findOne(['pped_estado' => '1', 'pped_estado_logico' => '1', 'ent_id' => $entidad->ent_id]);
+        $arr_objestr = ObjetivoEstrategico::findAll(['oest_estado' => '1', 'oest_estado_logico' => '1', 'pped_id'=> $planPedi->pped_id]);
+        $arr_objestr = ['0' => gpr::t('objetivoestrategico', "-- All Strategic Objective --")] + ArrayHelper::map($arr_objestr, "oest_id", "oest_nombre");
         return $this->render('index', [
             'model' => $model->getAllEstrategiasEstrGrid(NULL, NULL, true),
             'arr_objestr' => $arr_objestr,
@@ -31,8 +37,12 @@ class EstrategiaestrController extends \app\components\CController {
     }
 
     public function actionNew() {
-        $arr_objestr = ObjetivoEstrategico::findAll(['oest_estado' => '1', 'oest_estado_logico' => '1']);
-        $arr_objestr = array_merge(['0' => gpr::t('objetivoestrategico', "-- Select a Strategic Objective --")],ArrayHelper::map($arr_objestr, "oest_id", "oest_nombre"));
+        $user_id = Yii::$app->session->get('PB_iduser', FALSE);
+        $emp_id = Yii::$app->session->get("PB_idempresa", FALSE);
+        $entidad = Entidad::findOne(['ent_estado' => '1', 'ent_estado_logico' => '1', 'emp_id' => $emp_id]);
+        $planPedi = PlanificacionPedi::findOne(['pped_estado' => '1', 'pped_estado_logico' => '1', 'ent_id' => $entidad->ent_id]);
+        $arr_objestr = ObjetivoEstrategico::findAll(['oest_estado' => '1', 'oest_estado_logico' => '1', 'pped_id'=> $planPedi->pped_id]);
+        $arr_objestr = ['0' => gpr::t('objetivoestrategico', "-- Select a Strategic Objective --")] + ArrayHelper::map($arr_objestr, "oest_id", "oest_nombre");
         $_SESSION['JSLANG']['Please select a Strategic Objective.'] = gpr::t('objetivoestrategico', 'Please select a Strategic Objective.');
         return $this->render('new', [
             'arr_objestr' => $arr_objestr,
@@ -43,8 +53,12 @@ class EstrategiaestrController extends \app\components\CController {
         $data = Yii::$app->request->get();
         if (isset($data['id'])) {
             $id = $data['id'];
-            $arr_objestr = ObjetivoEstrategico::findAll(['oest_estado' => '1', 'oest_estado_logico' => '1']);
-            $arr_objestr = array_merge(['0' => gpr::t('objetivoestrategico', "-- Select a Strategic Objective --")],ArrayHelper::map($arr_objestr, "oest_id", "oest_nombre"));
+            $user_id = Yii::$app->session->get('PB_iduser', FALSE);
+            $emp_id = Yii::$app->session->get("PB_idempresa", FALSE);
+            $entidad = Entidad::findOne(['ent_estado' => '1', 'ent_estado_logico' => '1', 'emp_id' => $emp_id]);
+            $planPedi = PlanificacionPedi::findOne(['pped_estado' => '1', 'pped_estado_logico' => '1', 'ent_id' => $entidad->ent_id]);
+            $arr_objestr = ObjetivoEstrategico::findAll(['oest_estado' => '1', 'oest_estado_logico' => '1', 'pped_id'=> $planPedi->pped_id]);
+            $arr_objestr = ['0' => gpr::t('objetivoestrategico', "-- Select a Strategic Objective --")] + ArrayHelper::map($arr_objestr, "oest_id", "oest_nombre");
             return $this->render('view', [
                 'model' => EstrategiaObjEstr::findOne($id),
                 'arr_objestr' => $arr_objestr,
@@ -57,8 +71,12 @@ class EstrategiaestrController extends \app\components\CController {
         $data = Yii::$app->request->get();
         if (isset($data['id'])) {
             $id = $data['id'];
-            $arr_objestr = ObjetivoEstrategico::findAll(['oest_estado' => '1', 'oest_estado_logico' => '1']);
-            $arr_objestr = array_merge(['0' => gpr::t('objetivoestrategico', "-- Select a Strategic Objective --")],ArrayHelper::map($arr_objestr, "oest_id", "oest_nombre"));
+            $user_id = Yii::$app->session->get('PB_iduser', FALSE);
+            $emp_id = Yii::$app->session->get("PB_idempresa", FALSE);
+            $entidad = Entidad::findOne(['ent_estado' => '1', 'ent_estado_logico' => '1', 'emp_id' => $emp_id]);
+            $planPedi = PlanificacionPedi::findOne(['pped_estado' => '1', 'pped_estado_logico' => '1', 'ent_id' => $entidad->ent_id]);
+            $arr_objestr = ObjetivoEstrategico::findAll(['oest_estado' => '1', 'oest_estado_logico' => '1', 'pped_id'=> $planPedi->pped_id]);
+            $arr_objestr = ['0' => gpr::t('objetivoestrategico', "-- Select a Strategic Objective --")] + ArrayHelper::map($arr_objestr, "oest_id", "oest_nombre");
             $_SESSION['JSLANG']['Please select a Strategic Objective.'] = gpr::t('objetivoestrategico', 'Please select a Strategic Objective.');
             return $this->render('edit', [
                 'model' => EstrategiaObjEstr::findOne($id),

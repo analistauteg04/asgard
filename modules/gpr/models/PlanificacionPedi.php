@@ -119,7 +119,10 @@ class PlanificacionPedi extends \yii\db\ActiveRecord
     public function getAllPlanPediGrid($search = NULL, $entidad = NULL, $cierre = NULL, $dataProvider = false){
         $search_cond = "%".$search."%";
         $str_search = "";
+        $user_id = Yii::$app->session->get('PB_iduser', FALSE);
+        $emp_id  = Yii::$app->session->get("PB_idempresa", FALSE);
         $con = Yii::$app->db_gpr;
+        $con2 = Yii::$app->db;
         if(isset($search)){
             $str_search  = "(p.pped_nombre like :search OR ";
             $str_search .= "p.pped_descripcion like :search OR ";
@@ -130,6 +133,11 @@ class PlanificacionPedi extends \yii\db\ActiveRecord
         }
         if(isset($cierre) && $cierre >= 0){
             $str_search .= "p.pped_estado_cierre = :cierre AND ";
+        }
+        if(ResponsableUnidad::userIsAdmin($user_id, $emp_id)){
+            $str_search .= " em.emp_id = $emp_id AND ";
+        }elseif($user_id != 1){
+            $str_search .= " em.emp_id = $emp_id AND us.usu_id = $user_id AND ";
         }
         $sql = "SELECT 
                     p.pped_id as id,
@@ -144,9 +152,15 @@ class PlanificacionPedi extends \yii\db\ActiveRecord
                 FROM 
                     ".$con->dbname.".planificacion_pedi as p
                     INNER JOIN ".$con->dbname.".entidad as e ON e.ent_id = p.ent_id
+                    INNER JOIN ".$con->dbname.".unidad_gpr as u ON u.ent_id = e.ent_id
+                    INNER JOIN ".$con->dbname.".responsable_unidad AS rp ON rp.ugpr_id = u.ugpr_id
+                    INNER JOIN ".$con2->dbname.".empresa AS em ON e.emp_id = em.emp_id
+                    INNER JOIN ".$con2->dbname.".usuario AS us ON us.usu_id = rp.usu_id
                 WHERE 
                     $str_search
                     p.pped_estado_logico=1 
+                GROUP BY p.pped_id, p.pped_nombre, p.pped_descripcion, e.ent_nombre, p.pped_fecha_inicio, 
+                         p.pped_fecha_fin, p.pped_fecha_actualizacion, p.pped_estado_cierre, p.pped_estado
                 ORDER BY p.pped_id desc;";
         $comando = Yii::$app->db->createCommand($sql);
         if(isset($search)){
@@ -172,6 +186,49 @@ class PlanificacionPedi extends \yii\db\ActiveRecord
             ]);
             return $dataProvider;
         }
+        return $res;
+    }
+
+    public static function getArrayPlanPedi(){
+        $user_id = Yii::$app->session->get('PB_iduser', FALSE);
+        $emp_id  = Yii::$app->session->get("PB_idempresa", FALSE);
+        $con = Yii::$app->db_gpr;
+        $con2 = Yii::$app->db;
+        $search = "";
+        if($user_id != 1){
+            $search .= " em.emp_id = $emp_id AND ";
+        }
+        $sql = "SELECT 
+                    pl.pped_id as id,
+                    pl.pped_nombre as name
+                FROM 
+                    ".$con->dbname.".objetivo_operativo AS op
+                    INNER JOIN ".$con->dbname.".objetivo_especifico AS oep ON oep.oesp_id = op.oesp_id
+                    INNER JOIN ".$con->dbname.".objetivo_estrategico AS oet ON oet.oest_id = oep.oest_id
+                    INNER JOIN ".$con->dbname.".planificacion_pedi AS pl ON pl.pped_id = oet.pped_id
+                    INNER JOIN ".$con->dbname.".planificacion_poa AS po ON po.ppoa_id = op.ppoa_id 
+                    INNER JOIN ".$con->dbname.".entidad AS en ON en.ent_id = pl.ent_id
+                    INNER JOIN ".$con->dbname.".unidad_gpr AS un ON un.ent_id = en.ent_id
+                    INNER JOIN ".$con->dbname.".responsable_unidad AS rp ON rp.ugpr_id = un.ugpr_id
+                    INNER JOIN ".$con2->dbname.".empresa AS em ON en.emp_id = em.emp_id
+                    INNER JOIN ".$con2->dbname.".usuario AS u ON u.usu_id = rp.usu_id
+                WHERE 
+                    $search
+                    oep.oesp_estado_logico=1 AND
+                    oet.oest_estado_logico=1 AND
+                    oet.oest_estado=1 AND
+                    pl.pped_estado_logico=1 AND
+                    pl.pped_estado=1 AND
+                    em.emp_estado_logico=1 AND
+                    em.emp_estado=1 AND
+                    un.ugpr_estado_logico=1 AND
+                    un.ugpr_estado=1 AND
+                    en.ent_estado_logico=1 AND
+                    en.ent_estado=1
+                GROUP BY pl.pped_id, pl.pped_nombre
+                ORDER BY pl.pped_id;";
+        $comando = Yii::$app->db->createCommand($sql);
+        $res = $comando->queryAll();
         return $res;
     }
 }

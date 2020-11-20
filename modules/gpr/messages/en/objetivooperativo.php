@@ -40,6 +40,7 @@
  */
 
 return [ 
+    "Operative Objective" => "Operative Objective",
     "Operative Objective Name" => "Operative Objective Name",
     "Operative Objective Description" => "Operative Objective Description",
     "Operative Objective Status" => "Operative Objective Status",

@@ -26,9 +26,9 @@ gpr::registerTranslations();
     </div> 
     <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
         <div class="form-group">
-            <label for="cmb_adm" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label"><?= gpr::t("unidadadministrativa", "Administrative Unit Name") ?> <span class="text-danger">*</span></label>
+            <label for="cmb_adm" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label"><?= gpr::t("unidad", "Unity Name") ?> <span class="text-danger">*</span></label>
             <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                <?= Html::dropDownList("cmb_adm", $model->uadm_id, $arr_unidades, ["class" => "form-control", "id" => "cmb_adm", "disabled" => "disabled", ]) ?>  
+                <?= Html::dropDownList("cmb_adm", $model->ugpr_id, $arr_unidades, ["class" => "form-control", "id" => "cmb_adm", "disabled" => "disabled", ]) ?>  
             </div>
         </div>
     </div> 
@@ -42,7 +42,7 @@ gpr::registerTranslations();
     </div> 
     <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
         <div class="form-group">
-            <label for="frm_bsc_status" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label"><?= gpr::t("objetivoespecifico", "Strategic Status") ?></label>
+            <label for="frm_bsc_status" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label"><?= gpr::t("objetivoespecifico", "Specific Objective Status") ?></label>
             <div class="col-sm-1">
                 <div class="input-group">
                     <input type="hidden" class="form-control PBvalidation" id="frm_omod_status" value="<?= $model->oesp_estado ?>" data-type="number" placeholder="<?= gpr::t("objetivoespecifico", "Specific Objective Status") ?>">

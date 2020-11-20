@@ -6,6 +6,8 @@ use Yii;
 use app\modules\gpr\models\ObjetivoEspecifico;
 use app\modules\gpr\models\EstrategiaObjEsp;
 use app\models\Utilities;
+use app\modules\gpr\models\Entidad;
+use app\modules\gpr\models\PlanificacionPedi;
 use yii\data\ArrayDataProvider;
 use yii\helpers\ArrayHelper;
 use yii\base\Exception;
@@ -17,13 +19,16 @@ class EstrategiaespController extends \app\components\CController {
     public function actionIndex() {
         $model = new EstrategiaObjEsp();
         $data = Yii::$app->request->get();
+        $user_id = Yii::$app->session->get('PB_iduser', FALSE);
+        $emp_id = Yii::$app->session->get("PB_idempresa", FALSE);
         if (isset($data["PBgetFilter"])) {
             return $this->renderPartial('index-grid', [
                 "model" => $model->getAllEstrategiasEspGrid($data["search"], $data["objetivo"], true)
             ]);
         }
-        $arr_obj = ObjetivoEspecifico::findAll(['oesp_estado' => '1', 'oesp_estado_logico' => '1']);
-        $arr_obj = array_merge(['0' => gpr::t('objetivoespecifico', "-- All Specific Objective --")],ArrayHelper::map($arr_obj, "oesp_id", "oesp_nombre"));
+        //$arr_obj = ObjetivoEspecifico::findAll(['oesp_estado' => '1', 'oesp_estado_logico' => '1']);
+        $arr_obj = ObjetivoEspecifico::getArrayObjEspecifico();
+        $arr_obj = ['0' => gpr::t('objetivoespecifico', "-- All Specific Objective --")] + ArrayHelper::map($arr_obj, "id", "name");
         return $this->render('index', [
             'model' => $model->getAllEstrategiasEspGrid(NULL, NULL, true),
             'arr_obj' => $arr_obj,
@@ -31,8 +36,11 @@ class EstrategiaespController extends \app\components\CController {
     }
 
     public function actionNew() {
-        $arr_obj = ObjetivoEspecifico::findAll(['oesp_estado' => '1', 'oesp_estado_logico' => '1']);
-        $arr_obj = array_merge(['0' => gpr::t('objetivoespecifico', "-- Select a Specific Objective --")],ArrayHelper::map($arr_obj, "oesp_id", "oesp_nombre"));
+        $user_id = Yii::$app->session->get('PB_iduser', FALSE);
+        $emp_id = Yii::$app->session->get("PB_idempresa", FALSE);
+        //$arr_obj = ObjetivoEspecifico::findAll(['oesp_estado' => '1', 'oesp_estado_logico' => '1']);
+        $arr_obj = ObjetivoEspecifico::getArrayObjEspecifico();
+        $arr_obj = ['0' => gpr::t('objetivoespecifico', "-- Select a Specific Objective --")] + ArrayHelper::map($arr_obj, "id", "name");
         $_SESSION['JSLANG']['Please select a Specific Objective.'] = gpr::t('objetivoestrategico', 'Please select a Specific Objective.');
         return $this->render('new', [
             'arr_obj' => $arr_obj,
@@ -43,8 +51,11 @@ class EstrategiaespController extends \app\components\CController {
         $data = Yii::$app->request->get();
         if (isset($data['id'])) {
             $id = $data['id'];
-            $arr_obj = ObjetivoEspecifico::findAll(['oesp_estado' => '1', 'oesp_estado_logico' => '1']);
-            $arr_obj = array_merge(['0' => gpr::t('objetivoespecifico', "-- Select a Specific Objective --")],ArrayHelper::map($arr_obj, "oesp_id", "oesp_nombre"));
+            $user_id = Yii::$app->session->get('PB_iduser', FALSE);
+            $emp_id = Yii::$app->session->get("PB_idempresa", FALSE);
+            //$arr_obj = ObjetivoEspecifico::findAll(['oesp_estado' => '1', 'oesp_estado_logico' => '1']);
+            $arr_obj = ObjetivoEspecifico::getArrayObjEspecifico();
+            $arr_obj = ['0' => gpr::t('objetivoespecifico', "-- Select a Specific Objective --")] + ArrayHelper::map($arr_obj, "id", "name");
             return $this->render('view', [
                 'model' => EstrategiaObjEsp::findOne($id),
                 'arr_obj' => $arr_obj,
@@ -57,8 +68,11 @@ class EstrategiaespController extends \app\components\CController {
         $data = Yii::$app->request->get();
         if (isset($data['id'])) {
             $id = $data['id'];
-            $arr_obj = ObjetivoEspecifico::findAll(['oesp_estado' => '1', 'oesp_estado_logico' => '1']);
-            $arr_obj = array_merge(['0' => gpr::t('objetivoespecifico', "-- Select a Specific Objective --")],ArrayHelper::map($arr_obj, "oesp_id", "oesp_nombre"));
+            $user_id = Yii::$app->session->get('PB_iduser', FALSE);
+            $emp_id = Yii::$app->session->get("PB_idempresa", FALSE);
+            //$arr_obj = ObjetivoEspecifico::findAll(['oesp_estado' => '1', 'oesp_estado_logico' => '1']);
+            $arr_obj = ObjetivoEspecifico::getArrayObjEspecifico();
+            $arr_obj = ['0' => gpr::t('objetivoespecifico', "-- Select a Specific Objective --")] + ArrayHelper::map($arr_obj, "id", "name");
             $_SESSION['JSLANG']['Please select a Specific Objective.'] = gpr::t('objetivoespecifico', 'Please select a Specific Objective.');
             return $this->render('edit', [
                 'model' => EstrategiaObjEsp::findOne($id),

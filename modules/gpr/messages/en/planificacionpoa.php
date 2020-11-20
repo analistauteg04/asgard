@@ -59,4 +59,5 @@ return [
     "-- All Status Poa Planning Closed --" => "-- All Status Poa Planning Closed --",
     "Please select a Poa Planning." => "Please select a Poa Planning.",
     "Search by Planning Name" => "Search by Planning Name",
+    "Transaction is invalid. Planning Pedi/Poa is closed." => "Transaction is invalid. Planning Pedi/Poa is closed.",
 ];

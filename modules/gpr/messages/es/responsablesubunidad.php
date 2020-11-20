@@ -40,6 +40,26 @@
  */
 
 return [ 
-    "Responsible Subunit" => "Responsables de la Subunidad",
-    "The Subunit must have at least 1 responsible." => "La Subunidad deberia tener al menos 1 responsable.",
+    "Responsible" => "Responsables",
+    "Responsible Subunit" => "Responsables de la Unidad",
+    "Responsible Status" => "Estado Responsable",
+    "Responsible Enabled" => "Activado Responsable",
+    "Responsible Disabled" => "Desactivado Responsable",
+    "The Subunit must have at least 1 responsible." => "La Unidad deberia tener al menos 1 responsable.",
+    'Responsible already exists in System to assigned another Unit.' => 'Responsable ya existe en el Sistema asignado a otra Unidad.',
+    "Search by Person's Name" => "Buscar por Nombre de personas",
+    "Level" => "Nivel",
+    "-- All Companies --" => "-- Todas las Empresas --",
+    "-- All Levels --" => "-- Todos los Niveles --",
+    "-- Select a Company Name --" => "-- Seleccione una Empresa --",
+    "-- Select a Level --" => "-- Seleccione un Nivel --",
+    "-- Select a Person --" => "-- Seleccione una Persona --",
+    "Please select a Company Name." => "Por favor seleccione una Empresa.",
+    "Please select a Person Name." => "Por favor seleccion una Persona.",
+    "Please select a Level." => "Por favor seleccione un Nivel",
+    "User have no privileges N1 to do this transaccion." => "Usuario no tiene priviegios de N1 para realizar esta operación.",
+    "Is Auditor" => "Es Auditor",
+    "Auditor" => "Auditor",
+    "No Auditor" => "No es Auditor",
+    "Auditor requires N1 privileges." => "Auditor requiere tener privilegios N1.",
 ];

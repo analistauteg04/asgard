@@ -24,7 +24,6 @@ use yii\base\Exception;
  *
  * @property Categoria $cat
  * @property PlanificacionPedi[] $planificacionPedis
- * @property UnidadAdministrativa[] $unidadAdministrativas
  * @property UnidadGpr[] $unidadGprs
  */
 class Entidad extends \yii\db\ActiveRecord
@@ -99,16 +98,6 @@ class Entidad extends \yii\db\ActiveRecord
     public function getPlanificacionPedis()
     {
         return $this->hasMany(PlanificacionPedi::className(), ['ent_id' => 'ent_id']);
-    }
-
-    /**
-     * Gets query for [[UnidadAdministrativas]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getUnidadAdministrativas()
-    {
-        return $this->hasMany(UnidadAdministrativa::className(), ['ent_id' => 'ent_id']);
     }
 
     /**

@@ -40,6 +40,26 @@
  */
 
 return [ 
+    "Responsible" => "Responsible",
     "Responsible Subunit" => "Responsible Subunit",
+    "Responsible Status" => "Responsible Status",
+    "Responsible Enabled" => "Responsible Enabled",
+    "Responsible Disabled" => "Responsible Disabled",
     "The Subunit must have at least 1 responsible." => "The Subunit must have at least 1 responsible.",
+    "Responsible already exists in System to assigned another Unit." => "Responsible already exists in System to assigned another Unit.",
+    "Search by Person's Name" => "Search by Person's Name",
+    "Level" => "Level",
+    "-- All Companies --" => "-- All Companies --",
+    "-- All Levels --" => "-- All Levels --",
+    "-- Select a Company Name --" => "-- Select a Company Name --",
+    "-- Select a Level --" => "-- Select a Level --",
+    "-- Select a Person --" => "-- Select a Person --",
+    "Please select a Company Name." => "Please select a Company Name.",
+    "Please select a Person Name." => "Please select a Person Name.",
+    "Please select a Level." => "Please select a Level.",
+    "User have no privileges N1 to do this transaccion." => "User have no privileges N1 to do this transaccion.",
+    "Is Auditor" => "Is Auditor",
+    "Auditor" => "Auditor",
+    "No Auditor" => "No Auditor",
+    "Auditor requires N1 privileges." => "Auditor requires N1 privileges.",
 ];

@@ -26,14 +26,14 @@ class EntidadController extends \app\components\CController {
             ]);
         }
         $arr_categoria = Categoria::findAll(['cat_estado' => '1', 'cat_estado_logico' => '1']);
-        $arr_categoria = array_merge(['0' => gpr::t('categoria', '-- All Categories --')],ArrayHelper::map($arr_categoria, "cat_id", "cat_nombre"));
+        $arr_categoria = ['0' => gpr::t('categoria', '-- All Categories --')] + ArrayHelper::map($arr_categoria, "cat_id", "cat_nombre");
         $arr_empresa = array();
         if($user_id == 1){
             $arr_empresa = Empresa::findAll(['emp_estado' => '1', 'emp_estado_logico' => '1']);
         }else{
             $arr_empresa = Empresa::findAll(['emp_estado' => '1', 'emp_estado_logico' => '1', 'emp_id' => $idEmpresa]);
         }
-        $arr_empresa = array_merge(['0' => gpr::t('entidad', '-- All Companies --')],ArrayHelper::map($arr_empresa, "emp_id", "emp_alias"));
+        $arr_empresa = ['0' => gpr::t('entidad', '-- All Companies --')] + ArrayHelper::map($arr_empresa, "emp_id", "emp_alias");
         return $this->render('index', [
             'model' => $model->getAllPlanPediGrid(NULL, NULL, true),
             'arr_categoria' => $arr_categoria,
@@ -47,14 +47,14 @@ class EntidadController extends \app\components\CController {
         $user_id = Yii::$app->session->get('PB_iduser', FALSE);
         $idEmpresa = Yii::$app->session->get("PB_idempresa", FALSE);
         $arr_categoria = Categoria::findAll(['cat_estado' => '1', 'cat_estado_logico' => '1']);
-        $arr_categoria = array_merge(['0' => gpr::t('categoria', '-- All Categories --')],ArrayHelper::map($arr_categoria, "cat_id", "cat_nombre"));
+        $arr_categoria = ['0' => gpr::t('categoria', '-- All Categories --')] + ArrayHelper::map($arr_categoria, "cat_id", "cat_nombre");
         $arr_empresa = array();
         if($user_id == 1){
             $arr_empresa = Empresa::findAll(['emp_estado' => '1', 'emp_estado_logico' => '1']);
         }else{
             $arr_empresa = Empresa::findAll(['emp_estado' => '1', 'emp_estado_logico' => '1', 'emp_id' => $idEmpresa]);
         }
-        $arr_empresa = array_merge(['0' => gpr::t('entidad', '-- Select a Company Name --')],ArrayHelper::map($arr_empresa, "emp_id", "emp_alias"));
+        $arr_empresa = ['0' => gpr::t('entidad', '-- Select a Company Name --')] + ArrayHelper::map($arr_empresa, "emp_id", "emp_alias");
         return $this->render('new', [
             'arr_categoria' => $arr_categoria,
             'arr_empresa' => $arr_empresa,
@@ -70,13 +70,13 @@ class EntidadController extends \app\components\CController {
             $user_id = Yii::$app->session->get('PB_iduser', FALSE);
             $idEmpresa = Yii::$app->session->get("PB_idempresa", FALSE);
             $arr_categoria = Categoria::findAll(['cat_estado' => '1', 'cat_estado_logico' => '1']);
-            $arr_categoria = array_merge(['0' => gpr::t('categoria', '-- All Categories --')],ArrayHelper::map($arr_categoria, "cat_id", "cat_nombre"));
+            $arr_categoria = ['0' => gpr::t('categoria', '-- All Categories --')] + ArrayHelper::map($arr_categoria, "cat_id", "cat_nombre");
             if($user_id == 1){
                 $arr_empresa = Empresa::findAll(['emp_estado' => '1', 'emp_estado_logico' => '1']);
             }else{
                 $arr_empresa = Empresa::findAll(['emp_estado' => '1', 'emp_estado_logico' => '1', 'emp_id' => $idEmpresa]);
             }
-            $arr_empresa = array_merge(['0' => gpr::t('entidad', '-- Select a Company Name --')],ArrayHelper::map($arr_empresa, "emp_id", "emp_alias"));
+            $arr_empresa = ['0' => gpr::t('entidad', '-- Select a Company Name --')] + ArrayHelper::map($arr_empresa, "emp_id", "emp_alias");
             return $this->render('view', [
                 'model' => Entidad::findOne($id),
                 'arr_categoria' => $arr_categoria,
@@ -96,13 +96,13 @@ class EntidadController extends \app\components\CController {
             $_SESSION['JSLANG']['Please select a Category Name.'] = gpr::t('categoria', 'Please select a Category Name.');
             $_SESSION['JSLANG']['Please select a Company Name.'] = gpr::t('entidad', 'Please select a Company Name.');
             $arr_categoria = Categoria::findAll(['cat_estado' => '1', 'cat_estado_logico' => '1']);
-            $arr_categoria = array_merge(['0' => gpr::t('categoria', '-- All Categories --')],ArrayHelper::map($arr_categoria, "cat_id", "cat_nombre"));
+            $arr_categoria = ['0' => gpr::t('categoria', '-- All Categories --')] + ArrayHelper::map($arr_categoria, "cat_id", "cat_nombre");
             if($user_id == 1){
                 $arr_empresa = Empresa::findAll(['emp_estado' => '1', 'emp_estado_logico' => '1']);
             }else{
                 $arr_empresa = Empresa::findAll(['emp_estado' => '1', 'emp_estado_logico' => '1', 'emp_id' => $idEmpresa]);
             }
-            $arr_empresa = array_merge(['0' => gpr::t('entidad', '-- Select a Company Name --')],ArrayHelper::map($arr_empresa, "emp_id", "emp_alias"));
+            $arr_empresa = ['0' => gpr::t('entidad', '-- Select a Company Name --')] + ArrayHelper::map($arr_empresa, "emp_id", "emp_alias");
             return $this->render('edit', [
                 'model' => Entidad::findOne($id),
                 'arr_categoria' => $arr_categoria,

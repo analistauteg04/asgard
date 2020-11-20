@@ -93,4 +93,5 @@ return [
     "-- All Status Poa Planning Closed --" => "-- Todas los Estados de Cierre --",
     "Please select a Poa Planning." => "Por favor seleccione una Planificación Poa.",
     "Search by Planning Name" => "Buscar por Nombre de Planificación",
+    "Transaction is invalid. Planning Pedi/Poa is closed." => "Transacción es inválida. Planificación Pedi/Poa esta cerrada."
 ];

@@ -23,11 +23,11 @@ gpr::registerTranslations();
                 'header' => gpr::t("objetivooperativo", "Operative Objective Name"),
                 'value' => 'Nombre',
             ],
-            [
+            /*[
                 'attribute' => 'Descripcion',
                 'header' => gpr::t("objetivooperativo", 'Operative Objective Description'),
                 'value' => 'Descripcion',
-            ],
+            ],*/
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => gpr::t("objetivoestrategico", "Strategic Objective Name"),

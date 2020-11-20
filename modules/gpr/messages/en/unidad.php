@@ -46,8 +46,11 @@ return [
     "Unity Status" => "Unity Status",
     "Unity Enabled" => "Unity Enabled",
     "Unity Disabled" => "Unity Disabled",
-    "-- Select a Unity Name --" => "-- Select a Unity Name --",
+    "-- Select an Unity Name --" => "-- Select an Unity Name --",
+    "-- Select a Type of Unit --" => "-- Select a Type of Unit --",
     "-- All Unities --" => "-- All Unities --",
     "Please select an Unity Name." => "Please select an Unity Name.",
+    "Please select a Type of Unit." => "Please select a Type of Unit.",
     "Search by Entity, Category, Unity" => "Search by Entity, Category, Unity",
+    "Type of Unit" => "Type of Unit",
 ];

@@ -40,9 +40,11 @@
  */
 
 return [ 
-    "Configuration Type Name" => "Nombre Tipo de Configuración",
+    "Configuration Type Name" => "Tipo de Configuración",
     "Configuration Type Description" => "Descripción Tipo de Configuración",
     "Configuration Type Status" => "Estado Tipo de Configuración",
     "Configuration Type Enabled" => "Activado Tipo de Configuración",
     "Configuration Type Disabled" => "Desactivado Tipo de Configuración",
+    "-- Select a Configuration Type --" => "-- Seleccione un Tipo de Configuración --",
+    "Please select a Configuration Type." => "Por favor seleccione un Tipo de Configuración.",
 ];

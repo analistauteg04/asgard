@@ -42,7 +42,7 @@ gpr::registerTranslations();
             ],
             [
                 'attribute' => 'Unidad',
-                'header' => gpr::t("unidadadministrativa", 'Administrative Unit'),
+                'header' => gpr::t("unidad", 'Unity Name'),
                 'value' => 'Unidad',
             ],
             [

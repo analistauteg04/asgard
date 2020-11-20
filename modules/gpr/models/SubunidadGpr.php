@@ -172,9 +172,10 @@ class SubunidadGpr extends \yii\db\ActiveRecord
                     ".$con->dbname.".subunidad_gpr AS su
                     INNER JOIN ".$con->dbname.".unidad_gpr AS un ON un.ugpr_id = su.ugpr_id
                     INNER JOIN ".$con->dbname.".entidad AS en ON en.ent_id = un.ent_id
-                    INNER JOIN ".$con->dbname.".responsable_subunidad AS rp ON rp.sgpr_id = su.sgpr_id
+                    INNER JOIN ".$con->dbname.".responsable_unidad AS rp ON rp.ugpr_id = un.ugpr_id
                     INNER JOIN ".$con2->dbname.".empresa AS em ON en.emp_id = em.emp_id
                     INNER JOIN ".$con2->dbname.".usuario AS u ON u.usu_id = rp.usu_id
+                    INNER JOIN ".$con->dbname.".tipo_unidad AS tu ON tu.tuni_id = un.tuni_id
                 WHERE 
                     $search
                     em.emp_estado_logico=1 AND

@@ -141,7 +141,10 @@ class ObjetivoEstrategico extends \yii\db\ActiveRecord
     public function getAllObjEstGrid($search = NULL, $bsc = NULL, $enfoque = NULL, $plan = NULL, $dataProvider = false){
         $search_cond = "%".$search."%";
         $str_search = "";
+        $user_id = Yii::$app->session->get('PB_iduser', FALSE);
+        $emp_id  = Yii::$app->session->get("PB_idempresa", FALSE);
         $con = Yii::$app->db_gpr;
+        $con2 = Yii::$app->db;
         if(isset($search)){
             $str_search  = "(oe.oest_nombre like :search OR ";
             $str_search .= "oe.oest_descripcion like :search) AND ";
@@ -155,6 +158,12 @@ class ObjetivoEstrategico extends \yii\db\ActiveRecord
         if(isset($plan) && $plan > 0){
             $str_search .= "pl.pped_id = :plan AND ";
         }
+        if(ResponsableUnidad::userIsAdmin($user_id, $emp_id)){
+            $str_search .= " em.emp_id = $emp_id AND ";
+        }elseif($user_id != 1){
+            $str_search .= " em.emp_id = $emp_id AND us.usu_id = $user_id AND ";
+        }
+        $str_search_no_admin = " pl.pped_estado_cierre = '0' AND ";
         $sql = "SELECT 
                     oe.oest_id as id,
                     oe.oest_nombre as Nombre,
@@ -173,12 +182,20 @@ class ObjetivoEstrategico extends \yii\db\ActiveRecord
                     INNER JOIN ".$con->dbname.".categoria_bsc AS ca ON ca.cbsc_id = oe.cbsc_id
                     INNER JOIN ".$con->dbname.".planificacion_pedi AS pl ON pl.pped_id = oe.pped_id
                     INNER JOIN ".$con->dbname.".entidad AS ent ON ent.ent_id = pl.ent_id
+                    INNER JOIN ".$con->dbname.".unidad_gpr AS un ON un.ent_id = ent.ent_id
+                    INNER JOIN ".$con->dbname.".responsable_unidad AS rp ON rp.ugpr_id = un.ugpr_id
+                    INNER JOIN ".$con2->dbname.".empresa AS em ON ent.emp_id = em.emp_id
+                    INNER JOIN ".$con2->dbname.".usuario AS us ON us.usu_id = rp.usu_id
                 WHERE 
+                    $str_search_no_admin
                     $str_search
                     oe.oest_estado_logico=1 AND
                     en.enf_estado_logico=1 AND 
                     ca.cbsc_estado_logico=1 AND
                     pl.pped_estado_logico=1 
+                GROUP BY
+                    oe.oest_id, oe.oest_nombre, oe.oest_descripcion, en.enf_nombre, ca.cbsc_nombre, pl.pped_nombre, pl.pped_fecha_inicio,
+                    pl.pped_fecha_fin, oe.oest_fecha_actualizacion, pl.pped_estado_cierre, oe.oest_estado
                 ORDER BY oe.oest_id;";
         $comando = Yii::$app->db->createCommand($sql);
         if(isset($search)){

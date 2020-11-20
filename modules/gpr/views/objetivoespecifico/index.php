@@ -26,7 +26,7 @@ gpr::registerTranslations();
                 <div class="col-sm-3 col-xs-3 col-md-3 col-lg-3">
                     <?= Html::dropDownList("cmb_obj", "0", $arr_objestr, ["class" => "form-control", "id" => "cmb_obj"]) ?>                                
                 </div>
-                <label for="cmb_adm" class="col-sm-2 col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= gpr::t("unidadadministrativa", "Administrative Unit Name") ?></label>
+                <label for="cmb_adm" class="col-sm-2 col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= gpr::t("unidad", "Unity Name") ?></label>
                 <div class="col-sm-3 col-xs-3 col-md-3 col-lg-3">
                     <?= Html::dropDownList("cmb_adm", "0", $arr_unidades, ["class" => "form-control", "id" => "cmb_adm"]) ?>                                
                 </div>

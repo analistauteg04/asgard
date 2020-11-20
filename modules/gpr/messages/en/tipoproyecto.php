@@ -40,9 +40,14 @@
  */
 
 return [ 
+    "Project Type" => "Project Type",
     "Project Type Name" => "Project Type Name",
     "Project Type Description" => "Project Type Description",
     "Project Type Status" => "Project Type Status",
     "Project Type Enabled" => "Project Type Enabled",
     "Project Type Disabled" => "Project Type Disabled",
+    "-- All Type Proyect --" => "-- All Type Proyect --",
+    "-- Select a Type Proyect --" => "-- Select a Type Proyect --",
+    "Search by Project Type Name" => "Search by Project Type Name",
+    "Please select a Project Type." => "Please select a Project Type.",
 ];

@@ -40,6 +40,7 @@
  */
 
 return [ 
+    "Operative Objective" => "Objetivo Operativo",
     "Operative Objective Name" => "Nombre del Objetivo Operativo",
     "Operative Objective Description" => "Descripción Objetivo Operativo",
     "Operative Objective Status" => "Estado Objetivo Operativo",

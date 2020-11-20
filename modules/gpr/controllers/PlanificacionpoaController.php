@@ -5,6 +5,7 @@ namespace app\modules\gpr\controllers;
 use Yii;
 use app\modules\gpr\models\PlanificacionPoa;
 use app\models\Utilities;
+use app\modules\gpr\models\Entidad;
 use app\modules\gpr\models\PlanificacionPedi;
 use yii\data\ArrayDataProvider;
 use yii\helpers\ArrayHelper;
@@ -16,14 +17,17 @@ class PlanificacionpoaController extends \app\components\CController {
 
     public function actionIndex() {
         $model = new PlanificacionPoa();
+        $user_id = Yii::$app->session->get('PB_iduser', FALSE);
+        $emp_id  = Yii::$app->session->get("PB_idempresa", FALSE);
         $data = Yii::$app->request->get();
         if (isset($data["PBgetFilter"])) {
             return $this->renderPartial('index-grid', [
                 "model" => $model->getAllPlanPoaGrid($data["search"], $data["planpedi"], $data["cierre"], true)
             ]);
         }
-        $arr_plan = PlanificacionPedi::findAll(['pped_estado' => '1', 'pped_estado_logico' => '1']);
-        $arr_plan = array_merge(['0' => gpr::t('planificacionpedi', '-- All Pedi Planning --')],ArrayHelper::map($arr_plan, "pped_id", "pped_nombre"));
+        $entidad =  Entidad::findOne(['emp_id' => $emp_id, 'ent_estado' => '1', 'ent_estado_logico' => '1']);
+        $arr_plan = PlanificacionPedi::findAll(['pped_estado' => '1', 'pped_estado_logico' => '1', 'ent_id' => $entidad->ent_id]);
+        $arr_plan = ['0' => gpr::t('planificacionpedi', '-- All Pedi Planning --')] + ArrayHelper::map($arr_plan, "pped_id", "pped_nombre");
         $arr_cierre = ['-1' => gpr::t('planificacionpoa', '-- All Status Poa Planning Closed --'),'0' => gpr::t('planificacionpoa', 'Planning Opened'), '1' => gpr::t('planificacionpoa', 'Planning Closed')];
         return $this->render('index', [
             'model' => $model->getAllPlanPoaGrid(NULL, NULL, NULL, true),
@@ -33,10 +37,13 @@ class PlanificacionpoaController extends \app\components\CController {
     }
 
     public function actionNew() {
+        $user_id = Yii::$app->session->get('PB_iduser', FALSE);
+        $emp_id  = Yii::$app->session->get("PB_idempresa", FALSE);
         $_SESSION['JSLANG']['The initial date of registry cannot be greater than end date.'] = gpr::t('planificacionpedi', 'The initial date of registry cannot be greater than end date.');
         $_SESSION['JSLANG']['Please select a Pedi Planning.'] = gpr::t('planificacionpedi', 'Please select a Pedi Planning.');
-        $arr_plan = PlanificacionPedi::findAll(['pped_estado' => '1', 'pped_estado_logico' => '1']);
-        $arr_plan = array_merge(['0' => gpr::t('planificacionpedi', '-- Select a Pedi Planning --')],ArrayHelper::map($arr_plan, "pped_id", "pped_nombre"));
+        $entidad =  Entidad::findOne(['emp_id' => $emp_id, 'ent_estado' => '1', 'ent_estado_logico' => '1']);
+        $arr_plan = PlanificacionPedi::findAll(['pped_estado' => '1', 'pped_estado_logico' => '1', 'ent_id' => $entidad->ent_id, 'pped_estado_cierre' => '0']);
+        $arr_plan = ['0' => gpr::t('planificacionpedi', '-- Select a Pedi Planning --')] + ArrayHelper::map($arr_plan, "pped_id", "pped_nombre");
         return $this->render('new',[
             'arr_plan' => $arr_plan,
         ]);
@@ -45,10 +52,13 @@ class PlanificacionpoaController extends \app\components\CController {
     public function actionView() {
         $data = Yii::$app->request->get();
         if (isset($data['id'])) {
+            $user_id = Yii::$app->session->get('PB_iduser', FALSE);
+            $emp_id  = Yii::$app->session->get("PB_idempresa", FALSE);
             $id = $data['id'];
             $arr_cierre = ['0' => gpr::t('planificacionpedi', 'Planning Opened'), '1' => gpr::t('planificacionpedi', 'Planning Closed')];
-            $arr_plan = PlanificacionPedi::findAll(['pped_estado' => '1', 'pped_estado_logico' => '1']);
-            $arr_plan = array_merge(['0' => gpr::t('planificacionpedi', '-- Select a Pedi Planning --')],ArrayHelper::map($arr_plan, "pped_id", "pped_nombre"));
+            $entidad =  Entidad::findOne(['emp_id' => $emp_id, 'ent_estado' => '1', 'ent_estado_logico' => '1']);
+            $arr_plan = PlanificacionPedi::findAll(['pped_estado' => '1', 'pped_estado_logico' => '1', 'ent_id' => $entidad->ent_id, 'pped_estado_cierre' => '0']);
+            $arr_plan = ['0' => gpr::t('planificacionpedi', '-- Select a Pedi Planning --')] + ArrayHelper::map($arr_plan, "pped_id", "pped_nombre");
             return $this->render('view', [
                 'model' => PlanificacionPoa::findOne($id),
                 'arr_cierre' => $arr_cierre,
@@ -61,12 +71,15 @@ class PlanificacionpoaController extends \app\components\CController {
     public function actionEdit() {
         $data = Yii::$app->request->get();
         if (isset($data['id'])) {
+            $user_id = Yii::$app->session->get('PB_iduser', FALSE);
+            $emp_id  = Yii::$app->session->get("PB_idempresa", FALSE);
             $_SESSION['JSLANG']['The initial date of registry cannot be greater than end date.'] = gpr::t('planificacionpedi', 'The initial date of registry cannot be greater than end date.');
             $_SESSION['JSLANG']['Please select a Pedi Planning.'] = gpr::t('planificacionpedi', 'Please select a Pedi Planning.');
             $id = $data['id'];
             $arr_cierre = ['0' => gpr::t('planificacionpedi', 'Planning Opened'), '1' => gpr::t('planificacionpedi', 'Planning Closed')];
-            $arr_plan = PlanificacionPedi::findAll(['pped_estado' => '1', 'pped_estado_logico' => '1']);
-            $arr_plan = array_merge(['0' => gpr::t('planificacionpedi', '-- Select a Pedi Planning --')],ArrayHelper::map($arr_plan, "pped_id", "pped_nombre"));
+            $entidad =  Entidad::findOne(['emp_id' => $emp_id, 'ent_estado' => '1', 'ent_estado_logico' => '1']);
+            $arr_plan = PlanificacionPedi::findAll(['pped_estado' => '1', 'pped_estado_logico' => '1', 'ent_id' => $entidad->ent_id, 'pped_estado_cierre' => '0']);
+            $arr_plan = ['0' => gpr::t('planificacionpedi', '-- Select a Pedi Planning --')] + ArrayHelper::map($arr_plan, "pped_id", "pped_nombre");
             return $this->render('edit', [
                 'model' => PlanificacionPoa::findOne($id),
                 'arr_cierre' => $arr_cierre,

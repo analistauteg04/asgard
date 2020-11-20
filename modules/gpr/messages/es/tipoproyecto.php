@@ -40,9 +40,14 @@
  */
 
 return [ 
+    "Project Type" => "Tipo de Proyecto",
     "Project Type Name" => "Nombre Tipo de Proyecto",
     "Project Type Description" => "Descripción Tipo de Proyecto",
     "Project Type Status" => "Estado Tipo de Proyecto",
     "Project Type Enabled" => "Activado Tipo de Proyecto",
     "Project Type Disabled" => "Desactivado Tipo de Proyecto",
+    "-- All Type Proyect --" => "-- Todos los Tipos de Proyectos --",
+    "-- Select a Type Proyect --" => "-- Seleccione un Tipo de Proyecto --",
+    "Search by Project Type Name" => "Buscar por Nombre de Proyecto",
+    "Please select a Project Type." => "Por favor seleccione un Tipo de Proyecto.",
 ];

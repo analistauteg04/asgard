@@ -17,13 +17,15 @@ class PlanificacionpediController extends \app\components\CController {
     public function actionIndex() {
         $model = new PlanificacionPedi();
         $data = Yii::$app->request->get();
+        $user_id = Yii::$app->session->get('PB_iduser', FALSE);
+        $emp_id  = Yii::$app->session->get("PB_idempresa", FALSE);
         if (isset($data["PBgetFilter"])) {
             return $this->renderPartial('index-grid', [
                 "model" => $model->getAllPlanPediGrid($data["search"], $data["entidad"], $data["cierre"], true)
             ]);
         }
-        $arr_entidad = Entidad::findAll(['ent_estado' => '1', 'ent_estado_logico' => '1']);
-        $arr_entidad = array_merge(['0' => gpr::t('entidad', '-- All Entities --')],ArrayHelper::map($arr_entidad, "ent_id", "ent_nombre"));
+        $arr_entidad = Entidad::findAll(['ent_estado' => '1', 'ent_estado_logico' => '1', 'emp_id' => $emp_id]);
+        $arr_entidad = ['0' => gpr::t('entidad', '-- All Entities --')] + ArrayHelper::map($arr_entidad, "ent_id", "ent_nombre");
         $arr_cierre = ['-1' => gpr::t('planificacionpedi', '-- All Status Pedi Planning Closed --'),'0' => gpr::t('planificacionpedi', 'Planning Opened'), '1' => gpr::t('planificacionpedi', 'Planning Closed')];
         return $this->render('index', [
                     'model' => $model->getAllPlanPediGrid(NULL, NULL, NULL, true),
@@ -33,10 +35,12 @@ class PlanificacionpediController extends \app\components\CController {
     }
 
     public function actionNew() {
+        $user_id = Yii::$app->session->get('PB_iduser', FALSE);
+        $emp_id  = Yii::$app->session->get("PB_idempresa", FALSE);
         $_SESSION['JSLANG']['The initial date of registry cannot be greater than end date.'] = gpr::t('planificacionpedi', 'The initial date of registry cannot be greater than end date.');
         $_SESSION['JSLANG']['Please select an Entity Name.'] = gpr::t('entidad', 'Please select an Entity Name.');
-        $arr_entidad = Entidad::findAll(['ent_estado' => '1', 'ent_estado_logico' => '1']);
-        $arr_entidad = array_merge(['0' => gpr::t('entidad', '-- Select a Entity Name --')],ArrayHelper::map($arr_entidad, "ent_id", "ent_nombre"));
+        $arr_entidad = Entidad::findAll(['ent_estado' => '1', 'ent_estado_logico' => '1', 'emp_id' => $emp_id]);
+        $arr_entidad = ['0' => gpr::t('entidad', '-- Select a Entity Name --')] + ArrayHelper::map($arr_entidad, "ent_id", "ent_nombre");
         return $this->render('new',[
             'arr_entidad' => $arr_entidad,
         ]);
@@ -45,10 +49,12 @@ class PlanificacionpediController extends \app\components\CController {
     public function actionView() {
         $data = Yii::$app->request->get();
         if (isset($data['id'])) {
+            $user_id = Yii::$app->session->get('PB_iduser', FALSE);
+            $emp_id  = Yii::$app->session->get("PB_idempresa", FALSE);
             $id = $data['id'];
             $arr_cierre = ['0' => gpr::t('planificacionpedi', 'Planning Opened'), '1' => gpr::t('planificacionpedi', 'Planning Closed')];
-            $arr_entidad = Entidad::findAll(['ent_estado' => '1', 'ent_estado_logico' => '1']);
-            $arr_entidad = array_merge(['0' => gpr::t('entidad', '-- Select a Entity Name --')],ArrayHelper::map($arr_entidad, "ent_id", "ent_nombre"));
+            $arr_entidad = Entidad::findAll(['ent_estado' => '1', 'ent_estado_logico' => '1', 'emp_id' => $emp_id]);
+            $arr_entidad = ['0' => gpr::t('entidad', '-- Select a Entity Name --')] + ArrayHelper::map($arr_entidad, "ent_id", "ent_nombre");
             return $this->render('view', [
                 'model' => PlanificacionPedi::findOne($id),
                 'arr_cierre' => $arr_cierre,
@@ -61,12 +67,14 @@ class PlanificacionpediController extends \app\components\CController {
     public function actionEdit() {
         $data = Yii::$app->request->get();
         if (isset($data['id'])) {
+            $user_id = Yii::$app->session->get('PB_iduser', FALSE);
+            $emp_id  = Yii::$app->session->get("PB_idempresa", FALSE);
             $_SESSION['JSLANG']['The initial date of registry cannot be greater than end date.'] = gpr::t('planificacionpedi', 'The initial date of registry cannot be greater than end date.');
             $_SESSION['JSLANG']['Please select an Entity Name.'] = gpr::t('entidad', 'Please select an Entity Name.');
             $id = $data['id'];
             $arr_cierre = ['0' => gpr::t('planificacionpedi', 'Planning Opened'), '1' => gpr::t('planificacionpedi', 'Planning Closed')];
-            $arr_entidad = Entidad::findAll(['ent_estado' => '1', 'ent_estado_logico' => '1']);
-            $arr_entidad = array_merge(['0' => gpr::t('entidad', '-- Select a Entity Name --')],ArrayHelper::map($arr_entidad, "ent_id", "ent_nombre"));
+            $arr_entidad = Entidad::findAll(['ent_estado' => '1', 'ent_estado_logico' => '1', 'emp_id' => $emp_id]);
+            $arr_entidad = ['0' => gpr::t('entidad', '-- Select a Entity Name --')] + ArrayHelper::map($arr_entidad, "ent_id", "ent_nombre");
             return $this->render('edit', [
                 'model' => PlanificacionPedi::findOne($id),
                 'arr_cierre' => $arr_cierre,

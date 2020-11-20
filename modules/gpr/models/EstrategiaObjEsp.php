@@ -89,7 +89,10 @@ class EstrategiaObjEsp extends \yii\db\ActiveRecord
     public function getAllEstrategiasEspGrid($search = NULL, $objetivo = NULL, $dataProvider = false){
         $search_cond = "%".$search."%";
         $str_search = "";
+        $user_id = Yii::$app->session->get('PB_iduser', FALSE);
+        $emp_id  = Yii::$app->session->get("PB_idempresa", FALSE);
         $con = Yii::$app->db_gpr;
+        $con2 = Yii::$app->db;
         if(isset($search)){
             $str_search  = "(es.eoep_nombre like :search OR ";
             $str_search .= "es.eoep_descripcion like :search) AND ";
@@ -97,6 +100,12 @@ class EstrategiaObjEsp extends \yii\db\ActiveRecord
         if(isset($objetivo) && $objetivo > 0){
             $str_search .= "oe.oesp_id = :objetivo AND ";
         }
+        if(ResponsableUnidad::userIsAdmin($user_id, $emp_id)){
+            $str_search .= " em.emp_id = $emp_id AND ";
+        }elseif($user_id != 1){
+            $str_search .= " em.emp_id = $emp_id AND u.usu_id = $user_id AND ";
+        }
+        $str_search_no_admin = " pl.pped_estado_cierre = '0' AND ";
         $sql = "SELECT 
                     es.eoep_id as id,
                     es.eoep_nombre as Nombre,
@@ -109,11 +118,27 @@ class EstrategiaObjEsp extends \yii\db\ActiveRecord
                     INNER JOIN ".$con->dbname.".objetivo_estrategico as ob ON ob.oest_id = oe.oest_id
                     INNER JOIN ".$con->dbname.".planificacion_pedi AS pl ON pl.pped_id = ob.pped_id
                     INNER JOIN ".$con->dbname.".entidad AS ent ON ent.ent_id = pl.ent_id
+                    INNER JOIN ".$con->dbname.".unidad_gpr AS un ON un.ent_id = ent.ent_id
+                    -- INNER JOIN ".$con->dbname.".subunidad_gpr AS su ON su.ugpr_id = un.ugpr_id
+                    INNER JOIN ".$con->dbname.".responsable_unidad AS rp ON rp.ugpr_id = un.ugpr_id
+                    INNER JOIN ".$con2->dbname.".empresa AS em ON ent.emp_id = em.emp_id
+                    INNER JOIN ".$con2->dbname.".usuario AS u ON u.usu_id = rp.usu_id
+                    INNER JOIN ".$con->dbname.".tipo_unidad AS tu ON tu.tuni_id = un.tuni_id
                 WHERE 
+                    $str_search_no_admin
                     $str_search
                     oe.oesp_estado_logico=1 AND
                     oe.oesp_estado=1 AND
+                    em.emp_estado_logico=1 AND
+                    em.emp_estado=1 AND
+                    un.ugpr_estado_logico=1 AND
+                    un.ugpr_estado=1 AND
+                    -- su.sgpr_estado_logico=1 AND
+                    -- su.sgpr_estado=1 AND
+                    ent.ent_estado_logico=1 AND
+                    ent.ent_estado=1 AND
                     es.eoep_estado_logico=1 
+                GROUP BY es.eoep_id, es.eoep_nombre, es.eoep_descripcion, oe.oesp_nombre, es.eoep_estado
                 ORDER BY es.eoep_id;";
         $comando = Yii::$app->db->createCommand($sql);
         if(isset($search)){

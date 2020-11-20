@@ -53,5 +53,6 @@ return [
     "Threshold Start of Range" => "Inicio del Rango",
     "Threshold End of Range" => "Fin del Rango",
     "Numeric value for Threshold" => "Valor numérico",
+    "Range Threshold" => "Rango Umbral",
     "Please the Init Value of Threshold must be less than End Value." => "Por favor el valor inicial del Umbral debe ser menor que el valor final",
 ];

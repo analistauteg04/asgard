@@ -31,6 +31,32 @@ $(document).ready(function() {
             }
         }, true);
     });
+    /*$('.share-contact').slimScroll({
+        height: '220px'
+    });
+    $('.chk-cal').click(function() {
+        if ($(this).parent().find("input").val() == "1") {
+            $(this).find("i").attr("class", "fa fa-square-o");
+            $(this).parent().find("input").val("0");
+        } else {
+            $(this).find("i").attr("class", "fa fa-check-square");
+            $(this).parent().find("input").val("1");
+        }
+        let in_value = $(this).parent().find("input").val();
+        let in_class = $(this).find("i").attr("class");
+        let data_id = $(this).parent().find("input").attr("data-id");
+        objContact = new Array();
+        $('div#external-events > div.input-group').each(function() {
+            if (data_id == "all") {
+                $(this).find("input").val(in_value);
+                $(this).find("i").attr("class", in_class);
+            }
+            if ($(this).find("input").val() == 1 && $(this).find("input").attr("data-id") != "all") {
+                objContact.push($(this).find("input").attr("data-id"));
+            }
+        });
+
+    });*/
 });
 
 function searchModules(idbox, idgrid) {
@@ -42,6 +68,25 @@ function searchModules(idbox, idgrid) {
     $("#" + idgrid).PbGridView("applyFilterData", arrParams);
 }
 
+/*function fillContactObject() {
+    objContact = new Array();
+    $('div#external-events > div.input-group').each(function() {
+        let id = $(this).find("input").attr("data-id");
+        if ($(this).find("input").val() == 1 && id != "all")
+            objContact.push(id);
+    });
+}
+
+fillContactObject();
+
+function desmarcarContactos() {
+    objContact = new Array();
+    $('div#external-events > div.input-group').each(function() {
+        $(this).find("input").val("0");
+        $(this).find("i").attr("class", "fa fa-square-o");
+    });
+}
+*/
 function edit() {
     var link = $('#txth_base').val() + "/gpr/unidad/edit" + "?id=" + $("#frm_id").val();
     window.location = link;
@@ -56,6 +101,8 @@ function update() {
     arrParams.categoria = $('#cmb_cat').val();
     arrParams.entidad = $('#cmb_ent').val();
     arrParams.estado = $('#frm_status').val();
+    arrParams.tunidad = $('#cmb_tunidad').val();
+    //arrParams.usuarios = objContact;
     if ($('#cmb_cat').val() == 0) {
         var msg = objLang.Please_select_a_Category_Name_;
         shortModal(msg, objLang.Error, "error");
@@ -66,6 +113,16 @@ function update() {
         shortModal(msg, objLang.Error, "error");
         return;
     }
+    if ($('#cmb_tunidad').val() == 0) {
+        var msg = objLang.Please_select_a_Type_of_Unit_;
+        shortModal(msg, objLang.Error, "error");
+        return;
+    }
+    /*if (objContact.length == 0) {
+        var msg = objLang.The_Subunit_must_have_at_least_1_responsible_;
+        shortModal(msg, objLang.Error, "error");
+        return;
+    }*/
     if (!validateForm()) {
         requestHttpAjax(link, arrParams, function(response) {
             showAlert(response.status, response.label, response.message);
@@ -81,6 +138,8 @@ function save() {
     arrParams.categoria = $('#cmb_cat').val();
     arrParams.entidad = $('#cmb_ent').val();
     arrParams.estado = $('#frm_status').val();
+    arrParams.tunidad = $('#cmb_tunidad').val();
+    //arrParams.usuarios = objContact;
     if ($('#cmb_cat').val() == 0) {
         var msg = objLang.Please_select_a_Category_Name_;
         shortModal(msg, objLang.Error, "error");
@@ -91,6 +150,16 @@ function save() {
         shortModal(msg, objLang.Error, "error");
         return;
     }
+    if ($('#cmb_tunidad').val() == 0) {
+        var msg = objLang.Please_select_a_Type_of_Unit_;
+        shortModal(msg, objLang.Error, "error");
+        return;
+    }
+    /*if (objContact.length == 0) {
+        var msg = objLang.The_Subunit_must_have_at_least_1_responsible_;
+        shortModal(msg, objLang.Error, "error");
+        return;
+    }*/
     if (!validateForm()) {
         requestHttpAjax(link, arrParams, function(response) {
             showAlert(response.status, response.label, response.message);
