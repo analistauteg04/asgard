@@ -7,11 +7,39 @@ USE `db_asgard`;
 --
 -- Tabla `dash`
 --
+-- INSERT INTO `dash` (`dash_id`, `dash_title`, `dash_detail`, `dash_link`, `dash_target`, `dash_estado`, `dash_fecha_creacion`, `dash_fecha_modificacion`, `dash_estado_logico`) VALUES
+-- (1, 'Biblioteca Virtual', 'Permite a nuestros estudiantes acceder a los libros digitales desde cualquier lugar y en cualquier momento.', 'https://www.biblionline.pearson.com', '_blank', '1', '2017-02-01 15:05:20', NULL, '1'),
+-- (2, 'Campus Virtual', 'Los programas que se ofertan bajo la modalidad Online para los distintos niveles de educación, son impartidos a través de la plataforma en internet “Campus Virtual UTEG”.', 'https://campusvirtual.uteg.edu.ec', '_blank', '1', '2017-02-01 15:05:20', NULL, '1'),
+-- (3, 'Videos', 'Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.', '[[BASE_VIDEO]]', '', '1', '2017-02-01 15:05:20', NULL, '1'),
+-- (4, 'Asgard System', 'Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.', '[[FIRST_MODULE]]', '', '1', '2017-02-01 15:05:20', NULL, '1');
+
 INSERT INTO `dash` (`dash_id`, `dash_title`, `dash_detail`, `dash_link`, `dash_target`, `dash_estado`, `dash_fecha_creacion`, `dash_fecha_modificacion`, `dash_estado_logico`) VALUES
-(1, 'Biblioteca Virtual', 'Permite a nuestros estudiantes acceder a los libros digitales desde cualquier lugar y en cualquier momento.', 'https://www.biblionline.pearson.com', '_blank', '1', '2017-02-01 15:05:20', NULL, '1'),
-(2, 'Campus Virtual', 'Los programas que se ofertan bajo la modalidad Online para los distintos niveles de educación, son impartidos a través de la plataforma en internet “Campus Virtual UTEG”.', 'https://campusvirtual.uteg.edu.ec', '_blank', '1', '2017-02-01 15:05:20', NULL, '1'),
-(3, 'Videos', 'Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.', '[[BASE_VIDEO]]', '', '1', '2017-02-01 15:05:20', NULL, '1'),
-(4, 'Asgard System', 'Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.', '[[FIRST_MODULE]]', '', '1', '2017-02-01 15:05:20', NULL, '1');
+(1, 'Académico', '', '', '', '1', '2017-02-01 15:05:20', NULL, '1'),
+(2, 'Financiero', '', '', '', '1', '2017-02-01 15:05:20', NULL, '1'),
+(3, 'Bienestar Estudiantil', '', '', '', '1', '2017-02-01 15:05:20', NULL, '1'),
+(4, 'Vinculación', '', '', '', '1', '2017-02-01 15:05:20', NULL, '1'),
+(5, 'Administrativo', '', '', '', '1', '2017-02-01 15:05:20', NULL, '1');
+
+-- --------------------------------------------------------
+--
+-- Tabla `dash_item`
+--
+
+INSERT INTO `dash_item` (`dite_id`, `dash_id`, `dite_title`, `dite_detail`, `dite_link`, `dite_target`, `dite_estado`, `dite_fecha_creacion`, `dite_fecha_modificacion`, `dite_estado_logico`) VALUES
+(1, 1, 'Matriculación en Línea', '', '/academico/matriculacion/registropago', '', '1', '2017-02-01 15:05:20', NULL, '1'),
+(2, 1, 'Carnet', '', '/perfil/update', '', '1', '2017-02-01 15:05:20', NULL, '1'),
+(3, 1, 'Malla Académica', '', '', '', '1', '2017-02-01 15:05:20', NULL, '1'),
+(4, 1, 'Horarios', '', '', '', '1', '2017-02-01 15:05:20', NULL, '1'),
+(5, 1, 'Cronogramas', '', '', '', '1', '2017-02-01 15:05:20', NULL, '1'),
+(6, 1, 'Calificaciones', '', '', '', '1', '2017-02-01 15:05:20', NULL, '1'),
+(7, 2, 'Pagos en Línea', '', '', '', '1', '2017-02-01 15:05:20', NULL, '1'),
+(8, 2, 'Facturas', '', '', '', '1', '2017-02-01 15:05:20', NULL, '1'),
+(9, 3, 'Nivel Socio Económico', '', '', '', '1', '2017-02-01 15:05:20', NULL, '1'),
+(10, 3, 'Pensión Diferenciada', '', '', '', '1', '2017-02-01 15:05:20', NULL, '1'),
+(11, 3, 'Becas', '', '', '', '1', '2017-02-01 15:05:20', NULL, '1'),
+(12, 3, 'Ficha Médica', '', '', '', '1', '2017-02-01 15:05:20', NULL, '1'),
+(13, 4, 'Proyectos', '', '', '', '1', '2017-02-01 15:05:20', NULL, '1'),
+(14, 5, 'Especies Valoradas', '', '/academico/especies/solicitudalumno', '', '1', '2017-02-01 15:05:20', NULL, '1');
 
 
 -- --------------------------------------------------------

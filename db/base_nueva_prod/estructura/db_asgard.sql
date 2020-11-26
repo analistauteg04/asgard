@@ -713,6 +713,24 @@ create table if not exists `dash` (
 
 -- --------------------------------------------------------
 --
+-- Estructura de tabla para la tabla `dash_item`
+--
+create table if not exists `dash_item` (
+  `dite_id` bigint(20) not null auto_increment primary key,
+  `dash_id` bigint(20) not null,
+  `dite_title` varchar(300) not null,  
+  `dite_detail` varchar(500) not null, 
+  `dite_link` varchar(250) null,  
+  `dite_target` varchar(250) null, 
+  `dite_estado` varchar(1) not null,
+  `dite_fecha_creacion` timestamp not null default current_timestamp,
+  `dite_fecha_modificacion` timestamp null default null,
+  `dite_estado_logico` varchar(1) not null,
+  FOREIGN KEY (dash_id) REFERENCES `dash`(dash_id)
+);
+
+-- --------------------------------------------------------
+--
 -- Estructura de tabla para la tabla `empresa_correo`
 --
 CREATE TABLE IF NOT EXISTS `empresa_correo` (

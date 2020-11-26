@@ -17,10 +17,13 @@ use app\models\Modulo;
 use app\models\Grupo;
 use app\models\Empresa;
 use app\models\Dash;
+use app\models\DashItem;
+use app\models\EmpresaPersona;
 use yii\base\Security;
 use app\modules\academico\models\Estudiante;
 use app\modules\academico\models\Profesor;
 use app\models\Persona;
+use app\models\UsuaGrolEper;
 use yii\base\Exception;
 
 class SiteController extends CController {
@@ -209,10 +212,12 @@ class SiteController extends CController {
         $url_biblioteca = Yii::$app->params['url_biblioteca'];
         $url_educativa = Yii::$app->session->get("PB_educativa", "");//Yii::$app->params['url_educativa'];
 
-        $modules = Dash::find()->all();
+        $modules = Dash::find(['dash_estado' => '1', 'dash_estado_logico' => '1'])->all();
+        $dash_items = DashItem::find(['dite_estado' => '1', 'dite_estado_logico' => '1'])->all();
         $this->layout = '@themes/' . Yii::$app->getView()->theme->themeName . '/layouts/dash.php';
         return $this->render('dash', [
                     'modules' => $modules,
+                    'dash_items' => $dash_items,
                     'url_video' => Url::base(true) . "/site/portalestudiante",
                     'url_asgard' => $url,
                     'url_educativa' => $url_educativa
@@ -371,9 +376,16 @@ class SiteController extends CController {
             $mod = new Modulo();
             $link = $mod->getFirstModuleLink();
             $url = Url::base(true) . "/" . $link["url"];
-             //$url = Url::base(true) . "/site/dash";
-
-
+            // preguntar el usuario en sesion tiene el grol_id=37 de estudiante mostrar el dash
+            $user_id = Yii::$app->session->get('PB_iduser', FALSE);
+            $emp_id  = Yii::$app->session->get("PB_idempresa", FALSE);
+            $per_id  = Yii::$app->session->get("PB_perid", FALSE);
+            $modelEper = EmpresaPersona::findOne(['emp_id' => $emp_id, 'per_id' => $per_id, 'eper_estado' => '1', 'eper_estado_logico' => '1']);
+            $modelUGrlEper = new UsuaGrolEper();
+            $modEper = $modelUGrlEper->consultarIdUsuaGrolEper($modelEper->eper_id, $user_id, '37');
+            if($modEper != 0){
+                $url = Url::base(true) . "/site/dash";
+            }
             return $this->goBack($url);
         } else {
             if ($model->getErrorSession())

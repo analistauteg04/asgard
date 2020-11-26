@@ -36,20 +36,16 @@
  * Asgard is based on code by
  * Yii Software LLC (http://www.yiisoft.com) Copyright Â© 2008
  *
+ * Authors:
+ * 
+ * Diana Lopez <dlopez@uteg.edu.ec>
  * 
  */
-
-use yii\helpers\Html;
-use yii\helpers\Url;
-
 ?>
 <style>
     .thumbnail{
         background: rgba(255, 255, 255, 0.8) none repeat scroll 0 0;
         border-radius: 0px;
-    }
-    .caption{
-        min-height: 300px;
     }
 </style>
 <div class="row">
@@ -57,12 +53,11 @@ use yii\helpers\Url;
         <div class="col-sm-6 col-md-4">
             <div class="thumbnail">
                 <div class="caption">
-                    <h2><?= $values->dash_title ?></h2>
-                    <?php foreach($dash_items as $key => $ditem){ 
-                        if($ditem['dash_id'] == $values->dash_id) :
-                    ?>
-                    <a class="btn btn-primary btn-flat margin" href="<?= (isset($ditem->dite_link) && $ditem->dite_link != "")?(Url::base() . $ditem->dite_link):"javascript:" ?>"><?= $ditem->dite_title ?></a>
-                    <?php endif; } ?>
+                    <h3><?= $values->dash_title ?></h3>
+                    <p><?= $values->dash_detail ?></p>
+                    <p class="text-right">
+                        <a href="<?= ($values->dash_link == '[[BASE_VIDEO]]')?$url_video:(($values->dash_link == '[[FIRST_MODULE]]')?$url_asgard:(($values->dash_link == '[[LOGIN_EDUCATIVA]]')?$url_educativa:$values->dash_link)) ?>" target='<?= $values->dash_target ?>' class="btn btn-primary btn-flat" role="button">Ir&nbsp;&nbsp;&nbsp;<i class="fa fa-arrow-circle-right"></i></a>
+                    </p>
                 </div>
             </div>
         </div>
