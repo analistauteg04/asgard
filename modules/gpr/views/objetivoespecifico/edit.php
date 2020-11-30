@@ -12,7 +12,7 @@ gpr::registerTranslations();
         <div class="form-group">
             <label for="frm_name" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label"><?= gpr::t("objetivoespecifico", "Specific Objective Name") ?> <span class="text-danger">*</span></label>
             <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                <input type="text" class="form-control PBvalidation" value="<?= $model->oesp_nombre ?>" id="frm_name" data-type="all" placeholder="<?= gpr::t("estrategiaestr", "Specific Objective Name") ?>">
+                <input type="text" class="form-control PBvalidation" value="<?= $model->oesp_nombre ?>" id="frm_name" data-type="all" placeholder="<?= gpr::t("objetivoespecifico", "Specific Objective Name") ?>">
             </div>
         </div>
     </div> 
@@ -36,7 +36,7 @@ gpr::registerTranslations();
         <div class="form-group">
             <label for="frm_desc" class="col-sm-5 col-md-5 col-xs-5 col-lg-5 control-label"><?= gpr::t("objetivoespecifico", 'Specific Objective Description') ?> <span class="text-danger">*</span></label>
             <div class="col-sm-7 col-md-7 col-xs-7 col-lg-7">
-                <textarea class="form-control PBvalidation" id="frm_desc" rows="4" data-type="all" placeholder="<?= gpr::t("estrategiaestr", "Specific Objective Description") ?>"><?= $model->oesp_descripcion ?></textarea>
+                <textarea class="form-control PBvalidation" id="frm_desc" rows="4" data-type="all" placeholder="<?= gpr::t("objetivoespecifico", "Specific Objective Description") ?>"><?= $model->oesp_descripcion ?></textarea>
             </div>
         </div>
     </div> 
