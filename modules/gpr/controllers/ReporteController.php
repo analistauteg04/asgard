@@ -132,6 +132,10 @@ class ReporteController extends \app\components\CController {
             $arrData2 = $modelHito->getAllHitoGrid();
         }
 
+        if(empty($arrData1) || empty($arrData2)){
+            $temp = "emptyReport";
+        }
+
         $report->orientation = "L"; // tipo de orientacion L => Horizontal, P => Vertical    
         $report->createReportPdf(
             $this->render($temp, [
