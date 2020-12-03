@@ -152,6 +152,7 @@ class Reporte extends \yii\db\ActiveRecord {
         $con = \Yii::$app->db_captacion;
         $con1 = \Yii::$app->db_asgard;
         $con2 = \Yii::$app->db_academico;
+        $con3 = \Yii::$app->db_facturacion;
         $estado = 1;
         $str_search = "";
         if (isset($arrFiltro) && count($arrFiltro) > 0) {
@@ -170,8 +171,8 @@ class Reporte extends \yii\db\ActiveRecord {
                         concat(ifnull(per.per_pri_apellido,''),' ',ifnull(per.per_seg_apellido,'')) as apellidos,                    
                         emp.emp_nombre_comercial as empresa,                                         
                         IFNULL(uaca.uaca_nombre,'') uaca_nombre,
-                        case when sins.uaca_id<3 then (select eaca.eaca_nombre from db_academico.estudio_academico eaca inner join db_captacion.solicitud_inscripcion sins on sins.eaca_id = eaca.eaca_id WHERE int_id = inte.int_id ORDER BY sins_fecha_solicitud desc LIMIT 1)
-                            else (select mes.mest_nombre from db_academico.modulo_estudio mes inner join db_captacion.solicitud_inscripcion sins on sins.mest_id = mes.mest_id WHERE int_id = inte.int_id ORDER BY sins_fecha_solicitud desc LIMIT 1)				
+                        case when sins.uaca_id<3 then (select eaca.eaca_nombre from " . $con2->dbname . ".estudio_academico eaca inner join " . $con->dbname . ".solicitud_inscripcion sins on sins.eaca_id = eaca.eaca_id WHERE int_id = inte.int_id ORDER BY sins_fecha_solicitud desc LIMIT 1)
+                            else (select mes.mest_nombre from " . $con2->dbname . ".modulo_estudio mes inner join " . $con->dbname . ".solicitud_inscripcion sins on sins.mest_id = mes.mest_id WHERE int_id = inte.int_id ORDER BY sins_fecha_solicitud desc LIMIT 1)				
                         end carrera,
                         ifnull(moda.mod_nombre,'') mod_nombre,
                         CONCAT(ifnull(pag.per_pri_nombre,' '), ' ', ifnull(pag.per_pri_apellido,' ')) Agente,
@@ -187,9 +188,9 @@ class Reporte extends \yii\db\ActiveRecord {
                                     select 
                                         count(sdoc.sdoc_id) as num_documentos
                                     from 
-                                        db_captacion.interesado as inter
-                                        join db_captacion.solicitud_inscripcion as sins on sins.int_id=inter.int_id
-                                        join db_captacion.solicitudins_documento as sdoc on sdoc.sins_id=sins.sins_id
+                                    " . $con->dbname . ".interesado as inter
+                                        join " . $con->dbname . ".solicitud_inscripcion as sins on sins.int_id=inter.int_id
+                                        join " . $con->dbname . ".solicitudins_documento as sdoc on sdoc.sins_id=sins.sins_id
                                     where 
                                         inter.int_id=inte.int_id 
                                     group by inter.int_id 
@@ -198,20 +199,20 @@ class Reporte extends \yii\db\ActiveRecord {
                                 'Pendiente'
                         end Estado_Documentos,
                         case
-                            WHEN ifnull((SELECT opag_estado_pago FROM db_facturacion.orden_pago op WHERE op.sins_id = sins.sins_id and op.opag_estado = '1'),'N') = 'N' THEN 'No generado'
-                            WHEN (SELECT opag_estado_pago FROM db_facturacion.orden_pago op WHERE op.sins_id = sins.sins_id and op.opag_estado = '1') = 'P' THEN 'Pendiente'
+                            WHEN ifnull((SELECT opag_estado_pago FROM " . $con3->dbname . ".orden_pago op WHERE op.sins_id = sins.sins_id and op.opag_estado = '1'),'N') = 'N' THEN 'No generado'
+                            WHEN (SELECT opag_estado_pago FROM " . $con3->dbname . ".orden_pago op WHERE op.sins_id = sins.sins_id and op.opag_estado = '1') = 'P' THEN 'Pendiente'
                             ELSE 'Pagado'
                         end Estado_Pago
                     from 
-                        db_captacion.interesado inte                        
-                        join db_asgard.persona as per on inte.per_id=per.per_id
-                        join db_captacion.interesado_empresa as iemp on iemp.int_id=inte.int_id
-                        join db_captacion.solicitud_inscripcion as sins on sins.int_id=inte.int_id
-                        join db_asgard.persona pag on pag.per_id = sins.sins_usuario_ingreso
-                        join db_academico.unidad_academica as uaca on uaca.uaca_id=sins.uaca_id
-                        join db_academico.modalidad as moda on moda.mod_id=sins.mod_id
-                        join db_asgard.empresa as emp on emp.emp_id=iemp.emp_id
-                        left join db_captacion.admitido admit on admit.int_id=inte.int_id        
+                    " . $con->dbname . ".interesado inte                        
+                        join " . $con1->dbname . ".persona as per on inte.per_id=per.per_id
+                        join " . $con->dbname . ".interesado_empresa as iemp on iemp.int_id=inte.int_id
+                        join " . $con->dbname . ".solicitud_inscripcion as sins on sins.int_id=inte.int_id
+                        join " . $con1->dbname . ".persona pag on pag.per_id = sins.sins_usuario_ingreso
+                        join " . $con2->dbname . ".unidad_academica as uaca on uaca.uaca_id=sins.uaca_id
+                        join " . $con2->dbname . ".modalidad as moda on moda.mod_id=sins.mod_id
+                        join " . $con1->dbname . ".empresa as emp on emp.emp_id=iemp.emp_id
+                        left join " . $con->dbname . ".admitido admit on admit.int_id=inte.int_id        
                     where
                         $str_search
                         inte.int_estado_logico=:estado AND

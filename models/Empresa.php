@@ -196,7 +196,7 @@ class Empresa extends \yii\db\ActiveRecord {
      */
     public static function getAllEmpresa() {
         $con = \Yii::$app->db;
-        $sql = "SELECT emp_id as id,emp_razon_social as value from db_asgard.empresa WHERE emp_estado_logico=1 AND emp_estado=1 ORDER BY id asc";  
+        $sql = "SELECT emp_id as id,emp_razon_social as value from " . $con->dbname . ".empresa WHERE emp_estado_logico=1 AND emp_estado=1 ORDER BY id asc";  
         $comando = $con->createCommand($sql);
         return $comando->queryAll();
     }
@@ -268,7 +268,7 @@ class Empresa extends \yii\db\ActiveRecord {
         $con = \Yii::$app->db_asgard;
         $estado = 1;
         $sql = "SELECT emp_id id , ecor_correo name
-                FROM db_asgard.empresa_correo
+                FROM " . $con->dbname . ".empresa_correo
                 WHERE emp_id = :emp_id
                       and ecor_estado = :estado
                       and ecor_estado_logico = :estado";
