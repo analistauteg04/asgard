@@ -31,6 +31,14 @@ class Area extends \yii\db\ActiveRecord
     }
 
     /**
+     * @return \yii\db\Connection the database connection used by this AR class.
+     */
+    public static function getDb()
+    {
+        return Yii::$app->get('db_general');
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function rules()
@@ -93,7 +101,7 @@ class Area extends \yii\db\ActiveRecord
 
         if ($empresa == 1) {
             $sql = "SELECT are_id id, are_descripcion name
-                    FROM db_general.area
+                    FROM " . $con->dbname . ".area
                     WHERE dep_id = :dep_id 
                           and are_estado = :estado 
                           and are_estado_logico = :estado";
