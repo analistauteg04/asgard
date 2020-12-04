@@ -312,7 +312,7 @@ class Indicador extends \yii\db\ActiveRecord
                     INNER JOIN ".$con2->dbname.".empresa AS em ON ent.emp_id = em.emp_id
                     INNER JOIN ".$con2->dbname.".usuario AS u ON u.usu_id = rp.usu_id
                     LEFT JOIN ".$con->dbname.".tipo_agrupacion AS ta ON ta.tagr_id = i.tagr_id
-                    INNER JOIN (
+                    LEFT JOIN (
                         SELECT 
                             mi.ind_id as ind_id,
                             ifnull(SUM(mi.mind_meta), '0') AS SumMeta,
