@@ -198,8 +198,8 @@ INSERT INTO `subunidad_gpr` (`sgpr_id`, `ugpr_id`, `sgpr_nombre`, `sgpr_descripc
 -- Tabla `responsable_unidad`
 --
 -- --------------------------------------------------------
-INSERT INTO `responsable_unidad` (`runi_id`, `ugpr_id`, `usu_id`, `emp_id`, `runi_isadmin`, `runi_usuario_ingreso`, `runi_usuario_modifica`, `runi_estado`, `runi_fecha_creacion`, `runi_fecha_modificacion`, `runi_estado_logico`) VALUES
-(1, 1, 1, 1, '1', 1, NULL, '1', '2020-09-14 15:00:00', NULL, '1');
+INSERT INTO `responsable_unidad` (`runi_id`, `ugpr_id`, `usu_id`, `emp_id`, `niv_id`, `runi_isadmin`, `runi_usuario_ingreso`, `runi_usuario_modifica`, `runi_estado`, `runi_fecha_creacion`, `runi_fecha_modificacion`, `runi_estado_logico`) VALUES
+(1, 1, 1, 1, 1, '1', 1, NULL, '1', '2020-09-14 15:00:00', NULL, '1');
 
 -- --------------------------------------------------------
 --
