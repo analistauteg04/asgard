@@ -556,9 +556,21 @@ function deletematestudiante(plaid, perid, bloque, hora) {
     showAlert("warning", "warning", messagePB);
 }
 
-
-
-
+function buscaDatoTabla(par_tabla, par_comboID, par_clase){ 
+    var retorna = false;
+    console.log(par_tabla)
+    console.log(par_comboID  )
+    console.log(par_clase)
+    $('#' + par_tabla + ' tr').each(function() {
+        var bloqueID = $(this).find("." + par_clase).html(); 
+        console.log(bloqueID);
+        console.log(par_comboID);
+        if (bloqueID === par_comboID){ 
+            retorna = true; 
+        } 
+    });
+    return retorna;
+}
 
 /* AGREGAR OPCIONES A GRID */
 function agregarItems(opAccion) {
@@ -579,15 +591,25 @@ function agregarItems(opAccion) {
                     var vasignatura = $('#cmb_asignaest option:selected').text();
                     var vbloque = $('#cmb_bloqueest option:selected').text();
                     var vhora = $('#cmb_horaest option:selected').text();
+                    var vBloque =  buscaDatoTabla(tGrid, vbloque, 'bloque');
+                    var vHora =  buscaDatoTabla(tGrid, vhora, 'hora');
+                    var viguales = 0;
+                    console.log(vBloque);
+                    console.log( vHora);
                     //console.log(vasignatura);
-                    if (checkId(vasignatura, 'asignatura') || (checkId(vbloque, 'bloque') && checkId(vhora, 'hora'))) {
-                        showAlert('NO_OK', 'error', { "wtmessage": "Ya ha ingresado esa asignatura, hora y bloque", "title": 'Información' });
-                        return;
+                    if (vBloque   && vHora ){
+                        viguales = 1;
                     }
-                   /* else if (checkId(vbloque, 'bloque') && checkId(vhora, 'hora')) {
-                        showAlert('NO_OK', 'error', { "wtmessage": "Ya ha ingresado una asignatura en ese bloque y hora", "title": 'Información' });
+                    //alert ('sdsds' + viguales);
+                    if (checkId(vasignatura, 'asignatura') /*||  (viguales === 1)*/) {
+                     //if (vBloque && vhora) {                         
+                        showAlert('NO_OK', 'error', { "wtmessage": "Ya ha ingresado esa asignatura", "title": 'Información' });
                         return;
-                    }*/
+                     //}
+                    } else if(viguales === 1){
+                        showAlert('NO_OK', 'error', { "wtmessage": "Ya ha ingresado una asignatura en este bloque y hora", "title": 'Información' });
+                        return;
+                    }   
                     else {
                         //Varios Items                    
                         arr_Grid[size] = objProducto(size);
@@ -671,9 +693,9 @@ function retornaFila(c, Grid, TbGtable, op) {
     strFila += '<td style=" display:none;border:none;">' + per_id + '</td>';
     strFila += '<td for="asignatura">' + Grid[c]['asignatura'] + '</td>';
     // strFila += '<td>' + Grid[c]['jornada'] + '</td>';
-    strFila += '<td for="bloque">' + Grid[c]['bloque'] + '</td>';
+    strFila += '<td class="bloque">' + Grid[c]['bloque'] + '</td>';
     strFila += '<td>' + Grid[c]['modalidad'] + '</td>';
-    strFila += '<td for="hora">' + Grid[c]['hora'] + '</td>';
+    strFila += '<td class="hora">' + Grid[c]['hora'] + '</td>';
     strFila += '<td>';//¿Está seguro de eliminar este elemento?   
     strFila += '<a onclick="eliminarItems(\'' + Grid[c]['indice'] + '\',\'' + TbGtable + '\')" ><span class="glyphicon glyphicon-remove"></span></a>';
     strFila += '</td>';
