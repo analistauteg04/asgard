@@ -188,7 +188,8 @@ class UnidadGpr extends \yii\db\ActiveRecord
         if(ResponsableUnidad::userIsAdmin($user_id, $emp_id)){
             $str_search .= " em.emp_id = $emp_id AND ";
         }elseif($user_id != 1){
-            $str_search .= " em.emp_id = $emp_id AND us.usu_id = $user_id AND ";
+            $str_search .= " em.emp_id = $emp_id AND ";
+            // $str_search .= " em.emp_id = $emp_id AND us.usu_id = $user_id AND ";
         }
         $sql = "SELECT 
                     u.ugpr_id as id,
