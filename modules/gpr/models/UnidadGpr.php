@@ -204,7 +204,7 @@ class UnidadGpr extends \yii\db\ActiveRecord
                     INNER JOIN ".$con->dbname.".categoria as c ON c.cat_id = e.cat_id
                     INNER JOIN ".$con->dbname.".responsable_unidad AS rp ON rp.ugpr_id = u.ugpr_id
                     INNER JOIN ".$con2->dbname.".empresa AS em ON e.emp_id = em.emp_id
-                    INNER JOIN ".$con2->dbname.".usuario AS us ON us.usu_id = rp.usu_id
+                    -- INNER JOIN ".$con2->dbname.".usuario AS us ON us.usu_id = rp.usu_id
                 WHERE 
                     $str_search
                     u.ugpr_estado_logico=1 AND
