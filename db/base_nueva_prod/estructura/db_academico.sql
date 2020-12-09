@@ -780,6 +780,21 @@ create table if not exists `tipo_distributivo` (
  `tdis_estado_logico` varchar(1) not null
 );
 
+
+create table if not exists db_academico.`distributivo_horario_paralelo` (
+  `dhpa_id` bigint(20) not null auto_increment primary key,   
+  `daho_id` bigint(20) not null,
+  `dhpa_grupo` varchar(2) null,
+  `dhpa_paralelo` varchar(10) not null,  
+  `dhpa_usuario_ingreso` bigint(20) not null,
+  `dhpa_usuario_modifica` bigint(20) null,  
+  `dhpa_estado` varchar(1) not null,
+  `dhpa_fecha_creacion` timestamp not null default current_timestamp,
+  `dhpa_fecha_modificacion` timestamp null default null,
+  `dhpa_estado_logico` varchar(1) not null,
+  foreign key (daho_id) references `distributivo_academico_horario`(daho_id)
+);
+
 -- --------------------------------------------------------
 -- 
 -- Estructura de tabla para la tabla `distributivo_academico`
@@ -1819,17 +1834,3 @@ create table if not exists db_academico.`configuracion_tipo_distributivo` (
  foreign key (mod_id) references `modalidad`(mod_id)
 );
 
-
-create table if not exists db_academico.`distributivo_horario_paralelo` (
-  `dhpa_id` bigint(20) not null auto_increment primary key,   
-  `daho_id` bigint(20) not null,
-  `dhpa_grupo` varchar(2) null,
-  `dhpa_paralelo` varchar(10) not null,  
-  `dhpa_usuario_ingreso` bigint(20) not null,
-  `dhpa_usuario_modifica` bigint(20) null,  
-  `dhpa_estado` varchar(1) not null,
-  `dhpa_fecha_creacion` timestamp not null default current_timestamp,
-  `dhpa_fecha_modificacion` timestamp null default null,
-  `dhpa_estado_logico` varchar(1) not null,
-  foreign key (daho_id) references `distributivo_academico_horario`(daho_id)
-);
