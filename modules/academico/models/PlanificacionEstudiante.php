@@ -375,118 +375,56 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord
     }
 
     public function saveDocumentoDB($val, $pla_id, $per_id_estudiante) {
-        // try {
-        /* print_r($val); */
-        /* print("$$");
-          print($val[10]);
-          print(gettype($val[10]));
-          print("$$"); */
-        /* print($pla_id);
-          print($per_id); */
+
         $model_planificacion_estudiante = new PlanificacionEstudiante();
         $model_planificacion_estudiante->pla_id = $pla_id;
 
 
         $model_planificacion_estudiante->per_id = $per_id_estudiante;
-        $model_planificacion_estudiante->pes_jornada = $val[1];
+        //$model_planificacion_estudiante->pes_jornada = $val[1];
+        $model_planificacion_estudiante->pes_cod_malla = $val[1];
         /*  $model_planificacion_estudiante->pes_cod_carrera = $val[2]; */
+        //bloque 1
         $model_planificacion_estudiante->pes_carrera = $val[3];
         $model_planificacion_estudiante->pes_dni = strval($val[4]);
         $model_planificacion_estudiante->pes_nombres = $val[5];
-        /* $es_egresado = "";
-          if($val[6] == "egresado"){
-          $es_egresado = $val[6];
-          }
-          $model_planificacion_estudiante->pes_egresado = $es_egresado;
-          if(!is_null($val[7]) || $val[7] != ""){
-          $array_tutoria = explode(" {", $val[7]);
-          $nombre_tutoria = $array_tutoria[0];
-          $codigo_tutoria = substr($array_tutoria[1], 0 , -1);
-          $model_planificacion_estudiante->pes_tutoria_nombre = $nombre_tutoria;
-          $model_planificacion_estudiante->pes_tutoria_cod = $codigo_tutoria;
-          } else {
-          $model_planificacion_estudiante->pes_tutoria_nombre = null;
-          $model_planificacion_estudiante->pes_tutoria_cod = null;
-          } */
-
-
-        /*  $array_mat_b1h1_nom = explode(" {", $val[8]);
-          $nombre__mat_b1h1 = $array_mat_b1h1_nom[0];
-          $codigo_mat_b1h1 = substr($array_mat_b1h1_nom[1], 0 , -1); */
         $model_planificacion_estudiante->pes_mat_b1_h1_cod = $val[6];
-        /*  $model_planificacion_estudiante->pes_mat_b1_h1_cod = $codigo_mat_b1h1; */
-
-        /*  $array_mat_b1h2_nom = explode(" {", $val[9]);
-          $nombre__mat_b1h2 = $array_mat_b1h2_nom[0];
-          $codigo_mat_b1h2 = substr($array_mat_b1h2_nom[1], 0 , -1); */
-        $model_planificacion_estudiante->pes_mod_b1_h1 = $val[7];
-        /*   $model_planificacion_estudiante->pes_mat_b1_h2_cod = $codigo_mat_b1h2; */
-
-        /*  $array_mat_b1h3_nom = explode(" {", $val[10]);
-          $nombre__mat_b1h3 = $array_mat_b1h3_nom[0];
-          $codigo_mat_b1h3 = substr($array_mat_b1h3_nom[1], 0 , -1); */
-        $model_planificacion_estudiante->pes_mat_b1_h2_cod = $val[8];
-        /*   $model_planificacion_estudiante->pes_mat_b1_h3_cod = $codigo_mat_b1h3; */
-
-        /*  $array_mat_b1h4_nom = explode(" {", $val[11]);
-          $nombre__mat_b1h4 = $array_mat_b1h4_nom[0];
-          $codigo_mat_b1h4 = substr($array_mat_b1h4_nom[1], 0 , -1); */
-        $model_planificacion_estudiante->pes_mod_b1_h2 = $val[9];
-        /*  $model_planificacion_estudiante->pes_mat_b1_h4_cod = $codigo_mat_b1h4; */
-
-        /*  $array_mat_b1h5_nom = explode(" {", $val[12]);
-          $nombre__mat_b1h5 = $array_mat_b1h5_nom[0];
-          $codigo_mat_b1h5 = substr($array_mat_b1h5_nom[1], 0 , -1); */
-        $model_planificacion_estudiante->pes_mat_b1_h3_cod = $val[10];
-        /*  $model_planificacion_estudiante->pes_mat_b1_h5_cod = $codigo_mat_b1h5; */
-
-        $model_planificacion_estudiante->pes_mod_b1_h3 = $val[11];
-
-        /*  $array_mat_b2h1_nom = explode(" {", $val[13]);
-          $nombre__mat_b2h1 = $array_mat_b2h1_nom[0];
-          $codigo_mat_b2h1 = substr($array_mat_b2h1_nom[1], 0 , -1); */
-        $model_planificacion_estudiante->pes_mat_b1_h4_cod = $val[12];
-        /* $model_planificacion_estudiante->pes_mat_b2_h1_cod = $codigo_mat_b2h1; */
-
-        /*  $array_mat_b2h2_nom = explode(" {", $val[14]);
-          $nombre__mat_b2h2 = $array_mat_b2h2_nom[0];
-          $codigo_mat_b2h2 = substr($array_mat_b2h2_nom[1], 0 , -1); */
-        $model_planificacion_estudiante->pes_mod_b1_h4 = $val[13];
-        /*   $model_planificacion_estudiante->pes_mat_b2_h2_cod = $codigo_mat_b2h2; */
-
-        /*   $array_mat_b2h3_nom = explode(" {", $val[15]);
-          $nombre__mat_b2h3 = $array_mat_b2h3_nom[0];
-          $codigo_mat_b2h3 = substr($array_mat_b2h3_nom[1], 0 , -1); */
-        $model_planificacion_estudiante->pes_mat_b1_h5_cod = $val[14];
-        /*  $model_planificacion_estudiante->pes_mat_b2_h3_cod = $codigo_mat_b2h3; */
-
-        /*   $array_mat_b2h4_nom = explode(" {", $val[16]);
-          $nombre__mat_b2h4 = $array_mat_b2h4_nom[0];
-          $codigo_mat_b2h4 = substr($array_mat_b2h4_nom[1], 0 , -1); */
-        $model_planificacion_estudiante->pes_mod_b1_h5 = $val[15];
-        /*  $model_planificacion_estudiante->pes_mat_b2_h4_cod = $codigo_mat_b2h4;
-         */
-        /*  $array_mat_b2h5_nom = explode(" {", $val[17]);
-          $nombre__mat_b2h5 = $array_mat_b2h5_nom[0];
-          $codigo_mat_b2h5 = substr($array_mat_b2h5_nom[1], 0 , -1); */
-        $model_planificacion_estudiante->pes_mat_b1_h6_cod = $val[16];
-        /*  $model_planificacion_estudiante->pes_mat_b2_h5_cod = $codigo_mat_b2h5; */
-
-        $model_planificacion_estudiante->pes_mod_b1_h6 = $val[17];
-
-        $model_planificacion_estudiante->pes_mat_b2_h1_cod = $val[18];
-        $model_planificacion_estudiante->pes_mod_b2_h1 = $val[19];
-        $model_planificacion_estudiante->pes_mat_b2_h2_cod = $val[20];
-        $model_planificacion_estudiante->pes_mod_b2_h2 = $val[21];
-        $model_planificacion_estudiante->pes_mat_b2_h3_cod = $val[22];
-        $model_planificacion_estudiante->pes_mod_b2_h3 = $val[23];
-        $model_planificacion_estudiante->pes_mat_b2_h4_cod = $val[24];
-        $model_planificacion_estudiante->pes_mod_b2_h4 = $val[25];
-        $model_planificacion_estudiante->pes_mat_b2_h5_cod = $val[26];
-        $model_planificacion_estudiante->pes_mod_b2_h5 = $val[27];
-        $model_planificacion_estudiante->pes_mat_b2_h6_cod = $val[28];
-        $model_planificacion_estudiante->pes_mod_b2_h6 = $val[29];
-
+        $model_planificacion_estudiante->pes_mod_b1_h1 = $val[7];    
+        $model_planificacion_estudiante->pes_jor_b1_h1 = $val[8];       
+        $model_planificacion_estudiante->pes_mat_b1_h2_cod = $val[9];
+        $model_planificacion_estudiante->pes_mod_b1_h2 = $val[10];    
+        $model_planificacion_estudiante->pes_jor_b1_h2 = $val[11];
+        $model_planificacion_estudiante->pes_mat_b1_h3_cod = $val[12];
+        $model_planificacion_estudiante->pes_mod_b1_h3 = $val[13];
+        $model_planificacion_estudiante->pes_jor_b1_h3 = $val[14];
+        $model_planificacion_estudiante->pes_mat_b1_h4_cod = $val[15];        
+        $model_planificacion_estudiante->pes_mod_b1_h4 = $val[16]; 
+        $model_planificacion_estudiante->pes_jor_b1_h4 = $val[17];
+        $model_planificacion_estudiante->pes_mat_b1_h5_cod = $val[18];        
+        $model_planificacion_estudiante->pes_mod_b1_h5 = $val[19];
+        $model_planificacion_estudiante->pes_jor_b1_h5 = $val[20];
+        $model_planificacion_estudiante->pes_mat_b1_h6_cod = $val[21];
+        $model_planificacion_estudiante->pes_mod_b1_h6 = $val[22];
+        $model_planificacion_estudiante->pes_jor_b1_h6 = $val[23];
+        //bloque 2
+        $model_planificacion_estudiante->pes_mat_b2_h1_cod = $val[24];
+        $model_planificacion_estudiante->pes_mod_b2_h1 = $val[25];
+        $model_planificacion_estudiante->pes_jor_b2_h1 = $val[26];
+        $model_planificacion_estudiante->pes_mat_b2_h2_cod = $val[27];
+        $model_planificacion_estudiante->pes_mod_b2_h2 = $val[28];
+        $model_planificacion_estudiante->pes_jor_b2_h2 = $val[29];
+        $model_planificacion_estudiante->pes_mat_b2_h3_cod = $val[30];
+        $model_planificacion_estudiante->pes_mod_b2_h3 = $val[31];
+        $model_planificacion_estudiante->pes_jor_b2_h3 = $val[32];
+        $model_planificacion_estudiante->pes_mat_b2_h4_cod = $val[33];
+        $model_planificacion_estudiante->pes_mod_b2_h4 = $val[34];
+        $model_planificacion_estudiante->pes_jor_b2_h4 = $val[35];
+        $model_planificacion_estudiante->pes_mat_b2_h5_cod = $val[36];
+        $model_planificacion_estudiante->pes_mod_b2_h5 = $val[37];
+        $model_planificacion_estudiante->pes_jor_b2_h5 = $val[38];
+        $model_planificacion_estudiante->pes_mat_b2_h6_cod = $val[39];
+        $model_planificacion_estudiante->pes_mod_b2_h6 = $val[40];
+        $model_planificacion_estudiante->pes_jor_b2_h6 = $val[41];
         $model_planificacion_estudiante->pes_estado = "1";
         $model_planificacion_estudiante->pes_estado_logico = "1";
         /* if($val[4] == "0925029605") {
