@@ -24,6 +24,7 @@ use app\models\Persona;
  * @property string|null $pes_egresado
  * @property string|null $pes_tutoria_nombre
  * @property string|null $pes_tutoria_cod
+ * @property string|null $pes_cod_malla
  * @property string|null $pes_mat_b1_h1_nombre
  * @property string|null $pes_mat_b1_h1_cod
  * @property string|null $pes_mod_b1_h1
@@ -113,6 +114,7 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord
             [['pes_dni'], 'string', 'max' => 15],
             [['pes_nombres'], 'string', 'max' => 200],
             [['pes_egresado', 'pes_estado', 'pes_estado_logico'], 'string', 'max' => 1],
+            [['pes_cod_malla'], 'string', 'max' => 50],
             [['pes_mod_b1_h1', 'pes_mod_b1_h2', 'pes_mod_b1_h3', 'pes_mod_b1_h4', 'pes_mod_b1_h5', 'pes_mod_b1_h6', 'pes_mod_b2_h1', 'pes_mod_b2_h2', 'pes_mod_b2_h3', 'pes_mod_b2_h4', 'pes_mod_b2_h5', 'pes_mod_b2_h6'], 'string', 'max' => 2],
             [['pla_id'], 'exist', 'skipOnError' => true, 'targetClass' => Planificacion::className(), 'targetAttribute' => ['pla_id' => 'pla_id']],
         ];
@@ -135,6 +137,7 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord
             'pes_egresado' => 'Pes Egresado',
             'pes_tutoria_nombre' => 'Pes Tutoria Nombre',
             'pes_tutoria_cod' => 'Pes Tutoria Cod',
+            'pes_cod_malla' => 'Pes Cod Malla',
             'pes_mat_b1_h1_nombre' => 'Pes Mat B1 H1 Nombre',
             'pes_mat_b1_h1_cod' => 'Pes Mat B1 H1 Cod',
             'pes_mod_b1_h1' => 'Pes Mod B1 H1',
@@ -200,7 +203,8 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Planificacion::className(), ['pla_id' => 'pla_id']);
     }
-    /**
+
+     /**
      * @return \yii\db\ActiveQuery
      */
     public function getRegistroOnlines() {
@@ -1029,5 +1033,4 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord
             return FALSE;
         }
     }
-
 }
