@@ -879,8 +879,10 @@ class PlanificacionController extends \app\components\CController {
                         $mat_cod = $materia[0];      
                         $codmateria  = "pes_mat_b" . $bloque . "_h" . $horario . "_cod = '" . $mat_cod . "', ";
                         $modmateria  = "pes_mod_b" . $bloque . "_h" . $horario . "= '" . $modalidades . "', ";                  
-                        $modificar .=  $codmateria . ' ' .  $modmateria;                    
+                        $jormateria  = "pes_jor_b" . $bloque . "_h" . $horario . "= '" . $arrplanedit[$i]['jornada'] . "', "; 
+                        $modificar .=  $codmateria . ' ' .  $modmateria . ' ' .  $jormateria;                    
                     }   
+                    //\app\models\Utilities::putMessageLogFile('modificar..: '. $modificar);    
                     $resul = $mod_planifica->modificarDataPlanificacionestudiante($plan_id, $pers_id, $usu_autenticado, $modificar);
             }
 

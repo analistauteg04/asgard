@@ -578,7 +578,7 @@ function agregarItems(opAccion) {
     //var nombre = $('#cmb_estandar_evi option:selected').text();
     //Verifica que tenga nombre producto y tenga foto
     //alert('dsasd' + $('#cmb_modalidadesth').val());
-    if ($('#cmb_asignaest').val() != '0' && $('#cmb_jornadaest').val() != '0' && $('#cmb_bloqueest').val() != '0' && $('#cmb_modalidadesth').val() != '0' && $('#cmb_horaest').val() != '0') {
+    if ($('#cmb_asignaest').val() != '0' /*&& $('#cmb_jornadaest').val() != '0'*/ && $('#cmb_bloqueest').val() != '0' && $('#cmb_modalidadesth').val() != '0' && $('#cmb_horaest').val() != '0') {
         /* var valor = $('#cmb_estandar_evi option:selected').text();*/
         if (opAccion != "edit") {
             //*********   AGREGAR ITEMS *********
