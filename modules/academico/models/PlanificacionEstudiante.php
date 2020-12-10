@@ -747,13 +747,13 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord
      * @return  
      */
     /* INSERTAR DATOS */
-    public function insertarDataPlanificacionestudiante($pla_id, $per_id, $pes_jornada, $pes_carrera, $pes_dni, $pes_nombres, $insertar, $valores) {
+    public function insertarDataPlanificacionestudiante($pla_id, $per_id, $pes_jornada, $pes_carrera, $pes_dni, $pes_nombres, $pes_cod_malla, $insertar, $valores) {
         $arroout = array();
         $con = \Yii::$app->db_academico;
         $trans = $con->beginTransaction();
         try {            
             $data = isset($data['DATA']) ? $data['DATAS'] : array();
-            $this->insertarPlanificacionestudiante($con, $pla_id, $per_id, $pes_jornada, $pes_carrera, $pes_dni, $pes_nombres, $insertar, $valores);
+            $this->insertarPlanificacionestudiante($con, $pla_id, $per_id, $pes_jornada, $pes_carrera, $pes_dni, $pes_nombres, $pes_cod_malla, $insertar, $valores);
             $trans->commit();
             $con->close();
             //RETORNA DATOS             
@@ -775,7 +775,7 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord
      * @property integer $userid
      * @return  
      */
-    private function insertarPlanificacionestudiante($con, $pla_id, $per_id, $pes_jornada, $pes_carrera, $pes_dni, $pes_nombres, $insertar, $valores) {
+    private function insertarPlanificacionestudiante($con, $pla_id, $per_id, $pes_jornada, $pes_carrera, $pes_dni, $pes_nombres, $pes_cod_malla, $insertar, $valores) {
         $estado = 1;
         $sql = "INSERT INTO " . $con->dbname . ".planificacion_estudiante
                     (pla_id,
@@ -783,13 +783,13 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord
                      pes_jornada,
                      pes_carrera,
                      pes_dni,
-                     pes_nombres, " .
+                     pes_nombres, 
+                     pes_cod_malla, " .
                      $insertar . "
                      pes_estado,                   
                      pes_estado_logico)VALUES
                     (" . $pla_id . "," . $per_id . ",'" . $pes_jornada . "','" . $pes_carrera . "','" . $pes_dni . "','"
-                . $pes_nombres . "'," . $valores . " '" . $estado . "','" . $estado . "')";
-        
+                . $pes_nombres . "'," . $pes_cod_malla . ", " . $valores . " '" . $estado . "','" . $estado . "')";
         $command = $con->createCommand($sql);
         $command->execute();
     }

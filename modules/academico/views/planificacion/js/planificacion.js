@@ -763,7 +763,7 @@ function guardaplanificacion() {
     //arrParams.jornadaest = $('#cmb_jornadaest option:selected').text();
     arrParams.carreraest = $('#cmb_carreraest option:selected').text();
     arrParams.modalidadest = $('#cmb_modalidadest').val();
-    arrParams.mallaest = $('#cmb_malladoest').val();
+    arrParams.mallaest = $('#cmb_malladoest option:selected').text();
     arrParams.periodoest = $('#cmb_periodoest').val();
     arrParams.nombreest = $('#cmb_buscarest').val();   
     if (/*$('#cmb_jornadaest').val() != '0' &&*/ $('#cmb_carreraest').text() != 'Seleccionar' && $('#cmb_modalidadest').val() != '0' && $('#cmb_malladoest').val() != '0' && $('#cmb_periodoest').val() != '0' && $('#cmb_buscarest').val() > '0') {

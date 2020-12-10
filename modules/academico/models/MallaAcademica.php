@@ -262,7 +262,7 @@ class MallaAcademica extends \yii\db\ActiveRecord
         $estado = 1;
         $sql = "SELECT 
                     mac.maca_id AS id,
-                    mac.maca_nombre AS name  
+                    concat(mac.maca_codigo,' - ',mac.maca_nombre) AS name  
                FROM " . $con->dbname . ".modalidad_estudio_unidad meu  
                INNER JOIN " . $con->dbname . ".malla_unidad_modalidad mum ON mum.meun_id = meu.meun_id                  
                INNER JOIN " . $con->dbname . ".malla_academica mac ON mac.maca_id = mum.maca_id 

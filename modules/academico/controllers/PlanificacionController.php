@@ -792,6 +792,8 @@ class PlanificacionController extends \app\components\CController {
             $carrera = $data['carreraest'];
             $modalidad = $data['modalidadest'];
             //$malla = $data['mallaest'];
+            $malla = explode(" - ", $data['mallaest']);
+            $malla_guarda = "'". $malla[0] . "'";
             $periodo = $data['periodoest'];
             $per_id = $data['nombreest']; 
             $data_persona = $mod_persona->consultaPersonaId($per_id);
@@ -835,10 +837,8 @@ class PlanificacionController extends \app\components\CController {
                         $mat_cod = $materia[0];
                         //$mat_nombre = $materia[1];
                         $valores .= "'" . $mat_cod . "', '" . $modalidades . "', '" . $arrplan[$i]['jornada'] . "',";
-                    }  
-                    //\app\models\Utilities::putMessageLogFile('inset..: '. $insertar);                   
-                    //\app\models\Utilities::putMessageLogFile('valores..: '. $valores);                   
-                    $resul = $mod_planifica->insertarDataPlanificacionestudiante($resulpla_id['pla_id'], $per_id, $jornada, $carrera, $dni, $nombre, $insertar, $valores);
+                    }
+                    $resul = $mod_planifica->insertarDataPlanificacionestudiante($resulpla_id['pla_id'], $per_id, $jornada, $carrera, $dni, $nombre, $malla_guarda, $insertar, $valores);
                 } else {
                         // no existe mensaje que no permitar guardar      
                         $noentra = 'NOS';
