@@ -69,37 +69,37 @@ ALTER TABLE `db_academico`.`planificacion_estudiante`
 ADD COLUMN `pes_cod_malla` VARCHAR(50) NULL AFTER `pes_tutoria_cod`;
 
 ALTER TABLE `db_academico`.`planificacion_estudiante` 
-ADD COLUMN `pes_jor_b1_h1` VARCHAR(3) NULL AFTER `pes_mod_b1_h1`;
+ADD COLUMN `pes_jor_b1_h1` VARCHAR(20) NULL AFTER `pes_mod_b1_h1`;
 
 ALTER TABLE `db_academico`.`planificacion_estudiante` 
-ADD COLUMN `pes_jor_b1_h2` VARCHAR(3) NULL AFTER `pes_mod_b1_h2`;
+ADD COLUMN `pes_jor_b1_h2` VARCHAR(20) NULL AFTER `pes_mod_b1_h2`;
 
 ALTER TABLE `db_academico`.`planificacion_estudiante` 
-ADD COLUMN `pes_jor_b1_h3` VARCHAR(3) NULL AFTER `pes_mod_b1_h3`;
+ADD COLUMN `pes_jor_b1_h3` VARCHAR(20) NULL AFTER `pes_mod_b1_h3`;
 
 ALTER TABLE `db_academico`.`planificacion_estudiante` 
-ADD COLUMN `pes_jor_b1_h4` VARCHAR(3) NULL AFTER `pes_mod_b1_h4`;
+ADD COLUMN `pes_jor_b1_h4` VARCHAR(20) NULL AFTER `pes_mod_b1_h4`;
 
 ALTER TABLE `db_academico`.`planificacion_estudiante` 
-ADD COLUMN `pes_jor_b1_h5` VARCHAR(3) NULL AFTER `pes_mod_b1_h5`;
+ADD COLUMN `pes_jor_b1_h5` VARCHAR(20) NULL AFTER `pes_mod_b1_h5`;
 
 ALTER TABLE `db_academico`.`planificacion_estudiante` 
-ADD COLUMN `pes_jor_b1_h6` VARCHAR(3) NULL AFTER `pes_mod_b1_h6`;
+ADD COLUMN `pes_jor_b1_h6` VARCHAR(20) NULL AFTER `pes_mod_b1_h6`;
 
 ALTER TABLE `db_academico`.`planificacion_estudiante` 
-ADD COLUMN `pes_jor_b2_h1` VARCHAR(3) NULL AFTER `pes_mod_b2_h1`;
+ADD COLUMN `pes_jor_b2_h1` VARCHAR(20) NULL AFTER `pes_mod_b2_h1`;
 
 ALTER TABLE `db_academico`.`planificacion_estudiante` 
-ADD COLUMN `pes_jor_b2_h2` VARCHAR(3) NULL AFTER `pes_mod_b2_h2`;
+ADD COLUMN `pes_jor_b2_h2` VARCHAR(20) NULL AFTER `pes_mod_b2_h2`;
 
 ALTER TABLE `db_academico`.`planificacion_estudiante` 
-ADD COLUMN `pes_jor_b2_h3` VARCHAR(3) NULL AFTER `pes_mod_b2_h3`;
+ADD COLUMN `pes_jor_b2_h3` VARCHAR(20) NULL AFTER `pes_mod_b2_h3`;
 
 ALTER TABLE `db_academico`.`planificacion_estudiante` 
-ADD COLUMN `pes_jor_b2_h4` VARCHAR(3) NULL AFTER `pes_mod_b2_h4`;
+ADD COLUMN `pes_jor_b2_h4` VARCHAR(20) NULL AFTER `pes_mod_b2_h4`;
 
 ALTER TABLE `db_academico`.`planificacion_estudiante` 
-ADD COLUMN `pes_jor_b2_h5` VARCHAR(3) NULL AFTER `pes_mod_b2_h5`;
+ADD COLUMN `pes_jor_b2_h5` VARCHAR(20) NULL AFTER `pes_mod_b2_h5`;
 
 ALTER TABLE `db_academico`.`planificacion_estudiante` 
-ADD COLUMN `pes_jor_b2_h6` VARCHAR(3) NULL AFTER `pes_mod_b2_h6`;
+ADD COLUMN `pes_jor_b2_h6` VARCHAR(20) NULL AFTER `pes_mod_b2_h6`;

@@ -788,7 +788,7 @@ class PlanificacionController extends \app\components\CController {
             $mod_planifica = new PlanificacionEstudiante();
             $mod_persona = new Persona();
             $data = Yii::$app->request->post();
-            $jornada = substr($data['jornadaest'], 0, 1);
+            $jornada = null;//substr($data['jornadaest'], 0, 1);
             $carrera = $data['carreraest'];
             $modalidad = $data['modalidadest'];
             //$malla = $data['mallaest'];
@@ -829,13 +829,15 @@ class PlanificacionController extends \app\components\CController {
                                 $modalidades = '4';
                                 break;
                         }
-                        $insertar .= 'pes_mat_b' . $bloque . '_h' . $horario . '_cod, pes_mod_b' . $bloque . '_h' . $horario . ',';
+                        $insertar .= 'pes_mat_b' . $bloque . '_h' . $horario . '_cod, pes_mod_b' . $bloque . '_h' . $horario . ', pes_jor_b' . $bloque . '_h' . $horario .',';
                         // crear el string de los valores
                         $materia = explode(" - ", $arrplan[$i]['asignatura']);
                         $mat_cod = $materia[0];
                         //$mat_nombre = $materia[1];
-                        $valores .= "'" . $mat_cod . "', " . $modalidades . ",";
-                    }                    
+                        $valores .= "'" . $mat_cod . "', '" . $modalidades . "', '" . $arrplan[$i]['jornada'] . "',";
+                    }  
+                    //\app\models\Utilities::putMessageLogFile('inset..: '. $insertar);                   
+                    //\app\models\Utilities::putMessageLogFile('valores..: '. $valores);                   
                     $resul = $mod_planifica->insertarDataPlanificacionestudiante($resulpla_id['pla_id'], $per_id, $jornada, $carrera, $dni, $nombre, $insertar, $valores);
                 } else {
                         // no existe mensaje que no permitar guardar      
@@ -846,7 +848,7 @@ class PlanificacionController extends \app\components\CController {
                     $noentra = 'NO';
                 }
             } else if ($accion == 'Update') {
-                \app\models\Utilities::putMessageLogFile('entro..: '); 
+                //\app\models\Utilities::putMessageLogFile('entro..: '); 
                 $plan_id = $data['pla_id'];
                 $pers_id = $data['per_id'];
                 //Modificar Planificacion

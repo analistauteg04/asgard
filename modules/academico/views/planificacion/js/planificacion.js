@@ -578,7 +578,7 @@ function agregarItems(opAccion) {
     //var nombre = $('#cmb_estandar_evi option:selected').text();
     //Verifica que tenga nombre producto y tenga foto
     //alert('dsasd' + $('#cmb_modalidadesth').val());
-    if ($('#cmb_asignaest').val() != '0' /*&& $('#cmb_jornadaest').val() != '0'*/ && $('#cmb_bloqueest').val() != '0' && $('#cmb_modalidadesth').val() != '0' && $('#cmb_horaest').val() != '0') {
+    if ($('#cmb_asignaest').val() != '0' && $('#cmb_jornadaest').val() != '0' && $('#cmb_bloqueest').val() != '0' && $('#cmb_modalidadesth').val() != '0' && $('#cmb_horaest').val() != '0') {
         /* var valor = $('#cmb_estandar_evi option:selected').text();*/
         if (opAccion != "edit") {
             //*********   AGREGAR ITEMS *********
@@ -648,7 +648,7 @@ function objProducto(indice) {
      rowGrid.per_id = $('#txth_per_id').val();*/
     
     rowGrid.asignatura = $('#cmb_asignaest option:selected').text();
-    // rowGrid.jornada = $('#cmb_jornadaest option:selected').text();    
+    rowGrid.jornada = $('#cmb_jornadaest option:selected').text();    
     rowGrid.bloque = $('#cmb_bloqueest option:selected').text();
     rowGrid.modalidad = $('#cmb_modalidadesth option:selected').text();
     rowGrid.hora = $('#cmb_horaest option:selected').text();
@@ -664,7 +664,7 @@ function addPrimerItem(TbGtable, lista, i) {
 
 function limpiarDetalle() {
     $('#cmb_asignaest').val("0");
-    // $('#cmb_jornadaest').val("0");
+    $('#cmb_jornadaest').val("0");
     $('#cmb_bloqueest').val("0");
     $('#cmb_modalidadesth').val("0");
     $('#cmb_horaest').val("0");
@@ -692,7 +692,7 @@ function retornaFila(c, Grid, TbGtable, op) {
     strFila += '<td style=" display:none; border:none;">' + pla_id + '</td>';
     strFila += '<td style=" display:none;border:none;">' + per_id + '</td>';
     strFila += '<td for="asignatura">' + Grid[c]['asignatura'] + '</td>';
-    // strFila += '<td>' + Grid[c]['jornada'] + '</td>';
+    strFila += '<td>' + Grid[c]['jornada'] + '</td>';
     strFila += '<td class="bloque">' + Grid[c]['bloque'] + '</td>';
     strFila += '<td>' + Grid[c]['modalidad'] + '</td>';
     strFila += '<td class="hora">' + Grid[c]['hora'] + '</td>';
@@ -760,13 +760,13 @@ function guardaplanificacion() {
     var accion = "Create";
     var link = $('#txth_base').val() + "/academico/planificacion/saveplanificacion";
 
-    arrParams.jornadaest = $('#cmb_jornadaest option:selected').text();
+    //arrParams.jornadaest = $('#cmb_jornadaest option:selected').text();
     arrParams.carreraest = $('#cmb_carreraest option:selected').text();
     arrParams.modalidadest = $('#cmb_modalidadest').val();
     arrParams.mallaest = $('#cmb_malladoest').val();
     arrParams.periodoest = $('#cmb_periodoest').val();
     arrParams.nombreest = $('#cmb_buscarest').val();   
-    if ($('#cmb_jornadaest').val() != '0' && $('#cmb_carreraest').text() != 'Seleccionar' && $('#cmb_modalidadest').val() != '0' && $('#cmb_malladoest').val() != '0' && $('#cmb_periodoest').val() != '0' && $('#cmb_buscarest').val() > '0') {
+    if (/*$('#cmb_jornadaest').val() != '0' &&*/ $('#cmb_carreraest').text() != 'Seleccionar' && $('#cmb_modalidadest').val() != '0' && $('#cmb_malladoest').val() != '0' && $('#cmb_periodoest').val() != '0' && $('#cmb_buscarest').val() > '0') {
         if (sessionStorage.dts_datosItemplan) {
              var arr_Grid = JSON.parse(sessionStorage.dts_datosItemplan);
             if (arr_Grid.length > 0) {

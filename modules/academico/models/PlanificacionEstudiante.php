@@ -108,14 +108,15 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord
             [['pla_id', 'per_id', 'pes_estado', 'pes_estado_logico'], 'required'],
             [['pla_id', 'per_id', 'pes_usuario_modifica'], 'integer'],
             [['pes_fecha_creacion', 'pes_fecha_modificacion'], 'safe'],
-            [['pes_jornada', 'pes_jor_b1_h1', 'pes_jor_b1_h2', 'pes_jor_b1_h3', 'pes_jor_b1_h4', 'pes_jor_b1_h5', 'pes_jor_b1_h6', 'pes_jor_b2_h1', 'pes_jor_b2_h2', 'pes_jor_b2_h3', 'pes_jor_b2_h4', 'pes_jor_b2_h5', 'pes_jor_b2_h6'], 'string', 'max' => 3],
-            [['pes_cod_carrera', 'pes_tutoria_cod', 'pes_mat_b1_h1_cod', 'pes_mat_b1_h2_cod', 'pes_mat_b1_h3_cod', 'pes_mat_b1_h4_cod', 'pes_mat_b1_h5_cod', 'pes_mat_b1_h6_cod', 'pes_mat_b2_h1_cod', 'pes_mat_b2_h2_cod', 'pes_mat_b2_h3_cod', 'pes_mat_b2_h4_cod', 'pes_mat_b2_h5_cod', 'pes_mat_b2_h6_cod'], 'string', 'max' => 20],
+            [['pes_jornada'], 'string', 'max' => 3],
+            [['pes_cod_carrera', 'pes_tutoria_cod', 'pes_mat_b1_h1_cod', 'pes_jor_b1_h1', 'pes_mat_b1_h2_cod', 'pes_jor_b1_h2', 'pes_mat_b1_h3_cod', 'pes_jor_b1_h3', 'pes_mat_b1_h4_cod', 'pes_jor_b1_h4', 'pes_mat_b1_h5_cod', 'pes_jor_b1_h5', 'pes_mat_b1_h6_cod', 'pes_jor_b1_h6', 'pes_mat_b2_h1_cod', 'pes_mat_b2_h2_cod', 'pes_jor_b2_h2', 'pes_mat_b2_h3_cod', 'pes_jor_b2_h3', 'pes_mat_b2_h4_cod', 'pes_jor_b2_h4', 'pes_mat_b2_h5_cod', 'pes_jor_b2_h5', 'pes_mat_b2_h6_cod', 'pes_jor_b2_h6'], 'string', 'max' => 20],
             [['pes_carrera', 'pes_tutoria_nombre', 'pes_mat_b1_h1_nombre', 'pes_mat_b1_h2_nombre', 'pes_mat_b1_h3_nombre', 'pes_mat_b1_h4_nombre', 'pes_mat_b1_h5_nombre', 'pes_mat_b1_h6_nombre', 'pes_mat_b2_h1_nombre', 'pes_mat_b2_h2_nombre', 'pes_mat_b2_h3_nombre', 'pes_mat_b2_h4_nombre', 'pes_mat_b2_h5_nombre', 'pes_mat_b2_h6_nombre'], 'string', 'max' => 100],
             [['pes_dni'], 'string', 'max' => 15],
             [['pes_nombres'], 'string', 'max' => 200],
             [['pes_egresado', 'pes_estado', 'pes_estado_logico'], 'string', 'max' => 1],
             [['pes_cod_malla'], 'string', 'max' => 50],
             [['pes_mod_b1_h1', 'pes_mod_b1_h2', 'pes_mod_b1_h3', 'pes_mod_b1_h4', 'pes_mod_b1_h5', 'pes_mod_b1_h6', 'pes_mod_b2_h1', 'pes_mod_b2_h2', 'pes_mod_b2_h3', 'pes_mod_b2_h4', 'pes_mod_b2_h5', 'pes_mod_b2_h6'], 'string', 'max' => 2],
+            [['pes_jor_b2_h1'], 'string', 'max' => 30],
             [['pla_id'], 'exist', 'skipOnError' => true, 'targetClass' => Planificacion::className(), 'targetAttribute' => ['pla_id' => 'pla_id']],
         ];
     }
@@ -203,8 +204,7 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Planificacion::className(), ['pla_id' => 'pla_id']);
     }
-
-     /**
+    /**
      * @return \yii\db\ActiveQuery
      */
     public function getRegistroOnlines() {
@@ -972,3 +972,4 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord
         }
     }
 }
+
