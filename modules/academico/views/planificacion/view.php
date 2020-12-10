@@ -22,10 +22,10 @@ academico::registerTranslations();
                 <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
                     <?= Html::dropDownList("cmb_unidadest", 1, $arr_unidad, ["class" => "form-control", "id" => "cmb_unidadest", "Disabled" => "disabled"]) ?>
                 </div> 
-                <label for="lbl_jornadaest" class="col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= academico::t("Academico", "Working day") ?> </label>
+                <!-- <label for="lbl_jornadaest" class="col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= academico::t("Academico", "Working day") ?> </label>
                 <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
                     <?= Html::dropDownList("cmb_jornadaest", $valorjornada, $arr_jornada, ["class" => "form-control", "id" => "cmb_jornadaest", "disabled" => "true"]) ?>
-                </div>                 
+                </div> -->                
             </div>        
         </div>  
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -81,7 +81,12 @@ academico::registerTranslations();
                 'value'=>function ($model_detalle) {
                     return $model_detalle['cod_asignatura']  . ' - ' . $model_detalle['asignatura'];
                 },
-            ],    
+            ],  
+            [
+                'attribute' => 'jornada',
+                'header' => academico::t("Academico", "Working day"),
+                'value' => 'jor_materia',
+            ],  
             [
                 'attribute' => 'bloque',
                 'header' => Yii::t("formulario", "Block"),

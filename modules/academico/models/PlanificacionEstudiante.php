@@ -614,7 +614,7 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord
         $con = \Yii::$app->db_academico;
         // Bloque 1
         for ($i = 1; $i < 7; $i++) {
-            $sql .= "SELECT pes_id as Ids, pes_mat_b1_h" . $i . "_cod as cod_asignatura, asig.asi_nombre as asignatura, CASE pes_jornada  
+            $sql .= "SELECT pes_id as Ids, pes_jor_b1_h" . $i . " as jor_materia, pes_mat_b1_h" . $i . "_cod as cod_asignatura, asig.asi_nombre as asignatura, CASE pes_jornada  
                             WHEN 'M' THEN 'Matutino'  
                             WHEN 'N' THEN 'Nocturno'  
                             WHEN 'S' THEN 'Semipresencial'
@@ -629,7 +629,7 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord
         }
         // Bloque 2
         for ($j = 1; $j < 7; $j++) {
-            $sql .= "SELECT pes_id as Ids, pes_mat_b2_h" . $j . "_cod as cod_asignatura, asig.asi_nombre as asignatura, CASE pes_jornada  
+            $sql .= "SELECT pes_id as Ids, pes_jor_b2_h" . $j . " as jor_materia, pes_mat_b2_h" . $j . "_cod as cod_asignatura, asig.asi_nombre as asignatura, CASE pes_jornada  
                             WHEN 'M' THEN 'Matutino'  
                             WHEN 'N' THEN 'Nocturno'  
                             WHEN 'S' THEN 'Semipresencial'

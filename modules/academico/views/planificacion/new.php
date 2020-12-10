@@ -127,7 +127,7 @@ academico::registerTranslations();
                                 <th style="display:none; border:none;"><?= Yii::t("formulario", "pla_id") ?></th>
                                 <th style="display:none; border:none;"><?= Yii::t("formulario", "per_id") ?></th>
                                 <th><?= academico::t("Academico", "Subject") ?></th>
-                                <!-- <th><? academico::t("Academico", "Working day") ?></th>-->
+                                <th><?= academico::t("Academico", "Working day") ?></th>
                                 <th><?= Yii::t("formulario", "Block") ?></th>                            
                                 <th><?= Yii::t("formulario", "Mode") ?></th>
                                 <th><?= academico::t("Academico", "Hour") ?></th>  
