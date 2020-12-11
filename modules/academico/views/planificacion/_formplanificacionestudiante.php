@@ -43,10 +43,7 @@ use app\modules\admision\Module;
         <div class="form-group">
         <label for="lbl_plantilla" class="col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= Yii::t("formulario", "Plantilla"); ?></label>
             <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
-            <?= Html::a(academico::t("matriculacion", "Download"), Url::to(['matriculacion/updatepagoregistro', 'filename' => 'plantilla_carga_planificacionestudiante.xlsx']));   ?>
-            <?php
-                //echo "<a href='" . Url::to(['route' => "/uploads/plantilla_planificacion/plantilla_carga_planificacionestudiante.xlsx"]) . "' download='plantilla_carga_planificacionestudiante.xlsx' ><span class='glyphicon glyphicon-download-alt'></span>Descargar Plantilla</a>"
-            ?>
+            <?= Html::a(academico::t("matriculacion", "Download"), Url::to(['planificacion/downloadplantilla', 'filename' => 'plantilla_carga_planificacionestudiante.xlsx']));   ?>
             </div>                       
         </div>        
     </div>   

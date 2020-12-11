@@ -903,5 +903,26 @@ class PlanificacionController extends \app\components\CController {
             return;
         }
     }
+    public function actionDownloadplantilla() {
+        //$file_path ='/uploads/plantilla_planificacion/plantilla_carga_planificacionestudiante.xlsx'; 
+        $file = 'plantilla_carga_planificacionestudiante.xlsx';
+                $route = str_replace("../", "", $file);
+                $url_file = Yii::$app->basePath . "/uploads/plantilla_planificacion/" . $route;
+                $arrfile = explode(".", $url_file);
+                $typeImage = $arrfile[count($arrfile) - 1];
+                if (file_exists($url_file)) {
+                    if (strtolower($typeImage) == "xlsx") {
+                        header('Pragma: public');
+                        header('Expires: 0');
+                        header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+                        header('Cache-Control: private', false);
+                        header("Content-type: application/xlsx");
+                        header('Content-Disposition: attachment; filename="plantillaplanificacionest_' . time() . '.xlsx";');
+                        header('Content-Transfer-Encoding: binary');
+                        header('Content-Length: ' . filesize($url_file));
+                        readfile($url_file);
+                    }
+                }
+    }
 
 }
