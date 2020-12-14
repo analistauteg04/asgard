@@ -879,7 +879,7 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord
         return $resultData;
     }
 
-      /**
+    /**
      * Function Consultar modalidad y periodo en planificacion.
      * @author  Giovanni Vergara <analistadesarrollo01@uteg.edu.ec>;
      * @property       
@@ -970,6 +970,34 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord
                 $trans->rollback();
             return FALSE;
         }
+    }
+
+      /**
+     * Function Consultar codigo asigantura para archivo de planificacion estudiante.
+     * @author  Giovanni Vergara <analistadesarrollo01@uteg.edu.ec>;
+     * @property       
+     * @return  
+     */
+    public function consultarCodigoAsignatura($maca_codigo, $asi_id) {
+        $con = \Yii::$app->db_academico;
+        $estado = 1;
+
+        $sql = "SELECT made_codigo_asignatura 
+                FROM " . $con->dbname . ".malla_academica_detalle macad 
+                    INNER JOIN " . $con->dbname . ".malla_academica maca 
+                    ON maca.maca_id = macad.maca_id 
+                    AND maca_codigo = maca_codigo
+                WHERE macad.asi_id = asi_id AND
+                      maca.maca_estado = :estado AND
+                      maca.maca_estado_logico = :estado AND
+                      macad.made_estado = :estado AND
+                      macad.made_estado_logico = :estado";
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":maca_codigo", $maca_codigo, \PDO::PARAM_STR);
+        $comando->bindParam(":asi_id", $asi_id, \PDO::PARAM_INT);
+        $resultData = $comando->queryOne();
+        return $resultData;
     }
 }
 
