@@ -376,6 +376,19 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord
 
     public function saveDocumentoDB($val, $pla_id, $per_id_estudiante) {
 
+        $materia_id1 = null;
+        $materia_id2 = null;
+        $materia_id3 = null;
+        $materia_id4 = null;
+        $materia_id5 = null;
+        $materia_id6 = null;
+        $materia_id7 = null;
+        $materia_id8 = null;
+        $materia_id9 = null;
+        $materia_id10 = null;
+        $materia_id11 = null;
+        $materia_id12 = null;
+
         $model_planificacion_estudiante = new PlanificacionEstudiante();
         $model_planificacion_estudiante->pla_id = $pla_id;
 
@@ -388,41 +401,89 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord
         $model_planificacion_estudiante->pes_carrera = $val[3];
         $model_planificacion_estudiante->pes_dni = strval($val[4]);
         $model_planificacion_estudiante->pes_nombres = $val[5];
-        $model_planificacion_estudiante->pes_mat_b1_h1_cod = $val[6];
+        if (!empty($val[6])) {
+            $materia_id1 = consultarCodigoAsignatura($val[1], $val[6]);
+            $model_planificacion_estudiante->pes_mat_b1_h1_cod = $materia_id1['made_codigo_asignatura'];
+           }
+        //$model_planificacion_estudiante->pes_mat_b1_h1_cod = $val[6];
         $model_planificacion_estudiante->pes_mod_b1_h1 = $val[7];    
-        $model_planificacion_estudiante->pes_jor_b1_h1 = $val[8];       
-        $model_planificacion_estudiante->pes_mat_b1_h2_cod = $val[9];
+        $model_planificacion_estudiante->pes_jor_b1_h1 = $val[8];   
+        if (!empty($val[9])) {
+         $materia_id2 = consultarCodigoAsignatura($val[1], $val[9]);
+         $model_planificacion_estudiante->pes_mat_b1_h2_cod = $materia_id2['made_codigo_asignatura'];
+        }
+        //$model_planificacion_estudiante->pes_mat_b1_h2_cod = $val[9];
         $model_planificacion_estudiante->pes_mod_b1_h2 = $val[10];    
         $model_planificacion_estudiante->pes_jor_b1_h2 = $val[11];
-        $model_planificacion_estudiante->pes_mat_b1_h3_cod = $val[12];
+        if (!empty($val[12])) {
+            $materia_id3 = consultarCodigoAsignatura($val[1], $val[12]);
+            $model_planificacion_estudiante->pes_mat_b1_h3_cod = $materia_id3['made_codigo_asignatura'];
+        }
+        //$model_planificacion_estudiante->pes_mat_b1_h3_cod = $val[12];
         $model_planificacion_estudiante->pes_mod_b1_h3 = $val[13];
         $model_planificacion_estudiante->pes_jor_b1_h3 = $val[14];
-        $model_planificacion_estudiante->pes_mat_b1_h4_cod = $val[15];        
+        if (!empty($val[15])) {
+            $materia_id4 = consultarCodigoAsignatura($val[1], $val[15]);
+            $model_planificacion_estudiante->pes_mat_b1_h4_cod = $materia_id4['made_codigo_asignatura'];
+        }
+        //$model_planificacion_estudiante->pes_mat_b1_h4_cod = $val[15];        
         $model_planificacion_estudiante->pes_mod_b1_h4 = $val[16]; 
         $model_planificacion_estudiante->pes_jor_b1_h4 = $val[17];
-        $model_planificacion_estudiante->pes_mat_b1_h5_cod = $val[18];        
+        if (!empty($val[18])) {
+            $materia_id5 = consultarCodigoAsignatura($val[1], $val[18]);
+            $model_planificacion_estudiante->pes_mat_b1_h5_cod = $materia_id5['made_codigo_asignatura'];
+        }
+        //$model_planificacion_estudiante->pes_mat_b1_h5_cod = $val[18];        
         $model_planificacion_estudiante->pes_mod_b1_h5 = $val[19];
         $model_planificacion_estudiante->pes_jor_b1_h5 = $val[20];
-        $model_planificacion_estudiante->pes_mat_b1_h6_cod = $val[21];
+        if (!empty($val[21])) {
+            $materia_id6 = consultarCodigoAsignatura($val[1], $val[21]);
+            $model_planificacion_estudiante->pes_mat_b1_h6_cod = $materia_id6['made_codigo_asignatura'];
+        }
+        //$model_planificacion_estudiante->pes_mat_b1_h6_cod = $val[21];
         $model_planificacion_estudiante->pes_mod_b1_h6 = $val[22];
         $model_planificacion_estudiante->pes_jor_b1_h6 = $val[23];
         //bloque 2
-        $model_planificacion_estudiante->pes_mat_b2_h1_cod = $val[24];
+        if (!empty($val[24])) {
+            $materia_id7 = consultarCodigoAsignatura($val[1], $val[24]);
+            $model_planificacion_estudiante->pes_mat_b2_h1_cod = $materia_id7['made_codigo_asignatura'];
+        }
+        //$model_planificacion_estudiante->pes_mat_b2_h1_cod = $val[24];
         $model_planificacion_estudiante->pes_mod_b2_h1 = $val[25];
         $model_planificacion_estudiante->pes_jor_b2_h1 = $val[26];
-        $model_planificacion_estudiante->pes_mat_b2_h2_cod = $val[27];
+        if (!empty($val[27])) {
+            $materia_id8 = consultarCodigoAsignatura($val[1], $val[27]);
+            $model_planificacion_estudiante->pes_mat_b2_h2_cod = $materia_id8['made_codigo_asignatura'];
+        }
+        //$model_planificacion_estudiante->pes_mat_b2_h2_cod = $val[27];
         $model_planificacion_estudiante->pes_mod_b2_h2 = $val[28];
         $model_planificacion_estudiante->pes_jor_b2_h2 = $val[29];
-        $model_planificacion_estudiante->pes_mat_b2_h3_cod = $val[30];
+        if (!empty($val[30])) {
+            $materia_id9 = consultarCodigoAsignatura($val[1], $val[30]);
+            $model_planificacion_estudiante->pes_mat_b2_h3_cod = $materia_id9['made_codigo_asignatura'];
+        }
+        //$model_planificacion_estudiante->pes_mat_b2_h3_cod = $val[30];
         $model_planificacion_estudiante->pes_mod_b2_h3 = $val[31];
         $model_planificacion_estudiante->pes_jor_b2_h3 = $val[32];
-        $model_planificacion_estudiante->pes_mat_b2_h4_cod = $val[33];
+        if (!empty($val[33])) {
+            $materia_id10 = consultarCodigoAsignatura($val[1], $val[33]);
+            $model_planificacion_estudiante->pes_mat_b2_h4_cod = $materia_id10['made_codigo_asignatura'];
+        }
+        //$model_planificacion_estudiante->pes_mat_b2_h4_cod = $val[33];
         $model_planificacion_estudiante->pes_mod_b2_h4 = $val[34];
         $model_planificacion_estudiante->pes_jor_b2_h4 = $val[35];
-        $model_planificacion_estudiante->pes_mat_b2_h5_cod = $val[36];
+        if (!empty($val[36])) {
+            $materia_id11 = consultarCodigoAsignatura($val[1], $val[36]);
+            $model_planificacion_estudiante->pes_mat_b2_h5_cod = $materia_id11['made_codigo_asignatura'];
+        }
+        //$model_planificacion_estudiante->pes_mat_b2_h5_cod = $val[36];
         $model_planificacion_estudiante->pes_mod_b2_h5 = $val[37];
         $model_planificacion_estudiante->pes_jor_b2_h5 = $val[38];
-        $model_planificacion_estudiante->pes_mat_b2_h6_cod = $val[39];
+        if (!empty($val[39])) {
+            $materia_id12 = consultarCodigoAsignatura($val[1], $val[39]);
+            $model_planificacion_estudiante->pes_mat_b2_h6_cod = $materia_id12['made_codigo_asignatura'];
+        }
+        //$model_planificacion_estudiante->pes_mat_b2_h6_cod = $val[39];
         $model_planificacion_estudiante->pes_mod_b2_h6 = $val[40];
         $model_planificacion_estudiante->pes_jor_b2_h6 = $val[41];
         $model_planificacion_estudiante->pes_estado = "1";
