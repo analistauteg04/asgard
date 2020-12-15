@@ -20,7 +20,7 @@ $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
 ?>
 <form class="form-horizontal" enctype="multipart/form-data" >
     <h3><span id="lbl_titulo"><?= academico::t("Academico", "Planning Load") ?></span></h3>
-    <br></br>
+    <br></br>    
     <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
         <p class="text-danger"> <?= Yii::t("formulario", "Fields with * are required") ?> </p>
     </div>
@@ -28,15 +28,21 @@ $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
         <?php echo $leyenda; ?>
     </div> 
     <div class='row'>
-        <div class='col-lg-12 col-md-12 col-sm-12 col-xs-12'> 
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="form-group">
+        <label for="lbl_plantilla" class="col-sm-3 col-lg-3 col-md-3 col-xs-3 control-label"><?= academico::t("planificacion", "Template"); ?></label>
+            <div class="col-sm-9 col-md-9 col-xs-9 col-lg-9">
+            <?= Html::a(academico::t("matriculacion", "Download"), Url::to(['planificacion/downloadplantilla', 'filename' => 'plantilla_carga_planificacionestudiante.xlsx']));   ?>
+            </div>                       
+        </div> 
             <div class="form-group">
-                <label for="frm_per_aca" class="col-sm-3 control-label"><?= academico::t("planificacion", "Periodo Academico") ?> <span class="text-danger">*</span> </label>
+                <label for="frm_per_aca" class="col-sm-3 control-label"><?= academico::t("Academico", "Lecturing Period") ?> <span class="text-danger">*</span> </label>
                 <div class="col-sm-9">
                     <input type="text" class="form-control PBvalidation" id="frm_per_aca" value="" data-type="all" placeholder="<?= academico::t("planificacion", "Periodo Academico") ?>">
                 </div>
             </div>
             <div class="form-group">
-                <label for="dtp_pla_fecha_ini" class="col-sm-3 control-label"><?= academico::t("planificacion", "Inicio") ?> <span class="text-danger">*</span> </label>
+                <label for="dtp_pla_fecha_ini" class="col-sm-3 control-label"><?= yii::t("formulario", "Start") ?> <span class="text-danger">*</span> </label>
                 <div class="col-sm-9">
                     <?=
                     DatePicker::widget([
@@ -44,7 +50,7 @@ $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
                         'name' => 'dtp_pla_fecha_ini',
                         'type' => DatePicker::TYPE_INPUT,
                         'value' => '',
-                        'options' => ["class" => "form-control PBvalidation", "data-type" => "fecha", "placeholder" => academico::t("planificacion", "Inicio"),],
+                        'options' => ["class" => "form-control PBvalidation", "data-type" => "fecha", "placeholder" => yii::t("formulario", "Start"),],
                         'pluginOptions' => [
                             'autoclose' => true,
                             'format' => 'yyyy-mm-dd',
@@ -54,7 +60,7 @@ $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
                 </div>
             </div>
             <div class="form-group">
-                <label for="dtp_pla_fecha_fin" class="col-sm-3 control-label"><?= academico::t("planificacion", "Fin") ?> <span class="text-danger">*</span> </label>
+                <label for="dtp_pla_fecha_fin" class="col-sm-3 control-label"><?= yii::t("formulario", "End") ?> <span class="text-danger">*</span> </label>
                 <div class="col-sm-9">
                     <?=
                     DatePicker::widget([
@@ -62,7 +68,7 @@ $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
                         'name' => 'dtp_pla_fecha_fin',
                         'type' => DatePicker::TYPE_INPUT,
                         'value' => '',
-                        'options' => ["class" => "form-control PBvalidation", "data-type" => "fecha", "placeholder" => academico::t("planificacion", "Fin"),],
+                        'options' => ["class" => "form-control PBvalidation", "data-type" => "fecha", "placeholder" => yii::t("formulario", "End"),],
                         'pluginOptions' => [
                             'autoclose' => true,
                             'format' => 'yyyy-mm-dd',
@@ -72,7 +78,7 @@ $leyenda = '<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
                 </div>
             </div>
             <div class="form-group">
-                <label for="cmb_moda" class="col-sm-3 control-label"><?= academico::t("planificacion", "Modalidad") ?> <span class="text-danger">*</span> </label>
+                <label for="cmb_moda" class="col-sm-3 control-label"><?= yii::t("formulario", "Mode") ?> <span class="text-danger">*</span> </label>
                 <div class="col-sm-9">
                     <?= Html::dropDownList("cmb_moda", "", $arr_modalidad, ["class" => "form-control", "id" => "cmb_moda"]) ?>
                 </div>
