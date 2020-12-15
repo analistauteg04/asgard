@@ -788,10 +788,12 @@ class PlanificacionController extends \app\components\CController {
             $mod_planifica = new PlanificacionEstudiante();
             $mod_persona = new Persona();
             $data = Yii::$app->request->post();
-            $jornada = substr($data['jornadaest'], 0, 1);
+            $jornada = null;//substr($data['jornadaest'], 0, 1);
             $carrera = $data['carreraest'];
             $modalidad = $data['modalidadest'];
             //$malla = $data['mallaest'];
+            $malla = explode(" - ", $data['mallaest']);
+            $malla_guarda = "'". $malla[0] . "'";
             $periodo = $data['periodoest'];
             $per_id = $data['nombreest']; 
             $data_persona = $mod_persona->consultaPersonaId($per_id);
@@ -829,14 +831,14 @@ class PlanificacionController extends \app\components\CController {
                                 $modalidades = '4';
                                 break;
                         }
-                        $insertar .= 'pes_mat_b' . $bloque . '_h' . $horario . '_cod, pes_mod_b' . $bloque . '_h' . $horario . ',';
+                        $insertar .= 'pes_mat_b' . $bloque . '_h' . $horario . '_cod, pes_mod_b' . $bloque . '_h' . $horario . ', pes_jor_b' . $bloque . '_h' . $horario .',';
                         // crear el string de los valores
                         $materia = explode(" - ", $arrplan[$i]['asignatura']);
                         $mat_cod = $materia[0];
                         //$mat_nombre = $materia[1];
-                        $valores .= "'" . $mat_cod . "', " . $modalidades . ",";
-                    }                    
-                    $resul = $mod_planifica->insertarDataPlanificacionestudiante($resulpla_id['pla_id'], $per_id, $jornada, $carrera, $dni, $nombre, $insertar, $valores);
+                        $valores .= "'" . $mat_cod . "', '" . $modalidades . "', '" . $arrplan[$i]['jornada'] . "',";
+                    }
+                    $resul = $mod_planifica->insertarDataPlanificacionestudiante($resulpla_id['pla_id'], $per_id, $jornada, $carrera, $dni, $nombre, $malla_guarda, $insertar, $valores);
                 } else {
                         // no existe mensaje que no permitar guardar      
                         $noentra = 'NOS';
@@ -846,7 +848,7 @@ class PlanificacionController extends \app\components\CController {
                     $noentra = 'NO';
                 }
             } else if ($accion == 'Update') {
-                \app\models\Utilities::putMessageLogFile('entro..: '); 
+                //\app\models\Utilities::putMessageLogFile('entro..: '); 
                 $plan_id = $data['pla_id'];
                 $pers_id = $data['per_id'];
                 //Modificar Planificacion
@@ -877,8 +879,10 @@ class PlanificacionController extends \app\components\CController {
                         $mat_cod = $materia[0];      
                         $codmateria  = "pes_mat_b" . $bloque . "_h" . $horario . "_cod = '" . $mat_cod . "', ";
                         $modmateria  = "pes_mod_b" . $bloque . "_h" . $horario . "= '" . $modalidades . "', ";                  
-                        $modificar .=  $codmateria . ' ' .  $modmateria;                    
+                        $jormateria  = "pes_jor_b" . $bloque . "_h" . $horario . "= '" . $arrplanedit[$i]['jornada'] . "', "; 
+                        $modificar .=  $codmateria . ' ' .  $modmateria . ' ' .  $jormateria;                    
                     }   
+                    //\app\models\Utilities::putMessageLogFile('modificar..: '. $modificar);    
                     $resul = $mod_planifica->modificarDataPlanificacionestudiante($plan_id, $pers_id, $usu_autenticado, $modificar);
             }
 
@@ -898,6 +902,27 @@ class PlanificacionController extends \app\components\CController {
 
             return;
         }
+    }
+    public function actionDownloadplantilla() {
+        //$file_path ='/uploads/plantilla_planificacion/plantilla_carga_planificacionestudiante.xlsx'; 
+        $file = 'plantilla_carga_planificacionestudiante.xlsx';
+                $route = str_replace("../", "", $file);
+                $url_file = Yii::$app->basePath . "/uploads/plantilla_planificacion/" . $route;
+                $arrfile = explode(".", $url_file);
+                $typeImage = $arrfile[count($arrfile) - 1];
+                if (file_exists($url_file)) {
+                    if (strtolower($typeImage) == "xlsx") {
+                        header('Pragma: public');
+                        header('Expires: 0');
+                        header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+                        header('Cache-Control: private', false);
+                        header("Content-type: application/xlsx");
+                        header('Content-Disposition: attachment; filename="plantillaplanificacionest_' . time() . '.xlsx";');
+                        header('Content-Transfer-Encoding: binary');
+                        header('Content-Length: ' . filesize($url_file));
+                        readfile($url_file);
+                    }
+                }
     }
 
 }

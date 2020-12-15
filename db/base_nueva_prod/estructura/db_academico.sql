@@ -780,6 +780,21 @@ create table if not exists `tipo_distributivo` (
  `tdis_estado_logico` varchar(1) not null
 );
 
+
+create table if not exists db_academico.`distributivo_horario_paralelo` (
+  `dhpa_id` bigint(20) not null auto_increment primary key,   
+  `daho_id` bigint(20) not null,
+  `dhpa_grupo` varchar(2) null,
+  `dhpa_paralelo` varchar(10) not null,  
+  `dhpa_usuario_ingreso` bigint(20) not null,
+  `dhpa_usuario_modifica` bigint(20) null,  
+  `dhpa_estado` varchar(1) not null,
+  `dhpa_fecha_creacion` timestamp not null default current_timestamp,
+  `dhpa_fecha_modificacion` timestamp null default null,
+  `dhpa_estado_logico` varchar(1) not null,
+  foreign key (daho_id) references `distributivo_academico_horario`(daho_id)
+);
+
 -- --------------------------------------------------------
 -- 
 -- Estructura de tabla para la tabla `distributivo_academico`
@@ -1354,42 +1369,55 @@ create table if not exists `planificacion_estudiante` (
  `pes_egresado` varchar(1) null, 
  `pes_tutoria_nombre` varchar(100) null, 
  `pes_tutoria_cod` varchar(20) null, 
+ `pes_cod_malla`varchar(50) null,
  `pes_mat_b1_h1_nombre` varchar(100) null, 
  `pes_mat_b1_h1_cod` varchar(20) null,
  `pes_mod_b1_h1` varchar(2) null, 
+ `pes_jor_b1_h1` varchar(20) null, 
  `pes_mat_b1_h2_nombre` varchar(100) null, 
  `pes_mat_b1_h2_cod` varchar(20) null,
  `pes_mod_b1_h2` varchar(2) null, 
+ `pes_jor_b1_h2` varchar(20) null, 
  `pes_mat_b1_h3_nombre` varchar(100) null, 
  `pes_mat_b1_h3_cod` varchar(20) null,
  `pes_mod_b1_h3` varchar(2) null, 
+ `pes_jor_b1_h3` varchar(20) null, 
  `pes_mat_b1_h4_nombre` varchar(100) null, 
  `pes_mat_b1_h4_cod` varchar(20) null,
  `pes_mod_b1_h4` varchar(2) null, 
+ `pes_jor_b1_h4` varchar(20) null, 
  `pes_mat_b1_h5_nombre` varchar(100) null, 
  `pes_mat_b1_h5_cod` varchar(20) null,
  `pes_mod_b1_h5` varchar(2) null, 
+ `pes_jor_b1_h5` varchar(20) null, 
  `pes_mat_b1_h6_nombre` varchar(100) null, 
  `pes_mat_b1_h6_cod` varchar(20) null,
  `pes_mod_b1_h6` varchar(2) null, 
+ `pes_jor_b1_h6` varchar(20) null, 
  `pes_mat_b2_h1_nombre` varchar(100) null, 
  `pes_mat_b2_h1_cod` varchar(20) null,
  `pes_mod_b2_h1` varchar(2) null, 
+ `pes_jor_b2_h1` varchar(20) null, 
  `pes_mat_b2_h2_nombre` varchar(100) null, 
  `pes_mat_b2_h2_cod` varchar(20) null,
- `pes_mod_b2_h2` varchar(2) null, 
+ `pes_mod_b2_h2` varchar(2) null,
+ `pes_jor_b2_h2` varchar(20) null, 
  `pes_mat_b2_h3_nombre` varchar(100) null, 
  `pes_mat_b2_h3_cod` varchar(20) null,
  `pes_mod_b2_h3` varchar(2) null, 
+ `pes_jor_b2_h3` varchar(20) null, 
  `pes_mat_b2_h4_nombre` varchar(100) null, 
  `pes_mat_b2_h4_cod` varchar(20) null,
- `pes_mod_b2_h4` varchar(2) null, 
+ `pes_mod_b2_h4` varchar(2) null,
+ `pes_jor_b2_h4` varchar(20) null, 
  `pes_mat_b2_h5_nombre` varchar(100) null, 
  `pes_mat_b2_h5_cod` varchar(20) null,
  `pes_mod_b2_h5` varchar(2) null, 
+ `pes_jor_b2_h5` varchar(20) null, 
  `pes_mat_b2_h6_nombre` varchar(100) null, 
  `pes_mat_b2_h6_cod` varchar(20) null,
  `pes_mod_b2_h6` varchar(2) null, 
+ `pes_jor_b2_h6` varchar(20) null, 
  `pes_estado` varchar(1) not null, 
  `pes_fecha_creacion` timestamp not null default current_timestamp,
  `pes_usuario_modifica` bigint(20) null,
@@ -1806,17 +1834,3 @@ create table if not exists db_academico.`configuracion_tipo_distributivo` (
  foreign key (mod_id) references `modalidad`(mod_id)
 );
 
-
-create table if not exists db_academico.`distributivo_horario_paralelo` (
-  `dhpa_id` bigint(20) not null auto_increment primary key,   
-  `daho_id` bigint(20) not null,
-  `dhpa_grupo` varchar(2) null,
-  `dhpa_paralelo` varchar(10) not null,  
-  `dhpa_usuario_ingreso` bigint(20) not null,
-  `dhpa_usuario_modifica` bigint(20) null,  
-  `dhpa_estado` varchar(1) not null,
-  `dhpa_fecha_creacion` timestamp not null default current_timestamp,
-  `dhpa_fecha_modificacion` timestamp null default null,
-  `dhpa_estado_logico` varchar(1) not null,
-  foreign key (daho_id) references `distributivo_academico_horario`(daho_id)
-);

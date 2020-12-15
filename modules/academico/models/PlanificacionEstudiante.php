@@ -16,89 +16,107 @@ use app\models\Persona;
  * @property int $pes_id
  * @property int $pla_id
  * @property int $per_id
- * @property string $pes_jornada
- * @property string $pes_cod_carrera
- * @property string $pes_carrera
- * @property string $pes_dni
- * @property string $pes_nombres
- * @property string $pes_egresado
- * @property string $pes_tutoria_nombre
- * @property string $pes_tutoria_cod
- * @property string $pes_mat_b1_h1_nombre
- * @property string $pes_mat_b1_h1_cod
- * @property int $pes_mod_b1_h1
- * @property string $pes_mat_b1_h2_nombre
- * @property string $pes_mat_b1_h2_cod
- * @property int $pes_mod_b1_h2
- * @property string $pes_mat_b1_h3_nombre
- * @property string $pes_mat_b1_h3_cod
- * @property int $pes_mod_b1_h3
- * @property string $pes_mat_b1_h4_nombre
- * @property string $pes_mat_b1_h4_cod
- * @property int $pes_mod_b1_h4
- * @property string $pes_mat_b1_h5_nombre
- * @property string $pes_mat_b1_h5_cod
- * @property int $pes_mod_b1_h5
- * @property string $pes_mat_b1_h6_nombre
- * @property string $pes_mat_b1_h6_cod
- * @property int $pes_mod_b1_h6
- * @property string $pes_mat_b2_h1_nombre
- * @property string $pes_mat_b2_h1_cod
- * @property int $pes_mod_b2_h1
- * @property string $pes_mat_b2_h2_nombre
- * @property string $pes_mat_b2_h2_cod
- * @property int $pes_mod_b2_h2
- * @property string $pes_mat_b2_h3_nombre
- * @property string $pes_mat_b2_h3_cod
- * @property int $pes_mod_b2_h3
- * @property string $pes_mat_b2_h4_nombre
- * @property string $pes_mat_b2_h4_cod
- * @property int $pes_mod_b2_h4
- * @property string $pes_mat_b2_h5_nombre
- * @property string $pes_mat_b2_h5_cod
- * @property int $pes_mod_b2_h5
- * @property string $pes_mat_b2_h6_nombre
- * @property string $pes_mat_b2_h6_cod
- * @property int $pes_mod_b2_h6
+ * @property string|null $pes_jornada
+ * @property string|null $pes_cod_carrera
+ * @property string|null $pes_carrera
+ * @property string|null $pes_dni
+ * @property string|null $pes_nombres
+ * @property string|null $pes_egresado
+ * @property string|null $pes_tutoria_nombre
+ * @property string|null $pes_tutoria_cod
+ * @property string|null $pes_cod_malla
+ * @property string|null $pes_mat_b1_h1_nombre
+ * @property string|null $pes_mat_b1_h1_cod
+ * @property string|null $pes_mod_b1_h1
+ * @property string|null $pes_jor_b1_h1
+ * @property string|null $pes_mat_b1_h2_nombre
+ * @property string|null $pes_mat_b1_h2_cod
+ * @property string|null $pes_mod_b1_h2
+ * @property string|null $pes_jor_b1_h2
+ * @property string|null $pes_mat_b1_h3_nombre
+ * @property string|null $pes_mat_b1_h3_cod
+ * @property string|null $pes_mod_b1_h3
+ * @property string|null $pes_jor_b1_h3
+ * @property string|null $pes_mat_b1_h4_nombre
+ * @property string|null $pes_mat_b1_h4_cod
+ * @property string|null $pes_mod_b1_h4
+ * @property string|null $pes_jor_b1_h4
+ * @property string|null $pes_mat_b1_h5_nombre
+ * @property string|null $pes_mat_b1_h5_cod
+ * @property string|null $pes_mod_b1_h5
+ * @property string|null $pes_jor_b1_h5
+ * @property string|null $pes_mat_b1_h6_nombre
+ * @property string|null $pes_mat_b1_h6_cod
+ * @property string|null $pes_mod_b1_h6
+ * @property string|null $pes_jor_b1_h6
+ * @property string|null $pes_mat_b2_h1_nombre
+ * @property string|null $pes_mat_b2_h1_cod
+ * @property string|null $pes_mod_b2_h1
+ * @property string|null $pes_jor_b2_h1
+ * @property string|null $pes_mat_b2_h2_nombre
+ * @property string|null $pes_mat_b2_h2_cod
+ * @property string|null $pes_mod_b2_h2
+ * @property string|null $pes_jor_b2_h2
+ * @property string|null $pes_mat_b2_h3_nombre
+ * @property string|null $pes_mat_b2_h3_cod
+ * @property string|null $pes_mod_b2_h3
+ * @property string|null $pes_jor_b2_h3
+ * @property string|null $pes_mat_b2_h4_nombre
+ * @property string|null $pes_mat_b2_h4_cod
+ * @property string|null $pes_mod_b2_h4
+ * @property string|null $pes_jor_b2_h4
+ * @property string|null $pes_mat_b2_h5_nombre
+ * @property string|null $pes_mat_b2_h5_cod
+ * @property string|null $pes_mod_b2_h5
+ * @property string|null $pes_jor_b2_h5
+ * @property string|null $pes_mat_b2_h6_nombre
+ * @property string|null $pes_mat_b2_h6_cod
+ * @property string|null $pes_mod_b2_h6
+ * @property string|null $pes_jor_b2_h6
  * @property string $pes_estado
  * @property string $pes_fecha_creacion
- * @property int $pes_usuario_modifica
- * @property string $pes_fecha_modificacion
+ * @property int|null $pes_usuario_modifica
+ * @property string|null $pes_fecha_modificacion
  * @property string $pes_estado_logico
  *
  * @property Planificacion $pla
- * @property RegistroOnline[] $registroOnlines
  */
-class PlanificacionEstudiante extends \yii\db\ActiveRecord {
-
+class PlanificacionEstudiante extends \yii\db\ActiveRecord
+{
     /**
      * {@inheritdoc}
      */
-    public static function tableName() {
+    public static function tableName()
+    {
         return 'planificacion_estudiante';
     }
 
     /**
      * @return \yii\db\Connection the database connection used by this AR class.
      */
-    public static function getDb() {
+    public static function getDb()
+    {
         return Yii::$app->get('db_academico');
     }
 
     /**
      * {@inheritdoc}
      */
-    public function rules() {
+    public function rules()
+    {
         return [
             [['pla_id', 'per_id', 'pes_estado', 'pes_estado_logico'], 'required'],
-            [['pla_id', 'per_id', 'pes_mod_b1_h1', 'pes_mod_b1_h2', 'pes_mod_b1_h3', 'pes_mod_b1_h4', 'pes_mod_b1_h5', 'pes_mod_b1_h6', 'pes_mod_b2_h1', 'pes_mod_b2_h2', 'pes_mod_b2_h3', 'pes_mod_b2_h4', 'pes_mod_b2_h5', 'pes_mod_b2_h6', 'pes_usuario_modifica'], 'integer'],
+            [['pla_id', 'per_id', 'pes_usuario_modifica'], 'integer'],
             [['pes_fecha_creacion', 'pes_fecha_modificacion'], 'safe'],
             [['pes_jornada'], 'string', 'max' => 3],
-            [['pes_cod_carrera', 'pes_tutoria_cod', 'pes_mat_b1_h1_cod', 'pes_mat_b1_h2_cod', 'pes_mat_b1_h3_cod', 'pes_mat_b1_h4_cod', 'pes_mat_b1_h5_cod', 'pes_mat_b1_h6_cod', 'pes_mat_b2_h1_cod', 'pes_mat_b2_h2_cod', 'pes_mat_b2_h3_cod', 'pes_mat_b2_h4_cod', 'pes_mat_b2_h5_cod', 'pes_mat_b2_h6_cod'], 'string', 'max' => 20],
+            [['pes_cod_carrera', 'pes_tutoria_cod', 'pes_mat_b1_h1_cod', 'pes_jor_b1_h1', 'pes_mat_b1_h2_cod', 'pes_jor_b1_h2', 'pes_mat_b1_h3_cod', 'pes_jor_b1_h3', 'pes_mat_b1_h4_cod', 'pes_jor_b1_h4', 'pes_mat_b1_h5_cod', 'pes_jor_b1_h5', 'pes_mat_b1_h6_cod', 'pes_jor_b1_h6', 'pes_mat_b2_h1_cod', 'pes_mat_b2_h2_cod', 'pes_jor_b2_h2', 'pes_mat_b2_h3_cod', 'pes_jor_b2_h3', 'pes_mat_b2_h4_cod', 'pes_jor_b2_h4', 'pes_mat_b2_h5_cod', 'pes_jor_b2_h5', 'pes_mat_b2_h6_cod', 'pes_jor_b2_h6'], 'string', 'max' => 20],
             [['pes_carrera', 'pes_tutoria_nombre', 'pes_mat_b1_h1_nombre', 'pes_mat_b1_h2_nombre', 'pes_mat_b1_h3_nombre', 'pes_mat_b1_h4_nombre', 'pes_mat_b1_h5_nombre', 'pes_mat_b1_h6_nombre', 'pes_mat_b2_h1_nombre', 'pes_mat_b2_h2_nombre', 'pes_mat_b2_h3_nombre', 'pes_mat_b2_h4_nombre', 'pes_mat_b2_h5_nombre', 'pes_mat_b2_h6_nombre'], 'string', 'max' => 100],
             [['pes_dni'], 'string', 'max' => 15],
             [['pes_nombres'], 'string', 'max' => 200],
             [['pes_egresado', 'pes_estado', 'pes_estado_logico'], 'string', 'max' => 1],
+            [['pes_cod_malla'], 'string', 'max' => 50],
+            [['pes_mod_b1_h1', 'pes_mod_b1_h2', 'pes_mod_b1_h3', 'pes_mod_b1_h4', 'pes_mod_b1_h5', 'pes_mod_b1_h6', 'pes_mod_b2_h1', 'pes_mod_b2_h2', 'pes_mod_b2_h3', 'pes_mod_b2_h4', 'pes_mod_b2_h5', 'pes_mod_b2_h6'], 'string', 'max' => 2],
+            [['pes_jor_b2_h1'], 'string', 'max' => 30],
             [['pla_id'], 'exist', 'skipOnError' => true, 'targetClass' => Planificacion::className(), 'targetAttribute' => ['pla_id' => 'pla_id']],
         ];
     }
@@ -106,7 +124,8 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord {
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels() {
+    public function attributeLabels()
+    {
         return [
             'pes_id' => 'Pes ID',
             'pla_id' => 'Pla ID',
@@ -119,42 +138,55 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord {
             'pes_egresado' => 'Pes Egresado',
             'pes_tutoria_nombre' => 'Pes Tutoria Nombre',
             'pes_tutoria_cod' => 'Pes Tutoria Cod',
+            'pes_cod_malla' => 'Pes Cod Malla',
             'pes_mat_b1_h1_nombre' => 'Pes Mat B1 H1 Nombre',
             'pes_mat_b1_h1_cod' => 'Pes Mat B1 H1 Cod',
             'pes_mod_b1_h1' => 'Pes Mod B1 H1',
+            'pes_jor_b1_h1' => 'Pes Jor B1 H1',
             'pes_mat_b1_h2_nombre' => 'Pes Mat B1 H2 Nombre',
             'pes_mat_b1_h2_cod' => 'Pes Mat B1 H2 Cod',
             'pes_mod_b1_h2' => 'Pes Mod B1 H2',
+            'pes_jor_b1_h2' => 'Pes Jor B1 H2',
             'pes_mat_b1_h3_nombre' => 'Pes Mat B1 H3 Nombre',
             'pes_mat_b1_h3_cod' => 'Pes Mat B1 H3 Cod',
             'pes_mod_b1_h3' => 'Pes Mod B1 H3',
+            'pes_jor_b1_h3' => 'Pes Jor B1 H3',
             'pes_mat_b1_h4_nombre' => 'Pes Mat B1 H4 Nombre',
             'pes_mat_b1_h4_cod' => 'Pes Mat B1 H4 Cod',
             'pes_mod_b1_h4' => 'Pes Mod B1 H4',
+            'pes_jor_b1_h4' => 'Pes Jor B1 H4',
             'pes_mat_b1_h5_nombre' => 'Pes Mat B1 H5 Nombre',
             'pes_mat_b1_h5_cod' => 'Pes Mat B1 H5 Cod',
             'pes_mod_b1_h5' => 'Pes Mod B1 H5',
+            'pes_jor_b1_h5' => 'Pes Jor B1 H5',
             'pes_mat_b1_h6_nombre' => 'Pes Mat B1 H6 Nombre',
             'pes_mat_b1_h6_cod' => 'Pes Mat B1 H6 Cod',
             'pes_mod_b1_h6' => 'Pes Mod B1 H6',
+            'pes_jor_b1_h6' => 'Pes Jor B1 H6',
             'pes_mat_b2_h1_nombre' => 'Pes Mat B2 H1 Nombre',
             'pes_mat_b2_h1_cod' => 'Pes Mat B2 H1 Cod',
             'pes_mod_b2_h1' => 'Pes Mod B2 H1',
+            'pes_jor_b2_h1' => 'Pes Jor B2 H1',
             'pes_mat_b2_h2_nombre' => 'Pes Mat B2 H2 Nombre',
             'pes_mat_b2_h2_cod' => 'Pes Mat B2 H2 Cod',
             'pes_mod_b2_h2' => 'Pes Mod B2 H2',
+            'pes_jor_b2_h2' => 'Pes Jor B2 H2',
             'pes_mat_b2_h3_nombre' => 'Pes Mat B2 H3 Nombre',
             'pes_mat_b2_h3_cod' => 'Pes Mat B2 H3 Cod',
             'pes_mod_b2_h3' => 'Pes Mod B2 H3',
+            'pes_jor_b2_h3' => 'Pes Jor B2 H3',
             'pes_mat_b2_h4_nombre' => 'Pes Mat B2 H4 Nombre',
             'pes_mat_b2_h4_cod' => 'Pes Mat B2 H4 Cod',
             'pes_mod_b2_h4' => 'Pes Mod B2 H4',
+            'pes_jor_b2_h4' => 'Pes Jor B2 H4',
             'pes_mat_b2_h5_nombre' => 'Pes Mat B2 H5 Nombre',
             'pes_mat_b2_h5_cod' => 'Pes Mat B2 H5 Cod',
             'pes_mod_b2_h5' => 'Pes Mod B2 H5',
+            'pes_jor_b2_h5' => 'Pes Jor B2 H5',
             'pes_mat_b2_h6_nombre' => 'Pes Mat B2 H6 Nombre',
             'pes_mat_b2_h6_cod' => 'Pes Mat B2 H6 Cod',
             'pes_mod_b2_h6' => 'Pes Mod B2 H6',
+            'pes_jor_b2_h6' => 'Pes Jor B2 H6',
             'pes_estado' => 'Pes Estado',
             'pes_fecha_creacion' => 'Pes Fecha Creacion',
             'pes_usuario_modifica' => 'Pes Usuario Modifica',
@@ -164,12 +196,14 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord {
     }
 
     /**
+     * Gets query for [[Pla]].
+     *
      * @return \yii\db\ActiveQuery
      */
-    public function getPla() {
+    public function getPla()
+    {
         return $this->hasOne(Planificacion::className(), ['pla_id' => 'pla_id']);
     }
-
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -341,118 +375,117 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord {
     }
 
     public function saveDocumentoDB($val, $pla_id, $per_id_estudiante) {
-        // try {
-        /* print_r($val); */
-        /* print("$$");
-          print($val[10]);
-          print(gettype($val[10]));
-          print("$$"); */
-        /* print($pla_id);
-          print($per_id); */
+
+        $materia_id1 = null;
+        $materia_id2 = null;
+        $materia_id3 = null;
+        $materia_id4 = null;
+        $materia_id5 = null;
+        $materia_id6 = null;
+        $materia_id7 = null;
+        $materia_id8 = null;
+        $materia_id9 = null;
+        $materia_id10 = null;
+        $materia_id11 = null;
+        $materia_id12 = null;
+
         $model_planificacion_estudiante = new PlanificacionEstudiante();
         $model_planificacion_estudiante->pla_id = $pla_id;
 
 
         $model_planificacion_estudiante->per_id = $per_id_estudiante;
-        $model_planificacion_estudiante->pes_jornada = $val[1];
+        //$model_planificacion_estudiante->pes_jornada = $val[1];
+        $model_planificacion_estudiante->pes_cod_malla = $val[1];
         /*  $model_planificacion_estudiante->pes_cod_carrera = $val[2]; */
+        //bloque 1
         $model_planificacion_estudiante->pes_carrera = $val[3];
         $model_planificacion_estudiante->pes_dni = strval($val[4]);
         $model_planificacion_estudiante->pes_nombres = $val[5];
-        /* $es_egresado = "";
-          if($val[6] == "egresado"){
-          $es_egresado = $val[6];
-          }
-          $model_planificacion_estudiante->pes_egresado = $es_egresado;
-          if(!is_null($val[7]) || $val[7] != ""){
-          $array_tutoria = explode(" {", $val[7]);
-          $nombre_tutoria = $array_tutoria[0];
-          $codigo_tutoria = substr($array_tutoria[1], 0 , -1);
-          $model_planificacion_estudiante->pes_tutoria_nombre = $nombre_tutoria;
-          $model_planificacion_estudiante->pes_tutoria_cod = $codigo_tutoria;
-          } else {
-          $model_planificacion_estudiante->pes_tutoria_nombre = null;
-          $model_planificacion_estudiante->pes_tutoria_cod = null;
-          } */
-
-
-        /*  $array_mat_b1h1_nom = explode(" {", $val[8]);
-          $nombre__mat_b1h1 = $array_mat_b1h1_nom[0];
-          $codigo_mat_b1h1 = substr($array_mat_b1h1_nom[1], 0 , -1); */
-        $model_planificacion_estudiante->pes_mat_b1_h1_cod = $val[6];
-        /*  $model_planificacion_estudiante->pes_mat_b1_h1_cod = $codigo_mat_b1h1; */
-
-        /*  $array_mat_b1h2_nom = explode(" {", $val[9]);
-          $nombre__mat_b1h2 = $array_mat_b1h2_nom[0];
-          $codigo_mat_b1h2 = substr($array_mat_b1h2_nom[1], 0 , -1); */
-        $model_planificacion_estudiante->pes_mod_b1_h1 = $val[7];
-        /*   $model_planificacion_estudiante->pes_mat_b1_h2_cod = $codigo_mat_b1h2; */
-
-        /*  $array_mat_b1h3_nom = explode(" {", $val[10]);
-          $nombre__mat_b1h3 = $array_mat_b1h3_nom[0];
-          $codigo_mat_b1h3 = substr($array_mat_b1h3_nom[1], 0 , -1); */
-        $model_planificacion_estudiante->pes_mat_b1_h2_cod = $val[8];
-        /*   $model_planificacion_estudiante->pes_mat_b1_h3_cod = $codigo_mat_b1h3; */
-
-        /*  $array_mat_b1h4_nom = explode(" {", $val[11]);
-          $nombre__mat_b1h4 = $array_mat_b1h4_nom[0];
-          $codigo_mat_b1h4 = substr($array_mat_b1h4_nom[1], 0 , -1); */
-        $model_planificacion_estudiante->pes_mod_b1_h2 = $val[9];
-        /*  $model_planificacion_estudiante->pes_mat_b1_h4_cod = $codigo_mat_b1h4; */
-
-        /*  $array_mat_b1h5_nom = explode(" {", $val[12]);
-          $nombre__mat_b1h5 = $array_mat_b1h5_nom[0];
-          $codigo_mat_b1h5 = substr($array_mat_b1h5_nom[1], 0 , -1); */
-        $model_planificacion_estudiante->pes_mat_b1_h3_cod = $val[10];
-        /*  $model_planificacion_estudiante->pes_mat_b1_h5_cod = $codigo_mat_b1h5; */
-
-        $model_planificacion_estudiante->pes_mod_b1_h3 = $val[11];
-
-        /*  $array_mat_b2h1_nom = explode(" {", $val[13]);
-          $nombre__mat_b2h1 = $array_mat_b2h1_nom[0];
-          $codigo_mat_b2h1 = substr($array_mat_b2h1_nom[1], 0 , -1); */
-        $model_planificacion_estudiante->pes_mat_b1_h4_cod = $val[12];
-        /* $model_planificacion_estudiante->pes_mat_b2_h1_cod = $codigo_mat_b2h1; */
-
-        /*  $array_mat_b2h2_nom = explode(" {", $val[14]);
-          $nombre__mat_b2h2 = $array_mat_b2h2_nom[0];
-          $codigo_mat_b2h2 = substr($array_mat_b2h2_nom[1], 0 , -1); */
-        $model_planificacion_estudiante->pes_mod_b1_h4 = $val[13];
-        /*   $model_planificacion_estudiante->pes_mat_b2_h2_cod = $codigo_mat_b2h2; */
-
-        /*   $array_mat_b2h3_nom = explode(" {", $val[15]);
-          $nombre__mat_b2h3 = $array_mat_b2h3_nom[0];
-          $codigo_mat_b2h3 = substr($array_mat_b2h3_nom[1], 0 , -1); */
-        $model_planificacion_estudiante->pes_mat_b1_h5_cod = $val[14];
-        /*  $model_planificacion_estudiante->pes_mat_b2_h3_cod = $codigo_mat_b2h3; */
-
-        /*   $array_mat_b2h4_nom = explode(" {", $val[16]);
-          $nombre__mat_b2h4 = $array_mat_b2h4_nom[0];
-          $codigo_mat_b2h4 = substr($array_mat_b2h4_nom[1], 0 , -1); */
-        $model_planificacion_estudiante->pes_mod_b1_h5 = $val[15];
-        /*  $model_planificacion_estudiante->pes_mat_b2_h4_cod = $codigo_mat_b2h4;
-         */
-        /*  $array_mat_b2h5_nom = explode(" {", $val[17]);
-          $nombre__mat_b2h5 = $array_mat_b2h5_nom[0];
-          $codigo_mat_b2h5 = substr($array_mat_b2h5_nom[1], 0 , -1); */
-        $model_planificacion_estudiante->pes_mat_b1_h6_cod = $val[16];
-        /*  $model_planificacion_estudiante->pes_mat_b2_h5_cod = $codigo_mat_b2h5; */
-
-        $model_planificacion_estudiante->pes_mod_b1_h6 = $val[17];
-
-        $model_planificacion_estudiante->pes_mat_b2_h1_cod = $val[18];
-        $model_planificacion_estudiante->pes_mod_b2_h1 = $val[19];
-        $model_planificacion_estudiante->pes_mat_b2_h2_cod = $val[20];
-        $model_planificacion_estudiante->pes_mod_b2_h2 = $val[21];
-        $model_planificacion_estudiante->pes_mat_b2_h3_cod = $val[22];
-        $model_planificacion_estudiante->pes_mod_b2_h3 = $val[23];
-        $model_planificacion_estudiante->pes_mat_b2_h4_cod = $val[24];
-        $model_planificacion_estudiante->pes_mod_b2_h4 = $val[25];
-        $model_planificacion_estudiante->pes_mat_b2_h5_cod = $val[26];
-        $model_planificacion_estudiante->pes_mod_b2_h5 = $val[27];
-        $model_planificacion_estudiante->pes_mat_b2_h6_cod = $val[28];
-        $model_planificacion_estudiante->pes_mod_b2_h6 = $val[29];
-
+        if (!empty($val[6])) {
+            $materia_id1 = consultarCodigoAsignatura($val[1], $val[6]);
+            $model_planificacion_estudiante->pes_mat_b1_h1_cod = $materia_id1['made_codigo_asignatura'];
+           }
+        //$model_planificacion_estudiante->pes_mat_b1_h1_cod = $val[6];
+        $model_planificacion_estudiante->pes_mod_b1_h1 = $val[7];    
+        $model_planificacion_estudiante->pes_jor_b1_h1 = $val[8];   
+        if (!empty($val[9])) {
+         $materia_id2 = consultarCodigoAsignatura($val[1], $val[9]);
+         $model_planificacion_estudiante->pes_mat_b1_h2_cod = $materia_id2['made_codigo_asignatura'];
+        }
+        //$model_planificacion_estudiante->pes_mat_b1_h2_cod = $val[9];
+        $model_planificacion_estudiante->pes_mod_b1_h2 = $val[10];    
+        $model_planificacion_estudiante->pes_jor_b1_h2 = $val[11];
+        if (!empty($val[12])) {
+            $materia_id3 = consultarCodigoAsignatura($val[1], $val[12]);
+            $model_planificacion_estudiante->pes_mat_b1_h3_cod = $materia_id3['made_codigo_asignatura'];
+        }
+        //$model_planificacion_estudiante->pes_mat_b1_h3_cod = $val[12];
+        $model_planificacion_estudiante->pes_mod_b1_h3 = $val[13];
+        $model_planificacion_estudiante->pes_jor_b1_h3 = $val[14];
+        if (!empty($val[15])) {
+            $materia_id4 = consultarCodigoAsignatura($val[1], $val[15]);
+            $model_planificacion_estudiante->pes_mat_b1_h4_cod = $materia_id4['made_codigo_asignatura'];
+        }
+        //$model_planificacion_estudiante->pes_mat_b1_h4_cod = $val[15];        
+        $model_planificacion_estudiante->pes_mod_b1_h4 = $val[16]; 
+        $model_planificacion_estudiante->pes_jor_b1_h4 = $val[17];
+        if (!empty($val[18])) {
+            $materia_id5 = consultarCodigoAsignatura($val[1], $val[18]);
+            $model_planificacion_estudiante->pes_mat_b1_h5_cod = $materia_id5['made_codigo_asignatura'];
+        }
+        //$model_planificacion_estudiante->pes_mat_b1_h5_cod = $val[18];        
+        $model_planificacion_estudiante->pes_mod_b1_h5 = $val[19];
+        $model_planificacion_estudiante->pes_jor_b1_h5 = $val[20];
+        if (!empty($val[21])) {
+            $materia_id6 = consultarCodigoAsignatura($val[1], $val[21]);
+            $model_planificacion_estudiante->pes_mat_b1_h6_cod = $materia_id6['made_codigo_asignatura'];
+        }
+        //$model_planificacion_estudiante->pes_mat_b1_h6_cod = $val[21];
+        $model_planificacion_estudiante->pes_mod_b1_h6 = $val[22];
+        $model_planificacion_estudiante->pes_jor_b1_h6 = $val[23];
+        //bloque 2
+        if (!empty($val[24])) {
+            $materia_id7 = consultarCodigoAsignatura($val[1], $val[24]);
+            $model_planificacion_estudiante->pes_mat_b2_h1_cod = $materia_id7['made_codigo_asignatura'];
+        }
+        //$model_planificacion_estudiante->pes_mat_b2_h1_cod = $val[24];
+        $model_planificacion_estudiante->pes_mod_b2_h1 = $val[25];
+        $model_planificacion_estudiante->pes_jor_b2_h1 = $val[26];
+        if (!empty($val[27])) {
+            $materia_id8 = consultarCodigoAsignatura($val[1], $val[27]);
+            $model_planificacion_estudiante->pes_mat_b2_h2_cod = $materia_id8['made_codigo_asignatura'];
+        }
+        //$model_planificacion_estudiante->pes_mat_b2_h2_cod = $val[27];
+        $model_planificacion_estudiante->pes_mod_b2_h2 = $val[28];
+        $model_planificacion_estudiante->pes_jor_b2_h2 = $val[29];
+        if (!empty($val[30])) {
+            $materia_id9 = consultarCodigoAsignatura($val[1], $val[30]);
+            $model_planificacion_estudiante->pes_mat_b2_h3_cod = $materia_id9['made_codigo_asignatura'];
+        }
+        //$model_planificacion_estudiante->pes_mat_b2_h3_cod = $val[30];
+        $model_planificacion_estudiante->pes_mod_b2_h3 = $val[31];
+        $model_planificacion_estudiante->pes_jor_b2_h3 = $val[32];
+        if (!empty($val[33])) {
+            $materia_id10 = consultarCodigoAsignatura($val[1], $val[33]);
+            $model_planificacion_estudiante->pes_mat_b2_h4_cod = $materia_id10['made_codigo_asignatura'];
+        }
+        //$model_planificacion_estudiante->pes_mat_b2_h4_cod = $val[33];
+        $model_planificacion_estudiante->pes_mod_b2_h4 = $val[34];
+        $model_planificacion_estudiante->pes_jor_b2_h4 = $val[35];
+        if (!empty($val[36])) {
+            $materia_id11 = consultarCodigoAsignatura($val[1], $val[36]);
+            $model_planificacion_estudiante->pes_mat_b2_h5_cod = $materia_id11['made_codigo_asignatura'];
+        }
+        //$model_planificacion_estudiante->pes_mat_b2_h5_cod = $val[36];
+        $model_planificacion_estudiante->pes_mod_b2_h5 = $val[37];
+        $model_planificacion_estudiante->pes_jor_b2_h5 = $val[38];
+        if (!empty($val[39])) {
+            $materia_id12 = consultarCodigoAsignatura($val[1], $val[39]);
+            $model_planificacion_estudiante->pes_mat_b2_h6_cod = $materia_id12['made_codigo_asignatura'];
+        }
+        //$model_planificacion_estudiante->pes_mat_b2_h6_cod = $val[39];
+        $model_planificacion_estudiante->pes_mod_b2_h6 = $val[40];
+        $model_planificacion_estudiante->pes_jor_b2_h6 = $val[41];
         $model_planificacion_estudiante->pes_estado = "1";
         $model_planificacion_estudiante->pes_estado_logico = "1";
         /* if($val[4] == "0925029605") {
@@ -642,7 +675,7 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord {
         $con = \Yii::$app->db_academico;
         // Bloque 1
         for ($i = 1; $i < 7; $i++) {
-            $sql .= "SELECT pes_id as Ids, pes_mat_b1_h" . $i . "_cod as cod_asignatura, asig.asi_nombre as asignatura, CASE pes_jornada  
+            $sql .= "SELECT pes_id as Ids, pes_jor_b1_h" . $i . " as jor_materia, pes_mat_b1_h" . $i . "_cod as cod_asignatura, asig.asi_nombre as asignatura, CASE pes_jornada  
                             WHEN 'M' THEN 'Matutino'  
                             WHEN 'N' THEN 'Nocturno'  
                             WHEN 'S' THEN 'Semipresencial'
@@ -657,7 +690,7 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord {
         }
         // Bloque 2
         for ($j = 1; $j < 7; $j++) {
-            $sql .= "SELECT pes_id as Ids, pes_mat_b2_h" . $j . "_cod as cod_asignatura, asig.asi_nombre as asignatura, CASE pes_jornada  
+            $sql .= "SELECT pes_id as Ids, pes_jor_b2_h" . $j . " as jor_materia, pes_mat_b2_h" . $j . "_cod as cod_asignatura, asig.asi_nombre as asignatura, CASE pes_jornada  
                             WHEN 'M' THEN 'Matutino'  
                             WHEN 'N' THEN 'Nocturno'  
                             WHEN 'S' THEN 'Semipresencial'
@@ -775,13 +808,13 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord {
      * @return  
      */
     /* INSERTAR DATOS */
-    public function insertarDataPlanificacionestudiante($pla_id, $per_id, $pes_jornada, $pes_carrera, $pes_dni, $pes_nombres, $insertar, $valores) {
+    public function insertarDataPlanificacionestudiante($pla_id, $per_id, $pes_jornada, $pes_carrera, $pes_dni, $pes_nombres, $pes_cod_malla, $insertar, $valores) {
         $arroout = array();
         $con = \Yii::$app->db_academico;
         $trans = $con->beginTransaction();
         try {            
             $data = isset($data['DATA']) ? $data['DATAS'] : array();
-            $this->insertarPlanificacionestudiante($con, $pla_id, $per_id, $pes_jornada, $pes_carrera, $pes_dni, $pes_nombres, $insertar, $valores);
+            $this->insertarPlanificacionestudiante($con, $pla_id, $per_id, $pes_jornada, $pes_carrera, $pes_dni, $pes_nombres, $pes_cod_malla, $insertar, $valores);
             $trans->commit();
             $con->close();
             //RETORNA DATOS             
@@ -803,7 +836,7 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord {
      * @property integer $userid
      * @return  
      */
-    private function insertarPlanificacionestudiante($con, $pla_id, $per_id, $pes_jornada, $pes_carrera, $pes_dni, $pes_nombres, $insertar, $valores) {
+    private function insertarPlanificacionestudiante($con, $pla_id, $per_id, $pes_jornada, $pes_carrera, $pes_dni, $pes_nombres, $pes_cod_malla, $insertar, $valores) {
         $estado = 1;
         $sql = "INSERT INTO " . $con->dbname . ".planificacion_estudiante
                     (pla_id,
@@ -811,13 +844,13 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord {
                      pes_jornada,
                      pes_carrera,
                      pes_dni,
-                     pes_nombres, " .
+                     pes_nombres, 
+                     pes_cod_malla, " .
                      $insertar . "
                      pes_estado,                   
                      pes_estado_logico)VALUES
                     (" . $pla_id . "," . $per_id . ",'" . $pes_jornada . "','" . $pes_carrera . "','" . $pes_dni . "','"
-                . $pes_nombres . "'," . $valores . " '" . $estado . "','" . $estado . "')";
-        
+                . $pes_nombres . "'," . $pes_cod_malla . ", " . $valores . " '" . $estado . "','" . $estado . "')";
         $command = $con->createCommand($sql);
         $command->execute();
     }
@@ -907,7 +940,7 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord {
         return $resultData;
     }
 
-      /**
+    /**
      * Function Consultar modalidad y periodo en planificacion.
      * @author  Giovanni Vergara <analistadesarrollo01@uteg.edu.ec>;
      * @property       
@@ -999,4 +1032,33 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord {
             return FALSE;
         }
     }
+
+      /**
+     * Function Consultar codigo asigantura para archivo de planificacion estudiante.
+     * @author  Giovanni Vergara <analistadesarrollo01@uteg.edu.ec>;
+     * @property       
+     * @return  
+     */
+    public function consultarCodigoAsignatura($maca_codigo, $asi_id) {
+        $con = \Yii::$app->db_academico;
+        $estado = 1;
+
+        $sql = "SELECT made_codigo_asignatura 
+                FROM " . $con->dbname . ".malla_academica_detalle macad 
+                    INNER JOIN " . $con->dbname . ".malla_academica maca 
+                    ON maca.maca_id = macad.maca_id 
+                    AND maca_codigo = maca_codigo
+                WHERE macad.asi_id = asi_id AND
+                      maca.maca_estado = :estado AND
+                      maca.maca_estado_logico = :estado AND
+                      macad.made_estado = :estado AND
+                      macad.made_estado_logico = :estado";
+        $comando = $con->createCommand($sql);
+        $comando->bindParam(":estado", $estado, \PDO::PARAM_STR);
+        $comando->bindParam(":maca_codigo", $maca_codigo, \PDO::PARAM_STR);
+        $comando->bindParam(":asi_id", $asi_id, \PDO::PARAM_INT);
+        $resultData = $comando->queryOne();
+        return $resultData;
+    }
 }
+
