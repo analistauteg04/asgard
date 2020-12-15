@@ -577,6 +577,7 @@ return [
     "Skills / Compensations" => "Habilidades/Competencias",
     "Speaking" => "Hablado",
     "Specific objectives" => "Objetivos Específicos",
+    "Start" => "Inicio",
     "Start date" => "Fecha Inicio",
     "State of birth" => "Prov / Est Nacimiento",
     "State" => "Provincia / Estado",

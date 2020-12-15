@@ -38,15 +38,7 @@ use app\modules\admision\Module;
                 <?= Html::dropDownList("cmb_periodo", 0, $arr_periodo, ["class" => "form-control", "id" => "cmb_periodo"]) ?>
             </div>                  
         </div>        
-    </div>  
-    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-        <div class="form-group">
-        <label for="lbl_plantilla" class="col-sm-2 col-lg-2 col-md-2 col-xs-2 control-label"><?= Yii::t("formulario", "Plantilla"); ?></label>
-            <div class="col-sm-3 col-md-3 col-xs-3 col-lg-3">
-            <?= Html::a(academico::t("matriculacion", "Download"), Url::to(['planificacion/downloadplantilla', 'filename' => 'plantilla_carga_planificacionestudiante.xlsx']));   ?>
-            </div>                       
-        </div>        
-    </div>   
+    </div>        
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">  
         <div class="col-sm-8"></div>
         <div class="col-sm-2">                
