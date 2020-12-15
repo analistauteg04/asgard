@@ -65,6 +65,9 @@ ADD COLUMN `pes_mod_b2_h6` VARCHAR(2) NULL AFTER `pes_mat_b2_h6_cod`;
 
 /****************************************************************************/
 
+/***** cambios ultimos pedidos en la reunion para la carga de archivos *****/
+
+/***************************************************************************/
 ALTER TABLE `db_academico`.`planificacion_estudiante` 
 ADD COLUMN `pes_cod_malla` VARCHAR(50) NULL AFTER `pes_tutoria_cod`;
 
