@@ -376,18 +376,18 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord
 
     public function saveDocumentoDB($val, $pla_id, $per_id_estudiante) {
 
-        $materia_id1 = null;
-        $materia_id2 = null;
-        $materia_id3 = null;
-        $materia_id4 = null;
-        $materia_id5 = null;
-        $materia_id6 = null;
-        $materia_id7 = null;
-        $materia_id8 = null;
-        $materia_id9 = null;
-        $materia_id10 = null;
-        $materia_id11 = null;
-        $materia_id12 = null;
+        $materia_id1 = '';
+        $materia_id2 = '';
+        $materia_id3 = '';
+        $materia_id4 = '';
+        $materia_id5 = '';
+        $materia_id6 = '';
+        $materia_id7 = '';
+        $materia_id8 = '';
+        $materia_id9 = '';
+        $materia_id10 = '';
+        $materia_id11 = '';
+        $materia_id12 = '';
 
         $model_planificacion_estudiante = new PlanificacionEstudiante();
         $model_planificacion_estudiante->pla_id = $pla_id;
