@@ -401,10 +401,13 @@ class PlanificacionEstudiante extends \yii\db\ActiveRecord
         $model_planificacion_estudiante->pes_carrera = $val[3];
         $model_planificacion_estudiante->pes_dni = strval($val[4]);
         $model_planificacion_estudiante->pes_nombres = $val[5];
+        \app\models\Utilities::putMessageLogFile('val[6]: ' .$val[6]);
         if (!empty($val[6])) {
             $materia_id1 = $model_planificacion_estudiante->consultarCodigoAsignatura($val[1], $val[6]);
             $model_planificacion_estudiante->pes_mat_b1_h1_cod = $materia_id1['made_codigo_asignatura'];
-           }
+            \app\models\Utilities::putMessageLogFile('val[1]: ' .$val[1]);
+            \app\models\Utilities::putMessageLogFile('made_codigo_asignatura: ' .$materia_id1['made_codigo_asignatura']);
+        }
         //$model_planificacion_estudiante->pes_mat_b1_h1_cod = $val[6];
         $model_planificacion_estudiante->pes_mod_b1_h1 = $val[7];    
         $model_planificacion_estudiante->pes_jor_b1_h1 = $val[8];   
